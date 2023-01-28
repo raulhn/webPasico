@@ -31,4 +31,12 @@ export class UsuariosService {
     let API_URL = this.url + '/logout';
     return this.http.get(API_URL,  {withCredentials:true } );
   }
+
+  registrar(usuario: String, password: String) : Observable<any>
+  {
+    let API_URL = this.url + '/registrar';
+ 
+    return this.http.post(API_URL, {usuario: usuario, password: password},  {  withCredentials:true }).pipe(catchError(err => {console.log('Error', err); return throwError(() => new Error(err.status))}));
+  }
+
 }

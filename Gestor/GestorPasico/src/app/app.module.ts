@@ -11,6 +11,7 @@ import { CabeceraComponent } from './componente/cabecera/cabecera.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { UsuarioComponent } from './componente/usuario/usuario.component';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
     AppComponent,
     LoginComponent,
     HomeComponent,
-    CabeceraComponent
+    CabeceraComponent,
+    UsuarioComponent
   ],
   imports: [
     FormsModule,

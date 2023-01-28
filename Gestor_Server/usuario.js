@@ -5,39 +5,6 @@ const bcrypt = require('bcryptjs');
 const rondas = 10;
 
 
-function login(usuario, password)
-{
-    return new Promise(
-        function(resolve)
-        {
-            console.log('select * from '+ constantes.ESQUEMA_BD + '.usuario where usuario = ' +  conexion.dbConn.escape(usuario) + 
-            ' and pass = ' +  conexion.dbConn.escape(password) );
-            conexion.dbConn.query('select pass from '+ constantes.ESQUEMA_BD + '.usuario where usuario = ' +  conexion.dbConn.escape(usuario) 
-               , 
-            function(error, results, fields)
-            {
-                if (error) throw resolve(false);
-                console.log(results.length);
-                if (results.length <= 0)
-                {
-                  resolve(false);
-                }
-                else{
-                    let passHash = results[0].pass;
-                    bcrypt.compare(password, passHash, (err, coinciden) => {
-                        if (err) {
-                            console.log("Error comprobando:", err);
-                        } else {
-                           resolve(coinciden);
-                        }
-                    });
-                }
-
-            }
-            );
-        });
-}
-
 function obtener_usuarios()
 {
     return new Promise(
@@ -81,17 +48,31 @@ function obtener_pass(user)
     )
 }
 
-async function nuevo_login(user, pass)
+async function comparar_pass(pass, pass_hash)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            bcrypt.compare(pass, pass_hash, (err, coinciden) => {
+                if (err) {
+                    console.log("Error comprobando:", err);
+                    resolve(false);
+                } else {
+                    console.log(coinciden);
+                    resolve(coinciden);
+                }
+            });
+        }
+    )
+}
+async function login(user, pass)
 {
     try{
-        pass_original = await obtener_pass(user);
-        if (pass === pass_original)
-        {
-            console.log(pass);
-            console.log(pass_original);
-            return true;
-        }
-        return false;
+        pass_hash = await obtener_pass(user);
+        console.log(pass_hash);
+        console.log(pass);
+        return await comparar_pass(pass, pass_hash)
+       
     }
     catch(err)
     {
@@ -99,6 +80,59 @@ async function nuevo_login(user, pass)
     }
 }
 
+function existe_login(user)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.query('select count(*) nCont from '+ constantes.ESQUEMA_BD + '.usuario where usuario = ' + conexion.dbConn.escape(user) , 
+            function(error, results, fields)
+            {
+                if (error)  {console.log(error); reject();}
+                if (results.length < 1 || results.length > 1)
+                {
+                    reject();
+                }
+                else{
+                    resolve(results[0].nCont > 0);
+                }
+    }
+    );
+    }
+    );
+}
+
+async function registrar_usuario(user, pass)
+{
+    return new Promise(
+        async (resolve, reject) =>
+        {
+            bExiste = await existe_login(user);
+            if (!bExiste)
+            {
+                const saltRounds = 15;
+                conexion.dbConn.beginTransaction(
+                    () =>
+                    {  
+                        bcrypt.hash(pass, saltRounds,
+                            (err, hash) =>
+                            {
+                                conexion.dbConn.query('insert into ' +  constantes.ESQUEMA_BD + '.usuario(usuario, password) values(' +
+                                conexion.dbConn.escape(user) + ', ' + conexion.dbConn.escape(hash) + ')',
+                                (error, results, fields) =>
+                                {
+                                    if (error) {conexion.dbConn.rollback();  console.log(error); reject();}
+                                    else {conexion.dbConn.commit(); console.log('Usuario registrado'); resolve(); }
+                                })
+                            }
+                            )
+                    }
+                );
+            }
+        }
+    )
+}
+
 module.exports.login = login;
 module.exports.obtener_usuarios = obtener_usuarios;
-module.exports.nuevo_login = nuevo_login;
+module.exports.registrar_usuario = registrar_usuario;

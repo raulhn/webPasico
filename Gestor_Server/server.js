@@ -27,10 +27,12 @@ app.get('/',
 }
 );
 
+
 /** Usuarios **/
 app.post('/login', servlet_usuario.login);
 app.get('/logueado', servlet_usuario.logueado);
 app.get('/logout', servlet_usuario.logout);
+app.post('/registrar', servlet_usuario.registrar_usuario)
 
 
 https.createServer({
