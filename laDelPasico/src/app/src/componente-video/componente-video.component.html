@@ -1,0 +1,12 @@
+<div *ngIf="bCargado | async" style="float:center">
+
+  <div  *ngIf="bYoutube" class="video-container">
+    <iframe width="560px" height="315px" [src]="obtiene_url_video()"  ></iframe>
+
+  </div>
+  <div  *ngIf="!bYoutube" class="video-container">
+      <video  [src]="obtiene_url_video()" width='640' height='360' controls>
+    </video>
+    
+  </div>
+</div>

@@ -1,0 +1,14 @@
+<div class="row" *ngIf="bCargado | async">
+ 
+    <div *ngFor="let in of contador_componentes_definidos(); let i = index" class="col-md mb-2 col-sm-12">
+   
+        <div *ngIf="componentes[i] == '-1'">
+            <app-nuevo-componente-componentes id_componente={{id_componente}} nOrden="{{i}}"></app-nuevo-componente-componentes>
+        </div>
+
+        <!-- https://stackoverflow.com/questions/44900769/angular-wait-until-i-receive-data-before-loading-template -->
+        <div *ngIf="componentes[i] != '-1'">
+            <app-componente-componente id_componente={{componentes[i]}}></app-componente-componente>
+        </div>
+    </div>
+</div> 

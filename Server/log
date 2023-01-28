@@ -1,0 +1,853 @@
+My HTTPS server listening on port 8443...
+undefined
+id_pagina 0
+Promise { <pending> }
+Error null
+Resultados [ RowDataPacket { nOrden: 1 } ]
+undefined
+Error null
+Resultados [ RowDataPacket { nOrden: 2 } ]
+undefined
+{
+  tipo_componente: [Function: tipo_componente],
+  existe_componente: [Function: existe_componente],
+  actualizar_texto: [Function: actualizar_texto],
+  registrar_componente_comun: [Function: registrar_componente_comun],
+  registrar_componente_texto: [Function: registrar_componente_texto],
+  registrar_componente_texto_orden: [Function: registrar_componente_texto_orden],
+  registrar_componente_imagen: [Function: registrar_componente_imagen],
+  registrar_componente_imagen_orden: [Function: registrar_componente_imagen_orden],
+  registrar_componente: [Function: registrar_componente],
+  obtiene_componente_texto: [Function: obtiene_componente_texto],
+  obtiene_componentes: [Function: obtiene_componentes],
+  eliminar_componente_texto: [Function: eliminar_componente_texto],
+  eliminar_componente_imagen: [Function: eliminar_componente_imagen],
+  decrementa_orden: [Function: decrementa_orden],
+  incrementa_orden: [Function: incrementa_orden],
+  obtiene_numero_componente: [Function: obtiene_numero_componente],
+  obtiene_orden: [Function: obtiene_orden]
+}
+Promise { <pending> }
+{
+  tipo_componente: [Function: tipo_componente],
+  existe_componente: [Function: existe_componente],
+  actualizar_texto: [Function: actualizar_texto],
+  registrar_componente_comun: [Function: registrar_componente_comun],
+  registrar_componente_texto: [Function: registrar_componente_texto],
+  registrar_componente_texto_orden: [Function: registrar_componente_texto_orden],
+  registrar_componente_imagen: [Function: registrar_componente_imagen],
+  registrar_componente_imagen_orden: [Function: registrar_componente_imagen_orden],
+  registrar_componente: [Function: registrar_componente],
+  obtiene_componente_texto: [Function: obtiene_componente_texto],
+  obtiene_componentes: [Function: obtiene_componentes],
+  eliminar_componente_texto: [Function: eliminar_componente_texto],
+  eliminar_componente_imagen: [Function: eliminar_componente_imagen],
+  decrementa_orden: [Function: decrementa_orden],
+  incrementa_orden: [Function: incrementa_orden],
+  obtiene_numero_componente: [Function: obtiene_numero_componente],
+  obtiene_orden: [Function: obtiene_orden]
+}
+[ RowDataPacket { nTipo: 1 } ]
+[ RowDataPacket { nTipo: 1 } ]
+1
+1
+Promise { <pending> }
+undefined
+Promise { <pending> }
+1
+1
+select * from pasico.usuario where usuario = 'a' and pass = 'a'
+1
+a
+Promise { <pending> }
+select * from pasico.usuario where usuario = 'a' and rol = 1
+consulta a 1
+Devuelta true
+select * from pasico.usuario where usuario = 'a' and rol = 1
+id_pagina 0
+consulta a 1
+Devuelta true
+Promise { <pending> }
+select * from pasico.usuario where usuario = 'a' and rol = 1
+{
+  tipo_componente: [Function: tipo_componente],
+  existe_componente: [Function: existe_componente],
+  actualizar_texto: [Function: actualizar_texto],
+  registrar_componente_comun: [Function: registrar_componente_comun],
+  registrar_componente_texto: [Function: registrar_componente_texto],
+  registrar_componente_texto_orden: [Function: registrar_componente_texto_orden],
+  registrar_componente_imagen: [Function: registrar_componente_imagen],
+  registrar_componente_imagen_orden: [Function: registrar_componente_imagen_orden],
+  registrar_componente: [Function: registrar_componente],
+  obtiene_componente_texto: [Function: obtiene_componente_texto],
+  obtiene_componentes: [Function: obtiene_componentes],
+  eliminar_componente_texto: [Function: eliminar_componente_texto],
+  eliminar_componente_imagen: [Function: eliminar_componente_imagen],
+  decrementa_orden: [Function: decrementa_orden],
+  incrementa_orden: [Function: incrementa_orden],
+  obtiene_numero_componente: [Function: obtiene_numero_componente],
+  obtiene_orden: [Function: obtiene_orden]
+}
+a
+select * from pasico.usuario where usuario = 'a' and rol = 1
+consulta a 1
+Devuelta true
+[ RowDataPacket { nTipo: 1 } ]
+consulta a 1
+Devuelta true
+{
+  tipo_componente: [Function: tipo_componente],
+  existe_componente: [Function: existe_componente],
+  actualizar_texto: [Function: actualizar_texto],
+  registrar_componente_comun: [Function: registrar_componente_comun],
+  registrar_componente_texto: [Function: registrar_componente_texto],
+  registrar_componente_texto_orden: [Function: registrar_componente_texto_orden],
+  registrar_componente_imagen: [Function: registrar_componente_imagen],
+  registrar_componente_imagen_orden: [Function: registrar_componente_imagen_orden],
+  registrar_componente: [Function: registrar_componente],
+  obtiene_componente_texto: [Function: obtiene_componente_texto],
+  obtiene_componentes: [Function: obtiene_componentes],
+  eliminar_componente_texto: [Function: eliminar_componente_texto],
+  eliminar_componente_imagen: [Function: eliminar_componente_imagen],
+  decrementa_orden: [Function: decrementa_orden],
+  incrementa_orden: [Function: incrementa_orden],
+  obtiene_numero_componente: [Function: obtiene_numero_componente],
+  obtiene_orden: [Function: obtiene_orden]
+}
+[ RowDataPacket { nTipo: 1 } ]
+1
+Error null
+Resultados [ RowDataPacket { nOrden: 2 } ]
+1
+Error null
+Resultados [ RowDataPacket { nOrden: 1 } ]
+a
+{
+  tipo_componente: [Function: tipo_componente],
+  existe_componente: [Function: existe_componente],
+  actualizar_texto: [Function: actualizar_texto],
+  registrar_componente_comun: [Function: registrar_componente_comun],
+  registrar_componente_texto: [Function: registrar_componente_texto],
+  registrar_componente_texto_orden: [Function: registrar_componente_texto_orden],
+  registrar_componente_imagen: [Function: registrar_componente_imagen],
+  registrar_componente_imagen_orden: [Function: registrar_componente_imagen_orden],
+  registrar_componente: [Function: registrar_componente],
+  obtiene_componente_texto: [Function: obtiene_componente_texto],
+  obtiene_componentes: [Function: obtiene_componentes],
+  eliminar_componente_texto: [Function: eliminar_componente_texto],
+  eliminar_componente_imagen: [Function: eliminar_componente_imagen],
+  decrementa_orden: [Function: decrementa_orden],
+  incrementa_orden: [Function: incrementa_orden],
+  obtiene_numero_componente: [Function: obtiene_numero_componente],
+  obtiene_orden: [Function: obtiene_orden]
+}
+[ RowDataPacket { nTipo: 1 } ]
+a
+select * from pasico.usuario where usuario = 'a' and rol = 1
+a
+select * from pasico.usuario where usuario = 'a' and rol = 1
+Error null
+Resultados [ RowDataPacket { nOrden: 1 } ]
+{
+  tipo_componente: [Function: tipo_componente],
+  existe_componente: [Function: existe_componente],
+  actualizar_texto: [Function: actualizar_texto],
+  registrar_componente_comun: [Function: registrar_componente_comun],
+  registrar_componente_texto: [Function: registrar_componente_texto],
+  registrar_componente_texto_orden: [Function: registrar_componente_texto_orden],
+  registrar_componente_imagen: [Function: registrar_componente_imagen],
+  registrar_componente_imagen_orden: [Function: registrar_componente_imagen_orden],
+  registrar_componente: [Function: registrar_componente],
+  obtiene_componente_texto: [Function: obtiene_componente_texto],
+  obtiene_componentes: [Function: obtiene_componentes],
+  eliminar_componente_texto: [Function: eliminar_componente_texto],
+  eliminar_componente_imagen: [Function: eliminar_componente_imagen],
+  decrementa_orden: [Function: decrementa_orden],
+  incrementa_orden: [Function: incrementa_orden],
+  obtiene_numero_componente: [Function: obtiene_numero_componente],
+  obtiene_orden: [Function: obtiene_orden]
+}
+Promise { <pending> }
+consulta a 1
+Devuelta true
+consulta a 1
+Devuelta true
+Error null
+Resultados [ RowDataPacket { nOrden: 2 } ]
+[ RowDataPacket { nTipo: 1 } ]
+1
+1
+Promise { <pending> }
+select * from pasico.usuario where usuario = 'a' and rol = 1
+a
+id_pagina 3
+consulta a 1
+Devuelta true
+select * from pasico.usuario where usuario = 'a' and rol = 1
+consulta a 1
+Devuelta true
+{
+  tipo_componente: [Function: tipo_componente],
+  existe_componente: [Function: existe_componente],
+  actualizar_texto: [Function: actualizar_texto],
+  registrar_componente_comun: [Function: registrar_componente_comun],
+  registrar_componente_texto: [Function: registrar_componente_texto],
+  registrar_componente_texto_orden: [Function: registrar_componente_texto_orden],
+  registrar_componente_imagen: [Function: registrar_componente_imagen],
+  registrar_componente_imagen_orden: [Function: registrar_componente_imagen_orden],
+  registrar_componente: [Function: registrar_componente],
+  obtiene_componente_texto: [Function: obtiene_componente_texto],
+  obtiene_componentes: [Function: obtiene_componentes],
+  eliminar_componente_texto: [Function: eliminar_componente_texto],
+  eliminar_componente_imagen: [Function: eliminar_componente_imagen],
+  decrementa_orden: [Function: decrementa_orden],
+  incrementa_orden: [Function: incrementa_orden],
+  obtiene_numero_componente: [Function: obtiene_numero_componente],
+  obtiene_orden: [Function: obtiene_orden]
+}
+a
+[ RowDataPacket { nTipo: 1 } ]
+select * from pasico.usuario where usuario = 'a' and rol = 1
+consulta a 1
+Devuelta true
+Error null
+Resultados [ RowDataPacket { nOrden: 1 } ]
+Promise { <pending> }
+1
+1
+select * from pasico.usuario where usuario = 'a' and rol = 1
+consulta a 1
+select * from pasico.usuario where usuario = 'a' and rol = 1
+consulta a 1
+Devuelta true
+Promise { <pending> }
+a
+select * from pasico.usuario where usuario = 'a' and rol = 1
+id_pagina 3
+consulta a 1
+Devuelta true
+Promise { <pending> }
+select * from pasico.usuario where usuario = 'a' and rol = 1
+consulta a 1
+Devuelta true
+Error null
+Resultados [ RowDataPacket { nOrden: 1 } ]
+a
+1
+{
+  tipo_componente: [Function: tipo_componente],
+  existe_componente: [Function: existe_componente],
+  actualizar_texto: [Function: actualizar_texto],
+  registrar_componente_comun: [Function: registrar_componente_comun],
+  registrar_componente_texto: [Function: registrar_componente_texto],
+  registrar_componente_texto_orden: [Function: registrar_componente_texto_orden],
+  registrar_componente_imagen: [Function: registrar_componente_imagen],
+  registrar_componente_imagen_orden: [Function: registrar_componente_imagen_orden],
+  registrar_componente: [Function: registrar_componente],
+  obtiene_componente_texto: [Function: obtiene_componente_texto],
+  obtiene_componentes: [Function: obtiene_componentes],
+  eliminar_componente_texto: [Function: eliminar_componente_texto],
+  eliminar_componente_imagen: [Function: eliminar_componente_imagen],
+  decrementa_orden: [Function: decrementa_orden],
+  incrementa_orden: [Function: incrementa_orden],
+  obtiene_numero_componente: [Function: obtiene_numero_componente],
+  obtiene_orden: [Function: obtiene_orden]
+}
+[ RowDataPacket { nTipo: 1 } ]
+1
+Promise { <pending> }
+id_pagina 3
+select * from pasico.usuario where usuario = 'a' and rol = 1
+select * from pasico.usuario where usuario = 'a' and rol = 1
+a
+consulta a 1
+Devuelta true
+consulta a 1
+Devuelta true
+Promise { <pending> }
+{
+  tipo_componente: [Function: tipo_componente],
+  existe_componente: [Function: existe_componente],
+  actualizar_texto: [Function: actualizar_texto],
+  registrar_componente_comun: [Function: registrar_componente_comun],
+  registrar_componente_texto: [Function: registrar_componente_texto],
+  registrar_componente_texto_orden: [Function: registrar_componente_texto_orden],
+  registrar_componente_imagen: [Function: registrar_componente_imagen],
+  registrar_componente_imagen_orden: [Function: registrar_componente_imagen_orden],
+  registrar_componente: [Function: registrar_componente],
+  obtiene_componente_texto: [Function: obtiene_componente_texto],
+  obtiene_componentes: [Function: obtiene_componentes],
+  eliminar_componente_texto: [Function: eliminar_componente_texto],
+  eliminar_componente_imagen: [Function: eliminar_componente_imagen],
+  decrementa_orden: [Function: decrementa_orden],
+  incrementa_orden: [Function: incrementa_orden],
+  obtiene_numero_componente: [Function: obtiene_numero_componente],
+  obtiene_orden: [Function: obtiene_orden]
+}
+[ RowDataPacket { nTipo: 1 } ]
+a
+Error null
+Resultados [ RowDataPacket { nOrden: 1 } ]
+select * from pasico.usuario where usuario = 'a' and rol = 1
+consulta a 1
+Devuelta true
+1
+1
+select * from pasico.usuario where usuario = 'a' and rol = 1
+consulta a 1
+id_pagina 3
+select * from pasico.usuario where usuario = 'a' and rol = 1
+consulta a 1
+Devuelta true
+Promise { <pending> }
+select * from pasico.usuario where usuario = 'a' and rol = 1
+consulta a 1
+Devuelta true
+a
+a
+select * from pasico.usuario where usuario = 'a' and rol = 1
+consulta a 1
+Devuelta true
+{
+  tipo_componente: [Function: tipo_componente],
+  existe_componente: [Function: existe_componente],
+  actualizar_texto: [Function: actualizar_texto],
+  registrar_componente_comun: [Function: registrar_componente_comun],
+  registrar_componente_texto: [Function: registrar_componente_texto],
+  registrar_componente_texto_orden: [Function: registrar_componente_texto_orden],
+  registrar_componente_imagen: [Function: registrar_componente_imagen],
+  registrar_componente_imagen_orden: [Function: registrar_componente_imagen_orden],
+  registrar_componente: [Function: registrar_componente],
+  obtiene_componente_texto: [Function: obtiene_componente_texto],
+  obtiene_componentes: [Function: obtiene_componentes],
+  eliminar_componente_texto: [Function: eliminar_componente_texto],
+  eliminar_componente_imagen: [Function: eliminar_componente_imagen],
+  decrementa_orden: [Function: decrementa_orden],
+  incrementa_orden: [Function: incrementa_orden],
+  obtiene_numero_componente: [Function: obtiene_numero_componente],
+  obtiene_orden: [Function: obtiene_orden]
+}
+Error null
+Resultados [ RowDataPacket { nOrden: 1 } ]
+[ RowDataPacket { nTipo: 1 } ]
+Promise { <pending> }
+1
+1
+select * from pasico.usuario where usuario = 'a' and rol = 1
+consulta a 1
+id_pagina 3
+select * from pasico.usuario where usuario = 'a' and rol = 1
+consulta a 1
+Devuelta true
+Promise { <pending> }
+a
+select * from pasico.usuario where usuario = 'a' and rol = 1
+consulta a 1
+Devuelta true
+Error null
+Resultados [ RowDataPacket { nOrden: 1 } ]
+{
+  tipo_componente: [Function: tipo_componente],
+  existe_componente: [Function: existe_componente],
+  actualizar_texto: [Function: actualizar_texto],
+  registrar_componente_comun: [Function: registrar_componente_comun],
+  registrar_componente_texto: [Function: registrar_componente_texto],
+  registrar_componente_texto_orden: [Function: registrar_componente_texto_orden],
+  registrar_componente_imagen: [Function: registrar_componente_imagen],
+  registrar_componente_imagen_orden: [Function: registrar_componente_imagen_orden],
+  registrar_componente: [Function: registrar_componente],
+  obtiene_componente_texto: [Function: obtiene_componente_texto],
+  obtiene_componentes: [Function: obtiene_componentes],
+  eliminar_componente_texto: [Function: eliminar_componente_texto],
+  eliminar_componente_imagen: [Function: eliminar_componente_imagen],
+  decrementa_orden: [Function: decrementa_orden],
+  incrementa_orden: [Function: incrementa_orden],
+  obtiene_numero_componente: [Function: obtiene_numero_componente],
+  obtiene_orden: [Function: obtiene_orden]
+}
+[ RowDataPacket { nTipo: 1 } ]
+Promise { <pending> }
+a
+select * from pasico.usuario where usuario = 'a' and rol = 1
+consulta a 1
+Devuelta true
+1
+1
+select * from pasico.usuario where usuario = 'a' and rol = 1
+consulta a 1
+id_pagina 3
+a
+Promise { <pending> }
+select * from pasico.usuario where usuario = 'a' and rol = 1
+consulta a 1
+Devuelta true
+select * from pasico.usuario where usuario = 'a' and rol = 1
+consulta a 1
+Devuelta true
+{
+  tipo_componente: [Function: tipo_componente],
+  existe_componente: [Function: existe_componente],
+  actualizar_texto: [Function: actualizar_texto],
+  registrar_componente_comun: [Function: registrar_componente_comun],
+  registrar_componente_texto: [Function: registrar_componente_texto],
+  registrar_componente_texto_orden: [Function: registrar_componente_texto_orden],
+  registrar_componente_imagen: [Function: registrar_componente_imagen],
+  registrar_componente_imagen_orden: [Function: registrar_componente_imagen_orden],
+  registrar_componente: [Function: registrar_componente],
+  obtiene_componente_texto: [Function: obtiene_componente_texto],
+  obtiene_componentes: [Function: obtiene_componentes],
+  eliminar_componente_texto: [Function: eliminar_componente_texto],
+  eliminar_componente_imagen: [Function: eliminar_componente_imagen],
+  decrementa_orden: [Function: decrementa_orden],
+  incrementa_orden: [Function: incrementa_orden],
+  obtiene_numero_componente: [Function: obtiene_numero_componente],
+  obtiene_orden: [Function: obtiene_orden]
+}
+[ RowDataPacket { nTipo: 1 } ]
+a
+select * from pasico.usuario where usuario = 'a' and rol = 1
+consulta a 1
+Devuelta true
+Promise { <pending> }
+Error null
+Resultados [ RowDataPacket { nOrden: 1 } ]
+1
+1
+id_pagina 0
+select * from pasico.usuario where usuario = 'a' and rol = 1
+consulta a 1
+Devuelta true
+select * from pasico.usuario where usuario = 'a' and rol = 1
+a
+consulta a 1
+Devuelta true
+Promise { <pending> }
+Error null
+Resultados [ RowDataPacket { nOrden: 1 } ]
+a
+{
+  tipo_componente: [Function: tipo_componente],
+  existe_componente: [Function: existe_componente],
+  actualizar_texto: [Function: actualizar_texto],
+  registrar_componente_comun: [Function: registrar_componente_comun],
+  registrar_componente_texto: [Function: registrar_componente_texto],
+  registrar_componente_texto_orden: [Function: registrar_componente_texto_orden],
+  registrar_componente_imagen: [Function: registrar_componente_imagen],
+  registrar_componente_imagen_orden: [Function: registrar_componente_imagen_orden],
+  registrar_componente: [Function: registrar_componente],
+  obtiene_componente_texto: [Function: obtiene_componente_texto],
+  obtiene_componentes: [Function: obtiene_componentes],
+  eliminar_componente_texto: [Function: eliminar_componente_texto],
+  eliminar_componente_imagen: [Function: eliminar_componente_imagen],
+  decrementa_orden: [Function: decrementa_orden],
+  incrementa_orden: [Function: incrementa_orden],
+  obtiene_numero_componente: [Function: obtiene_numero_componente],
+  obtiene_orden: [Function: obtiene_orden]
+}
+select * from pasico.usuario where usuario = 'a' and rol = 1
+[ RowDataPacket { nTipo: 1 } ]
+a
+consulta a 1
+Devuelta true
+select * from pasico.usuario where usuario = 'a' and rol = 1
+consulta a 1
+Devuelta true
+Error null
+Resultados [ RowDataPacket { nOrden: 2 } ]
+{
+  tipo_componente: [Function: tipo_componente],
+  existe_componente: [Function: existe_componente],
+  actualizar_texto: [Function: actualizar_texto],
+  registrar_componente_comun: [Function: registrar_componente_comun],
+  registrar_componente_texto: [Function: registrar_componente_texto],
+  registrar_componente_texto_orden: [Function: registrar_componente_texto_orden],
+  registrar_componente_imagen: [Function: registrar_componente_imagen],
+  registrar_componente_imagen_orden: [Function: registrar_componente_imagen_orden],
+  registrar_componente: [Function: registrar_componente],
+  obtiene_componente_texto: [Function: obtiene_componente_texto],
+  obtiene_componentes: [Function: obtiene_componentes],
+  eliminar_componente_texto: [Function: eliminar_componente_texto],
+  eliminar_componente_imagen: [Function: eliminar_componente_imagen],
+  decrementa_orden: [Function: decrementa_orden],
+  incrementa_orden: [Function: incrementa_orden],
+  obtiene_numero_componente: [Function: obtiene_numero_componente],
+  obtiene_orden: [Function: obtiene_orden]
+}
+[ RowDataPacket { nTipo: 1 } ]
+Promise { <pending> }
+1
+1
+id_pagina 0
+Promise { <pending> }
+undefined
+{
+  tipo_componente: [Function: tipo_componente],
+  existe_componente: [Function: existe_componente],
+  actualizar_texto: [Function: actualizar_texto],
+  registrar_componente_comun: [Function: registrar_componente_comun],
+  registrar_componente_texto: [Function: registrar_componente_texto],
+  registrar_componente_texto_orden: [Function: registrar_componente_texto_orden],
+  registrar_componente_imagen: [Function: registrar_componente_imagen],
+  registrar_componente_imagen_orden: [Function: registrar_componente_imagen_orden],
+  registrar_componente: [Function: registrar_componente],
+  obtiene_componente_texto: [Function: obtiene_componente_texto],
+  obtiene_componentes: [Function: obtiene_componentes],
+  eliminar_componente_texto: [Function: eliminar_componente_texto],
+  eliminar_componente_imagen: [Function: eliminar_componente_imagen],
+  decrementa_orden: [Function: decrementa_orden],
+  incrementa_orden: [Function: incrementa_orden],
+  obtiene_numero_componente: [Function: obtiene_numero_componente],
+  obtiene_orden: [Function: obtiene_orden]
+}
+Error null
+Resultados [ RowDataPacket { nOrden: 1 } ]
+[ RowDataPacket { nTipo: 1 } ]
+undefined
+undefined
+Error null
+Resultados [ RowDataPacket { nOrden: 2 } ]
+{
+  tipo_componente: [Function: tipo_componente],
+  existe_componente: [Function: existe_componente],
+  actualizar_texto: [Function: actualizar_texto],
+  registrar_componente_comun: [Function: registrar_componente_comun],
+  registrar_componente_texto: [Function: registrar_componente_texto],
+  registrar_componente_texto_orden: [Function: registrar_componente_texto_orden],
+  registrar_componente_imagen: [Function: registrar_componente_imagen],
+  registrar_componente_imagen_orden: [Function: registrar_componente_imagen_orden],
+  registrar_componente: [Function: registrar_componente],
+  obtiene_componente_texto: [Function: obtiene_componente_texto],
+  obtiene_componentes: [Function: obtiene_componentes],
+  eliminar_componente_texto: [Function: eliminar_componente_texto],
+  eliminar_componente_imagen: [Function: eliminar_componente_imagen],
+  decrementa_orden: [Function: decrementa_orden],
+  incrementa_orden: [Function: incrementa_orden],
+  obtiene_numero_componente: [Function: obtiene_numero_componente],
+  obtiene_orden: [Function: obtiene_orden]
+}
+[ RowDataPacket { nTipo: 1 } ]
+Promise { <pending> }
+1
+1
+id_pagina 0
+Promise { <pending> }
+undefined
+Error null
+Resultados [ RowDataPacket { nOrden: 1 } ]
+undefined
+{
+  tipo_componente: [Function: tipo_componente],
+  existe_componente: [Function: existe_componente],
+  actualizar_texto: [Function: actualizar_texto],
+  registrar_componente_comun: [Function: registrar_componente_comun],
+  registrar_componente_texto: [Function: registrar_componente_texto],
+  registrar_componente_texto_orden: [Function: registrar_componente_texto_orden],
+  registrar_componente_imagen: [Function: registrar_componente_imagen],
+  registrar_componente_imagen_orden: [Function: registrar_componente_imagen_orden],
+  registrar_componente: [Function: registrar_componente],
+  obtiene_componente_texto: [Function: obtiene_componente_texto],
+  obtiene_componentes: [Function: obtiene_componentes],
+  eliminar_componente_texto: [Function: eliminar_componente_texto],
+  eliminar_componente_imagen: [Function: eliminar_componente_imagen],
+  decrementa_orden: [Function: decrementa_orden],
+  incrementa_orden: [Function: incrementa_orden],
+  obtiene_numero_componente: [Function: obtiene_numero_componente],
+  obtiene_orden: [Function: obtiene_orden]
+}
+[ RowDataPacket { nTipo: 1 } ]
+undefined
+Error null
+Resultados [ RowDataPacket { nOrden: 2 } ]
+Promise { <pending> }
+{
+  tipo_componente: [Function: tipo_componente],
+  existe_componente: [Function: existe_componente],
+  actualizar_texto: [Function: actualizar_texto],
+  registrar_componente_comun: [Function: registrar_componente_comun],
+  registrar_componente_texto: [Function: registrar_componente_texto],
+  registrar_componente_texto_orden: [Function: registrar_componente_texto_orden],
+  registrar_componente_imagen: [Function: registrar_componente_imagen],
+  registrar_componente_imagen_orden: [Function: registrar_componente_imagen_orden],
+  registrar_componente: [Function: registrar_componente],
+  obtiene_componente_texto: [Function: obtiene_componente_texto],
+  obtiene_componentes: [Function: obtiene_componentes],
+  eliminar_componente_texto: [Function: eliminar_componente_texto],
+  eliminar_componente_imagen: [Function: eliminar_componente_imagen],
+  decrementa_orden: [Function: decrementa_orden],
+  incrementa_orden: [Function: incrementa_orden],
+  obtiene_numero_componente: [Function: obtiene_numero_componente],
+  obtiene_orden: [Function: obtiene_orden]
+}
+[ RowDataPacket { nTipo: 1 } ]
+1
+1
+Promise { <pending> }
+undefined
+Promise { <pending> }
+1
+1
+select * from pasico.usuario where usuario = 'a' and pass = 'a'
+1
+id_pagina 0
+Promise { <pending> }
+select * from pasico.usuario where usuario = 'a' and rol = 1
+consulta a 1
+Devuelta true
+select * from pasico.usuario where usuario = 'a' and rol = 1
+consulta a 1
+Devuelta true
+a
+a
+select * from pasico.usuario where usuario = 'a' and rol = 1
+consulta a 1
+Devuelta true
+a
+select * from pasico.usuario where usuario = 'a' and rol = 1
+consulta a 1
+Devuelta true
+Promise { <pending> }
+{
+  tipo_componente: [Function: tipo_componente],
+  existe_componente: [Function: existe_componente],
+  actualizar_texto: [Function: actualizar_texto],
+  registrar_componente_comun: [Function: registrar_componente_comun],
+  registrar_componente_texto: [Function: registrar_componente_texto],
+  registrar_componente_texto_orden: [Function: registrar_componente_texto_orden],
+  registrar_componente_imagen: [Function: registrar_componente_imagen],
+  registrar_componente_imagen_orden: [Function: registrar_componente_imagen_orden],
+  registrar_componente: [Function: registrar_componente],
+  obtiene_componente_texto: [Function: obtiene_componente_texto],
+  obtiene_componentes: [Function: obtiene_componentes],
+  eliminar_componente_texto: [Function: eliminar_componente_texto],
+  eliminar_componente_imagen: [Function: eliminar_componente_imagen],
+  decrementa_orden: [Function: decrementa_orden],
+  incrementa_orden: [Function: incrementa_orden],
+  obtiene_numero_componente: [Function: obtiene_numero_componente],
+  obtiene_orden: [Function: obtiene_orden]
+}
+[ RowDataPacket { nTipo: 1 } ]
+Error null
+Resultados [ RowDataPacket { nOrden: 2 } ]
+{
+  tipo_componente: [Function: tipo_componente],
+  existe_componente: [Function: existe_componente],
+  actualizar_texto: [Function: actualizar_texto],
+  registrar_componente_comun: [Function: registrar_componente_comun],
+  registrar_componente_texto: [Function: registrar_componente_texto],
+  registrar_componente_texto_orden: [Function: registrar_componente_texto_orden],
+  registrar_componente_imagen: [Function: registrar_componente_imagen],
+  registrar_componente_imagen_orden: [Function: registrar_componente_imagen_orden],
+  registrar_componente: [Function: registrar_componente],
+  obtiene_componente_texto: [Function: obtiene_componente_texto],
+  obtiene_componentes: [Function: obtiene_componentes],
+  eliminar_componente_texto: [Function: eliminar_componente_texto],
+  eliminar_componente_imagen: [Function: eliminar_componente_imagen],
+  decrementa_orden: [Function: decrementa_orden],
+  incrementa_orden: [Function: incrementa_orden],
+  obtiene_numero_componente: [Function: obtiene_numero_componente],
+  obtiene_orden: [Function: obtiene_orden]
+}
+Error null
+Resultados [ RowDataPacket { nOrden: 1 } ]
+[ RowDataPacket { nTipo: 1 } ]
+1
+1
+select * from pasico.usuario where usuario = 'a' and rol = 1
+consulta a 1
+[ RowDataPacket { nTipo: 1 } ]
+Eliminar componente texto
+eliminar_componente_texto-> Eliminar 1
+Error null
+Resultados [ RowDataPacket { nOrden: 2 } ]
+Eliminado
+id_pagina 0
+a
+Promise { <pending> }
+select * from pasico.usuario where usuario = 'a' and rol = 1
+select * from pasico.usuario where usuario = 'a' and rol = 1
+consulta a 1
+Devuelta true
+consulta a 1
+Devuelta true
+Promise { <pending> }
+Error null
+Resultados [ RowDataPacket { nOrden: 1 } ]
+a
+select * from pasico.usuario where usuario = 'a' and rol = 1
+consulta a 1
+Devuelta true
+{
+  tipo_componente: [Function: tipo_componente],
+  existe_componente: [Function: existe_componente],
+  actualizar_texto: [Function: actualizar_texto],
+  registrar_componente_comun: [Function: registrar_componente_comun],
+  registrar_componente_texto: [Function: registrar_componente_texto],
+  registrar_componente_texto_orden: [Function: registrar_componente_texto_orden],
+  registrar_componente_imagen: [Function: registrar_componente_imagen],
+  registrar_componente_imagen_orden: [Function: registrar_componente_imagen_orden],
+  registrar_componente: [Function: registrar_componente],
+  obtiene_componente_texto: [Function: obtiene_componente_texto],
+  obtiene_componentes: [Function: obtiene_componentes],
+  eliminar_componente_texto: [Function: eliminar_componente_texto],
+  eliminar_componente_imagen: [Function: eliminar_componente_imagen],
+  decrementa_orden: [Function: decrementa_orden],
+  incrementa_orden: [Function: incrementa_orden],
+  obtiene_numero_componente: [Function: obtiene_numero_componente],
+  obtiene_orden: [Function: obtiene_orden]
+}
+[ RowDataPacket { nTipo: 1 } ]
+1
+1
+registrar
+a
+0
+Tipo asociacion 1
+select * from pasico.usuario where usuario = 'a' and rol = 1
+consulta a 1
+Registrar Imagen
+registrar
+a
+0
+Tipo asociacion 1
+select * from pasico.usuario where usuario = 'a' and rol = 1
+consulta a 1
+Registrar Imagen
+registrar
+a
+0
+Tipo asociacion 1
+select * from pasico.usuario where usuario = 'a' and rol = 1
+consulta a 1
+Registrar Imagen
+id_pagina 0
+Promise { <pending> }
+select * from pasico.usuario where usuario = 'a' and rol = 1
+consulta a 1
+Devuelta true
+select * from pasico.usuario where usuario = 'a' and rol = 1
+consulta a 1
+Devuelta true
+a
+a
+{
+  tipo_componente: [Function: tipo_componente],
+  existe_componente: [Function: existe_componente],
+  actualizar_texto: [Function: actualizar_texto],
+  registrar_componente_comun: [Function: registrar_componente_comun],
+  registrar_componente_texto: [Function: registrar_componente_texto],
+  registrar_componente_texto_orden: [Function: registrar_componente_texto_orden],
+  registrar_componente_imagen: [Function: registrar_componente_imagen],
+  registrar_componente_imagen_orden: [Function: registrar_componente_imagen_orden],
+  registrar_componente: [Function: registrar_componente],
+  obtiene_componente_texto: [Function: obtiene_componente_texto],
+  obtiene_componentes: [Function: obtiene_componentes],
+  eliminar_componente_texto: [Function: eliminar_componente_texto],
+  eliminar_componente_imagen: [Function: eliminar_componente_imagen],
+  decrementa_orden: [Function: decrementa_orden],
+  incrementa_orden: [Function: incrementa_orden],
+  obtiene_numero_componente: [Function: obtiene_numero_componente],
+  obtiene_orden: [Function: obtiene_orden]
+}
+[ RowDataPacket { nTipo: 1 } ]
+Error null
+Resultados [ RowDataPacket { nOrden: 1 } ]
+select * from pasico.usuario where usuario = 'a' and rol = 1
+consulta a 1
+Devuelta true
+Promise { <pending> }
+1
+1
+select * from pasico.usuario where usuario = 'a' and rol = 1
+Promise { <pending> }
+id_pagina 0
+consulta a 1
+Devuelta true
+select * from pasico.usuario where usuario = 'a' and rol = 1
+consulta a 1
+Devuelta true
+a
+Promise { <pending> }
+Error null
+Resultados [ RowDataPacket { nOrden: 1 } ]
+a
+{
+  tipo_componente: [Function: tipo_componente],
+  existe_componente: [Function: existe_componente],
+  actualizar_texto: [Function: actualizar_texto],
+  registrar_componente_comun: [Function: registrar_componente_comun],
+  registrar_componente_texto: [Function: registrar_componente_texto],
+  registrar_componente_texto_orden: [Function: registrar_componente_texto_orden],
+  registrar_componente_imagen: [Function: registrar_componente_imagen],
+  registrar_componente_imagen_orden: [Function: registrar_componente_imagen_orden],
+  registrar_componente: [Function: registrar_componente],
+  obtiene_componente_texto: [Function: obtiene_componente_texto],
+  obtiene_componentes: [Function: obtiene_componentes],
+  eliminar_componente_texto: [Function: eliminar_componente_texto],
+  eliminar_componente_imagen: [Function: eliminar_componente_imagen],
+  decrementa_orden: [Function: decrementa_orden],
+  incrementa_orden: [Function: incrementa_orden],
+  obtiene_numero_componente: [Function: obtiene_numero_componente],
+  obtiene_orden: [Function: obtiene_orden]
+}
+select * from pasico.usuario where usuario = 'a' and rol = 1
+[ RowDataPacket { nTipo: 1 } ]
+consulta a 1
+Devuelta true
+1
+1
+registrar
+a
+0
+Tipo asociacion 1
+select * from pasico.usuario where usuario = 'a' and rol = 1
+consulta a 1
+Registrar Imagen
+registrar
+a
+0
+Tipo asociacion 1
+select * from pasico.usuario where usuario = 'a' and rol = 1
+consulta a 1
+Registrar Imagen
+registrar
+a
+0
+Tipo asociacion 1
+select * from pasico.usuario where usuario = 'a' and rol = 1
+consulta a 1
+Registrar Imagen
+registrar
+a
+0
+Tipo asociacion 1
+select * from pasico.usuario where usuario = 'a' and rol = 1
+consulta a 1
+Registrar Imagen
+registrar
+a
+0
+Tipo asociacion 1
+select * from pasico.usuario where usuario = 'a' and rol = 1
+consulta a 1
+Registrar Imagen
+registrar
+a
+0
+Tipo asociacion 1
+select * from pasico.usuario where usuario = 'a' and rol = 1
+consulta a 1
+Registrar Imagen
+registrar
+a
+0
+Tipo asociacion 1
+select * from pasico.usuario where usuario = 'a' and rol = 1
+consulta a 1
+Registrar Imagen
+registrar
+a
+0
+Tipo asociacion 1
+select * from pasico.usuario where usuario = 'a' and rol = 1
+consulta a 1
+Registrar Imagen

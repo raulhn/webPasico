@@ -1,0 +1,77 @@
+
+.dropdown-menu {
+    background-color: blue;
+    color: white;
+  }
+  
+  .boton{
+    background-color: blue;
+    color: white;
+  }
+  
+  .active-menu {
+    color: blue !important;
+    font-weight: 700;
+  
+  }
+  
+  .inactive-menu:hover{
+    font-weight: 700;
+    
+  }
+  
+  .dropdown-item:hover{
+    background-color: blue !important;
+  }
+  
+  .dropdown-item{
+    font-size: 13px !important;
+  }
+  
+  .menu-principal {
+    font-size: 15px !important;
+    font-weight: 400 !important;
+  }
+  
+  .bold {
+      font-weight: 700;
+  }
+  
+  .nav-item:hover{
+    color: blue;
+  }
+  
+  .gris {
+    color: #7f7f7f !important;
+  }
+  
+  .blue{
+    color: blue !important;
+  }
+  
+  .black{
+    color: black !important;
+  }
+  a{
+    color: inherit !important;
+  }
+  
+  hr.separa-destacados {
+    border: 1px solid blue;
+  }
+  
+  
+  .foto-destacados{
+    height: 420px !important;
+  }
+  
+  .foto-evento-destacado{
+    width: 150px !important;
+  }
+  
+  .imagen-carrusel{
+    max-height: 1000px;
+  }
+  
+  
+  

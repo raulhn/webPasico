@@ -1,0 +1,78 @@
+/* You can add global styles to this file, and also import other style files */
+
+.borde_gris {border-color: gray; border-style: solid;}
+.borde_azul:hover {border-color: blue; border-style: solid;}
+.enlace_menu {text-decoration: none; color: gray; padding-right: 20px;}
+.menu_principal{color: black;}
+.menu_secundario {background-color: blue !important; color: white !important; text-decoration:none; }
+
+.azul_clarito {background-color: #c4eef2}
+.amarillo_clarito {background-color: rgb(255, 245, 185);}
+.rosa_clarito {background-color: #f8e4f9}
+.marron_clarito {background-color: #dcb292}
+.verde_clarito {background-color: #c3dc92;}
+.rojo_clarito {background-color: #ec7059}
+.lila_clarito {background-color: #c08bf5}
+
+.azul_claro {background-color: #B4B4F3;}
+.azul_banda {background-color: #1717e6;}
+
+.azul_suave {background-color: #bcd4f1;}
+.borde_azul_suave {border-color: #bcd4f1;}
+
+
+
+.video-container {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 56.27198%;
+}
+.video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.video-container video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.iframe-container {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 56.27198%;
+}
+.iframe-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.texto-overflow{
+  overflow-wrap: break-word;
+}
+
+.ngx-gallery { display: inline-block; margin-bottom: 20px; }
+
+  /*Cambiar color de flechas */    
+  /*  
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  height: 100px;
+  width: 100px;
+  background-size: 100%, 100%;
+  background-color: white;
+  border: 1px solid white;
+  background-image: none;
+}
+
+*/

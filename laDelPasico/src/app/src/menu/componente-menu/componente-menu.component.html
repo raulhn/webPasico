@@ -1,0 +1,107 @@
+<div class="container-fluid pb-1 pt-4">
+  <div class="row">
+    <div class="col-12">
+      <a href="./">
+        <img src="./assets/img/Logo.png" style="max-width: 100%;width:auto"/> 
+      </a>
+    </div>
+
+
+  </div>
+</div>
+<nav *ngIf="bCargado | async"  class="navbar navbar-expand-lg navbar-light bg-light" role="navigation">
+  <div class="container-fluid">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul  class="navbar-nav me-auto mb-2 mb-lg-0">
+
+        <div  *ngFor="let menu_padre of menu_completo[0];">
+
+        <li class="nav-item dropdown">
+          <button *ngIf="esAdministrador  && modoEdicion" style=" color:rgb(119, 23, 23); border-color:rgb(119, 23, 23); background-color: white; border-style: solid; " 
+          type="button" class="btn" (click)="[eliminar_menu(menu_padre.nid)]" ><fa-icon [icon]="faXmark"></fa-icon></button>
+          <button *ngIf="esAdministrador  && modoEdicion" style="color:rgb(14, 49, 14); border-color:rgb(14, 49, 14); background-color: white; border-style: solid; " 
+          type="button" class="btn" (click)="[actualizar_titulo_menu(menu_padre.nid)]"><fa-icon [icon]="faPen"></fa-icon></button>
+ 
+              <a class="dropdown-toggle enlace_menu menu_principal"   href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                 {{menu_padre.vTitulo}}
+              </a>
+
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown" style="background-color:blue;">
+            <li *ngFor="let menu_hijo of menu_completo[menu_padre.nid];" >
+              <div class="row">
+                <div class="col" *ngIf="esAdministrador  && modoEdicion" class="" style="float: right;">
+                  <button style=" color:rgb(119, 23, 23); border-color:rgb(119, 23, 23); background-color: white; border-style: solid; " 
+                  type="button" class="btn" (click)="[eliminar_menu(menu_hijo.nid)]"><fa-icon [icon]="faXmark"></fa-icon></button>
+                  <button  style="color:rgb(14, 49, 14); border-color:rgb(14, 49, 14); background-color: white; border-style: solid; " 
+                  type="button" class="btn" (click)="[actualizar_titulo_menu(menu_hijo.nid)]"><fa-icon [icon]="faPen"></fa-icon></button>
+                 
+                </div>
+                <div class="container-fluid col " id="{{'menu_' + menu_hijo.nOrden}}">
+                   <a class="enlace_menu" class="dropdown-item menu_secundario" href="{{obtiene_url(menu_hijo.nid)}}">{{menu_hijo.vTitulo}}</a>
+                   <hr  *ngIf="esAdministrador  && modoEdicion"  style="border: 1px  rgb(23, 5, 126); color: rgb(23, 5, 126);" >
+                </div>
+
+              </div>
+           
+            </li>
+
+            <li *ngIf="esAdministrador  && modoEdicion"><button  style="color:rgb(23, 5, 126); border-color:rgb(23, 5, 126); background-color: white; border-style: solid; " 
+              type="button" class="btn" (click)="[crear_menu(menu_padre.nid)]"><fa-icon [icon]="faPlus"></fa-icon> Nueva opción</button></li>
+          </ul>
+          <ul *ngIf="esAdministrador  && modoEdicion" class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li>
+              <button  style="color:rgb(23, 5, 126); border-color:rgb(23, 5, 126); background-color: white; border-style: solid; " 
+              type="button" class="btn" (click)="[crear_menu(menu_padre.nid)]"><fa-icon [icon]="faPlus"></fa-icon> Nueva opción</button>
+          </li>
+          </ul>
+          
+        </li>
+    
+    </div>
+        <li *ngIf="esAdministrador  && modoEdicion" class="nav-item">
+            <button  style="color:rgb(23, 5, 126); border-color:rgb(23, 5, 126); background-color: white; border-style: solid; " 
+            type="button" class="btn" (click)="[crear_menu(0)]"><fa-icon [icon]="faPlus"></fa-icon> Nueva opción</button>
+        </li>
+
+        <li *ngIf="esAdministrador && !modoEdicion">
+            <button  style="color:rgb(23, 5, 126); border-color:rgb(23, 5, 126); background-color: white; border-style: solid; " 
+            type="button" class="btn" (click)="activar_edicion()"><fa-icon [icon]="faPen"></fa-icon> Editar menu</button>
+        </li>
+        <li *ngIf="esAdministrador && modoEdicion">
+          <span>&nbsp;</span>
+          <button  style="color:rgb(23, 5, 126); border-color:rgb(23, 5, 126); background-color: white; border-style: solid; " 
+          type="button" class="btn" (click)="desactivar_edicion()"><fa-icon [icon]="faXmark"></fa-icon> Cerrar edición</button>
+      </li>
+      <li>
+       <a href="https://ladelpasico.es/general/47"> <button class="btn btn-primary">¡Matriculate!</button></a>
+       </li>
+    </ul>
+   
+      <div  style="float:right; text-align:right;">
+        <a href="https://twitter.com/pasicorchea?lang=es"   target="_blank" class="pl-2 enlace_menu"> <fa-icon [icon]="faTwitter"></fa-icon>  Twitter </a>
+        <a href="https://www.facebook.com/losdelpasico/"    target="_blank" class="pl-2 enlace_menu">  <fa-icon [icon]="faFacebook"></fa-icon> Facebook </a>
+        <a href="https://www.instagram.com/los_del_pasico/"    target="_blank" class="pl-2 enlace_menu">  <fa-icon [icon]="faInstagram"></fa-icon>  Instagram </a>
+        </div>
+   
+     
+      <span *ngIf="esLogueado">
+        <div class="row">
+          <div class="col">
+            <b>Usuario:</b> {{this.usuario}}
+          </div>
+          <div class="col">
+            <button (click)="[logout()]" type="button" class="btn btn-primary">
+              Logout
+            </button>
+          </div>
+        </div>
+       </span>
+
+    </div>
+  </div>
+</nav>
+<br>
+

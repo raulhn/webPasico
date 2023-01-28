@@ -1,0 +1,29 @@
+
+<form class="pt-5">
+  <div class="row justify-content-center">
+    <div class="col-6">
+    <div class="form-row">
+      <label>Usuario: </label> <input type="text" class="form-control" [(ngModel)] = "usuario" name="usuario"/>
+    </div>
+    <div class="form-row">
+      <label>Contraseña: </label> <input type="password" class="form-control"  [(ngModel)] = 'password' name="password"/>
+    </div>
+    <div class="form-row pt-3">
+      <button (click)="login()" class="btn btn-primary mb-3 "> Login </button>
+    </div>
+    </div>
+  </div>
+
+  <div class="row justify-content-center">
+    <div class="col-6">
+      <div *ngIf="error" class="pt-5">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          
+          <strong>Error:</strong> {{mensajeError}}
+          <button type="button" class="btn-close" (click)="limpiaError()"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</form>

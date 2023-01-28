@@ -1,0 +1,63 @@
+
+<div class="container">
+
+    <div  [ngClass]="esAdministrador ? 'borde_gris borde_azul': ''">
+        <div class = "row">
+            <div class="col" *ngIf="esAdministrador && !modo_edicion">
+                <button style="float: right; color:rgb(119, 23, 23); border-color:rgb(119, 23, 23); background-color: white; border-style: solid; " 
+                    type="button" class="btn" (click)="eliminar()"><fa-icon [icon]="faXmark"></fa-icon></button>
+    
+                <button  style="float: right; color:rgb(14, 49, 14); border-color:rgb(14, 49, 14); background-color: white; border-style: solid; " 
+                    type="button" class="btn"  (click)="activa_edicion()"><fa-icon [icon]="faPen"></fa-icon></button>
+
+            </div>
+    
+            <div class="col" *ngIf="esAdministrador && modo_edicion">
+                <button style="float: right; color:rgb(119, 23, 23); border-color:rgb(119, 23, 23); background-color: white; border-style: solid; " 
+                    type="button" class="btn" (click)="cancelar_edicion()"><fa-icon [icon]="faXmark"></fa-icon></button>
+                <button style="float: right; color:rgb(14, 49, 14); border-color:rgb(14, 49, 14); background-color: white; border-style: solid; " 
+                    type="button" class="btn"   (click)="guardar()"><fa-icon [icon]="faSave"></fa-icon></button>  
+            </div>
+        </div>
+        <div  *ngIf="tipo == '1'"  class="row">
+            <div class="col texto-overflow">
+                <div *ngIf="!modo_edicion">
+                    <div [innerHTML]="componente_texto.cTexto"></div>
+                </div>
+                <div *ngIf="modo_edicion">
+                    <app-editar-componente-texto #instancia_texto nid={{id_componente}}></app-editar-componente-texto>
+                </div>
+            </div>
+        </div>
+        <div  *ngIf="tipo == '2'"  class="row">
+        
+            <div class="col">
+                <div *ngIf="!modo_edicion">
+                    <app-componente-imagen nid={{id_componente}}></app-componente-imagen>
+                  
+                </div>
+                <div *ngIf="modo_edicion">
+                    <app-editar-componente-imagen #instancia_imagen nid={{id_componente}}></app-editar-componente-imagen>
+                   
+                </div>
+            </div>
+        </div>
+        <div  *ngIf="tipo == '4'"  class="row">
+        
+            <div class="col">
+                <div *ngIf="!modo_edicion">
+                    <app-componente-video id_componente={{id_componente}}></app-componente-video>
+                  
+                </div>
+                <div *ngIf="modo_edicion">
+                    <app-editar-componente-video id_componente={{id_componente}}></app-editar-componente-video>
+                   
+                </div>
+            </div>
+        </div>
+       
+    </div>
+    
+    </div>
+    
+    

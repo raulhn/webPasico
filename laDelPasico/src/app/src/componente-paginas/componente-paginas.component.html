@@ -1,0 +1,44 @@
+<ul class="list-group" *ngFor="let pagina of pagina_componente;">
+    <div>
+    <div *ngIf="pagina_actual == obtiene_paginacion(pagina.nid_pagina)" >
+         <li class="list-group-item"  [ngClass]="{'list-group-item-dark': es_par(pagina)}"> 
+            <div class="row" >
+                <div class="col-4">
+                    <a style="text-decoration: none;" href="{{obtiene_url_pagina(pagina.nid_pagina)}}"><h3>{{obtiene_titulo_pagina(pagina.nid_pagina)}}</h3></a>
+                </div>
+                <div class="col-8">
+                    <a style="text-decoration: none;" href="{{obtiene_url_pagina(pagina.nid_pagina)}}"><span>{{pagina.descripcion}}</span></a>
+              
+                </div>
+            </div>  
+                
+         </li>
+    </div>
+    </div>
+ </ul>
+ <nav aria-label="Page navigation example">
+         <ul class="pagination">
+                 <li class="page-item">
+                 <button class="page-link"  (click)="pagina_primera()" aria-label="Previous">
+                 <span aria-hidden="true">&laquo;</span>
+                 </button>
+                 </li>
+                 <li class="page-item" *ngIf="!es_primera()"><button class="page-link" (click)="pagina(prev_pagina())">{{prev_pagina()}} </button></li>
+                 <li class="page-item active" *ngIf="es_primera()"><button class="page-link" (click)="pagina(prev_pagina())">{{prev_pagina()}} </button></li>
+                 
+                 <li class="page-item disabled" *ngIf="numero_paginas < 1"><button class="page-link" (click)="pagina(cent_pagina())">{{cent_pagina()}} </button></li>
+                 <li class="page-item active"  *ngIf="numero_paginas >= 1 &&  !es_primera() && !es_ultima()"><button class="page-link" (click)="pagina(cent_pagina())">{{cent_pagina()}} </button></li>
+                 <li class="page-item"  *ngIf="numero_paginas >= 1 && (es_primera() || es_ultima())"><button class="page-link" (click)="pagina(cent_pagina())">{{cent_pagina()}} </button></li>
+ 
+                 <li class="page-item disabled" *ngIf="numero_paginas < 2"><button class="page-link" (click)="pagina(post_pagina())">{{post_pagina()}} </button></li>
+                 <li class="page-item active"  *ngIf="numero_paginas >= 2 && es_ultima()"><button class="page-link" (click)="pagina(post_pagina())">{{post_pagina()}} </button></li>
+                 <li class="page-item"  *ngIf="numero_paginas >= 2 && !es_ultima()"><button class="page-link" (click)="pagina(post_pagina())">{{post_pagina()}} </button></li>
+ 
+                 <li class="page-item">
+                 <button class="page-link" (click)="pagina_ultima()" aria-label="Next">
+                 <span aria-hidden="true">&raquo;</span>
+                 </button>
+                 </li>
+         </ul>
+ </nav>
+ 

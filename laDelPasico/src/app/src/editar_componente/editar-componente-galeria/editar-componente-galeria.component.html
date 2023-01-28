@@ -1,0 +1,30 @@
+
+<div class="row">
+    <div class="col" *ngFor="let imagen of imagenes;">
+        <button style="float: right; color:rgb(119, 23, 23); border-color:rgb(119, 23, 23); background-color: white; border-style: solid; " 
+        type="button" class="btn" (click)="eliminar(imagen)"><fa-icon [icon]="faXmark"></fa-icon></button>
+
+    <img style="max-width: 300px;" [src]="obtiene_url_imagen(imagen)" />
+
+    </div>
+</div>
+
+<button  type="button" class="btn" style="background-color:rgb(14, 49, 14); border-width: 2px; display:block; margin-left: auto; margin-right: auto;"
+(click)="add()">
+<div class="row">
+<div class="col" style="float:center; ">
+    <fa-icon style="color: white;" [icon] = faAdd></fa-icon>
+</div>
+</div>
+<div class="row">
+<div class="col">
+    <span style="color: white"> Añadir imagen </span>
+</div>
+</div>
+</button>
+
+<div *ngIf="modoNueva">
+    <label>Titulo: </label><input type="text" [(ngModel)] = "nuevoTitulo"/>
+    <input type="file" class="form-control" (change)="onChange($event)" multiple/>
+</div>
+

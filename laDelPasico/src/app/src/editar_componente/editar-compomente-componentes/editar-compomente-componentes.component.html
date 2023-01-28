@@ -1,0 +1,14 @@
+<div class="row">
+    {{num_componentes_definidos}}
+    <div *ngFor="let in of contador_componentes_definidos(); let i = index" class="col">
+        {{i}}
+        <div *ngIf="componentes[i] == '-1'">
+            <app-nuevo-componente-componentes id_componente={{id_componente}} nOrden="{{i}}"></app-nuevo-componente-componentes>
+        </div>
+     
+        <div *ngIf="componentes[i] != '-1'">
+            <app-componente-componente id={{componentes[i]}}></app-componente-componente>
+        </div>
+       
+    </div>
+</div> 

@@ -1,0 +1,48 @@
+import { Component, OnInit } from '@angular/core';
+import { UsuariosService } from '../sercicios/usuarios.service';
+import { Router } from '@angular/router';
+
+@Component({
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.css']
+})
+export class HomeComponent implements OnInit {
+
+  constructor(private usuariosService: UsuariosService, private router: Router) { }
+  usuario = '';
+
+  
+  
+
+  ngOnInit(): void {
+    this.usuariosService.logueado().subscribe(
+      (res:any) =>
+      {
+        console.log(res.logueado);
+        if(!res.logueado)
+        {
+          this.router.navigate(['login']);
+        }
+        else{
+          this.usuario = res.login;
+        }
+      }
+    )
+  }
+
+  logout()
+  {
+    this.usuariosService.logout().subscribe(
+      (res:any) =>
+      {
+        console.log(res);
+        if(!res.error)
+        {
+          this.router.navigate(['login']);
+        }
+      }
+    )
+  }
+
+}

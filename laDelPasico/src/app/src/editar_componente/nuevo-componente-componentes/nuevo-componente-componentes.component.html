@@ -1,0 +1,47 @@
+<div *ngIf="esAdministrador" class = "container">
+    <button *ngIf="!insert" type="button" class="btn" style="background-color:rgb(14, 49, 14); border-width: 2px; display:block; margin-left: auto; margin-right: auto;"
+        (click)="add()">
+    <div class="row">
+        <div class="col" style="float:center; ">
+            <fa-icon style="color: white;" [icon] = faAdd></fa-icon>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <span style="color: white">Añade un nuevo componente</span>
+        </div>
+    </div>
+    </button>
+
+    <div  *ngIf="insert" class="container borde_gris borde_azul" id="div_selector" >
+        <div class="row">
+            <div class="col" >
+                <button style="float: right; color:rgb(119, 23, 23); border-color:rgb(119, 23, 23); background-color: white; border-style: solid; " 
+                type="button" class="btn" (click)="cancelar()" ><fa-icon [icon]="faXmark"></fa-icon></button>
+                <button style="float:right; color:rgb(14, 49, 14); border-color:rgb(14, 49, 14); background-color: white; border-style: solid;" 
+                type="button" class="btn"  (click)="guardar()" ><fa-icon [icon]="faSave"></fa-icon></button>  
+            </div>
+        </div>
+        <div   class="row">
+            <div class="col">
+                <select class="form-select" [(ngModel)]="desplegable" >
+                    <option value="1"> Componente texto </option>
+                    <option value="2"> Componente imagen </option>
+                    <option value="4"> Componente video </option>
+                </select>
+            </div>
+        </div>
+        
+        <!-- Datos especificos componente de imagen -->
+        <div *ngIf="desplegable == '2'" class="row">
+            <label>Titulo</label> <input type="text" [(ngModel)]="titulo_imagen"/>
+        </div>
+        <!-- Datos especificos componente de componentes -->
+        <div *ngIf="desplegable == '3'">
+            <label>Número de columnas</label> <input type="text" [(ngModel)]="num_columnas"/>
+        </div> 
+        <!-- Datos especificos componente de video -->
+        <div *ngIf="desplegable == '4'">
+            <label>Url</label> <input type="text" [(ngModel)]="url"/>
+        </div> 
+</div>

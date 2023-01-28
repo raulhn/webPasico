@@ -1,0 +1,111 @@
+
+
+<div class="container">
+
+<div  [ngClass]="esAdministrador ? 'borde_gris borde_azul': ''">
+    <div class = "row">
+        <div class="col" *ngIf="esAdministrador && !modo_edicion">
+            <button style="float: right; color:rgb(119, 23, 23); border-color:rgb(119, 23, 23); background-color: white; border-style: solid; " 
+                type="button" class="btn" (click)="eliminar()"><fa-icon [icon]="faXmark"></fa-icon></button>
+
+            <button  style="float: right; color:rgb(14, 49, 14); border-color:rgb(14, 49, 14); background-color: white; border-style: solid; " 
+                type="button" class="btn"  (click)="activa_edicion()"><fa-icon [icon]="faPen"></fa-icon></button>
+            <button  *ngIf="orden < numero_componentes_pagina" style="float: right; color:rgb(23, 5, 126); border-color:rgb(23, 5, 126); background-color: white; border-style: solid; " 
+                type="button" class="btn"  (click)="incrementa_orden()"><fa-icon [icon]="faArrowDown"></fa-icon></button>
+            <button *ngIf="orden > 1" style="float: right; color:rgb(23, 5, 126); border-color:rgb(23, 5, 126); background-color: white; border-style: solid; " 
+                type="button" class="btn"  (click)="decrementa_orden()"><fa-icon [icon]="faArrowUp"></fa-icon></button>
+        </div>
+
+        <div class="col" *ngIf="esAdministrador && modo_edicion">
+            <button style="float: right; color:rgb(119, 23, 23); border-color:rgb(119, 23, 23); background-color: white; border-style: solid; " 
+                type="button" class="btn" (click)="cancelar_edicion()"><fa-icon [icon]="faXmark"></fa-icon></button>
+            <button style="float: right; color:rgb(14, 49, 14); border-color:rgb(14, 49, 14); background-color: white; border-style: solid; " 
+                type="button" class="btn"   (click)="guardar()"><fa-icon [icon]="faSave"></fa-icon></button>  
+        </div>
+    </div>
+    <div  *ngIf="tipo == '1'"  class="row">
+        <div class="col texto-overflow">
+            <div *ngIf="!modo_edicion">
+                <div  *ngIf="bCargadoTexto | async" [innerHTML]="transform()"></div>
+          
+            </div>
+            <div *ngIf="modo_edicion">
+                <app-editar-componente-texto #instancia_texto nid='{{id}}'></app-editar-componente-texto>
+               
+            </div>
+        </div>
+    </div>
+    <div  *ngIf="tipo == '2'"  class="row">
+        <div class="col">
+            <div *ngIf="!modo_edicion">
+                <app-componente-imagen nid={{id}}></app-componente-imagen>
+              
+            </div>
+            <div *ngIf="modo_edicion">
+                <app-editar-componente-imagen #instancia_imagen nid={{id}}></app-editar-componente-imagen>
+               
+            </div>
+        </div>
+    </div>
+    <div  *ngIf="tipo == '3'"  class="row">
+        <div class="col">
+
+            <div *ngIf="modo_edicion">
+                <app-editar-compomente-componentes id_componente={{id}}></app-editar-compomente-componentes>
+               
+            </div>
+            <div *ngIf="!modo_edicion">
+                <app-componente-componentes id_componente={{id}}></app-componente-componentes>
+            </div>
+        </div>
+    </div>
+    <div  *ngIf="tipo == '4'"  class="row">
+        <div class="col">
+
+            <div *ngIf="modo_edicion">
+                <app-editar-componente-video id_componente={{id}}></app-editar-componente-video>
+               
+            </div>
+            <div *ngIf="!modo_edicion">
+                <app-componente-video id_componente={{id}}></app-componente-video>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="tipo == '5'" class="row">
+        <div class="col">
+            <div *ngIf="modo_edicion">
+                <app-editar-componente-galeria #instancia_galeria id_componente={{id}}></app-editar-componente-galeria>
+               
+            </div>
+            <div *ngIf="!modo_edicion">
+                <app-componente-galeria id_componente={{id}}></app-componente-galeria>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="tipo == '6'" class="row">
+        <div class="col">
+            <div *ngIf="modo_edicion">
+                <app-editar-componente-paginas #instancia_paginas id_componente={{id}}></app-editar-componente-paginas>
+               
+            </div>
+            <div *ngIf="!modo_edicion">
+                <app-componente-paginas id_componente={{id}}></app-componente-paginas>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="tipo == '7'">
+        <div class="col">
+            <div *ngIf="modo_edicion">
+
+            </div>
+            <div *ngIf="!modo_edicion">
+                <app-componente_carusel id_componente="{{id}}"></app-componente_carusel>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</div>
+
