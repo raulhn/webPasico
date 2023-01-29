@@ -32,7 +32,8 @@ app.get('/',
 app.post('/login', servlet_usuario.login);
 app.get('/logueado', servlet_usuario.logueado);
 app.get('/logout', servlet_usuario.logout);
-app.post('/registrar', servlet_usuario.registrar_usuario)
+app.post('/registrar', servlet_usuario.registrar_usuario);
+app.get('/obtener_usuarios', servlet_usuario.obtener_usuarios);
 
 
 https.createServer({

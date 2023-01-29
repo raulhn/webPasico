@@ -50,10 +50,6 @@ async function registrar_usuario(req, res)
 
     let usu = req.body.usuario;
     let pass = req.body.password;
-
-
-    console.log(usu);
-    console.log(pass);
     
     try{
       await gestion_usuarios.registrar_usuario(usu, pass);
@@ -72,7 +68,38 @@ async function registrar_usuario(req, res)
   }
 }
 
+async function esAdministrador(user)
+{
+  return await gestion_usuarios.esAdministrador(user);
+}
+
+async function obtener_usuarios(req, res)
+{
+  if(req.session.nombre)
+  {
+    let usuario = req.session.nombre;
+    bEsAdministrador = await esAdministrador(usuario);
+    if (bEsAdministrador)
+    {
+      try{
+        resultados = await gestion_usuarios.obtener_usuarios();
+      }
+      catch(error)
+      {
+         res.status(500).send({error: true, message: error});
+      }
+    }
+    else{
+      res.status(401).send({error: true, message: 'No está autorizado'});
+    }
+  }
+  else{
+    res.status(401).send({error: true, message: 'No está autorizado'});
+  }
+}
+
 module.exports.login = login; 
 module.exports.logueado = logueado;
 module.exports.logout = logout;
 module.exports.registrar_usuario = registrar_usuario;
+module.exports.obtener_usuarios = obtener_usuarios;

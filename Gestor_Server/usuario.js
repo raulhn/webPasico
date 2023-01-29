@@ -58,7 +58,6 @@ async function comparar_pass(pass, pass_hash)
                     console.log("Error comprobando:", err);
                     resolve(false);
                 } else {
-                    console.log(coinciden);
                     resolve(coinciden);
                 }
             });
@@ -69,8 +68,6 @@ async function login(user, pass)
 {
     try{
         pass_hash = await obtener_pass(user);
-        console.log(pass_hash);
-        console.log(pass);
         return await comparar_pass(pass, pass_hash)
        
     }
@@ -102,6 +99,25 @@ function existe_login(user)
     );
 }
 
+
+function esAdministrador(user)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.query('select count(*) ncont from ' + constantes.ESQUEMA_BD + '.usuario where usuario = ' + conexion.dbConn.escape(user),
+            (error, results, fileds) =>
+            {
+                if (error) {console.log(error); resolve(false);}
+                else{
+                    resolve(results[0].nCont > 0);
+                }
+            } 
+            )
+        }
+    )
+}
+
 async function registrar_usuario(user, pass)
 {
     return new Promise(
@@ -117,8 +133,8 @@ async function registrar_usuario(user, pass)
                         bcrypt.hash(pass, saltRounds,
                             (err, hash) =>
                             {
-                                conexion.dbConn.query('insert into ' +  constantes.ESQUEMA_BD + '.usuario(usuario, password) values(' +
-                                conexion.dbConn.escape(user) + ', ' + conexion.dbConn.escape(hash) + ')',
+                                conexion.dbConn.query('insert into ' +  constantes.ESQUEMA_BD + '.usuario(usuario, password, nid_rol) values(' +
+                                conexion.dbConn.escape(user) + ', ' + conexion.dbConn.escape(hash) + ', 2)',
                                 (error, results, fields) =>
                                 {
                                     if (error) {conexion.dbConn.rollback();  console.log(error); reject();}
@@ -133,6 +149,8 @@ async function registrar_usuario(user, pass)
     )
 }
 
+
 module.exports.login = login;
 module.exports.obtener_usuarios = obtener_usuarios;
 module.exports.registrar_usuario = registrar_usuario;
+module.exports.esAdministrador = esAdministrador;

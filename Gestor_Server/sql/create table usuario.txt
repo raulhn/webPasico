@@ -1,0 +1,7 @@
+create table pasico.usuario(
+	usuario varchar(50) primary key,
+	password varchar(300),
+	nid_rol integer
+);
+
+alter table pasico.usuario add constraint fk_roles foreign key (nid_rol) references pasico.roles(nid);

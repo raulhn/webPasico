@@ -1,0 +1,7 @@
+create table pasico.roles(
+	nid integer primary key auto_increment,
+	descripcion varchar(50)
+);
+
+insert into pasico.roles(descripcion) values('Administrador');
+insert into pasico.roles(descripcion) values('Gestor');
