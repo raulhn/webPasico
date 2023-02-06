@@ -29,6 +29,11 @@ export class LoginComponent implements OnInit {
     )
   }
 
+  redirectTo(uri:string){
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(()=>
+    this.router.navigate([uri]));
+ }
+
   login()
   {
     console.log(this.usuario);
@@ -43,7 +48,9 @@ export class LoginComponent implements OnInit {
             console.log(res);
             if(res.logueado)
             {
-              this.router.navigate(['']);
+              this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+                this.router.navigate(['/login']);
+            }); 
             }
             else{
               this.error = true;
