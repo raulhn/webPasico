@@ -14,7 +14,8 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { UsuarioComponent } from './componente/usuario/usuario.component';
 import { MenuComponent } from './componente/menu/menu.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap'
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { UsuariosComponent } from './componente/usuarios/usuarios.component'
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap'
     LoginComponent,
     HomeComponent,
     UsuarioComponent,
-    MenuComponent
+    MenuComponent,
+    UsuariosComponent
   ],
   imports: [
     FormsModule,

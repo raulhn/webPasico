@@ -48,6 +48,12 @@ function obtener_pass(user)
     )
 }
 
+/**
+ * Compara la contraseña con la contraseña cifrada que esté almacenada en bd
+ * @param {*} pass 
+ * @param {*} pass_hash 
+ * @returns 
+ */
 async function comparar_pass(pass, pass_hash)
 {
     return new Promise(
@@ -64,6 +70,13 @@ async function comparar_pass(pass, pass_hash)
         }
     )
 }
+
+/**
+ * Comprueba que el usuario está registrado y la contraseña es correcta
+ * @param {*} user 
+ * @param {*} pass 
+ * @returns Devuelve true en caso de que el usuario y la contraseña sea correcta, false en caso contrario
+ */
 async function login(user, pass)
 {
     try{
@@ -99,7 +112,11 @@ function existe_login(user)
     );
 }
 
-
+/**
+ * Comprueba si el usuario tiene el rol de adminstrador
+ * @param {*} user 
+ * @returns 
+ */
 function esAdministrador(user)
 {
     return new Promise(
@@ -110,7 +127,7 @@ function esAdministrador(user)
             {
                 if (error) {console.log(error); resolve(false);}
                 else{
-                    resolve(results[0].nCont > 0);
+                    resolve(results[0].ncont > 0);
                 }
             } 
             )
@@ -118,6 +135,12 @@ function esAdministrador(user)
     )
 }
 
+/**
+ * Función que registra a un usuario nuevo con el rol por defecto de gestor
+ * @param {*} user 
+ * @param {*} pass 
+ * @returns 
+ */
 async function registrar_usuario(user, pass)
 {
     return new Promise(
@@ -149,8 +172,41 @@ async function registrar_usuario(user, pass)
     )
 }
 
+async function actualizar_password(user, pass)
+{
+    return new Promise(
+        async (resolve, reject) =>
+        {
+            bExiste = await existe_login(user);
+            if (bExiste)
+            {
+                const saltRounds = 15;
+                conexion.dbConn.beginTransaction(
+                    () =>
+                    {  
+                        bcrypt.hash(pass, saltRounds,
+                            (err, hash) =>
+                            {
+                                conexion.dbConn.query('update ' +  constantes.ESQUEMA_BD + '.usuario set password = ' +
+                                conexion.dbConn.escape(pass) + ' where usuario = ' + conexion.dbConn.escape(user),
+                                (error, results, fields) =>
+                                {
+                                    if (error) {conexion.dbConn.rollback();  console.log(error); reject();}
+                                    else {conexion.dbConn.commit(); console.log('Usuario registrado'); resolve(); }
+                                })
+                            }
+                            )
+                    }
+                );
+            }
+        }
+    )
+}
+
+
 
 module.exports.login = login;
 module.exports.obtener_usuarios = obtener_usuarios;
 module.exports.registrar_usuario = registrar_usuario;
 module.exports.esAdministrador = esAdministrador;
+module.exports.actualizar_password = actualizar_password;

@@ -34,7 +34,7 @@ app.get('/logueado', servlet_usuario.logueado);
 app.get('/logout', servlet_usuario.logout);
 app.post('/registrar', servlet_usuario.registrar_usuario);
 app.get('/obtener_usuarios', servlet_usuario.obtener_usuarios);
-
+app.post('/actualiza_password', servlet_usuario.actualizar_password_usu);
 
 https.createServer({
     key: fs.readFileSync('apache.key'),
