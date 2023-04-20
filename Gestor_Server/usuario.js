@@ -122,7 +122,8 @@ function esAdministrador(user)
     return new Promise(
         (resolve, reject) =>
         {
-            conexion.dbConn.query('select count(*) ncont from ' + constantes.ESQUEMA_BD + '.usuario where usuario = ' + conexion.dbConn.escape(user),
+            conexion.dbConn.query('select count(*) ncont from ' + constantes.ESQUEMA_BD + '.usuario where usuario = ' + conexion.dbConn.escape(user) +
+              ' and nid_rol = ' + conexion.dbConn.escape(constantes.ROL_ADMINISTRADOR),
             (error, results, fileds) =>
             {
                 if (error) {console.log(error); resolve(false);}
@@ -180,25 +181,31 @@ async function actualizar_password(user, pass)
             bExiste = await existe_login(user);
             if (bExiste)
             {
-                const saltRounds = 15;
-                conexion.dbConn.beginTransaction(
-                    () =>
-                    {  
-                        bcrypt.hash(pass, saltRounds,
-                            (err, hash) =>
-                            {
-                                conexion.dbConn.query('update ' +  constantes.ESQUEMA_BD + '.usuario set password = ' +
-                                conexion.dbConn.escape(pass) + ' where usuario = ' + conexion.dbConn.escape(user),
-                                (error, results, fields) =>
+                bAdministrador = await esAdministrador(user)
+                if(bEsAdministrador)
+                {
+                    const saltRounds = 15;
+                    conexion.dbConn.beginTransaction(
+                        () =>
+                        {  
+                            bcrypt.hash(pass, saltRounds,
+                                (err, hash) =>
                                 {
-                                    if (error) {conexion.dbConn.rollback();  console.log(error); reject();}
-                                    else {conexion.dbConn.commit(); console.log('Usuario registrado'); resolve(); }
-                                })
-                            }
-                            )
-                    }
-                );
+                                    conexion.dbConn.query('update ' +  constantes.ESQUEMA_BD + '.usuario set password = ' +
+                                    conexion.dbConn.escape(hash) + ' where usuario = ' + conexion.dbConn.escape(user),
+                                    (error, results, fields) =>
+                                    {
+                                        if (error) {conexion.dbConn.rollback();  console.log(error); reject();}
+                                        else {conexion.dbConn.commit(); console.log('Usuario registrado'); resolve(); }
+                                    })
+                                }
+                                )
+                        }
+                    );
+                }
+                else {reject()}
             }
+            else {reject()}
         }
     )
 }

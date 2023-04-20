@@ -1,0 +1,38 @@
+<app-menu></app-menu>
+<h1 class="pt-5">Administración de usuarios</h1>
+<div class="pt-5 row justify-content-center">
+<div class="col">
+    <form class="">
+        <div class="row justify-content-center">
+            <div class="col-1"><strong>Usuario</strong></div>
+            <div class="col-2"><strong>Contraseña</strong></div>
+            <div class="col-1"></div>
+        </div>
+        <div class="pt-2" *ngFor="let item of lista_usuarios; let i = index;">
+           <div class="row justify-content-center">   
+                <div class="col-1">{{item}}</div>
+                <div class="col-2"> <input type="password" class="form-control" [(ngModel)] = "lista_password[i]" name="password"/> </div>
+                <div class="col-1"><button (click)="peticion_cambiar_pass(i)" class="btn btn-primary mb-3"> Cambiar contraseña </button></div>
+          
+           </div>
+       </div>
+    </form>
+</div>
+<div class="row justify-content-center">
+    <div class="col-6">
+      <div *ngIf="error_cambio" class="pt-5">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          
+          <strong>Error: Al cambiar la contraseña</strong>
+          <button type="button" class="btn-close" (click)="limpiaError()"></button>
+        </div>
+      </div>
+      <div *ngIf="cambio_realizado" class="pt-5">
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          
+          <strong>Contraseña cambiada correctamente</strong>
+          <button type="button" class="btn-close" (click)="limpiaCambioRealizado()"></button>
+        </div>
+      </div>
+    </div>
+</div>

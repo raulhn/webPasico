@@ -97,8 +97,7 @@ async function registrar_usuario(req, res)
 }
 
 /*
-* Función para registrar un nuevo usuario, es necesario que quien realice la petición este logueado
-* y que el usuario tenga permisos de administrador
+* Función para actualizar la contraseña de un usuario
 */
 async function actualizar_password_usu(req, res)
 {
