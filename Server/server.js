@@ -25,6 +25,8 @@ const gestion_usuarios = require('./usuario.js');
 const gestion_ficheros = require('./gestion_ficheros.js');
 const imagen = require('./imagen.js');
 
+const servlet_componente = require('./servlet_componente.js');
+
 const ESQUEMA_BD = constantes.ESQUEMA_BD;
 
 var sesion_config = require('./config/sesion.json');
@@ -33,12 +35,12 @@ var sesion_config = require('./config/sesion.json');
 var fs = require('fs');
 
 /** Desarrollo **/
-//var url_web = 'https://80.240.127.138:8081';
-//const PORT = 8444;
+var url_web = 'https://80.240.127.138:8081';
+const PORT = 8444;
 
 /** Producción **/
-var url_web = 'https://ladelpasico.es';
-const PORT = 8443;
+//var url_web = 'https://ladelpasico.es';
+//const PORT = 8443;
 
 app.use(cors({origin: url_web, credentials: true})); // Se configura el control de peticiones permitidas para poder recibir peticiones del front-end
                                                                      // credentials: true permite la comunicación de la sesión
@@ -612,28 +614,8 @@ app.post('/registrar_componente', function(req, res)
                     }
                     else if(tipo_componente == constantes.TIPO_COMPONENTE_CARUSEL)
                     {
-                        let elementos_simultaneos = req.body.elementos_simultaneos;
-                        if(tipo_asociacion == constantes.TIPO_ASOCIACION_PAGINA)
-                        {
-                            console.log('Registrar componente carusel');
-                            componente.registrar_componente_carusel(id, elementos_simultaneos, tipo_asociacion).then(
-                                () => {return res.sendStatus(200).send({error: false, message: 'Componente creado'});}
-                            )
-                            .catch(
-                                () => {return res.status(400).send({error: true, message: 'Error'})}
-                            )
-                        }
-                        else if(tipo_asociacion == constantes.TIPO_ASOCIACION_COMPONENTE)
-                        {
-                            let nOrden = req.body.nOrden;
-                            componente.registrar_componente_carusel_orden(id, tipo_asociacion, elementos_simultaneos, nOrden).then(
-                                () => {
-                                    return res.status(200).send({error: false, message:'Componente creado'});
-                                })
-                                .catch(
-                                    () => { return res.status(400).send({error: true, message: 'Error'});}
-                            );
-                        }
+                        console.log('Registrar componente Carrusel')
+                        servlet_componente.registrar_componente_carusel(req, res);
                     }
                    
                 }
@@ -646,7 +628,6 @@ app.post('/registrar_componente', function(req, res)
 
 app.get('/obtener_componentes/:id_pagina', function(req, res)
 {
-    console.log('id_pagina ' + req.params.id_pagina);
     componente.obtiene_componentes(req.params.id_pagina).then(
         function(resultados)
         {
@@ -736,7 +717,7 @@ app.post('/eliminar_componente',
                     {
                         // Obtiene el tipo de componente
                         componente.tipo_componente(id_componente).then(
-                            tipo =>
+                            async (tipo) =>
                             {
                                if(tipo == constantes.TIPO_COMPONENTE_TEXTO)
                                {
@@ -786,6 +767,19 @@ app.post('/eliminar_componente',
                                     .then(() => {console.log('Eliminado'); return res.status(200).send({error: false, message: 'Componente eliminado'});})
                                     .catch(() => {console.log('Error'); return res.status(400).send({error: true, message: 'Error'});})
                                }  
+                               if(tipo == constantes.TIPO_COMPONENTE_CARUSEL)
+                               {
+                                 console.log('Eliminar componente Carusel')
+                                 try
+                                 {
+                                    await componente.eliminar_componente_carusel(id_pagina, id_componente, tipo_asociacion)
+                                 }
+                                 catch(error)
+                                 {
+                                    console.log('Error eliminar componente carusel')
+                                    return res.status(400).send({error: true, message: 'Error al eliminar el componente'})
+                                 }
+                               }
                             }
                         )
                     }
@@ -1138,6 +1132,22 @@ app.post('/remove_pagina_componente',
         )
     }
 )
+
+/**
+ * Componente Carrusel
+ */
+  app.get('/obtener_carusel/:id_componente',
+    async (req, res) =>
+    {
+        let bEsAdministrador = await esAdministrador(req.session.nombre);
+        if (bEsAdministrador)
+        {
+            servlet_componente.obtener_componente_carusel(req, res);
+        }
+    }
+  
+  )
+
 
   https.createServer({
     key: fs.readFileSync('apache.key'),

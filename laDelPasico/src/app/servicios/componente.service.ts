@@ -74,7 +74,7 @@ export class ComponenteService {
   crear_componente_carusel(id_pagina: string, tipo_componente: string, elementos_simultaneos: string)
   {
     let API_URL = this.url + '/registrar_componente';
-    return this.http.post(API_URL, {id: id_pagina, tipo_componente: tipo_componente, tipo_asociacion: Constantes.TipoAsociacion.pagina}, { withCredentials: true});
+    return this.http.post(API_URL, {id: id_pagina, tipo_componente: tipo_componente, elementos_simultaneos: elementos_simultaneos, tipo_asociacion: Constantes.TipoAsociacion.pagina}, { withCredentials: true});
   }
 
   /** CREAR COMPONENTES DE COMPONENTE**/

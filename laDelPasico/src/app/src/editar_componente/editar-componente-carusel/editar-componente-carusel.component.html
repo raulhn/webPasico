@@ -1,7 +1,28 @@
 <owl-carousel-o [options]="customOptions">
+    <ng-template carouselSlide >        
+        <div class="item" >
+        <button  type="button" class="btn" style="background-color:rgb(14, 49, 14); border-width: 2px; display:block; margin-left: auto; margin-right: auto;"
+            >
+        <div class="row">
+            <div class="col" style="float:center; ">
+                <fa-icon style="color: white;" [icon] = faAdd></fa-icon>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <span style="color: white">Añadir nueva imagen</span>
+            </div>
+        </div>
+        </button>
+      </div>
+    </ng-template>  
+  
     <ng-template carouselSlide>
      
       <div class="item" >
+        <button style="float: right; color:rgb(119, 23, 23); border-color:rgb(119, 23, 23); background-color: white; border-style: solid; " 
+        type="button" class="btn" ><fa-icon [icon]="faXmark"></fa-icon></button>
+
         <img src="https://ladelpasico.es:8443/imagen_url/16" class="d-block" alt="..." />
       </div>
       
@@ -28,5 +49,5 @@
       <img src="https://ladelpasico.es:8443/imagen_url/45" class="d-block" alt="..."/>
     </div>
   </ng-template>  
-  
+
   </owl-carousel-o>

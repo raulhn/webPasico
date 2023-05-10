@@ -97,10 +97,10 @@
     <div *ngIf="tipo == '7'">
         <div class="col">
             <div *ngIf="modo_edicion">
-
+                <app-componente-carusel></app-componente-carusel>
             </div>
             <div *ngIf="!modo_edicion">
-                <app-componente_carusel id_componente="{{id}}"></app-componente_carusel>
+                <app-editar-componente-carusel></app-editar-componente-carusel>
             </div>
         </div>
     </div>

@@ -31,6 +31,7 @@
                     <option value="4"> Componente video </option>
                     <option value="5"> Componente galería </option>
                     <option value="6"> Componente páginas </option>
+                    <option value="7"> Componente Carrusel </option>
                 </select>
             </div>
         </div>
@@ -69,6 +70,6 @@
         </div>
 
         <div *ngIf="desplegable == '7'">
-            <label>Número de elementos simultaneos: </label> <input type="number" [(ngModel)] = ""/>
+            <label>Número de elementos simultaneos: </label> <input type="number" [(ngModel)] = "elementos_simultaneos"/>
         </div>
 </div>

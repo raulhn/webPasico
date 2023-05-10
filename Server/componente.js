@@ -274,7 +274,7 @@ function registrar_componente_comun(tipo_componente, id, tipo_asociacion, nOrden
                             }
                         }
                     ).catch(
-                        (error) => {console.log(error); reject();},
+                        (error) => {console.log(error); console.log('error'); reject();},
                         () => {console.log("Se ha producido un error");}
                     );
                 }
@@ -559,7 +559,8 @@ function registrar_componente_carusel_orden(id, tipo_asociacion, elementos_simul
     return new Promise(
         (resolve, reject) =>
         {
-            registrar_componente_comun(constantes.TIPO_COMPONENTE_PAGINAS, id, tipo_asociacion, nOrden).then(
+            console.log('Tipo de asociacion ' + tipo_asociacion)
+            registrar_componente_comun(constantes.TIPO_COMPONENTE_CARUSEL, id, tipo_asociacion, nOrden).then(
                 (nid_componente) =>
                 {
                     console.log('Nuevo componente ' + nid_componente);
@@ -583,7 +584,7 @@ function registrar_componente_carusel(id, tipo_asociacion, elementos_simultaneos
 {
     return new Promise(
         (resolve, reject) =>
-        {
+        {       console.log('4')
             obtener_ultimo_orden(id).then(
                 (max_orden) =>
                 {
@@ -846,6 +847,35 @@ function eliminar_componente_paginas(id_pagina, id_componente, tipo_asociacion)
                 }
             );
             });
+        }
+    )
+}
+
+function eliminar_componente_carusel(id_pagina, id_componente, tipo_asociacion)
+{
+    return new Promise(
+        async (resolve, reject) =>
+        {
+            try
+            {
+                if (tipo_asociacion == constantes.TIPO_ASOCIACION_PAGINA)
+                {
+                    console.log('eliminar_componente_carusel -> Eliminar carusel componente')
+                    await eliminar_pagina_componente(id_pagina, id_compnente);
+                    conexion.dbConn.commit();
+                    resolve();
+                }
+                else if(tipo_asociacion == constantes.TIPO_ASOCIACION_COMPONENTE)
+                {
+                    await eliminar_componente_componentes(id_componente);
+                    conexion.dbConn.commit();
+                    resolve();
+                }
+            }
+            catch(e)
+            {
+                reject();
+            }
         }
     )
 }
@@ -1197,6 +1227,7 @@ module.exports.eliminar_componente_imagen = eliminar_componente_imagen;
 module.exports.eliminar_componente_video = eliminar_componente_video;
 module.exports.eliminar_componente_galeria = eliminar_componente_galeria;
 module.exports.eliminar_componente_paginas = eliminar_componente_paginas;
+module.exports.eliminar_componente_carusel = eliminar_componente_carusel;
 
 module.exports.decrementa_orden = decrementa_orden;
 module.exports.incrementa_orden = incrementa_orden;
@@ -1211,4 +1242,3 @@ module.exports.add_pagina_componente = add_pagina_componente;
 module.exports.remove_pagina_componente = remove_pagina_componente;
 module.exports.obtener_paginas_componente = obtener_paginas_componente;
 
-module.exports.add_element_carusel = add_element_carusel;

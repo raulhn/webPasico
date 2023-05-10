@@ -38,6 +38,7 @@ import { NgxGoogleAnalyticsModule, NgxGoogleAnalyticsRouterModule } from 'ngx-go
 import { EditarComponentePaginasComponent } from './src/editar_componente/editar-componente-paginas/editar-componente-paginas.component';
 import { ComponentePaginasComponent } from './src/componente-paginas/componente-paginas.component';
 import { ComponenteCaruselComponent } from './src/componente-carusel/componente-carusel.component';
+import { EditarComponenteCaruselComponent } from './src/editar_componente/editar-componente-carusel/editar-componente-carusel.component';
 
 @NgModule({
   declarations: [
@@ -63,7 +64,8 @@ import { ComponenteCaruselComponent } from './src/componente-carusel/componente-
     EditarComponenteGaleriaComponent,
     EditarComponentePaginasComponent,
     ComponentePaginasComponent,
-    ComponenteCaruselComponent
+    ComponenteCaruselComponent,
+    EditarComponenteCaruselComponent
   ],
   imports: [
     BrowserModule,

@@ -6,8 +6,8 @@ export namespace Constantes
     {
         /** Producción **/
       
-       public static readonly URL_BACKED = 'https://ladelpasico.es:8443';
-       public static readonly URL_FRONTED = 'https://ladelpasico.es';
+       public static readonly URL_BACKED = 'https://80.240.127.138:8444';
+       public static readonly URL_FRONTED = 'https://80.240.127.138';
        
 
        /** Desarrollo **/
