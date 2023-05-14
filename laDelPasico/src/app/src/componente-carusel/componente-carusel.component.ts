@@ -1,12 +1,7 @@
 import { Component, Input, OnInit, ViewChild, Pipe, PipeTransform } from '@angular/core';
-import { UsuariosService } from 'src/app/servicios/usuarios.service';
-import { QuillModule } from 'ngx-quill';
-import { Pagina_componente } from '../logica/componentes/pagina_componente';
 import { ComponenteService } from 'src/app/servicios/componente.service';
-import { AngularEditorConfig } from '@kolkov/angular-editor';
-import { Title } from '@angular/platform-browser';
 import { OwlOptions } from 'ngx-owl-carousel-o';
-
+import { Constantes } from '../logica/constantes';
 
 @Component({
   selector: 'app-componente-carusel',
@@ -37,11 +32,53 @@ export class ComponenteCaruselComponent implements OnInit {
     nav: false
   }
 
+  @Input() id_componente: string = "";
+  imagenes:any [] = [];
 
-  constructor() { }
+  constructor(private componenteService: ComponenteService) { }
  
+  inicializa_carrusel =
+  {
+    next: (respuesta: any) =>
+    {
+      let elementos_simultaneos = respuesta["componente_carusel"][0]["elementos_simultaneos"];
+      this.imagenes = respuesta["elementos_carusel"];
+      console.log(this.imagenes)
+      console.log(this.imagenes[0]['nid_imagen'])
+      this.customOptions = {
+        loop: true,
+        mouseDrag: true,
+        touchDrag: true,
+        pullDrag: false,
+        dots: true,
+        margin:10,
+        autoplay: true,
+        autoWidth:true,
+        navSpeed: 700,
+        merge:true,
+        
+        responsive: {
+          0: {
+            items: 1
+          },
+          450: {
+            items: elementos_simultaneos
+          }
+        },
+        nav: false
+      }
+    }
+  }
+
+  obtiene_url_imagen(id: string): string
+  {
+    return  Constantes.General.URL_BACKED + "/imagen_url/" + id;
+  }
 
   ngOnInit(): void {
+    this.componenteService.obtener_carrusel(this.id_componente).subscribe(
+      this.inicializa_carrusel
+    )
   }
 
 }

@@ -5,6 +5,7 @@ const bcrypt = require('bcryptjs');
 const rondas = 10;
 
 
+
 /*
 function login(usuario, password)
 {
@@ -28,6 +29,40 @@ function login(usuario, password)
             );
         });
 }*/
+
+function esLogueado(usuario)
+{
+    if(!usuario)
+    {
+       return false;
+    }
+    else
+    {
+        return true;
+    }
+}
+
+function esAdministrador(usuario)
+{
+    return new Promise(function (resolve, reject)
+    {
+        if(!esLogueado(usuario)){resolve(false);}
+        else{
+
+            conexion.dbConn.query('select * from '+ constantes.ESQUEMA_BD + '.usuario where usuario = ' + conexion.dbConn.escape(usuario) + ' and rol = ' + constantes.ROL_ADMINISTRADOR ,  function(error, results, fields)
+            {
+                if (error)  return resolve(false);
+                console.log('consulta ' + usuario + ' ' + results.length);
+                if (results.length <= 0)
+                {
+                    resolve(false);
+                }
+                resolve(true);
+            });
+        }
+    });
+}
+
 
 function login(usuario, password)
 {
@@ -77,6 +112,6 @@ function obtener_usuarios()
 }
 
 
-
+module.exports.esAdministrador = esAdministrador;
 module.exports.login = login;
 module.exports.obtener_usuarios = obtener_usuarios;

@@ -214,6 +214,25 @@ export class ComponenteService {
     let API_URL = this.url + '/obtener_paginas_componente/' + id_componente;
     return this.http.get(API_URL);
   }
+
+  /** Componente Carrusel **/
+  obtener_carrusel(id_componente: string)
+  {
+    let API_URL = this.url + '/obtener_carusel/' + id_componente;
+    return this.http.get(API_URL)
+  }
+
+  add_elemento_carrusel(fichero:any)
+  {
+    let API_URL = this.url + '/add_imagen_carusel';
+    return this.http.post(API_URL, fichero, {withCredentials: true});
+  }
+
+  eliminar_elemento_carrusel(nid_componente: string, nid_imagen: string)
+  {
+    let API_URL = this.url + '/eliminar_imagen_carusel';
+    return this.http.post(API_URL, {id_componente: nid_componente, id_imagen: nid_imagen}, {withCredentials:true});
+  }
 }
 
 

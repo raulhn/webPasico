@@ -1169,30 +1169,6 @@ function obtener_paginas_componente(nid_componente)
     )
 }
 
-function add_elemento_carusel(nid_componente, id_pagina, titulo, fichero)
-{
-    return new Promise(
-        (resolve, reject) =>
-        {
-            conexion.dbConn.beginTransaction(
-                () =>
-                {
-                    
-                    imagen.subir_imagen(titulo, fichero).then(
-                        (id_imagen) => {
-                            conexion.dbConn.query("insert into " + constantes.ESQUEMA_BD + ".elemento_carusel(nid_componente, nid_pagina, nid_imagen) values " +
-                                conexion.dbConn.escape(nid_componente) + ", "  + conexion.dbConn.escape(id_pagina) + ", " + conexion.dbConn.escape(id_imagen));
-                            conexion.dbConn.commit();
-                            resolve();
-                        }
-                    ).catch(
-                        () => {console.log('Error al incluir un elemento en el carusel'); reject();}
-                    );
-                }
-            )
-        }
-    )
-}
 
 module.exports.tipo_componente = tipo_componente;
 module.exports.existe_componente = existe_componente;

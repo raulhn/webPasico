@@ -1,7 +1,7 @@
 const constantes = require('../constantes.js');
 const conexion = require('../conexion.js');
-const componente = require('../componente.js')
-
+const componente = require('../componente.js');
+const imagen = require('../imagen.js');
 
 function obtener_elementos_carusel(id_componente)
 {
@@ -44,5 +44,64 @@ function obtener_componente_carusel(id_componente)
     )
 }
 
+function add_elemento_carusel(nid_componente, titulo, fichero)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.beginTransaction(
+                async () =>
+                {
+                    try
+                    {
+                        let nid_imagen = await imagen.subir_imagen(titulo, fichero);
+                        conexion.dbConn.query("insert into " + constantes.ESQUEMA_BD + ".elemento_carusel(nid_componente, nid_imagen) values (" +
+                            conexion.dbConn.escape(nid_componente) + ", " + conexion.dbConn.escape(nid_imagen) + ")",
+                          (error, results, fields) =>
+                          {
+                            if(error) {console.log('Error: ' + error); reject();}
+                            else{
+                                conexion.dbConn.commit();
+                                resolve();
+                            }
+                          }
+                        );
+                    }
+                    catch(e)
+                    {
+                        console.log(e)
+                        reject();
+                    }
+                }
+            )
+        }
+    )
+}
+
+function eliminar_imagen_carusel(id_componente, id_imagen)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.beginTransaction(
+               conexion.dbConn.query("delete from " +  constantes.ESQUMEA_BD + ".elemento_carusel where nid_componente = " +
+                        conexion.dbConn.escape(id_componente) + " and nid_imagen = " + conexion.dbConn.escape(id_imagen),
+                    (error, results, fields) =>
+                    {
+                        if(error) {console.log('Error ' + error); reject();}
+                        else{
+                            conexion.dbConn.commit();
+                            resolve();
+                        }
+                    }   
+                ) 
+            )
+        }
+    )
+}
+
+
 module.exports.obtener_elementos_carusel = obtener_elementos_carusel;
 module.exports.obtener_componente_carusel = obtener_componente_carusel;
+module.exports.add_elemento_carusel = add_elemento_carusel;
+module.exports.eliminar_imagen_carusel = eliminar_imagen_carusel;

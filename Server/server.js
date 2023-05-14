@@ -65,26 +65,6 @@ app.use(session(sesion_config));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
-
-
-function esAdministrador(usuario)
-{
-    return new Promise(function (resolve, reject)
-    {
-        dbConn.query('select * from '+ constantes.ESQUEMA_BD + '.usuario where usuario = ' + conexion.dbConn.escape(usuario) + ' and rol = ' + constantes.ROL_ADMINISTRADOR ,  function(error, results, fields)
-        {
-            if (error)  return resolve(false);
-            console.log('consulta ' + usuario + ' ' + results.length);
-            if (results.length <= 0)
-            {
-                resolve(false);
-            }
-            resolve(true);
-        });
-    });
-}
-
-
 function esLogueado(usuario)
 {
     if(!usuario)
@@ -107,7 +87,7 @@ app.get('/usuarios', function(req, res)
 {
     if(esLogueado(req.session.nombre))
     {
-        esAdministrador(req.session.nombre).then(
+        gestion_usuarios.esAdministrador(req.session.nombre).then(
             function(bAdministrador)
             {
                 if (bAdministrador)
@@ -154,7 +134,7 @@ app.get('/logueado_administrador', function(req, res)
     if (esLogueado(req.session.nombre))
     {
         let usuario = req.session.nombre;
-        esAdministrador(usuario).then(
+        gestion_usuarios.esAdministrador(usuario).then(
             function(bAdministrador)
             {
              
@@ -263,7 +243,7 @@ app.post('/addMenu', function(req,res)
     {
         let login_sesion = req.session.nombre;
 
-        esAdministrador(login_sesion).then(function(bAdministrador)
+        gestion_usuarios.esAdministrador(login_sesion).then(function(bAdministrador)
             {
                 if(bAdministrador)
                 {
@@ -289,7 +269,7 @@ app.post('/eliminar_menu',
     (req, res) =>
     {
         let id_menu = req.body.id_menu;
-        esAdministrador(req.session.nombre).then(
+        gestion_usuarios.esAdministrador(req.session.nombre).then(
             (bEsAdministrador) =>
             {
                 if(bEsAdministrador)
@@ -311,7 +291,7 @@ app.post('/actualizar_titulo_menu',
     {
         let id_menu = req.body.id_menu;
         let titulo = req.body.titulo;
-        esAdministrador(req.session.nombre).then(
+        gestion_usuarios.esAdministrador(req.session.nombre).then(
             (bEsAdministrador) =>
             {
                 if(bEsAdministrador)
@@ -402,7 +382,7 @@ app.post('/guardar_texto', function(req,res)
     if(esLogueado(req.session.nombre))
     {
         let login_sesion = req.session.nombre;
-        esAdministrador(login_sesion).then(
+        gestion_usuarios.esAdministrador(login_sesion).then(
             function(bAdministrador)
             {
                 if(bAdministrador)
@@ -448,7 +428,7 @@ app.post('/registrar_componente', function(req, res)
     {
 
         let usuario = req.session.nombre;
-        esAdministrador(usuario).then(
+        gestion_usuarios.esAdministrador(usuario).then(
             function(bEsAdministrador)
             {
                 if (bEsAdministrador)
@@ -650,7 +630,7 @@ app.post('/incrementa_orden',
         if(esLogueado(req.session.nombre))
         {
             let usuario = req.session.nombre;
-            esAdministrador(usuario).then(
+            gestion_usuarios.esAdministrador(usuario).then(
                 bEsAdministrador =>
                 {
                     if (bEsAdministrador)
@@ -677,7 +657,7 @@ app.post('/decrementa_orden',
         if(esLogueado(req.session.nombre))
         {
             let usuario = req.session.nombre;
-            esAdministrador(usuario).then(
+            gestion_usuarios.esAdministrador(usuario).then(
                 bEsAdministrador =>
                 {
                     if (bEsAdministrador)
@@ -710,7 +690,7 @@ app.post('/eliminar_componente',
         if(esLogueado(req.session.nombre))
         {
             let usuario = req.session.nombre;
-            esAdministrador(usuario).then(
+            gestion_usuarios.esAdministrador(usuario).then(
                 bEsAdministrador =>
                 {
                     if (bEsAdministrador)
@@ -869,7 +849,7 @@ app.post('/actualizar_imagen',
     (req, res) =>
     {
 
-        esAdministrador(req.session.nombre).then(
+        gestion_usuarios.esAdministrador(req.session.nombre).then(
             (bEsAdministrador) =>
             {
                 if(bEsAdministrador)
@@ -1007,7 +987,8 @@ app.get('/obtiene_imagenes_galeria/:id',
 app.post('/add_imagen_galeria',
     (req, res) =>
     {
-        esAdministrador(req.session.nombre).then(
+        
+        gestion_usuarios.esAdministrador(req.session.nombre).then(
             (bEsAdministrador) =>
             {
                 if(bEsAdministrador)
@@ -1015,7 +996,7 @@ app.post('/add_imagen_galeria',
                   id_componente = req.body.id_componente;
                   titulo = req.body.titulo;
                   fichero = req.files;
-                  console.log('Add imagen');
+               
                   componente_galeria.add_imagen_galeria(id_componente, titulo, fichero).then(
                     () =>
                     {
@@ -1037,7 +1018,7 @@ app.post('/add_imagen_galeria',
 app.post('/eliminar_imagen_galeria', 
     (req, res) =>
     {
-        esAdministrador(req.session.nombre).then(
+        gestion_usuarios.esAdministrador(req.session.nombre).then(
             (bEsAdministrador) =>
             {
                 if(bEsAdministrador)
@@ -1080,7 +1061,7 @@ app.get('/obtener_paginas_componente/:id',
 app.post('/add_pagina_componente',
     (req, res) =>
     {
-        esAdministrador(req.session.nombre).then(
+        gestion_usuarios.esAdministrador(req.session.nombre).then(
             (bEsAdministrador) =>
             {
                 if(bEsAdministrador)
@@ -1111,7 +1092,7 @@ app.post('/add_pagina_componente',
 app.post('/remove_pagina_componente', 
     (req, res) =>
     {
-        esAdministrador(req.session.nombre).then(
+        gestion_usuarios.esAdministrador(req.session.nombre).then(
             (bEsAdministrador) =>
             {
                 if(bEsAdministrador)
@@ -1136,18 +1117,11 @@ app.post('/remove_pagina_componente',
 /**
  * Componente Carrusel
  */
-  app.get('/obtener_carusel/:id_componente',
-    async (req, res) =>
-    {
-        let bEsAdministrador = await esAdministrador(req.session.nombre);
-        if (bEsAdministrador)
-        {
-            servlet_componente.obtener_componente_carusel(req, res);
-        }
-    }
-  
-  )
+  app.get('/obtener_carusel/:id_componente', servlet_componente.obtener_componente_carusel)
 
+  app.post('/add_imagen_carusel', servlet_componente.add_imagen_carusel)
+
+  app.post('/eliminar_imagen_carusel', servlet_componente.eliminar_imagen_carusel)
 
   https.createServer({
     key: fs.readFileSync('apache.key'),

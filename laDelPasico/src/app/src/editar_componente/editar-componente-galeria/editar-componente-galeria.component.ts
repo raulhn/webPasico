@@ -24,8 +24,6 @@ export class EditarComponenteGaleriaComponent implements OnInit {
 
   constructor(private componenteService: ComponenteService) { }
 
-
-
   items: any[] = [];
 
   imagenesArchivos:File[] = [];
@@ -79,12 +77,10 @@ export class EditarComponenteGaleriaComponent implements OnInit {
         this.componenteService.add_imagen_galeria(formData).subscribe(
           (res: any) =>
           {
-            console.log(res);
             iteraciones = iteraciones + 1;
             if(!res.error && iteraciones == this.imagenesArchivos.length)
             {
               setTimeout(() => {window.location.reload();}, 1000);
-              
             }
           }
         );
@@ -109,6 +105,7 @@ export class EditarComponenteGaleriaComponent implements OnInit {
       }
     )
   }
+  
   onChange(event:any)
   {
     this.imagenesArchivos = event.target.files;

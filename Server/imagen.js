@@ -71,17 +71,20 @@ function actualizar_imagen_servidor(id_imagen, fichero)
     return new Promise(
         (resolve, reject) =>
         {
+            console.log(fichero)
     let imagen = fichero.imagen;
+    console.log('xxxx')
+    console.log(imagen)
     let nombre_imagen = id_imagen + "_" + imagen.name;
 
-   
+    console.log('Actualiza imagen ' + nombre_imagen)
     conexion.dbConn.query("update " +  constantes.ESQUEMA_BD + ".imagen set ruta_servidor = " + 
             conexion.dbConn.escape(constantes.RUTA_SUBIDAS  + nombre_imagen) + " where nid = " +  conexion.dbConn.escape(id_imagen), 
     (error, results, field) =>
     {
         if(error) {console.log(error); conexion.dbConn.rollback(); reject(error);}
         else{
-           
+            console.log('Subida de fichero')
             gestion_ficheros.subir_ficheros(fichero, nombre_imagen).then(
             () => { conexion.dbConn.commit(); resolve();}
             ).catch(
@@ -126,7 +129,7 @@ function subir_imagen(titulo, fichero)
             conexion.dbConn.beginTransaction(
                 () =>
                 {
-                    let imagen = fichero.imagen;
+                    console.log('registrar imagen')
                     conexion.dbConn.query("insert into " + constantes.ESQUEMA_BD + ".imagen(titulo) values(" +
                         conexion.dbConn.escape(titulo) + ")", 
                     (error, results, fields) =>
@@ -135,7 +138,8 @@ function subir_imagen(titulo, fichero)
                         else
                         {
                             id_imagen = results.insertId;
-                          
+                            console.log('Subir imagen')
+                            console.log(fichero)
                             actualizar_imagen_servidor(id_imagen, fichero).then(
                                 () => { conexion.dbConn.commit(); resolve(id_imagen); }
                             ).catch(

@@ -83,6 +83,8 @@ function obtiene_imagenes_galeria(id_componente)
     )
 }
 
+
+
 module.exports.add_imagen_galeria = add_imagen_galeria;
 module.exports.eliminar_imagen_galeria = eliminar_imagen_galeria;
 module.exports.obtiene_imagenes_galeria =  obtiene_imagenes_galeria;
