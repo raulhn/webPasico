@@ -3,6 +3,7 @@ import { OwlOptions } from 'ngx-owl-carousel-o';
 import { faX, faCirclePlus} from '@fortawesome/free-solid-svg-icons';
 import { ComponenteService } from 'src/app/servicios/componente.service';
 import { Constantes } from '../../logica/constantes';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-editar-componente-carusel',
@@ -129,11 +130,26 @@ export class EditarComponenteCaruselComponent implements OnInit {
 
   eliminar(id_imagen: string)
   {
-    this.componentService.eliminar_elemento_carrusel(this.id_componente, id_imagen).subscribe(
-      (res:any) =>
-      {
-        console.log(res)
-      }
-    );
+    Swal.fire({
+      title: 'Aviso',
+      text: '¿Esta seguro de eliminar este elemento?',
+      showDenyButton: true,
+      confirmButtonText: 'Si',
+      denyButtonText: 'No'
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        this.componentService.eliminar_elemento_carrusel(this.id_componente, id_imagen).subscribe(
+          (res:any) =>
+          {
+            if(!res.error)
+            {
+              window.location.reload();
+            }
+          }
+        );
+      } 
+    })
+
   }
 }

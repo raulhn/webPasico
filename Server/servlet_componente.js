@@ -69,7 +69,6 @@ async function eliminar_imagen_carusel(req, res)
 {
     let id_componente = req.body.id_componente;
     let id_imagen = req.body.id_imagen;
-
     try{
         bEsAdministrador = await gestion_usuarios.esAdministrador(req.session.nombre);
         if(bEsAdministrador)

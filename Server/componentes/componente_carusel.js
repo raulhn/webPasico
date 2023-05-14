@@ -84,19 +84,23 @@ function eliminar_imagen_carusel(id_componente, id_imagen)
         (resolve, reject) =>
         {
             conexion.dbConn.beginTransaction(
-               conexion.dbConn.query("delete from " +  constantes.ESQUMEA_BD + ".elemento_carusel where nid_componente = " +
-                        conexion.dbConn.escape(id_componente) + " and nid_imagen = " + conexion.dbConn.escape(id_imagen),
-                    (error, results, fields) =>
-                    {
-                        if(error) {console.log('Error ' + error); reject();}
-                        else{
-                            conexion.dbConn.commit();
-                            resolve();
-                        }
-                    }   
-                ) 
-            )
-        }
+                () =>
+                {          
+                    conexion.dbConn.query("delete from " +  constantes.ESQUEMA_BD + ".elemento_carusel where nid_componente = " +
+                            conexion.dbConn.escape(id_componente) + " and nid_imagen = " + conexion.dbConn.escape(id_imagen),
+                        (error, results, fields) =>
+                        {
+                            if(error) {console.log('Error ' + error); conexion.dbConn.rollback(); reject();}
+                            else{
+                                conexion.dbConn.commit();
+                                console.log('Elemento eliminado');
+                                resolve();
+                            }
+                        }   
+                    ) 
+                }
+                )
+            }
     )
 }
 
