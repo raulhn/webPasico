@@ -87,8 +87,30 @@ async function eliminar_imagen_carusel(req, res)
     }
 }
 
+async function actualizar_elementos_simultaneos(req, res)
+{
+    let id_componente = req.body.id_componente;
+    let num_elementos = req.body.num_elementos;
+    try{
+        bEsAdministrador = await gestion_usuarios.esAdministrador(req.session.nombre);
+        if (bEsAdministrador)
+        {
+            await componente_carusel.actualiza_elementos_simultaneos(id_componente, num_elementos);
+            return res.status(200).send({error:false, message:'Componente actualizado'});
+        }
+        else{
+            return res.status(400).send({error: true, message: 'Error al actualizar'})
+        }
+    }
+    catch(error)
+    {
+        console.log(error); 
+        return res.status(400).send({error:true, message: 'No se ha podido realizar la actualizacion'})
+    }
+}
 
 module.exports.registrar_componente_carusel = registrar_componente_carusel;
 module.exports.obtener_componente_carusel = obtener_componente_carusel;
 module.exports.add_imagen_carusel = add_imagen_carusel;
 module.exports.eliminar_imagen_carusel = eliminar_imagen_carusel;
+module.exports.actualizar_elementos_simultaneos = actualizar_elementos_simultaneos;

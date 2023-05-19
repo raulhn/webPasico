@@ -13,6 +13,7 @@ import { Constantes } from '../logica/constantes';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 import { EditarComponenteGaleriaComponent } from '../editar_componente/editar-componente-galeria/editar-componente-galeria.component';
 import { EditarComponentePaginasComponent } from '../editar_componente/editar-componente-paginas/editar-componente-paginas.component';
+import { EditarComponenteCaruselComponent } from '../editar_componente/editar-componente-carusel/editar-componente-carusel.component';
 
 @Component({
   selector: 'app-componente',
@@ -31,6 +32,8 @@ export class ComponenteComponent implements OnInit {
   @ViewChild('instancia_galeria') instancia_galeria!: EditarComponenteGaleriaComponent;
 
   @ViewChild('instancia_paginas') instancia_paginas!: EditarComponentePaginasComponent;
+
+  @ViewChild('instancia_carusel') instancia_carusel!: EditarComponenteCaruselComponent;
 
  
   faPen = faPen;
@@ -167,8 +170,11 @@ export class ComponenteComponent implements OnInit {
     }
     else if(this.tipo == Constantes.TipoComponente.PAGINAS)
     {
-
       this.instancia_paginas.guardar(this.id_pagina);
+    }
+    else if(this.tipo == Constantes.TipoComponente.CARUSEL)
+    {
+      this.instancia_carusel.guardar();
     }
   }
 

@@ -23,6 +23,9 @@ export class EditarComponenteCaruselComponent implements OnInit {
 
   imagenes:any [] = [];
 
+  elementos_simultaneos: number = 1;
+  elementos_simultaneos_original: number = 1;
+
   customOptions: OwlOptions = {
       loop: true,
       mouseDrag: true,
@@ -39,7 +42,7 @@ export class EditarComponenteCaruselComponent implements OnInit {
         0: {
           items: 1
         },
-        450: {
+        300: {
           items: 3
         }
       },
@@ -49,7 +52,8 @@ export class EditarComponenteCaruselComponent implements OnInit {
   inicializa_carrusel = {
     next: (respuesta: any) =>
     {
-      let elementos_simultaneos = respuesta["componente_carusel"][0]["elementos_simultaneos"];
+      this.elementos_simultaneos = respuesta["componente_carusel"][0]["elementos_simultaneos"];
+      this.elementos_simultaneos_original = this.elementos_simultaneos;
       this.imagenes = respuesta["elementos_carusel"];
       this.customOptions = {
               loop: true,
@@ -67,8 +71,8 @@ export class EditarComponenteCaruselComponent implements OnInit {
                 0: {
                   items: 1
                 },
-                450: {
-                  items: elementos_simultaneos
+                300: {
+                  items: this.elementos_simultaneos
                 }
               },
               nav: false
@@ -109,6 +113,8 @@ export class EditarComponenteCaruselComponent implements OnInit {
 
   crear_elemento()
   {
+    console.log(this.bPendienteSubir)
+    console.log(this.imagenesArchivos.length)
     if (this.bPendienteSubir && this.imagenesArchivos.length > 0)
     {
       var formData = new FormData();
@@ -121,11 +127,49 @@ export class EditarComponenteCaruselComponent implements OnInit {
         (res: any) =>
         {
           console.log(res);
-          setTimeout(() => {window.location.reload();}, 1000);
+          if(!res.error)
+          {
+            setTimeout(() => {window.location.reload();}, 1000);
+          }
         }
       )
     }
+  }
 
+  guardar()
+  {
+    this.componentService.actualizar_elementos_simultaneos(this.id_componente, this.elementos_simultaneos).subscribe(
+      (res: any) =>
+      {
+        console.log(res)
+        if(!res.error)
+        {
+          this.customOptions = {
+            loop: true,
+            mouseDrag: true,
+            touchDrag: true,
+            pullDrag: false,
+            dots: true,
+            margin:10,
+            autoplay: true,
+            autoWidth:true,
+            navSpeed: 700,
+            merge:true,
+            
+            responsive: {
+              0: {
+                items: 1
+              },
+              300: {
+                items: this.elementos_simultaneos
+              }
+            },
+            nav: false
+          }
+          setTimeout(() => {window.location.reload();}, 1000);
+        }
+      }
+    )
   }
 
   eliminar(id_imagen: string)

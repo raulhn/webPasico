@@ -911,23 +911,32 @@ app.get('/imagen/:id',
   );
 
   app.get('/imagen_url/:id',
-  (req, res) => {
+  async (req, res) => {
 
       let id_imagen = req.params.id;
 
-    imagen.obtiene_ruta_imagen(id_imagen).then(
-        (ruta_imagen) =>
-        {
-            fs.readFile(ruta_imagen,
-            (err, data) =>
+    try{
+        await imagen.obtiene_ruta_imagen(id_imagen).then(
+            (ruta_imagen) =>
             {
-                res.writeHead(200);
-                res.write(data);
-                return res.end();
-            });
-        }
-    )
-
+                fs.readFile(ruta_imagen,
+                (err, data) =>
+                {
+                    if(data === undefined)
+                    {
+                        return res.status(400).send({error: true, message: 'Error'})
+                    }
+                    res.writeHead(200);
+                    res.write(data);
+                    return res.end();
+                });
+            }
+        )
+    }catch(error)
+    {
+        console.log(error);
+        return res.status(400).send({error: true, message: error})
+    }
 
     
   }
@@ -1122,6 +1131,8 @@ app.post('/remove_pagina_componente',
   app.post('/add_imagen_carusel', servlet_componente.add_imagen_carusel)
 
   app.post('/eliminar_imagen_carusel', servlet_componente.eliminar_imagen_carusel)
+
+  app.post('/actualizar_elementos_simultaneos', servlet_componente.actualizar_elementos_simultaneos)
 
   https.createServer({
     key: fs.readFileSync('apache.key'),

@@ -78,6 +78,30 @@ function add_elemento_carusel(nid_componente, titulo, fichero)
     )
 }
 
+function actualiza_elementos_simultaneos(nid_componente, elementos_simultaneos)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.beginTransaction(
+                () =>
+                {
+                    conexion.dbConn.query("update " + constantes.ESQUEMA_BD + ".componente_carusel set elementos_simultaneos = " +
+                            conexion.dbConn.escape(elementos_simultaneos) + " where nid_componente = " + conexion.dbConn.escape(nid_componente), 
+                        (error, results, fields) =>
+                        {
+                            if(error){console.log(error); reject();}
+                            else{
+                                resolve();
+                            }
+                        }
+                    )
+                }
+            )
+        }
+    )
+}
+
 function eliminar_imagen_carusel(id_componente, id_imagen)
 {
     return new Promise(
@@ -108,4 +132,5 @@ function eliminar_imagen_carusel(id_componente, id_imagen)
 module.exports.obtener_elementos_carusel = obtener_elementos_carusel;
 module.exports.obtener_componente_carusel = obtener_componente_carusel;
 module.exports.add_elemento_carusel = add_elemento_carusel;
+module.exports.actualiza_elementos_simultaneos = actualiza_elementos_simultaneos;
 module.exports.eliminar_imagen_carusel = eliminar_imagen_carusel;

@@ -233,6 +233,12 @@ export class ComponenteService {
     let API_URL = this.url + '/eliminar_imagen_carusel';
     return this.http.post(API_URL, {id_componente: nid_componente, id_imagen: nid_imagen}, {withCredentials:true});
   }
+
+  actualizar_elementos_simultaneos(nid_componente: string, elementos_carusel: number)
+  {
+    let API_URL = this.url + '/actualizar_elementos_simultaneos';
+    return this.http.post(API_URL, {id_componente: nid_componente, num_elementos: elementos_carusel}, {withCredentials: true});
+  }
 }
 
 

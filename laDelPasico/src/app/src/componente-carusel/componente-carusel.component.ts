@@ -20,7 +20,6 @@ export class ComponenteCaruselComponent implements OnInit {
     autoWidth:true,
     navSpeed: 700,
     merge:true,
-    
     responsive: {
       0: {
         items: 1
@@ -43,8 +42,7 @@ export class ComponenteCaruselComponent implements OnInit {
     {
       let elementos_simultaneos = respuesta["componente_carusel"][0]["elementos_simultaneos"];
       this.imagenes = respuesta["elementos_carusel"];
-      console.log(this.imagenes)
-      console.log(this.imagenes[0]['nid_imagen'])
+      console.log(elementos_simultaneos);
       this.customOptions = {
         loop: true,
         mouseDrag: true,
@@ -55,13 +53,12 @@ export class ComponenteCaruselComponent implements OnInit {
         autoplay: true,
         autoWidth:true,
         navSpeed: 700,
-        merge:true,
-        
+        merge:true, 
         responsive: {
           0: {
             items: 1
           },
-          450: {
+          300: {
             items: elementos_simultaneos
           }
         },
