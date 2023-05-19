@@ -42,7 +42,7 @@ export class EditarComponenteCaruselComponent implements OnInit {
         0: {
           items: 1
         },
-        300: {
+        600: {
           items: 3
         }
       },
@@ -71,7 +71,7 @@ export class EditarComponenteCaruselComponent implements OnInit {
                 0: {
                   items: 1
                 },
-                300: {
+                600: {
                   items: this.elementos_simultaneos
                 }
               },
@@ -160,7 +160,7 @@ export class EditarComponenteCaruselComponent implements OnInit {
               0: {
                 items: 1
               },
-              300: {
+              600: {
                 items: this.elementos_simultaneos
               }
             },

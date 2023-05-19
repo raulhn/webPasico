@@ -24,7 +24,7 @@ export class ComponenteCaruselComponent implements OnInit {
       0: {
         items: 1
       },
-      450: {
+      600: {
         items: 3
       }
     },
@@ -58,7 +58,7 @@ export class ComponenteCaruselComponent implements OnInit {
           0: {
             items: 1
           },
-          300: {
+          600: {
             items: elementos_simultaneos
           }
         },

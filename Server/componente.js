@@ -1218,3 +1218,5 @@ module.exports.add_pagina_componente = add_pagina_componente;
 module.exports.remove_pagina_componente = remove_pagina_componente;
 module.exports.obtener_paginas_componente = obtener_paginas_componente;
 
+module.exports.eliminar_pagina_componente = eliminar_pagina_componente;
+

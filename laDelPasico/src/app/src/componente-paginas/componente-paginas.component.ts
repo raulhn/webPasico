@@ -78,11 +78,6 @@ export class ComponentePaginasComponent implements OnInit {
 
   obtiene_paginacion(id_pagina: number)
   {
-    console.log(this.orden_pagina[id_pagina] + '/' + this.NUM_PAGINAS);
-    console.log(this.orden_pagina[id_pagina] / this.NUM_PAGINAS);
-    console.log(Math.trunc(this.orden_pagina[id_pagina] / this.NUM_PAGINAS));
-    console.log(id_pagina);
-    console.log(this.orden_pagina[id_pagina]);
     return Math.trunc(this.orden_pagina[id_pagina] / this.NUM_PAGINAS);
   }
 
