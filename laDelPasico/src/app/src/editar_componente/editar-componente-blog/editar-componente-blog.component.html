@@ -1,0 +1,62 @@
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Incluir Nuevo Elemento</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <label>Titulo</label>
+            <input class="form-control" type="text" [(ngModel)]="titulo"/>
+  
+            <label>Imagen</label>
+            <input class="form-control" type="file" (change)="cargar_imagen($event)"/>
+
+            <label>Fecha</label>
+            <input class="form-control" type="date" [(ngModel)]="fecha"/>
+
+            <label>Descripcion</label>
+            <input class="form-controrl" type="text" [(ngModel)]="descripcion"/>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <button type="button" (click)="crear_elemento()" class="btn btn-primary">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-2">
+    <div *ngFor="let blog of elementos_blog;" class="col-md-4">
+        <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+        <div class="col p-4 d-flex flex-column position-static">
+            <strong class="d-inline-block mb-2 text-primary">Noticias</strong>
+            <h3 class="mb-0">{{blog['titulo']}}</h3>
+            <div class="mb-1 text-muted">{{obtiene_fecha(blog['fecha'])}}</div>
+            <p class="card-text mb-auto">{{blog['descripcion']}}</p>
+            <a [href]="obtiene_url_pagina(blog['nid_menu'])" class="stretched-link">Continua leyendo</a>
+        </div>
+        <div class="col-auto d-none d-lg-block">
+            <img [src]="obtiene_url_imagen(blog['nid_imagen'])" width="200" >
+        </div>
+        </div>
+    </div>
+  </div>
+
+
+  <div class="item" >
+    <button  type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal" style="background-color:rgb(14, 49, 14); border-width: 2px; display:block; margin-left: auto; margin-right: auto;">
+    <div class="row">
+        <div class="col" style="float:center; ">
+            <fa-icon style="color: white;" [icon] = faAdd></fa-icon>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <span style="color: white">Añadir nueva imagen</span>
+        </div>
+    </div>
+    </button>
+  </div>

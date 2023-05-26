@@ -7,7 +7,7 @@ export namespace Constantes
         /** Producción **/
       
        public static readonly URL_BACKED = 'https://80.240.127.138:8444';
-       public static readonly URL_FRONTED = 'https://80.240.127.138';
+       public static readonly URL_FRONTED = 'https://80.240.127.138:8081';
        
 
        /** Desarrollo **/
@@ -26,6 +26,7 @@ export namespace Constantes
         public static readonly GALERIA = "5";
         public static readonly PAGINAS = "6";
         public static readonly CARUSEL = "7";
+        public static readonly BLOG = "8";
     };
 
     export class TipoAsociacion

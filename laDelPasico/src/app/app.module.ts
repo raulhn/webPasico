@@ -39,6 +39,8 @@ import { EditarComponentePaginasComponent } from './src/editar_componente/editar
 import { ComponentePaginasComponent } from './src/componente-paginas/componente-paginas.component';
 import { ComponenteCaruselComponent } from './src/componente-carusel/componente-carusel.component';
 import { EditarComponenteCaruselComponent } from './src/editar_componente/editar-componente-carusel/editar-componente-carusel.component';
+import { ComponenteBlogComponent } from './src/componente-blog/componente-blog.component';
+import { EditarComponenteBlogComponent } from './src/editar_componente/editar-componente-blog/editar-componente-blog.component';
 
 @NgModule({
   declarations: [
@@ -65,7 +67,9 @@ import { EditarComponenteCaruselComponent } from './src/editar_componente/editar
     EditarComponentePaginasComponent,
     ComponentePaginasComponent,
     ComponenteCaruselComponent,
-    EditarComponenteCaruselComponent
+    EditarComponenteCaruselComponent,
+    ComponenteBlogComponent,
+    EditarComponenteBlogComponent
   ],
   imports: [
     BrowserModule,

@@ -113,8 +113,7 @@ export class EditarComponenteCaruselComponent implements OnInit {
 
   crear_elemento()
   {
-    console.log(this.bPendienteSubir)
-    console.log(this.imagenesArchivos.length)
+
     if (this.bPendienteSubir && this.imagenesArchivos.length > 0)
     {
       var formData = new FormData();

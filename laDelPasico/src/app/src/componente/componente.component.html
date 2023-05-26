@@ -97,10 +97,20 @@
     <div *ngIf="tipo == '7'">
         <div class="col">
             <div *ngIf="!modo_edicion">
-                <app-componente-carusel id_componente="156"></app-componente-carusel>
+                <app-componente-carusel id_componente={{id}}></app-componente-carusel>
             </div>
             <div *ngIf="modo_edicion">
-                <app-editar-componente-carusel #instancia_carusel id_componente="156"></app-editar-componente-carusel>
+                <app-editar-componente-carusel #instancia_carusel id_componente={{id}}></app-editar-componente-carusel>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="tipo == '8'">
+        <div class="col">
+            <div *ngIf="!modo_edicion">
+                <app-componente-blog id_componente={{id}}></app-componente-blog>
+            </div>
+            <div *ngIf="modo_edicion">
+                <app-editar-componente-blog id_componente={{id}}></app-editar-componente-blog>
             </div>
         </div>
     </div>

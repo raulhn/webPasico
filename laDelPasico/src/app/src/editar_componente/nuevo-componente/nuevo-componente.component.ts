@@ -45,6 +45,10 @@ export class NuevoComponenteComponent implements OnInit {
   // Componente de carusel
   elementos_simultaneos: string = "";
 
+  // Componente de blog
+  titulo_blog: string = "";
+  fecha: string = "";
+
   constructor(private usuarioService: UsuariosService, private componenteService: ComponenteService) { }
 
   ngOnInit(): void {
@@ -126,10 +130,20 @@ export class NuevoComponenteComponent implements OnInit {
         (res) =>
         {
           console.log(res);
-        //  window.location.reload();
+          window.location.reload();
         }
       )
     }
+    else if(this.desplegable == Constantes.TipoComponente.BLOG)
+    {
+      this.componenteService.crear_componente_blog(this.id_pagina, this.desplegable).subscribe(
+        (res: any) =>
+        {
+          window.location.reload();
+        }
+      )
+    }
+
   }
 
 }

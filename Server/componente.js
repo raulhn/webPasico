@@ -25,6 +25,26 @@ function existe_componente(nid_componente)
     );
 }
 
+/*
+    Obtiene la página asociada a un componente
+*/
+function obtener_pagina_de_componente(nid_componente)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.query("select max(nid_pagina) pagina from " + constantes.ESQUEMA_BD + ".pagina_componente where nid_componente = " + conexion.dbConn.escape(nid_componente),
+                (error, results, fields) =>
+                {
+                    if(error) {console.log(error); reject();}
+                    else if(results.length <= 0) {console.log('Error al obtener la página'); reject();}
+                    else { resolve(results[0]["pagina"]); }
+                }
+            )
+        }
+    )
+}
+
 function tipo_componente(nid_componente)
 {
     return new Promise(
@@ -861,7 +881,7 @@ function eliminar_componente_carusel(id_pagina, id_componente, tipo_asociacion)
                 if (tipo_asociacion == constantes.TIPO_ASOCIACION_PAGINA)
                 {
                     console.log('eliminar_componente_carusel -> Eliminar carusel componente')
-                    await eliminar_pagina_componente(id_pagina, id_compnente);
+                    await eliminar_pagina_componente(id_pagina, id_componente);
                     conexion.dbConn.commit();
                     resolve();
                 }
@@ -1169,9 +1189,32 @@ function obtener_paginas_componente(nid_componente)
     )
 }
 
+async function eliminar_componente_comun(id_componente, id_pagina, tipo_asociacion)
+{
+    try
+    {
+        if (tipo_asociacion == constantes.TIPO_ASOCIACION_PAGINA)
+        {
+            await eliminar_componente_paginas(id_pagina, id_componente);
+        }
+        else if(tipo_asociacion = constantes.TIPO_ASOCIACION_COMPONENTE)
+        {
+            await eliminar_componente_componentes(id_componente);
+        }
+        conexion.dbConn.commit();
+        resolve();
+    }
+    catch(e)
+    {
+        console.log(e);
+        conexion.dbConn.rollback();
+        reject();
+    }
+}
 
 module.exports.tipo_componente = tipo_componente;
 module.exports.existe_componente = existe_componente;
+module.exports.obtener_pagina_de_componente = obtener_pagina_de_componente;
 module.exports.actualizar_texto = actualizar_texto;
 
 module.exports.registrar_componente_comun = registrar_componente_comun;
@@ -1219,4 +1262,5 @@ module.exports.remove_pagina_componente = remove_pagina_componente;
 module.exports.obtener_paginas_componente = obtener_paginas_componente;
 
 module.exports.eliminar_pagina_componente = eliminar_pagina_componente;
-
+module.exports.eliminar_componente_componentes = eliminar_componente_componentes;
+module.exports.eliminar_componente_comun = eliminar_componente_comun;

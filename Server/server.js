@@ -26,6 +26,7 @@ const gestion_ficheros = require('./gestion_ficheros.js');
 const imagen = require('./imagen.js');
 
 const servlet_componente = require('./servlet_componente.js');
+const servlet_componente_blog = require('./servlets/servlet_componente_blog.js')
 
 const ESQUEMA_BD = constantes.ESQUEMA_BD;
 
@@ -33,6 +34,7 @@ var sesion_config = require('./config/sesion.json');
 
 //https://www.w3schools.com/nodejs/nodejs_filesystem.asp
 var fs = require('fs');
+const { eliminar_componente_blog } = require('./componentes/componente_blog.js');
 
 /** Desarrollo **/
 var url_web = 'https://80.240.127.138:8081';
@@ -597,6 +599,11 @@ app.post('/registrar_componente', function(req, res)
                         console.log('Registrar componente Carrusel')
                         servlet_componente.registrar_componente_carusel(req, res);
                     }
+                    else if(tipo_componente == constantes.TIPO_COMPONENTE_BLOG)
+                    {
+                        console.log('Registrar componente blog')
+                        servlet_componente_blog.registrar_componente_blog(req, res);
+                    }
                    
                 }
                
@@ -742,7 +749,7 @@ app.post('/eliminar_componente',
                                }
                                if(tipo == constantes.TIPO_COMPONENTE_PAGINAS)
                                {
-                                    console.log('Eliminar compoonente Paginas');
+                                    console.log('Eliminar componente Paginas');
                                     componente.eliminar_componente_paginas(id_pagina, id_componente, tipo_asociacion)
                                     .then(() => {console.log('Eliminado'); return res.status(200).send({error: false, message: 'Componente eliminado'});})
                                     .catch(() => {console.log('Error'); return res.status(400).send({error: true, message: 'Error'});})
@@ -753,10 +760,24 @@ app.post('/eliminar_componente',
                                  try
                                  {
                                     await componente.eliminar_componente_carusel(id_pagina, id_componente, tipo_asociacion)
+                                    return res.status(200).send({error:false, message: 'Componente eliminado'})
                                  }
                                  catch(error)
                                  {
                                     console.log('Error eliminar componente carusel')
+                                    return res.status(400).send({error: true, message: 'Error al eliminar el componente'})
+                                 }
+                               }
+                               if(tipo == constantes.TIPO_COMPONENTE_BLOG)
+                               {
+                                 console.log('Eliminar componente Blog')
+                                 try{
+                                    await servlet_componente_blog.eliminar_componente_blog(id_pagina, id_componente, tipo_asociacion)
+                                    return res.status(200).send({error: false, message: 'Componente eliminado'})
+                                 }
+                                 catch(error)
+                                 {
+                                    console.log(error)
                                     return res.status(400).send({error: true, message: 'Error al eliminar el componente'})
                                  }
                                }
@@ -1133,6 +1154,14 @@ app.post('/remove_pagina_componente',
   app.post('/eliminar_imagen_carusel', servlet_componente.eliminar_imagen_carusel)
 
   app.post('/actualizar_elementos_simultaneos', servlet_componente.actualizar_elementos_simultaneos)
+
+/**
+ * Componente Blog
+ */
+  app.get('/obtener_componente_blog/:id_componente', servlet_componente_blog.obtener_componente_blog)
+
+  app.post('/add_componente_blog', servlet_componente_blog.add_elemento_blog);
+
 
   https.createServer({
     key: fs.readFileSync('apache.key'),

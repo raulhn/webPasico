@@ -77,6 +77,12 @@ export class ComponenteService {
     return this.http.post(API_URL, {id: id_pagina, tipo_componente: tipo_componente, elementos_simultaneos: elementos_simultaneos, tipo_asociacion: Constantes.TipoAsociacion.pagina}, { withCredentials: true});
   }
 
+  crear_componente_blog(id_pagina: string, tipo_componente: string)
+  {
+    let API_URL = this.url + '/registrar_componente';
+    return this.http.post(API_URL, {id: id_pagina, tipo_componente: tipo_componente, tipo_asociacion: Constantes.TipoAsociacion.pagina}, {withCredentials: true});
+  }
+
   /** CREAR COMPONENTES DE COMPONENTE**/
 
   crear_componente_componentes_texto(id_componente: string, tipo_componente: string, nOrden: string)
@@ -239,6 +245,20 @@ export class ComponenteService {
     let API_URL = this.url + '/actualizar_elementos_simultaneos';
     return this.http.post(API_URL, {id_componente: nid_componente, num_elementos: elementos_carusel}, {withCredentials: true});
   }
+
+  /** Componente Blog **/
+  add_elemento_blog(data:any)
+  {
+    let API_URL = this.url + '/add_componente_blog';
+    return this.http.post(API_URL, data, {withCredentials: true});
+  }
+
+  obtener_elemento_blog(id_componente: string)
+  {
+    let API_URL = this.url + '/obtener_componente_blog/' + id_componente;
+    return this.http.get(API_URL)
+  }
+  
 }
 
 
