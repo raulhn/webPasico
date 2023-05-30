@@ -1,4 +1,4 @@
-const componente = require('./componente.js');
+const componente = require('./componentes/componente.js');
 const constantes = require('./constantes.js');
 const componente_carusel = require('./componentes/componente_carusel.js');
 const gestion_usuarios = require('./usuario.js')

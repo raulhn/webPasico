@@ -145,6 +145,8 @@ function menu_tiene_hijos(id_menu)
     )
 }
 
+
+
 function eliminar_menu(id_menu)
 {
     return new Promise(
@@ -159,10 +161,11 @@ function eliminar_menu(id_menu)
                             if(bTiene_componentes || bTiene_hijos)
                             {
                                 console.log(bTiene_hijos);
-                                reject();
+                                reject('La pagina tiene componentes');
                             }
                             else
                             {
+                                console.log("delete from " + constantes.ESQUEMA_BD + ".menu where nid = " + conexion.dbConn.escape(id_menu))
                                 conexion.dbConn.query("delete from " + constantes.ESQUEMA_BD + ".menu where nid = " + conexion.dbConn.escape(id_menu),
                                 (error, results, field) =>
                                 {

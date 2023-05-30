@@ -1,6 +1,6 @@
 const constantes = require('../constantes.js');
 const conexion = require('../conexion.js');
-const componente = require('../componente.js');
+const componente = require('./componente.js');
 const menu = require('../menu.js');
 const imagen = require('../imagen.js');
 
@@ -73,6 +73,69 @@ function obtener_componente_blog(id_componente)
     )
 }
 
+
+
+function eliminar_elemento_blog(id_componente, id_imagen, id_menu)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.beginTransaction(
+                async () =>
+                {
+                  
+                   
+                    conexion.dbConn.query('delete from ' + constantes.ESQUEMA_BD + '.componente_blog where nid_componente = ' +  
+                            conexion.dbConn.escape(id_componente) + " and nid_imagen = " + conexion.dbConn.escape(id_imagen) + 
+                            ' and nid_menu = ' + conexion.dbConn.escape(id_menu),
+                        async (error, result, fields) =>
+                        {
+                            try{
+                                if (error)
+                                {
+                                    console.log(error);
+                                    conexion.dbConn.rollback();
+                                    reject(error);
+                                }
+                                else{
+                                    await menu.eliminar_menu(id_menu);
+                                    conexion.dbConn.commit();
+                                    resolve();
+                                }
+                            }
+                            catch(e)
+                            {
+                                conexion.dbConn.rollback();
+                                console.log(e);
+                                reject(e);
+                            }
+                        }
+                        
+                    )
+                    
+                }
+            )
+        }
+    )
+}
+
+function numero_elementos(id_componente)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.query('select count(*) num from ' + constantes.ESQUEMA_BD + '.componente_blog where nid_componente = ' +
+                    conexion.dbConn.escape(id_componente),
+                (error, results, fields) =>
+                {
+                    if(error) {console.log(error); resolve(0);}
+                    else {resolve(results[0]['num']);}
+                }
+            )
+        }
+    )
+}
+
 function eliminar_componente_blog(id_pagina, id_componente, tipo_asociacion)
 {
     return new Promise(
@@ -81,34 +144,32 @@ function eliminar_componente_blog(id_pagina, id_componente, tipo_asociacion)
             conexion.dbConn.beginTransaction(
                 async () =>
                 {
-                    conexion.dbConn.query('delete from ' + constantes.ESQUEMA_BD + '.componente_blog where nid_componente = ' +  
-                            conexion.dbConn.escape(id_componente),
-                        async (error, result, fields) =>
-                        {
-                            if (error)
-                            {
-                                console.log(error);
-                                conexion.dbConn.rollback();
-                                reject();
-                            }
-                            else{
-                                try
-                                {componente.eliminar_componente_comun(id_pagina, id_componente, tipo_asociacion)}
-                                catch(e)
-                                {
-                                    console.log(e);
-                                    reject();
-                                }
-                            }
-                        }
-                        
-                    )
+                    let cantidad_elementos = await numero_elementos(id_componente);
+                    if (cantidad_elementos > 0)
+                    {
+                       try
+                       {
+                        await componente.eliminar_componente_comun(id_componente, id_pagina, tipo_asociacion);
+                        resolve();
+                       }
+                       catch(error)
+                       {
+                        console.log(error);
+                        reject(error);
+                       }
+
+                    }
+                    else{
+                        reject();
+                    }
                 }
             )
         }
-    )
+    );
 }
+
 
 module.exports.add_componente_blog = add_componente_blog
 module.exports.obtener_componente_blog = obtener_componente_blog
+module.exports.eliminar_elemento_blog = eliminar_elemento_blog
 module.exports.eliminar_componente_blog = eliminar_componente_blog

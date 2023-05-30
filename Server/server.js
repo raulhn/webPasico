@@ -14,9 +14,10 @@ const TIPO_COMPONENTE_TEXTO = 1;
 
 var dbConn = conexion.dbConn;
 
-const componente = require('./componente.js');
-const componente_componentes = require('./componente_componentes');
-const componente_galeria = require('./componente_galeria.js');
+const componente = require('./componentes/componente.js');
+const componente_componentes = require('./componentes/componente_componentes.js');
+const componente_galeria = require('./componentes/componente_galeria.js');
+const componente_blog = require('./componentes/componente_blog.js');
 
 const constantes = require('./constantes.js');
 const parametro = require('./parametro.js');
@@ -34,7 +35,7 @@ var sesion_config = require('./config/sesion.json');
 
 //https://www.w3schools.com/nodejs/nodejs_filesystem.asp
 var fs = require('fs');
-const { eliminar_componente_blog } = require('./componentes/componente_blog.js');
+
 
 /** Desarrollo **/
 var url_web = 'https://80.240.127.138:8081';
@@ -392,7 +393,6 @@ app.post('/guardar_texto', function(req,res)
                     componente.actualizar_texto(texto_html, nid).then(
                         function(bRetorno)
                         {
-                            console.log(bRetorno);
                             if(bRetorno)
                             {
                                 return res.status(200).send({error: false, message:'Componente actualizado'});
@@ -401,7 +401,7 @@ app.post('/guardar_texto', function(req,res)
                     )
                     .catch(
                         function(){
-                            console.log('Error');
+                            console.log('Error guardar texto');
                             return res.status(400).send({error:true, message:'Error'});
                         }
                     )
@@ -423,8 +423,6 @@ app.post('/registrar_componente', function(req, res)
     let tipo_componente = req.body.tipo_componente;
     let tipo_asociacion = req.body.tipo_asociacion;
 
-    console.log('Tipo componente ' + tipo_componente);
-    console.log('Tipo asociacion ' + tipo_asociacion);
 
     if(esLogueado(req.session.nombre))
     {
@@ -772,7 +770,7 @@ app.post('/eliminar_componente',
                                {
                                  console.log('Eliminar componente Blog')
                                  try{
-                                    await servlet_componente_blog.eliminar_componente_blog(id_pagina, id_componente, tipo_asociacion)
+                                    await componente_blog.eliminar_componente_blog(id_pagina, id_componente, tipo_asociacion)
                                     return res.status(200).send({error: false, message: 'Componente eliminado'})
                                  }
                                  catch(error)
@@ -1162,6 +1160,7 @@ app.post('/remove_pagina_componente',
 
   app.post('/add_componente_blog', servlet_componente_blog.add_elemento_blog);
 
+  app.post('/eliminar_elemento_blog', servlet_componente_blog.eliminar_elemento_blog);
 
   https.createServer({
     key: fs.readFileSync('apache.key'),

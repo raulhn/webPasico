@@ -1,16 +1,43 @@
 <div class="row mb-2">
-    <div *ngFor="let blog of elementos_blog;" class="col-md-4">
-        <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-        <div class="col p-4 d-flex flex-column position-static">
-            <strong class="d-inline-block mb-2 text-primary">Noticias</strong>
-            <h3 class="mb-0">{{blog['titulo']}}</h3>
-            <div class="mb-1 text-muted">{{obtiene_fecha(blog['fecha'])}}</div>
-            <p class="card-text mb-auto">{{blog['descripcion']}}</p>
-            <a [href]="obtiene_url_pagina(blog['nid_menu'])" class="stretched-link">Continua leyendo</a>
-        </div>
-        <div class="col-auto d-none d-lg-block">
-            <img [src]="obtiene_url_imagen(blog['nid_imagen'])" width="200" >
-        </div>
+    <div *ngFor="let blog of elementos_blog; let i = index" class="col-md-4">
+        <div *ngIf="pagina_actual == obtiene_paginacion(i)" >
+            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                <div class="col p-4 d-flex flex-column position-static">
+                    <strong class="d-inline-block mb-2 text-primary">Noticias</strong>
+                    <h3 class="mb-0">{{blog['titulo']}}</h3>
+                    <div class="mb-1 text-muted">{{obtiene_fecha(blog['fecha'])}}</div>
+                    <p class="card-text mb-auto">{{blog['descripcion']}}</p>
+                    <a [href]="obtiene_url_pagina(blog['nid_menu'])" class="stretched-link">Continua leyendo</a>
+                </div>
+                <div class="col-auto d-none d-lg-block">
+                    <img [src]="obtiene_url_imagen(blog['nid_imagen'])" width="200" >
+                </div>
+            </div>
         </div>
     </div>
 </div>
+<nav aria-label="Page navigation">
+    <ul class="pagination">
+            <li class="page-item">
+            <button class="page-link"  (click)="pagina_primera()" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+            </button>
+            </li>
+            <li class="page-item" *ngIf="!es_primera()"><button class="page-link" (click)="pagina(prev_pagina())">{{prev_pagina()}} </button></li>
+            <li class="page-item active" *ngIf="es_primera()"><button class="page-link" (click)="pagina(prev_pagina())">{{prev_pagina()}} </button></li>
+            
+            <li class="page-item disabled" *ngIf="numero_paginas < 1"><button class="page-link" (click)="pagina(cent_pagina())">{{cent_pagina()}} </button></li>
+            <li class="page-item active"  *ngIf="numero_paginas >= 1 &&  !es_primera() && !es_ultima()"><button class="page-link" (click)="pagina(cent_pagina())">{{cent_pagina()}} </button></li>
+            <li class="page-item"  *ngIf="numero_paginas >= 1 && (es_primera() || es_ultima())"><button class="page-link" (click)="pagina(cent_pagina())">{{cent_pagina()}} </button></li>
+
+            <li class="page-item disabled" *ngIf="numero_paginas < 2"><button class="page-link" (click)="pagina(post_pagina())">{{post_pagina()}} </button></li>
+            <li class="page-item active"  *ngIf="numero_paginas >= 2 && es_ultima()"><button class="page-link" (click)="pagina(post_pagina())">{{post_pagina()}} </button></li>
+            <li class="page-item"  *ngIf="numero_paginas >= 2 && !es_ultima()"><button class="page-link" (click)="pagina(post_pagina())">{{post_pagina()}} </button></li>
+
+            <li class="page-item">
+            <button class="page-link" (click)="pagina_ultima()" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+            </button>
+            </li>
+    </ul>
+</nav>

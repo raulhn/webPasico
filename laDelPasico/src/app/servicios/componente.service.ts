@@ -258,6 +258,13 @@ export class ComponenteService {
     let API_URL = this.url + '/obtener_componente_blog/' + id_componente;
     return this.http.get(API_URL)
   }
+
+  eliminar_elemento_blog(id_componente: string, id_imagen: string, id_menu: string)
+  {
+    let API_URL = this.url + '/eliminar_elemento_blog';
+    return this.http.post(API_URL, {id_componente: id_componente, id_imagen: id_imagen, id_menu: id_menu}, {withCredentials:true});
+  }
+  
   
 }
 

@@ -1,6 +1,6 @@
 const constantes = require('../constantes.js');
 const conexion = require('../conexion.js');
-const componente = require('../componente.js');
+const componente = require('./componente.js');
 const imagen = require('../imagen.js');
 
 function obtener_elementos_carusel(id_componente)
