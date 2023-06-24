@@ -49,7 +49,7 @@ function obtener_componente_blog(id_componente)
         (resolve, reject) =>
         {
             conexion.dbConn.query('select nid_componente, titulo, fecha, nid_imagen, nid_menu, descripcion from ' + constantes.ESQUEMA_BD + '.componente_blog where nid_componente = ' + 
-                conexion.dbConn.escape(id_componente),
+                conexion.dbConn.escape(id_componente) + ' order by fecha desc',
                 (error, results, fields) =>
                 {
                     if (error)

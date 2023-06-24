@@ -1,7 +1,7 @@
 const RUTA_SUBIDAS  = './subidas/';
 const IMAGEN_NO_ENCONTRADA = './subidas/imagen_not_found.jpg';
 
-const ESQUEMA_BD = 'pasicopru';
+const ESQUEMA_BD = 'pasico';
 const ROL_ADMINISTRADOR = 1;
 
 const TIPO_COMPONENTE_TEXTO = 1;

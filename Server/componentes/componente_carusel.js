@@ -9,7 +9,7 @@ function obtener_elementos_carusel(id_componente)
         (resolve, reject) =>
         {
             conexion.dbConn.query('select * from ' + constantes.ESQUEMA_BD + '.elemento_carusel where nid_componente = ' + 
-                                  conexion.dbConn.escape(id_componente),
+                                  conexion.dbConn.escape(id_componente) + ' order by nid_imagen desc',
                 (error, results, fields) =>
                 {
                     if(error) {console.log(error); reject();}

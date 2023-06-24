@@ -9,21 +9,28 @@ async function registrar_componente_carusel(req, res)
     let tipo_asociacion = req.body.tipo_asociacion;
     let elementos_simultaneos = req.body.elementos_simultaneos;
 
-    try{
-        if(tipo_asociacion == constantes.TIPO_ASOCIACION_PAGINA)
-        {
-            await componente.registrar_componente_carusel(id, elementos_simultaneos, tipo_asociacion);
-            return res.status(200).send({error: false, message: 'Componente creado'})
-        }
-        else if(tipo_asociacion == constantes.TIPO_ASOCIACION_COMPONENTE)
-        {
-            let nOrden = req.body.nOrden;
-            await componente.registrar_componente_carusel_orden(id, tipo_asociacion, elementos_simultaneos, nOrden);
-            return res.status(200).send({error: false, message: 'Componente creado'})
-        } 
-    }
-    catch(e)
+    bEsAdministrador = await gestion_usuarios.esAdministrador(req.session.nombre);
+    if(bEsAdministrador)
     {
+        try{
+            if(tipo_asociacion == constantes.TIPO_ASOCIACION_PAGINA)
+            {
+                await componente.registrar_componente_carusel(id, tipo_asociacion, elementos_simultaneos);
+                return res.status(200).send({error: false, message: 'Componente creado'})
+            }
+            else if(tipo_asociacion == constantes.TIPO_ASOCIACION_COMPONENTE)
+            {
+                let nOrden = req.body.nOrden;
+                await componente.registrar_componente_carusel_orden(id, tipo_asociacion, elementos_simultaneos, nOrden);
+                return res.status(200).send({error: false, message: 'Componente creado'})
+            } 
+        }
+        catch(e)
+        {
+            return res.status(400).send({error: true, message: 'Error al registrar el componente de carrusel'});
+        }
+    }
+    else{
         return res.status(400).send({error: true, message: 'Error al registrar el componente de carrusel'});
     }
 }
