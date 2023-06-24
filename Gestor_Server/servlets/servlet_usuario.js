@@ -67,11 +67,11 @@ async function registrar_usuario(req, res)
 
   if(req.session.nombre)
   {
-
+    let usuario = req.session.nombre;
     let usu = req.body.usuario;
     let pass = req.body.password;
 
-    let bEsAdministrador = await esAdministrador(usu);
+    let bEsAdministrador = await esAdministrador(usuario);
     
     if(!bEsAdministrador)
     {
@@ -104,11 +104,11 @@ async function actualizar_password_usu(req, res)
 
   if(req.session.nombre)
   {
-
+    let usuario = req.session.nombre;
     let usu = req.body.usuario;
     let pass = req.body.password;
     
-    let bEsAdministrador = await esAdministrador(usu);
+    let bEsAdministrador = await esAdministrador(usuario);
     
     if(!bEsAdministrador)
     {

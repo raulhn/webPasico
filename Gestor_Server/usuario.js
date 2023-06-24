@@ -101,14 +101,14 @@ function existe_login(user)
                 if (error)  {console.log(error); reject();}
                 if (results.length < 1 || results.length > 1)
                 {
-                    reject();
+                    resolve(false)
                 }
                 else{
                     resolve(results[0].nCont > 0);
                 }
-    }
-    );
-    }
+            }
+            );
+        }
     );
 }
 
@@ -213,6 +213,7 @@ async function actualizar_password(user, pass)
 
 
 module.exports.login = login;
+module.exports.existe_login = existe_login;
 module.exports.obtener_usuarios = obtener_usuarios;
 module.exports.registrar_usuario = registrar_usuario;
 module.exports.esAdministrador = esAdministrador;

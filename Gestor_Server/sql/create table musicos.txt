@@ -1,11 +1,50 @@
-create table pasico.musico(
-	nid integer primary key auto_increment,
-	nombre varchar(300),
-	primer_apellido varchar(300),
-	segundo_apellido varchar(300),
-	fecha_nacimiento date,
-	
+create table pasico.tipo_persona(
+  nid integer primary key auto_increment,
+  descripcion varchar(100)
 );
+
+create table pasico.persona(
+    nid integer primary key auto_increment,
+	nombre varchar(300),
+	primer_apellido  varchar(300),
+	segundo_apellido varchar(300),
+	telefono integer,
+	fecha_nacimiento date,
+	nif varchar(9)
+);
+
+alter table pasico.persona add constraint uk_nif unique key(nif);
+
+create table pasico.tipo_persona_persona(
+   nid_persona integer,
+   nid_tipo_persona integer
+);
+
+alter table pasico.tipo_persona_persona add constraint fk_persona foreign key (nid_persona) references pasico.persona(nid);
+alter table pasico.tipo_persona_persona add constraint fk_persona_tipo foreign key (nid_tipo_persona) references pasico.tipo_persona(nid);
+
+
+insert into pasico.tipo_persona(descripcion) values('Musico');
+insert into pasico.tipo_persona(descripcion) values('Alumno');
+insert into pasico.tipo_persona(descripcion) values('Padre');
+insert into pasico.tipo_persona(descripcion) values('Padre');
+
+create table pasico.instrumento(
+	nid integer primary key auto_increment,
+	descripcion varchar(100)
+);
+
+create table pasico.musico_instrumento(
+	nid_persona integer,
+	nid_instrumento integer,
+	primary key(nid_persona, nid_instrumento)
+);
+
+alter table pasico.musico.instrumento add constraint fk_persona_instrumento foreign key (nid_persona) references pasico.persona(nid);
+alter table pasico.musico.instrumento add constraint fk_musico_instrumento foreign key(nid_isntrumento) references pasico.instrumento(nid);
+
+alter table pasico.alumno add constraint fk_alumno_persona foreign key (nid_persona) references pasico.persona(nid);
+
 
 create table pasico.curso(
 	nid integer primary key auto_increment,
@@ -14,20 +53,6 @@ create table pasico.curso(
 	año_fin integer
 );
 
-create table pasico.expediente(
-	nid integer primary key auto_increment,
-	nid_musico integer,
-	nid_curso integer
-);
-
-alter table pasico.expediente add constraint fk_musico_expediente foreign key(nid_musico) references pasico.musico(nid);
-alter table pasico.expediente add constraint fk_curso_expediente foreign key(nid_curso) references pasico.curso(nid);
-
-
-create table pasico.instrumento(
-	nid integer primary key auto_increment,
-	descripcion varchar(150)
-);
 
 create table pasico.asignatura(
    nid integer primary key auto_increment,
@@ -35,22 +60,17 @@ create table pasico.asignatura(
    nid_instrumento integer
 );
 
-alter table pasico.asignatura add constraint fk_instrumento_asignatura foreign key(nid_instrumento) references pasico.instrumento(nid);
 
-create table pasico.evaluacion_curso(
-	nid integer primary key auto_increment,
-	nid_expediente integer,
-	nid_asignatura integer
+create table pasico.expediente(
+	nid_persona integer,
+	nid_curso integer,
+	nid_asignatura integer,
+	primary key(nid_persona, nid_curso, nid_asignatura)
 );
 
-alter table pasico.evaluacion_curso add constraint fk_expediente_evaluacion foreign key(nid_expediente) references pasico.expediente(nid);
+alter table pasico.expediente add constraint fk_expediente_persona foreign key(nid_persona) references pasico.persona(nid);
+alter table pasico.expediente add constraint fk_expediente_curso foreign key(nid_curso) references pasico.curso(nid);
+alter table pasico.expediente add constraint fk_expediente_asignatura foreign key(nid_asignatura) references pasico.asignatura(nid);
+------------------------------------------------------------------------------------------------------------------------------------------
 
-create table pasico.calificaciones(
-	nid integer primary key auto_increment,
-	nid_evaluacion integer,
-	trimestre integer,
-	puntacion integer,
-	observaciones varchar(1000)
-);
 
-alter table pasico.calificaciones add constraint fk_evaluacion_calificaciones foreign key(nid_evaluaicon) references pasico.evaluacion_curso(nid);
