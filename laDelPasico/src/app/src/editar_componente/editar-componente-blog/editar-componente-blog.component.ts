@@ -59,7 +59,8 @@ export class EditarComponenteBlogComponent implements OnInit {
   obtiene_fecha(fecha: string)
   {
     let dFecha = new Date(fecha);
-    return dFecha.getDate() + '/' + dFecha.getMonth() + '/' + dFecha.getFullYear();
+    let mes = dFecha.getMonth() + 1;
+    return dFecha.getDate() + '/' + mes + '/' + dFecha.getFullYear();
   }
 
   cargar_imagen(event:any)
@@ -135,7 +136,6 @@ export class EditarComponenteBlogComponent implements OnInit {
     }
     return Math.trunc((this.elementos_blog.length - 1)/ this.NUM_PAGINAS) ;
   }
-
 
   pagina(num_pagina: number)
   {

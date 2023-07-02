@@ -48,7 +48,8 @@ export class ComponenteBlogComponent implements OnInit {
   obtiene_fecha(fecha: string)
   {
     let dFecha = new Date(fecha);
-    return dFecha.getDate() + '/' + dFecha.getMonth() + '/' + dFecha.getFullYear();
+    let mes = dFecha.getMonth() + 1;
+    return dFecha.getDate() + '/' + mes + '/' + dFecha.getFullYear();
   }
 
   ultima_pagina()

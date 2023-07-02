@@ -15,7 +15,12 @@ import { UsuarioComponent } from './componente/usuario/usuario.component';
 import { MenuComponent } from './componente/menu/menu.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { UsuariosComponent } from './componente/usuarios/usuarios.component'
+import { UsuariosComponent } from './componente/usuarios/usuarios.component';
+import { ListaPersonasComponent } from './componente/lista-personas/lista-personas.component';
+import { RegistoMusicoComponent } from './componente/registo-musico/registo-musico.component';
+import { FichaPersonaComponent } from './componente/ficha-persona/ficha-persona.component';
+import { RegistroPersonaComponent } from './componente/registro-persona/registro-persona.component';
+import { PersonaComponent } from './componente/persona/persona.component'
 
 
 @NgModule({
@@ -25,7 +30,12 @@ import { UsuariosComponent } from './componente/usuarios/usuarios.component'
     HomeComponent,
     UsuarioComponent,
     MenuComponent,
-    UsuariosComponent
+    UsuariosComponent,
+    ListaPersonasComponent,
+    RegistoMusicoComponent,
+    FichaPersonaComponent,
+    RegistroPersonaComponent,
+    PersonaComponent
   ],
   imports: [
     FormsModule,

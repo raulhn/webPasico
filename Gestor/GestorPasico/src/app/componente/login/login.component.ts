@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UsuariosService } from 'src/app/sercicios/usuarios.service';
+import { UsuariosService } from 'src/app/servicios/usuarios.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -16,6 +16,7 @@ export class LoginComponent implements OnInit {
 
   error = false;
   mensajeError = "";
+  
   ngOnInit(): void {
     this.usuarioService.logueado().subscribe(
       (res:any) =>

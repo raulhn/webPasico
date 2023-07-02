@@ -1,7 +1,17 @@
-create table pasico.usuario(
+ create database pasico_gestor_pru;
+grant all privileges on pasico_gestor_pru to 'pasico'@'%';
+
+
+create table pasico_gestor_pru.roles(
+	nid integer primary key auto_increment,
+	descripcion varchar(300)
+);
+
+create table pasico_gestor_pru.usuario(
 	usuario varchar(50) primary key,
 	password varchar(300),
 	nid_rol integer
 );
 
-alter table pasico.usuario add constraint fk_roles foreign key (nid_rol) references pasico.roles(nid);
+alter table pasico_gestor_pru.usuario add constraint fk_roles foreign key (nid_rol) references pasico_gestor_pru.roles(nid);
+

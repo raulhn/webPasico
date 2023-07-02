@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
+import { URL } from '../logica/constantes'
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ export class UsuariosService {
 
   constructor(private http: HttpClient) { }
 
-  private url: string = "https://localhost:8080";
+  private url: string = URL.URL_SERVICIO;
 
   login(usuario: String, password: String) : Observable<any>
   {

@@ -42,7 +42,8 @@ export class ComponenteBlogReducidoComponent implements OnInit {
   obtiene_fecha(fecha: string)
   {
     let dFecha = new Date(fecha);
-    return dFecha.getDate() + '/' + dFecha.getMonth() + '/' + dFecha.getFullYear();
+    let mes = dFecha.getMonth() + 1;
+    return dFecha.getDate() + '/' + mes + '/' + dFecha.getFullYear();
   }
 
   obtiene_paginacion(id_pagina: number)

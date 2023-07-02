@@ -4,6 +4,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { UsuarioComponent } from './componente/usuario/usuario.component';
 import { UsuariosComponent } from './componente/usuarios/usuarios.component';
+import { ListaPersonasComponent } from './componente/lista-personas/lista-personas.component';
+import { RegistroPersonaComponent } from './componente/registro-persona/registro-persona.component';
+import { FichaPersonaComponent } from './componente/ficha-persona/ficha-persona.component';
 
 const routes: Routes = [
   { 
@@ -21,6 +24,18 @@ const routes: Routes = [
   {
     path: 'usuarios',
     component: UsuariosComponent
+  },
+  {
+    path: 'personas',
+    component: ListaPersonasComponent
+  },
+  {
+    path: 'registrar-persona',
+    component: RegistroPersonaComponent
+  },
+  {
+    path: 'ficha_persona/:id',
+    component: FichaPersonaComponent 
   }
 
 ];

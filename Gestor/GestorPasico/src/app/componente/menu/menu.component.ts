@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { UsuariosService } from 'src/app/sercicios/usuarios.service';
+import { UsuariosService } from 'src/app/servicios/usuarios.service';
 import { faUser as faUser } from '@fortawesome/free-regular-svg-icons';
 
 @Component({

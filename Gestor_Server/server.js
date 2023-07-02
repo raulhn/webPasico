@@ -16,7 +16,7 @@ var fs = require('fs');
 var conexion = require('./conexion.js');
 var sesion_config = require('./config/sesion.json');
 
-app.use(cors({origin: "http://localhost:4200", credentials: true}));
+app.use(cors({origin: "https://80.240.127.138:8081", credentials: true}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(session(sesion_config));
@@ -41,10 +41,9 @@ app.post('/actualiza_password', servlet_usuario.actualizar_password_usu);
 app.get('/obtener_personas', servlet_persona.obtener_personas);
 app.post('/actualizar_persona', servlet_persona.actualizar_persona);
 app.get('/obtener_persona/:nid', servlet_persona.obtener_persona);
+app.post('/registrar_persona', servlet_persona.registrar_persona);
 
-/** Musicos **/
-app.get('/obtener_musicos', servlet_persona.obtener_musicos);
-app.post('/registrar_musico', servlet_persona.registrar_musico);
+
 
 https.createServer({
     key: fs.readFileSync('apache.key'),

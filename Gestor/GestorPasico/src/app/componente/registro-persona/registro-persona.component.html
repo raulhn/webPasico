@@ -1,0 +1,47 @@
+<form ngNativeValidate class="form-control">
+    <div class="row form-row">
+        <div class="col">
+            <label > DNI: </label>
+            <input type="text" [(ngModel)] = "nif" name="nif" onkeyup="this.value = this.value.toUpperCase();" class="form-control"/>
+        </div>
+    </div>
+    <div class="row form-row">
+        <div class="col">
+            <label> Nombre: </label>
+            <input class="form-control" [(ngModel)]= "nombre" name="nombre" type="text" required/> 
+            <label> Primer apellido: </label>
+            <input class="form-control" [(ngModel)]= "primer_apellido" name="Primer apellido" type="text" required/>
+        </div>
+    </div>
+    <div class="row form-row">
+        <div class="col">
+            <label> Segundo apellido: </label>
+            <input class="form-control" [(ngModel)]= "segundo_apellido" name="Segundo apellido" type="test"/>
+        </div>
+    </div>
+    <div class="row form-row">
+        <div class="col">
+            <label> Fecha nacimiento: </label>
+            <input class="form-control" name ="Fecha nacimiento" [(ngModel)] = "fecha_nacimiento" type="date" required/>
+        </div>
+    </div>
+
+    <div class="row form-row">
+        <div class="col">
+            <label> Telefono: </label>
+            <input class="form-control" name="Teléfono" [(ngModel)] = "telefono" type="text" />
+        </div>
+    </div>
+
+    <div class="row form-row pt-3">
+        <div class="col">
+            <button (click)= "registrar_persona()" class="btn btn-primary mb-3 "> Registrar </button>
+        </div>
+    </div>
+</form>
+<div *ngIf="bError" class="alert alert-danger" role="alert">
+    {{mensaje_error}}
+ </div>
+ <div *ngIf="bRegistrado" class="alert alert-success" role="alert">
+    {{mensaje_registro}}
+ </div>

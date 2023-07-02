@@ -34,6 +34,9 @@ function obtener_pass(user)
             conexion.dbConn.query('select password from '+ constantes.ESQUEMA_BD + '.usuario where usuario = ' + conexion.dbConn.escape(user) , 
             function(error, results, fields)
             {
+                console.log(error)
+                console.log('results')
+                console.log(results)
                 if (error)  {console.log(error); reject();}
                 if (results.length < 1 || results.length > 1)
                 {
