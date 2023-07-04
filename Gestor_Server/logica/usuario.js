@@ -1,5 +1,5 @@
-const constantes = require('./constantes.js');
-const conexion = require('./conexion.js');
+const constantes = require('../constantes.js');
+const conexion = require('../conexion.js');
 
 const bcrypt = require('bcryptjs');
 const rondas = 10;

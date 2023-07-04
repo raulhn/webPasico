@@ -25,6 +25,24 @@ async function existe_nif(nif)
     )
 }
 
+async function existe_nid(nid_persona)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.query('select count(*) cont from ' + constantes.ESQUEMA_BD + '.persona where nid = ' + conexion.dbConn.escape(nid_persona),
+                (error, results, fields) =>
+                {
+                    if (error) {resolve(false)}
+                    else{
+                        resolve(results[0]['cont'] > 0)
+                    }
+                }
+            )
+        }
+    )
+}
+
 function existe_persona(nombre, primer_apellido, segundo_apellido, fecha_nacimiento)
 {
     return new Promise(
@@ -156,33 +174,33 @@ function actualizar_persona(nid, nif, nombre, primer_apellido, segundo_apellido,
     return new Promise(
         (resolve, reject) =>
         {
+
             conexion.dbConn.beginTransaction(
-                () =>
+                async () =>
                 {
-                    console.log('update ' + constantes.ESQUEMA_BD + '.persona set' +
-                    ' nif = ' + conexion.dbConn.escape(nif) +
-                    ', nombre = ' + conexion.dbConn.escape(nombre) +
-                    ', primer_apellido = ' + conexion.dbConn.escape(primer_apellido) +
-                    ', segundo_apellido = ' + conexion.dbConn.escape(segundo_apellido) +
-                    ', telefono = cast(nullif(' +  conexion.dbConn.escape(telefono) + ', \'\') as unsigned)' +
-                    ', fecha_nacimiento = str_to_date(nullif(' + conexion.dbConn.escape(fecha_nacimiento) + ', \'\') , \'%Y-%m-%d\')'  +
-                    ' where nid = ' + conexion.dbConn.escape(nid));
+                    bExistePersona = await existe_nid(nid);
+                    if(bExistePersona)
+                    {
+                        conexion.dbConn.query('update ' + constantes.ESQUEMA_BD + '.persona set' +
+                            ' nif = ' + conexion.dbConn.escape(nif) +
+                            ', nombre = ' + conexion.dbConn.escape(nombre) +
+                            ', primer_apellido = ' + conexion.dbConn.escape(primer_apellido) +
+                            ', segundo_apellido = ' + conexion.dbConn.escape(segundo_apellido) +
+                            ', telefono = cast(nullif(' +  conexion.dbConn.escape(telefono) + ', \'\') as unsigned)' +
+                            ', fecha_nacimiento = str_to_date(nullif(' + conexion.dbConn.escape(fecha_nacimiento) + ', \'\') , \'%Y-%m-%d\')'  +
+                            ' where nid = ' + conexion.dbConn.escape(nid),
+                            (error, results, fields) => 
+                            {
+                                if(error){console.log(error); conexion.dbConn.rollback(); resolve(false)}
+                                else{conexion.dbConn.commit(); resolve(true)}
+                            }
 
-                    conexion.dbConn.query('update ' + constantes.ESQUEMA_BD + '.persona set' +
-                        ' nif = ' + conexion.dbConn.escape(nif) +
-                        ', nombre = ' + conexion.dbConn.escape(nombre) +
-                        ', primer_apellido = ' + conexion.dbConn.escape(primer_apellido) +
-                        ', segundo_apellido = ' + conexion.dbConn.escape(segundo_apellido) +
-                        ', telefono = cast(nullif(' +  conexion.dbConn.escape(telefono) + ', \'\') as unsigned)' +
-                        ', fecha_nacimiento = str_to_date(nullif(' + conexion.dbConn.escape(fecha_nacimiento) + ', \'\') , \'%Y-%m-%d\')'  +
-                        ' where nid = ' + conexion.dbConn.escape(nid),
-                        (error, results, fields) => 
-                        {
-                            if(error){console.log(error); conexion.dbConn.rollback(); resolve(false)}
-                            else{conexion.dbConn.commit(); resolve(true)}
-                        }
-
-                    )
+                        )
+                    }
+                    else
+                    {
+                        resolve(false);
+                    }
                 }
             )
         }
@@ -194,6 +212,7 @@ module.exports.registrar_persona = registrar_persona
 module.exports.actualizar_persona = actualizar_persona
 
 module.exports.existe_nif = existe_nif
+module.exports.existe_nid = existe_nid
 module.exports.obtener_nid_persona = obtener_nid_persona
 module.exports.obtener_personas = obtener_personas
 module.exports.obtener_persona = obtener_persona

@@ -10,9 +10,20 @@ create table pasico_gestor_pru.persona(
 	nid_madre integer
 );
 
-alter table pasico_gestor_pru.persona add constraint fk_persona_padre foreign key(nid_padre) references pasico.persona(nid);
-alter table pasico_gestor_pru.persona add constraint fk_persona_madre foreign key(nid_madre) references pasico.persona(nid);
+alter table pasico_gestor_pru.persona add constraint fk_persona_padre foreign key(nid_padre) references pasico_gestor_pru.persona(nid);
+alter table pasico_gestor_pru.persona add constraint fk_persona_madre foreign key(nid_madre) references pasico_gestor_pru.persona(nid);
 
+create table pasico_gestor_pru.instrumentos(
+	nid integer primary key auto_increment,
+	descripcion varchar(300)
+);
+
+insert into pasico_gestor_pru.instrumentos(descripcion)
+  values('Saxofón');
+insert into pasico_gestor_pru.instrumentos(descripcion)
+  values('Trompeta');
+insert into pasico_gestor_pru.instrumentos(descripcion)
+  values('Clarinete');
 
 create table pasico_gestor_pru.musico(
 	nid_persona integer,
@@ -20,13 +31,9 @@ create table pasico_gestor_pru.musico(
 	primary key(nid_persona, nid_instrumento)
 );
 
-alter table pasico_gestor_pru.musico add constraint fk_musico_instrumento foreign key(nid_instrumento) references pasico.musico(nid);
-alter table pasico_gestor_pru.musico add constraint fk_musico_persona foreign key(nid_persona) references pasico.persona(nid);
+alter table pasico_gestor_pru.musico add constraint fk_musico_instrumento foreign key(nid_instrumento) references pasico_gestor_pru.instrumentos(nid);
+alter table pasico_gestor_pru.musico add constraint fk_musico_persona foreign key(nid_persona) references pasico_gestor_pru.persona(nid);
 
-create table pasico_gestor_pru.instrumentos(
-	nid integer primary key auto_increment,
-	descripcion varchar2
-);
 
 create table pasico_gestor_pru.evaluacion(
 	nid_persona integer,

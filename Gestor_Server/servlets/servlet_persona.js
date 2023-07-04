@@ -1,23 +1,21 @@
 const persona = require('../logica/persona.js')
-const gestion_usuarios = require('../usuario.js')
+const gestion_usuarios = require('../logica/usuario.js')
+const musico = require('../logica/musico.js')
 const constantes = require('../constantes.js')
+const comun = require('./servlet_comun.js')
 
 async function registrar_persona(req, res)
 {
-    let nif = req.body.nif;
-    let nombre = req.body.nombre;
-    let primer_apellido = req.body.primer_apellido;
-    let segundo_apellido = req.body.segundo_apellido;
-    let telefono = req.body.telefono;
-    let fecha_nacimiento = req.body.fecha_nacimiento;
-
-    let usuario = req.session.nombre;
-
-    try
-    {
-        bExisteLogin = await gestion_usuarios.existe_login(usuario);
-        if (bExisteLogin)
+    comun.comprobaciones(req, res,
+        async () =>
         {
+            let nif = req.body.nif;
+            let nombre = req.body.nombre;
+            let primer_apellido = req.body.primer_apellido;
+            let segundo_apellido = req.body.segundo_apellido;
+            let telefono = req.body.telefono;
+            let fecha_nacimiento = req.body.fecha_nacimiento;
+
             bResultado = await persona.registrar_persona(nombre, primer_apellido, segundo_apellido, telefono, fecha_nacimiento, nif);
             if (bResultado)
             {
@@ -27,78 +25,45 @@ async function registrar_persona(req, res)
                 res.status(400).send({error: true, message: 'Error al registrar la persona'})
             }
         }
-        else{
-            res.status(401).send({error: true, message: 'Usuario no autorizado'})
-        }
-    }
-    catch(error)
-    {
-        console.log(error);
-        res.status(400).send({error: true, message: error})
-    }
+    )
 }
 
 
 async function obtener_personas(req, res)
 {
-    // Quien realiza la petición tiene que estar registrado como usuario
-    let usuario = req.session.nombre
-    if (await gestion_usuarios.existe_login(usuario))
-    {
-        try{
+    comun.comprobaciones(req, res,
+        async () =>
+        {
             resultados = await persona.obtener_personas();
-            console.log
             res.status(200).send({error:false, personas: resultados})
         }
-        catch(e)
-        {
-            console.log(e)
-            res.status(400).send({error: true, message: e})
-        }
-    }
-    else{
-        res.status(401).send({error: true, message: 'Usuario no autorizado'})
-    }
+    )
 }
 
 async function obtener_persona(req, res)
 {
-    let usuario = req.session.nombre
-    if(await gestion_usuarios.existe_login(usuario))
-    {
-        let nid = req.params.nid
-        try{
+    comun.comprobaciones(req, res,
+        async () =>
+        {
             resultados = await persona.obtener_persona(nid);
             res.status(200).send({error:false, persona: resultados})
         }
-        catch(error)
-        {
-            console.log(error)
-            res.status(400).send({error:true, message: 'Se ha producido un error en la consulta'})
-        }
-    }
-    else{
-        res.status(401).send({error:true, message: 'Usuario no autorizado'})
-    }
+    )
 }
 
 async function actualizar_persona(req, res)
 {
-    let usuario = req.session.nombre
-    if(await gestion_usuarios.existe_login(usuario))
-    {
-        let nid = req.body.nid
-        let nif = req.body.nif
-        let nombre = req.body.nombre
-        let primer_apellido = req.body.primer_apellido
-        let segundo_apellido = req.body.segundo_apellido
-        let telefono = req.body.telefono
-        let fecha_nacimiento = req.body.fecha_nacimiento
-
-        console.log(nid !== undefined)
-        if(nid !== undefined)
+    comun.comprobaciones(req, res,
+        async() =>
         {
-            console.log('lanza actualizacion')
+            let nid = req.body.nid
+            let nif = req.body.nif
+            let nombre = req.body.nombre
+            let primer_apellido = req.body.primer_apellido
+            let segundo_apellido = req.body.segundo_apellido
+            let telefono = req.body.telefono
+            let fecha_nacimiento = req.body.fecha_nacimiento
+
             bResultado = await persona.actualizar_persona(nid, nif, nombre, primer_apellido, segundo_apellido, telefono, fecha_nacimiento);
             if(bResultado)
             {
@@ -108,10 +73,21 @@ async function actualizar_persona(req, res)
                 res.status(400).send({error:true, message: 'Se ha producido un error al actualizar'})
             }
         }
-        else{
-            res.status(400).send({error: true, message: 'Se ha producido un error al actualizar'})
+    )
+}
+
+
+async function obtener_ficha_persona(req, res)
+{
+    comun.comprobaciones(req, res,
+        async () =>
+        {
+            let nid_persona =  req.params.nid_persona;
+            resultado_persona = await persona.obtener_persona(nid_persona);
+            resultado_instrumentos = await musico.obtener_instrumentos_persona(nid_persona);
+            res.status(200).send({error:false, persona: resultado_persona, instrumentos: resultado_instrumentos})
         }
-    }
+    )
 }
 
 module.exports.registrar_persona = registrar_persona
@@ -119,3 +95,5 @@ module.exports.actualizar_persona = actualizar_persona
 
 module.exports.obtener_personas = obtener_personas
 module.exports.obtener_persona = obtener_persona
+
+module.exports.obtener_ficha_persona = obtener_ficha_persona

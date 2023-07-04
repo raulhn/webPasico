@@ -10,6 +10,7 @@ var constantes = require('./constantes.js');
 
 var servlet_usuario = require('./servlets/servlet_usuario');
 var servlet_persona = require('./servlets/servlet_persona.js');
+var servlet_musico = require('./servlets/servlet_musico.js')
 
 var fs = require('fs');
 
@@ -43,7 +44,10 @@ app.post('/actualizar_persona', servlet_persona.actualizar_persona);
 app.get('/obtener_persona/:nid', servlet_persona.obtener_persona);
 app.post('/registrar_persona', servlet_persona.registrar_persona);
 
+app.get('/obtener_ficha_persona/:nid_persona', servlet_persona.obtener_ficha_persona);
 
+/** Instrumentos **/
+app.post('/registrar_musico', servlet_musico.registrar_musico);
 
 https.createServer({
     key: fs.readFileSync('apache.key'),

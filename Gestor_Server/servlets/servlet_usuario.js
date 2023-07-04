@@ -1,4 +1,4 @@
-const gestion_usuarios = require('../usuario.js');
+const gestion_usuarios = require('../logica/usuario.js');
 
 /**
  * Función login, inicio de sesión por usuario y contraseña
@@ -101,10 +101,9 @@ async function registrar_usuario(req, res)
 */
 async function actualizar_password_usu(req, res)
 {
-
-  if(req.session.nombre)
+  let usuario = req.session.nombre;
+  if(await gestion_usuarios.existe_login(usuario))
   {
-    let usuario = req.session.nombre;
     let usu = req.body.usuario;
     let pass = req.body.password;
     
