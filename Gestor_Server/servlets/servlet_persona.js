@@ -45,6 +45,7 @@ async function obtener_persona(req, res)
     comun.comprobaciones(req, res,
         async () =>
         {
+            let nid = req.params.nid
             resultados = await persona.obtener_persona(nid);
             res.status(200).send({error:false, persona: resultados})
         }
@@ -90,6 +91,58 @@ async function obtener_ficha_persona(req, res)
     )
 }
 
+async function obtener_padre(req, res)
+{
+    comun.comprobaciones(req, res,
+        async () =>
+        {
+            let nid_persona = req.params.nid_persona;
+            let nid_padre = await persona.obtener_padre(nid_persona);
+            let resultado_padre = await persona.obtener_persona(nid_padre);
+            res.status(200).send({error: false, padre: resultado_padre})
+        }
+    )
+}
+
+
+async function obtener_madre(req, res)
+{
+    comun.comprobaciones(req, res,
+        async () =>
+        {
+            let nid_persona = req.params.nid_persona;
+            let nid_madre = await persona.obtener_madre(nid_persona);
+            let resultado_madre = await persona.obtener_persona(nid_madre);
+            res.status(200).send({error: false, madre: resultado_madre})
+        }
+    )
+}
+
+async function registrar_padre(req, res)
+{
+    comun.comprobaciones(req, res,
+        async () =>
+        {
+            let nid_persona = req.body.nid_persona;
+            let nid_padre = req.body.nid_padre;
+            await persona.registrar_padre(nid_persona, nid_padre).subscribe();
+        }
+    )
+}
+
+async function registrar_madre(req, res)
+{
+    comun.comprobaciones(req, res,
+        async () =>
+        {
+            let nid_persona = req.body.nid_persona;
+            let nid_madre = req.body.nid_madre;
+            await persona.registrar_madre(nid_persona, nid_madre);
+        }
+    )
+}
+
+
 module.exports.registrar_persona = registrar_persona
 module.exports.actualizar_persona = actualizar_persona
 
@@ -97,3 +150,9 @@ module.exports.obtener_personas = obtener_personas
 module.exports.obtener_persona = obtener_persona
 
 module.exports.obtener_ficha_persona = obtener_ficha_persona
+
+module.exports.obtener_padre = obtener_padre;
+module.exports.obtener_madre = obtener_madre;
+
+module.exports.registrar_madre = registrar_madre;
+module.exports.registrar_padre = registrar_padre;

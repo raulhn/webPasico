@@ -19,6 +19,24 @@ function existe_instrumento(nid_instrumento)
     )
 }
 
+function obtener_instrumentos()
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.query('select * from ' + constantes.ESQUEMA_BD + '.instrumentos',
+                (error, results, fields) =>
+                {
+                    if(error) {reject(error);}
+                    else
+                    {
+                        resolve(results);
+                    }
+                }
+            )
+        }
+    )
+}
 
 async function registrar_instrumento_persona(nid_persona, nid_instrumento)
 {
@@ -124,6 +142,8 @@ function obtener_personas_instrumento(nid_instrumento)
         }
     )
 }
+
+module.exports.obtener_instrumentos = obtener_instrumentos;
 
 module.exports.registrar_instrumento_persona = registrar_instrumento_persona
 module.exports.obtener_instrumentos_persona = obtener_instrumentos_persona

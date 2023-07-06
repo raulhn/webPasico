@@ -1,9 +1,20 @@
 const musico = require('../logica/musico.js')
 const comun = require('./servlet_comun.js')
 
+
+async function obtener_instrumentos(req, res)
+{
+    comun.comprobaciones(req, res, 
+        async () =>
+        {
+            resultado = musico.obtener_instrumentos();
+            res.status(200).send({error: false, instrumentos: resultado});
+        }
+    )
+}
+
 async function registrar_musico(req, res)
 {
-    let usuario = req.session.nombre;
     comun.comprobaciones(req, res, 
         async() =>
         {
@@ -39,6 +50,8 @@ async function obtener_personas_instrumento(req, res)
         }
     );
 }
+
+module.exports.obtener_instrumentos = obtener_instrumentos;
 
 module.exports.registrar_musico = registrar_musico;
 module.exports.eliminar_instrumento_musico = eliminar_instrumento_persona;

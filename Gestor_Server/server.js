@@ -46,8 +46,19 @@ app.post('/registrar_persona', servlet_persona.registrar_persona);
 
 app.get('/obtener_ficha_persona/:nid_persona', servlet_persona.obtener_ficha_persona);
 
+/** Padres **/
+app.get('/obtener_padre/:nid_persona', servlet_persona.obtener_padre);
+app.get('/obtener_madre/:nid_persona', servlet_persona.obtener_madre);
+
+app.post('/registrar_padre', servlet_persona.registrar_padre);
+app.post('/registrar_madre', servlet_persona.registrar_madre)
+
 /** Instrumentos **/
+app.get('/obtener_instrumentos', servlet_musico.obtener_instrumentos);
+
 app.post('/registrar_musico', servlet_musico.registrar_musico);
+app.post('/eliminar_instrumento_musico', servlet_musico.eliminar_instrumento_musico);
+app.get('/obtener_personas_instrumento/:nid_instrumento', servlet_musico.obtener_personas_instrumento);
 
 https.createServer({
     key: fs.readFileSync('apache.key'),

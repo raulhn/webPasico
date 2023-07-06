@@ -20,7 +20,9 @@ import { ListaPersonasComponent } from './componente/lista-personas/lista-person
 import { RegistoMusicoComponent } from './componente/registo-musico/registo-musico.component';
 import { FichaPersonaComponent } from './componente/ficha-persona/ficha-persona.component';
 import { RegistroPersonaComponent } from './componente/registro-persona/registro-persona.component';
-import { PersonaComponent } from './componente/persona/persona.component'
+import { PersonaComponent } from './componente/persona/persona.component';
+import { PadresPersonaComponent } from './componente/padres-persona/padres-persona.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 
 @NgModule({
@@ -35,7 +37,8 @@ import { PersonaComponent } from './componente/persona/persona.component'
     RegistoMusicoComponent,
     FichaPersonaComponent,
     RegistroPersonaComponent,
-    PersonaComponent
+    PersonaComponent,
+    PadresPersonaComponent
   ],
   imports: [
     FormsModule,
@@ -46,8 +49,8 @@ import { PersonaComponent } from './componente/persona/persona.component'
     TooltipModule,
     FontAwesomeModule,
     RouterModule,
-    NgbModule
-
+    NgbModule,
+    NgSelectModule
   ],
   providers: [],
   bootstrap: [AppComponent]

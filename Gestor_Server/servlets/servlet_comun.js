@@ -6,7 +6,7 @@ async function comprobaciones(req, res, funcion_especifica)
     if(await gestion_usuarios.existe_login(usuario))
     {
         try{
-            funcion_especifica(req, res);
+            await funcion_especifica();
         }
         catch(error)
         {

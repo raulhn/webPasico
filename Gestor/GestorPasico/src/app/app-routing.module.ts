@@ -7,6 +7,7 @@ import { UsuariosComponent } from './componente/usuarios/usuarios.component';
 import { ListaPersonasComponent } from './componente/lista-personas/lista-personas.component';
 import { RegistroPersonaComponent } from './componente/registro-persona/registro-persona.component';
 import { FichaPersonaComponent } from './componente/ficha-persona/ficha-persona.component';
+import { PadresPersonaComponent } from './componente/padres-persona/padres-persona.component';
 
 const routes: Routes = [
   { 
@@ -36,6 +37,10 @@ const routes: Routes = [
   {
     path: 'ficha_persona/:id',
     component: FichaPersonaComponent 
+  },
+  {
+    path: 'padres',
+    component: PadresPersonaComponent 
   }
 
 ];

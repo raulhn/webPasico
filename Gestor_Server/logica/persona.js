@@ -116,7 +116,7 @@ function obtener_nid_persona(nif)
                 conexion.dbConn.query('select nid from ' + constantes.ESQUEMA_BD + '.persona where nif = ' + conexion.dbConn.escape(nif),
                     (error, results, fields) =>
                     {
-                        if (error) {console.log(error); reject('');}
+                        if (error) {console.log(error); reject(error);}
                         else if(results.length < 1) {resolve('')}
                         else{
                             resolve(results[0]['nid']);
@@ -130,8 +130,132 @@ function obtener_nid_persona(nif)
         }
 
     )
-    
 }
+
+function obtener_padre(nid_persona)
+{
+    return new Promise(
+        async (resolve, reject) =>
+        {
+            bExiste = await existe_nid(nid_persona);
+            if(bExiste)
+            {
+                conexion.dbConn.query('select nid_padre from ' + constantes.ESQUEMA_BD + '.persona where nid = ' + conexion.dbConn.escape(nid_persona),
+                    async (error, results, fields) =>
+                    {
+                        if (error) {console.log(error); reject(error);}
+                        else if (results.length < 1) {reject('No encontrada_persona')}
+                        else {
+                            resolve(results[0]['nid_padre']);
+                        }
+                    }
+                )
+            }
+            else
+            {
+                reject();
+            }
+        }
+    )
+}
+
+function obtener_madre(nid_persona)
+{
+    return new Promise(
+        async (resolve, reject) =>
+        {
+            bExiste = await existe_nid(nid_persona);
+            if(bExiste)
+            {
+                conexion.dbConn.query('select nid_madre from ' + constantes.ESQUEMA_BD + '.persona where nid = ' + conexion.dbConn.escape(nid_persona),
+                    async (error, results, fields) =>
+                    {
+                        if (error) {console.log(error); reject(error);}
+                        else if (results.length < 1) {reject('No encontrada persona')}
+                        else {
+                            resolve(results[0]['nid_madre']);
+                        }
+                    }
+                )
+            }
+            else
+            {
+                reject();
+            }
+        }
+    )
+}
+
+
+function registrar_padre(nid_persona, nid_padre)
+{
+    return new Promise(
+        async (resolve, reject) =>
+        {
+            bExiste = await existe_nid(nid_persona);
+            bExiste_padre = await existe_nid(nid_padre);
+
+            if(bExiste && bExiste_padre)
+            {
+                conexion.dbConn.beginTransaction(
+                    () =>
+                    {
+                        conexion.dbConn.query('update ' + constantes.ESQUEMA_BD + '.persona set nid_padre = ' + conexion.dbConn.escape(nid_padre) +
+                            ' where nid_persona = ' + conexion.dbConn.escape(nid_persona),
+                            (error, results, fields) =>
+                            {
+                                if(error) {console.log(error); conexion.dbConn.rollback(); reject(error)}
+                                else{
+                                    resolve();
+                                }
+                            }
+                        )
+                    }
+                )
+            }
+            else
+            {
+                reject('Error al registrar el padre')
+            }
+        }
+    )
+}
+
+
+function registrar_madre(nid_persona, nid_madre)
+{
+    return new Promise(
+        async (resolve, reject) =>
+        {
+            bExiste = await existe_nid(nid_persona);
+            bExiste_madre = await existe_nid(nid_madre);
+
+            if(bExiste && bExiste_madre)
+            {
+                conexion.dbConn.beginTransaction(
+                    () =>
+                    {
+                        conexion.dbConn.query('update ' + constantes.ESQUEMA_BD + '.persona set nid_madre = ' + conexion.dbConn.escape(nid_madre) +
+                            ' where nid_persona = ' + conexion.dbConn.escape(nid_persona),
+                            (error, results, fields) =>
+                            {
+                                if(error) {console.log(error); conexion.dbConn.rollback(); reject(error)}
+                                else{
+                                    resolve();
+                                }
+                            }
+                        )
+                    }
+                )
+            }
+            else
+            {
+                reject('Error al registrar la madre')
+            }
+        }
+    )
+}
+
 
 function obtener_personas()
 {
@@ -214,5 +338,13 @@ module.exports.actualizar_persona = actualizar_persona
 module.exports.existe_nif = existe_nif
 module.exports.existe_nid = existe_nid
 module.exports.obtener_nid_persona = obtener_nid_persona
+
+module.exports.obtener_padre = obtener_padre;
+module.exports.obtener_madre = obtener_madre;
+
+module.exports.registrar_padre = registrar_padre;
+module.exports.registrar_madre = registrar_madre;
+
 module.exports.obtener_personas = obtener_personas
 module.exports.obtener_persona = obtener_persona
+

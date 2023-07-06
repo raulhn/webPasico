@@ -38,4 +38,28 @@ export class PersonasService {
     return this.http.post(API_URL,{nid: nid, nif: nif, nombre: nombre, primer_apellido: primer_apellido, segundo_apellido, telefono: telefono, fecha_nacimiento: fecha_nacimiento},
       {withCredentials: true});
   }
+
+  registrar_padre(nid_persona: string, nid_padre: string)
+  {
+    let API_URL = this.url + '/registrar_padre';
+    return this.http.post(API_URL, {nid_persona: nid_persona, nid_padre: nid_padre}, {withCredentials: true});
+  }
+
+  registrar_madre(nid_persona: string, nid_madre: string)
+  {
+    let API_URL = this.url + '/registrar_madre';
+    return this.http.post(API_URL, {nid_persona: nid_persona, nid_madre: nid_madre}, {withCredentials: true})
+  }
+
+  obtener_padre(nid_persona: string)
+  {
+    let API_URL = this.url + '/obtener_padre/' + nid_persona;
+    return this.http.get(API_URL, {withCredentials: true})
+  }
+
+  obtener_madre(nid_persona: string)
+  {
+    let API_URL = this.url + '/obtener_madre/' + nid_persona;
+    return this.http.get(API_URL, {withCredentials: true})
+  }
 }

@@ -1,0 +1,25 @@
+
+<form ngNativeValidate class="form-control">
+    <div class="row form-row">
+        <div class="col">
+            <label>Padre:</label>
+            <ng-select [(ngModel)]="padre" id="float">
+                    <ng-option *ngFor="let persona of lista_personas" [value]="persona">{{persona['nif']}} - {{persona['nombre']}} {{persona['primer_apellido']}} {{persona['segundo_apellido']}}</ng-option>
+            </ng-select>
+        </div>
+    </div>
+    <div class="row form-row">
+        <div class="col">
+            <label>Madre:</label>
+            <ng-select [(ngModel)]="madre" id="float">
+                    <ng-option *ngFor="let persona of lista_personas" [value]="persona">{{persona['nif']}} - {{persona['nombre']}} {{persona['primer_apellido']}} {{persona['segundo_apellido']}}</ng-option>
+            </ng-select>
+        </div>
+    </div>
+    <div class="row form-row pt-3">
+        <div class="col">
+            <button (click)= "guardar()" class="btn btn-primary mb-3 "> Guardar </button>
+        </div>
+    </div>
+</form>
+

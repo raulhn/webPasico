@@ -7,7 +7,7 @@ import { PersonasService } from 'src/app/servicios/personas.service';
   styleUrls: ['./persona.component.css']
 })
 export class PersonaComponent {
-  @Input() id: string="4";
+  @Input() id: string="";
 
   persona: any;
 
@@ -44,18 +44,27 @@ export class PersonaComponent {
     }
   }
 
+  valida_formulario()
+  {
+    return this.persona.nombre.length > 0 && this.persona.primer_apellido.length > 0 &&
+           this.persona.fecha_nacimiento.length > 0;
+  }
+
   actualizar_persona()
   {
-    let nid: string = this.persona.nid;
-    let nif: string = this.persona.nif;
-    let nombre: string = this.persona.nombre;
-    let primer_apellido: string = this.persona.primer_apellido;
-    let segundo_apellido: string = this.persona.segundo_apellido;
-    let telefono: string = this.persona.telefono;
-    let fecha_nacimiento: string = this.persona.fecha_nacimiento;
-    this.personasService.actualizar_persona(nid, nif, nombre, primer_apellido, segundo_apellido, telefono, fecha_nacimiento).subscribe
-    (
-      this.actualizar
-    )
+    if (this.valida_formulario())
+    {
+      let nid: string = this.persona.nid;
+      let nif: string = this.persona.nif;
+      let nombre: string = this.persona.nombre;
+      let primer_apellido: string = this.persona.primer_apellido;
+      let segundo_apellido: string = this.persona.segundo_apellido;
+      let telefono: string = this.persona.telefono;
+      let fecha_nacimiento: string = this.persona.fecha_nacimiento;
+      this.personasService.actualizar_persona(nid, nif, nombre, primer_apellido, segundo_apellido, telefono, fecha_nacimiento).subscribe
+      (
+        this.actualizar
+      )
+    }
   }
 }
