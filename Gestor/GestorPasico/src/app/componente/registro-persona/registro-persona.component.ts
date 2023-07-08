@@ -15,6 +15,7 @@ export class RegistroPersonaComponent implements OnInit{
   primer_apellido: string = "";
   segundo_apellido: string = "";
   fecha_nacimiento: string = "";
+  correo_electronico:string = "";
 
   bError: boolean = false;
   mensaje_error: string = "";
@@ -35,7 +36,6 @@ export class RegistroPersonaComponent implements OnInit{
       console.log(respuesta)
       if(!respuesta.error)
       {
-        console.log('Persona registrada')
         this.bRegistrado = true;
       }
       else{
@@ -44,8 +44,6 @@ export class RegistroPersonaComponent implements OnInit{
     },
     error: (respuesta: any) =>
     {
-      console.log('XXXX '  + respuesta)
-      console.log(respuesta.error)
       this.bError = true;
       this.mensaje_error = respuesta.error.message;
     }
@@ -63,7 +61,7 @@ export class RegistroPersonaComponent implements OnInit{
   {
     if (this.valida_formulario())
     {
-      this.personasServices.registrar_persona(this.nif, this.nombre, this.primer_apellido, this.segundo_apellido, this.telefono, this.fecha_nacimiento).subscribe(
+      this.personasServices.registrar_persona(this.nif, this.nombre, this.primer_apellido, this.segundo_apellido, this.telefono, this.fecha_nacimiento, this.correo_electronico).subscribe(
         this.registro_persona
       )
     }

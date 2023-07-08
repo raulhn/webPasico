@@ -22,14 +22,21 @@
     <div class="row form-row">
         <div class="col">
             <label> Fecha nacimiento: </label>
-            <input class="form-control" name ="Fecha nacimiento" [(ngModel)] = "persona.fecha_nacimiento" type="date" required/>
+            <input class="form-control" name ="Fecha nacimiento" [(ngModel)] = "persona['fecha_nacimiento']" type="date" required/>
         </div>
     </div>
 
     <div class="row form-row">
         <div class="col">
             <label> Telefono: </label>
-            <input class="form-control" name="Teléfono" [(ngModel)] = "persona.telefono" type="text" />
+            <input class="form-control" name="Teléfono" [(ngModel)] = "persona['telefono']" type="text" />
+        </div>
+    </div>
+
+    <div class="row form-row">
+        <div class="col">
+            <label> Correo electrónico: </label>
+            <input class="form-control" name="Teléfono" [(ngModel)] = "persona['correo_electronico']" type="text" />
         </div>
     </div>
 

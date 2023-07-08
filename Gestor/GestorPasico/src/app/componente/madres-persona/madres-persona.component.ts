@@ -1,19 +1,16 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { PersonasService } from 'src/app/servicios/personas.service';
 
 @Component({
-  selector: 'app-padres-persona',
-  templateUrl: './padres-persona.component.html',
-  styleUrls: ['./padres-persona.component.css']
+  selector: 'app-madres-persona',
+  templateUrl: './madres-persona.component.html',
+  styleUrls: ['./madres-persona.component.css']
 })
-export class PadresPersonaComponent implements OnInit{
+export class MadresPersonaComponent {
   @Input() nid_persona: string="";
 
    lista_personas: any[] = [];
-
-  
-
-   padre: any;
+   madre: any;
   
 
    bError: boolean = false;
@@ -27,7 +24,6 @@ export class PadresPersonaComponent implements OnInit{
 
    }
   
-
    obtener_personas =
    {
      next: (respuesta: any) =>
@@ -37,22 +33,22 @@ export class PadresPersonaComponent implements OnInit{
      }
    }
 
-   obtener_padre = 
+   obtener_madre = 
    {
      next: (respuesta: any) =>
      {
-      this.padre = respuesta.padre['nid'];
+      this.madre = respuesta.madre['nid'];
      }
    }
 
 
    ngOnInit(): void {
       this.personaService.obtener_lista_personas().subscribe(this.obtener_personas);
-      this.personaService.obtener_padre(this.nid_persona).subscribe(this.obtener_padre);
+      this.personaService.obtener_madre(this.nid_persona).subscribe(this.obtener_madre);
    }
 
 
-  registrar_padre = {
+  registrar_madre = {
       next: (respuesta: any) =>
       {
           if(!respuesta.error)
@@ -71,27 +67,20 @@ export class PadresPersonaComponent implements OnInit{
 
    guardar()
    {
-    console.log('Guardar padre '+  this.padre)
-      if(this.padre === undefined)
+      console.log('Guardar madre '+  this.madre)
+      if(this.madre === undefined)
       {
-        this.personaService.registrar_padre(this.nid_persona, '').subscribe(this.registrar_padre);
+        this.personaService.registrar_madre(this.nid_persona, '').subscribe(this.registrar_madre);
       }
       else
       {
-        this.personaService.registrar_padre(this.nid_persona, this.padre).subscribe(this.registrar_padre);
+        this.personaService.registrar_madre(this.nid_persona, this.madre).subscribe(this.registrar_madre);
       }
 
    }
 
    comparePersona_madre(item: any, selected: any) {
-    console.log(item['nid'])
-    console.log(selected)
-    console.log(item['nid'] == selected)
     return item['nid'] == selected;
   }
 
- 
-  comparePersona_padre(item: any, selected: any) {
-    return item['nid'] == selected;
-  }
 }

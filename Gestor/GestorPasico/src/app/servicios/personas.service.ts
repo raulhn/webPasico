@@ -25,17 +25,17 @@ export class PersonasService {
     return this.http.get(API_URL, { withCredentials:true});
   }
 
-  registrar_persona(nif: string, nombre: string, primer_apellido: string, segundo_apellido: string, telefono: string, fecha_nacimiento: string) : Observable<any>
+  registrar_persona(nif: string, nombre: string, primer_apellido: string, segundo_apellido: string, telefono: string, fecha_nacimiento: string, correo_electronico: string) : Observable<any>
   {
     let API_URL = this.url + '/registrar_persona';
-    return this.http.post(API_URL, {nif: nif, nombre: nombre, primer_apellido: primer_apellido, segundo_apellido, telefono: telefono, fecha_nacimiento: fecha_nacimiento}, 
+    return this.http.post(API_URL, {nif: nif, nombre: nombre, primer_apellido: primer_apellido, segundo_apellido, telefono: telefono, fecha_nacimiento: fecha_nacimiento, correo_electronico: correo_electronico}, 
       {withCredentials: true});
   }
 
-  actualizar_persona(nid: string, nif: string, nombre: string, primer_apellido: string, segundo_apellido: string, telefono:string, fecha_nacimiento: string)
+  actualizar_persona(nid: string, nif: string, nombre: string, primer_apellido: string, segundo_apellido: string, telefono:string, fecha_nacimiento: string, correo_electronico: string)
   {
     let API_URL = this.url + '/actualizar_persona';
-    return this.http.post(API_URL,{nid: nid, nif: nif, nombre: nombre, primer_apellido: primer_apellido, segundo_apellido, telefono: telefono, fecha_nacimiento: fecha_nacimiento},
+    return this.http.post(API_URL,{nid: nid, nif: nif, nombre: nombre, primer_apellido: primer_apellido, segundo_apellido, telefono: telefono, fecha_nacimiento: fecha_nacimiento, correo_electronico: correo_electronico},
       {withCredentials: true});
   }
 

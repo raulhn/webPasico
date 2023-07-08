@@ -6,6 +6,7 @@ export class Persona
     private telefono: string = "";
     private nid: string = "";
     private fechaNacimiento: string = "";
+    private correo_electronico: string = "";
 
     public setNid(nid: string)
     {
@@ -38,6 +39,11 @@ export class Persona
         this.fechaNacimiento = fechaNacimiento;
     }
 
+    public setCorreoElectronico(correo_electronico: string)
+    {
+        this.correo_electronico = correo_electronico;
+    }
+
     public getNid()
     {
         return this.nid;
@@ -65,4 +71,8 @@ export class Persona
         return this.fechaNacimiento;
     }
     
+    public getCorreoElectronico(): string
+    {
+        return this.correo_electronico;
+    }
 }

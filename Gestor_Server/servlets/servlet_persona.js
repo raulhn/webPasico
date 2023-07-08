@@ -15,8 +15,9 @@ async function registrar_persona(req, res)
             let segundo_apellido = req.body.segundo_apellido;
             let telefono = req.body.telefono;
             let fecha_nacimiento = req.body.fecha_nacimiento;
+            let correo_electronico = req.body.correo_electronico;
 
-            bResultado = await persona.registrar_persona(nombre, primer_apellido, segundo_apellido, telefono, fecha_nacimiento, nif);
+            bResultado = await persona.registrar_persona(nombre, primer_apellido, segundo_apellido, telefono, fecha_nacimiento, nif, correo_electronico);
             if (bResultado)
             {
                 res.status(200).send({error: false, message: 'Registro creado'});
@@ -64,8 +65,9 @@ async function actualizar_persona(req, res)
             let segundo_apellido = req.body.segundo_apellido
             let telefono = req.body.telefono
             let fecha_nacimiento = req.body.fecha_nacimiento
+            let correo_electronico = req.body.correo_electronico
 
-            bResultado = await persona.actualizar_persona(nid, nif, nombre, primer_apellido, segundo_apellido, telefono, fecha_nacimiento);
+            bResultado = await persona.actualizar_persona(nid, nif, nombre, primer_apellido, segundo_apellido, telefono, fecha_nacimiento, correo_electronico);
             if(bResultado)
             {
                 res.status(200).send({error: false, message: 'Se ha actualizado la persona de forma correcta'})
@@ -125,7 +127,8 @@ async function registrar_padre(req, res)
         {
             let nid_persona = req.body.nid_persona;
             let nid_padre = req.body.nid_padre;
-            await persona.registrar_padre(nid_persona, nid_padre).subscribe();
+            await persona.registrar_padre(nid_persona, nid_padre);
+            res.status(200).send({error: false, message: 'Padre registrado'})
         }
     )
 }
@@ -138,6 +141,7 @@ async function registrar_madre(req, res)
             let nid_persona = req.body.nid_persona;
             let nid_madre = req.body.nid_madre;
             await persona.registrar_madre(nid_persona, nid_madre);
+            res.status(200).send({error: false, message: 'Madre registrada'})
         }
     )
 }

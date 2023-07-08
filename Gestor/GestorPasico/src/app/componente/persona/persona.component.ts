@@ -61,7 +61,9 @@ export class PersonaComponent {
       let segundo_apellido: string = this.persona.segundo_apellido;
       let telefono: string = this.persona.telefono;
       let fecha_nacimiento: string = this.persona.fecha_nacimiento;
-      this.personasService.actualizar_persona(nid, nif, nombre, primer_apellido, segundo_apellido, telefono, fecha_nacimiento).subscribe
+      let correo_electronico: string = this.persona.correo_electronico;
+
+      this.personasService.actualizar_persona(nid, nif, nombre, primer_apellido, segundo_apellido, telefono, fecha_nacimiento, correo_electronico).subscribe
       (
         this.actualizar
       )

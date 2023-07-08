@@ -2,18 +2,19 @@
 <form  ngNativeValidate class="form-control">
     <div class="row form-row">
         <div class="col-11">
-            <label>Padre:</label>
+            <label>Madre:</label>
             <ng-select [items]="lista_personas"
                     bindLabel="etiqueta" 
                     bindValue="nid"
-                    [(ngModel)]="padre"
-                    [compareWith]="comparePersona_padre">
+                    [(ngModel)]="madre"
+                    [compareWith]="comparePersona_madre">
             </ng-select>
         </div>
         <div class="col-1">
             <button (click)= "guardar()" class="btn btn-primary mb-3 "> Guardar </button>
         </div>
     </div>
+
 </form>
 <div *ngIf="bError" class="alert alert-danger" role="alert">
     {{mensaje_error}}

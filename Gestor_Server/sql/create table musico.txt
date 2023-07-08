@@ -3,6 +3,7 @@ create table pasico_gestor_pru.persona(
 	nombre varchar(300),
 	primer_apellido  varchar(300),
 	segundo_apellido varchar(300),
+	correo_electronico varchar(600),
 	telefono integer,
 	fecha_nacimiento date,
 	nif varchar(9),
