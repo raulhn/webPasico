@@ -94,4 +94,11 @@ export class PadresPersonaComponent implements OnInit{
   comparePersona_padre(item: any, selected: any) {
     return item['nid'] == selected;
   }
+
+  construye_peticion() : any
+  {
+    var peticion: any;
+    peticion = {nid_persona: this.nid_persona, nid_padre: this.padre};
+    return peticion;
+  }
 }

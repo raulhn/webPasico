@@ -2,21 +2,21 @@
     <div class="row form-row">
         <div class="col">
             <label > DNI: </label>
-            <input type="text" [(ngModel)] = "persona.nif" name="nif" onkeyup="this.value = this.value.toUpperCase();" class="form-control"/>
+            <input type="text" [(ngModel)] = "persona['nif']" name="nif" onkeyup="this.value = this.value.toUpperCase();" class="form-control"/>
         </div>
     </div>
     <div class="row form-row">
         <div class="col">
             <label> Nombre: </label>
-            <input class="form-control" [(ngModel)]= "persona.nombre" name="nombre" type="text" required/> 
+            <input class="form-control" [(ngModel)]= "persona['nombre']" name="nombre" type="text" required/> 
             <label> Primer apellido: </label>
-            <input class="form-control" [(ngModel)]= "persona.primer_apellido" name="Primer apellido" type="text" required/>
+            <input class="form-control" [(ngModel)]= "persona['primer_apellido']" name="Primer apellido" type="text" required/>
         </div>
     </div>
     <div class="row form-row">
         <div class="col">
             <label> Segundo apellido: </label>
-            <input class="form-control" [(ngModel)]= "persona.segundo_apellido" name="Segundo apellido" type="test"/>
+            <input class="form-control" [(ngModel)]= "persona['segundo_apellido']" name="Segundo apellido" type="test"/>
         </div>
     </div>
     <div class="row form-row">
@@ -36,13 +36,8 @@
     <div class="row form-row">
         <div class="col">
             <label> Correo electrónico: </label>
-            <input class="form-control" name="Teléfono" [(ngModel)] = "persona['correo_electronico']" type="text" />
+            <input class="form-control" name="Correo electrónico" [(ngModel)] = "persona['correo_electronico']" type="text" />
         </div>
     </div>
 
-    <div class="row form-row pt-3">
-        <div class="col">
-          <button (click)= "actualizar_persona()" class="btn btn-primary mb-3 "> Guardar </button>
-        </div>
-    </div>
 </form>

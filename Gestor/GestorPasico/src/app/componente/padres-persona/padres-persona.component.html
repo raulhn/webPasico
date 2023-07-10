@@ -1,7 +1,7 @@
 
 <form  ngNativeValidate class="form-control">
     <div class="row form-row">
-        <div class="col-11">
+        <div class="col">
             <label>Padre:</label>
             <ng-select [items]="lista_personas"
                     bindLabel="etiqueta" 
@@ -9,9 +9,6 @@
                     [(ngModel)]="padre"
                     [compareWith]="comparePersona_padre">
             </ng-select>
-        </div>
-        <div class="col-1">
-            <button (click)= "guardar()" class="btn btn-primary mb-3 "> Guardar </button>
         </div>
     </div>
 </form>

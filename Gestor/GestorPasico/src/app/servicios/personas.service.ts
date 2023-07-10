@@ -39,6 +39,12 @@ export class PersonasService {
       {withCredentials: true});
   }
 
+  actualizar_persona_form(formData: any)
+  {
+    let API_URL = this.url + '/actualizar_persona';
+    return this.http.post(API_URL, formData, {withCredentials:true})
+  }
+
   registrar_padre(nid_persona: string, nid_padre: string)
   {
     let API_URL = this.url + '/registrar_padre';
@@ -49,6 +55,18 @@ export class PersonasService {
   {
     let API_URL = this.url + '/registrar_madre';
     return this.http.post(API_URL, {nid_persona: nid_persona, nid_madre: nid_madre}, {withCredentials: true})
+  }
+
+  registrar_padre_peticion(peticion: any)
+  {
+    let API_URL = this.url + '/registrar_padre';
+    return this.http.post(API_URL, peticion, {withCredentials: true});
+  }
+
+  registrar_madre_peticion(peticion: any)
+  {
+    let API_URL = this.url + '/registrar_madre';
+    return this.http.post(API_URL, peticion, {withCredentials: true})
   }
 
   obtener_padre(nid_persona: string)

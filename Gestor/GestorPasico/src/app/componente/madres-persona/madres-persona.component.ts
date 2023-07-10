@@ -83,4 +83,10 @@ export class MadresPersonaComponent {
     return item['nid'] == selected;
   }
 
+  construye_peticion() : any
+  {
+    var peticion: any;
+    peticion = {nid_persona: this.nid_persona, nid_madre: this.madre};
+    return peticion;
+  }
 }

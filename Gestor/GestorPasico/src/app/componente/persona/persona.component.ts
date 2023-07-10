@@ -34,7 +34,7 @@ export class PersonaComponent {
 
   actualizar =
   {
-    next: (respuesta: any) =>
+    next: async (respuesta: any) =>
     {
       console.log(respuesta);
     },
@@ -52,21 +52,42 @@ export class PersonaComponent {
 
   actualizar_persona()
   {
+      if (this.valida_formulario())
+      {
+        let nid: string = this.persona.nid;
+        let nif: string = this.persona.nif;
+        let nombre: string = this.persona.nombre;
+        let primer_apellido: string = this.persona.primer_apellido;
+        let segundo_apellido: string = this.persona.segundo_apellido;
+        let telefono: string = this.persona.telefono;
+        let fecha_nacimiento: string = this.persona.fecha_nacimiento;
+        let correo_electronico: string = this.persona.correo_electronico;
+
+        this.personasService.actualizar_persona(nid, nif, nombre, primer_apellido, segundo_apellido, telefono, fecha_nacimiento, correo_electronico).subscribe
+        (
+          {next: async (respuesta: any) =>
+          {
+            console.log(respuesta);
+          },
+          error: (respuesta: any) =>
+          {
+            console.log(respuesta);
+          }}
+        )
+      }
+  }
+
+  construye_peticion() : any
+  {
+    var peticion: any = null;
     if (this.valida_formulario())
     {
-      let nid: string = this.persona.nid;
-      let nif: string = this.persona.nif;
-      let nombre: string = this.persona.nombre;
-      let primer_apellido: string = this.persona.primer_apellido;
-      let segundo_apellido: string = this.persona.segundo_apellido;
-      let telefono: string = this.persona.telefono;
-      let fecha_nacimiento: string = this.persona.fecha_nacimiento;
-      let correo_electronico: string = this.persona.correo_electronico;
+      peticion = {nid:  this.persona['nid'], nif:  this.persona['nif'], nombre:  this.persona['nombre'], primer_apellido:  this.persona['primer_apellido'], 
+        segundo_apellido:  this.persona['segundo_apellido'], telefono:  this.persona['telefono'], fecha_nacimiento:  this.persona['fecha_nacimiento'], 
+        correo_electronico:  this.persona['correo_electronico']};
 
-      this.personasService.actualizar_persona(nid, nif, nombre, primer_apellido, segundo_apellido, telefono, fecha_nacimiento, correo_electronico).subscribe
-      (
-        this.actualizar
-      )
     }
+    return peticion;
   }
+  
 }
