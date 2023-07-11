@@ -1,0 +1,7 @@
+create table pasico_gestor_pru.socios(
+	nid_persona integer primary key,
+	fecha_alta date,
+	fecha_baja date
+);
+
+alter table pasico_gestor_pru.socios add foreign key(nid_persona) references pasico_gestor_pru.persona(nid);
