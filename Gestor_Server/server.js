@@ -10,7 +10,8 @@ var constantes = require('./constantes.js');
 
 var servlet_usuario = require('./servlets/servlet_usuario');
 var servlet_persona = require('./servlets/servlet_persona.js');
-var servlet_musico = require('./servlets/servlet_musico.js')
+var servlet_musico = require('./servlets/servlet_musico.js');
+var servlet_socio = require('./servlets/servlet_socios.js')
 
 var fs = require('fs');
 
@@ -59,6 +60,12 @@ app.get('/obtener_instrumentos', servlet_musico.obtener_instrumentos);
 app.post('/registrar_musico', servlet_musico.registrar_musico);
 app.post('/eliminar_instrumento_musico', servlet_musico.eliminar_instrumento_musico);
 app.get('/obtener_personas_instrumento/:nid_instrumento', servlet_musico.obtener_personas_instrumento);
+
+/** Socios **/
+app.post('/registrar_socio', servlet_socio.registrar_socio);
+app.post('/actualizar_socio', servlet_socio.actualizar_socio);
+app.get('/obtener_socios', servlet_socio.obtener_socios);
+app.get('/obtener_socio/:nid_persona', servlet_socio.obtener_socio);
 
 https.createServer({
     key: fs.readFileSync('apache.key'),

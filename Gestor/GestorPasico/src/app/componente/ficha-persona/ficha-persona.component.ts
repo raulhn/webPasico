@@ -4,6 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 import { PersonaComponent } from '../persona/persona.component';
 import { PadresPersonaComponent } from '../padres-persona/padres-persona.component';
 import { MadresPersonaComponent } from '../madres-persona/madres-persona.component';
+import { SocioComponent } from '../socio/socio.component';
+import { SociosService } from 'src/app/servicios/socios.service';
 
 @Component({
   selector: 'app-ficha-persona',
@@ -18,15 +20,18 @@ export class FichaPersonaComponent implements OnInit{
   bRegistrado: boolean = false;
   bRegistrado_madre: boolean = false;
   bRegistrado_padre: boolean = false;
+  bActualizado_socio: boolean = false;
 
   bError:boolean = false;
   bError_padre: boolean = false;
   bError_madre: boolean = false;
+  bError_socio: boolean = false;
 
   mensaje_registro: string = 'Se ha guardado correctamente';
   
   mensaje_error_padre: string = '';
   mensaje_error_madre: string = '';
+  mensaje_error_socio: string = '';
   mensaje_error: string = '';
 
   
@@ -36,7 +41,9 @@ export class FichaPersonaComponent implements OnInit{
 
   @ViewChild('instancia_madre') instancia_madre!: MadresPersonaComponent;
 
-  constructor(private rutaActiva: ActivatedRoute, private personasService: PersonasService)
+  @ViewChild('instancia_socio') instancia_socio!: SocioComponent;
+
+  constructor(private rutaActiva: ActivatedRoute, private personasService: PersonasService, private socioService: SociosService)
   {
     this.id_persona = rutaActiva.snapshot.params['id'];
   }
@@ -66,12 +73,11 @@ export class FichaPersonaComponent implements OnInit{
           if(!respuesta.error)
           {
             this.bRegistrado_padre = true;
-            this.mensaje_registro = 'Se ha guardado correctamente'
           }
       },
       error: (respuesta: any) =>
       {
-        this.bError = true;
+        this.bError_padre = true;
         this.mensaje_error_padre = respuesta.error.message;
       }
   }
@@ -83,13 +89,27 @@ registrar_madre = {
         if(!respuesta.error)
         {
           this.bRegistrado_madre = true;
-          this.mensaje_registro = 'Se ha guardado correctamente'
         }
     },
     error: (respuesta: any) =>
     {
-      this.bError = true;
+      this.bError_madre = true;
       this.mensaje_error_madre = respuesta.error.message;
+    }
+  }
+
+  actualizar_socio = {
+    next: (respuesta: any) =>
+    {
+      if(respuesta.error)
+      {
+        this.bActualizado_socio = true;
+      }
+    },
+    error: (respuesta: any) =>
+    {
+      this.bError = true;
+      this.mensaje_error_socio = respuesta.error.message;
     }
   }
 
@@ -107,18 +127,25 @@ registrar_madre = {
     var peticion_madre = this.instancia_madre.construye_peticion()
     this.personasService.registrar_madre_peticion(peticion_madre).subscribe(this.registrar_madre);
 
+    var peticion_socio = this.instancia_socio.construye_peticion();
+    this.socioService.actualizar_socio(peticion_socio).subscribe(this.actualizar_socio);
+
+
     setTimeout(()=>{                        
       this.bRegistrado = false;
       this.bRegistrado_madre = false;
       this.bRegistrado_padre = false;
+      this.bActualizado_socio = false;
     
       this.bError = false;
       this.bError_padre = false;
       this.bError_madre = false;
+      this.bError_socio = false;
 
       this.mensaje_error_padre = '';
       this.mensaje_error_madre = '';
       this.mensaje_error = '';
+      this.mensaje_error_socio = '';
   }, 2000);
   }
 }

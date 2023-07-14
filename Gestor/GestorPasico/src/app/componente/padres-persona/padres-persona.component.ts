@@ -32,7 +32,6 @@ export class PadresPersonaComponent implements OnInit{
    {
      next: (respuesta: any) =>
      {
-
       this.lista_personas = respuesta.personas;
      }
    }
@@ -84,9 +83,6 @@ export class PadresPersonaComponent implements OnInit{
    }
 
    comparePersona_madre(item: any, selected: any) {
-    console.log(item['nid'])
-    console.log(selected)
-    console.log(item['nid'] == selected)
     return item['nid'] == selected;
   }
 

@@ -23,6 +23,8 @@ import { PersonaComponent } from './componente/persona/persona.component';
 import { PadresPersonaComponent } from './componente/padres-persona/padres-persona.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { MadresPersonaComponent } from './componente/madres-persona/madres-persona.component';
+import { RegistroSocioComponent } from './componente/registro-socio/registro-socio.component';
+import { SocioComponent } from './componente/socio/socio.component';
 
 
 @NgModule({
@@ -38,7 +40,9 @@ import { MadresPersonaComponent } from './componente/madres-persona/madres-perso
     RegistroPersonaComponent,
     PersonaComponent,
     PadresPersonaComponent,
-    MadresPersonaComponent
+    MadresPersonaComponent,
+    RegistroSocioComponent,
+    SocioComponent
   ],
   imports: [
     FormsModule,
