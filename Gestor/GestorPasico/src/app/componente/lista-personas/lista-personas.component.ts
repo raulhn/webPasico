@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { PersonasService } from 'src/app/servicios/personas.service';
 import { Persona } from 'src/app/logica/persona';
 import { URL } from 'src/app/logica/constantes';
+import { DataTablesOptions } from 'src/app/logica/constantes';
+import { faLanguage } from '@fortawesome/free-solid-svg-icons';
+
 
 @Component({
   selector: 'app-lista-personas',
@@ -12,13 +15,23 @@ export class ListaPersonasComponent {
 
   listaPersonas:Persona[] = [];
   enlaceFicha: string = URL.URL_FRONT_END + "/ficha_persona/";
+  bCargado: boolean = false;
+
+  dtOptions: DataTables.Settings = {}
+ 
+
+
   constructor(private personasService:PersonasService)
   {
-
+    this.dtOptions =
+    {
+      language: DataTablesOptions.spanish_datatables
+    }
   }
 
 
   ngOnInit(): void {
+
     this.personasService.obtener_lista_personas().subscribe(
       (resultado:any) =>
       {
@@ -34,6 +47,8 @@ export class ListaPersonasComponent {
             p.setNid(resultado.personas[i]['nid']);
             this.listaPersonas[i] = p;
           }
+
+          this.bCargado = true;
         }
         console.log(this.listaPersonas)
       }

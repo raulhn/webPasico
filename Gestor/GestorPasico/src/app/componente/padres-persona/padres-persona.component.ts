@@ -11,10 +11,7 @@ export class PadresPersonaComponent implements OnInit{
 
    lista_personas: any[] = [];
 
-  
-
    padre: any;
-  
 
    bError: boolean = false;
    bRegistrado: boolean = false;

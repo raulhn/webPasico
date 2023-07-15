@@ -39,7 +39,7 @@ function obtener_socios(req, res)
         async () =>
         {
             let resultado_socios = await socios.obtener_socios();
-            res.estatus(200).send({error:false, socios: resultado_socios})
+            res.status(200).send({error:false, socios: resultado_socios})
         }
     )
 }

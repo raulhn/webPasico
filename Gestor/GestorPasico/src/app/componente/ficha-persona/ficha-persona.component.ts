@@ -101,7 +101,8 @@ registrar_madre = {
   actualizar_socio = {
     next: (respuesta: any) =>
     {
-      if(respuesta.error)
+      console.log(respuesta)
+      if(!respuesta.error)
       {
         this.bActualizado_socio = true;
       }
@@ -129,7 +130,6 @@ registrar_madre = {
 
     var peticion_socio = this.instancia_socio.construye_peticion();
     this.socioService.actualizar_socio(peticion_socio).subscribe(this.actualizar_socio);
-
 
     setTimeout(()=>{                        
       this.bRegistrado = false;

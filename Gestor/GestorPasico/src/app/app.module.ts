@@ -25,6 +25,9 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { MadresPersonaComponent } from './componente/madres-persona/madres-persona.component';
 import { RegistroSocioComponent } from './componente/registro-socio/registro-socio.component';
 import { SocioComponent } from './componente/socio/socio.component';
+import { ListaSociosComponent } from './componente/lista-socios/lista-socios.component';
+import { DataTablesModule } from 'angular-datatables';
+
 
 
 @NgModule({
@@ -42,11 +45,13 @@ import { SocioComponent } from './componente/socio/socio.component';
     PadresPersonaComponent,
     MadresPersonaComponent,
     RegistroSocioComponent,
-    SocioComponent
+    SocioComponent,
+    ListaSociosComponent
   ],
   imports: [
     FormsModule,
     BrowserModule,
+    DataTablesModule,
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,

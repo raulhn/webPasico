@@ -7,8 +7,8 @@ import { UsuariosComponent } from './componente/usuarios/usuarios.component';
 import { ListaPersonasComponent } from './componente/lista-personas/lista-personas.component';
 import { RegistroPersonaComponent } from './componente/registro-persona/registro-persona.component';
 import { FichaPersonaComponent } from './componente/ficha-persona/ficha-persona.component';
-import { PadresPersonaComponent } from './componente/padres-persona/padres-persona.component';
-import { RegistroSocioComponent } from './componente/registro-socio/registro-socio.component';
+import { ListaSociosComponent } from './componente/lista-socios/lista-socios.component';
+
 
 const routes: Routes = [
   { 
@@ -40,8 +40,8 @@ const routes: Routes = [
     component: FichaPersonaComponent 
   },
   {
-    path: 'socio',
-    component: RegistroSocioComponent 
+    path: 'socios',
+    component: ListaSociosComponent
   }
 
 ];
