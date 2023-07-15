@@ -46,11 +46,13 @@ export class RegistroSocioComponent implements OnInit{
   {
     next: (respuesta: any) =>
     {
-      console.log(respuesta)
+      this.bRegistrado = true;
+      this.mensaje_registro = 'Se ha registrado como socio'
     },
     error: (respuesta: any) =>
     {
-      console.log(respuesta)
+      this.bError = true;
+      this.mensaje_error = respuesta.error.info;
     }
   }
 

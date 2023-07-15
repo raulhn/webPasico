@@ -1,33 +1,35 @@
+<app-menu class=""></app-menu>
+<div class="container pt-4">
+    <div *ngIf="bCargado">
+    <table datatable [dtOptions]="dtOptions" class="table">
+        <thead>
+            <tr>
+                <th scope="col">
+                    Nombre
+                </th>
+                <th>
+                    Primer apellido
+                </th>
+                <th>
+                    Segundo Apellido
+                </th>
+                <th>
+                    Teléfono
+                </th>
+                <th>
 
-<div *ngIf="bCargado">
-<table datatable [dtOptions]="dtOptions" class="table">
-    <thead>
-        <tr>
-            <th scope="col">
-                Nombre
-            </th>
-            <th>
-                Primer apellido
-            </th>
-            <th>
-                Segundo Apellido
-            </th>
-            <th>
-                Teléfono
-            </th>
-            <th>
-
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let persona_ of listaPersonas; let i = index">
-            <td>{{persona_.getNombre()}}</td>
-            <td>{{persona_.getPrimerApellido()}}</td>
-            <td>{{persona_.getSegundoApellido()}}</td>
-            <td>{{persona_.getTelefono()}}</td>
-            <td><a [href]="obtenerEnlaceFicha(persona_.getNid())"> <button class="btn btn-primary"> Ver Ficha</button></a></td>
-        </tr>
-    </tbody>
-</table>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let persona_ of listaPersonas; let i = index">
+                <td>{{persona_.getNombre()}}</td>
+                <td>{{persona_.getPrimerApellido()}}</td>
+                <td>{{persona_.getSegundoApellido()}}</td>
+                <td>{{persona_.getTelefono()}}</td>
+                <td><a [href]="obtenerEnlaceFicha(persona_.getNid())"> <button class="btn btn-primary"> Ver Ficha</button></a></td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
 </div>

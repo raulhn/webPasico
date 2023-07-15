@@ -48,7 +48,7 @@ alter table pasico.alumno add constraint fk_alumno_persona foreign key (nid_pers
 
 create table pasico.curso(
 	nid integer primary key auto_increment,
-	descripcion varchar(100) unique,
+	descripcion varchar(200) unique key,
 	año_inicio integer,
 	año_fin integer
 );

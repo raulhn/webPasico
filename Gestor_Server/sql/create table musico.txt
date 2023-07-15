@@ -38,18 +38,29 @@ alter table pasico_gestor_pru.musico add constraint fk_musico_persona foreign ke
 
 
 
+
 create table pasico_gestor_pru.asignatura(
 	nid integer primary key auto_increment,
-	descripcion varchar(400),
-	año integer
+	descripcion varchar(400)
 );
+
+create table pasico_gestor_pru.profesor(
+	nid_persona integer,
+	nid_asignatura integer
+);
+
+alter table pasico_gestor_pru.profesor add constraint fk_profesor_asignatura foreign key(nid_persona) references pasico_gestor_pru.persona(nid);
+alter table pasico_gestor_pru.profesor add constraint fk_asignatura_profesor foreign key(nid_asignatura) references pasico_gestor_pru.asignatura(nid);
+alter table pasico_gestor_pru.profesor add constraint pk_profesor primary key(nid_persona, nid_asignatura);
 
 create table pasico_gestor_pru.evaluacion(
 	nid integer auto_increment primary key,
-	nid_asignatura inteeger,
-	nid_profesor integer,
-	trimestre integer
+	nid_asignatura integer,
+	nid_profesor integer, -- Profesor que hizo la evaluacion
+	trimestre integer,
+	nid_curso integer
 );
+
 
 alter table pasico_gestor_pru.evaluacion add constraint fk_evaluacion_asignatura foreign key(nid_asignatura) references pasico_gestor_pru.asignatura(nid);
 alter table pasico_gestor_pru.evaluacion add constraint fk_evluacion_profesor foreign key(nid_profesor) references pasico_gestor_pru.persona(nid);

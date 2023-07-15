@@ -8,6 +8,7 @@ import { ListaPersonasComponent } from './componente/lista-personas/lista-person
 import { RegistroPersonaComponent } from './componente/registro-persona/registro-persona.component';
 import { FichaPersonaComponent } from './componente/ficha-persona/ficha-persona.component';
 import { ListaSociosComponent } from './componente/lista-socios/lista-socios.component';
+import { RegistroSocioComponent } from './componente/registro-socio/registro-socio.component';
 
 
 const routes: Routes = [
@@ -42,6 +43,10 @@ const routes: Routes = [
   {
     path: 'socios',
     component: ListaSociosComponent
+  },
+  {
+    path: 'registrar-socio',
+    component: RegistroSocioComponent
   }
 
 ];

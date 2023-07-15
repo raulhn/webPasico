@@ -1,31 +1,38 @@
-<form  ngNativeValidate class="form-control">
-    <div class="row form-row">
-        <div class="col">
-            <label>Socio:</label>
-            <ng-select [items]="lista_personas"
-                    bindLabel="etiqueta" 
-                    bindValue="nid"
-                    [(ngModel)]="socio"
-                    [compareWith]="comparePersona_socio">
-            </ng-select>
+<app-menu></app-menu>
+<div class="container pt-4">
+    <form  ngNativeValidate class="form-control">
+        <div class="row form-row">
+            <div class="col">
+                <label>Socio:</label>
+                <ng-select [items]="lista_personas"
+                        bindLabel="etiqueta" 
+                        bindValue="nid"
+                        [(ngModel)]="socio"
+                        [compareWith]="comparePersona_socio">
+                </ng-select>
+            </div>
         </div>
-        <div class="col">
-            <label>Número de socio:</label>
-            <input  class="form-control" [(ngModel)] = "num_socio" type="text"/>
+        <div class="row form-row">
+            <div class="col">
+                <label>Número de socio:</label>
+                <input  class="form-control" [(ngModel)] = "num_socio" type="text"/>
+            </div>
+            <div class="col">
+                <label>Fecha de alta:</label>
+                <input class="form-control" [(ngModel)] = "fecha_alta" type="date"/>
+            </div>
         </div>
-        <div class="col">
-            <label>Fecha de alta:</label>
-            <input class="form-control" [(ngModel)] = "fecha_alta" type="date"/>
+        <div class="row form-row pt-3">
+            <div class="col">
+                <button (click) = "guardar()"  class="btn btn-primary mb-3 "> Registrar </button>
+            </div>
         </div>
-    </div>
-    <div class="row form-row">
-        <button (click) = "guardar()"  class="btn btn-primary mb-3 "> Registrar </button>
-    </div>
 
-</form>
-<div *ngIf="bError" class="alert alert-danger" role="alert">
-    {{mensaje_error}}
- </div>
- <div *ngIf="bRegistrado" class="alert alert-success" role="alert">
-    {{mensaje_registro}}
- </div>
+    </form>
+    <div *ngIf="bError" class="alert alert-danger" role="alert">
+        {{mensaje_error}}
+    </div>
+    <div *ngIf="bRegistrado" class="alert alert-success" role="alert">
+        {{mensaje_registro}}
+    </div>
+</div>

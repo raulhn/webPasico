@@ -125,6 +125,7 @@ function obtener_socios()
     )
 }
 
+
 function obtener_socio(nid_persona)
 {
     return new Promise(

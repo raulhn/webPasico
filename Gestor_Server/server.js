@@ -11,7 +11,8 @@ var constantes = require('./constantes.js');
 var servlet_usuario = require('./servlets/servlet_usuario');
 var servlet_persona = require('./servlets/servlet_persona.js');
 var servlet_musico = require('./servlets/servlet_musico.js');
-var servlet_socio = require('./servlets/servlet_socios.js')
+var servlet_socio = require('./servlets/servlet_socios.js');
+var servlet_asignatura = require('./servlets/servlet_asignatura.js');
 
 var fs = require('fs');
 
@@ -29,7 +30,6 @@ app.get('/',
     return res.status(200).send({error: true, message: 'Hola mundo'})
 }
 );
-
 
 /** Usuarios **/
 app.post('/login', servlet_usuario.login);
@@ -66,6 +66,17 @@ app.post('/registrar_socio', servlet_socio.registrar_socio);
 app.post('/actualizar_socio', servlet_socio.actualizar_socio);
 app.get('/obtener_socios', servlet_socio.obtener_socios);
 app.get('/obtener_socio/:nid_persona', servlet_socio.obtener_socio);
+
+/** Asignaturas **/
+app.post('/registrar_asignatura', servlet_asignatura.registrar_asignatura);
+app.post('/actualizar_asignatura', servlet_asignatura.actualizar_asignatura);
+app.post('/eliminar_asignatura', servlet_asignatura.eliminar_asignatura);
+app.get('/obtener_asignaturas', servlet_asignatura.obtener_asignaturas);
+
+app.post('/add_profesor', servlet_asignatura.add_profesor);
+app.post('/eliminar_profesor', servlet_asignatura.eliminar_profesor);
+app.get('/obtener_profesores', servlet_asignatura.obtener_profesores);
+app.get('/obtener_profesores_asignatura/:nid_asignatura', servlet_asignatura.obtener_profesores_asignatura);
 
 https.createServer({
     key: fs.readFileSync('apache.key'),

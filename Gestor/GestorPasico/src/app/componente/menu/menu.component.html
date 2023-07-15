@@ -1,51 +1,44 @@
-<nav class="navbar navbar-dark bg-dark fixed-top">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">Gestor Pasico</a>
-     
-     
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">Gestor Pasico</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarGestor" aria-controls="navbarGestor" aria-expanded="true" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="navbar-collapse collapse show" id="navbarGestor">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarPersonas" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Personas
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/personas">Listado Personas</a></li>
+            <li><a class="dropdown-item" href="/registrar-persona">Registrar Persona</a></li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarSocios" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Socios
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/socios">Listado Socios</a></li>
+            <li><a class="dropdown-item" href="/registrar-socio">Registrar Socio</a></li>
+          </ul>
+        </li>
+      </ul>
 
-      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      
-      <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
-        <div class="offcanvas-header">
-          <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">Gestor Pasico</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      <span *ngIf="logueado">
+        <div class="row">
+          <div class="col">
+            <b>Usuario:</b> {{this.usuario}}
+          </div>
+          <div class="col">
+            <button (click)="[logout()]" type="button" class="btn btn-dark">
+              Logout
+            </button>
+          </div>
         </div>
-        <div class="offcanvas-body">
-         
-          <ul *ngIf="true" class="navbar-nav justify-content-end flex-grow-1 pe-3">
-            <li class="nav-item">
-              <span class="" href="#"> 
-                <fa-icon [icon]="faUser"></fa-icon> {{usuario}}  
-              </span>
-              <a (click)="logout()"  class="nav-link"> Logout </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/usuarios">Usuarios</a>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Dropdown
-              </a>
-              <ul class="dropdown-menu dropdown-menu-dark">
-                <li><a class="dropdown-item" href="#">Action</a></li>
-                <li><a class="dropdown-item" href="#">Another action</a></li>
-                <li>
-                  <hr class="dropdown-divider">
-                </li>
-                <li><a class="dropdown-item" href="#">Something else here</a></li>
-              </ul>
-            </li>
-          </ul>
-          <ul *ngIf="!logueado" class="navbar-nav justify-content-end flex-grow-1 pe-3">
-            <li  class="nav-item">
-              <a class="nav-link" href="/login">Login</a>
-            </li>
-          </ul>
-         
-        </div>
-      </div>
+       </span>
+
     </div>
-  </nav>
+  </div>
+</nav>
