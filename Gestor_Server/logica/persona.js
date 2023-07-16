@@ -193,14 +193,14 @@ function registrar_padre(nid_persona, nid_padre)
         async (resolve, reject) =>
         {
             bExiste = await existe_nid(nid_persona);
-            bExiste_padre = await existe_nid(nid_padre);
 
-            if(bExiste && bExiste_padre)
+            if(bExiste)
             {
                 conexion.dbConn.beginTransaction(
                     () =>
                     {
-                        conexion.dbConn.query('update ' + constantes.ESQUEMA_BD + '.persona set nid_padre = ' + conexion.dbConn.escape(nid_padre) +
+                        conexion.dbConn.query('update ' + constantes.ESQUEMA_BD + '.persona set nid_padre = nullif(' 
+                            + conexion.dbConn.escape(nid_padre) + ', \'\')' +
                             ' where nid = ' + conexion.dbConn.escape(nid_persona),
                             (error, results, fields) =>
                             {
@@ -228,14 +228,14 @@ function registrar_madre(nid_persona, nid_madre)
         async (resolve, reject) =>
         {
             bExiste = await existe_nid(nid_persona);
-            bExiste_madre = await existe_nid(nid_madre);
 
-            if(bExiste && bExiste_madre)
+            if(bExiste)
             {
                 conexion.dbConn.beginTransaction(
                     () =>
                     {
-                        conexion.dbConn.query('update ' + constantes.ESQUEMA_BD + '.persona set nid_madre = ' + conexion.dbConn.escape(nid_madre) +
+                        conexion.dbConn.query('update ' + constantes.ESQUEMA_BD + '.persona set nid_madre =  nullif(' +
+                             conexion.dbConn.escape(nid_madre) + ', \'\')' +
                             ' where nid = ' + conexion.dbConn.escape(nid_persona),
                             (error, results, fields) =>
                             {
@@ -294,6 +294,7 @@ function obtener_persona(nid)
         }
     )
 }
+
 function actualizar_persona(nid, nif, nombre, primer_apellido, segundo_apellido, telefono, fecha_nacimiento, correo_electronico)
 {
     return new Promise(

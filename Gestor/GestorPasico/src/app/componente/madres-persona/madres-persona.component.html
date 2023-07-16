@@ -11,6 +11,11 @@
             </ng-select>
         </div>
     </div>
+    <div *ngIf="existeMadre()" class="row form-row">
+        <div class="col">
+            <a class="btn btn-primary" [href]="obtenerEnlaceFicha()" role="button"> Ver Ficha</a>
+        </div>
+    </div>
 
 </form>
 <div *ngIf="bError" class="alert alert-danger" role="alert">

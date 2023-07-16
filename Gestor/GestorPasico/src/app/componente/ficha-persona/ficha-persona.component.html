@@ -19,7 +19,7 @@
    <div *ngIf="bError_socio" class="alert alert-danger" role="alert">
       {{mensaje_error_socio}}
    </div>
-   <div *ngIf="bRegistrado && bRegistrado_madre && bRegistrado_padre && bActualizado_socio" class="alert alert-success" role="alert">
+   <div *ngIf="bRegistrado && bRegistrado_madre && bRegistrado_padre && !bError_socio" class="alert alert-success" role="alert">
       {{mensaje_registro}}
    </div>
 </div>

@@ -9,6 +9,7 @@ import { RegistroPersonaComponent } from './componente/registro-persona/registro
 import { FichaPersonaComponent } from './componente/ficha-persona/ficha-persona.component';
 import { ListaSociosComponent } from './componente/lista-socios/lista-socios.component';
 import { RegistroSocioComponent } from './componente/registro-socio/registro-socio.component';
+import { AsignaturasComponent } from './componente/asignaturas/asignaturas.component';
 
 
 const routes: Routes = [
@@ -47,6 +48,10 @@ const routes: Routes = [
   {
     path: 'registrar-socio',
     component: RegistroSocioComponent
+  },
+  {
+    path: 'asignaturas',
+    component: AsignaturasComponent
   }
 
 ];

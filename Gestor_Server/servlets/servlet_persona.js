@@ -127,6 +127,7 @@ async function registrar_padre(req, res)
         {
             let nid_persona = req.body.nid_persona;
             let nid_padre = req.body.nid_padre;
+
             await persona.registrar_padre(nid_persona, nid_padre);
             res.status(200).send({error: false, message: 'Padre registrado'})
         }
@@ -140,6 +141,7 @@ async function registrar_madre(req, res)
         {
             let nid_persona = req.body.nid_persona;
             let nid_madre = req.body.nid_madre;
+            
             await persona.registrar_madre(nid_persona, nid_madre);
             res.status(200).send({error: false, message: 'Madre registrada'})
         }

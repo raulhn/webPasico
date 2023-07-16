@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { PersonasService } from 'src/app/servicios/personas.service';
+import { URL } from 'src/app/logica/constantes';
 
 @Component({
   selector: 'app-padres-persona',
@@ -18,6 +19,8 @@ export class PadresPersonaComponent implements OnInit{
 
    mensaje_error: string = "";
    mensaje_registro: string = "";
+
+   enlaceFicha: string = URL.URL_FRONT_END + "/ficha_persona/";
 
    constructor(private personaService: PersonasService)
    {
@@ -67,7 +70,6 @@ export class PadresPersonaComponent implements OnInit{
 
    guardar()
    {
-    console.log('Guardar padre '+  this.padre)
       if(this.padre === undefined)
       {
         this.personaService.registrar_padre(this.nid_persona, '').subscribe(this.registrar_padre);
@@ -91,7 +93,25 @@ export class PadresPersonaComponent implements OnInit{
   construye_peticion() : any
   {
     var peticion: any;
-    peticion = {nid_persona: this.nid_persona, nid_padre: this.padre};
+
+    if (this.padre === undefined)
+    {
+      peticion = {nid_persona: this.nid_persona, nid_padre: ''};
+    }
+    else 
+    {
+      peticion = {nid_persona: this.nid_persona, nid_padre: this.padre};
+    }
     return peticion;
+  }
+
+  obtenerEnlaceFicha()
+  {
+    return this.enlaceFicha + this.padre;
+  }
+
+  existePadre()
+  {
+    return this.padre !== undefined && this.padre !== null;
   }
 }

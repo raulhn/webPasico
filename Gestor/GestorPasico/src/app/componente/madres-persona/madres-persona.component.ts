@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { PersonasService } from 'src/app/servicios/personas.service';
+import { URL } from 'src/app/logica/constantes';
 
 @Component({
   selector: 'app-madres-persona',
@@ -18,6 +19,8 @@ export class MadresPersonaComponent {
 
    mensaje_error: string = "";
    mensaje_registro: string = "";
+
+   enlaceFicha: string = URL.URL_FRONT_END + "/ficha_persona/";
 
    constructor(private personaService: PersonasService)
    {
@@ -86,7 +89,25 @@ export class MadresPersonaComponent {
   construye_peticion() : any
   {
     var peticion: any;
-    peticion = {nid_persona: this.nid_persona, nid_madre: this.madre};
+    if(this.madre === undefined)
+    {
+      peticion = {nid_persona: this.nid_persona, nid_madre: ''};
+    }
+    else
+    {
+      peticion =  {nid_persona: this.nid_persona, nid_madre: this.madre};
+    }
+
     return peticion;
+  }
+
+  obtenerEnlaceFicha()
+  {
+    return this.enlaceFicha + this.madre;
+  }
+
+  existeMadre()
+  {
+    return this.madre !== undefined && this.madre !== null;
   }
 }

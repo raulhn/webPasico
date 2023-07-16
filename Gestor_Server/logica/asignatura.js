@@ -9,7 +9,7 @@ function registrar_asignatura(descripcion)
             conexion.dbConn.beginTransaction(
                 () =>
                 {
-                    conexion.dbConn.query("insert into " + constantes.ESQUEMA_BD + ".asignatura(descripcion) values(" + conexion.dbConn.escape(descripcion),
+                    conexion.dbConn.query("insert into " + constantes.ESQUEMA_BD + ".asignatura(descripcion) values(" + conexion.dbConn.escape(descripcion) + ')',
                         (error, results, fields) =>
                         {
                             if(error) {console.log(error); conexion.dbConn.rollback(); reject();}
@@ -56,7 +56,7 @@ function eliminar_asignatura(nid_asignatura)
             conexion.dbConn.beginTransaction(
                 () =>
                 {
-                    conexion.dbConn.query("delete from " + constantes.ESQUEMA_BD + ".asignatura where nid = " + conexion.dbConn.escape(nid_asignatura),
+                    conexion.dbConn.query("delete from " + constantes.ESQUEMA_BD + ".asignatura where nid = " + conexion.dbConn.escape(nid_asignatura) ,
                         (error, results, fields) =>
                         {
                             if (error) {console.log(error); conexion.dbConn.rollback(); reject();}

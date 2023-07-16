@@ -27,6 +27,7 @@ import { RegistroSocioComponent } from './componente/registro-socio/registro-soc
 import { SocioComponent } from './componente/socio/socio.component';
 import { ListaSociosComponent } from './componente/lista-socios/lista-socios.component';
 import { DataTablesModule } from 'angular-datatables';
+import { AsignaturasComponent } from './componente/asignaturas/asignaturas.component';
 
 
 
@@ -46,7 +47,8 @@ import { DataTablesModule } from 'angular-datatables';
     MadresPersonaComponent,
     RegistroSocioComponent,
     SocioComponent,
-    ListaSociosComponent
+    ListaSociosComponent,
+    AsignaturasComponent
   ],
   imports: [
     FormsModule,
