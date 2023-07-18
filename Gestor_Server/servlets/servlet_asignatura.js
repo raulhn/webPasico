@@ -99,7 +99,7 @@ function obtener_profesores_asignatura(req, res)
             let nid_asignatura = req.params.nid_asignatura;
 
             resultado_profesores = await asignatura.obtener_profesores_asignatura(nid_asignatura);
-            res.status(200).send({error: false, profesores, resultado_profesores});
+            res.status(200).send({error: false, profesores: resultado_profesores});
         }
     )
 }
