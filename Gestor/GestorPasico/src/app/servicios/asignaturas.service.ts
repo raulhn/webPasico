@@ -32,4 +32,17 @@ export class AsignaturasService {
     let API_URL = this.url + '/obtener_profesores_asignatura/' + nid_asignatura;
     return this.http.get(API_URL, {withCredentials:true})
   }
+
+  registrar_profesor(nid_persona: string, nid_asignatura: string)
+  {
+    let API_URL = this.url + '/add_profesor';
+    return this.http.post(API_URL, {nid_persona: nid_persona, nid_asignatura: nid_asignatura}, {withCredentials: true})
+  }
+
+  obtener_profesores()
+  {
+    let API_URL = this.url + '/obtener_profesores';
+    return this.http.get(API_URL, {withCredentials: true})
+  }
+
 }

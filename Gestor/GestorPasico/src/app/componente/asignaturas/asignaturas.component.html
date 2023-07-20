@@ -2,37 +2,32 @@
 <button class="form-control" (click) = "addAsignatura()"> Añadir Asignatura </button>
 <strong>{{ message }}</strong>
 <div  *ngIf="bCargado">
-<table datatable [dtOptions]="dtOptions" class="row-border hover">
-  <thead>
-    <tr>
-        <th>
-            Asignatura
-        </th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr [ngClass]="{'selected': asignatura_actual.nid === asignatura_seleccionada.nid}" *ngFor="let asignatura_actual of asignaturas" (click) ="click_asignatura(asignatura_actual)">
-       <td>
-         {{asignatura_actual['descripcion']}}
-       </td> 
-    </tr>
-  </tbody>
+<table datatable [dtOptions]="dtOptions" id="tabla_asignaturas" class="row-border hover">
 </table>
 </div>
 
 
 <button class="form-control" (click) = "addProfesor()"> Añadir Profesor </button>
 
+<div *ngIf="profesores.length > 0">
+  <table datatable [dtOptions]="dtOptions_profesor" id="tabla_profesor" class="row-border hover"></table>
+</div>
+
+
+
 <div style="display: none;"> <!--YOU NEED TO PUT THE COMPONENT INSIDE A HIDDEN DIV-->
 
     <div #instancia_asignatura>
-        <input type="text" id="descripcion_asignatura" class="swal2-input" placeholder="" disabled [value]="asignatura_seleccionada.descripcion"/>
-        <ng-select  [items]="lista_personas"
-        bindLabel="etiqueta" 
-        bindValue="nid"
-        [(ngModel)]="profesor_nuevo"
-        [compareWith]="comparePersona_profesor">
-        </ng-select>
+        <div style="min-height: 500px;">
+          <input type="text" id="descripcion_asignatura" class="swal2-input" placeholder="" disabled [value]="asignatura_seleccionada.descripcion"/>
+          <ng-select  [items]="lista_personas"
+          bindLabel="etiqueta" 
+          bindValue="nid"
+          [(ngModel)]="profesor_nuevo"
+          [compareWith]="comparePersona_profesor">
+          </ng-select>
+        </div>
     </div>
 </div>
+
 

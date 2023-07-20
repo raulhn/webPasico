@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { AsignaturasService } from 'src/app/servicios/asignaturas.service';
 import { PersonasService } from 'src/app/servicios/personas.service';
@@ -9,9 +9,11 @@ import Swal from 'sweetalert2';
   templateUrl: './asignaturas.component.html',
   styleUrls: ['./asignaturas.component.css']
 })
-export class AsignaturasComponent implements OnInit{
+export class AsignaturasComponent implements OnInit {
 
   dtOptions: DataTables.Settings = {};
+  dtOptions_profesor: DataTables.Settings = {};
+
 
   message: string ="";
 
@@ -31,8 +33,38 @@ export class AsignaturasComponent implements OnInit{
   }
 
   bCargado: boolean = false;
+  bCargadoProfesor: boolean = false;
+
   asignaturas: any[] = [];
   profesores: any[] = [];
+
+  refrescar_asignaturas = 
+  {
+    next: (respuesta: any) =>
+    {
+      var datatable = $('#tabla_asignaturas').DataTable();
+      datatable.destroy();
+      this.asignaturas = respuesta.asignaturas;
+
+      this.dtOptions = {
+        data: this.asignaturas,
+        columns:
+        [
+          {title: 'Asignatura',
+            data: 'descripcion'}],
+        rowCallback: (row: Node, data: any[] | Object, index: number) => {
+          $('td', row).off('click');
+          $('td', row).on('click', () => {
+            this.click_asignatura(data);
+          });
+          return row;
+        }
+      };
+
+      $('#tabla_asignaturas').DataTable(this.dtOptions);
+
+    }
+  }
 
   recuperar_asignaturas =
   {
@@ -42,59 +74,75 @@ export class AsignaturasComponent implements OnInit{
       console.log(this.asignaturas)
       console.log(this.asignaturas[0])
       this.bCargado = true;
+
+      this.dtOptions = {
+        data: this.asignaturas,
+        columns:
+        [
+          {title: 'Asignatura',
+            data: 'descripcion'}],
+        rowCallback: (row: Node, data: any[] | Object, index: number) => {
+          $('td', row).off('click');
+          $('td', row).on('click', () => {
+            this.click_asignatura(data);
+          });
+          return row;
+        }
+      };
     }
   }
-
 
   obtener_profesores =
   {
     next: (respuesta:any) =>
     {
       this.profesores = respuesta.profesores;
-      console.log(this.profesores)
-    }
+      var datatable = $('#tabla_profesor').DataTable();
+      datatable.destroy();
+
+      this.dtOptions_profesor = {
+          data: this.profesores,
+          columns:
+          [
+            {title: 'Nombre',
+              data: 'nombre'},
+              {title: 'Primer apellido',
+              data: 'primer_apellido'},
+              {title: 'Segundo apellido',
+              data: 'segundo_apellido'}
+          ]
+      }
+
+      $('#tabla_profesor').DataTable(this.dtOptions_profesor);
   }
+}
 
   click_asignatura(asignatura_marcada: any)
   {
     this.asignatura_seleccionada = asignatura_marcada;
     console.log(this.asignatura_seleccionada)
-    this.asignaturasServices.obtener_profesores_asingatura(this.asignatura_seleccionada.nid).subscribe();
+    this.asignaturasServices.obtener_profesores_asingatura(this.asignatura_seleccionada.nid).subscribe(this.obtener_profesores);
   }
 
 
   ngOnInit(): void {
     this.personaService.obtener_lista_personas().subscribe(this.obtener_personas);
-
-      this.dtOptions = {
-        ajax: 'data/data.json',
-        columns: [{
-          title: 'ID',
-          data: 'id'
-        }, {
-          title: 'First name',
-          data: 'firstName'
-        }, {
-          title: 'Last name',
-          data: 'lastName'
-        }],
-        rowCallback: (row: Node, data: any[] | Object, index: number) => {
-          const self = this;
-          // Unbind first in order to avoid any duplicate handler
-          // (see https://github.com/l-lin/angular-datatables/issues/87)
-          // Note: In newer jQuery v3 versions, `unbind` and `bind` are 
-          // deprecated in favor of `off` and `on`
-          $('td', row).off('click');
-          $('td', row).on('click', () => {
-            self.click_asignatura(data);
-          });
-          return row;
-        }
-      };
-
-    this.asignaturasServices.obtener_asignaturas().subscribe(
-      this.recuperar_asignaturas
-    )
+    this.asignaturasServices.obtener_asignaturas().subscribe(this.recuperar_asignaturas);
+    
+    // Inicializa el dataTable de los profesores vacío //
+    this.dtOptions_profesor =
+      {
+        data: [],
+        columns: [
+          {
+          title: 'Nombre',
+          data: 'nombre'},
+          {title: 'Primer apellido',
+          data: 'primer_apellido'},
+          {title: 'Segundo apellido',
+          data: 'segundo_apellido'}
+      ]
+      }
   }
 
   nueva_asignatura: string = "";
@@ -108,6 +156,7 @@ export class AsignaturasComponent implements OnInit{
         title: 'Registro correcto',
         text: 'Se ha registrado correctamente'
       })
+      this.asignaturasServices.obtener_asignaturas().subscribe(this.refrescar_asignaturas);
     },
     error: (respuesta: any) =>
     {
@@ -123,7 +172,6 @@ export class AsignaturasComponent implements OnInit{
   {
     next: (respuesta: any) =>
     {
-
      this.lista_personas = respuesta.personas;
     }
   }
@@ -133,12 +181,12 @@ export class AsignaturasComponent implements OnInit{
     //https://sweetalert2.github.io/
     Swal.fire({
       title: 'Crear asignatura',
-      html : `<input type="text" id="descripcion_asignatura" class="swal2-input" placeholder="Username">
+      html : `<input type="text" id="nombre_asignatura" class="swal2-input" placeholder="Username">
              `,
       confirmButtonText: 'Crear',
       showCancelButton: true,
       preConfirm: () => {
-        this.nueva_asignatura = (<HTMLInputElement>document.getElementById("descripcion_asignatura")).value;
+        this.nueva_asignatura = (<HTMLInputElement>document.getElementById("nombre_asignatura")).value;
       }
     }).then(
       (results) =>
@@ -150,6 +198,29 @@ export class AsignaturasComponent implements OnInit{
       }
     )
    }
+
+
+   add_profesor =
+   {
+    next: (respuesta: any) =>
+    {
+      Swal.fire({
+        icon: 'success',
+        title: 'Profesor registrado',
+        text: 'Se ha registrado el profesor',
+      });
+      this.asignaturasServices.obtener_profesores_asingatura(this.asignatura_seleccionada.nid).subscribe(this.obtener_profesores);
+    },
+    error: (respuesta: any) =>
+    {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Se ha producido un error al registrar el profesor',
+      })
+    }
+   }
+
 
    addProfesor()
    {
@@ -176,7 +247,7 @@ export class AsignaturasComponent implements OnInit{
             {
             if(results.isConfirmed)
             {
-              this.asignaturasServices.registrar_asignatura(this.nueva_asignatura).subscribe(this.registro);
+              this.asignaturasServices.registrar_profesor(this.profesor_nuevo, this.asignatura_seleccionada.nid).subscribe(this.add_profesor);
             }
           }
         )
