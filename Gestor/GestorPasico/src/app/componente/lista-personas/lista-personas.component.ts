@@ -17,7 +17,7 @@ export class ListaPersonasComponent {
   enlaceFicha: string = URL.URL_FRONT_END + "/ficha_persona/";
   bCargado: boolean = false;
 
-  dtOptions: DataTables.Settings = {}
+  dtOptions: any = {}
  
 
 
@@ -25,7 +25,9 @@ export class ListaPersonasComponent {
   {
     this.dtOptions =
     {
-      language: DataTablesOptions.spanish_datatables
+      language: DataTablesOptions.spanish_datatables,
+      dom: 'Bfrtip',
+      buttons: ['copy', 'csv', 'excel', 'print'],
     }
   }
 

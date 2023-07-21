@@ -11,7 +11,7 @@ import Swal from 'sweetalert2';
 })
 export class AsignaturasComponent implements OnInit {
 
-  dtOptions: DataTables.Settings = {};
+  dtOptions: any = {};
   dtOptions_profesor: DataTables.Settings = {};
 
 
@@ -48,10 +48,13 @@ export class AsignaturasComponent implements OnInit {
 
       this.dtOptions = {
         data: this.asignaturas,
+        dom: 'Bfrtip',
+        buttons: ['copy', 'csv', 'excel', 'print'],
         columns:
         [
           {title: 'Asignatura',
-            data: 'descripcion'}],
+            data: 'descripcion'
+          }],
         rowCallback: (row: Node, data: any[] | Object, index: number) => {
           $('td', row).off('click');
           $('td', row).on('click', () => {
@@ -62,7 +65,7 @@ export class AsignaturasComponent implements OnInit {
       };
 
       $('#tabla_asignaturas').DataTable(this.dtOptions);
-
+      $('#tabla_asignaturas button').addClass('btn btn-primary mb-3 ');
     }
   }
 
@@ -77,6 +80,8 @@ export class AsignaturasComponent implements OnInit {
 
       this.dtOptions = {
         data: this.asignaturas,
+        dom: 'Bfrtip',
+        buttons: ['copy', 'csv', 'excel', 'print'],
         columns:
         [
           {title: 'Asignatura',
@@ -91,6 +96,7 @@ export class AsignaturasComponent implements OnInit {
           return row;
         }
       };
+      $('#tabla_asignaturas button').addClass('btn btn-primary mb-3 ');
     }
   }
 
@@ -191,7 +197,7 @@ export class AsignaturasComponent implements OnInit {
         this.nueva_asignatura = (<HTMLInputElement>document.getElementById("nombre_asignatura")).value;
       }
     }).then(
-      (results) =>
+      (results: any) =>
         {
         if(results.isConfirmed)
         {
@@ -245,7 +251,7 @@ export class AsignaturasComponent implements OnInit {
             this.nueva_asignatura = (<HTMLInputElement>document.getElementById("descripcion_asignatura")).value;
           }
         }).then(
-          (results) =>
+          (results: any) =>
             {
             if(results.isConfirmed)
             {
