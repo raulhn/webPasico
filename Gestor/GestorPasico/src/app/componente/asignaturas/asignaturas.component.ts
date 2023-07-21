@@ -85,6 +85,8 @@ export class AsignaturasComponent implements OnInit {
           $('td', row).off('click');
           $('td', row).on('click', () => {
             this.click_asignatura(data);
+            $('#tabla_asignaturas tr').removeClass('selected')
+            $(row).addClass('selected');
           });
           return row;
         }

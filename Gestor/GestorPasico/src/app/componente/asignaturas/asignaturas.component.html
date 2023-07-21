@@ -1,24 +1,35 @@
 
-<button class="form-control" (click) = "addAsignatura()"> Añadir Asignatura </button>
+<app-menu class=""></app-menu>
 <strong>{{ message }}</strong>
 <div  *ngIf="bCargado">
+  <div class="row form-row pt-3">
+    <div class="col">
+      <button class="btn btn-primary mb-3 " (click) = "addAsignatura()"> Añadir Asignatura </button>
+    </div>
+  </div>
+  
 <table datatable [dtOptions]="dtOptions" id="tabla_asignaturas" class="row-border hover">
 </table>
 </div>
 
 
-<button class="form-control" (click) = "addProfesor()"> Añadir Profesor </button>
-
+<div class="row form-row pt-3">
+  <div class="col">
+    <button class="btn btn-primary mb-3 "  (click) = "addProfesor()"> Añadir Profesor </button>
+  </div>
+</div>
 <div *ngIf="profesores.length > 0">
   <table datatable [dtOptions]="dtOptions_profesor" id="tabla_profesor" class="row-border hover"></table>
 </div>
 
 
 
+
+
 <div style="display: none;"> <!--YOU NEED TO PUT THE COMPONENT INSIDE A HIDDEN DIV-->
 
     <div #instancia_asignatura>
-        <div style="min-height: 500px;">
+        <div style="min-height: 300px;">
           <input type="text" id="descripcion_asignatura" class="swal2-input" placeholder="" disabled [value]="asignatura_seleccionada.descripcion"/>
           <ng-select  [items]="lista_personas"
           bindLabel="etiqueta" 
@@ -29,5 +40,6 @@
         </div>
     </div>
 </div>
+
 
 
