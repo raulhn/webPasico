@@ -81,7 +81,7 @@ export class AsignaturasComponent implements OnInit {
       this.dtOptions = {
         data: this.asignaturas,
         dom: 'Bfrtip',
-        buttons: ['copy', 'csv', 'excel', 'print'],
+        buttons: ['copy', 'csv', 'excel', 'print'], // https://therichpost.com/how-to-implement-datatable-with-print-excel-csv-buttons-in-angular-10/
         columns:
         [
           {title: 'Asignatura',
