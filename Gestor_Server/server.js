@@ -13,6 +13,8 @@ var servlet_persona = require('./servlets/servlet_persona.js');
 var servlet_musico = require('./servlets/servlet_musico.js');
 var servlet_socio = require('./servlets/servlet_socios.js');
 var servlet_asignatura = require('./servlets/servlet_asignatura.js');
+var servlet_curso = require('./servlets/servlet_curso.js');
+var servlet_matricula = require('./servlets/servlet_matricula.js');
 
 var fs = require('fs');
 
@@ -77,6 +79,14 @@ app.post('/add_profesor', servlet_asignatura.add_profesor);
 app.post('/eliminar_profesor', servlet_asignatura.eliminar_profesor);
 app.get('/obtener_profesores', servlet_asignatura.obtener_profesores);
 app.get('/obtener_profesores_asignatura/:nid_asignatura', servlet_asignatura.obtener_profesores_asignatura);
+
+/** Cursos **/
+app.post('/registrar_curso', servlet_curso.registrar_curso);
+app.get('/obtener_cursos', servlet_curso.obtener_cursos);
+app.post('/eliminar_curso', servlet_curso.eliminar_curso);
+
+/** Matriculas **/
+app.post('/registrar_matricula', servlet_matricula.registrar_matricula);
 
 https.createServer({
     key: fs.readFileSync('apache.key'),

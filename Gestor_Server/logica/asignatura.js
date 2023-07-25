@@ -69,6 +69,22 @@ function eliminar_asignatura(nid_asignatura)
     )
 }
 
+function existe_asignatura(nid_asignatura)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.query('select count(*) cont from ' + constantes.ESQUEMA_BD + '.asignatura where nid = ' + conexion.dbConn.escape(nid_asignatura),
+                (error, results, fields) =>
+                {
+                    if(error) {console.log(error); reject();}
+                    else {resolve(results(results[0]['cont']))}
+                }
+            )
+        }
+    )
+}
+
 function obtener_asignaturas()
 {
     return new Promise(
@@ -168,6 +184,7 @@ function obtener_profesores_asignatura(nid_asignatura)
 module.exports.registrar_asignatura = registrar_asignatura;
 module.exports.actualizar_asignatura = actualizar_asignatura;
 module.exports.eliminar_asignatura = eliminar_asignatura;
+module.exports.existe_asignatura = existe_asignatura;
 module.exports.obtener_asignaturas = obtener_asignaturas;
 
 module.exports.add_profesor = add_profesor;

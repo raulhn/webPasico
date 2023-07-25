@@ -28,6 +28,8 @@ import { SocioComponent } from './componente/socio/socio.component';
 import { ListaSociosComponent } from './componente/lista-socios/lista-socios.component';
 import { DataTablesModule } from 'angular-datatables';
 import { AsignaturasComponent } from './componente/asignaturas/asignaturas.component';
+import { RegistroMatriculaComponent } from './componente/registro-matricula/registro-matricula.component';
+import { RegistroCursoComponent } from './componente/registro-curso/registro-curso.component';
 
 
 
@@ -48,7 +50,9 @@ import { AsignaturasComponent } from './componente/asignaturas/asignaturas.compo
     RegistroSocioComponent,
     SocioComponent,
     ListaSociosComponent,
-    AsignaturasComponent
+    AsignaturasComponent,
+    RegistroMatriculaComponent,
+    RegistroCursoComponent
   ],
   imports: [
     FormsModule,

@@ -27,7 +27,7 @@ export class ListaPersonasComponent {
     {
       language: DataTablesOptions.spanish_datatables,
       dom: 'Bfrtip',
-      buttons: ['copy', 'csv', 'excel', 'print'],
+      buttons: [{extend: 'excel', text: 'Generar Excel', className: 'btn btn-dark mb-3'}]
     }
   }
 

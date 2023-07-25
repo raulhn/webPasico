@@ -13,7 +13,7 @@ export class ListaSociosComponent {
   listaPersonas:Persona[] = [];
   enlaceFicha: string = URL.URL_FRONT_END + "/ficha_persona/";
 
-  dtOptions: DataTables.Settings = {}
+  dtOptions: any = {}
  
   bCargado: boolean = false;
 
@@ -21,7 +21,9 @@ export class ListaSociosComponent {
   {
     this.dtOptions =
     {
-      language: DataTablesOptions.spanish_datatables
+      language: DataTablesOptions.spanish_datatables,
+      dom: 'Bfrtip',
+      buttons: [{extend: 'excel', text: 'Generar Excel', className: 'btn btn-dark mb-3'}]
     }
   }
 

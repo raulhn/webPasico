@@ -45,4 +45,8 @@ export class AsignaturasService {
     return this.http.get(API_URL, {withCredentials: true})
   }
 
+  obtener_cursos()
+  {
+    let API_URL = this.url + '/obtener_cursos'
+  }
 }

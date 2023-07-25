@@ -10,6 +10,8 @@ import { FichaPersonaComponent } from './componente/ficha-persona/ficha-persona.
 import { ListaSociosComponent } from './componente/lista-socios/lista-socios.component';
 import { RegistroSocioComponent } from './componente/registro-socio/registro-socio.component';
 import { AsignaturasComponent } from './componente/asignaturas/asignaturas.component';
+import { RegistroMatriculaComponent } from './componente/registro-matricula/registro-matricula.component';
+import { RegistroCursoComponent } from './componente/registro-curso/registro-curso.component';
 
 
 const routes: Routes = [
@@ -52,6 +54,14 @@ const routes: Routes = [
   {
     path: 'asignaturas',
     component: AsignaturasComponent
+  },
+  {
+    path: 'matricula',
+    component: RegistroMatriculaComponent
+  },
+  {
+    path: 'cursos',
+    component: RegistroCursoComponent
   }
 
 ];

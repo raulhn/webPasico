@@ -1,0 +1,6 @@
+<button (click) = "addCurso()">Añadir Curso</button>
+
+<div *ngIf="bCargado">
+    <table datatable [dtOptions]="dtOptions" id="tabla_cursos" class="row-border hover">
+    </table>
+</div>
