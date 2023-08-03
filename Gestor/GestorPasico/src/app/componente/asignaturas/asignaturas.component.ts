@@ -14,14 +14,12 @@ export class AsignaturasComponent implements OnInit {
   dtOptions: any = {};
   dtOptions_profesor: DataTables.Settings = {};
 
-
   message: string ="";
-
   asignatura_seleccionada: any = "";
-
   lista_personas: any[] = [];
-
   profesor_nuevo: string = "";
+
+  bSelecionada_asignatura: boolean = false;
 
 
   @ViewChild('instancia_asignatura') instancia_asignatura!: ElementRef;
@@ -55,12 +53,14 @@ export class AsignaturasComponent implements OnInit {
           {title: 'Asignatura',
             data: 'descripcion'
           }],
-        rowCallback: (row: Node, data: any[] | Object, index: number) => {
-          $('td', row).off('click');
-          $('td', row).on('click', () => {
-            this.click_asignatura(data);
-          });
-          return row;
+          rowCallback: (row: Node, data: any[] | Object, index: number) => {
+            $('td', row).off('click');
+            $('td', row).on('click', () => {
+              this.click_asignatura(data);
+              $('#tabla_asignaturas tr').removeClass('selected')
+              $(row).addClass('selected');
+            });
+            return row;
         }
       };
 
@@ -81,7 +81,8 @@ export class AsignaturasComponent implements OnInit {
       this.dtOptions = {
         data: this.asignaturas,
         dom: 'Bfrtip',
-        buttons: [{extend: 'excel', text: 'Generar Excel', className: 'btn btn-dark mb-3'}], // https://therichpost.com/how-to-implement-datatable-with-print-excel-csv-buttons-in-angular-10/
+        buttons: [{extend: 'excel', text: 'Generar Excel', className: 'btn btn-dark mb-3'}
+      ], // https://therichpost.com/how-to-implement-datatable-with-print-excel-csv-buttons-in-angular-10/
         columns:
         [
           {title: 'Asignatura',
@@ -128,8 +129,8 @@ export class AsignaturasComponent implements OnInit {
   click_asignatura(asignatura_marcada: any)
   {
     this.asignatura_seleccionada = asignatura_marcada;
-    console.log(this.asignatura_seleccionada)
     this.asignaturasServices.obtener_profesores_asingatura(this.asignatura_seleccionada.nid).subscribe(this.obtener_profesores);
+    this.bSelecionada_asignatura = true;
   }
 
 
@@ -148,7 +149,10 @@ export class AsignaturasComponent implements OnInit {
           {title: 'Primer apellido',
           data: 'primer_apellido'},
           {title: 'Segundo apellido',
-          data: 'segundo_apellido'}
+          data: 'segundo_apellido'},
+          {
+            defaultContent: "<button class='showIdButton' (href)=>Ficha asignatura</button>"
+          }
       ]
       }
   }
@@ -182,6 +186,11 @@ export class AsignaturasComponent implements OnInit {
     {
      this.lista_personas = respuesta.personas;
     }
+  }
+
+  url_ficha_asignatura()
+  {
+    return '/ficha_asignatura/' + this.asignatura_seleccionada.nid;
   }
 
   addAsignatura()

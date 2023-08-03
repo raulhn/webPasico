@@ -52,6 +52,19 @@ function obtener_asignaturas(req, res)
     )
 }
 
+function obtener_asignatura(req, res)
+{
+    comun.comprobaciones(req, res,
+        async () =>
+        {
+            let nid_asignatura = req.params.nid_asignatura;
+
+            resultado = await asignatura.obtener_asignatura(nid_asignatura);
+            res.status(200).send({error:false, asignatura: resultado})
+        }
+    )
+}
+
 function add_profesor(req, res)
 {
     comun.comprobaciones(req, res,
@@ -108,6 +121,7 @@ module.exports.registrar_asignatura = registrar_asignatura;
 module.exports.actualizar_asignatura = actualizar_asignatura;
 module.exports.eliminar_asignatura = eliminar_asignatura;
 module.exports.obtener_asignaturas = obtener_asignaturas;
+module.exports.obtener_asignatura = obtener_asignatura;
 
 module.exports.add_profesor = add_profesor;
 module.exports.eliminar_profesor = eliminar_profesor;

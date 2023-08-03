@@ -56,7 +56,7 @@ const routes: Routes = [
     component: AsignaturasComponent
   },
   {
-    path: 'matricula',
+    path: 'ficha_asignatura/:nid_asignatura',
     component: RegistroMatriculaComponent
   },
   {

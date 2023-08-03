@@ -63,9 +63,23 @@ function obtener_matriculas(req, res)
     )
 }
 
+function obtener_alumnos_asignaturas(req, res)
+{
+    comun.comprobaciones(req, res,
+        async () =>
+        {
+            let nid_curso = req.params.nid_curso;
+            let nid_asignatura = req.params.nid_asignatura;
 
+            resultados = await matricula.obtener_alumnos_asignaturas(nid_curso, nid_asignatura);
+
+            res.status(200).send({error: false, alumnos: resultados})
+        }
+    )
+}
 
 
 module.exports.registrar_matricula = registrar_matricula;
 module.exports.actualizar_matricula = actualizar_matricula;
 module.exports.obtener_matriculas = obtener_matriculas;
+module.exports.obtener_alumnos_asignaturas = obtener_alumnos_asignaturas;

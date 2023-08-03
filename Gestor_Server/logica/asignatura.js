@@ -78,7 +78,7 @@ function existe_asignatura(nid_asignatura)
                 (error, results, fields) =>
                 {
                     if(error) {console.log(error); reject();}
-                    else {resolve(results(results[0]['cont']))}
+                    else {resolve(results[0]['cont'])}
                 }
             )
         }
@@ -95,6 +95,23 @@ function obtener_asignaturas()
                 {
                     if(error) {console.log(error); reject();}
                     else {resolve(results);}
+                }
+            )
+        }
+    )
+}
+
+function obtener_asignatura(nid_asignatura)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.query("select * from " + constantes.ESQUEMA_BD + '.asignatura where nid = ' + conexion.dbConn.escape(nid_asignatura),
+                (error, results, fields) =>
+                {
+                    if(error) {console.log(error); reject();}
+                    else if(results.length < 1) {reject()}
+                    else {resolve(results[0])}
                 }
             )
         }
@@ -186,6 +203,7 @@ module.exports.actualizar_asignatura = actualizar_asignatura;
 module.exports.eliminar_asignatura = eliminar_asignatura;
 module.exports.existe_asignatura = existe_asignatura;
 module.exports.obtener_asignaturas = obtener_asignaturas;
+module.exports.obtener_asignatura = obtener_asignatura;
 
 module.exports.add_profesor = add_profesor;
 module.exports.eliminar_profesor = eliminar_profesor;

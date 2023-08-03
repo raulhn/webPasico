@@ -50,7 +50,7 @@ function registrar_matricula(nid_persona, nid_curso)
                     () =>
                     {
                         conexion.dbConn.query('insert into ' + constantes.ESQUEMA_BD + '.matricula(nid_persona, nid_curso) values('
-                                + conexion.dbConn.escape(nid_persona) + ', ' + conexion.dbConn.escape(nid_curso),
+                                + conexion.dbConn.escape(nid_persona) + ', ' + conexion.dbConn.escape(nid_curso) + ')',
                             (error, results, fields) =>
                             {
                                 if(error) {console.log(error); conexion.dbConn.rollback(); reject()}
@@ -102,6 +102,25 @@ function obtener_matriculas(nid_persona)
     )
 }
 
+function obtener_alumnos_asignaturas(nid_curso, nid_asignatura)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.query('select  p.* from ' + constantes.ESQUEMA_BD + '.matricula_asignatura ma, '+ constantes.ESQUEMA_BD +
+                   '.persona p, ' + constantes.ESQUEMA_BD +'.matricula m where p.nid = m.nid_persona and ma.nid_matricula = m.nid and m.nid_curso = ' + 
+                    conexion.dbConn.escape(nid_curso) + ' and ma.nid_asignatura = ' + conexion.dbConn.escape(nid_asignatura),
+                (error, results, fields) =>
+                {
+                    if(error) {console.log(error); reject();}
+                    else {resolve(results)}
+                }   
+            )
+        }
+    )
+}
+
+
 function add_asignatura(nid_matricula, nid_asignatura)
 {
     return new Promise(
@@ -147,12 +166,15 @@ function eliminar_asignatura(nid_matricula, nid_asignatura)
     )
 }
 
+
+
 module.exports.existe_matricula = existe_matricula;
 module.exports.obtener_nid_matricula = obtener_nid_matricula;
 
 module.exports.registrar_matricula = registrar_matricula;
 module.exports.actualizar_matricula = actualizar_matricula;
 module.exports.obtener_matriculas = obtener_matriculas;
+module.exports.obtener_alumnos_asignaturas = obtener_alumnos_asignaturas;
 
 module.exports.add_asignatura = add_asignatura;
 module.exports.eliminar_asignatura = eliminar_asignatura;

@@ -74,6 +74,7 @@ app.post('/registrar_asignatura', servlet_asignatura.registrar_asignatura);
 app.post('/actualizar_asignatura', servlet_asignatura.actualizar_asignatura);
 app.post('/eliminar_asignatura', servlet_asignatura.eliminar_asignatura);
 app.get('/obtener_asignaturas', servlet_asignatura.obtener_asignaturas);
+app.get('/obtener_asignatura/:nid_asignatura', servlet_asignatura.obtener_asignatura)
 
 app.post('/add_profesor', servlet_asignatura.add_profesor);
 app.post('/eliminar_profesor', servlet_asignatura.eliminar_profesor);
@@ -87,6 +88,7 @@ app.post('/eliminar_curso', servlet_curso.eliminar_curso);
 
 /** Matriculas **/
 app.post('/registrar_matricula', servlet_matricula.registrar_matricula);
+app.get('/obtener_alumnos_asignaturas/:nid_curso/:nid_asignatura', servlet_matricula.obtener_alumnos_asignaturas)
 
 https.createServer({
     key: fs.readFileSync('apache.key'),

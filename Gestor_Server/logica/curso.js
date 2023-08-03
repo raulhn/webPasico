@@ -32,7 +32,7 @@ function actualizar_curso(nid_curso, descripcion)
                 () =>
                 {
                     conexion.dbConn.query('update ' + constantes.ESQUEMA_BD + '.curso set descripcion = ' + 
-                            conexion.dbConn.escape(descripcion) + ' where nid = ' + conexion.dbConn.escape(nid_curso),
+                            conexion.dbConn.escape(descripcion) + ' where nid = ' + conexion.dbConn.escape(nid_curso) ,
                         (error, results, fields) =>
                         {   
                             if(error) {console.log(error); conexion.dbConn.rollback(); reject();}
@@ -50,7 +50,7 @@ function obtener_cursos()
     return new Promise(
         (resolve, reject) =>
         {
-            conexion.dbConn.query('select * from ' + constantes.ESQUEMA_BD + '.curso',
+            conexion.dbConn.query('select * from ' + constantes.ESQUEMA_BD + '.curso order by descripcion desc',
                 (error, results, fields) =>
                 {
                     if(error) {console.log(error); reject()}

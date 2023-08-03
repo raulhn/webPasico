@@ -1,5 +1,6 @@
 
 <app-menu class=""></app-menu>
+<div class="container pt-4">
 <strong>{{ message }}</strong>
 <div  *ngIf="bCargado">
   <div class="row form-row pt-3">
@@ -7,9 +8,14 @@
       <button class="btn btn-primary mb-3 " (click) = "addAsignatura()"> Añadir Asignatura </button>
     </div>
   </div>
-  
+
+
+
 <table datatable [dtOptions]="dtOptions" id="tabla_asignaturas" class="row-border hover">
 </table>
+<div *ngIf="bSelecionada_asignatura">
+  <a [href]="url_ficha_asignatura()"> <button class="btn btn-primary"> Ver Ficha</button></a>
+</div>
 </div>
 
 
@@ -41,5 +47,5 @@
     </div>
 </div>
 
-
+</div>
 

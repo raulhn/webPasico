@@ -15,4 +15,10 @@ export class MatriculasService {
     let API_URL = this.url + '/registrar_matricula';
     return this.http.post(API_URL, {nid_persona: nid_persona, nid_curso: nid_curso, nid_asignatura: nid_asignatura}, { withCredentials:true});
   }
+
+  obtener_alumnos_asignaturas(nid_curso: string, nid_asignatura: string)
+  {
+    let API_URL = this.url + '/obtener_alumnos_asignaturas/' + nid_curso + '/' + nid_asignatura;
+    return this.http.get(API_URL, {withCredentials: true});
+  }
 }

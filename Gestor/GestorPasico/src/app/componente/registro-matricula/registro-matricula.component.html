@@ -1,27 +1,45 @@
-<form  ngNativeValidate class="form-control">
-    <legend>Alumno</legend>
-    <div class="row form-row">
-        <div class="col">
-            <ng-select [items]="lista_personas"
-                    bindLabel="etiqueta" 
-                    bindValue="nid"
-                    [(ngModel)]="alumno"
-                    [compareWith]="comparePersona_alumno">
+<app-menu class=""></app-menu>
+<div class="container pt-4">
+    <h1>{{asignatura.descripcion}}</h1>
+    <div *ngIf="bCargadocompleto">
+    <form  ngNativeValidate class="form-control">
+        
+        <legend>Curso</legend>
+        <div *ngIf="bCargado_cursos" class="row form-row">
+            <div class="col">
+                <ng-select [items]="cursos"
+                        bindLabel="descripcion" 
+                        bindValue="clave_curso"
+                        [(ngModel)]="curso"
+                        [compareWith]="compareCursos"
+                        (change)="onChangeCurso($event)">
+                </ng-select>
+            </div>
+        </div>
+
+        <button class="btn btn-primary mb-3 " (click)="add_alumno()"> Registrar alumno</button>
+    </form>
+    </div>
+
+
+    <div style="display: none;"> <!--YOU NEED TO PUT THE COMPONENT INSIDE A HIDDEN DIV-->
+
+        <div #instancia_alumno>
+            <div style="min-height: 300px;">
+            <ng-select  [items]="lista_personas"
+            bindLabel="etiqueta" 
+            bindValue="clave_persona"
+            [(ngModel)]="alumno"
+            [compareWith]="comparePersona_alumno">
             </ng-select>
+            </div>
         </div>
     </div>
 
-    <legend>Curso</legend>
-    <div class="row form-row">
-        <div class="col">
-            <ng-select [items]="cursos"
-                    bindLabel="descripcion" 
-                    bindValue="nid"
-                    [(ngModel)]="curso"
-                    [compareWith]="compareCursos">
-            </ng-select>
-        </div>
-    </div>
 
-    <button (click) = "registrar()"> Registrar </button>
-</form>
+    <div *ngIf="bCargado">
+        <table datatable [dtOptions]="dtOptions" id="tabla_alumnos" class="table">
+        
+        </table>
+    </div>
+</div>
