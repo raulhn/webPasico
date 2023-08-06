@@ -12,6 +12,7 @@ import { RegistroSocioComponent } from './componente/registro-socio/registro-soc
 import { AsignaturasComponent } from './componente/asignaturas/asignaturas.component';
 import { RegistroMatriculaComponent } from './componente/registro-matricula/registro-matricula.component';
 import { RegistroCursoComponent } from './componente/registro-curso/registro-curso.component';
+import { FichaMatriculaComponent } from './componente/ficha-matricula/ficha-matricula.component';
 
 
 const routes: Routes = [
@@ -62,6 +63,10 @@ const routes: Routes = [
   {
     path: 'cursos',
     component: RegistroCursoComponent
+  },
+  {
+    path: 'ficha_matricula/:nid_matricula',
+    component: FichaMatriculaComponent
   }
 
 ];

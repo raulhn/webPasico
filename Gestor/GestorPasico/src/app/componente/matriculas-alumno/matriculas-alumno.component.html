@@ -1,0 +1,12 @@
+<div *ngIf="bCargado">
+  <div class="card" *ngFor="let matricula of matriculas">
+    <div class="row">
+      <div class="col">
+        {{matricula.descripcion}}
+      </div>
+      <div class="col">
+        <a [href]="obtener_url(matricula.nid)"> <button class="btn btn-primary"> Ver Ficha</button></a>
+      </div>
+    </div>
+  </div>
+</div>

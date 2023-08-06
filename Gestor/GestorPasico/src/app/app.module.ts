@@ -30,6 +30,8 @@ import { DataTablesModule } from 'angular-datatables';
 import { AsignaturasComponent } from './componente/asignaturas/asignaturas.component';
 import { RegistroMatriculaComponent } from './componente/registro-matricula/registro-matricula.component';
 import { RegistroCursoComponent } from './componente/registro-curso/registro-curso.component';
+import { MatriculasAlumnoComponent } from './componente/matriculas-alumno/matriculas-alumno.component';
+import { FichaMatriculaComponent } from './componente/ficha-matricula/ficha-matricula.component';
 
 
 
@@ -52,7 +54,9 @@ import { RegistroCursoComponent } from './componente/registro-curso/registro-cur
     ListaSociosComponent,
     AsignaturasComponent,
     RegistroMatriculaComponent,
-    RegistroCursoComponent
+    RegistroCursoComponent,
+    MatriculasAlumnoComponent,
+    FichaMatriculaComponent
   ],
   imports: [
     FormsModule,

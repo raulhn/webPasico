@@ -1,5 +1,6 @@
 create table pasico_gestor_pru.curso(
 	nid integer primary key auto_increment,
+	ano integer unique,
 	descripcion varchar(300)
 );
 

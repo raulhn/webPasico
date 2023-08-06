@@ -1,0 +1,6 @@
+<app-menu></app-menu>
+<div *ngIf="bCargado">
+    <div class="card" *ngFor="let asignatura of asignaturas">
+        {{asignatura.descripcion}}
+    </div>
+</div>

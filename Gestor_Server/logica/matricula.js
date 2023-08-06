@@ -120,6 +120,40 @@ function obtener_alumnos_asignaturas(nid_curso, nid_asignatura)
     )
 }
 
+function obtener_matriculas_alumno(nid_alumno)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.query('select c.* from ' + constantes.ESQUEMA_BD + '.matricula m, ' +
+                    constantes.ESQUEMA_BD + '.curso c where m.nid_curso = c.nid and m.nid_persona = ' + conexion.dbConn.escape(nid_alumno) + ' order by ano desc',
+                (error, results, fields) =>
+                {
+                    if (error) {console.log(error); reject();}
+                    else {resolve(results)}
+                }        
+            )
+        }
+    )
+}
+
+function obtener_asignaturas_matricula(nid_matricula)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.query('select a.* from ' + constantes.ESQUEMA_BD + '.matricula_asignatura ma, ' + 
+                    constantes.ESQUEMA_BD + '.asignatura a where ma.nid_asignatura = a.nid and nid_matricula = ' + 
+                    conexion.dbConn.escape(nid_matricula),
+                (error, results, fields) =>
+                {
+                    if(error) {console.log(error); reject();}
+                    else {resolve(results)}
+                }
+            )
+        }
+    )
+}
 
 function add_asignatura(nid_matricula, nid_asignatura)
 {
@@ -175,6 +209,8 @@ module.exports.registrar_matricula = registrar_matricula;
 module.exports.actualizar_matricula = actualizar_matricula;
 module.exports.obtener_matriculas = obtener_matriculas;
 module.exports.obtener_alumnos_asignaturas = obtener_alumnos_asignaturas;
+module.exports.obtener_matriculas_alumno = obtener_matriculas_alumno;
+module.exports.obtener_asignaturas_matricula = obtener_asignaturas_matricula;
 
 module.exports.add_asignatura = add_asignatura;
 module.exports.eliminar_asignatura = eliminar_asignatura;

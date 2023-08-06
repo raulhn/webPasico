@@ -21,4 +21,16 @@ export class MatriculasService {
     let API_URL = this.url + '/obtener_alumnos_asignaturas/' + nid_curso + '/' + nid_asignatura;
     return this.http.get(API_URL, {withCredentials: true});
   }
+
+  obtener_matriculas_alumno(nid_asignatura: string)
+  {
+    let API_URL = this.url + '/obtener_matriculas_alumno/' + nid_asignatura;
+    return this.http.get(API_URL, {withCredentials: true});
+  }
+
+  obtener_asignaturas_matriculas(nid_matricula: string)
+  {
+    let API_URL = this.url + '/obtener_asignaturas_matriculas/' + nid_matricula;
+    return this.http.get(API_URL, {withCredentials: true});
+  }
 }

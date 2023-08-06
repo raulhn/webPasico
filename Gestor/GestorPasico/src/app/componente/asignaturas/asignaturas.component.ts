@@ -47,11 +47,16 @@ export class AsignaturasComponent implements OnInit {
       this.dtOptions = {
         data: this.asignaturas,
         dom: 'Bfrtip',
-        buttons: ['copy', 'csv', 'excel', 'print'],
+        buttons: [{extend: 'excel', text: 'Generar Excel', className: 'btn btn-dark mb-3'}],
         columns:
         [
           {title: 'Asignatura',
             data: 'descripcion'
+          },
+          {
+            title: '',
+            data: null,
+            render: (e:any) => { return '<a href="' + '/ficha_asignatura/' + e.nid + '"> <button class="btn btn-dark mb-3"> Ver Ficha</button></a>'}
           }],
           rowCallback: (row: Node, data: any[] | Object, index: number) => {
             $('td', row).off('click');
@@ -86,7 +91,13 @@ export class AsignaturasComponent implements OnInit {
         columns:
         [
           {title: 'Asignatura',
-            data: 'descripcion'}],
+            data: 'descripcion'},
+            {
+              title: '',
+              data: null,
+              render: (e:any) => { return '<a href="' + '/ficha_asignatura/' + e.nid + '"> <button class="btn btn-dark mb-3"> Ver Ficha</button></a>'}
+            }
+         ],
         rowCallback: (row: Node, data: any[] | Object, index: number) => {
           $('td', row).off('click');
           $('td', row).on('click', () => {
@@ -118,7 +129,12 @@ export class AsignaturasComponent implements OnInit {
               {title: 'Primer apellido',
               data: 'primer_apellido'},
               {title: 'Segundo apellido',
-              data: 'segundo_apellido'}
+              data: 'segundo_apellido'},
+              {
+                title: '',
+                data: null,
+                render: (e) => { return '<a href="' + '/ficha_persona/' + e.nid_persona + '"> <button class="btn btn-primary"> Ver Ficha</button></a>'}
+              }
           ]
       }
 
