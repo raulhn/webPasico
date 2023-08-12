@@ -13,11 +13,13 @@ import { faLanguage } from '@fortawesome/free-solid-svg-icons';
 })
 export class ListaPersonasComponent {
 
-  listaPersonas:Persona[] = [];
+
+
   enlaceFicha: string = URL.URL_FRONT_END + "/ficha_persona/";
 
   bCargado: boolean = false;
   bCargadoPersonas: boolean = false;
+  bCargado_cursos: boolean = false;
 
   dtOptions: any = {}
  
@@ -28,6 +30,7 @@ export class ListaPersonasComponent {
   tipo: string = "1";
 
   persona_seleccionada: any;
+
 
   constructor(private personasService:PersonasService)
   {
@@ -91,27 +94,6 @@ export class ListaPersonasComponent {
   ngOnInit(): void {
     this.personasService.obtener_personas(this.tipo).subscribe(this.refrescar_personas);
 
-    this.personasService.obtener_lista_personas().subscribe(
-      (resultado:any) =>
-      {
-        if (!resultado.error)
-        {
-          for (let i:number = 0; i < resultado.personas.length; i++)
-          {
-            var p: Persona = new Persona();
-            p.setNombre(resultado.personas[i]['nombre']); 
-            p.setPrimerApellido(resultado.personas[i]['primer_apellido']);
-            p.setSegundoApellido(resultado.personas[i]['segundo_apellido']);
-            p.setTelefono(resultado.personas[i]['telefono']);
-            p.setNid(resultado.personas[i]['nid']);
-            this.listaPersonas[i] = p;
-          }
-
-          this.bCargado = true;
-        }
-        console.log(this.listaPersonas)
-      }
-    )
   }
 
   cambia_seleccion()
@@ -126,6 +108,7 @@ export class ListaPersonasComponent {
 
   obtenerUrlFicha()
   {
+    console.log(this.persona_seleccionada)
     return this.enlaceFicha + this.persona_seleccionada.nid;
   }
 }

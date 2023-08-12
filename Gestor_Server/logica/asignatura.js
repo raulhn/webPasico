@@ -168,7 +168,24 @@ function obtener_profesores()
     return new Promise(
         (resolve, reject) =>
         {
-            conexion.dbConn.query("select p.*, a.nid nid_asignatura, a.* from " + constantes.ESQUEMA_BD + ".persona p, " + 
+            conexion.dbConn.query("select p.*, a.nid nid_asignatura, a.descripcion from " + constantes.ESQUEMA_BD + ".persona p, " + 
+                    constantes.ESQUEMA_BD + ".asignatura a, " + constantes.ESQUEMA_BD + ".profesor pr where p.nid = pr.nid_persona and pr.nid_asignatura = a.nid",
+                (error, results, fields) =>
+                {
+                    if(error) {console.log(error); reject()}
+                    else{resolve(results)}
+                }        
+            )
+        }
+    )
+}
+
+function obtener_profesores_distinct()
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.query("select distinct p.* from " + constantes.ESQUEMA_BD + ".persona p, " + 
                     constantes.ESQUEMA_BD + ".asignatura a, " + constantes.ESQUEMA_BD + ".profesor pr where p.nid = pr.nid_persona and pr.nid_asignatura = a.nid",
                 (error, results, fields) =>
                 {
@@ -185,7 +202,7 @@ function obtener_profesores_asignatura(nid_asignatura)
     return new Promise(
         (resolve, reject) =>
         {
-            conexion.dbConn.query("select p.*, p.nid nid_persona, a.nid nid_asignatura, a.* from " + constantes.ESQUEMA_BD + ".persona p, " + 
+            conexion.dbConn.query("select p.*, p.nid nid_persona, a.nid nid_asignatura, a.descripcion from " + constantes.ESQUEMA_BD + ".persona p, " + 
                     constantes.ESQUEMA_BD + ".asignatura a, " + constantes.ESQUEMA_BD + ".profesor pr where p.nid = pr.nid_persona and pr.nid_asignatura = a.nid and " +
                     "a.nid = " + conexion.dbConn.escape(nid_asignatura),
                 (error, results, fields) =>
@@ -209,4 +226,5 @@ module.exports.add_profesor = add_profesor;
 module.exports.eliminar_profesor = eliminar_profesor;
 
 module.exports.obtener_profesores = obtener_profesores;
+module.exports.obtener_profesores_distinct = obtener_profesores_distinct;
 module.exports.obtener_profesores_asignatura = obtener_profesores_asignatura;

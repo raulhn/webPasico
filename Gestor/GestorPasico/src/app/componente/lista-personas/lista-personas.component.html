@@ -3,6 +3,8 @@
     <select class="form-select" [(ngModel)]="tipo" (change)="cambia_seleccion()" aria-label="Default select example">
         <option selected value="1">Todos</option>
         <option value="2">Socios</option>
+        <option value="3">Profesores</option>
+        <option value="4">Alumnos Curso Actual</option>
     </select>
     <div *ngIf="bCargadoPersonas">
         <table datatable [dtOptions]="dtOptions_personas" id="tabla_personas" class="row-border hover"></table>

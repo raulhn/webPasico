@@ -2,6 +2,8 @@ const persona = require('../logica/persona.js')
 const musico = require('../logica/musico.js')
 const comun = require('./servlet_comun.js')
 const socio = require('../logica/socio.js')
+const asignatura = require('../logica/asignatura.js')
+const matricula = require('../logica/matricula.js')
 
 async function registrar_persona(req, res)
 {
@@ -48,16 +50,25 @@ async function obtener_personas_tipo(req, res)
             let tipo = req.params.tipo;
 
             let resultados;
-            console.log(tipo)
             if (tipo == "1")
             {
                 resultados = await persona.obtener_todas_personas();
-                res.status(200).send({error:false, personas: resultados})
+                res.status(200).send({error:false, tipo: 1, personas: resultados})
             }
-            else if (tipo == "2")
+            else if(tipo == "2")
             {
                 resultados = await socio.obtener_socios();
-                res.status(200).send({error:false, personas: resultados})
+                res.status(200).send({error:false, tipo: 2, personas: resultados})
+            }
+            else if(tipo == "3")
+            {
+                resultados = await asignatura.obtener_profesores_distinct();
+                res.status(200).send({error:false, tipo: 3, personas: resultados})
+            }
+            else if(tipo == "4")
+            {
+                resultados = await matricula.obtener_alumnos_curso_actual()
+                res.status(200).send({error: false, tipo: 4, personas: resultados});
             }
             else
             {

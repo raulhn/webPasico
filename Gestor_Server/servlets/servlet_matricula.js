@@ -106,6 +106,8 @@ function obtener_alumnos_asignaturas(req, res)
 }
 
 
+
+
 function obtener_matriculas_alumno(req, res)
 {
     comun.comprobaciones(req, res,
