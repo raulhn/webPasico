@@ -21,7 +21,14 @@
     </form>
     </div>
 
+    <select class="form-select" [(ngModel)]="activo" (change)="cambia_seleccion()" aria-label="Default select example">
+        <option selected value="1">Activos</option>
+        <option value="2">Dados de baja</option>
+        <option value="3">Todos</option>
+    </select>
+    
     <div *ngIf="bCargado">
+
         <table datatable [dtOptions]="dtOptions" id="tabla_alumnos" class="table">
         
         </table>

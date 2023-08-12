@@ -45,6 +45,7 @@ export class RegistroMatriculaComponent implements OnInit{
 
   dtOptions: any;
 
+  activo: string = "1";
 
   @ViewChild('instancia_alumno') instancia_alumno!: ElementRef;
   @ViewChild('instancia_baja') instancia_baja!: ElementRef;
@@ -56,7 +57,7 @@ export class RegistroMatriculaComponent implements OnInit{
       this.cursos = respuesta.cursos.map((elemento: any) => {return {descripcion: elemento.descripcion, clave_curso: elemento.nid}});
       this.bCargado_cursos = true;
       this.curso = respuesta.cursos[0]['nid']
-      this.matriculasServices.obtener_alumnos_asignaturas(this.cursos[0]['clave_curso'], this.nid_asignatura).subscribe(this.obtener_alumnos);
+      this.matriculasServices.obtener_alumnos_asignaturas(this.cursos[0]['clave_curso'], this.nid_asignatura, this.activo).subscribe(this.obtener_alumnos);
       this.bCargadocompleto = true;
     }
   }
@@ -223,7 +224,7 @@ export class RegistroMatriculaComponent implements OnInit{
         title: 'Registro correcto',
         text: 'Se ha registrado correctamente'
       })
-      this.matriculasServices.obtener_alumnos_asignaturas(this.curso, this.nid_asignatura).subscribe(this.refrescar_alumnos);
+      this.matriculasServices.obtener_alumnos_asignaturas(this.curso, this.nid_asignatura, this.activo).subscribe(this.refrescar_alumnos);
     },
     error: (respuesta: any) =>
     {
@@ -242,7 +243,7 @@ export class RegistroMatriculaComponent implements OnInit{
 
   onChangeCurso(evento: any)
   {
-    this.matriculasServices.obtener_alumnos_asignaturas(this.curso, this.nid_asignatura).subscribe(this.refrescar_alumnos)
+    this.matriculasServices.obtener_alumnos_asignaturas(this.curso, this.nid_asignatura, this.activo).subscribe(this.refrescar_alumnos)
   }
 
   add_alumno()
@@ -304,6 +305,11 @@ export class RegistroMatriculaComponent implements OnInit{
         }
       }
     )
+  }
+
+  cambia_seleccion()
+  {
+    this.matriculasServices.obtener_alumnos_asignaturas(this.curso, this.nid_asignatura, this.activo).subscribe(this.refrescar_alumnos);
   }
 
 }

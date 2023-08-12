@@ -276,6 +276,24 @@ function obtener_personas()
     )
 }
 
+function obtener_todas_personas()
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.query('select p.* from ' + constantes.ESQUEMA_BD + '.persona p', 
+              (error, results, fields) =>
+              {
+                if(error) {console.log(error);  reject();}
+                else if (results.length < 1) {reject();}
+                else {
+                    resolve(results);
+                }
+              }
+            )
+        }
+    )
+}
 
 function obtener_persona(nid)
 {
@@ -349,5 +367,6 @@ module.exports.registrar_padre = registrar_padre;
 module.exports.registrar_madre = registrar_madre;
 
 module.exports.obtener_personas = obtener_personas
+module.exports.obtener_todas_personas = obtener_todas_personas;
 module.exports.obtener_persona = obtener_persona
 

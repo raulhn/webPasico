@@ -1,8 +1,7 @@
 const persona = require('../logica/persona.js')
-const gestion_usuarios = require('../logica/usuario.js')
 const musico = require('../logica/musico.js')
-const constantes = require('../constantes.js')
 const comun = require('./servlet_comun.js')
+const socio = require('../logica/socio.js')
 
 async function registrar_persona(req, res)
 {
@@ -37,6 +36,33 @@ async function obtener_personas(req, res)
         {
             resultados = await persona.obtener_personas();
             res.status(200).send({error:false, personas: resultados})
+        }
+    )
+}
+
+async function obtener_personas_tipo(req, res)
+{
+    comun.comprobaciones(req, res,
+        async () =>
+        {
+            let tipo = req.params.tipo;
+
+            let resultados;
+            console.log(tipo)
+            if (tipo == "1")
+            {
+                resultados = await persona.obtener_todas_personas();
+                res.status(200).send({error:false, personas: resultados})
+            }
+            else if (tipo == "2")
+            {
+                resultados = await socio.obtener_socios();
+                res.status(200).send({error:false, personas: resultados})
+            }
+            else
+            {
+                res.status(401).send({error:true, message: 'No se ha encontrado el tipo'});
+            }
         }
     )
 }
@@ -149,11 +175,13 @@ async function registrar_madre(req, res)
 }
 
 
+
 module.exports.registrar_persona = registrar_persona
 module.exports.actualizar_persona = actualizar_persona
 
 module.exports.obtener_personas = obtener_personas
 module.exports.obtener_persona = obtener_persona
+module.exports.obtener_personas_tipo = obtener_personas_tipo;
 
 module.exports.obtener_ficha_persona = obtener_ficha_persona
 

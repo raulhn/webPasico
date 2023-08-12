@@ -113,6 +113,46 @@ function obtener_alumnos_asignaturas(nid_curso, nid_asignatura)
                 (error, results, fields) =>
                 {
                     if(error) {console.log(error); reject();}
+                    else {console.log('select  p.*, ma.nid_matricula from ' + constantes.ESQUEMA_BD + '.matricula_asignatura ma, '+ constantes.ESQUEMA_BD +
+                    '.persona p, ' + constantes.ESQUEMA_BD +'.matricula m where p.nid = m.nid_persona and ma.nid_matricula = m.nid and m.nid_curso = ' + 
+                     conexion.dbConn.escape(nid_curso) + ' and ma.nid_asignatura = ' + conexion.dbConn.escape(nid_asignatura)); console.log(results); resolve(results)}
+                }   
+            )
+        }
+    )
+}
+
+function obtener_alumnos_asignaturas_alta(nid_curso, nid_asignatura)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.query('select  p.*, ma.nid_matricula from ' + constantes.ESQUEMA_BD + '.matricula_asignatura ma, '+ constantes.ESQUEMA_BD +
+                   '.persona p, ' + constantes.ESQUEMA_BD +'.matricula m where p.nid = m.nid_persona and ma.nid_matricula = m.nid and m.nid_curso = ' + 
+                    conexion.dbConn.escape(nid_curso) + ' and ma.nid_asignatura = ' + conexion.dbConn.escape(nid_asignatura) + 
+                    ' and (fecha_baja is null or fecha_baja >= sysdate())',
+                (error, results, fields) =>
+                {
+                    if(error) {console.log(error); reject();}
+                    else {resolve(results)}
+                }   
+            )
+        }
+    )
+}
+
+function obtener_alumnos_asignaturas_baja(nid_curso, nid_asignatura)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.query('select  p.*, ma.nid_matricula from ' + constantes.ESQUEMA_BD + '.matricula_asignatura ma, '+ constantes.ESQUEMA_BD +
+                    '.persona p, ' + constantes.ESQUEMA_BD +'.matricula m where p.nid = m.nid_persona and ma.nid_matricula = m.nid and m.nid_curso = ' + 
+                    conexion.dbConn.escape(nid_curso) + ' and ma.nid_asignatura = ' + conexion.dbConn.escape(nid_asignatura) + 
+                    ' and  fecha_baja < sysdate()',
+                (error, results, fields) =>
+                {
+                    if(error) {console.log(error); reject();}
                     else {resolve(results)}
                 }   
             )
@@ -144,7 +184,7 @@ function obtener_asignaturas_matricula(nid_matricula)
         {
             conexion.dbConn.query('select a.* from ' + constantes.ESQUEMA_BD + '.matricula_asignatura ma, ' + 
                     constantes.ESQUEMA_BD + '.asignatura a where ma.nid_asignatura = a.nid and nid_matricula = ' + 
-                    conexion.dbConn.escape(nid_matricula),
+                    conexion.dbConn.escape(nid_matricula) ,
                 (error, results, fields) =>
                 {
                     if(error) {console.log(error); reject();}
@@ -231,7 +271,11 @@ module.exports.obtener_nid_matricula = obtener_nid_matricula;
 module.exports.registrar_matricula = registrar_matricula;
 module.exports.actualizar_matricula = actualizar_matricula;
 module.exports.obtener_matriculas = obtener_matriculas;
+
 module.exports.obtener_alumnos_asignaturas = obtener_alumnos_asignaturas;
+module.exports.obtener_alumnos_asignaturas_alta = obtener_alumnos_asignaturas_alta;
+module.exports.obtener_alumnos_asignaturas_baja = obtener_alumnos_asignaturas_baja;
+
 module.exports.obtener_matriculas_alumno = obtener_matriculas_alumno;
 module.exports.obtener_asignaturas_matricula = obtener_asignaturas_matricula;
 

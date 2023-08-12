@@ -47,6 +47,7 @@ app.post('/actualizar_persona', servlet_persona.actualizar_persona);
 app.get('/obtener_persona/:nid', servlet_persona.obtener_persona);
 app.post('/registrar_persona', servlet_persona.registrar_persona);
 app.get('/obtener_ficha_persona/:nid_persona', servlet_persona.obtener_ficha_persona);
+app.get('/obtener_personas/:tipo', servlet_persona.obtener_personas_tipo)
 
 /** Padres **/
 app.get('/obtener_padre/:nid_persona', servlet_persona.obtener_padre);
@@ -86,7 +87,8 @@ app.post('/eliminar_curso', servlet_curso.eliminar_curso);
 
 /** Matriculas **/
 app.post('/registrar_matricula', servlet_matricula.registrar_matricula);
-app.get('/obtener_alumnos_asignaturas/:nid_curso/:nid_asignatura', servlet_matricula.obtener_alumnos_asignaturas)
+app.get('/obtener_alumnos_asignaturas/:nid_curso/:nid_asignatura/:activo', servlet_matricula.obtener_alumnos_asignaturas);
+
 app.get('/obtener_matriculas_alumno/:nid_alumno', servlet_matricula.obtener_matriculas_alumno);
 app.get('/obtener_asignaturas_matriculas/:nid_matricula', servlet_matricula.obtener_asignaturas_matricula);
 app.post('/eliminar_asignatura', servlet_matricula.eliminar_asignatura);
