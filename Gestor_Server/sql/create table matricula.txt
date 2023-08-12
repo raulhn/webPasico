@@ -17,8 +17,12 @@ alter table pasico_gestor_pru.matricula add foreign key(nid_persona) references 
 
 create table pasico_gestor_pru.matricula_asignatura(
 	nid_matricula integer,
-	nid_asignatura integer
+	nid_asignatura integer,
+	nid_profesor integer,
+	fecha_alta date,
+	fecha_baja date
 );
 
 alter table pasico_gestor_pru.matricula_asignatura add foreign key(nid_matricula) references pasico_gestor_pru.matricula(nid);
 alter table pasico_gestor_pru.matricula_asignatura add foreign key(nid_asignatura) references pasico_gestor_pru.asignatura(nid);
+alter table pasico_gestor_pru.matricula_asignatura add foreign fk_matricula_profesor foreign key(nid_profesor) references pasico_gestor_pru.persona(nid);

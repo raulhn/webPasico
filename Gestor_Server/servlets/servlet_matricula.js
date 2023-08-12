@@ -11,6 +11,7 @@ function registrar_matricula(req, res)
             let nid_persona = req.body.nid_persona;
             let nid_curso = req.body.nid_curso;
             let nid_asignatura = req.body.nid_asignatura;
+            let nid_profesor = req.body.nid_profesor;
 
             bExisteMatricula = await matricula.existe_matricula(nid_persona, nid_curso);
 
@@ -20,12 +21,11 @@ function registrar_matricula(req, res)
             }
 
             let nid_matricula = await matricula.obtener_nid_matricula(nid_persona, nid_curso);
-
             bExisteAsignatura = await asignatura.existe_asignatura(nid_asignatura);
 
             if(bExisteAsignatura)
             {
-                await matricula.add_asignatura(nid_matricula, nid_asignatura);
+                await matricula.add_asignatura(nid_matricula, nid_asignatura, nid_profesor);
                 res.status(200).send({error:false, message: 'Matricula registrada'});
             }
             else
@@ -34,6 +34,20 @@ function registrar_matricula(req, res)
             }
         }
     );
+}
+
+function eliminar_asignatura(req, res)
+{
+    comun.comprobaciones(req, res,
+        async () =>
+        {
+            let nid_matricula = req.body.nid_matricula;
+            let nid_asignatura = req.body.nid_asignatura;
+
+            await matricula.eliminar_asignatura(nid_matricula, nid_asignatura);
+            res.status(200).send({error:false, message: 'Se ha eliminado al alumno de la asignatura'});
+        }
+    )
 }
 
 function actualizar_matricula(req, res)
@@ -103,9 +117,27 @@ function obtener_asignaturas_matricula(req, res)
     )
 }
 
+function dar_baja_asignatura(req, res)
+{
+    comun.comprobaciones(req, res,
+        async() =>
+        {
+            let nid_matricula = req.body.nid_matricula;
+            let nid_asignatura = req.body.nid_asignatura;
+            let fecha_baja = req.body.fecha_baja;
+
+            await matricula.dar_baja_asignatura(nid_matricula, nid_asignatura, fecha_baja);
+            res.status(200).send({error: false, message: 'Alumno dado de baja'})
+        }
+    )
+}
+
+
 module.exports.registrar_matricula = registrar_matricula;
+module.exports.eliminar_asignatura = eliminar_asignatura;
 module.exports.actualizar_matricula = actualizar_matricula;
 module.exports.obtener_matriculas = obtener_matriculas;
 module.exports.obtener_alumnos_asignaturas = obtener_alumnos_asignaturas;
 module.exports.obtener_matriculas_alumno = obtener_matriculas_alumno;
-module.exports.obtener_asingaturas_matricula = obtener_asignaturas_matricula;
+module.exports.obtener_asignaturas_matricula = obtener_asignaturas_matricula;
+module.exports.dar_baja_asignatura = dar_baja_asignatura;

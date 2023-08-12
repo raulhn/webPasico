@@ -107,7 +107,7 @@ function obtener_alumnos_asignaturas(nid_curso, nid_asignatura)
     return new Promise(
         (resolve, reject) =>
         {
-            conexion.dbConn.query('select  p.* from ' + constantes.ESQUEMA_BD + '.matricula_asignatura ma, '+ constantes.ESQUEMA_BD +
+            conexion.dbConn.query('select  p.*, ma.nid_matricula from ' + constantes.ESQUEMA_BD + '.matricula_asignatura ma, '+ constantes.ESQUEMA_BD +
                    '.persona p, ' + constantes.ESQUEMA_BD +'.matricula m where p.nid = m.nid_persona and ma.nid_matricula = m.nid and m.nid_curso = ' + 
                     conexion.dbConn.escape(nid_curso) + ' and ma.nid_asignatura = ' + conexion.dbConn.escape(nid_asignatura),
                 (error, results, fields) =>
@@ -155,7 +155,7 @@ function obtener_asignaturas_matricula(nid_matricula)
     )
 }
 
-function add_asignatura(nid_matricula, nid_asignatura)
+function add_asignatura(nid_matricula, nid_asignatura, nid_profesor)
 {
     return new Promise(
         (resolve, reject) =>
@@ -163,8 +163,9 @@ function add_asignatura(nid_matricula, nid_asignatura)
             conexion.dbConn.beginTransaction(
                 () =>
                 {
-                    conexion.dbConn.query('insert into ' + constantes.ESQUEMA_BD + '.matricula_asignatura(nid_matricula, nid_asignatura) values(' + 
-                            conexion.dbConn.escape(nid_matricula) + ', ' + conexion.dbConn.escape(nid_asignatura) + ')',
+                    conexion.dbConn.query('insert into ' + constantes.ESQUEMA_BD + '.matricula_asignatura(nid_matricula, nid_asignatura, fecha_alta, nid_profesor) values(' + 
+                            conexion.dbConn.escape(nid_matricula) + ', ' + conexion.dbConn.escape(nid_asignatura) + ', sysdate(), '
+                             +  conexion.dbConn.escape(nid_profesor) + ')',
                         (error, results, fields) =>
                         {
                             if(error) {console.log(error); conexion.dbConn.rollback(); reject();}
@@ -200,6 +201,28 @@ function eliminar_asignatura(nid_matricula, nid_asignatura)
     )
 }
 
+function dar_baja_asignatura(nid_matricula, nid_asignatura, fecha_baja)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.beginTransaction(
+                () =>
+                {
+                    conexion.dbConn.query('update ' + constantes.ESQUEMA_BD + '.matricula_asignatura set fecha_baja = ' +
+                            'str_to_date(nullif(' + conexion.dbConn.escape(fecha_baja) + ', \'\') , \'%Y-%m-%d\') where nid_matricula = ' +
+                            conexion.dbConn.escape(nid_matricula) + ' and nid_asignatura = ' + conexion.dbConn.escape(nid_asignatura),
+                        (error, results, fields) =>
+                        {
+                            if(error) {console.log(error); conexion.dbConn.rollback(); reject();}
+                            else {conexion.dbConn.commit(); resolve();}
+                        }
+                    )
+                }
+            )
+        }
+    )
+}
 
 
 module.exports.existe_matricula = existe_matricula;
@@ -214,3 +237,4 @@ module.exports.obtener_asignaturas_matricula = obtener_asignaturas_matricula;
 
 module.exports.add_asignatura = add_asignatura;
 module.exports.eliminar_asignatura = eliminar_asignatura;
+module.exports.dar_baja_asignatura = dar_baja_asignatura;

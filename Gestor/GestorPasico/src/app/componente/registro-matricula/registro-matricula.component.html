@@ -21,25 +21,46 @@
     </form>
     </div>
 
-
-    <div style="display: none;"> <!--YOU NEED TO PUT THE COMPONENT INSIDE A HIDDEN DIV-->
-
-        <div #instancia_alumno>
-            <div style="min-height: 300px;">
-            <ng-select  [items]="lista_personas"
-            bindLabel="etiqueta" 
-            bindValue="clave_persona"
-            [(ngModel)]="alumno"
-            [compareWith]="comparePersona_alumno">
-            </ng-select>
-            </div>
-        </div>
-    </div>
-
-
     <div *ngIf="bCargado">
         <table datatable [dtOptions]="dtOptions" id="tabla_alumnos" class="table">
         
         </table>
+        <div *ngIf="alumno_seleccionado !== undefined" class="float-end p-3">
+            <button class="btn btn-danger" (click)="dar_baja_alumno()"><fa-icon [icon]="faXmark"></fa-icon> Dar de baja </button>
+        </div>
     </div>
+
+    <!-- Registrar alumno en asignatura -->
+    <div style="display: none;">
+        <div #instancia_alumno>
+            <div style="min-height: 300px;">
+            <label>Alumno</label>
+            <ng-select  [items]="lista_personas"
+            bindLabel="etiqueta" 
+            bindValue="clave_persona"
+            [(ngModel)]="alumno">
+            </ng-select>
+
+            <label>Profesor</label>
+            <ng-select [items]="lista_profesores"
+            bindLabel="etiqueta_profesor"
+            bindValue="clave_profesor"
+            [(ngModel)]="profesor"></ng-select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Registrar alumno en asignatura -->
+    <div style="display: none;">
+        <div #instancia_baja>
+            <div style="min-height: 100px;">
+            <label>Fecha baja:</label>
+            <input class="form-control" name ="Fecha nacimiento" [(ngModel)] = "fecha_baja" type="date" required/>
+            </div>
+        </div>
+    </div>
+
+    
 </div>
+
+

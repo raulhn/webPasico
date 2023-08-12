@@ -165,10 +165,7 @@ export class AsignaturasComponent implements OnInit {
           {title: 'Primer apellido',
           data: 'primer_apellido'},
           {title: 'Segundo apellido',
-          data: 'segundo_apellido'},
-          {
-            defaultContent: "<button class='showIdButton' (href)=>Ficha asignatura</button>"
-          }
+          data: 'segundo_apellido'}
       ]
       }
   }

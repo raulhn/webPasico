@@ -8,6 +8,9 @@ import { DataTablesOptions } from 'src/app/logica/constantes';
 import { URL } from 'src/app/logica/constantes';
 import Swal from 'sweetalert2';
 
+// https://www.angularjswiki.com/angular/how-to-use-font-awesome-icons-in-angular-applications/
+import { faX } from '@fortawesome/free-solid-svg-icons';
+
 @Component({
   selector: 'app-registro-matricula',
   templateUrl: './registro-matricula.component.html',
@@ -17,6 +20,10 @@ export class RegistroMatriculaComponent implements OnInit{
   bCargado: boolean = false;
   bCargado_cursos: boolean = false;
   bCargadocompleto: boolean = false;
+
+  alumno_seleccionado: any;
+
+  faXmark = faX
 
   enlaceFicha: string = URL.URL_FRONT_END + "/ficha_persona/";
   nid_asignatura: string ="";
@@ -28,14 +35,19 @@ export class RegistroMatriculaComponent implements OnInit{
 
   alumno: any ;
   curso: any = '3';
+  profesor: any;
   asignatura: any;
 
   listaAlumnos: any[] = [];
+  lista_profesores: any[] = [];
+
+  fecha_baja: string ="";
 
   dtOptions: any;
 
 
   @ViewChild('instancia_alumno') instancia_alumno!: ElementRef;
+  @ViewChild('instancia_baja') instancia_baja!: ElementRef;
 
   obtener_cursos = 
   {
@@ -49,7 +61,8 @@ export class RegistroMatriculaComponent implements OnInit{
     }
   }
 
-  constructor(private rutaActiva: ActivatedRoute,private personasServices: PersonasService, private cursosServices: CursosService, private matriculasServices: MatriculasService, private asignaturasServices: AsignaturasService)
+  constructor(private rutaActiva: ActivatedRoute,private personasServices: PersonasService, private cursosServices: CursosService, 
+              private matriculasServices: MatriculasService, private asignaturasServices: AsignaturasService)
   {
     this.nid_asignatura =  rutaActiva.snapshot.params['nid_asignatura'];
   }
@@ -64,6 +77,15 @@ export class RegistroMatriculaComponent implements OnInit{
     }
   }
 
+  obtener_profesores = 
+  {
+    next: (respuesta: any) =>
+    {
+      this.lista_profesores = respuesta.profesores.map((elemento: any) =>{return{etiqueta_profesor: elemento.nif + ' ' + elemento.nombre + ' ' 
+          + elemento.primer_apellido + ' ' + elemento.segundo_apellido, clave_profesor: elemento.nid_persona}});
+    }
+  }
+
 
   obtener_asignatura =
   {
@@ -72,6 +94,11 @@ export class RegistroMatriculaComponent implements OnInit{
       console.log(respuesta);
       this.asignatura = respuesta.asignatura;
     }
+  }
+
+  click_alumno(alumno: any)
+  {
+    this.alumno_seleccionado = alumno;
   }
 
   obtener_alumnos = 
@@ -98,11 +125,30 @@ export class RegistroMatriculaComponent implements OnInit{
           },
           {title: 'Teléfono',
             data: 'telefono'
-          }]
+          }],
+          rowCallback: (row: Node, data: any[] | Object, index: number) => {
+            $('td', row).off('click');
+            $('td', row).on('click', () => {
+              this.click_alumno(data);
+              $('#tabla_alumnos tr').removeClass('selected')
+              $(row).addClass('selected');
+            });
+            return row;
+        }
+          /* Incluir botones en datatable */
+          /* https://stackblitz.com/edit/angular-hxdbgi-t371wf?file=app%2Ftab-nav-bar-basic-example.ts
+          {
+            title: '',
+            data: null,
+            render: (e: any) =>{ return '<button class="btn btn-danger"> <fa-icon _ngcontent-irg-c51="" class="ng-fa-icon"><svg role="img" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="x" class="svg-inline--fa fa-x" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="currentColor" d="M376.6 84.5c11.3-13.6 9.5-33.8-4.1-45.1s-33.8-9.5-45.1 4.1L192 206 56.6 43.5C45.3 29.9 25.1 28.1 11.5 39.4S-3.9 70.9 7.4 84.5L150.3 256 7.4 427.5c-11.3 13.6-9.5 33.8 4.1 45.1s33.8 9.5 45.1-4.1L192 306 327.4 468.5c11.3 13.6 31.5 15.4 45.1 4.1s15.4-31.5 4.1-45.1L233.7 256 376.6 84.5z"></path></svg></fa-icon> Eliminar </button>'}
+            
+          }*/
       }
       this.bCargado = true;
     }
   }
+  
+  
 
   refrescar_alumnos =
   {
@@ -129,8 +175,17 @@ export class RegistroMatriculaComponent implements OnInit{
           },
           {title: 'Teléfono',
             data: 'telefono'
-          },
+          }
         ],
+          rowCallback: (row: Node, data: any[] | Object, index: number) => {
+            $('td', row).off('click');
+            $('td', row).on('click', () => {
+              this.click_alumno(data);
+              $('#tabla_alumnos tr').removeClass('selected')
+              $(row).addClass('selected');
+            });
+            return row;
+        }
       }
       $('#tabla_alumnos').DataTable(this.dtOptions);
     }
@@ -142,6 +197,7 @@ export class RegistroMatriculaComponent implements OnInit{
     this.personasServices.obtener_lista_personas().subscribe(this.obtener_personas);
     this.asignaturasServices.obtener_asignatura(this.nid_asignatura).subscribe(this.obtener_asignatura);
     this.cursosServices.obtener_cursos().subscribe(this.obtener_cursos);
+    this.asignaturasServices.obtener_profesores_asingatura(this.nid_asignatura).subscribe(this.obtener_profesores);
   }
 
   comparePersona_alumno(item: any, selected: any) {
@@ -151,6 +207,11 @@ export class RegistroMatriculaComponent implements OnInit{
   compareCursos(item: any, selected: any)
   {
     return item['clave_curso'] == selected
+  }
+
+  comparePersona_profesor(item: any, selected: any)
+  {
+    return item['clave_profesor'] == selected
   }
 
   registrar_alumno = 
@@ -174,11 +235,6 @@ export class RegistroMatriculaComponent implements OnInit{
     }
   }
 
-  registrar()
-  {
-    this.matriculasServices.registrar_matricula(this.alumno, this.curso, this.nid_asignatura).subscribe(this.registrar_alumno)
-  }
-
   obtenerEnlaceFicha(nid: string)
   {
     return this.enlaceFicha + nid;
@@ -199,9 +255,52 @@ export class RegistroMatriculaComponent implements OnInit{
     }).then(
       (results: any) =>
         {
+          if(results.isConfirmed)
+          {
+            this.matriculasServices.registrar_matricula(this.alumno, this.curso, this.nid_asignatura, this.profesor).subscribe(this.registrar_alumno)
+          }
+      }
+    )
+  }
+
+  registrar_baja =
+  {
+    next: (respuesta: any) =>
+    {
+      Swal.fire({
+        icon: 'success',
+        title: 'Baja registrada',
+        text: 'Se ha registrado la baja correctamente'
+      })
+      this.fecha_baja = "";
+    },
+    error: (respuesta: any) =>
+    {
+      Swal.fire(
+        {
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Se ha producido un error'
+        }
+      )
+    }
+  }
+
+  dar_baja_alumno()
+  {
+    Swal.fire(
+      {
+        title: 'Dar de baja',
+        html: this.instancia_baja.nativeElement,
+        confirmButtonText: 'Dar de baja',
+        showCancelButton: true
+      }
+    ).then(
+      (results: any) =>
+      {
         if(results.isConfirmed)
         {
-           this.matriculasServices.registrar_matricula(this.alumno, this.curso, this.nid_asignatura).subscribe(this.registrar_alumno)
+          this.matriculasServices.dar_baja_alumno(this.alumno_seleccionado.nid_matricula, this.nid_asignatura, this.fecha_baja).subscribe(this.registrar_baja)
         }
       }
     )

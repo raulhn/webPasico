@@ -69,7 +69,8 @@ import { FichaMatriculaComponent } from './componente/ficha-matricula/ficha-matr
     FontAwesomeModule,
     RouterModule,
     NgbModule,
-    NgSelectModule
+    NgSelectModule,
+    FontAwesomeModule
   ],
   providers: [],
   bootstrap: [AppComponent]
