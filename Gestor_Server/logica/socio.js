@@ -125,6 +125,42 @@ function obtener_socios()
     )
 }
 
+function obtener_socios_alta()
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.query('select p.*, s.fecha_alta, s.fecha_baja from ' +
+                    constantes.ESQUEMA_BD + '.socios s, ' + constantes.ESQUEMA_BD + '.persona p ' +
+                    ' where s.nid_persona = p.nid and (s.fecha_baja is null or s.fecha_baja > sysdate())',
+                (error, results, fields) =>
+                {
+                    if(error) {console.log(error); reject();}
+                    else {resolve(results)}
+                }
+            )
+        }
+    )
+}
+
+function obtener_socios_baja()
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.query('select *, s.fecha_alta, s.fecha_baja from ' + 
+                    constantes.ESQUEMA_BD + '.socios s, ' + constantes.ESQUEMA_BD + '.persona p ' +
+                    ' where s.nid_persona = p.nid and s.fecha_baja <= sysdate()',
+                (error, results, fields) =>
+                {
+                    if(error) {console.log(error); reject();}
+                    else {resolve(results)}
+                }
+            )
+        }
+    )
+}
+
 
 function obtener_socio(nid_persona)
 {
@@ -144,5 +180,8 @@ function obtener_socio(nid_persona)
 
 module.exports.registrar_socio = registrar_socio;
 module.exports.actualizar_socio = actualizar_socio;
+
 module.exports.obtener_socios = obtener_socios;
+module.exports.obtener_socios_alta = obtener_socios_alta;
+module.exports.obtener_socios_baja = obtener_socios_baja;
 module.exports.obtener_socio = obtener_socio;

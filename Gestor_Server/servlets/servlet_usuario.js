@@ -1,4 +1,5 @@
 const gestion_usuarios = require('../logica/usuario.js');
+const comun = require('./servlet_comun.js')
 
 /**
  * Función login, inicio de sesión por usuario y contraseña
@@ -133,6 +134,25 @@ async function actualizar_password_usu(req, res)
   }
 }
 
+function actualizar_password(req, res)
+{
+  comun.comprobaciones(req, res,
+    async () =>
+    {
+      let usuario = req.session.nombre;
+      if(await gestion_usuarios.existe_login(usuario))
+      {
+        let password = req.body.password;
+        await gestion_usuarios.actualizar_password(usuario, password);
+        res.status(200).send({error:false, message: 'Actualización realizada'});
+      }
+      else{
+        res.status(400).send({error:true, message: 'No existe el usuario'})
+      }
+    }
+  )
+}
+
 
 /*
 * Recupera los usuarios registrados en la aplicación,
@@ -165,9 +185,12 @@ async function obtener_usuarios(req, res)
   }
 }
 
+
+
 module.exports.login = login; 
 module.exports.logueado = logueado;
 module.exports.logout = logout;
 module.exports.registrar_usuario = registrar_usuario;
 module.exports.actualizar_password_usu = actualizar_password_usu;
+module.exports.actualizar_password = actualizar_password;
 module.exports.obtener_usuarios = obtener_usuarios;

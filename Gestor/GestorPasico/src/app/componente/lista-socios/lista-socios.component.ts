@@ -14,8 +14,10 @@ export class ListaSociosComponent {
   enlaceFicha: string = URL.URL_FRONT_END + "/ficha_persona/";
 
   dtOptions: any = {}
+  dtOpciones_socios: any = {};
  
   bCargado: boolean = false;
+  bCargado_socios: boolean = false;
 
   constructor(private sociosService: SociosService)
   {
@@ -25,6 +27,8 @@ export class ListaSociosComponent {
       dom: 'Bfrtip',
       buttons: [{extend: 'excel', text: 'Generar Excel', className: 'btn btn-dark mb-3'}]
     }
+
+    this.dtOpciones_socios
   }
 
 
@@ -50,11 +54,52 @@ export class ListaSociosComponent {
     }
   }
 
+  refrescar_socios =
+  {
+    next: (respuesta: any) =>
+    {
+      var datatable = $('#tabla_socios').DataTable();
+      datatable.destroy();
+      this.listaPersonas = respuesta.personas;
+
+      this.dtOpciones_socios =
+      {
+        language: DataTablesOptions.spanish_datatables,
+        data: this.listaPersonas,
+        dom: 'Bfrtip',
+        buttons: [{extend: 'excel', text: 'Generar Excel', className: 'btn btn-dark mb-3'}],
+        columns:
+        [
+          {title: 'Nombre',
+            data: 'nombre'
+          },
+          {title: 'Primer apellido',
+            data: 'primer_apellido'
+          },
+          {title: 'Segundo apellido',
+            data: 'segundo_apellido'
+          },
+          {title: 'Teléfono',
+            data: 'telefono'
+          }],
+          rowCallback: (row: Node, data: any[] | Object, index: number) => {
+            $('td', row).off('click');
+            $('td', row).on('click', () => {
+              $('#tabla_socios tr').removeClass('selected')
+              $(row).addClass('selected');
+            });
+            return row;
+            }
+        }
+        $('#tabla_socios').DataTable(this.dtOpciones_socios);
+        this.bCargado_socios = true;
+      }
+  }
 
   ngOnInit(): void {
     this.sociosService.obtener_lista_socios().subscribe(
      this.recuperar_socios
-    )
+    );
   }
 
   obtenerEnlaceFicha(nid: string)

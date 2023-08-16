@@ -65,7 +65,7 @@ export class UsuariosComponent implements OnInit {
     return new Promise(
       (resolve, reject) =>
       {
-        this.usuarioService.actualizar_password(usuario, password).subscribe(
+        this.usuarioService.actualizar_password(password).subscribe(
           {
             next: (respuesta: any) =>
             {

@@ -160,14 +160,62 @@ function obtener_alumnos_asignaturas_baja(nid_curso, nid_asignatura)
     )
 }
 
+function obtener_alumnos_cursos_alta(nid_curso)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.query(
+                'select p.* ' +
+                'from ' + constantes.ESQUEMA_BD + '.persona p, ' + constantes.ESQUEMA_BD + '.matricula m ' +
+                'where p.nid = m.nid_persona ' + 
+                'and m.nid_curso = ' + conexion.dbConn.escape(nid_curso) +
+                ' and exists (select ma.* ' +
+                                'from ' + constantes.ESQUEMA_BD + '.matricula_asignatura ma ' +
+                                'where ma.nid_matricula = m.nid ' +
+                                    'and (ma.fecha_baja is null or ma.fecha_baja > sysdate()))',
+            (error, results, fields) =>
+            {
+                if(error) {console.log(error), reject();}
+                else {resolve(results)}
+            }
+            )
+        }
+    )
+}
+
+function obtener_alumnos_cursos_baja(nid_curso)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.query(
+                'select p.* ' +
+                'from ' + constantes.ESQUEMA_BD + '.persona p, ' + constantes.ESQUEMA_BD + '.matricula m ' +
+                'where p.nid = m.nid_persona ' + 
+                'and m.nid_curso = ' + conexion.dbConn.escape(nid_curso) +
+                ' and not exists (select ma.* ' +
+                                'from ' + constantes.ESQUEMA_BD + '.matricula_asignatura ma ' +
+                                'where ma.nid_matricula = m.nid ' +
+                                    'and (ma.fecha_baja is null or ma.fecha_baja > sysdate()))',
+            (error, results, fields) =>
+            {
+                if(error) {console.log(error), reject();}
+                else {resolve(results)}
+            }
+            )
+        }
+    )
+}
+
 function obtener_alumnos_cursos(nid_curso)
 {
     return new Promise(
         (resolve, reject) =>
         {
-            conexion.dbConn.query('select p.*, ma.nid_matricula from ' + constantes.ESQUEMA_BD + '.matricula_asignatura ma, ' + constantes.ESQUEMA_BD +
-            '.persona p, ' + constantes.ESQUEMA_BD + '.matricula m where p.nid = m.ni_persona, and ma.nid_matricula = m.nid and m.nid_curso = ' +
-            conexion.dbConn.escape(nid_curso) + ' and (fecha_baja is null or fecha_baja >= sysdate())',
+            conexion.dbConn.query('select distinct p.*from ' + constantes.ESQUEMA_BD + '.matricula_asignatura ma, ' + constantes.ESQUEMA_BD +
+            '.persona p, ' + constantes.ESQUEMA_BD + '.matricula m where p.nid = m.nid_persona and ma.nid_matricula = m.nid and m.nid_curso = ' +
+            conexion.dbConn.escape(nid_curso) ,
             (error, results, fields) =>
             {
                 if(error) {console.log(error), reject();}
@@ -312,7 +360,11 @@ module.exports.obtener_matriculas = obtener_matriculas;
 module.exports.obtener_alumnos_asignaturas = obtener_alumnos_asignaturas;
 module.exports.obtener_alumnos_asignaturas_alta = obtener_alumnos_asignaturas_alta;
 module.exports.obtener_alumnos_asignaturas_baja = obtener_alumnos_asignaturas_baja;
+
 module.exports.obtener_alumnos_cursos = obtener_alumnos_cursos;
+module.exports.obtener_alumnos_cursos_alta = obtener_alumnos_cursos_alta;
+module.exports.obtener_alumnos_cursos_baja = obtener_alumnos_cursos_baja;
+
 module.exports.obtener_alumnos_curso_actual = obtener_alumnos_curso_actual;
 
 module.exports.obtener_matriculas_alumno = obtener_matriculas_alumno;

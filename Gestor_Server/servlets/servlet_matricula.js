@@ -105,8 +105,33 @@ function obtener_alumnos_asignaturas(req, res)
     )
 }
 
+function obtener_alumnos_curso(req, res)
+{
+    comun.comprobaciones(req, res,
+        async () =>
+        {
+            let nid_curso = req.params.nid_curso;
+            let activo = req.params.activo;
 
+            let resultados;
 
+            if (activo == 1)
+            {
+                resultados = await matricula.obtener_alumnos_cursos_alta(nid_curso);
+            }
+            else if(activo == 2)
+            {
+                resultados = await matricula.obtener_alumnos_cursos_baja(nid_curso);
+            }
+            else if(activo == 3)
+            {
+                resultados = await matricula.obtener_alumnos_cursos(nid_curso);
+            }
+
+            res.status(200).send({error: false, alumnos: resultados})
+        }
+    )
+}
 
 function obtener_matriculas_alumno(req, res)
 {
@@ -156,6 +181,7 @@ module.exports.actualizar_matricula = actualizar_matricula;
 module.exports.obtener_matriculas = obtener_matriculas;
 
 module.exports.obtener_alumnos_asignaturas = obtener_alumnos_asignaturas;
+module.exports.obtener_alumnos_curso = obtener_alumnos_curso;
 
 module.exports.obtener_matriculas_alumno = obtener_matriculas_alumno;
 module.exports.obtener_asignaturas_matricula = obtener_asignaturas_matricula;

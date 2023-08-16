@@ -184,29 +184,25 @@ async function actualizar_password(user, pass)
             bExiste = await existe_login(user);
             if (bExiste)
             {
-                bAdministrador = await esAdministrador(user)
-                if(bEsAdministrador)
-                {
-                    const saltRounds = 15;
-                    conexion.dbConn.beginTransaction(
-                        () =>
-                        {  
-                            bcrypt.hash(pass, saltRounds,
-                                (err, hash) =>
+
+                const saltRounds = 15;
+                conexion.dbConn.beginTransaction(
+                    () =>
+                    {  
+                        bcrypt.hash(pass, saltRounds,
+                            (err, hash) =>
+                            {
+                                conexion.dbConn.query('update ' +  constantes.ESQUEMA_BD + '.usuario set password = ' +
+                                conexion.dbConn.escape(hash) + ' where usuario = ' + conexion.dbConn.escape(user),
+                                (error, results, fields) =>
                                 {
-                                    conexion.dbConn.query('update ' +  constantes.ESQUEMA_BD + '.usuario set password = ' +
-                                    conexion.dbConn.escape(hash) + ' where usuario = ' + conexion.dbConn.escape(user),
-                                    (error, results, fields) =>
-                                    {
-                                        if (error) {conexion.dbConn.rollback();  console.log(error); reject();}
-                                        else {conexion.dbConn.commit(); console.log('Usuario registrado'); resolve(); }
-                                    })
-                                }
-                                )
-                        }
-                    );
-                }
-                else {reject()}
+                                    if (error) {conexion.dbConn.rollback();  console.log(error); reject();}
+                                    else {conexion.dbConn.commit(); console.log('Usuario registrado'); resolve(); }
+                                })
+                            }
+                            )
+                    }
+                );
             }
             else {reject()}
         }

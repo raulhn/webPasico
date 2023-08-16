@@ -1,11 +1,45 @@
 <app-menu class=""></app-menu>
 <div class="container pt-4">
-    <select class="form-select" [(ngModel)]="tipo" (change)="cambia_seleccion()" aria-label="Default select example">
+    <select class="form-select" [(ngModel)]="tipo" (change)="cambia_seleccion()" >
         <option selected value="1">Todos</option>
         <option value="2">Socios</option>
         <option value="3">Profesores</option>
-        <option value="4">Alumnos Curso Actual</option>
+        <option value="4">Alumnos</option>
     </select>
+
+    <select *ngIf="tipo == '2'" class="form-select" [(ngModel)]="alta_socio" (change)="cambia_seleccion_socio()">
+        <option selected value="1">Todos</option>
+        <option value="2">Dados de alta</option>
+        <option value="3">Dados de baja</option>
+    </select>
+
+    <div *ngIf="tipo == '4'">
+        <legend>Curso</legend>
+        <div *ngIf="bCargado_cursos" class="row form-row">
+            <div class="col">
+                <ng-select [items]="lista_cursos"
+                        bindLabel="descripcion" 
+                        bindValue="clave_curso"
+                        [(ngModel)]="curso_seleccionado"
+                        (change)="cambia_seleccion_curso()">
+                </ng-select>
+            </div>
+        </div>
+
+        <select *ngIf="tipo == '4'" class="form-select" [(ngModel)]="asignatura_seleccionada" (change)="cambia_seleccion()">
+            <option selected value="0">Todas las asignaturas</option>
+            <option *ngFor="let asignatura_actual of lista_asignaturas" [value]="asignatura_actual.nid">
+                {{asignatura_actual.descripcion}}
+            </option>
+        </select>
+
+        <select class="form-select" [(ngModel)]="alumno_activo" (change)="cambia_seleccion()" aria-label="Default select example">
+            <option selected value="1">Activos</option>
+            <option value="2">Dados de baja</option>
+            <option value="3">Todos</option>
+        </select>
+    </div>
+
     <div *ngIf="bCargadoPersonas">
         <table datatable [dtOptions]="dtOptions_personas" id="tabla_personas" class="row-border hover"></table>
         <div *ngIf="persona_seleccionada !== undefined" class="float-end p-3">

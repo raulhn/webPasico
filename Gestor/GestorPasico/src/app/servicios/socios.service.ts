@@ -33,4 +33,16 @@ export class SociosService {
     let API_URL = this.url + '/obtener_socios'
     return this.http.get(API_URL, {withCredentials:true});
   }
+
+  obtener_lista_socios_alta()
+  {
+    let API_URL = this.url + '/obtener_socios_alta';
+    return this.http.get(API_URL, {withCredentials: true});
+  }
+
+  obtener_lista_socios_baja()
+  {
+    let API_URL = this.url + '/obtener_socios_baja';
+    return this.http.get(API_URL, {withCredentials: true});
+  }
 }

@@ -39,7 +39,29 @@ function obtener_socios(req, res)
         async () =>
         {
             let resultado_socios = await socios.obtener_socios();
-            res.status(200).send({error:false, socios: resultado_socios})
+            res.status(200).send({error:false, personas: resultado_socios})
+        }
+    )
+}
+
+function obtener_socios_alta(req, res)
+{
+    comun.comprobaciones(req, res,
+        async () =>
+        {
+            let resultado_socios = await socios.obtener_socios_alta();
+            res.status(200).send({error: false, personas: resultado_socios})
+        }
+    )
+}
+
+function obtener_socios_baja(req, res)
+{
+    comun.comprobaciones(req, res,
+        async () =>
+        {
+            let resultado_socios = await socios.obtener_socios_baja();
+            res.status(200).send({error: false, personas: resultado_socios});
         }
     )
 }
@@ -59,4 +81,6 @@ function obtener_socio(req, res)
 module.exports.registrar_socio = registrar_socio;
 module.exports.actualizar_socio = actualizar_socio;
 module.exports.obtener_socios = obtener_socios;
+module.exports.obtener_socios_alta = obtener_socios_alta;
+module.exports.obtener_socios_baja = obtener_socios_baja;
 module.exports.obtener_socio = obtener_socio;

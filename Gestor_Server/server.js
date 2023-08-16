@@ -39,7 +39,7 @@ app.get('/logueado', servlet_usuario.logueado);
 app.get('/logout', servlet_usuario.logout);
 app.post('/registrar', servlet_usuario.registrar_usuario);
 app.get('/obtener_usuarios', servlet_usuario.obtener_usuarios);
-app.post('/actualiza_password', servlet_usuario.actualizar_password_usu);
+app.post('/actualiza_password', servlet_usuario.actualizar_password);
 
 /** Personas **/
 app.get('/obtener_personas', servlet_persona.obtener_personas);
@@ -66,6 +66,8 @@ app.get('/obtener_personas_instrumento/:nid_instrumento', servlet_musico.obtener
 app.post('/registrar_socio', servlet_socio.registrar_socio);
 app.post('/actualizar_socio', servlet_socio.actualizar_socio);
 app.get('/obtener_socios', servlet_socio.obtener_socios);
+app.get('/obtener_socios_alta', servlet_socio.obtener_socios_alta);
+app.get('/obtener_socios_baja', servlet_socio.obtener_socios_baja);
 app.get('/obtener_socio/:nid_persona', servlet_socio.obtener_socio);
 
 /** Asignaturas **/
@@ -88,6 +90,7 @@ app.post('/eliminar_curso', servlet_curso.eliminar_curso);
 /** Matriculas **/
 app.post('/registrar_matricula', servlet_matricula.registrar_matricula);
 app.get('/obtener_alumnos_asignaturas/:nid_curso/:nid_asignatura/:activo', servlet_matricula.obtener_alumnos_asignaturas);
+app.get('/obtener_alumnos_curso/:nid_curso/:activo', servlet_matricula.obtener_alumnos_curso)
 
 app.get('/obtener_matriculas_alumno/:nid_alumno', servlet_matricula.obtener_matriculas_alumno);
 app.get('/obtener_asignaturas_matriculas/:nid_matricula', servlet_matricula.obtener_asignaturas_matricula);

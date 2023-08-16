@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { UsuariosService } from 'src/app/servicios/usuarios.service';
 import { faUser as faUser } from '@fortawesome/free-regular-svg-icons';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-menu',
@@ -14,6 +15,10 @@ export class MenuComponent implements OnInit {
   logueado = false;
 
   faUser = faUser;
+
+  nuevo_password: string = "";
+
+  @ViewChild('instancia_cambio_password') instancia_cambio_password!: ElementRef;
 
   constructor(private usuariosService: UsuariosService, private router: Router) { }
 
@@ -47,6 +52,44 @@ export class MenuComponent implements OnInit {
           this.logueado = false;
           this.usuario = "";
           this.router.navigate(['login']);
+        }
+      }
+    )
+  }
+
+  actualiza_password =
+  {
+    next: (respuesta: any) =>
+    {
+      Swal.fire({
+        icon: 'success',
+        title: 'Contraseña actualizada',
+        text: 'Se ha actualizado la contraseña correctamente'
+      })
+    },
+    error: (respuesta: any) =>
+    {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error al actualizar contraseña',
+        text: 'Se ha producido un error durante la actualización de la contraseña'
+      })
+    }
+  }
+
+  cambiar_password()
+  {
+    Swal.fire({
+      title: 'Cambiar contraseña',
+      html: this.instancia_cambio_password.nativeElement,
+      confirmButtonText: 'Guardar',
+      showCancelButton: true,
+    }).then(
+      (results: any) =>
+        {
+        if(results.isConfirmed)
+        {
+          this.usuariosService.actualizar_password(this.nuevo_password).subscribe(this.actualiza_password);
         }
       }
     )

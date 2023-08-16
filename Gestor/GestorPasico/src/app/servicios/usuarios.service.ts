@@ -47,10 +47,10 @@ export class UsuariosService {
     return this.http.get(API_URL,  {  withCredentials:true })
   }
 
-  actualizar_password(usuario: String, password: String) :Observable<any>
+  actualizar_password(password: String) :Observable<any>
   {
     let API_URL = this.url + '/actualiza_password';
-    return this.http.post(API_URL, {usuario: usuario, password: password}, {withCredentials: true})
+    return this.http.post(API_URL, {password: password}, {withCredentials: true})
       .pipe(catchError(err => {console.log('Error', err); return throwError(() => new Error(err.status))}));
   }
 
