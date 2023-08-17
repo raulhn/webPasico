@@ -20,7 +20,6 @@
               Socios
             </a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="/socios">Listado Socios</a></li>
               <li><a class="dropdown-item" href="/registrar-socio">Registrar Socio</a></li>
             </ul>
           </li>
@@ -30,16 +29,16 @@
         </ul>
 
         <span *ngIf="logueado">
-          <div class="row">
-            <div class="col">
+          <div class="float-end p-3 text-light">
+
               <b>Usuario:</b> {{this.usuario}}
-            </div>
-            <div class="col">
-              <button (click) ="cambiar_password()" class="btn btn-dark">Cambiar contraseña</button>
-              <button (click)="[logout()]" type="button" class="btn btn-dark">
+              <span class="p-1"></span>
+              <button (click) ="cambiar_password()" class="btn btn-dark btn-outline-light">Cambiar contraseña</button>
+              <span class="p-1"></span>
+              <button (click)="[logout()]" type="button" class="btn btn-dark btn-outline-light">
                 Logout
               </button>
-            </div>
+
           </div>
         </span>
       </div>

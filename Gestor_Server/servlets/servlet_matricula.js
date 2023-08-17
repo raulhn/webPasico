@@ -133,6 +133,36 @@ function obtener_alumnos_curso(req, res)
     )
 }
 
+function obtener_alumnos_profesor(req, res)
+{
+    comun.comprobaciones(req, res,
+        async () =>
+        {
+            let nid_profesor = req.params.nid_profesor;
+            let nid_curso = req.params.nid_curso;
+            let activo = req.params.activo;
+
+            let resultados;
+
+            if(activo == 1)
+            {
+                resultados = await matricula.obtener_alumnos_profesor(nid_profesor, nid_curso);
+            }
+            else if(activo == 2)
+            {
+                resultados = await matricula.obtener_alumnos_profesor_baja(nid_profesor, nid_curso);
+            }
+            else if(activo == 3)
+            {
+                resultados = await matricula.obtener_alumnos_profesor_alta(nid_profesor, nid_curso);
+            }
+
+            res.status(200).send({error:false, alumnos: resultados})
+        }
+    )
+}
+
+
 function obtener_matriculas_alumno(req, res)
 {
     comun.comprobaciones(req, res,
@@ -167,8 +197,9 @@ function dar_baja_asignatura(req, res)
             let nid_matricula = req.body.nid_matricula;
             let nid_asignatura = req.body.nid_asignatura;
             let fecha_baja = req.body.fecha_baja;
+            let nid = req.body.nid;
 
-            await matricula.dar_baja_asignatura(nid_matricula, nid_asignatura, fecha_baja);
+            await matricula.dar_baja_asignatura(nid, nid_matricula, nid_asignatura, fecha_baja);
             res.status(200).send({error: false, message: 'Alumno dado de baja'})
         }
     )
@@ -182,6 +213,7 @@ module.exports.obtener_matriculas = obtener_matriculas;
 
 module.exports.obtener_alumnos_asignaturas = obtener_alumnos_asignaturas;
 module.exports.obtener_alumnos_curso = obtener_alumnos_curso;
+module.exports.obtener_alumnos_profesor = obtener_alumnos_profesor;
 
 module.exports.obtener_matriculas_alumno = obtener_matriculas_alumno;
 module.exports.obtener_asignaturas_matricula = obtener_asignaturas_matricula;

@@ -48,8 +48,10 @@ function existe_persona(nombre, primer_apellido, segundo_apellido, fecha_nacimie
     return new Promise(
         (resolve, reject) =>
         {
-            conexion.dbConn.query('select count(*) cont from ' + constantes.ESQUEMA_BD + '.persona where nombre = ' + conexion.dbConn.escape(nombre) +
-                    ' and primer_apellido = ' + conexion.dbConn.escape(primer_apellido) + ' and segundo_apellido = ' + conexion.dbConn.escape(segundo_apellido) +
+            conexion.dbConn.query('select count(*) cont from ' + constantes.ESQUEMA_BD + '.persona ' +
+                    ' where ' +  constantes.ESQUEMA_BD + '.initcap(nombre) = ' + constantes.ESQUEMA_BD + '.initcap( ' +  conexion.dbConn.escape(nombre) + ') ' +
+                    ' and ' +  constantes.ESQUEMA_BD + '.initcap(primer_apellido) = ' + constantes.ESQUEMA_BD + '.initcap( ' + conexion.dbConn.escape(primer_apellido) + ') ' +
+                    ' and ' +  constantes.ESQUEMA_BD + '.initcap(segundo_apellido) = ' + constantes.ESQUEMA_BD + '.initcap( ' + conexion.dbConn.escape(segundo_apellido)  + ') ' +
                     ' and fecha_nacimiento = ' + 'str_to_date(nullif(' + conexion.dbConn.escape(fecha_nacimiento) + ', \'\') , \'%Y-%m-%d\')',
                 (error, results, fields) =>
                 {
@@ -80,8 +82,9 @@ function registrar_persona(nombre, primer_apellido, segundo_apellido, telefono, 
                     () =>
                     {  
                         conexion.dbConn.query('insert into ' +  constantes.ESQUEMA_BD + '.persona(nombre, primer_apellido, segundo_apellido, telefono, fecha_nacimiento, nif, correo_electronico) ' +
-                                            ' values(' + conexion.dbConn.escape(nombre) + ', ' + conexion.dbConn.escape(primer_apellido) + ', ' + 
-                                            conexion.dbConn.escape(segundo_apellido) + ','  +
+                                            ' values(' +  constantes.ESQUEMA_BD + '.initcap(' + conexion.dbConn.escape(nombre) + '), ' 
+                                                       +  constantes.ESQUEMA_BD + '.initcap(' + conexion.dbConn.escape(primer_apellido) + '), ' 
+                                                       +  constantes.ESQUEMA_BD + '.initcap(' + conexion.dbConn.escape(segundo_apellido) + '),'  +
                                             'cast(nullif(' + conexion.dbConn.escape(telefono) + ', \'\') as unsigned)'
                                             + ',' + 
                                             'str_to_date(nullif(' + conexion.dbConn.escape(fecha_nacimiento) + ', \'\') , \'%Y-%m-%d\')' + 
@@ -327,9 +330,9 @@ function actualizar_persona(nid, nif, nombre, primer_apellido, segundo_apellido,
                     {
                         conexion.dbConn.query('update ' + constantes.ESQUEMA_BD + '.persona set' +
                             ' nif = ' + conexion.dbConn.escape(nif) +
-                            ', nombre = ' + conexion.dbConn.escape(nombre) +
-                            ', primer_apellido = ' + conexion.dbConn.escape(primer_apellido) +
-                            ', segundo_apellido = ' + conexion.dbConn.escape(segundo_apellido) +
+                            ', nombre = ' +  constantes.ESQUEMA_BD + '.initcap(' + conexion.dbConn.escape(nombre) + ')' +
+                            ', primer_apellido = ' +  constantes.ESQUEMA_BD + '.initcap(' + conexion.dbConn.escape(primer_apellido) + ')' +
+                            ', segundo_apellido = ' +  constantes.ESQUEMA_BD + '.initcap(' + conexion.dbConn.escape(segundo_apellido) + ')' +
                             ', telefono = cast(nullif(' +  conexion.dbConn.escape(telefono) + ', \'\') as unsigned)' +
                             ', fecha_nacimiento = str_to_date(nullif(' + conexion.dbConn.escape(fecha_nacimiento) + ', \'\') , \'%Y-%m-%d\')'  +
                             ', correo_electronico = ' + conexion.dbConn.escape(correo_electronico) +

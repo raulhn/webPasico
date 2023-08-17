@@ -165,14 +165,14 @@ export class ListaPersonasComponent {
       this.lista_cursos = respuesta.cursos.map((elemento: any) => {return {descripcion: elemento.descripcion, clave_curso: elemento.nid}});
       this.bCargado_cursos = true;
       this.curso_seleccionado = respuesta.cursos[0]['nid']
-      this.cambia_seleccion_curso();
     }
   }
 
   ngOnInit(): void {
-    this.personasService.obtener_personas(this.tipo).subscribe(this.refrescar_personas);
     this.asignaturasService.obtener_asignaturas().subscribe(this.recuperar_asignaturas);
     this.cursosService.obtener_cursos().subscribe(this.obtener_cursos);
+    this.tipo = "1";
+    this.cambia_seleccion();
   }
 
   cambia_seleccion_socio()
@@ -227,7 +227,6 @@ export class ListaPersonasComponent {
 
   obtenerUrlFicha()
   {
-    console.log(this.persona_seleccionada)
     return this.enlaceFicha + this.persona_seleccionada.nid;
   }
 }

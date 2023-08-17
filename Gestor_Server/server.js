@@ -91,6 +91,7 @@ app.post('/eliminar_curso', servlet_curso.eliminar_curso);
 app.post('/registrar_matricula', servlet_matricula.registrar_matricula);
 app.get('/obtener_alumnos_asignaturas/:nid_curso/:nid_asignatura/:activo', servlet_matricula.obtener_alumnos_asignaturas);
 app.get('/obtener_alumnos_curso/:nid_curso/:activo', servlet_matricula.obtener_alumnos_curso)
+app.get('/obtener_alumnos_profesor/:nid_profesor/:nid_curso/:nid_activo', servlet_matricula.obtener_alumnos_profesor)
 
 app.get('/obtener_matriculas_alumno/:nid_alumno', servlet_matricula.obtener_matriculas_alumno);
 app.get('/obtener_asignaturas_matriculas/:nid_matricula', servlet_matricula.obtener_asignaturas_matricula);

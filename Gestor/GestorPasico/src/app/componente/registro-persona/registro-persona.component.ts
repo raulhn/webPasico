@@ -52,8 +52,7 @@ export class RegistroPersonaComponent implements OnInit{
   
   valida_formulario()
   {
-    return this.nombre.length > 0 && this.primer_apellido.length > 0 &&
-           this.fecha_nacimiento.length > 0;
+    return this.nombre.length > 0 && this.primer_apellido.length > 0;
   }
 
 

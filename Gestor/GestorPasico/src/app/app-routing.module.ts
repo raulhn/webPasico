@@ -45,10 +45,6 @@ const routes: Routes = [
     component: FichaPersonaComponent 
   },
   {
-    path: 'socios',
-    component: ListaSociosComponent
-  },
-  {
     path: 'registrar-socio',
     component: RegistroSocioComponent
   },

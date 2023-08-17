@@ -34,6 +34,8 @@
         </table>
         <div *ngIf="alumno_seleccionado !== undefined" class="float-end p-3">
             <button class="btn btn-danger" (click)="dar_baja_alumno()"><fa-icon [icon]="faXmark"></fa-icon> Dar de baja </button>
+            <span class="p-1"></span>
+            <a [href]="obtener_url_ficha_alumno()"><button class="btn btn-primary"> Ficha alumno </button></a>
         </div>
     </div>
 

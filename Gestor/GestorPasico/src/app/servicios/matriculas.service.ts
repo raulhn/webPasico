@@ -40,9 +40,9 @@ export class MatriculasService {
     return this.http.get(API_URL, {withCredentials: true});
   }
 
-  dar_baja_alumno(nid_matricula: string, nid_asignatura: string, fecha_baja: string)
+  dar_baja_alumno(nid_matricula_asignatura: string,nid_matricula: string, nid_asignatura: string, fecha_baja: string)
   {
     let API_URL = this.url + '/dar_baja_asignatura';
-    return this.http.post(API_URL, {nid_matricula: nid_matricula, nid_asignatura: nid_asignatura, fecha_baja: fecha_baja}, {withCredentials: true})
+    return this.http.post(API_URL, {nid: nid_matricula_asignatura, nid_matricula: nid_matricula, nid_asignatura: nid_asignatura, fecha_baja: fecha_baja}, {withCredentials: true})
   }
 }

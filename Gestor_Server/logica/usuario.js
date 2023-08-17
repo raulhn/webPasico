@@ -185,7 +185,7 @@ async function actualizar_password(user, pass)
             if (bExiste)
             {
 
-                const saltRounds = 15;
+                const saltRounds = 9;
                 conexion.dbConn.beginTransaction(
                     () =>
                     {  

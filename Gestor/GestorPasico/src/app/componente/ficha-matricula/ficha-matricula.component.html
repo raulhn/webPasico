@@ -1,6 +1,32 @@
 <app-menu></app-menu>
-<div *ngIf="bCargado">
-    <div class="card" *ngFor="let asignatura of asignaturas">
-        {{asignatura.descripcion}}
+<div class="container p-3">
+    <div class="card" *ngIf="bCargado">
+        <table class="table table-striped">
+            <thead>
+                <th>
+                    Asignatura
+                </th>
+                <th>
+                    Profesor
+                </th>
+                <th>
+                    Fecha alta
+                </th>
+            </thead>
+            <tbody>
+                <tr *ngFor="let asignatura of asignaturas">
+                    <td>
+                        {{asignatura.descripcion}}
+                    </td>
+                        <td>
+                        {{asignatura.nombre}} {{asignatura.primer_apellido}} {{asignatura.segundo_apellido}}
+                    </td>
+                    <td>
+                        {{asignatura.fecha_alta}}
+                    </td>
+                </tr>
+            </tbody>
+            
+        </table>
     </div>
 </div>

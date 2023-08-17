@@ -1,7 +1,20 @@
 
 <app-menu class=""></app-menu>
 <div class="container pt-4">
-<strong>{{ message }}</strong>
+
+
+  <div class="card p-3">
+  <legend> Profesores </legend>
+    <div class="row form-row pt-3">
+      <div *ngIf="asignatura_seleccionada != ''" class="col">
+        <button class="btn btn-primary mb-3 "  (click) = "addProfesor()"> Añadir Profesor </button>
+      </div>
+    </div>
+    <div *ngIf="profesores.length > 0">
+      <table datatable [dtOptions]="dtOptions_profesor" id="tabla_profesor" class="row-border hover"></table>
+    </div>
+  </div>
+
 <div class="card p-3"  *ngIf="bCargado">
   <legend> Asignaturas </legend>
   <div class="row form-row pt-3">
@@ -14,17 +27,7 @@
 </table>
 </div>
 
-<div class="card p-3">
-<legend> Profesores </legend>
-  <div class="row form-row pt-3">
-    <div class="col">
-      <button class="btn btn-primary mb-3 "  (click) = "addProfesor()"> Añadir Profesor </button>
-    </div>
-  </div>
-  <div *ngIf="profesores.length > 0">
-    <table datatable [dtOptions]="dtOptions_profesor" id="tabla_profesor" class="row-border hover"></table>
-  </div>
-</div>
+
 
 <div style="display: none;"> <!--YOU NEED TO PUT THE COMPONENT INSIDE A HIDDEN DIV-->
 

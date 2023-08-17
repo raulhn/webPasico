@@ -236,10 +236,7 @@ export class RegistroMatriculaComponent implements OnInit{
     }
   }
 
-  obtenerEnlaceFicha(nid: string)
-  {
-    return this.enlaceFicha + nid;
-  }
+
 
   onChangeCurso(evento: any)
   {
@@ -301,7 +298,7 @@ export class RegistroMatriculaComponent implements OnInit{
       {
         if(results.isConfirmed)
         {
-          this.matriculasServices.dar_baja_alumno(this.alumno_seleccionado.nid_matricula, this.nid_asignatura, this.fecha_baja).subscribe(this.registrar_baja)
+          this.matriculasServices.dar_baja_alumno(this.alumno_seleccionado.nid_matricula_asignatura, this.alumno_seleccionado.nid_matricula, this.nid_asignatura, this.fecha_baja).subscribe(this.registrar_baja)
         }
       }
     )
@@ -312,4 +309,8 @@ export class RegistroMatriculaComponent implements OnInit{
     this.matriculasServices.obtener_alumnos_asignaturas(this.curso, this.nid_asignatura, this.activo).subscribe(this.refrescar_alumnos);
   }
 
+  obtener_url_ficha_alumno()
+  {
+    return this.enlaceFicha + this.alumno_seleccionado.nid
+  }
 }

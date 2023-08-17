@@ -1,7 +1,7 @@
 const RUTA_SUBIDAS  = './subidas/';
 const IMAGEN_NO_ENCONTRADA = './subidas/imagen_not_found.jpg';
 
-const ESQUEMA_BD = 'pasico_gestor_pru';
+const ESQUEMA_BD = 'pasico_gestor';
 const ROL_ADMINISTRADOR = 1;
 
 const TIPO_PERSONA_MUSICO = 1;

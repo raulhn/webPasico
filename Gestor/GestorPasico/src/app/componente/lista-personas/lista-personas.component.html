@@ -1,5 +1,6 @@
 <app-menu class=""></app-menu>
 <div class="container pt-4">
+    <label>Tipo de persona</label>
     <select class="form-select" [(ngModel)]="tipo" (change)="cambia_seleccion()" >
         <option selected value="1">Todos</option>
         <option value="2">Socios</option>
@@ -7,14 +8,17 @@
         <option value="4">Alumnos</option>
     </select>
 
-    <select *ngIf="tipo == '2'" class="form-select" [(ngModel)]="alta_socio" (change)="cambia_seleccion_socio()">
-        <option selected value="1">Todos</option>
-        <option value="2">Dados de alta</option>
-        <option value="3">Dados de baja</option>
-    </select>
+    <div *ngIf="tipo == '2'">
+        <label>Estado</label>
+        <select class="form-select" [(ngModel)]="alta_socio" (change)="cambia_seleccion_socio()">
+            <option selected value="1">Todos</option>
+            <option value="2">Dados de alta</option>
+            <option value="3">Dados de baja</option>
+        </select>
+    </div>
 
     <div *ngIf="tipo == '4'">
-        <legend>Curso</legend>
+        <label>Curso</label>
         <div *ngIf="bCargado_cursos" class="row form-row">
             <div class="col">
                 <ng-select [items]="lista_cursos"
@@ -26,13 +30,15 @@
             </div>
         </div>
 
-        <select *ngIf="tipo == '4'" class="form-select" [(ngModel)]="asignatura_seleccionada" (change)="cambia_seleccion()">
+        <label>Asignatura</label>
+        <select  class="form-select" [(ngModel)]="asignatura_seleccionada" (change)="cambia_seleccion()">
             <option selected value="0">Todas las asignaturas</option>
             <option *ngFor="let asignatura_actual of lista_asignaturas" [value]="asignatura_actual.nid">
                 {{asignatura_actual.descripcion}}
             </option>
         </select>
 
+        <label>Estado</label>
         <select class="form-select" [(ngModel)]="alumno_activo" (change)="cambia_seleccion()" aria-label="Default select example">
             <option selected value="1">Activos</option>
             <option value="2">Dados de baja</option>
