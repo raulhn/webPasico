@@ -53,6 +53,8 @@ alter table pasico_gestor_pru.profesor add constraint fk_profesor_asignatura for
 alter table pasico_gestor_pru.profesor add constraint fk_asignatura_profesor foreign key(nid_asignatura) references pasico_gestor_pru.asignatura(nid);
 alter table pasico_gestor_pru.profesor add constraint pk_profesor primary key(nid_persona, nid_asignatura);
 
+
+
 create table pasico_gestor_pru.evaluacion(
 	nid integer auto_increment primary key,
 	nid_asignatura integer,
@@ -73,7 +75,18 @@ create table pasico_gestor_pru.evaluacion_alumno(
 );
 
 alter table pasico_gestor_pru.evaluacion_alumno add constraint fk_evaluacion_persona foreign key(nid_persona) references pasico.persona(nid);
-alter table pasico_gesotr_pru.evaluacion_alumno add constraint fk_evaluacion foreign key(nid_evaluacion) refrences pasico.evaluacion(nid)
+alter table pasico_gesotr_pru.evaluacion_alumno add constraint fk_evaluacion foreign key(nid_evaluacion) refrences pasico.evaluacion(nid);
 
 
 
+create table pasico_gestor_pru.profesor_alumno_matricula(
+	nid integer auto_increment primary key,
+	nid_profesor integer,
+	nid_matricula_asignatura integer,
+	fecha_alta date,
+	fecha_baja date
+);
+
+
+alter table pasico_gestor_pru.profesor_alumno_matricula add constraint fk_profesor_alumno_persona foreign key(nid_profesor) references pasico_gestor_pru.persona(nid);
+alter table pasico_gestor_pru.profesor_alumno_matricula add constraint fk_profesro_alumno_matricula foreign key(nid_matricula_asignatura) references pasico_gestor_pru.matricula_asignatura(nid);

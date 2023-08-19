@@ -1,0 +1,34 @@
+<app-menu></app-menu>
+<div class="container p-3">
+    <legend><b>Profesor: </b> {{nombre_profesor}}</legend>
+    <div class="p-2">
+        <label>Curso</label>
+        <select class="form-select" [(ngModel)]="curso_seleccionado" (change)="cambia_seleccion()" >
+            <option *ngFor="let curso_actual of lista_cursos" [value]="curso_actual.nid">
+                {{curso_actual.descripcion}}
+            </option>
+        </select>
+    </div>
+
+    <div class="p-2">
+        <label>Estado</label>
+        <select class="form-select" [(ngModel)]="activo" (change)="cambia_seleccion()">
+            <option value="1"> Todos </option>
+            <option value="2"> Dados de baja </option>
+            <option value="3"> Dados de alta </option>
+        </select>
+    </div>
+
+    <div *ngIf="bCargadasAsignaturas" class="p-2">
+        <label>Asignatura</label>
+        <select class="form-select" [(ngModel)]="asignatura_seleccionada" (change)="cambia_seleccion()">
+            <option *ngFor="let asignatura_actual of lista_asignaturas" [value]="asignatura_actual.nid">
+                {{asignatura_actual.descripcion}}
+            </option>
+        </select>
+    </div>
+
+    <div class="p-3" *ngIf="bCargadoAlumnos">
+        <table datatable [dtOptions]="dtOptions_alumnos" id="tabla_alumnos" class="row-border hover"></table>
+    </div>
+</div>

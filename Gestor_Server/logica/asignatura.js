@@ -101,6 +101,30 @@ function obtener_asignaturas()
     )
 }
 
+function obtener_asignaturas_profesor(nid_profesor)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.query(
+                    'select distinct a.* ' + 
+                    'from ' + constantes.ESQUEMA_BD + '.profesor_alumno_matricula pam, ' 
+                            + constantes.ESQUEMA_BD + '.matricula_asignatura ma, ' 
+                            + constantes.ESQUEMA_BD + '.asignatura a ' +
+                    'where pam.nid_matricula_asignatura = ma.nid ' + 
+                     ' and ma.nid_asignatura = a.nid ' +
+                     ' and pam.nid_profesor = ' + conexion.dbConn.escape(nid_profesor),
+                (error, results, fields) =>
+                {
+                    if(error) {console.log(error); reject();}
+                    else {resolve(results)}
+                }
+                    
+            )
+        }
+    )
+}
+
 function obtener_asignatura(nid_asignatura)
 {
     return new Promise(
@@ -219,6 +243,8 @@ module.exports.registrar_asignatura = registrar_asignatura;
 module.exports.actualizar_asignatura = actualizar_asignatura;
 module.exports.eliminar_asignatura = eliminar_asignatura;
 module.exports.existe_asignatura = existe_asignatura;
+
+module.exports.obtener_asignaturas_profesor = obtener_asignaturas_profesor;
 module.exports.obtener_asignaturas = obtener_asignaturas;
 module.exports.obtener_asignatura = obtener_asignatura;
 

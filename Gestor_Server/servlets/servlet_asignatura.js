@@ -117,6 +117,20 @@ function obtener_profesores_asignatura(req, res)
     )
 }
 
+function obtener_asignaturas_profesor(req, res)
+{
+    comun.comprobaciones(req, res,
+        async() =>
+        {
+            let nid_profesor = req.params.nid_profesor;
+
+            resultados = await asignatura.obtener_asignaturas_profesor(nid_profesor);
+            res.status(200).send({error: false, asignaturas: resultados});
+        }
+        
+    )
+}
+
 module.exports.registrar_asignatura = registrar_asignatura;
 module.exports.actualizar_asignatura = actualizar_asignatura;
 module.exports.eliminar_asignatura = eliminar_asignatura;
@@ -127,3 +141,5 @@ module.exports.add_profesor = add_profesor;
 module.exports.eliminar_profesor = eliminar_profesor;
 module.exports.obtener_profesores = obtener_profesores;
 module.exports.obtener_profesores_asignatura = obtener_profesores_asignatura;
+
+module.exports.obtener_asignaturas_profesor = obtener_asignaturas_profesor;

@@ -13,6 +13,7 @@ import { AsignaturasComponent } from './componente/asignaturas/asignaturas.compo
 import { RegistroMatriculaComponent } from './componente/registro-matricula/registro-matricula.component';
 import { RegistroCursoComponent } from './componente/registro-curso/registro-curso.component';
 import { FichaMatriculaComponent } from './componente/ficha-matricula/ficha-matricula.component';
+import { FichaProfesorComponent } from './componente/ficha-profesor/ficha-profesor.component';
 
 
 const routes: Routes = [
@@ -63,6 +64,10 @@ const routes: Routes = [
   {
     path: 'ficha_matricula/:nid_matricula',
     component: FichaMatriculaComponent
+  },
+  {
+    path: 'ficha_profesor/:nid_profesor',
+    component: FichaProfesorComponent
   }
 
 ];

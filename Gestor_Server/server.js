@@ -47,7 +47,7 @@ app.post('/actualizar_persona', servlet_persona.actualizar_persona);
 app.get('/obtener_persona/:nid', servlet_persona.obtener_persona);
 app.post('/registrar_persona', servlet_persona.registrar_persona);
 app.get('/obtener_ficha_persona/:nid_persona', servlet_persona.obtener_ficha_persona);
-app.get('/obtener_personas/:tipo', servlet_persona.obtener_personas_tipo)
+app.get('/obtener_personas/:tipo', servlet_persona.obtener_personas_tipo);
 
 /** Padres **/
 app.get('/obtener_padre/:nid_persona', servlet_persona.obtener_padre);
@@ -75,7 +75,8 @@ app.post('/registrar_asignatura', servlet_asignatura.registrar_asignatura);
 app.post('/actualizar_asignatura', servlet_asignatura.actualizar_asignatura);
 app.post('/eliminar_asignatura', servlet_asignatura.eliminar_asignatura);
 app.get('/obtener_asignaturas', servlet_asignatura.obtener_asignaturas);
-app.get('/obtener_asignatura/:nid_asignatura', servlet_asignatura.obtener_asignatura)
+app.get('/obtener_asignatura/:nid_asignatura', servlet_asignatura.obtener_asignatura);
+app.get('/obtener_asignaturas_profesor/:nid_profesor', servlet_asignatura.obtener_asignaturas_profesor);
 
 app.post('/add_profesor', servlet_asignatura.add_profesor);
 app.post('/eliminar_profesor', servlet_asignatura.eliminar_profesor);
@@ -86,12 +87,13 @@ app.get('/obtener_profesores_asignatura/:nid_asignatura', servlet_asignatura.obt
 app.post('/registrar_curso', servlet_curso.registrar_curso);
 app.get('/obtener_cursos', servlet_curso.obtener_cursos);
 app.post('/eliminar_curso', servlet_curso.eliminar_curso);
+app.get('/obtener_cursos_profesor/:nid_profesor', servlet_matricula.obtener_cursos_profesor);
 
 /** Matriculas **/
 app.post('/registrar_matricula', servlet_matricula.registrar_matricula);
 app.get('/obtener_alumnos_asignaturas/:nid_curso/:nid_asignatura/:activo', servlet_matricula.obtener_alumnos_asignaturas);
 app.get('/obtener_alumnos_curso/:nid_curso/:activo', servlet_matricula.obtener_alumnos_curso)
-app.get('/obtener_alumnos_profesor/:nid_profesor/:nid_curso/:nid_activo', servlet_matricula.obtener_alumnos_profesor)
+app.get('/obtener_alumnos_profesor/:nid_profesor/:nid_curso/:nid_asignatura/:activo', servlet_matricula.obtener_alumnos_profesor)
 
 app.get('/obtener_matriculas_alumno/:nid_alumno', servlet_matricula.obtener_matriculas_alumno);
 app.get('/obtener_asignaturas_matriculas/:nid_matricula', servlet_matricula.obtener_asignaturas_matricula);

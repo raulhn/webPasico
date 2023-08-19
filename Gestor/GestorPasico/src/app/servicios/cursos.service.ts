@@ -27,4 +27,10 @@ export class CursosService {
     return this.http.get(API_URL, {withCredentials: true});
   }
 
+  obtener_cursos_profesor(nid_profesor: string)
+  {
+    let API_URL = this.url + '/obtener_cursos_profesor/' + nid_profesor;
+    return this.http.get(API_URL, {withCredentials: true})
+  }
+
 }

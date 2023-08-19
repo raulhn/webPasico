@@ -141,20 +141,21 @@ function obtener_alumnos_profesor(req, res)
             let nid_profesor = req.params.nid_profesor;
             let nid_curso = req.params.nid_curso;
             let activo = req.params.activo;
+            let nid_asignatura = req.params.nid_asignatura;
 
             let resultados;
 
             if(activo == 1)
             {
-                resultados = await matricula.obtener_alumnos_profesor(nid_profesor, nid_curso);
+                resultados = await matricula.obtener_alumnos_profesor(nid_profesor, nid_curso, nid_asignatura);
             }
             else if(activo == 2)
             {
-                resultados = await matricula.obtener_alumnos_profesor_baja(nid_profesor, nid_curso);
+                resultados = await matricula.obtener_alumnos_profesor_baja(nid_profesor, nid_curso, nid_asignatura);
             }
             else if(activo == 3)
             {
-                resultados = await matricula.obtener_alumnos_profesor_alta(nid_profesor, nid_curso);
+                resultados = await matricula.obtener_alumnos_profesor_alta(nid_profesor, nid_curso, nid_asignatura);
             }
 
             res.status(200).send({error:false, alumnos: resultados})
@@ -162,6 +163,19 @@ function obtener_alumnos_profesor(req, res)
     )
 }
 
+function obtener_cursos_profesor(req, res)
+{
+    comun.comprobaciones(req, res,
+        async () =>
+        {
+            let nid_profesor = req.params.nid_profesor;
+
+            resultados = await matricula.obtener_cursos_profesor(nid_profesor);
+            
+            res.status(200).send({error: false, cursos: resultados});
+        }
+    )
+}
 
 function obtener_matriculas_alumno(req, res)
 {
@@ -206,6 +220,8 @@ function dar_baja_asignatura(req, res)
 }
 
 
+
+
 module.exports.registrar_matricula = registrar_matricula;
 module.exports.eliminar_asignatura = eliminar_asignatura;
 module.exports.actualizar_matricula = actualizar_matricula;
@@ -214,6 +230,8 @@ module.exports.obtener_matriculas = obtener_matriculas;
 module.exports.obtener_alumnos_asignaturas = obtener_alumnos_asignaturas;
 module.exports.obtener_alumnos_curso = obtener_alumnos_curso;
 module.exports.obtener_alumnos_profesor = obtener_alumnos_profesor;
+
+module.exports.obtener_cursos_profesor = obtener_cursos_profesor;
 
 module.exports.obtener_matriculas_alumno = obtener_matriculas_alumno;
 module.exports.obtener_asignaturas_matricula = obtener_asignaturas_matricula;

@@ -142,7 +142,7 @@ function obtener_alumnos_asignaturas_alta(nid_curso, nid_asignatura)
 }
 
 function obtener_alumnos_asignaturas_baja(nid_curso, nid_asignatura)
-{
+{ 
     return new Promise(
         (resolve, reject) =>
         {
@@ -245,18 +245,24 @@ function obtener_alumnos_curso_actual()
     )
 }
 
-function obtener_alumnos_profesor(nid_profesor, nid_curso)
+function obtener_alumnos_profesor(nid_profesor, nid_curso, nid_asignatura)
 {
     return new Promise(
         (resolve, reject) =>
         {
-            conexion.dbConn.query('select distinct p.* ' +
-                    'from ' + constantes.ESQUEMA_BD + '.matricula_asignatura ma, '  + constantes.ESQUEMA_BD + '.matricula m' +
-                        constantes.ESQUEMA_BD + '.persona p ' +
+            conexion.dbConn.query('select distinct p.*, a.nid nid_asignatura, a.descripcion descripcion_asignatura ' +
+                    'from ' + constantes.ESQUEMA_BD + '.matricula_asignatura ma, '  + 
+                              constantes.ESQUEMA_BD + '.matricula m, ' +
+                              constantes.ESQUEMA_BD + '.persona p, ' +
+                              constantes.ESQUEMA_BD + '.profesor_alumno_matricula pam, ' +
+                              constantes.ESQUEMA_BD + '.asignatura a ' +
                     'where m.nid = ma.nid_matricula ' +
                       'and p.nid = m.nid_persona ' +
+                      'and ma.nid = pam.nid_matricula_asignatura ' +
+                      'and ma.nid_asignatura = a.nid ' +
                       'and m.nid_curso = ' + conexion.dbConn.escape(nid_curso) + ' ' +
-                      'and ma.nid_profesor = ' + conexion.dbConn.escape(nid_profesor),
+                      'and pam.nid_profesor = ' + conexion.dbConn.escape(nid_profesor) + ' ' +
+                      'and a.nid = ' + conexion.dbConn.escape(nid_asignatura),
                 (error, results, fields) =>
                 {
                     if(error) {console.log(error); reject();}
@@ -267,41 +273,60 @@ function obtener_alumnos_profesor(nid_profesor, nid_curso)
     )
 }
 
-function obtener_alumnos_profesor_alta(nid_profesor, nid_curso)
+function obtener_alumnos_profesor_alta(nid_profesor, nid_curso, nid_asignatura)
 {
     return new Promise(
         (resolve, reject) =>
         {
-            conexion.dbConn.query('select distinct p.* ' +
-                    'from ' + constantes.ESQUEMA_BD + '.matricula_asignatura ma, '  + constantes.ESQUEMA_BD + '.matricula m' +
-                        constantes.ESQUEMA_BD + '.persona p ' +
+            conexion.dbConn.query('select distinct p.*, a.nid nid_asignatura, a.descripcion descripcion_asignatura ' +
+                    'from ' + constantes.ESQUEMA_BD + '.matricula_asignatura ma, '  + 
+                              constantes.ESQUEMA_BD + '.matricula m, ' +
+                              constantes.ESQUEMA_BD + '.persona p, ' +
+                              constantes.ESQUEMA_BD + '.profesor_alumno_matricula pam, ' +
+                              constantes.ESQUEMA_BD + '.asignatura a ' +
                     'where m.nid = ma.nid_matricula ' +
                     'and p.nid = m.nid_persona ' +
-                    'and (fecha_baja is null or fecha_baja >= sysdate()) ' +
+                    'and ma.nid = pam.nid_matricula_asignatura ' +
+                    'and (ma.fecha_baja is null or ma.fecha_baja >= sysdate()) ' +
+                    'and ma.nid_asignatura = a.nid ' +
                     'and m.nid_curso = ' + conexion.dbConn.escape(nid_curso) + ' ' +
-                    'and ma.nid_profesor = ' + conexion.dbConn.escape(nid_profesor)
-              
+                    'and pam.nid_profesor = ' + conexion.dbConn.escape(nid_profesor) + ' ' +
+                    'and a.nid = ' + conexion.dbConn.escape(nid_asignatura),
+                (error, results, fields) =>
+                {
+                    if(error) {console.log(error); reject();}
+                    else {resolve(results)}
+                }
             )
         }
     )
 }
 
-function obtener_alumnos_profesor_baja(nid_profesor, nid_curso)
+function obtener_alumnos_profesor_baja(nid_profesor, nid_curso, nid_asignatura)
 {
     return new Promise(
         (resolve, reject) =>
         {
-            conexion.dbConn.query('select distinct p.* ' +
-                    'from ' + constantes.ESQUEMA_BD + '.matricula_asignatura ma, '  + constantes.ESQUEMA_BD + '.matricula m' +
-                        constantes.ESQUEMA_BD + '.persona p ' +
-                    'where m.nid = ma.nid_matricula ' +
-                    'and p.nid = m.nid_persona ' +
-                    'and fecha_baja < sysdate() ' +
-                    'and m.nid_curso = ' + conexion.dbConn.escape(nid_curso) + ' ' +
-                    'and ma.nid_profesor = ' + conexion.dbConn.escape(nid_profesor)
-              
-            )
-        }
+            conexion.dbConn.query('select distinct p.*, a.nid nid_asignatura, a.descripcion descripcion_asignatura ' +
+            'from ' + constantes.ESQUEMA_BD + '.matricula_asignatura ma, '  + 
+                      constantes.ESQUEMA_BD + '.matricula m, ' +
+                      constantes.ESQUEMA_BD + '.persona p, ' +
+                      constantes.ESQUEMA_BD + '.profesor_alumno_matricula pam, ' +
+                      constantes.ESQUEMA_BD + '.asignatura a ' +
+            'where m.nid = ma.nid_matricula ' +
+            'and p.nid = m.nid_persona ' +
+            'and ma.nid = pam.nid_matricula_asignatura ' +
+            'and ma.fecha_baja < sysdate() ' +
+            'and ma.nid_asignatura = a.nid ' +
+            'and m.nid_curso = ' + conexion.dbConn.escape(nid_curso) + ' ' +
+            'and pam.nid_profesor = ' + conexion.dbConn.escape(nid_profesor) + ' ' +
+            'and a.nid = ' + conexion.dbConn.escape(nid_asignatura),
+        (error, results, fields) =>
+        {
+            if(error) {console.log(error); reject();}
+            else {resolve(results)}
+        })
+    }
     )
 }
 
@@ -328,13 +353,36 @@ function obtener_asignaturas_matricula(nid_matricula)
     return new Promise(
         (resolve, reject) =>
         {
-            conexion.dbConn.query('select a.*, ma.*, p.*, p.nid nid_profesor from ' + constantes.ESQUEMA_BD + '.matricula_asignatura ma, ' + 
-                    constantes.ESQUEMA_BD + '.asignatura a, ' + constantes.ESQUEMA_BD + '.persona p where ma.nid_asignatura = a.nid and nid_matricula = ' + 
-                    conexion.dbConn.escape(nid_matricula) + ' and ma.nid_profesor = p.nid' ,
+            conexion.dbConn.query('select a.*, ma.*, p.*, p.nid nid_profesor ' +
+                    'from ' + constantes.ESQUEMA_BD + '.matricula_asignatura ma, ' + 
+                              constantes.ESQUEMA_BD + '.asignatura a, ' + 
+                              constantes.ESQUEMA_BD + '.persona p, ' +
+                              constantes.ESQUEMA_BD + '.profesor_alumno_matricula pam ' +
+                    'where ma.nid_asignatura = a.nid and nid_matricula = ' + 
+                    conexion.dbConn.escape(nid_matricula) + ' and ma.nid = pam.nid_matricula_asignatura and pam.nid_profesor = p.nid' ,
                 (error, results, fields) =>
                 {
                     if(error) {console.log(error); reject();}
                     else {resolve(results)}
+                }
+            )
+        }
+    )
+}
+
+
+function alta_profesor_matricula(nid_matricula_asignatura, nid_profesor)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+
+            conexion.dbConn.query('insert into ' + constantes.ESQUEMA_BD + '.profesor_alumno_matricula(nid_profesor, nid_matricula_asignatura, fecha_alta) values(' +
+                    conexion.dbConn.escape(nid_profesor) + ', ' + conexion.dbConn.escape(nid_matricula_asignatura) + ', sysdate())',
+                (error, results, fields) =>
+                {
+                    if(error) {console.log(error); conexion.dbConn.rollback(); reject();}
+                    else {resolve()}
                 }
             )
         }
@@ -349,13 +397,15 @@ function add_asignatura(nid_matricula, nid_asignatura, nid_profesor)
             conexion.dbConn.beginTransaction(
                 () =>
                 {
-                    conexion.dbConn.query('insert into ' + constantes.ESQUEMA_BD + '.matricula_asignatura(nid_matricula, nid_asignatura, fecha_alta, nid_profesor) values(' + 
-                            conexion.dbConn.escape(nid_matricula) + ', ' + conexion.dbConn.escape(nid_asignatura) + ', sysdate(), '
-                             +  conexion.dbConn.escape(nid_profesor) + ')',
-                        (error, results, fields) =>
+                    conexion.dbConn.query('insert into ' + constantes.ESQUEMA_BD + '.matricula_asignatura(nid_matricula, nid_asignatura, fecha_alta) values(' + 
+                            conexion.dbConn.escape(nid_matricula) + ', ' + conexion.dbConn.escape(nid_asignatura) + ', sysdate())',
+                        async (error, results, fields) =>
                         {
                             if(error) {console.log(error); conexion.dbConn.rollback(); reject();}
-                            else {conexion.dbConn.commit(); resolve();}
+                            else {
+                                await alta_profesor_matricula(results.insertId, nid_profesor)
+                                conexion.dbConn.commit(); resolve();
+                            }
                         }
                     
                     )
@@ -411,6 +461,31 @@ function dar_baja_asignatura(nid, nid_matricula, nid_asignatura, fecha_baja)
     )
 }
 
+function obtener_cursos_profesor(nid_profesor)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.query(
+                    'select distinct c.* ' +
+                    'from ' + constantes.ESQUEMA_BD + '.matricula_asignatura ma, ' +
+                            constantes.ESQUEMA_BD + '.profesor_alumno_matricula pam, ' +
+                            constantes.ESQUEMA_BD + '.matricula m, ' +
+                            constantes.ESQUEMA_BD + '.curso c ' +
+                    'where ma.nid = pam.nid_matricula_asignatura ' +
+                    ' and m.nid = ma.nid_matricula ' +
+                    ' and m.nid_curso = c.nid ' +
+                    ' and pam.nid_profesor = ' + conexion.dbConn.escape(nid_profesor),
+                (error, results, fields) =>
+                {
+                    if(error) {console.log(error); reject();}
+                    else {resolve(results)}
+                }
+            )
+        }
+    )
+}
+
 
 module.exports.existe_matricula = existe_matricula;
 module.exports.obtener_nid_matricula = obtener_nid_matricula;
@@ -439,3 +514,5 @@ module.exports.obtener_asignaturas_matricula = obtener_asignaturas_matricula;
 module.exports.add_asignatura = add_asignatura;
 module.exports.eliminar_asignatura = eliminar_asignatura;
 module.exports.dar_baja_asignatura = dar_baja_asignatura;
+
+module.exports.obtener_cursos_profesor = obtener_cursos_profesor;

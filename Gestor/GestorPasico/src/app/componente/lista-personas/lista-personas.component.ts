@@ -26,7 +26,6 @@ export class ListaPersonasComponent {
   bCargado_cursos: boolean = false;
 
   dtOptions: any = {}
- 
   dtOptions_personas: any= {}
 
   lista_personas: any[] = [];
