@@ -4,6 +4,7 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './src/home/home.component';
 import { FormularioLoginComponent } from './src/login/formulario-login/formulario-login.component';
 import { PaginaComponent } from './src/pagina/pagina.component';
+import { FormularioPreinscripcionComponent } from './src/formulario-preinscripcion/formulario-preinscripcion.component';
 
 
 const routes: Routes = [
@@ -18,6 +19,10 @@ const routes: Routes = [
   {
     path: 'general/:id',
     component: PaginaComponent
+  },
+  {
+    path: 'preinscripcion',
+    component: FormularioPreinscripcionComponent
   }
 
 ];

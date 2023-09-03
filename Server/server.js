@@ -28,6 +28,8 @@ const imagen = require('./imagen.js');
 const servlet_componente = require('./servlet_componente.js');
 const servlet_componente_blog = require('./servlets/servlet_componente_blog.js')
 
+const servlet_preinscripcion = require('./servlets/servlet_preinscripcion.js')
+
 const ESQUEMA_BD = constantes.ESQUEMA_BD;
 
 var sesion_config = require('./config/sesion.json');
@@ -79,9 +81,11 @@ function esLogueado(usuario)
     }
 }
 
+const nodemailer = require('nodemailer')
 
 app.get('/', function(req, res)
 {
+    
     return res.status(200).send({error: true, message: 'Hola mundo'})
 });
 
@@ -117,6 +121,7 @@ app.get('/usuarios', function(req, res)
     
 }
 );
+
 
 app.get('/logueado', function(req, res)
 {
@@ -1160,6 +1165,11 @@ app.post('/remove_pagina_componente',
   app.post('/add_componente_blog', servlet_componente_blog.add_elemento_blog);
 
   app.post('/eliminar_elemento_blog', servlet_componente_blog.eliminar_elemento_blog);
+
+  /**
+   * Preinscripcion
+   */
+  app.post('/registrar_preinscripcion', servlet_preinscripcion.registrar_preinscripcion);
 
   https.createServer({
     key: fs.readFileSync('apache.key'),

@@ -1,0 +1,188 @@
+<app-componente-menu></app-componente-menu>
+<title>Formulario de Preinscripción</title>
+<div class="container">
+    <h4 class="bold titulo_pagina" style="color:blue"> Formulario de Preinscripción </h4>
+    <hr class="separa-destacados">
+    <form class="form-control" id="formulario-preinscripcion">
+        <div class="card p-3 m-1">
+            <legend>Alumno</legend>
+            <div class="row">
+                <div class="col-md-12 col-lg-4">
+                    <label>Nombre*</label>
+                    <input class="form-control" [(ngModel)]="nombre_alumno" type="text" />
+                </div>
+                <div class="col-md-12 col-lg-4">
+                    <label>Primer apellido*</label>
+                    <input class="form-control" [(ngModel)]="primer_apellido_alumno" type="text" />
+                </div>
+                <div class="col-md-12 col-lg-4">
+                    <label>Segundo apellido</label>
+                    <input class="form-control" [(ngModel)]="segundo_apellido_alumno" type="text" />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-5 col-lg-2">
+                    <label>DNI</label>
+                    <input class="form-control" [(ngModel)]="dni_alumno" type="text" />
+                </div>
+         
+                <div class="col-md-5 col-lg-2">
+                    <label>Fecha nacimiento*</label>
+                    <input class="form-control" [(ngModel)]="fecha_nacimiento" type="date" required />
+                </div>
+            </div>
+        </div>
+
+        <div class="card p-3 m-1">
+            <legend>Padre / Madre / Tutor</legend>
+            <div class="row">
+                <div class="col-lg-4 col-12">
+                    <label>Nombre</label>
+                    <input class="form-control" [(ngModel)]="nombre_padre" type="text" />
+                </div>
+                <div class="col-lg-4 col-12">
+                    <label>Primer apellido</label>
+                    <input class="form-control" [(ngModel)]="primer_apellido_padre" type="text" />
+                </div>
+                <div class="col-lg-4 col-12">
+                    <label>Segundo apellido</label>
+                    <input class="form-control" [(ngModel)]="segundo_apellido_padre" type="text" />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-2 col-5">
+                    <label>DNI</label>
+                    <input class="form-control" [(ngModel)]="dni_padre" type="text" />
+                </div>
+
+                <div class="col-lg-2 col-5">
+                    <label>Teléfono*</label>
+                    <input class="form-control" [(ngModel)]="telefono" type="text" required/>
+                </div>
+                <div class="col-lg-8 col-12">
+                    <label>Correo electrónico*</label>
+                    <input class="form-control" [(ngModel)] ="correo_electronico" type="text" required/>
+                </div>
+               
+            </div>
+        </div>
+
+        <div *ngIf="comprueba_edad()" class="card p-3 m-1">
+            <legend>Instrumento</legend>
+
+            <div class="form-check">
+                <input class="form-check-input" type="radio" (change) = "actualiza_instrumento('2')" name="familiaInstrumentos" id="Viento Metal">
+                <label class="form-check-label" for="Viento Madera">
+                    Viento Madera
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" (change) = "actualiza_instrumento('3')"  name="familiaInstrumentos" id="Viento Metal">
+                <label class="form-check-label" for="Viento Percusión">
+                    Percusión
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" (change) = "actualiza_instrumento('4')"  name="familiaInstrumentos" id="Cuerda" checked>
+                <label class="form-check-label" for="Cuerda">
+                    Cuerda
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" (change) = "actualiza_instrumento('1')"  name="familiaInstrumentos" id="Viento Metal" checked="checked" >
+                <label class="form-check-label" for="Viento Metal">
+                    Viento Metal
+                </label>
+            </div>
+
+            <div *ngIf="familia_instrumento == '1'">
+                <label>Elige instrumento</label>
+                <select class="form-select" [(ngModel)]="instrumento" aria-label="Default select example">
+                    <option value="Trompeta">Trompeta</option>
+                    <option value="Trompa">Trompa</option>
+                    <option value="Trombón">Trombón</option>
+                    <option value="Bombardino">Bombardino</option>
+                    <option value="Tuba">Tuba</option>
+                </select>
+            </div>
+
+            <div *ngIf="familia_instrumento=='2'">
+                <label>Elige instrumento</label>
+                <select  class="form-select" [(ngModel)]="instrumento" aria-label="Default select example">
+                    <option value="Clarinete">Clarinete</option>
+                    <option value="Saxofón">Saxofón</option>
+                    <option value="Flauta">Flauta</option>
+                    <option value="Oboe">Oboe</option>
+                    <option value="Fagot">Fagot</option>
+                </select>
+            </div>
+
+            <div *ngIf="familia_instrumento=='4'">
+                <label>Elige instrumento</label>
+                <select  class="form-select" [(ngModel)]="instrumento" aria-label="Default select example">
+                    <option value="Contrabajo">Contrabajo</option>
+                    <option value="Violonchelo">Violonchelo</option>
+                    <option value="Piano">Piano</option>
+                    <option value="Guitarra">Guitarra</option>
+                    <option value="Violín">Violín</option>
+                    <option value="Viola">Viola</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="card p-3 m-1">
+            <div class="row">
+                <div class="col">
+                    <legend>Dirección Postal</legend>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2 col-4">
+                    <label>Provincia</label>
+                    <input class="form-control" [(ngModel)] = "provincia" type="text" />
+                </div>
+
+                <div class="col-lg-2 col-4">
+                    <label>Municipio</label>
+                    <input class="form-control" [(ngModel)] = "municipio" type="text" />
+                </div>
+
+                <div class="col-lg-2 col-4">
+                    <label>Código Postal</label>
+                    <input class="form-control" [(ngModel)] = "codigo_postal" type ="text" />
+                </div>
+    
+                <div class="col-lg-12 col-12">
+                    <label>Dirección</label>
+                    <input class="form-control" [(ngModel)] = "direccion" type="text" />
+                </div>
+            </div>
+            <div class="row">
+               
+                <div class="col-lg-1 col-4">
+                    <label>Número</label>
+                    <input class="form-control" [(ngModel)] = "numero" type="text"/>
+                </div>
+                <div class="col-lg-1 col-4">
+                    <label>Puerta</label>
+                    <input class="form-control" [(ngModel)] = "puerta" type="text"/>
+                </div>
+     
+                <div class="col-lg-1 col-4">
+                    <label>Escalera</label>
+                    <input class="form-control" [(ngModel)] = "escalera" type="text"/>
+                </div>
+            </div>
+            <div class="row pt-3">
+                <div class="col-3">
+                    <button (click)="registrar()" class="btn btn-primary mb-3 "> Registrar </button>
+                </div>
+            </div>
+        </div>
+
+
+
+    </form>
+</div>

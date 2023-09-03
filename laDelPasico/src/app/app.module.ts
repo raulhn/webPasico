@@ -42,6 +42,9 @@ import { EditarComponenteCaruselComponent } from './src/editar_componente/editar
 import { ComponenteBlogComponent } from './src/componente-blog/componente-blog.component';
 import { EditarComponenteBlogComponent } from './src/editar_componente/editar-componente-blog/editar-componente-blog.component';
 import { ComponenteBlogReducidoComponent } from './src/componente-blog-reducido/componente-blog-reducido.component';
+import { FormularioPreinscripcionComponent } from './src/formulario-preinscripcion/formulario-preinscripcion.component';
+import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module } from 'ng-recaptcha';
+import { environment } from 'src/environments/environment';
 
 @NgModule({
   declarations: [
@@ -71,7 +74,8 @@ import { ComponenteBlogReducidoComponent } from './src/componente-blog-reducido/
     EditarComponenteCaruselComponent,
     ComponenteBlogComponent,
     EditarComponenteBlogComponent,
-    ComponenteBlogReducidoComponent
+    ComponenteBlogReducidoComponent,
+    FormularioPreinscripcionComponent
   ],
   imports: [
     BrowserModule,
@@ -84,9 +88,14 @@ import { ComponenteBlogReducidoComponent } from './src/componente-blog-reducido/
     QuillModule.forRoot(),
     NgxGalleryModule,
     NgxGoogleAnalyticsModule.forRoot('G-WCP2Y4KYHT'),
-    NgxGoogleAnalyticsRouterModule 
+    NgxGoogleAnalyticsRouterModule,
+    RecaptchaV3Module
   ],
-  providers: [Usuario],
+  providers: [Usuario,
+  {
+    provide: RECAPTCHA_V3_SITE_KEY,
+    useValue: environment.recaptcha.siteKey
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule {
