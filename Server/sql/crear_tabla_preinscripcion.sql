@@ -1,0 +1,43 @@
+create table pasico.preinscripcion(
+	nid_preinscripcion integer auto_increment primary key,
+	nombre varchar(100),
+	primer_apellido varchar(100),
+	segundo_apellido varchar(100),
+	dni varchar(10),
+	fecha_nacimiento date,
+	nombre_padre varchar(100),
+	primer_apellido_padre varchar(100),
+	segundo_apellido_padre varchar(100),
+	dni_padre varchar(10),
+	correo_electronico varchar(200),
+	telefono varchar(20),
+	municipio varchar(100),
+	provincia varchar(100),
+	direccion varchar(700),
+    codigo_postal varchar(20),
+	numero varchar(10),
+	puerta varchar(10),
+	escalera varchar(10)
+);
+
+create table pasicopru.preinscripcion(
+	nid_preinscripcion integer auto_increment primary key,
+	nombre varchar(100),
+	primer_apellido varchar(100),
+	segundo_apellido varchar(100),
+	dni varchar(10),
+	fecha_nacimiento date,
+	nombre_padre varchar(100),
+	primer_apellido_padre varchar(100),
+	segundo_apellido_padre varchar(100),
+	dni_padre varchar(10),
+	correo_electronico varchar(200),
+	telefono varchar(20),
+	municipio varchar(100),
+	provincia varchar(100),
+	direccion varchar(700),
+	codigo_postal varchar(20),
+	numero varchar(10),
+	puerta varchar(10),
+	escalera varchar(10)
+);

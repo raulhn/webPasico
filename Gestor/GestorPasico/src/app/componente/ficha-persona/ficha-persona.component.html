@@ -6,22 +6,6 @@
    <app-socio nid_persona={{id_persona}} #instancia_socio></app-socio>
    <app-matriculas-alumno nid_alumno={{id_persona}}></app-matriculas-alumno>
    <app-cursos-profesor nid_profesor={{id_persona}}></app-cursos-profesor>
-
    <button  class="btn btn-primary mb-3 tp-3" (click)="guardar()"> Guardar </button>
 
-   <div *ngIf="bError" class="alert alert-danger" role="alert">
-      {{mensaje_error}}
-   </div>
-   <div *ngIf="bError_padre" class="alert alert-danger" role="alert">
-      {{mensaje_error_padre}}
-   </div>
-   <div *ngIf="bError_madre" class="alert alert-danger" role="alert">
-      {{mensaje_error_madre}}
-   </div>
-   <div *ngIf="bError_socio" class="alert alert-danger" role="alert">
-      {{mensaje_error_socio}}
-   </div>
-   <div *ngIf="bRegistrado && bRegistrado_madre && bRegistrado_padre && !bError_socio" class="alert alert-success" role="alert">
-      {{mensaje_registro}}
-   </div>
 </div>

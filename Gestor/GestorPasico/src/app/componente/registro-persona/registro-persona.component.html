@@ -41,17 +41,10 @@
                 <input class="form-control" name="Correo electrónico" [(ngModel)] = "correo_electronico" type="text"/>
             </div>
         </div>
-
-        <div class="row form-row pt-3">
-            <div class="col">
-                <button (click)= "registrar_persona()" class="btn btn-primary mb-3 "> Registrar </button>
-            </div>
-        </div>
     </form>
-    <div *ngIf="bError" class="alert alert-danger" role="alert">
-        {{mensaje_error}}
-    </div>
-    <div *ngIf="bRegistrado" class="alert alert-success" role="alert">
-        {{mensaje_registro}}
-    </div>
+
+
+
+   
+      
 </div>

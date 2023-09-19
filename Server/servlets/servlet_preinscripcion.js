@@ -18,8 +18,8 @@ function registrar_preinscripcion(req, res)
             let fecha_nacimiento = req.body.fecha_nacimiento;
             let dni = req.body.dni;
             let nombre_padre = req.body.nombre_padre;
-            let primer_apellido_padre = req.body.primer_apellido;
-            let segundo_apellido_padre = req.body.segundo_apellido;
+            let primer_apellido_padre = req.body.primer_apellido_padre;
+            let segundo_apellido_padre = req.body.segundo_apellido_padre;
             let dni_padre = req.body.dni_padre;
             let correo_electronico = req.body.correo_electronico;
             let telefono = req.body.telefono;

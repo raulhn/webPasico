@@ -1,0 +1,11 @@
+create table pasico_gestor.forma_pago(
+	nid integer primary key auto_increment,
+	nid_titular integer,
+	iban varchar(40)
+);
+
+alter table pasico_gestor.forma_pago add constraint fk_forma_pago_persona foreign key(nid_titular) references pasico_gestor.persona(nid);
+
+
+alter table pasico_gestor_pru.forma_pago add constraint fk_forma_pago_persona foreign key(nid_titular) references pasico_gestor_pru.persona(nid);
+

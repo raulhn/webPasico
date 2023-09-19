@@ -69,7 +69,7 @@
             </div>
         </div>
 
-        <div *ngIf="comprueba_edad()" class="card p-3 m-1">
+        <div  [ngClass]="{'oculto': !comprueba_edad()}" class="card p-3 m-1">
             <legend>Instrumento</legend>
 
             <div class="form-check">

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PersonasService } from 'src/app/servicios/personas.service';
+import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-registro-persona',
@@ -23,7 +25,7 @@ export class RegistroPersonaComponent implements OnInit{
   bRegistrado: boolean = false;
   mensaje_registro: string = "Se ha registrado correctamente"
 
-  constructor(private personasServices: PersonasService)
+  constructor(private personasServices: PersonasService, private router:Router)
   {}
 
   ngOnInit(): void {
@@ -33,21 +35,30 @@ export class RegistroPersonaComponent implements OnInit{
   registro_persona =    {
     next: (respuesta: any) =>
     {
-      console.log(respuesta)
-      if(!respuesta.error)
-      {
-        this.bRegistrado = true;
-      }
-      else{
-        console.log(respuesta.message)
-      }
+      Swal.fire({
+        icon: 'success',
+        title: 'Registro correcto',
+        text: 'Se ha registrado correctamente'
+      })
+      .then( () =>
+        {
+          this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
+            {
+              this.router.navigate(['/ficha_persona/' + respuesta.nid_persona]);
+            }
+          )
+        })
     },
     error: (respuesta: any) =>
     {
-      this.bError = true;
-      this.mensaje_error = respuesta.error.message;
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Se ha producido un error',
+      })
     }
   }
+
 
   
   valida_formulario()

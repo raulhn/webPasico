@@ -86,4 +86,10 @@ export class PersonasService {
     let API_URL = this.url + '/obtener_madre/' + nid_persona;
     return this.http.get(API_URL, {withCredentials: true})
   }
+
+  obtener_formas_pago()
+  {
+    let API_URL = this.url + '/obtener_formas_pago';
+    return this.http.get(API_URL, {withCredentials: true});
+  }
 }

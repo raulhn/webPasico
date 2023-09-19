@@ -14,6 +14,7 @@ import { RegistroMatriculaComponent } from './componente/registro-matricula/regi
 import { RegistroCursoComponent } from './componente/registro-curso/registro-curso.component';
 import { FichaMatriculaComponent } from './componente/ficha-matricula/ficha-matricula.component';
 import { FichaProfesorComponent } from './componente/ficha-profesor/ficha-profesor.component';
+import { ListadoPreinscripcionesComponent } from './componente/listado-preinscripciones/listado-preinscripciones.component';
 
 
 const routes: Routes = [
@@ -68,6 +69,10 @@ const routes: Routes = [
   {
     path: 'ficha_profesor/:nid_profesor',
     component: FichaProfesorComponent
+  },
+  {
+    path: 'listado_preinscripciones',
+    component: ListadoPreinscripcionesComponent
   }
 
 ];

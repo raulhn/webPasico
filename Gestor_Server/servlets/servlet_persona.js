@@ -18,14 +18,10 @@ async function registrar_persona(req, res)
             let fecha_nacimiento = req.body.fecha_nacimiento;
             let correo_electronico = req.body.correo_electronico;
 
-            bResultado = await persona.registrar_persona(nombre, primer_apellido, segundo_apellido, telefono, fecha_nacimiento, nif, correo_electronico);
-            if (bResultado)
-            {
-                res.status(200).send({error: false, message: 'Registro creado'});
-            }
-            else{
-                res.status(400).send({error: true, message: 'Error al registrar la persona'})
-            }
+            nid_persona = await persona.registrar_persona(nombre, primer_apellido, segundo_apellido, telefono, fecha_nacimiento, nif, correo_electronico);
+
+            res.status(200).send({error: false, message: 'Registro creado', nid_persona: nid_persona});
+          
         }
     )
 }
@@ -185,6 +181,47 @@ async function registrar_madre(req, res)
     )
 }
 
+async function registrar_forma_pago(req, res)
+{
+    comun.comprobaciones(req, res, 
+        async () =>
+        {
+            let nid_titular = req.body.nid_titular;
+            let iban = req.body.nid_titular;
+
+            await persona.registrar_forma_pago(nid_titular, iban);
+            res.status(200).send({error: false, message: 'Forma de pago registrada'});
+        }   
+        
+    )
+}
+
+async function obtener_forma_pago(req, res)
+{
+    comun.comprobaciones(req, res,
+        async () =>
+        {
+            let nid_titular = req.params.nid_titular;
+
+            let resultados = await persona.obtener_forma_pago(nid_titular);
+            res.status(200).send({error: false, formas_pago: resultados});
+        }
+    )
+}
+
+
+async function obtener_formas_pago(req, res)
+{
+    comun.comprobaciones(req, res,
+        async() =>
+        {
+            let resultados = await persona.obtener_formas_pago();
+            res.status(200).send({erro: false, formas_pago: resultados})
+        }
+        
+    )
+}
+
 
 
 module.exports.registrar_persona = registrar_persona
@@ -201,3 +238,7 @@ module.exports.obtener_madre = obtener_madre;
 
 module.exports.registrar_madre = registrar_madre;
 module.exports.registrar_padre = registrar_padre;
+
+module.exports.registrar_forma_pago = registrar_forma_pago;
+module.exports.obtener_forma_pago = obtener_forma_pago;
+module.exports.obtener_formas_pago = obtener_formas_pago;

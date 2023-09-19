@@ -10,8 +10,6 @@ import { ReCaptchaV3Service } from 'ng-recaptcha';
 })
 export class FormularioPreinscripcionComponent implements OnInit {
 
-  constructor(private recaptchaV3Service: ReCaptchaV3Service, private servicioPreinscripcion: ServicioPreinscripcionService) { }
-
   nombre_alumno: string = "";
   primer_apellido_alumno: string = "";
   segundo_apellido_alumno: string = "";
@@ -37,6 +35,11 @@ export class FormularioPreinscripcionComponent implements OnInit {
 
 
   token: string ="";
+
+  
+  constructor(private recaptchaV3Service: ReCaptchaV3Service, private servicioPreinscripcion: ServicioPreinscripcionService) { }
+
+
 
 
   ngOnInit(): void {
@@ -69,7 +72,6 @@ export class FormularioPreinscripcionComponent implements OnInit {
     var fecha_actual = new Date();
     let resta =  fecha_actual.getTime() - date_nacimiento.getTime() 
 
-    console.log(resta / (1000*60*60*24))
     return resta / (1000*60*60*24*365) > 7;
   }
   

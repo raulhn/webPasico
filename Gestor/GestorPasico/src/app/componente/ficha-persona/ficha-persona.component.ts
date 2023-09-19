@@ -6,6 +6,7 @@ import { PadresPersonaComponent } from '../padres-persona/padres-persona.compone
 import { MadresPersonaComponent } from '../madres-persona/madres-persona.component';
 import { SocioComponent } from '../socio/socio.component';
 import { SociosService } from 'src/app/servicios/socios.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-ficha-persona',
@@ -58,12 +59,17 @@ export class FichaPersonaComponent implements OnInit{
     {
       console.log(respuesta);
       this.bRegistrado = true;
+      this.mostrar_aviso();
     },
     error: (respuesta: any) =>
     {
       console.log(respuesta);
       this.bError = true;
-      this.mensaje_error = 'Se ha producido un error'
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Se ha producido un error',
+      })
     }
   }
 
@@ -73,12 +79,17 @@ export class FichaPersonaComponent implements OnInit{
           if(!respuesta.error)
           {
             this.bRegistrado_padre = true;
+            this.mostrar_aviso();
           }
       },
       error: (respuesta: any) =>
       {
         this.bError_padre = true;
-        this.mensaje_error_padre = respuesta.error.message;
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Se ha producido un error',
+        })
       }
   }
 
@@ -89,12 +100,17 @@ registrar_madre = {
         if(!respuesta.error)
         {
           this.bRegistrado_madre = true;
+          this.mostrar_aviso();
         }
     },
     error: (respuesta: any) =>
     {
       this.bError_madre = true;
-      this.mensaje_error_madre = respuesta.error.message;
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Se ha producido un error',
+      })
     }
   }
 
@@ -105,12 +121,29 @@ registrar_madre = {
       if(!respuesta.error)
       {
         this.bActualizado_socio = true;
+        this.mostrar_aviso();
       }
     },
     error: (respuesta: any) =>
     {
       this.bError = true;
-      this.mensaje_error_socio = respuesta.error.message;
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Se ha producido un error',
+      })
+    }
+  }
+
+  mostrar_aviso()
+  {
+    if(this.bRegistrado && this.bRegistrado_madre && this.bRegistrado_padre && !this.bError_socio)
+    {
+        Swal.fire({
+          icon: 'success',
+          title: 'Registro correcto',
+          text: 'Se ha registrado correctamente'
+        })
     }
   }
 

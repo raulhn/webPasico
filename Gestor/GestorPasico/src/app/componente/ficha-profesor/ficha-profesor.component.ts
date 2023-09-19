@@ -5,6 +5,7 @@ import { DataTablesOptions } from 'src/app/logica/constantes';
 import { MatriculasService } from 'src/app/servicios/matriculas.service';
 import { PersonasService } from 'src/app/servicios/personas.service';
 import { AsignaturasService } from 'src/app/servicios/asignaturas.service';
+import { URL } from 'src/app/logica/constantes';
 
 @Component({
   selector: 'app-ficha-profesor',
@@ -12,6 +13,7 @@ import { AsignaturasService } from 'src/app/servicios/asignaturas.service';
   styleUrls: ['./ficha-profesor.component.css']
 })
 export class FichaProfesorComponent implements OnInit{
+  enlaceFicha: string = URL.URL_FRONT_END + "/ficha_persona/";
 
   lista_cursos: any[] = [];
   lista_alumnos: any[] = [];
@@ -31,10 +33,17 @@ export class FichaProfesorComponent implements OnInit{
 
   dtOptions_alumnos: any= {}
 
+  alumno_seleccionado: string = "";
+
   constructor(private rutaActiva: ActivatedRoute, private cusosServices: CursosService, private matriculasService: MatriculasService,
               private personasService: PersonasService, private asignaturasService: AsignaturasService)
   {
     this.nid_profesor = rutaActiva.snapshot.params['nid_profesor'];
+  }
+
+  click_alumno(data: any)
+  {
+
   }
 
   refrescar_alumnos =
@@ -69,6 +78,7 @@ export class FichaProfesorComponent implements OnInit{
             $('td', row).off('click');
             $('td', row).on('click', () => {
               $('#tabla_alumnos tr').removeClass('selected')
+              this.click_alumno(data)
               $(row).addClass('selected');
             });
             return row;
@@ -120,5 +130,10 @@ export class FichaProfesorComponent implements OnInit{
   cambia_seleccion()
   {
     this.matriculasService.obtener_alumnos_profesores(this.nid_profesor, this.curso_seleccionado, this.asignatura_seleccionada, this.activo).subscribe(this.refrescar_alumnos);
+  }
+
+  obtiene_url_ficha()
+  {
+    return this.enlaceFicha + this.alumno_seleccionado;
   }
 }

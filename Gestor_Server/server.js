@@ -15,6 +15,7 @@ var servlet_socio = require('./servlets/servlet_socios.js');
 var servlet_asignatura = require('./servlets/servlet_asignatura.js');
 var servlet_curso = require('./servlets/servlet_curso.js');
 var servlet_matricula = require('./servlets/servlet_matricula.js');
+var servlet_preinscripciones = require('./servlets/servlet_preinscripcion.js')
 
 var fs = require('fs');
 
@@ -99,6 +100,14 @@ app.get('/obtener_matriculas_alumno/:nid_alumno', servlet_matricula.obtener_matr
 app.get('/obtener_asignaturas_matriculas/:nid_matricula', servlet_matricula.obtener_asignaturas_matricula);
 app.post('/eliminar_asignatura', servlet_matricula.eliminar_asignatura);
 app.post('/dar_baja_asignatura', servlet_matricula.dar_baja_asignatura);
+
+/** Forma de pago **/
+app.post('/registrar_forma_pago', servlet_persona.registrar_forma_pago);
+app.get('/obtener_forma_pago/:nid_titular', servlet_persona.obtener_forma_pago);
+app.get('/obtener_formas_pago', servlet_persona.obtener_formas_pago);
+
+/** Preinscripciones **/
+app.get('/obtener_preinscripciones', servlet_preinscripciones.obtener_preinscripciones);
 
 https.createServer({
     key: fs.readFileSync('apache.key'),

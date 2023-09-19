@@ -11,6 +11,7 @@ export class PersonaComponent {
 
   persona: any;
 
+
   constructor(private personasService: PersonasService)
   {
 
@@ -24,6 +25,7 @@ export class PersonaComponent {
       this.persona.fecha_nacimiento = this.persona.fecha_nacimiento.substring(0, 10);
     }
   }
+
 
 
   ngOnInit(): void {
@@ -46,8 +48,7 @@ export class PersonaComponent {
 
   valida_formulario()
   {
-    return this.persona.nombre.length > 0 && this.persona.primer_apellido.length > 0 &&
-           this.persona.fecha_nacimiento.length > 0;
+    return this.persona.nombre.length > 0 && this.persona.primer_apellido.length > 0;
   }
 
   actualizar_persona()
@@ -85,7 +86,6 @@ export class PersonaComponent {
       peticion = {nid:  this.persona['nid'], nif:  this.persona['nif'], nombre:  this.persona['nombre'], primer_apellido:  this.persona['primer_apellido'], 
         segundo_apellido:  this.persona['segundo_apellido'], telefono:  this.persona['telefono'], fecha_nacimiento:  this.persona['fecha_nacimiento'], 
         correo_electronico:  this.persona['correo_electronico']};
-
     }
     return peticion;
   }
