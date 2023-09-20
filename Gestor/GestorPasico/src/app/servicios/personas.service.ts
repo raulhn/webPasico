@@ -92,4 +92,29 @@ export class PersonasService {
     let API_URL = this.url + '/obtener_formas_pago';
     return this.http.get(API_URL, {withCredentials: true});
   }
+
+  
+  obtener_forma_pago(nid_persona: string)
+  {
+    let API_URL = this.url + '/obtener_forma_pago/' + nid_persona;
+    return this.http.get(API_URL, {withCredentials: true});
+  }
+
+  obtener_pago_persona(nid_persona: string)
+  {
+    let API_URL = this.url + '/obtener_pago_persona/' + nid_persona;
+    return this.http.get(API_URL, {withCredentials: true});
+  }
+
+  registrar_forma_pago(nid_titular: string, iban: string)
+  {
+    let API_URL = this.url + '/registrar_forma_pago';
+    return this.http.post(API_URL, {nid_titular: nid_titular, iban: iban}, {withCredentials: true});
+  }
+
+  asociar_forma_pago(peticion: any)
+  {
+    let API_URL = this.url + '/asociar_forma_pago';
+    return this.http.post(API_URL, peticion, {withCredentials: true})
+  }
 }

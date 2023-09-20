@@ -8,7 +8,8 @@ create table pasico_gestor_pru.persona(
 	fecha_nacimiento date,
 	nif varchar(9),
 	nid_padre integer,
-	nid_madre integer
+	nid_madre integer,
+	nid_forma_pago integer
 );
 
 alter table pasico_gestor_pru.persona add constraint fk_persona_padre foreign key(nid_padre) references pasico_gestor_pru.persona(nid);

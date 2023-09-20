@@ -363,7 +363,7 @@ function registrar_forma_pago(nid_titular, iban)
             conexion.dbConn.beginTransaction(
                 async () =>
                 {
-                    bExistePersona = await existe_nid(nid_titula);
+                    bExistePersona = await existe_nid(nid_titular);
                     if(bExistePersona)
                     {
                         conexion.dbConn.query('insert into ' + constantes.ESQUEMA_BD + '.forma_pago(nid_titular, iban) values(' +
@@ -387,7 +387,7 @@ function obtener_forma_pago(nid_titular)
         (resolve, reject) =>
         {
             conexion.dbConn.query('select concat(p.nombre, \' \', p.primer_apellido, \' \', p.segundo_apellido, \' - \', iban) etiqueta, fp.nid from ' + 
-                    constantes.ESQUEMA_BD + '.forma_pago, ' + constantes.ESQUEMA_BD + '.persona p where fp.nid_titular = p.nid and fp.nid_titular = ' + 
+                    constantes.ESQUEMA_BD + '.forma_pago fp, ' + constantes.ESQUEMA_BD + '.persona p where fp.nid_titular = p.nid and fp.nid_titular = ' + 
                     conexion.dbConn.escape(nid_titular),
                 (error, results, fields) =>
                 {
@@ -398,6 +398,25 @@ function obtener_forma_pago(nid_titular)
         }
     )
 }
+
+function obtener_pago_persona(nid_titular)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.query('select nid_forma_pago from ' 
+                    + constantes.ESQUEMA_BD + '.persona p where p.nid = ' + 
+                    conexion.dbConn.escape(nid_titular),
+                (error, results, fields) =>
+                {
+                    if(error) {console.log(error); reject();}
+                    else {resolve(results[0]);}
+                }
+            )
+        }
+    )
+}
+
 
 function obtener_formas_pago()
 {
@@ -412,6 +431,28 @@ function obtener_formas_pago()
                 {
                     if(error) {console.log(error); reject();}
                     else {resolve(results);}
+                }
+            )
+        }
+    )
+}
+
+function asociar_pago_persona(nid_persona, nid_forma_pago)
+{
+    return new  Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.beginTransaction(
+                () =>
+                {
+                    conexion.dbConn.query('update ' + constantes.ESQUEMA_BD + '.persona set nid_forma_pago = ' + conexion.dbConn.escape(nid_forma_pago) +
+                            ' where nid = ' + conexion.dbConn.escape(nid_persona),
+                        (error, results, fields) =>
+                        {
+                            if(error) {console.log(error); conexion.dbConn.rollback(); reject();}
+                            else {conexion.dbConn.commit(); resolve();}
+                        }
+                    )
                 }
             )
         }
@@ -437,4 +478,6 @@ module.exports.obtener_persona = obtener_persona
 
 module.exports.registrar_forma_pago = registrar_forma_pago;
 module.exports.obtener_forma_pago = obtener_forma_pago;
+module.exports.obtener_pago_persona = obtener_pago_persona;
 module.exports.obtener_formas_pago = obtener_formas_pago;
+module.exports.asociar_pago_persona = asociar_pago_persona;

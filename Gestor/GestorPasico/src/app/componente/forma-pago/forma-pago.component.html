@@ -3,7 +3,8 @@
     <ng-select [items]="formas_pago"
         bindLabel="etiqueta" 
         bindValue="nid"
-        [(ngModel)]="forma_pago">
+        [(ngModel)]="forma_pago"
+        [compareWith]="compareForma_pago">
     </ng-select>
 
     <button type="button"  class="btn btn-primary mb-3 tp-3" data-bs-toggle="modal" data-bs-target="#registro-forma-pago">
@@ -18,20 +19,24 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
-            <div class="modal-body">
+            <div class="modal-body" *ngIf="bCargado_formas_pago">
                 <div class="form-row">
                     <label>Titular</label>
                     <ng-select [items]="personas"
-                        bindLabel="etiqueta" 
-                        bindValue="nid"
+                        bindLabel="etiqueta_persona" 
+                        bindValue="clave"
                         [(ngModel)]="persona">
                     </ng-select>
+                </div>
+                <div class="form-row">
+                    <label>IBAN</label>
+                    <input class="form-control" [(ngModel)]="iban" type="text" />
                 </div>
             </div>
             
             <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-            <button type="button" class="btn btn-primary">Guardar</button>
+            <button type="button" class="btn btn-primary" (click)="guardar()">Guardar</button>
             </div>
         </div>
         </div>

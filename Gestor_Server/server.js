@@ -105,6 +105,8 @@ app.post('/dar_baja_asignatura', servlet_matricula.dar_baja_asignatura);
 app.post('/registrar_forma_pago', servlet_persona.registrar_forma_pago);
 app.get('/obtener_forma_pago/:nid_titular', servlet_persona.obtener_forma_pago);
 app.get('/obtener_formas_pago', servlet_persona.obtener_formas_pago);
+app.post('/asociar_forma_pago', servlet_persona.asociar_forma_pago);
+app.get('/obtener_pago_persona/:nid_titular', servlet_persona.obtener_pago_persona);
 
 /** Preinscripciones **/
 app.get('/obtener_preinscripciones', servlet_preinscripciones.obtener_preinscripciones);

@@ -187,7 +187,7 @@ async function registrar_forma_pago(req, res)
         async () =>
         {
             let nid_titular = req.body.nid_titular;
-            let iban = req.body.nid_titular;
+            let iban = req.body.iban;
 
             await persona.registrar_forma_pago(nid_titular, iban);
             res.status(200).send({error: false, message: 'Forma de pago registrada'});
@@ -204,7 +204,7 @@ async function obtener_forma_pago(req, res)
             let nid_titular = req.params.nid_titular;
 
             let resultados = await persona.obtener_forma_pago(nid_titular);
-            res.status(200).send({error: false, formas_pago: resultados});
+            res.status(200).send({error: false, forma_pago: resultados});
         }
     )
 }
@@ -216,7 +216,37 @@ async function obtener_formas_pago(req, res)
         async() =>
         {
             let resultados = await persona.obtener_formas_pago();
-            res.status(200).send({erro: false, formas_pago: resultados})
+            res.status(200).send({error: false, formas_pago: resultados})
+        }
+        
+    )
+}
+
+async function obtener_pago_persona(req, res)
+{
+    comun.comprobaciones(req, res, 
+        async() =>
+        {
+            let nid_titular = req.params.nid_titular;
+            let resultado = await persona.obtener_pago_persona(nid_titular);
+
+            res.status(200).send({error:false, nid_forma_pago: resultado})
+        }
+        
+    )
+}
+
+async function asociar_forma_pago(req, res)
+
+{
+    comun.comprobaciones(req, res,
+        async() =>
+        {
+            let nid_forma_pago = req.body.nid_forma_pago;
+            let nid_persona = req.body.nid_persona;
+
+            await persona.asociar_pago_persona(nid_persona, nid_forma_pago);
+            res.status(200).send({error: false, message: 'Se ha asociado la forma de pago'})
         }
         
     )
@@ -242,3 +272,5 @@ module.exports.registrar_padre = registrar_padre;
 module.exports.registrar_forma_pago = registrar_forma_pago;
 module.exports.obtener_forma_pago = obtener_forma_pago;
 module.exports.obtener_formas_pago = obtener_formas_pago;
+module.exports.obtener_pago_persona = obtener_pago_persona;
+module.exports.asociar_forma_pago = asociar_forma_pago;

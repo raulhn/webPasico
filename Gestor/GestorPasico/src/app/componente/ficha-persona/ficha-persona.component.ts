@@ -7,6 +7,7 @@ import { MadresPersonaComponent } from '../madres-persona/madres-persona.compone
 import { SocioComponent } from '../socio/socio.component';
 import { SociosService } from 'src/app/servicios/socios.service';
 import Swal from 'sweetalert2';
+import { FormaPagoComponent } from '../forma-pago/forma-pago.component';
 
 @Component({
   selector: 'app-ficha-persona',
@@ -22,11 +23,13 @@ export class FichaPersonaComponent implements OnInit{
   bRegistrado_madre: boolean = false;
   bRegistrado_padre: boolean = false;
   bActualizado_socio: boolean = false;
+  bActualizado_pago: boolean = false;
 
   bError:boolean = false;
   bError_padre: boolean = false;
   bError_madre: boolean = false;
   bError_socio: boolean = false;
+  bError_pago: boolean = false;
 
   mensaje_registro: string = 'Se ha guardado correctamente';
   
@@ -43,6 +46,8 @@ export class FichaPersonaComponent implements OnInit{
   @ViewChild('instancia_madre') instancia_madre!: MadresPersonaComponent;
 
   @ViewChild('instancia_socio') instancia_socio!: SocioComponent;
+
+  @ViewChild('instancia_forma_pago') instancia_forma_pago!: FormaPagoComponent;
 
   constructor(private rutaActiva: ActivatedRoute, private personasService: PersonasService, private socioService: SociosService)
   {
@@ -117,7 +122,6 @@ registrar_madre = {
   actualizar_socio = {
     next: (respuesta: any) =>
     {
-      console.log(respuesta)
       if(!respuesta.error)
       {
         this.bActualizado_socio = true;
@@ -127,6 +131,23 @@ registrar_madre = {
     error: (respuesta: any) =>
     {
       this.bError = true;
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Se ha producido un error',
+      })
+    }
+  }
+
+  actualizar_pago =
+  {
+    next: (respuesta: any) =>
+    {
+      this.bActualizado_pago = true;
+    },
+    error: (respuesta: any) =>
+    {
+      this.bError_pago = true;
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
@@ -164,16 +185,21 @@ registrar_madre = {
     var peticion_socio = this.instancia_socio.construye_peticion();
     this.socioService.actualizar_socio(peticion_socio).subscribe(this.actualizar_socio);
 
+    var peticion_forma_pago = this.instancia_forma_pago.construye_peticion();
+    this.personasService.asociar_forma_pago(peticion_forma_pago).subscribe(this.actualizar_pago);
+
     setTimeout(()=>{                        
       this.bRegistrado = false;
       this.bRegistrado_madre = false;
       this.bRegistrado_padre = false;
       this.bActualizado_socio = false;
+      this.bActualizado_pago = false;
     
       this.bError = false;
       this.bError_padre = false;
       this.bError_madre = false;
       this.bError_socio = false;
+      this.bError_pago = false;
 
       this.mensaje_error_padre = '';
       this.mensaje_error_madre = '';
