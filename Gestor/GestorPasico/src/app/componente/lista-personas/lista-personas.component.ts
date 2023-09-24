@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component,  ViewChild } from '@angular/core';
 import { PersonasService } from 'src/app/servicios/personas.service';
 import { Persona } from 'src/app/logica/persona';
 import { URL } from 'src/app/logica/constantes';
@@ -10,6 +10,7 @@ import { MatriculasService } from 'src/app/servicios/matriculas.service';
 import { CursosService } from 'src/app/servicios/cursos.service';
 import 'datatables.net-plugins/filtering/type-based/accent-neutralise.mjs';
 
+import { DataTableDirective } from 'angular-datatables';
 
 @Component({
   selector: 'app-lista-personas',
@@ -18,7 +19,8 @@ import 'datatables.net-plugins/filtering/type-based/accent-neutralise.mjs';
 })
 export class ListaPersonasComponent {
 
-
+  @ViewChild(DataTableDirective, {static: false})
+  datatableElement!: DataTableDirective;
 
   enlaceFicha: string = URL.URL_FRONT_END + "/ficha_persona/";
 
@@ -66,11 +68,8 @@ export class ListaPersonasComponent {
   {
     next: (respuesta: any) =>
     {
-      var datatable = $('#tabla_personas').DataTable({
-        columnDefs : [
-           { targets: 0, type: 'locale-compare' },
-        ]
-      });
+      
+      var datatable = $('#tabla_personas').DataTable();
       datatable.destroy();
       this.lista_personas = respuesta.personas;
 
@@ -82,10 +81,6 @@ export class ListaPersonasComponent {
         buttons: [{extend: 'excel', text: 'Generar Excel', className: 'btn btn-dark mb-3'}],
         columns:
         [
-          {
-            title: 'DNI',
-            data: 'nif'
-          },
           {title: 'Nombre',
             data: 'nombre'
           },
