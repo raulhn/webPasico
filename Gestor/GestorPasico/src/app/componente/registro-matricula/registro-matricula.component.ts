@@ -92,7 +92,6 @@ export class RegistroMatriculaComponent implements OnInit{
   {
     next: (respuesta: any) =>
     {
-      console.log(respuesta);
       this.asignatura = respuesta.asignatura;
     }
   }

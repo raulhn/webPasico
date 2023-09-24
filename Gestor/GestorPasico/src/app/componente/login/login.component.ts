@@ -21,7 +21,6 @@ export class LoginComponent implements OnInit {
     this.usuarioService.logueado().subscribe(
       (res:any) =>
       {
-        console.log(res.logueado);
         if(res.logueado)
         {
           this.router.navigate(['']);
@@ -37,16 +36,13 @@ export class LoginComponent implements OnInit {
 
   login()
   {
-    console.log(this.usuario);
     this.usuarioService.login(this.usuario, this.password).subscribe(
       (res: any) =>
       {
-        console.log(res);
 
         this.usuarioService.logueado().subscribe(
           (res: any) =>
           {
-            console.log(res);
             if(res.logueado)
             {
               this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {

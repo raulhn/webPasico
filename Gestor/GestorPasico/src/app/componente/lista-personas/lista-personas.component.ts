@@ -8,6 +8,7 @@ import { SociosService } from 'src/app/servicios/socios.service';
 import { AsignaturasService } from 'src/app/servicios/asignaturas.service';
 import { MatriculasService } from 'src/app/servicios/matriculas.service';
 import { CursosService } from 'src/app/servicios/cursos.service';
+import 'datatables.net-plugins/filtering/type-based/accent-neutralise.mjs';
 
 
 @Component({
@@ -60,11 +61,16 @@ export class ListaPersonasComponent {
     this.persona_seleccionada = persona_marcada;
   }
 
+
   refrescar_personas = 
   {
     next: (respuesta: any) =>
     {
-      var datatable = $('#tabla_personas').DataTable();
+      var datatable = $('#tabla_personas').DataTable({
+        columnDefs : [
+           { targets: 0, type: 'locale-compare' },
+        ]
+      });
       datatable.destroy();
       this.lista_personas = respuesta.personas;
 
@@ -76,6 +82,10 @@ export class ListaPersonasComponent {
         buttons: [{extend: 'excel', text: 'Generar Excel', className: 'btn btn-dark mb-3'}],
         columns:
         [
+          {
+            title: 'DNI',
+            data: 'nif'
+          },
           {title: 'Nombre',
             data: 'nombre'
           },

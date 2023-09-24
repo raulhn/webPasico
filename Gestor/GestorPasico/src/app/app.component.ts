@@ -10,7 +10,5 @@ export class AppComponent {
   usuario ='';
   imprime()
   {
-    console.log('imprime');
-    console.log(this.usuario);
   }
 }

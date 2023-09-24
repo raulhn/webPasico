@@ -19,17 +19,12 @@ export class FichaPersonaComponent implements OnInit{
 
   id_persona: string = "";
 
-  bRegistrado: boolean = false;
-  bRegistrado_madre: boolean = false;
-  bRegistrado_padre: boolean = false;
-  bActualizado_socio: boolean = false;
-  bActualizado_pago: boolean = false;
+  bRegistrado: number = 0;
+  bRegistrado_madre: number = 0;
+  bRegistrado_padre: number = 0;
+  bActualizado_socio: number = 0;
+  bActualizado_pago: number = 0;
 
-  bError:boolean = false;
-  bError_padre: boolean = false;
-  bError_madre: boolean = false;
-  bError_socio: boolean = false;
-  bError_pago: boolean = false;
 
   mensaje_registro: string = 'Se ha guardado correctamente';
   
@@ -58,23 +53,32 @@ export class FichaPersonaComponent implements OnInit{
 
   }
 
+
+  limpia_variables()
+  {
+    this.bRegistrado = 0;
+    this.bRegistrado_madre = 0;
+    this.bRegistrado_padre = 0;
+    this.bActualizado_socio = 0;
+    this.bActualizado_pago = 0;
+
+    this.mensaje_error_padre = '';
+    this.mensaje_error_madre = '';
+    this.mensaje_error = '';
+    this.mensaje_error_socio = '';
+  }
+
   actualizar =
   {
     next: async (respuesta: any) =>
     {
-      console.log(respuesta);
-      this.bRegistrado = true;
+      this.bRegistrado = 1;
       this.mostrar_aviso();
     },
     error: (respuesta: any) =>
     {
-      console.log(respuesta);
-      this.bError = true;
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Se ha producido un error',
-      })
+      this.bRegistrado = 2;
+      this.mostrar_aviso();
     }
   }
 
@@ -83,18 +87,14 @@ export class FichaPersonaComponent implements OnInit{
       {
           if(!respuesta.error)
           {
-            this.bRegistrado_padre = true;
+            this.bRegistrado_padre = 1;
             this.mostrar_aviso();
           }
       },
       error: (respuesta: any) =>
       {
-        this.bError_padre = true;
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'Se ha producido un error',
-        })
+        this.bRegistrado_padre = 2;
+        this.mostrar_aviso();
       }
   }
 
@@ -104,18 +104,14 @@ registrar_madre = {
     {
         if(!respuesta.error)
         {
-          this.bRegistrado_madre = true;
+          this.bRegistrado_madre = 1;
           this.mostrar_aviso();
         }
     },
     error: (respuesta: any) =>
     {
-      this.bError_madre = true;
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Se ha producido un error',
-      })
+      this.bRegistrado_madre = 2;
+      this.mostrar_aviso();
     }
   }
 
@@ -124,18 +120,14 @@ registrar_madre = {
     {
       if(!respuesta.error)
       {
-        this.bActualizado_socio = true;
+        this.bActualizado_socio = 1;
         this.mostrar_aviso();
       }
     },
     error: (respuesta: any) =>
     {
-      this.bError = true;
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Se ha producido un error',
-      })
+      this.bActualizado_socio = 2;
+      this.mostrar_aviso();
     }
   }
 
@@ -143,28 +135,38 @@ registrar_madre = {
   {
     next: (respuesta: any) =>
     {
-      this.bActualizado_pago = true;
+      this.bActualizado_pago = 1;
+      this.mostrar_aviso();
     },
     error: (respuesta: any) =>
     {
-      this.bError_pago = true;
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Se ha producido un error',
-      })
+      this.bActualizado_pago = 2;
+      this.mostrar_aviso();
     }
   }
 
   mostrar_aviso()
   {
-    if(this.bRegistrado && this.bRegistrado_madre && this.bRegistrado_padre && !this.bError_socio)
+
+    if(this.bRegistrado == 1 && this.bRegistrado_madre == 1 && this.bRegistrado_padre  == 1 
+        && this.bActualizado_pago  == 1 && this.bActualizado_socio == 1)
     {
+        this.limpia_variables(); 
         Swal.fire({
           icon: 'success',
           title: 'Registro correcto',
           text: 'Se ha registrado correctamente'
         })
+    }
+    else if(this.bRegistrado != 0 && this.bRegistrado_madre != 0 && this.bRegistrado_padre  != 0 
+      && this.bActualizado_pago  != 0 && this.bActualizado_socio != 0)
+    {
+      this.limpia_variables();
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Se ha producido un error',
+      })
     }
   }
 
@@ -182,29 +184,17 @@ registrar_madre = {
     var peticion_madre = this.instancia_madre.construye_peticion()
     this.personasService.registrar_madre_peticion(peticion_madre).subscribe(this.registrar_madre);
 
-    var peticion_socio = this.instancia_socio.construye_peticion();
-    this.socioService.actualizar_socio(peticion_socio).subscribe(this.actualizar_socio);
-
     var peticion_forma_pago = this.instancia_forma_pago.construye_peticion();
     this.personasService.asociar_forma_pago(peticion_forma_pago).subscribe(this.actualizar_pago);
 
-    setTimeout(()=>{                        
-      this.bRegistrado = false;
-      this.bRegistrado_madre = false;
-      this.bRegistrado_padre = false;
-      this.bActualizado_socio = false;
-      this.bActualizado_pago = false;
-    
-      this.bError = false;
-      this.bError_padre = false;
-      this.bError_madre = false;
-      this.bError_socio = false;
-      this.bError_pago = false;
+    var peticion_socio = this.instancia_socio.construye_peticion();
 
-      this.mensaje_error_padre = '';
-      this.mensaje_error_madre = '';
-      this.mensaje_error = '';
-      this.mensaje_error_socio = '';
-  }, 2000);
+    if(peticion_socio.num_socio != -1 )
+    {
+      this.socioService.actualizar_socio(peticion_socio).subscribe(this.actualizar_socio);
+    }
+    else{
+      this.bActualizado_socio = 1;
+    }
   }
 }

@@ -41,6 +41,10 @@ export class MadresPersonaComponent {
      next: (respuesta: any) =>
      {
       this.madre = respuesta.madre['nid'];
+     },
+     error: (respuesta: any) =>
+     {
+      
      }
    }
 
@@ -70,7 +74,6 @@ export class MadresPersonaComponent {
 
    guardar()
    {
-      console.log('Guardar madre '+  this.madre)
       if(this.madre === undefined)
       {
         this.personaService.registrar_madre(this.nid_persona, '').subscribe(this.registrar_madre);

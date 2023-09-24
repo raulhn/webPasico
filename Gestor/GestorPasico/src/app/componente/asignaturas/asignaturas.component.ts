@@ -79,8 +79,6 @@ export class AsignaturasComponent implements OnInit {
     next: (respuesta: any) =>
     {
       this.asignaturas = respuesta.asignaturas;
-      console.log(this.asignaturas)
-      console.log(this.asignaturas[0])
       this.bCargado = true;
 
       this.dtOptions = {

@@ -26,7 +26,6 @@ export class MenuComponent implements OnInit {
     this.usuariosService.logueado().subscribe(
       (res:any) =>
       {
-        console.log(res.logueado);
         if(!res.logueado)
         {
           this.router.navigate(['login']);
@@ -34,7 +33,6 @@ export class MenuComponent implements OnInit {
         else{
           this.usuario = res.login;
           this.logueado = res.logueado;
-          console.log(this.usuario)
    //       this.router.navigate(['']);
         }
       }
@@ -46,7 +44,6 @@ export class MenuComponent implements OnInit {
     this.usuariosService.logout().subscribe(
       (res:any) =>
       {
-        console.log(res);
         if(!res.error)
         {
           this.logueado = false;

@@ -27,7 +27,6 @@ export class SocioComponent implements OnInit{
       
       if (respuesta.socio.length > 0)
       {
-        console.log(respuesta['socio'][0])
         this.socio_recuperado = respuesta['socio'][0];
         this.bRecuperadoSocio = true;
       }
@@ -41,6 +40,12 @@ export class SocioComponent implements OnInit{
 
   construye_peticion()
   {
-    return {nid_persona: this.nid_persona, fecha_alta: this.socio_recuperado['fecha_alta'], fecha_baja: this.socio_recuperado['fecha_baja'], num_socio: this.socio_recuperado['num_socio']};
-  }
+    if (this.bRecuperadoSocio)
+    {
+      return {nid_persona: this.nid_persona, fecha_alta: this.socio_recuperado['fecha_alta'], fecha_baja: this.socio_recuperado['fecha_baja'], num_socio: this.socio_recuperado['num_socio']};
+    }
+    else{
+      return {nid_persona: this.nid_persona, num_socio: -1}
+    }
+   }
 }

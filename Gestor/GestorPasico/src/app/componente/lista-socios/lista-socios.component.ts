@@ -50,7 +50,6 @@ export class ListaSociosComponent {
         }
         this.bCargado = true;
       }
-      console.log(this.listaPersonas)
     }
   }
 

@@ -41,6 +41,10 @@ export class PadresPersonaComponent implements OnInit{
      next: (respuesta: any) =>
      {
       this.padre = respuesta.padre['nid'];
+     },
+     error: (respuesta: any) =>
+     {
+      
      }
    }
 

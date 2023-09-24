@@ -10,6 +10,7 @@ export class PersonaComponent {
   @Input() id: string="";
 
   persona: any;
+  bRecuperado_persona: boolean = false;
 
 
   constructor(private personasService: PersonasService)
@@ -21,12 +22,14 @@ export class PersonaComponent {
   {
     next : (respuesta: any) =>
     {
+      this.bRecuperado_persona = true;
       this.persona = respuesta.persona;
-      this.persona.fecha_nacimiento = this.persona.fecha_nacimiento.substring(0, 10);
+      if(this.persona.fecha_nacimiento != null && this.persona.fecha_nacimiento.length > 0)
+      {
+        this.persona.fecha_nacimiento = this.persona.fecha_nacimiento.substring(0, 10);
+      }
     }
   }
-
-
 
   ngOnInit(): void {
     this.personasService.obtener_persona(this.id).subscribe(
@@ -34,50 +37,13 @@ export class PersonaComponent {
     )
   }
 
-  actualizar =
-  {
-    next: async (respuesta: any) =>
-    {
-      console.log(respuesta);
-    },
-    error: (respuesta: any) =>
-    {
-      console.log(respuesta);
-    }
-  }
 
   valida_formulario()
   {
     return this.persona.nombre.length > 0 && this.persona.primer_apellido.length > 0;
   }
 
-  actualizar_persona()
-  {
-      if (this.valida_formulario())
-      {
-        let nid: string = this.persona.nid;
-        let nif: string = this.persona.nif;
-        let nombre: string = this.persona.nombre;
-        let primer_apellido: string = this.persona.primer_apellido;
-        let segundo_apellido: string = this.persona.segundo_apellido;
-        let telefono: string = this.persona.telefono;
-        let fecha_nacimiento: string = this.persona.fecha_nacimiento;
-        let correo_electronico: string = this.persona.correo_electronico;
-
-        this.personasService.actualizar_persona(nid, nif, nombre, primer_apellido, segundo_apellido, telefono, fecha_nacimiento, correo_electronico).subscribe
-        (
-          {next: async (respuesta: any) =>
-          {
-            console.log(respuesta);
-          },
-          error: (respuesta: any) =>
-          {
-            console.log(respuesta);
-          }}
-        )
-      }
-  }
-
+ 
   construye_peticion() : any
   {
     var peticion: any = null;

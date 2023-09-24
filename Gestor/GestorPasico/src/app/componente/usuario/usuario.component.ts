@@ -23,11 +23,10 @@ export class UsuarioComponent implements OnInit {
   
   registrar()
   {
-    console.log(this.usuario);
     this.usuarioService.registrar(this.usuario, this.password).subscribe(
       (res: any) =>
       {
-        console.log(res);
+        
       }
     )
    
