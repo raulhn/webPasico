@@ -1,5 +1,6 @@
 /*! © SpryMedia Ltd - datatables.net/license */
-
+ // Realizar cambios en fichero node_modules/datatables.net/js/jquery.dataTables.js
+ // https://datatables.net/forums/discussion/21201/filtering-spanish-accents-in-searching-box
 (function( factory ){
 	if ( typeof define === 'function' && define.amd ) {
 		// AMD
@@ -66,26 +67,40 @@ var DataTable = $.fn.dataTable;
  *    } );
  */
 function removeAccents(data) {
-    if (data.normalize) {
+
         // Use I18n API if avaiable to split characters and accents, then remove
         // the accents wholesale. Note that we use the original data as well as
         // the new to allow for searching of either form.
-        return data + ' ' + data.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-    }
-    return data;
+        return data + ' ' +   data
+		.replace( /\n/g, ' ' )
+		.replace( /[áàäâ]/g, 'a' )
+		.replace( /[éèëê]/g, 'e' )
+		.replace( /[íìïî]/g, 'i' )
+		.replace( /[óòöô]/g, 'o' )
+		.replace( /[úùüû]/g, 'u' );
+    
+
 }
 var searchType = DataTable.ext.type.search;
 searchType.string = function (data) {
     return !data ? '' : typeof data === 'string' ? removeAccents(data) : data;
 };
+/*
 searchType.html = function (data) {
     return !data
         ? ''
         : typeof data === 'string'
             ? removeAccents(data.replace(/<.*?>/g, ''))
             : data;
-};
+};*/
 
+searchType.html = function (data) {
+    return !data
+        ? ''
+        : typeof data === 'string'
+            ? removeAccents(data)
+            : data;
+};
 
 return DataTable;
 }));

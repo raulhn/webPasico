@@ -1,6 +1,7 @@
 <app-menu class=""></app-menu>
 <div class="container pt-4">
-    <h1>{{asignatura.descripcion}}</h1>
+    
+    <app-ficha-asignatura nid_asignatura={{nid_asignatura}}></app-ficha-asignatura>
     <div *ngIf="bCargadocompleto">
     <form  ngNativeValidate class="form-control">
         

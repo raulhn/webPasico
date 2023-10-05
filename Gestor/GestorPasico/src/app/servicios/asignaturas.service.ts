@@ -15,10 +15,10 @@ export class AsignaturasService {
     return this.http.post(API_URL, {descripcion}, {withCredentials: true});
   }
 
-  actualizar_asignatura(descripcion: string, nid_asignatura: string)
+  actualizar_asignatura(descripcion: string, nid_asignatura: string, precio: string)
   {
     let API_URL = this.url + '/actualizar_asignatura';
-    return this.http.post(API_URL, {descripcion: descripcion, nid_asignatura: nid_asignatura}, {withCredentials: true});
+    return this.http.post(API_URL, {descripcion: descripcion, nid_asignatura: nid_asignatura, precio: precio}, {withCredentials: true});
   }
 
   obtener_asignaturas()

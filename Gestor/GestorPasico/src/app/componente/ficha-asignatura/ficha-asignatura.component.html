@@ -1,0 +1,49 @@
+<div class="card p-3 mb-1">
+    <div class="row">
+        <div class="col-6">
+            <label>
+                Asignatura
+            </label>
+            <input type="text" class="form-control" [(ngModel)] = "descripcion"/> 
+        </div>
+        <div class="col-4"></div>
+        <div class="col">
+            <label>
+                Precio
+            </label>
+            <input type="text" class="form-control" [(ngModel)] = "precio" />
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col">
+            <button  class="btn btn-primary mb-3 tp-3" (click)="guardar()"> Guardar </button>
+        </div>
+    </div>
+</div>
+
+<div class="card p-3">
+    <legend> Profesores </legend>
+    <div class="row form-row pt-3">
+    <div class="col">
+        <button class="btn btn-primary mb-3 "  (click) = "addProfesor()"> Añadir Profesor </button>
+    </div>
+    </div>
+    <div *ngIf="profesores.length > 0">
+    <table datatable [dtOptions]="dtOptions_profesor" id="tabla_profesor" class="row-border hover"></table>
+    </div>
+</div>
+
+<div style="display: none;"> <!--YOU NEED TO PUT THE COMPONENT INSIDE A HIDDEN DIV-->
+
+    <div #instancia_asignatura>
+        <div style="min-height: 300px;">
+          <input type="text" id="descripcion_asignatura" class="swal2-input" placeholder="" disabled [value]="descripcion"/>
+          <ng-select  [items]="lista_personas"
+          bindLabel="etiqueta" 
+          bindValue="nid"
+          [(ngModel)]="profesor_nuevo"
+          [compareWith]="comparePersona_profesor">
+          </ng-select>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,6 @@
+create table pasico_gestor.precio_asignatura(
+	nid_asignatura integer primary key,
+	precio float
+);
+
+alter table pasico_gestor.precio_asignatura add constraint fk_precio_asignatura foreign key(nid_asignatura) references pasico_gestor.asignatura(nid);

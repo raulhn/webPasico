@@ -3,17 +3,7 @@
 <div class="container pt-4">
 
 
-  <div class="card p-3">
-  <legend> Profesores </legend>
-    <div class="row form-row pt-3">
-      <div *ngIf="asignatura_seleccionada != ''" class="col">
-        <button class="btn btn-primary mb-3 "  (click) = "addProfesor()"> Añadir Profesor </button>
-      </div>
-    </div>
-    <div *ngIf="profesores.length > 0">
-      <table datatable [dtOptions]="dtOptions_profesor" id="tabla_profesor" class="row-border hover"></table>
-    </div>
-  </div>
+
 
 <div class="card p-3"  *ngIf="bCargado">
   <legend> Asignaturas </legend>
@@ -25,24 +15,12 @@
 
 <table datatable [dtOptions]="dtOptions" id="tabla_asignaturas" class="row-border hover">
 </table>
+<div *ngIf="bSelecionada_asignatura">
+  <a [href]="url_ficha_asignatura()"> <button class="btn btn-primary"> Ver Ficha</button></a>
+</div>
 </div>
 
 
-
-<div style="display: none;"> <!--YOU NEED TO PUT THE COMPONENT INSIDE A HIDDEN DIV-->
-
-    <div #instancia_asignatura>
-        <div style="min-height: 300px;">
-          <input type="text" id="descripcion_asignatura" class="swal2-input" placeholder="" disabled [value]="asignatura_seleccionada.descripcion"/>
-          <ng-select  [items]="lista_personas"
-          bindLabel="etiqueta" 
-          bindValue="nid"
-          [(ngModel)]="profesor_nuevo"
-          [compareWith]="comparePersona_profesor">
-          </ng-select>
-        </div>
-    </div>
-</div>
 
 </div>
 

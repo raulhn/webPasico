@@ -81,6 +81,9 @@ export class ListaPersonasComponent {
         buttons: [{extend: 'excel', text: 'Generar Excel', className: 'btn btn-dark mb-3'}],
         columns:
         [
+          {title: 'DNI',
+          data: 'nif'
+          },
           {title: 'Nombre',
             data: 'nombre'
           },
@@ -133,6 +136,9 @@ export class ListaPersonasComponent {
         buttons: [{extend: 'excel', text: 'Generar Excel', className: 'btn btn-dark mb-3'}],
         columns:
         [
+          {title: 'DNI',
+           data: 'nif'
+          },
           {title: 'Nombre',
             data: 'nombre'
           },

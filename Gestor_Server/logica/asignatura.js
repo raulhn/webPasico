@@ -1,7 +1,7 @@
 const conexion = require('../conexion.js')
 const constantes = require('../constantes.js')
 
-function registrar_asignatura(descripcion)
+function registrar_asignatura(descripcion, precio)
 {
     return new Promise(
         (resolve, reject) =>
@@ -9,8 +9,9 @@ function registrar_asignatura(descripcion)
             conexion.dbConn.beginTransaction(
                 () =>
                 {
-                    conexion.dbConn.query("insert into " + constantes.ESQUEMA_BD + ".asignatura(descripcion) values(" + conexion.dbConn.escape(descripcion) + ')',
-                        (error, results, fields) =>
+                    conexion.dbConn.query("insert into " + constantes.ESQUEMA_BD + ".asignatura(descripcion, precio) values(" + 
+                        conexion.dbConn.escape(descripcion) + ', replace(' +  conexion.dbConn.escape(precio) + ', \',\',  \'.\'))',
+                        async (error, results, fields) =>
                         {
                             if(error) {console.log(error); conexion.dbConn.rollback(); reject();}
                             else
@@ -26,7 +27,7 @@ function registrar_asignatura(descripcion)
     )
 }
 
-function actualizar_asignatura(nid_asignatura, descripcion)
+function actualizar_asignatura(nid_asignatura, descripcion, precio)
 {
     return new Promise(
         (resolve, reject) =>
@@ -34,12 +35,16 @@ function actualizar_asignatura(nid_asignatura, descripcion)
             conexion.dbConn.beginTransaction(
                 () =>
                 {
-                    conexion.dbConn.query("update " + constantes.ESQUEMA_BD + ".asignatura set descripcion = " + conexion.dbConn.escape(descripcion) +
+                    conexion.dbConn.query("update " + constantes.ESQUEMA_BD + ".asignatura set descripcion = " + 
+                        conexion.dbConn.escape(descripcion) + ', precio = replace(' +  conexion.dbConn.escape(precio) + ', \',\',  \'.\')' +
                         " where nid = " + conexion.dbConn.escape(nid_asignatura),
-                        (error, results, fields) =>
+                        async (error, results, fields) =>
                         {
                             if(error) {console.log(error); conexion.dbConn.rollback(); reject()}
-                            else{conexion.dbConn.commit(); resolve()}
+                            else{
+                                conexion.dbConn.commit(); 
+                                resolve()
+                            }
                         }
                     )
                 }
@@ -90,7 +95,7 @@ function obtener_asignaturas()
     return new Promise(
         (resolve, reject) =>
         {
-            conexion.dbConn.query("select * from " + constantes.ESQUEMA_BD + '.asignatura',
+            conexion.dbConn.query("select nid, descripcion, replace(precio, \'.'\, \',\') as precio from " + constantes.ESQUEMA_BD + '.asignatura',
                 (error, results, fields) =>
                 {
                     if(error) {console.log(error); reject();}
@@ -130,7 +135,7 @@ function obtener_asignatura(nid_asignatura)
     return new Promise(
         (resolve, reject) =>
         {
-            conexion.dbConn.query("select * from " + constantes.ESQUEMA_BD + '.asignatura where nid = ' + conexion.dbConn.escape(nid_asignatura),
+            conexion.dbConn.query("select nid, descripcion, replace(precio, \'.'\, \',\') as precio from " + constantes.ESQUEMA_BD + '.asignatura where nid = ' + conexion.dbConn.escape(nid_asignatura),
                 (error, results, fields) =>
                 {
                     if(error) {console.log(error); reject();}
@@ -239,6 +244,8 @@ function obtener_profesores_asignatura(nid_asignatura)
     )
 }
 
+
+
 module.exports.registrar_asignatura = registrar_asignatura;
 module.exports.actualizar_asignatura = actualizar_asignatura;
 module.exports.eliminar_asignatura = eliminar_asignatura;
@@ -254,3 +261,4 @@ module.exports.eliminar_profesor = eliminar_profesor;
 module.exports.obtener_profesores = obtener_profesores;
 module.exports.obtener_profesores_distinct = obtener_profesores_distinct;
 module.exports.obtener_profesores_asignatura = obtener_profesores_asignatura;
+

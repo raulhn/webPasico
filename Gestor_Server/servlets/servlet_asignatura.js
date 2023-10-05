@@ -7,8 +7,9 @@ function registrar_asignatura(req, res)
         async () =>
         {
             let descripcion = req.body.descripcion;
+            let precio = req.boyd.precio;
 
-            await asignatura.registrar_asignatura(descripcion);
+            await asignatura.registrar_asignatura(descripcion, precio);
             res.status(200).send({error: false, message: 'Asignatura registrada'});
         }
     )
@@ -21,8 +22,9 @@ function actualizar_asignatura(req, res)
         {
             let descripcion = req.body.descripcion;
             let nid_asignatura = req.body.nid_asignatura;
+            let precio = req.body.precio
 
-            await asignatura.actualizar_asignatura(nid_asignatura, descripcion);
+            await asignatura.actualizar_asignatura(nid_asignatura, descripcion, precio);
             res.status(200).send({error:false, message: 'Asignatura actualizada'});
         }
     )
