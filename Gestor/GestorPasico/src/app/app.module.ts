@@ -37,6 +37,7 @@ import { CursosProfesorComponent } from './componente/cursos-profesor/cursos-pro
 import { ListadoPreinscripcionesComponent } from './componente/listado-preinscripciones/listado-preinscripciones.component';
 import { FormaPagoComponent } from './componente/forma-pago/forma-pago.component';
 import { FichaAsignaturaComponent } from './componente/ficha-asignatura/ficha-asignatura.component';
+import { DireccionComponent } from './componente/direccion/direccion.component';
 
 
 
@@ -66,7 +67,8 @@ import { FichaAsignaturaComponent } from './componente/ficha-asignatura/ficha-as
     CursosProfesorComponent,
     ListadoPreinscripcionesComponent,
     FormaPagoComponent,
-    FichaAsignaturaComponent
+    FichaAsignaturaComponent,
+    DireccionComponent
   ],
   imports: [
     FormsModule,

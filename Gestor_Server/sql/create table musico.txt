@@ -9,11 +9,15 @@ create table pasico_gestor_pru.persona(
 	nif varchar(9),
 	nid_padre integer,
 	nid_madre integer,
-	nid_forma_pago integer
+	nid_forma_pago integer,
+	nid_direccion integer
 );
 
 alter table pasico_gestor_pru.persona add constraint fk_persona_padre foreign key(nid_padre) references pasico_gestor_pru.persona(nid);
 alter table pasico_gestor_pru.persona add constraint fk_persona_madre foreign key(nid_madre) references pasico_gestor_pru.persona(nid);
+
+
+alter table pasico_gestor_pru.persona add constraint fk_persona_pago foreing key(nid_forma_pago) references pasico_gestor_pru.forma_pago(nid);
 
 create table pasico_gestor_pru.instrumentos(
 	nid integer primary key auto_increment,
@@ -42,7 +46,8 @@ alter table pasico_gestor_pru.musico add constraint fk_musico_persona foreign ke
 
 create table pasico_gestor_pru.asignatura(
 	nid integer primary key auto_increment,
-	descripcion varchar(400)
+	descripcion varchar(400),
+	precio float
 );
 
 create table pasico_gestor_pru.profesor(

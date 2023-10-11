@@ -8,6 +8,9 @@ import { SocioComponent } from '../socio/socio.component';
 import { SociosService } from 'src/app/servicios/socios.service';
 import Swal from 'sweetalert2';
 import { FormaPagoComponent } from '../forma-pago/forma-pago.component';
+import { ViewEncapsulation } from '@angular/compiler';
+import { DireccionComponent } from '../direccion/direccion.component';
+import { DireccionService } from 'src/app/servicios/direccion.service';
 
 @Component({
   selector: 'app-ficha-persona',
@@ -24,6 +27,7 @@ export class FichaPersonaComponent implements OnInit{
   bRegistrado_padre: number = 0;
   bActualizado_socio: number = 0;
   bActualizado_pago: number = 0;
+  bActualizada_direccion: number = 0;
 
 
   mensaje_registro: string = 'Se ha guardado correctamente';
@@ -44,7 +48,10 @@ export class FichaPersonaComponent implements OnInit{
 
   @ViewChild('instancia_forma_pago') instancia_forma_pago!: FormaPagoComponent;
 
-  constructor(private rutaActiva: ActivatedRoute, private personasService: PersonasService, private socioService: SociosService)
+  @ViewChild('instancia_direccion') instancia_direccion!: DireccionComponent;
+
+  constructor(private rutaActiva: ActivatedRoute, private personasService: PersonasService, private socioService: SociosService,
+              private direccionService: DireccionService)
   {
     this.id_persona = rutaActiva.snapshot.params['id'];
   }
@@ -145,11 +152,25 @@ registrar_madre = {
     }
   }
 
+  actualizar_direccion =
+  {
+    next: (respuesta: any) =>
+    {
+      this.bActualizada_direccion = 1;
+      this.mostrar_aviso(); 
+    },
+    error: (respuesta: any) =>
+    {
+      this.bActualizada_direccion = 2;
+      this.mostrar_aviso();
+    }
+  }
+
   mostrar_aviso()
   {
 
     if(this.bRegistrado == 1 && this.bRegistrado_madre == 1 && this.bRegistrado_padre  == 1 
-        && this.bActualizado_pago  == 1 && this.bActualizado_socio == 1)
+        && this.bActualizado_pago  == 1 && this.bActualizado_socio == 1 && this.bActualizada_direccion == 1)
     {
         this.limpia_variables(); 
         Swal.fire({
@@ -159,7 +180,7 @@ registrar_madre = {
         })
     }
     else if(this.bRegistrado != 0 && this.bRegistrado_madre != 0 && this.bRegistrado_padre  != 0 
-      && this.bActualizado_pago  != 0 && this.bActualizado_socio != 0)
+      && this.bActualizado_pago  != 0 && this.bActualizado_socio != 0 && this.bActualizada_direccion != 0)
     {
       this.limpia_variables();
       Swal.fire({
@@ -186,6 +207,9 @@ registrar_madre = {
 
     var peticion_forma_pago = this.instancia_forma_pago.construye_peticion();
     this.personasService.asociar_forma_pago(peticion_forma_pago).subscribe(this.actualizar_pago);
+
+    var peticion_direccion = this.instancia_direccion.construye_direccion();
+    this.direccionService.registrar_direccion(peticion_direccion).subscribe(this.actualizar_direccion);
 
     var peticion_socio = this.instancia_socio.construye_peticion();
 

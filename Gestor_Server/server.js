@@ -16,6 +16,7 @@ var servlet_asignatura = require('./servlets/servlet_asignatura.js');
 var servlet_curso = require('./servlets/servlet_curso.js');
 var servlet_matricula = require('./servlets/servlet_matricula.js');
 var servlet_preinscripciones = require('./servlets/servlet_preinscripcion.js')
+var servlet_direcciones = require('./servlets/servlet_direccion.js');
 
 var fs = require('fs');
 
@@ -49,6 +50,10 @@ app.get('/obtener_persona/:nid', servlet_persona.obtener_persona);
 app.post('/registrar_persona', servlet_persona.registrar_persona);
 app.get('/obtener_ficha_persona/:nid_persona', servlet_persona.obtener_ficha_persona);
 app.get('/obtener_personas/:tipo', servlet_persona.obtener_personas_tipo);
+
+/** Direcciones **/
+app.post('/registrar_direccion', servlet_direcciones.registrar_direccion);
+app.get('/obtener_direccion/:nid_persona', servlet_direcciones.obtener_direccion);
 
 /** Padres **/
 app.get('/obtener_padre/:nid_persona', servlet_persona.obtener_padre);
