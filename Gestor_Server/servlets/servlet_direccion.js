@@ -6,7 +6,7 @@ function registrar_direccion(req, res)
     comun.comprobaciones(req, res,
         async () =>
         {
-            let direccion = req.body.direcion;
+            let domicilio = req.body.direcion;
             let municipio = req.body.municipio;
             let provincia = req.body.provincia;
             let codigo_postal = req.body.codigo_postal;
@@ -15,8 +15,7 @@ function registrar_direccion(req, res)
             let escalera = req.body.escalera;
 
             let nid_persona = req.body.nid_persona;
-
-            await direccion.registrar_direccion(nid_persona, direccion, municipio, provincia, codigo_postal, numero, puerta, escalera);
+            await direccion.registrar_direccion(nid_persona, domicilio, municipio, provincia, codigo_postal, numero, puerta, escalera);
 
             res.status(200).send({error:false, message: 'Direccion registrada'});
         }
@@ -26,11 +25,11 @@ function registrar_direccion(req, res)
 function obtener_direccion(req, res)
 {
     comun.comprobaciones(req, res,
-        async() =>
+        async () =>
         {
             let nid_persona = req.params.nid_persona;
 
-            let resultado = await direccion.obteener_direccion(nid_persona);
+            let resultado = await direccion.obtener_direccion(nid_persona);
 
             res.status(200).send({error:false, direccion: resultado});
         }

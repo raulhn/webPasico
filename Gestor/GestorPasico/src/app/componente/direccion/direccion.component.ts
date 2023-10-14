@@ -32,6 +32,7 @@ export class DireccionComponent implements OnInit{
       this.direccion = respuesta.direccion;
 
       this.provincia = this.direccion.provincia;
+      console.log('Provincia ' + this.provincia);
       this.municipio = this.direccion.municipio;
       this.direccion_postal = this.direccion.direccion_postal;
       this.codigo_postal = this.direccion.codigo_postal;
