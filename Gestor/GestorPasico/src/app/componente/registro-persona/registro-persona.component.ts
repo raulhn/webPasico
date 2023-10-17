@@ -18,6 +18,7 @@ export class RegistroPersonaComponent implements OnInit{
   segundo_apellido: string = "";
   fecha_nacimiento: string = "";
   correo_electronico:string = "";
+  codigo: string = "";
 
   bError: boolean = false;
   mensaje_error: string = "";
@@ -71,7 +72,7 @@ export class RegistroPersonaComponent implements OnInit{
   {
     if (this.valida_formulario())
     {
-      this.personasServices.registrar_persona(this.nif, this.nombre, this.primer_apellido, this.segundo_apellido, this.telefono, this.fecha_nacimiento, this.correo_electronico).subscribe(
+      this.personasServices.registrar_persona(this.nif, this.nombre, this.primer_apellido, this.segundo_apellido, this.telefono, this.fecha_nacimiento, this.correo_electronico, this.codigo).subscribe(
         this.registro_persona
       )
     }

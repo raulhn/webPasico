@@ -51,7 +51,7 @@ export class PersonaComponent {
     {
       peticion = {nid:  this.persona['nid'], nif:  this.persona['nif'], nombre:  this.persona['nombre'], primer_apellido:  this.persona['primer_apellido'], 
         segundo_apellido:  this.persona['segundo_apellido'], telefono:  this.persona['telefono'], fecha_nacimiento:  this.persona['fecha_nacimiento'], 
-        correo_electronico:  this.persona['correo_electronico']};
+        correo_electronico:  this.persona['correo_electronico'], codigo: this.persona['codigo']};
     }
     return peticion;
   }

@@ -66,7 +66,7 @@ function existe_persona(nombre, primer_apellido, segundo_apellido, fecha_nacimie
 }
 
 
-function registrar_persona(nombre, primer_apellido, segundo_apellido, telefono, fecha_nacimiento, nif, correo_electronico)
+function registrar_persona(nombre, primer_apellido, segundo_apellido, telefono, fecha_nacimiento, nif, correo_electronico, codigo)
 {
     return new Promise(
         async (resolve, reject) =>
@@ -81,14 +81,15 @@ function registrar_persona(nombre, primer_apellido, segundo_apellido, telefono, 
                 conexion.dbConn.beginTransaction(
                     () =>
                     {  
-                        conexion.dbConn.query('insert into ' +  constantes.ESQUEMA_BD + '.persona(nombre, primer_apellido, segundo_apellido, telefono, fecha_nacimiento, nif, correo_electronico) ' +
+                        conexion.dbConn.query('insert into ' +  constantes.ESQUEMA_BD + '.persona(nombre, primer_apellido, segundo_apellido, telefono, fecha_nacimiento, nif, correo_electronico, codigo) ' +
                                             ' values(' +  constantes.ESQUEMA_BD + '.initcap(' + conexion.dbConn.escape(nombre) + '), ' 
                                                        +  constantes.ESQUEMA_BD + '.initcap(' + conexion.dbConn.escape(primer_apellido) + '), ' 
                                                        +  constantes.ESQUEMA_BD + '.initcap(' + conexion.dbConn.escape(segundo_apellido) + '),'  +
                                             'cast(nullif(' + conexion.dbConn.escape(telefono) + ', \'\') as unsigned)'
                                             + ',' + 
                                             'str_to_date(nullif(' + conexion.dbConn.escape(fecha_nacimiento) + ', \'\') , \'%Y-%m-%d\')' + 
-                                            ', ' + conexion.dbConn.escape(nif) + ', ' + conexion.dbConn.escape(correo_electronico) + ')',
+                                            ', ' + conexion.dbConn.escape(nif) + ', ' + conexion.dbConn.escape(correo_electronico) + ',' + 
+                                             + conexion.dbConn.escape(codigo) + ')',
                                             (error, results, fields) =>
                                             {
                                                 if (error) {conexion.dbConn.rollback();  console.log(error); reject(error);}
@@ -316,7 +317,7 @@ function obtener_persona(nid)
     )
 }
 
-function actualizar_persona(nid, nif, nombre, primer_apellido, segundo_apellido, telefono, fecha_nacimiento, correo_electronico)
+function actualizar_persona(nid, nif, nombre, primer_apellido, segundo_apellido, telefono, fecha_nacimiento, correo_electronico, codigo)
 {
     return new Promise(
         (resolve, reject) =>
@@ -336,6 +337,7 @@ function actualizar_persona(nid, nif, nombre, primer_apellido, segundo_apellido,
                             ', telefono = cast(nullif(' +  conexion.dbConn.escape(telefono) + ', \'\') as unsigned)' +
                             ', fecha_nacimiento = str_to_date(nullif(' + conexion.dbConn.escape(fecha_nacimiento) + ', \'\') , \'%Y-%m-%d\')'  +
                             ', correo_electronico = ' + conexion.dbConn.escape(correo_electronico) +
+                            ', codigo = ' + conexion.dbConn.escape(codigo) +
                             ' where nid = ' + conexion.dbConn.escape(nid),
                             (error, results, fields) => 
                             {

@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { AsignaturasService } from 'src/app/servicios/asignaturas.service';
 import { PersonasService } from 'src/app/servicios/personas.service';
+import { DataTablesOptions } from 'src/app/logica/constantes';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -84,6 +85,7 @@ export class FichaAsignaturaComponent implements OnInit{
       datatable.destroy();
 
       this.dtOptions_profesor = {
+          language: DataTablesOptions.spanish_datatables,
           data: this.profesores,
           columns:
           [

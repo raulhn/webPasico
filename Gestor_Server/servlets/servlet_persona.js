@@ -17,8 +17,9 @@ async function registrar_persona(req, res)
             let telefono = req.body.telefono;
             let fecha_nacimiento = req.body.fecha_nacimiento;
             let correo_electronico = req.body.correo_electronico;
+            let codigo = req.body.codigo;
 
-            nid_persona = await persona.registrar_persona(nombre, primer_apellido, segundo_apellido, telefono, fecha_nacimiento, nif, correo_electronico);
+            nid_persona = await persona.registrar_persona(nombre, primer_apellido, segundo_apellido, telefono, fecha_nacimiento, nif, correo_electronico, codigo);
 
             res.status(200).send({error: false, message: 'Registro creado', nid_persona: nid_persona});
           
@@ -99,8 +100,9 @@ async function actualizar_persona(req, res)
             let telefono = req.body.telefono
             let fecha_nacimiento = req.body.fecha_nacimiento
             let correo_electronico = req.body.correo_electronico
+            let codigo = req.body.codigo
 
-            bResultado = await persona.actualizar_persona(nid, nif, nombre, primer_apellido, segundo_apellido, telefono, fecha_nacimiento, correo_electronico);
+            bResultado = await persona.actualizar_persona(nid, nif, nombre, primer_apellido, segundo_apellido, telefono, fecha_nacimiento, correo_electronico, codigo);
             if(bResultado)
             {
                 res.status(200).send({error: false, message: 'Se ha actualizado la persona de forma correcta'})
