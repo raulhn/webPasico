@@ -57,7 +57,8 @@ create table pasico.curso(
 create table pasico.asignatura(
    nid integer primary key auto_increment,
    descripcion varchar(500),
-   nid_instrumento integer
+   precio float,
+   instrumento_banda integer
 );
 
 

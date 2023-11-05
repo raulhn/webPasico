@@ -1,0 +1,28 @@
+create table pasico_gestor.remesa(
+	nid_remesa integer primary key auto_increment,
+	nid_forma_pago integer,
+	nid_persona integer,
+	concepto varchar(700)
+);
+
+alter table pasico_gestor.remesa add constraint fk_remesa_pago foreign key(nid_forma_pago) references pasico_gestor.forma_pago(nid);
+alter table pasico_gestor.remesa add constraint fk_remesa_persona foreign key(nid_persona) references pasico_gestor.persona(nid);
+
+
+create table pasico_gestor.linea_remesa(
+	nid_linea_remesa integer primary key auto_increment,
+	nid_remesa integer,
+	concepto varchar(700),
+	precio float
+);
+
+alter table pasico_gestor.linea_remesa add constraint fk_remesa_linea foreign key(nid_linea_remesa) references pasico_gestor.remesa(nid_remesa);
+
+
+create table pasico_gestor.linea_remesa_descuento(
+	nid_remesa_descuento integer primary key auto_increment,
+	nid_linea_remesa integer,
+	concepto varchar(700)
+);
+
+alter table pasico_gestor.linea_remesa_descuento add constraint fk_linea_descuento foreign key(nid_linea_remesa) references pasico_gestor.linea_remesa(nid_linea_remesa);

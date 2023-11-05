@@ -487,6 +487,24 @@ function obtener_cursos_profesor(nid_profesor)
 }
 
 
+function registrar_precio_manual(nid_matricula, precio)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.query("update " + constantes.ESQUEMA_BD + ".matricula set precio_manual = " + conexion.dbConn.escape(precio) +
+                    " where nid = " + conexion.dbConn.escape(nid_matricula),
+                (error, results, fields) =>
+                {
+                    if(error) {console.log(error); reject();}
+                    else {resolve();}
+                }
+            )
+        }
+
+    )
+}
+
 module.exports.existe_matricula = existe_matricula;
 module.exports.obtener_nid_matricula = obtener_nid_matricula;
 
@@ -516,3 +534,5 @@ module.exports.eliminar_asignatura = eliminar_asignatura;
 module.exports.dar_baja_asignatura = dar_baja_asignatura;
 
 module.exports.obtener_cursos_profesor = obtener_cursos_profesor;
+
+module.exports.registrar_precio_manual = registrar_precio_manual;

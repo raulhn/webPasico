@@ -7,9 +7,8 @@ function registrar_asignatura(req, res)
         async () =>
         {
             let descripcion = req.body.descripcion;
-            let precio = req.boyd.precio;
 
-            await asignatura.registrar_asignatura(descripcion, precio);
+            await asignatura.registrar_asignatura(descripcion);
             res.status(200).send({error: false, message: 'Asignatura registrada'});
         }
     )

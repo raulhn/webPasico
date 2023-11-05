@@ -1,0 +1,12 @@
+create table pasico_gestor.direccion
+(
+	nid_direccion integer primary key auto_increment,
+	direccion varchar(500),
+	numero varchar(10),
+	puerta varchar(10),
+	escalera varchar(10),
+	codigo_postal varchar(10),
+	provincia varchar(50),
+	municipio varchar(100)
+);
+

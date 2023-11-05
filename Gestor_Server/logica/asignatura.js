@@ -1,7 +1,7 @@
 const conexion = require('../conexion.js')
 const constantes = require('../constantes.js')
 
-function registrar_asignatura(descripcion, precio)
+function registrar_asignatura(descripcion)
 {
     return new Promise(
         (resolve, reject) =>
@@ -9,8 +9,8 @@ function registrar_asignatura(descripcion, precio)
             conexion.dbConn.beginTransaction(
                 () =>
                 {
-                    conexion.dbConn.query("insert into " + constantes.ESQUEMA_BD + ".asignatura(descripcion, precio) values(" + 
-                        conexion.dbConn.escape(descripcion) + ', replace(' +  conexion.dbConn.escape(precio) + ', \',\',  \'.\'))',
+                    conexion.dbConn.query("insert into " + constantes.ESQUEMA_BD + ".asignatura(descripcion) values(" + 
+                        conexion.dbConn.escape(descripcion) + ")",
                         async (error, results, fields) =>
                         {
                             if(error) {console.log(error); conexion.dbConn.rollback(); reject();}
