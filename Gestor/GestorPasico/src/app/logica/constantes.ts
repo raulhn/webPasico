@@ -1,8 +1,9 @@
 export class URL
 {
-    public static readonly URL_SERVICIO = "https://ladelpasico.es:2053";
-    public static readonly URL_FRONT_END= "https://ladelpasico.es:2096";
+    public static readonly URL_SERVICIO = "https://localhost:8080";
+    public static readonly URL_FRONT_END= "http://localhost";
   
+    public static readonly URL_WEB = "https://ladelpasico.es:8443"
 }
 
 export class DataTablesOptions

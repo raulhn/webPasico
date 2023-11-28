@@ -9,7 +9,7 @@ export class PreinscripcionesService {
 
   constructor(private http: HttpClient) { }
 
-  private url: string = URL.URL_SERVICIO;
+  private url: string = URL.URL_WEB;
 
 
   obtener_preinscripciones()

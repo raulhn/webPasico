@@ -1170,6 +1170,7 @@ app.post('/remove_pagina_componente',
    * Preinscripcion
    */
   app.post('/registrar_preinscripcion', servlet_preinscripcion.registrar_preinscripcion);
+  app.get('/obtener_preinscripciones', servlet_preinscripcion.obtener_preinscripciones);
 
   https.createServer({
     key: fs.readFileSync('apache.key'),

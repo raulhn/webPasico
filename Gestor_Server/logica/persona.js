@@ -71,13 +71,10 @@ function registrar_persona(nombre, primer_apellido, segundo_apellido, telefono, 
     return new Promise(
         async (resolve, reject) =>
         {
-
-            console.log('existe nif')
             let bExiste_nif = await existe_nif(nif);
             let bExiste_persona = await existe_persona(nombre, primer_apellido, segundo_apellido, fecha_nacimiento);
             if (!bExiste_nif && !bExiste_persona)
             {
-                console.log('transaccion')
                 conexion.dbConn.beginTransaction(
                     () =>
                     {  
@@ -88,8 +85,8 @@ function registrar_persona(nombre, primer_apellido, segundo_apellido, telefono, 
                                             'cast(nullif(' + conexion.dbConn.escape(telefono) + ', \'\') as unsigned)'
                                             + ',' + 
                                             'str_to_date(nullif(' + conexion.dbConn.escape(fecha_nacimiento) + ', \'\') , \'%Y-%m-%d\')' + 
-                                            ', ' + conexion.dbConn.escape(nif) + ', ' + conexion.dbConn.escape(correo_electronico) + ',' + 
-                                             + conexion.dbConn.escape(codigo) + ')',
+                                            ', ' + conexion.dbConn.escape(nif) + ', ' + conexion.dbConn.escape(correo_electronico) + ',' 
+                                             + 'nullif(' + conexion.dbConn.escape(codigo) + ', \'\'))',
                                             (error, results, fields) =>
                                             {
                                                 if (error) {conexion.dbConn.rollback();  console.log(error); reject(error);}

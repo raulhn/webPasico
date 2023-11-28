@@ -112,5 +112,18 @@ function enviar_email_respuesta(correo)
    )
 }
 
+function obtener_preinscripciones(req, res)
+{
+    comun.comprobaciones(req, res,
+        async () =>
+        {
+            let resultados = await preinscripcion.obtener_preinscripciones();
 
+            res.status(200).send({error: false, preinscripciones: resultados})
+        }
+        
+    )
+}
+
+module.exports.obtener_preinscripciones = obtener_preinscripciones;
 module.exports.registrar_preinscripcion = registrar_preinscripcion;

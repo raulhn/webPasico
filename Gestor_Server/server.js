@@ -23,7 +23,7 @@ var fs = require('fs');
 var conexion = require('./conexion.js');
 var sesion_config = require('./config/sesion.json');
 
-app.use(cors({origin: "https://80.240.127.138:8081", credentials: true}));
+app.use(cors({origin: ["http://localhost:80", "http://pasico.ddns.net:80"], credentials: true}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(session(sesion_config));
