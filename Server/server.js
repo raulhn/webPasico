@@ -27,7 +27,7 @@ const imagen = require('./imagen.js');
 
 const servlet_componente = require('./servlet_componente.js');
 const servlet_componente_blog = require('./servlets/servlet_componente_blog.js')
-
+const servlet_usuarios = require('./servlets/servlet_usuarios.js')
 const servlet_preinscripcion = require('./servlets/servlet_preinscripcion.js')
 
 const ESQUEMA_BD = constantes.ESQUEMA_BD;
@@ -1147,6 +1147,11 @@ app.post('/remove_pagina_componente',
 )
 
 /**
+ * Usuario
+ */
+app.post('/actualizar_password', servlet_usuarios.actualizar_password);
+
+/**
  * Componente Carrusel
  */
   app.get('/obtener_carusel/:id_componente', servlet_componente.obtener_componente_carusel)
@@ -1170,7 +1175,7 @@ app.post('/remove_pagina_componente',
    * Preinscripcion
    */
   app.post('/registrar_preinscripcion', servlet_preinscripcion.registrar_preinscripcion);
-  app.get('/obtener_preinscripciones', servlet_preinscripcion.obtener_preinscripciones);
+  //app.get('/obtener_preinscripciones', servlet_preinscripcion.obtener_preinscripciones);
 
   https.createServer({
     key: fs.readFileSync('apache.key'),

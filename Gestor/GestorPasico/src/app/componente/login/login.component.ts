@@ -34,12 +34,27 @@ export class LoginComponent implements OnInit {
     this.router.navigate([uri]));
  }
 
+
+ login_web =
+ {
+  next: (res: any) =>
+  {
+    console.log('Logueado en web')
+  },
+  error: (res: any) =>
+  {
+    console.log('Error al loguear en web')
+  }
+ }
+
   login()
   {
+    // Se loguea en la web para poder consultar las preinscripciones
+    this.usuarioService.login_web(this.usuario, this.password).subscribe(this.login_web);
+
     this.usuarioService.login(this.usuario, this.password).subscribe(
       (res: any) =>
       {
-
         this.usuarioService.logueado().subscribe(
           (res: any) =>
           {

@@ -74,6 +74,18 @@ export class MenuComponent implements OnInit {
     }
   }
 
+  actualiza_password_web = 
+  {
+    next: (respuesta: any) =>
+    {
+      console.log('Actualizada contraseña en web')
+    },
+    error: (respuestas: any) =>
+    {
+      console.log('Error cambio contraseña web')
+    }
+  }
+
   cambiar_password()
   {
     Swal.fire({
@@ -86,6 +98,7 @@ export class MenuComponent implements OnInit {
         {
         if(results.isConfirmed)
         {
+          this.usuariosService.actualizar_password_web(this.nuevo_password).subscribe(this.actualiza_password_web)
           this.usuariosService.actualizar_password(this.nuevo_password).subscribe(this.actualiza_password);
         }
       }

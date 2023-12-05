@@ -1,3 +1,4 @@
+const gestion_usuarios = require('../usuario.js')
 
 async function comprobaciones(req, res, funcion_especifica)
 {
@@ -11,4 +12,24 @@ async function comprobaciones(req, res, funcion_especifica)
     }
 }
 
+async function comprobaciones_login(req, res, funcion_especifica)
+{
+    if (await gestion_usuarios.esAdministrador(req.session.nombre))
+    {
+        console.log(req.session.nombre)
+        try{
+            await funcion_especifica();
+        }
+        catch(error)
+        {
+            console.log(error);
+            res.status(400).send({error: true, message: 'Se ha producido un error', info: error})
+        }
+    }
+    else{
+        res.status(404).send({error: true, message: 'No autorizado'})
+    }
+}
+
 module.exports.comprobaciones = comprobaciones;
+module.exports.comprobaciones_login = comprobaciones_login;

@@ -60,7 +60,7 @@ function obtener_preinscripciones()
     return new Promise(
         (resolve, reject) =>
         {
-            conexion.dbConn_web.query('select * from ' + constantes.ESQUEMA_BD + '.preinscripcion',
+            conexion.dbConn.query('select * from ' + constantes.ESQUEMA_BD + '.preinscripcion',
                 (error, results, fields) =>
                 {
                     if(error) {console.log(error); reject();}

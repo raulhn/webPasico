@@ -114,7 +114,7 @@ function enviar_email_respuesta(correo)
 
 function obtener_preinscripciones(req, res)
 {
-    comun.comprobaciones(req, res,
+    comun.comprobaciones_login(req, res,
         async () =>
         {
             let resultados = await preinscripcion.obtener_preinscripciones();
