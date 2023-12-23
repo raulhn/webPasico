@@ -17,13 +17,14 @@ var servlet_curso = require('./servlets/servlet_curso.js');
 var servlet_matricula = require('./servlets/servlet_matricula.js');
 var servlet_preinscripciones = require('./servlets/servlet_preinscripcion.js')
 var servlet_direcciones = require('./servlets/servlet_direccion.js');
+var servlet_remesa = require('./servlets/servlet_remesa.js');
 
 var fs = require('fs');
 
 var conexion = require('./conexion.js');
 var sesion_config = require('./config/sesion.json');
 
-app.use(cors({origin: ["http://localhost:80", "http://pasico.ddns.net:80"], credentials: true}));
+app.use(cors({origin: ["http://localhost", "http://pasico.ddns.net"], credentials: true}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(session(sesion_config));
@@ -115,6 +116,9 @@ app.get('/obtener_pago_persona/:nid_titular', servlet_persona.obtener_pago_perso
 
 /** Preinscripciones **/
 app.get('/obtener_preinscripciones', servlet_preinscripciones.obtener_preinscripciones);
+
+/** Remesas **/
+app.post('/registrar_remesa_persona', servlet_remesa.registrar_remesa_persona)
 
 https.createServer({
     key: fs.readFileSync('apache.key'),
