@@ -219,6 +219,33 @@ function dar_baja_asignatura(req, res)
     )
 }
 
+function registrar_precio_manual(req, res)
+{
+    comun.comprobaciones(req, res,
+        async() =>
+        {
+            let nid_matricula = req.body.nid_matricula;
+            let precio = req.body.precio;
+
+            await matricula.registrar_precio_manual(nid_matricula, precio);
+            res.status(200).send({error: false, message: 'Precio actualizado'})
+        }
+    )
+}
+
+function obtener_matricula(req, res)
+{
+    comun.comprobaciones(req, res,
+        async() =>
+        {
+            let nid_matricula = req.params.nid_matricula;
+
+            console.log(nid_matricula)
+            let matricula_retorno = await matricula.obtener_matricula(nid_matricula)
+            res.status(200).send({error: false, matricula: matricula_retorno})
+        }
+    )
+}
 
 
 
@@ -236,3 +263,7 @@ module.exports.obtener_cursos_profesor = obtener_cursos_profesor;
 module.exports.obtener_matriculas_alumno = obtener_matriculas_alumno;
 module.exports.obtener_asignaturas_matricula = obtener_asignaturas_matricula;
 module.exports.dar_baja_asignatura = dar_baja_asignatura;
+
+module.exports.registrar_precio_manual = registrar_precio_manual;
+
+module.exports.obtener_matricula = obtener_matricula;

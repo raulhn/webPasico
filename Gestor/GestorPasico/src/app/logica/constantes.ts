@@ -1,7 +1,7 @@
 export class URL
 {
     public static readonly URL_SERVICIO = "https://pasico.ddns.net:8080";
-    public static readonly URL_FRONT_END= "http://pasico.ddns.net";
+    public static readonly URL_FRONT_END= "https://pasico.ddns.net";
   
     public static readonly URL_WEB = "https://ladelpasico.es:8443"
 }

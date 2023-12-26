@@ -24,7 +24,7 @@ var fs = require('fs');
 var conexion = require('./conexion.js');
 var sesion_config = require('./config/sesion.json');
 
-app.use(cors({origin: ["http://localhost", "http://pasico.ddns.net"], credentials: true}));
+app.use(cors({origin: ["https://localhost", "https://pasico.ddns.net"], credentials: true}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(session(sesion_config));
@@ -106,6 +106,9 @@ app.get('/obtener_matriculas_alumno/:nid_alumno', servlet_matricula.obtener_matr
 app.get('/obtener_asignaturas_matriculas/:nid_matricula', servlet_matricula.obtener_asignaturas_matricula);
 app.post('/eliminar_asignatura', servlet_matricula.eliminar_asignatura);
 app.post('/dar_baja_asignatura', servlet_matricula.dar_baja_asignatura);
+
+app.post('/actualizar_precio_manual', servlet_matricula.registrar_precio_manual);
+app.get('/obtener_matricula/:nid_matricula', servlet_matricula.obtener_matricula);
 
 /** Forma de pago **/
 app.post('/registrar_forma_pago', servlet_persona.registrar_forma_pago);

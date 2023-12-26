@@ -348,6 +348,28 @@ function obtener_matriculas_alumno(nid_alumno)
     )
 }
 
+function obtener_matricula(nid_matricula)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.query('select c.descripcion descripcion_curso, m.* from ' + constantes.ESQUEMA_BD + '.matricula m, ' +
+                   constantes.ESQUEMA_BD + '.curso c where m.nid_curso = c.nid and m.nid = ' + conexion.dbConn.escape(nid_matricula),
+                (error, results, fields) =>
+                {
+                    if (error) {console.log(error); reject();}
+                    else if(results.length < 1)
+                    {   
+                        console.log('No se ha encontrado la matricula')
+                        reject();
+                    }
+                    else {resolve(results[0])}
+                }    
+            )
+        }
+    )
+}
+
 function obtener_asignaturas_matricula(nid_matricula)
 {
     return new Promise(
@@ -527,6 +549,7 @@ module.exports.obtener_alumnos_profesor_alta = obtener_alumnos_profesor_alta;
 module.exports.obtener_alumnos_profesor_baja = obtener_alumnos_profesor_baja;
 
 module.exports.obtener_matriculas_alumno = obtener_matriculas_alumno;
+module.exports.obtener_matricula = obtener_matricula;
 module.exports.obtener_asignaturas_matricula = obtener_asignaturas_matricula;
 
 module.exports.add_asignatura = add_asignatura;

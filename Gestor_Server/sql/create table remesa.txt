@@ -2,7 +2,8 @@ create table pasico_gestor.remesa(
 	nid_remesa integer primary key auto_increment,
 	nid_forma_pago integer,
 	nid_persona integer,
-	concepto varchar(700)
+	concepto varchar(700),
+	fecha date
 );
 
 alter table pasico_gestor.remesa add constraint fk_remesa_pago foreign key(nid_forma_pago) references pasico_gestor.forma_pago(nid);
@@ -16,7 +17,7 @@ create table pasico_gestor.linea_remesa(
 	precio float
 );
 
-alter table pasico_gestor.linea_remesa add constraint fk_remesa_linea foreign key(nid_linea_remesa) references pasico_gestor.remesa(nid_remesa);
+alter table pasico_gestor.linea_remesa add constraint fk_remesa_linea foreign key(nid_remesa) references pasico_gestor.remesa(nid_remesa);
 
 
 create table pasico_gestor.linea_remesa_descuento(

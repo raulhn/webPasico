@@ -38,6 +38,7 @@ import { ListadoPreinscripcionesComponent } from './componente/listado-preinscri
 import { FormaPagoComponent } from './componente/forma-pago/forma-pago.component';
 import { FichaAsignaturaComponent } from './componente/ficha-asignatura/ficha-asignatura.component';
 import { DireccionComponent } from './componente/direccion/direccion.component';
+import { RemesasComponent } from './componente/remesas/remesas.component';
 
 
 
@@ -68,7 +69,8 @@ import { DireccionComponent } from './componente/direccion/direccion.component';
     ListadoPreinscripcionesComponent,
     FormaPagoComponent,
     FichaAsignaturaComponent,
-    DireccionComponent
+    DireccionComponent,
+    RemesasComponent
   ],
   imports: [
     FormsModule,

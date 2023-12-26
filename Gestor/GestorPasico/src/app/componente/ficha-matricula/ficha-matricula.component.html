@@ -1,6 +1,18 @@
 <app-menu></app-menu>
 <div class="container p-3">
     <div class="card" *ngIf="bCargado">
+        <div class="row">
+            <div class="col-2">
+                <label>Precio Manual: </label>
+                <input class="form-control" [(ngModel)]="precio_manual"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <button class="form-control" class="btn btn-primary mb-3 tp-3" (click)="guardar()"> Guardar </button>
+            </div>
+        </div>
+
         <table class="table table-striped">
             <thead>
                 <th>
