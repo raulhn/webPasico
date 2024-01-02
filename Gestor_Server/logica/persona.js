@@ -398,14 +398,14 @@ function obtener_forma_pago(nid_titular)
     )
 }
 
-function obtener_pago_persona(nid_titular)
+function obtener_pago_persona(nid_persona)
 {
     return new Promise(
         (resolve, reject) =>
         {
             conexion.dbConn.query('select nid_forma_pago from ' 
                     + constantes.ESQUEMA_BD + '.persona p where p.nid = ' + 
-                    conexion.dbConn.escape(nid_titular),
+                    conexion.dbConn.escape(nid_persona),
                 (error, results, fields) =>
                 {
                     if(error) {console.log(error); reject();}

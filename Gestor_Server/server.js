@@ -121,7 +121,8 @@ app.get('/obtener_pago_persona/:nid_titular', servlet_persona.obtener_pago_perso
 app.get('/obtener_preinscripciones', servlet_preinscripciones.obtener_preinscripciones);
 
 /** Remesas **/
-app.post('/registrar_remesa_persona', servlet_remesa.registrar_remesa_persona)
+app.post('/registrar_remesa_persona', servlet_remesa.registrar_remesa_persona);
+app.get('/obtener_mensualidad/:nid_matricula', servlet_remesa.obtener_mensualidad);
 
 https.createServer({
     key: fs.readFileSync('apache.key'),

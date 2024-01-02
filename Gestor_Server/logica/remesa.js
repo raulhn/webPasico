@@ -2,6 +2,7 @@ const conexion = require('../conexion.js')
 const constantes = require('../constantes.js')
 const persona = require('./persona.js')
 const gestor_matricula = require('./matricula.js')
+const { obtener_instrumentos } = require('./musico.js')
 
 
 function existe_persona_sin_foma_pago()
@@ -24,15 +25,17 @@ function existe_persona_sin_foma_pago()
     )
 }
 
-function existe_socio(v_forma_pago)
+function existe_socio(nid_forma_pago)
 {
 	return new Promise(
 	  (resolve, reject) =>
 	  {
-	     conexion.dbConn.query("select count(*) cont " +
+		console.log('aqui forma pago')
+
+	    conexion.dbConn.query("select count(*) cont " +
 		                       "from " + constantes.ESQUEMA_BD + ".socios s, " + constantes.ESQUEMA_BD + ".persona p "+
-                               "where s.nid_persona = p.nid	" +
-                                  "and p.nid_forma_pago = " + conexion.dbConn.escape(v_forma_pago),
+                               "where s.nid_persona = p.nid " +
+                                  "and p.nid_forma_pago = " + conexion.dbConn.escape(nid_forma_pago),
 			(error, results, fields) =>
 			{
 				if(error) {console.log(error); reject();}
@@ -83,6 +86,20 @@ function obtener_matricula_asignatura(nid_matricula)
 	)
 }
 
+function obtener_siguiente_lote()
+{
+	return new Promise(
+		(resolve, reject) =>
+		{
+			conexion.dbConn.query(" select ifnull(max(lote), 0) + 1 lote from pasico_gestor.remesa",
+				(error, results, fields) =>
+				{
+					if(error) {console.log(error); reject();}
+					else {resolve(results[0]['lote'])}
+				})
+		}
+	)
+}
 
 function registrar_remesa(v_persona)
 {
@@ -93,13 +110,17 @@ function registrar_remesa(v_persona)
 				async () =>
 				{
 					let v_forma_pago = await persona.obtener_forma_pago(v_persona)
-					conexion.dbConn.query("insert into " + constantes.ESQUEMA_BD + ".remesa(nid_forma_pago, nid_persona, concepto, fecha) " +
+					let siguiente_lote = await obtener_siguiente_lote();
+
+					let persona_recuperada = await persona.obtener_persona(v_persona);
+
+					conexion.dbConn.query("insert into " + constantes.ESQUEMA_BD + ".remesa(nid_forma_pago, nid_persona, concepto, fecha, lote) " +
 							"values(" + conexion.dbConn.escape(v_forma_pago[0]['nid']) + ", " + conexion.dbConn.escape(v_persona) + ", " +
-							"'Pago Mensual', sysdate())",
+							"'Pago Mensual  " + persona_recuperada['etiqueta'] + "' , sysdate(), " + conexion.dbConn.escape(siguiente_lote) +")",
 						(error, results, fields) =>
 						{
 							if(error) {conexion.dbConn.rollback(); console.log(error); reject();}
-							else {conexion.dbConn.commit(); resolve(results.insertId);}
+							else {conexion.dbConn.commit(); console.log('Remesa registrada'); resolve(results.insertId);}
 						})
 				}
 			);
@@ -129,13 +150,13 @@ function registrar_linea_remesa(v_remesa, v_precio, v_concepto)
 	);
 }
 
-function registrar_descuento(nid_linea_remesa, concepto)
+function registrar_descuento(nid_remesa, concepto)
 {
     return new Promise(
         (resolve, reject) =>
         {
-            conexion.dbConn.query("insert into " + constantes.ESQUEMA_BD + ".linea_remesa_descuento(nid_linea_remesa, concepto) values(" +
-                    conexion.dbConn.escape(nid_linea_remesa) + ", " + conexion.dbConn.escape(concepto) + ")",
+            conexion.dbConn.query("insert into " + constantes.ESQUEMA_BD + ".remesa_descuento(nid_remesa, concepto) values(" +
+                    conexion.dbConn.escape(nid_remesa) + ", " + conexion.dbConn.escape(concepto) + ")",
                 (error, results, fields) =>
                 {
                     if(error) {console.log(error); conexion.dbConn.rollback(); reject();}
@@ -146,6 +167,9 @@ function registrar_descuento(nid_linea_remesa, concepto)
 
     )
 }
+
+
+
 
 function obtener_personas_activas(v_forma_pago)
 {
@@ -160,7 +184,8 @@ function obtener_personas_activas(v_forma_pago)
 								"and p.nid_forma_pago is not null " +
 								"and nid_forma_pago = " + conexion.dbConn.escape(v_forma_pago) + " " +
 								"and (ma.fecha_baja is null or ma.fecha_baja < sysdate()) " +
-							  "group by p.nid, m.nid",
+							  "group by p.nid, m.nid " +
+							  "order by p.nid",
 			(error, results, fields) =>
 			{
 				if(error) {console.log(error); reject()}
@@ -194,10 +219,11 @@ async function precio_matricula(nid_matricula, num_familiar)
 	let linea_remesas = [];
 
     // Obtiene si es socio //
-    let v_forma_pago = await persona.obtener_forma_pago(datos_matricula['nid_persona']);
-	var es_socio = !await existe_socio(v_forma_pago);
+    let v_forma_pago = await persona.obtener_pago_persona(datos_matricula['nid_persona']);
+	var es_socio = await existe_socio(v_forma_pago['nid_forma_pago']);
 
-	if (datos_matricula['precio_manual'] != null)
+
+	if (datos_matricula['precio_manual'] != null || datos_matricula['precio_manual'] == "")
 	{
 		var linea_remesa = new Object();
 
@@ -205,12 +231,15 @@ async function precio_matricula(nid_matricula, num_familiar)
 		linea_remesa.concepto = 'Precio manual para el alumno ' + datos_matricula['nombre_alumno'];
 
 		linea_remesas.push(linea_remesa);
+
+		resumen_matricula.precio = linea_remesa.precio
 	}
 	else
 	{
 		for(let z = 0; z < asignaturas_precio.length; z++)
 		{
 			v_precio_persona = 0;
+			var linea_remesa = new Object();
 
 			if (asignaturas_precio[z]['instrumento_banda'] == 1 && es_socio)
 			{
@@ -237,11 +266,11 @@ async function precio_matricula(nid_matricula, num_familiar)
 			}
 
 			linea_remesa.precio = v_precio_persona;
-			linea_remesa.concepto = 'Precio para el alumno ' + datos_matricula['nombre_alumno'] + ' en la asignatura ' + datos_matricula['nombre_asignatura'];
+			linea_remesa.concepto = 'Precio para el alumno ' + datos_matricula['nombre_alumno'] + ' en la asignatura ' + asignaturas_precio[z]['nombre_asignatura'];
 
 			linea_remesas.push(linea_remesa);
 
-			resumen_matricula.precio = parseFloat(v_precio_persona), parseFloat(resumen_matricula.precio);
+			resumen_matricula.precio = parseFloat(v_precio_persona) + parseFloat(resumen_matricula.precio);
 		}
 		// Descuento por familia //
 		if (num_familiar > 0 && es_socio)
@@ -252,20 +281,21 @@ async function precio_matricula(nid_matricula, num_familiar)
 
 			descuentos.push('Descuento por familiar ' + descuento_familiar + '% ' + num_miembro + ' miembro');
 		}
-
-		resumen_matricula.precio = resumen_matricula + SUMA_PRECIO_NO_SOCIO;
-		descuentos.push('Precio extra por no ser socio ' + SUMA_PRECIO_NO_SOCIO);
+		console.log('aqui')
+		console.log(es_socio)
+		if (!es_socio)
+		{
+			resumen_matricula.precio = resumen_matricula.precio + SUMA_PRECIO_NO_SOCIO;
+			descuentos.push('Precio extra por no ser socio ' + SUMA_PRECIO_NO_SOCIO);
+		}
 	}
 
 	resumen_matricula.descuentos = descuentos;
+	resumen_matricula.linea_remesas = linea_remesas;
 
 	return resumen_matricula;
 }
 
-async function registrar_remesa(resumen_matricula)
-{
-
-}
 
 function registrar_remesa_persona(nid_persona)
 {
@@ -306,8 +336,18 @@ function registrar_remesa_persona(nid_persona)
 							{
 								var resumen_matricula = await precio_matricula(personas_pago[j]['nid_matricula'], j);
 
+								console.log('Registrar Remesa')
 								let nid_remesa = await registrar_remesa(personas_pago[j]['nid_persona']);
+								
+								for (let z = 0; z < resumen_matricula.linea_remesas.length; z++)
+								{
+									await registrar_linea_remesa(nid_remesa, resumen_matricula.linea_remesas[z].precio, resumen_matricula.linea_remesas[z].concepto)
+								}
 
+								for (let z = 0; z < resumen_matricula.descuentos.length; z++)
+								{
+									await registrar_descuento(nid_remesa, resumen_matricula.descuentos[z]);
+								}
 
 							}
 						}
@@ -340,6 +380,39 @@ function obtener_remesas(fecha_desde, fecha_hasta)
 }
 
 
+function obtener_precio_matricula(nid_matricula)
+{
+	return new Promise(
+	 async (resolve, reject) =>
+	 {
+		let v_matricula = await gestor_matricula.obtener_matricula(nid_matricula);
+		let v_forma_pago = await persona.obtener_pago_persona(v_matricula['nid_persona']);
+		console.log('Matricula ' + v_matricula)
+		console.log('Persona ' + v_matricula['nid_persona'])
+		console.log('Forma pago ' + v_forma_pago['nid_forma_pago'])
+		let v_personas_activas = await obtener_personas_activas(v_forma_pago['nid_forma_pago']);
+
+		var v_resumen_matricula = null;
+
+		console.log(v_personas_activas)
+		if (v_personas_activas !== undefined)
+		{
+			for(let i = 0; i < v_personas_activas.length; i++)
+			{
+				if (v_personas_activas[i]['nid_matricula'] == nid_matricula)
+				{
+					v_resumen_matricula = await precio_matricula(nid_matricula, i);
+					resolve(v_resumen_matricula);
+				}
+				console.log('Matricula ' || nid_matricula || ' - ' || v_personas_activas[i]['nid_matricula'])
+			}
+		}
+		resolve(null);
+	 }
+	)
+}
+
 module.exports.registrar_remesa = registrar_remesa;
 module.exports.registrar_remesa_persona = registrar_remesa_persona;
 module.exports.obtener_remesas = obtener_remesas;
+module.exports.obtener_precio_matricula = obtener_precio_matricula;

@@ -39,6 +39,7 @@ import { FormaPagoComponent } from './componente/forma-pago/forma-pago.component
 import { FichaAsignaturaComponent } from './componente/ficha-asignatura/ficha-asignatura.component';
 import { DireccionComponent } from './componente/direccion/direccion.component';
 import { RemesasComponent } from './componente/remesas/remesas.component';
+import { DetalleRemesaComponent } from './componente/detalle-remesa/detalle-remesa.component';
 
 
 
@@ -70,7 +71,8 @@ import { RemesasComponent } from './componente/remesas/remesas.component';
     FormaPagoComponent,
     FichaAsignaturaComponent,
     DireccionComponent,
-    RemesasComponent
+    RemesasComponent,
+    DetalleRemesaComponent
   ],
   imports: [
     FormsModule,

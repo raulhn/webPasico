@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatriculasService } from 'src/app/servicios/matriculas.service';
 import { ActivatedRoute } from '@angular/router';
 import Swal from 'sweetalert2';
+import { RemesaService } from 'src/app/servicios/remesa.service';
 
 @Component({
   selector: 'app-ficha-matricula',
@@ -17,7 +18,9 @@ export class FichaMatriculaComponent implements OnInit{
 
   precio_manual: string ="";
 
-  constructor(private rutaActiva: ActivatedRoute, private matriculaService: MatriculasService)
+  mensualidad_matricula: any;
+
+  constructor(private rutaActiva: ActivatedRoute, private matriculaService: MatriculasService, private remesaService: RemesaService)
   {
     this.nid_matricula = rutaActiva.snapshot.params['nid_matricula'];
   }
@@ -27,7 +30,6 @@ export class FichaMatriculaComponent implements OnInit{
     next: (respuesta: any) =>
     {
       this.asignaturas = respuesta['asignaturas'];
-      this.bCargado = true;
     }
   }  
 
@@ -35,8 +37,6 @@ export class FichaMatriculaComponent implements OnInit{
   {
     next: (respuesta: any) =>
     {
-      console.log('Recupera')
-      console.log(respuesta)
       this.precio_manual = respuesta['matricula']['precio_manual'];
     }
   }
@@ -61,9 +61,19 @@ export class FichaMatriculaComponent implements OnInit{
     }
   }
 
+  obtener_mensualidad_matricula =
+  {
+    next: (respuesta: any) =>
+    {
+      this.mensualidad_matricula = respuesta['resumen_mensualidad'];
+      this.bCargado = true;
+    }
+  }
+
   ngOnInit(): void {
     this.matriculaService.obtener_matricula(this.nid_matricula).subscribe(this.recuperar_matricula);
     this.matriculaService.obtener_asignaturas_matriculas(this.nid_matricula).subscribe(this.obtener_asignaturas);
+    this.remesaService.obtener_precio_mensualidad(this.nid_matricula).subscribe(this.obtener_mensualidad_matricula);
   }
 
   guardar()

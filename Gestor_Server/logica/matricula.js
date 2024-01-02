@@ -357,7 +357,7 @@ function obtener_matricula(nid_matricula)
                    ' from ' + constantes.ESQUEMA_BD + '.matricula m, ' +
                    constantes.ESQUEMA_BD + '.persona p, ' +  constantes.ESQUEMA_BD + '.curso c ' +
                    'where m.nid_curso = c.nid and m.nid = ' + conexion.dbConn.escape(nid_matricula) + 
-                    'and p.nid = m.nid_persona',
+                    ' and p.nid = m.nid_persona',
                 (error, results, fields) =>
                 {
                     if (error) {console.log(error); reject();}
@@ -378,7 +378,7 @@ function obtener_asignaturas_matricula(nid_matricula)
     return new Promise(
         (resolve, reject) =>
         {
-            conexion.dbConn.query('select a.*, m.nid_persona nid_alumno, ma.*, ma.descripcion nombre_asignatura, p.*, p.nid nid_profesor ' +
+            conexion.dbConn.query('select a.*, m.nid_persona nid_alumno, ma.*, a.descripcion nombre_asignatura, p.*, p.nid nid_profesor ' +
                     'from ' + constantes.ESQUEMA_BD + '.matricula_asignatura ma, ' + 
                               constantes.ESQUEMA_BD + '.matricula m, ' +
                               constantes.ESQUEMA_BD + '.asignatura a, ' + 

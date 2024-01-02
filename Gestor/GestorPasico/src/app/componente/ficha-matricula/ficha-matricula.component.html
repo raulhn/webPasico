@@ -41,4 +41,18 @@
             
         </table>
     </div>
+
+    <div class="card" *ngIf="bCargado">
+        <div>
+            Precio: {{mensualidad_matricula['precio']}}
+        </div>
+
+        <div *ngFor="let linea of mensualidad_matricula['linea_remesas']">
+            {{linea['precio']}} - {{linea['concepto']}}
+        </div>
+
+        <div *ngFor="let descuento of mensualidad_matricula['descuentos']">
+            {{descuento}}
+        </div>
+    </div>
 </div>
