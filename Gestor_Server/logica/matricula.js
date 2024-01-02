@@ -353,8 +353,11 @@ function obtener_matricula(nid_matricula)
     return new Promise(
         (resolve, reject) =>
         {
-            conexion.dbConn.query('select c.descripcion descripcion_curso, m.* from ' + constantes.ESQUEMA_BD + '.matricula m, ' +
-                   constantes.ESQUEMA_BD + '.curso c where m.nid_curso = c.nid and m.nid = ' + conexion.dbConn.escape(nid_matricula),
+            conexion.dbConn.query('select c.descripcion descripcion_curso, m.*, concat(nombre,  \' \', primer_apellido, \' \', segundo_apellido) nombre_alumno ' +
+                   ' from ' + constantes.ESQUEMA_BD + '.matricula m, ' +
+                   constantes.ESQUEMA_BD + '.persona p, ' +  constantes.ESQUEMA_BD + '.curso c ' +
+                   'where m.nid_curso = c.nid and m.nid = ' + conexion.dbConn.escape(nid_matricula) + 
+                    'and p.nid = m.nid_persona',
                 (error, results, fields) =>
                 {
                     if (error) {console.log(error); reject();}
@@ -375,12 +378,13 @@ function obtener_asignaturas_matricula(nid_matricula)
     return new Promise(
         (resolve, reject) =>
         {
-            conexion.dbConn.query('select a.*, ma.*, p.*, p.nid nid_profesor ' +
+            conexion.dbConn.query('select a.*, m.nid_persona nid_alumno, ma.*, ma.descripcion nombre_asignatura, p.*, p.nid nid_profesor ' +
                     'from ' + constantes.ESQUEMA_BD + '.matricula_asignatura ma, ' + 
+                              constantes.ESQUEMA_BD + '.matricula m, ' +
                               constantes.ESQUEMA_BD + '.asignatura a, ' + 
                               constantes.ESQUEMA_BD + '.persona p, ' +
                               constantes.ESQUEMA_BD + '.profesor_alumno_matricula pam ' +
-                    'where ma.nid_asignatura = a.nid and nid_matricula = ' + 
+                    'where ma.nid_asignatura = a.nid and ' +   'm.nid = ma.nid_matricula and ' + 'nid_matricula = ' +
                     conexion.dbConn.escape(nid_matricula) + ' and ma.nid = pam.nid_matricula_asignatura and pam.nid_profesor = p.nid' ,
                 (error, results, fields) =>
                 {
@@ -526,6 +530,8 @@ function registrar_precio_manual(nid_matricula, precio)
 
     )
 }
+
+
 
 module.exports.existe_matricula = existe_matricula;
 module.exports.obtener_nid_matricula = obtener_nid_matricula;
