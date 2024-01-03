@@ -40,6 +40,7 @@ import { FichaAsignaturaComponent } from './componente/ficha-asignatura/ficha-as
 import { DireccionComponent } from './componente/direccion/direccion.component';
 import { RemesasComponent } from './componente/remesas/remesas.component';
 import { DetalleRemesaComponent } from './componente/detalle-remesa/detalle-remesa.component';
+import { ParametrosComponent } from './componente/parametros/parametros.component';
 
 
 
@@ -72,7 +73,8 @@ import { DetalleRemesaComponent } from './componente/detalle-remesa/detalle-reme
     FichaAsignaturaComponent,
     DireccionComponent,
     RemesasComponent,
-    DetalleRemesaComponent
+    DetalleRemesaComponent,
+    ParametrosComponent
   ],
   imports: [
     FormsModule,

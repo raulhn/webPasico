@@ -1,0 +1,19 @@
+create table pasico_gestor.parametros
+(
+	nombre varchar(100) primary key,
+	descripcion varchar(500),
+	valor varchar(300)
+);
+
+ insert into pasico_gestor.parametros(nombre, descripcion, valor) values('REBAJA_VIENTO_CUERDA', 'Descuento para alumnos que cursan instrumento de cuerda y viento a la vez', '15');
+ 
+ insert into pasico_gestor.parametros(nombre, descripcion, valor) values('SUMA_PRECIO_NO_SOCIO', 'Precio extra para los alumnos que no están relacionados con un socio', '10');
+ 
+ insert into pasico_gestor.parametros(nombre, descripcion, valor) values('PRECIO_INSTRUMENTO_BANDA', 'Precio de clase para instrumento de banda', '25');
+ 
+ insert into pasico_gestor.parametros(nombre, descripcion, valor) values('PRECIO_INSTRUMENTO_NO_BANDA', 'Precio de clase para instrumento que no son de banda', '40');
+ 
+ insert into pasico_gestor.parametros(nombre, descripcion, valor) values('PRECIO_LENGUAJE', 'Precio de clase de lenguaje musical', '20');
+ 
+ insert into pasico_gestor.parametros(nombre, descripcion, valor) values('PORCENTAJE_DESCUENTO_FAMILIA', 'Porcentaje de descuento por cada miembro extra', '20');
+ 

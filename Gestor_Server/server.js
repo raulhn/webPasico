@@ -18,6 +18,7 @@ var servlet_matricula = require('./servlets/servlet_matricula.js');
 var servlet_preinscripciones = require('./servlets/servlet_preinscripcion.js')
 var servlet_direcciones = require('./servlets/servlet_direccion.js');
 var servlet_remesa = require('./servlets/servlet_remesa.js');
+var servlet_parametros = require('./servlets/servlet_parametros.js');
 
 var fs = require('fs');
 
@@ -123,6 +124,11 @@ app.get('/obtener_preinscripciones', servlet_preinscripciones.obtener_preinscrip
 /** Remesas **/
 app.post('/registrar_remesa_persona', servlet_remesa.registrar_remesa_persona);
 app.get('/obtener_mensualidad/:nid_matricula', servlet_remesa.obtener_mensualidad);
+
+/** Parámetros **/
+app.get('/obtener_valor/:nombre', servlet_parametros.obtener_valor);
+app.post('/actualizar_valor', servlet_parametros.actualizar_valor);
+
 
 https.createServer({
     key: fs.readFileSync('apache.key'),

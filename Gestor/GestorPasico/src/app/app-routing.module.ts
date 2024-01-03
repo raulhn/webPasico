@@ -16,6 +16,7 @@ import { FichaMatriculaComponent } from './componente/ficha-matricula/ficha-matr
 import { FichaProfesorComponent } from './componente/ficha-profesor/ficha-profesor.component';
 import { ListadoPreinscripcionesComponent } from './componente/listado-preinscripciones/listado-preinscripciones.component';
 import { RemesasComponent } from './componente/remesas/remesas.component';
+import { ParametrosComponent } from './componente/parametros/parametros.component';
 
 
 const routes: Routes = [
@@ -78,6 +79,10 @@ const routes: Routes = [
   {
     path: 'registrar_remesa',
     component: RemesasComponent
+  },
+  {
+    path: 'parametros',
+    component: ParametrosComponent
   }
 
 ];

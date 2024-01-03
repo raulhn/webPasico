@@ -37,8 +37,6 @@ function obtener_mensualidad(req, res)
         async() =>
         {
             let nid_matricula = req.params.nid_matricula;
-
-            console.log('Matricula ' + nid_matricula)
             let v_resumen_matricula = await remesa.obtener_precio_matricula(nid_matricula);
 
             res.status(200).send({erro:false, resumen_mensualidad: v_resumen_matricula})

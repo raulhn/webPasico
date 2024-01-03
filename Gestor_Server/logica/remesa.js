@@ -2,6 +2,8 @@ const conexion = require('../conexion.js')
 const constantes = require('../constantes.js')
 const persona = require('./persona.js')
 const gestor_matricula = require('./matricula.js')
+const parametros = require('./parametros.js')
+
 const { obtener_instrumentos } = require('./musico.js')
 
 
@@ -30,7 +32,6 @@ function existe_socio(nid_forma_pago)
 	return new Promise(
 	  (resolve, reject) =>
 	  {
-		console.log('aqui forma pago')
 
 	    conexion.dbConn.query("select count(*) cont " +
 		                       "from " + constantes.ESQUEMA_BD + ".socios s, " + constantes.ESQUEMA_BD + ".persona p "+
@@ -198,10 +199,29 @@ function obtener_personas_activas(v_forma_pago)
 
 async function precio_matricula(nid_matricula, num_familiar)
 {
-	const REBAJA_VIENTO_CUERDA = 15;
-	const PORCENTAJE_FAMILIA = 20;
-	const SUMA_PRECIO_NO_SOCIO = 10;
-	const SUMA_PRECIO_ASIGNATURA_NO_SOCIO = 15;
+	var valor_recuperado = await parametros.obtener_valor('REBAJA_VIENTO_CUERDA');
+	const REBAJA_VIENTO_CUERDA = valor_recuperado['valor'];
+
+	valor_recuperado = await parametros.obtener_valor('SUMA_PRECIO_NO_SOCIO');
+	const SUMA_PRECIO_NO_SOCIO = valor_recuperado['valor'];
+
+	valor_recuperado = await parametros.obtener_valor('PRECIO_INSTRUMENTO_BANDA');
+	const PRECIO_INSTRUMENTO_BANDA = valor_recuperado['valor'];
+
+	valor_recuperado = await parametros.obtener_valor('PRECIO_INSTRUMENTO_NO_BANDA');
+	const PRECIO_INSTRUMENTO_NO_BANDA = valor_recuperado['valor'];
+
+	valor_recuperado = await parametros.obtener_valor('PRECIO_LENGUAJE');
+	const PRECIO_LENGUAJE = valor_recuperado['valor'];
+
+	valor_recuperado = await parametros.obtener_valor('PORCENTAJE_DESCUENTO_FAMILIA');
+	const PORCENTAJE_FAMILIA = valor_recuperado['valor'];
+
+
+	const ASIGNATURA_INSTRUMENTO_BANDA = 1;
+	const ASIGNATURA_INSTRUMENTO_NO_BANDA = 2;
+	const ASIGNATURA_LENGUAJE = 0;
+	const ASIGNATURA_BANDA = 3;
 
 	let v_precio_persona = 0;
 						
@@ -214,6 +234,8 @@ async function precio_matricula(nid_matricula, num_familiar)
 	var resumen_matricula = new Object();
 	resumen_matricula.precio = 0;
 	resumen_matricula.nid_matricula = nid_matricula;
+
+	var info = "";
 
 	let descuentos = [];
 	let linea_remesas = [];
@@ -241,50 +263,60 @@ async function precio_matricula(nid_matricula, num_familiar)
 			v_precio_persona = 0;
 			var linea_remesa = new Object();
 
-			if (asignaturas_precio[z]['instrumento_banda'] == 1 && es_socio)
+
+			if (asignaturas_precio[z]['tipo_asignatura'] == ASIGNATURA_INSTRUMENTO_BANDA && es_socio)
 			{
 				instrumento_banda = 1;
+				v_precio_persona = PRECIO_INSTRUMENTO_BANDA;	
+				info = 'Precio Instrumento de Banda';
 			}
-			else if(asignaturas_precio[z]['instrumento_banda'] == 2)
+			else if(asignaturas_precio[z]['tipo_asignatura'] == ASIGNATURA_INSTRUMENTO_BANDA && !es_socio)
+			{
+				v_precio_persona = PRECIO_INSTRUMENTO_NO_BANDA;
+				info = 'Precio Instrumento no de Banda al no estar asociado a un Socio';
+			}
+			else if(asignaturas_precio[z]['tipo_asignatura'] == ASIGNATURA_INSTRUMENTO_NO_BANDA)
 			{
 				instrumento_cuerda = 1;
-				descuentos.push('Precio estándar para instrumentos que no son de banda')
+				v_precio_persona = PRECIO_INSTRUMENTO_NO_BANDA;
+				info = 'Precio Instrumento no de Banda';
 			}
-			
-			v_precio_persona = v_precio_persona  + asignaturas_precio[z]['precio'];
-
-			if (asignaturas_precio[z]['instrumento_banda'] == 1 && !es_socio)
+		    else if(asignaturas_precio[z]['tipo_asignatura'] == ASIGNATURA_LENGUAJE)
 			{
-				v_precio_persona = v_precio_persona + SUMA_PRECIO_ASIGNATURA_NO_SOCIO; 
-			}
-			
-			// Descuento por instrumento de banda y cuerda //
-			if (instrumento_banda && instrumento_cuerda && es_socio)
-			{
-				v_precio_persona = v_precio_persona - REBAJA_VIENTO_CUERDA;
-				descuentos.push('Descuento por instrumento de banda y cuerda -' +  REBAJA_VIENTO_CUERDA)
+				
+				v_precio_persona = PRECIO_LENGUAJE;
+				info = 'Precio Lenguaje Musical';
 			}
 
 			linea_remesa.precio = v_precio_persona;
-			linea_remesa.concepto = 'Precio para el alumno ' + datos_matricula['nombre_alumno'] + ' en la asignatura ' + asignaturas_precio[z]['nombre_asignatura'];
-
+			linea_remesa.concepto = 'Precio para el alumno ' + datos_matricula['nombre_alumno'] + ' en la asignatura ' + asignaturas_precio[z]['nombre_asignatura'] + ' ('+ info +')';
 			linea_remesas.push(linea_remesa);
 
 			resumen_matricula.precio = parseFloat(v_precio_persona) + parseFloat(resumen_matricula.precio);
 		}
+
 		// Descuento por familia //
 		if (num_familiar > 0 && es_socio)
 		{
-			let descuento_familiar =  (PORCENTAJE_FAMILIA * num_familiar);
+			let descuento_familiar =  (parseFloat(PORCENTAJE_FAMILIA) * num_familiar);
 			let num_miembro = num_familiar + 1;
-			resumen_matricula.precio = resumen_matricula.precio * (1 - (descuento_familiar/ 100));
+			resumen_matricula.precio =  parseFloat(resumen_matricula.precio) * (1 - (descuento_familiar/ 100));
 
-			descuentos.push('Descuento por familiar ' + descuento_familiar + '% ' + num_miembro + ' miembro');
+			descuentos.push('Descuento por familiar ' + descuento_familiar + '% ' + num_miembro + 'º miembro');
 		}
+
+		// Se comprueba si se añade el extra por no ser socio //
 		if (!es_socio)
 		{
-			resumen_matricula.precio = resumen_matricula.precio + SUMA_PRECIO_NO_SOCIO;
-			descuentos.push('Precio extra por no ser socio ' + SUMA_PRECIO_NO_SOCIO);
+			resumen_matricula.precio = parseFloat(resumen_matricula.precio)+ parseFloat(SUMA_PRECIO_NO_SOCIO);
+			descuentos.push(SUMA_PRECIO_NO_SOCIO + '€ - Precio extra por no ser socio ');
+		}
+
+		// Descuento por instrumento de banda y cuerda //
+		if (instrumento_banda && instrumento_cuerda && es_socio)
+		{
+			resumen_matricula.precio =  parseFloat(resumen_matricula.precio) -  parseFloat(REBAJA_VIENTO_CUERDA);
+			descuentos.push('-' + REBAJA_VIENTO_CUERDA + '€ - Descuento por instrumento de banda y cuerda')
 		}
 	}
 
@@ -334,7 +366,6 @@ function registrar_remesa_persona(nid_persona)
 							{
 								var resumen_matricula = await precio_matricula(personas_pago[j]['nid_matricula'], j);
 
-								console.log('Registrar Remesa')
 								let nid_remesa = await registrar_remesa(personas_pago[j]['nid_persona']);
 								
 								for (let z = 0; z < resumen_matricula.linea_remesas.length; z++)
@@ -385,14 +416,11 @@ function obtener_precio_matricula(nid_matricula)
 	 {
 		let v_matricula = await gestor_matricula.obtener_matricula(nid_matricula);
 		let v_forma_pago = await persona.obtener_pago_persona(v_matricula['nid_persona']);
-		console.log('Matricula ' + v_matricula)
-		console.log('Persona ' + v_matricula['nid_persona'])
-		console.log('Forma pago ' + v_forma_pago['nid_forma_pago'])
+
 		let v_personas_activas = await obtener_personas_activas(v_forma_pago['nid_forma_pago']);
 
 		var v_resumen_matricula = null;
 
-		console.log(v_personas_activas)
 		if (v_personas_activas !== undefined)
 		{
 			for(let i = 0; i < v_personas_activas.length; i++)
@@ -402,7 +430,6 @@ function obtener_precio_matricula(nid_matricula)
 					v_resumen_matricula = await precio_matricula(nid_matricula, i);
 					resolve(v_resumen_matricula);
 				}
-				console.log('Matricula ' || nid_matricula || ' - ' || v_personas_activas[i]['nid_matricula'])
 			}
 		}
 		resolve(null);

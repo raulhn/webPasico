@@ -37,7 +37,7 @@ function actualizar_asignatura(nid_asignatura, descripcion, precio, tipo_asignat
                 {
                     conexion.dbConn.query("update " + constantes.ESQUEMA_BD + ".asignatura set descripcion = " + 
                         conexion.dbConn.escape(descripcion) + ', precio = replace(' +  conexion.dbConn.escape(precio) + ', \',\',  \'.\')' +
-                        ", instrumento_banda = " + conexion.dbConn.escape(tipo_asignatura) +
+                        ", tipo_asignatura = " + conexion.dbConn.escape(tipo_asignatura) +
                         " where nid = " + conexion.dbConn.escape(nid_asignatura),
                         async (error, results, fields) =>
                         {
@@ -136,7 +136,7 @@ function obtener_asignatura(nid_asignatura)
     return new Promise(
         (resolve, reject) =>
         {
-            conexion.dbConn.query("select nid, descripcion, replace(precio, \'.'\, \',\') as precio, instrumento_banda as tipo_asignatura from " + constantes.ESQUEMA_BD + '.asignatura where nid = ' + conexion.dbConn.escape(nid_asignatura),
+            conexion.dbConn.query("select nid, descripcion, replace(precio, \'.'\, \',\') as precio, tipo_asignatura as tipo_asignatura from " + constantes.ESQUEMA_BD + '.asignatura where nid = ' + conexion.dbConn.escape(nid_asignatura),
                 (error, results, fields) =>
                 {
                     if(error) {console.log(error); reject();}
