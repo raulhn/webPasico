@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PersonasService } from 'src/app/servicios/personas.service';
 import { SociosService } from 'src/app/servicios/socios.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-registro-socio',
@@ -46,13 +47,19 @@ export class RegistroSocioComponent implements OnInit{
   {
     next: (respuesta: any) =>
     {
-      this.bRegistrado = true;
-      this.mensaje_registro = 'Se ha registrado como socio'
+      Swal.fire({
+        icon: 'success',
+        title: 'Socio registrado',
+        text: 'Se ha completado el registro correctamente'
+      });
     },
     error: (respuesta: any) =>
     {
-      this.bError = true;
-      this.mensaje_error = respuesta.error.info;
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Se ha producido un error'
+      })
     }
   }
 

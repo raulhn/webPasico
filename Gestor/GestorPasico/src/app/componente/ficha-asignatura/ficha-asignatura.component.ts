@@ -17,7 +17,6 @@ export class FichaAsignaturaComponent implements OnInit{
   @ViewChild('instancia_asignatura') instancia_asignatura!: ElementRef;
 
   descripcion: string = "";
-  precio: string ="";
 
   tipo_asignatura: string="0";
 
@@ -42,7 +41,6 @@ export class FichaAsignaturaComponent implements OnInit{
     next: (respuesta: any) =>
     {
       this.descripcion = respuesta.asignatura.descripcion;
-      this.precio = respuesta.asignatura.precio;
       this.tipo_asignatura = respuesta.asignatura.tipo_asignatura;
 
       this.bCargadaAsignatura = true;
@@ -159,7 +157,7 @@ addProfesor()
 
   guardar()
   {
-    this.asignaturaServices.actualizar_asignatura(this.descripcion, this.nid_asignatura, this.precio, this.tipo_asignatura).subscribe(this.registrar_asignatura);
+    this.asignaturaServices.actualizar_asignatura(this.descripcion, this.nid_asignatura, this.tipo_asignatura).subscribe(this.registrar_asignatura);
   }
 
   ngOnInit(): void {

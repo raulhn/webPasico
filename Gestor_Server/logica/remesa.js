@@ -186,7 +186,7 @@ function obtener_personas_activas(v_forma_pago)
 								"and nid_forma_pago = " + conexion.dbConn.escape(v_forma_pago) + " " +
 								"and (ma.fecha_baja is null or ma.fecha_baja < sysdate()) " +
 							  "group by p.nid, m.nid " +
-							  "order by p.nid",
+							  "order by p.fecha_nacimiento",
 			(error, results, fields) =>
 			{
 				if(error) {console.log(error); reject()}
@@ -263,27 +263,27 @@ async function precio_matricula(nid_matricula, num_familiar)
 			v_precio_persona = 0;
 			var linea_remesa = new Object();
 
+			v_tipo_asignatura = asignaturas_precio[z]['tipo_asignatura'];
 
-			if (asignaturas_precio[z]['tipo_asignatura'] == ASIGNATURA_INSTRUMENTO_BANDA && es_socio)
+			if (v_tipo_asignatura == ASIGNATURA_INSTRUMENTO_BANDA && es_socio)
 			{
 				instrumento_banda = 1;
 				v_precio_persona = PRECIO_INSTRUMENTO_BANDA;	
 				info = 'Precio Instrumento de Banda';
 			}
-			else if(asignaturas_precio[z]['tipo_asignatura'] == ASIGNATURA_INSTRUMENTO_BANDA && !es_socio)
+			else if(v_tipo_asignatura == ASIGNATURA_INSTRUMENTO_BANDA && !es_socio)
 			{
 				v_precio_persona = PRECIO_INSTRUMENTO_NO_BANDA;
 				info = 'Precio Instrumento no de Banda al no estar asociado a un Socio';
 			}
-			else if(asignaturas_precio[z]['tipo_asignatura'] == ASIGNATURA_INSTRUMENTO_NO_BANDA)
+			else if(v_tipo_asignatura == ASIGNATURA_INSTRUMENTO_NO_BANDA)
 			{
 				instrumento_cuerda = 1;
 				v_precio_persona = PRECIO_INSTRUMENTO_NO_BANDA;
 				info = 'Precio Instrumento no de Banda';
 			}
-		    else if(asignaturas_precio[z]['tipo_asignatura'] == ASIGNATURA_LENGUAJE)
+		    else if(v_tipo_asignatura == ASIGNATURA_LENGUAJE)
 			{
-				
 				v_precio_persona = PRECIO_LENGUAJE;
 				info = 'Precio Lenguaje Musical';
 			}
@@ -332,15 +332,6 @@ function registrar_remesa_persona(nid_persona)
 	return new Promise(
 		(resolve, reject) =>
 		{
-			const REBAJA_VIENTO_CUERDA = 15;
-			const PORCENTAJE_FAMILIA = 20;
-			const SUMA_PRECIO_NO_SOCIO = 10;
-		
-			let v_precio_persona = 0;
-								
-			let instrumento_banda = 0;
-			let instrumento_cuerda = 0;
-		
 			
 			conexion.dbConn.query("select nid " +
 							      "from " + constantes.ESQUEMA_BD + ".forma_pago fp " +

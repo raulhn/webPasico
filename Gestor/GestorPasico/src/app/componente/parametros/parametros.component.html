@@ -1,38 +1,42 @@
 <app-menu class=""></app-menu>
-<div class="container pt-4">
+<div class="container p-4">
     <div class="card">
         <div class="card-header">
             <b>Parámetros</b>
         </div>
         <div class="row">
-            <div class="col">
+            <div class="col m-2">
                 <label class="">Precio Instrumento Banda:</label>
                 <input class="form-control" type="text" [(ngModel)]="precio_instrumento_banda"/>
             </div>
-            <div class="col">
+            <div class="col m-2">
                 <label class="">Precio Instrumento No de Banda:</label>
                 <input class="form-control" type="text" [(ngModel)]="precio_instrumento_no_banda"/>
             </div>
-            <div class="col">
+        </div>
+        <div class="row">
+            <div class="col m-2">
                 <label class="">Precio Lenguaje:</label>
                 <input class="form-control" type="text" [(ngModel)]="precio_lenguaje"/>
             </div>
-            <div class="col">
+            <div class="col m-2">
                 <label class="">Porcentaje Descuento por Miembro Familiar</label>
                 <input class="form-control" type="text" [(ngModel)]="porcentaje_familia"/>
             </div>
-            <div class="col">
+        </div>
+        <div class="row">
+            <div class="col m-2">
                 <label class="">Descuento para Cuerda y Viento:</label>
                 <input class="form-control" type="text" [(ngModel)]="rebaja_viento_cuerda"/>
             </div>
-            <div class="col">
+            <div class="col m-2">
                 <label class="">Extra para no socios:</label>
                 <input class="form-control" type="text" [(ngModel)]="suma_precio_no_socio"/>
             </div>
         </div>
         <div class="row">
             <div class="col">
-                <button  class="btn btn-primary mb-3 tp-3" (click)="guardar()" >Guardar </button>
+                <button  class="btn btn-primary mb-1 tp-3 ms-2" (click)="guardar()" >Guardar </button>
             </div>
         </div>
     </div>

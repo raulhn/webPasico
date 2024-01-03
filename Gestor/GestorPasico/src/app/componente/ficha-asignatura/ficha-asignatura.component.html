@@ -6,6 +6,7 @@
             </label>
             <input type="text" class="form-control" [(ngModel)] = "descripcion"/> 
         </div>
+        <div class="col-4"></div>
         <div class="col-4" *ngIf="bCargadaAsignatura">
             <div class="form-check">
                 <input class="form-check-input" type="radio" name="tipoAsignatura" id="tipoLenguaje" [(ngModel)]="tipo_asignatura" [value]="0" [checked]="tipo_asignatura === '0'">
@@ -32,12 +33,6 @@
                 </label>
               </div>
         </div>
-        <div class="col">
-            <label>
-                Precio
-            </label>
-            <input type="text" class="form-control" [(ngModel)] = "precio" />
-        </div>
     </div>
     
     <div class="row mt-3">
@@ -47,23 +42,24 @@
     </div>
 </div>
 
-<div class="card p-3">
+<div class="card p-3 mb-1 mt-1">
     <legend> Profesores </legend>
     <div class="row form-row pt-3">
     <div class="col">
         <button class="btn btn-primary mb-3 "  (click) = "addProfesor()"> Añadir Profesor </button>
     </div>
+
     </div>
     <div *ngIf="profesores.length > 0">
     <table datatable [dtOptions]="dtOptions_profesor" id="tabla_profesor" class="row-border hover"></table>
     </div>
 </div>
 
-<div style="display: none;">
+<div class="mb-1 mt-1" style="display: none;">
 
     <div #instancia_asignatura>
-        <div style="min-height: 300px;">
-          <input type="text" id="descripcion_asignatura" class="swal2-input" placeholder="" disabled [value]="descripcion"/>
+        <div style="min-height: 300px;" >
+          <input class="mb-2 mt-2" type="text" id="descripcion_asignatura" class="swal2-input" placeholder="" disabled [value]="descripcion"/>
           <ng-select  [items]="lista_personas"
           bindLabel="etiqueta" 
           bindValue="nid"

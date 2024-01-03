@@ -1,26 +1,32 @@
 <app-menu class=""></app-menu>
 <div class="container pt-4">
     
-    <app-ficha-asignatura nid_asignatura={{nid_asignatura}}></app-ficha-asignatura>
-    <div *ngIf="bCargadocompleto">
-    <form  ngNativeValidate class="form-control">
-        
-        <legend>Curso</legend>
-        <div *ngIf="bCargado_cursos" class="row form-row">
-            <div class="col">
-                <ng-select [items]="cursos"
-                        bindLabel="descripcion" 
-                        bindValue="clave_curso"
-                        [(ngModel)]="curso"
-                        [compareWith]="compareCursos"
-                        (change)="onChangeCurso($event)">
-                </ng-select>
-            </div>
-        </div>
-
-        <button class="btn btn-primary mb-3 " (click)="add_alumno()"> Registrar alumno</button>
-    </form>
+    <div class="mt-2">
+        <app-ficha-asignatura nid_asignatura={{nid_asignatura}}></app-ficha-asignatura>
     </div>
+
+    <div *ngIf="bCargadocompleto">
+    <div class="mb-2 mt-2">
+        <form  ngNativeValidate class="form-control">
+            
+            <legend>Curso</legend>
+            <div *ngIf="bCargado_cursos" class="row form-row">
+                <div class="col">
+                    <ng-select [items]="cursos"
+                            bindLabel="descripcion" 
+                            bindValue="clave_curso"
+                            [(ngModel)]="curso"
+                            [compareWith]="compareCursos"
+                            (change)="onChangeCurso($event)">
+                    </ng-select>
+                </div>
+            </div>
+
+            <button class="btn btn-primary mb-3 " (click)="add_alumno()"> Registrar alumno</button>
+        </form>
+    </div>
+    </div>
+
 
     <select class="form-select" [(ngModel)]="activo" (change)="cambia_seleccion()" aria-label="Default select example">
         <option selected value="1">Activos</option>
@@ -28,7 +34,7 @@
         <option value="3">Todos</option>
     </select>
     
-    <div *ngIf="bCargado">
+    <div class="mt-2 mb-2" *ngIf="bCargado">
 
         <table datatable [dtOptions]="dtOptions" id="tabla_alumnos" class="table">
         
