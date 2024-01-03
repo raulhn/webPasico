@@ -1,0 +1,3 @@
+ create table pasico_gestor.remesa_descuento(nid_descuento integer primary key auto_increment, nid_remesa integer, concepto varchar(3000));
+ 
+ alter table pasico_gestor.remesa_descuento add constraint fk_descuento_remesa foreign key(nid_remesa) references pasico_gestor.remesa(nid_remesa);

@@ -19,6 +19,8 @@ export class FichaAsignaturaComponent implements OnInit{
   descripcion: string = "";
   precio: string ="";
 
+  tipo_asignatura: string="0";
+
   dtOptions_profesor: DataTables.Settings = {};
   profesor_nuevo: string = "";
 
@@ -27,6 +29,8 @@ export class FichaAsignaturaComponent implements OnInit{
   profesores: any[] = [];
 
   nueva_asignatura: string = "";
+
+  bCargadaAsignatura:boolean = false;
 
   constructor(private asignaturaServices: AsignaturasService, private personaService: PersonasService)
   {
@@ -37,14 +41,11 @@ export class FichaAsignaturaComponent implements OnInit{
   {
     next: (respuesta: any) =>
     {
-
-      console.log(respuesta['asignatura']['descripcion'])
-      console.log(respuesta)
-      console.log(respuesta['asignatura']['precio'])
-
       this.descripcion = respuesta.asignatura.descripcion;
       this.precio = respuesta.asignatura.precio;
-      
+      this.tipo_asignatura = respuesta.asignatura.tipo_asignatura;
+
+      this.bCargadaAsignatura = true;
     }
   }
 
@@ -158,7 +159,7 @@ addProfesor()
 
   guardar()
   {
-    this.asignaturaServices.actualizar_asignatura(this.descripcion, this.nid_asignatura, this.precio).subscribe(this.registrar_asignatura);
+    this.asignaturaServices.actualizar_asignatura(this.descripcion, this.nid_asignatura, this.precio, this.tipo_asignatura).subscribe(this.registrar_asignatura);
   }
 
   ngOnInit(): void {

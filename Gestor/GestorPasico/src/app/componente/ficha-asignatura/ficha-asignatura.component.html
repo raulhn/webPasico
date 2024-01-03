@@ -1,12 +1,37 @@
 <div class="card p-3 mb-1">
     <div class="row">
-        <div class="col-6">
+        <div class="col-4">
             <label>
                 Asignatura
             </label>
             <input type="text" class="form-control" [(ngModel)] = "descripcion"/> 
         </div>
-        <div class="col-4"></div>
+        <div class="col-4" *ngIf="bCargadaAsignatura">
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="tipoAsignatura" id="tipoLenguaje" [(ngModel)]="tipo_asignatura" [value]="0" [checked]="tipo_asignatura === '0'">
+                <label class="form-check-label" for="tipoLenguaje">
+                  Lenguaje Musical
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="tipoAsignatura" id="tipoInstrumentoBanda" [(ngModel)]="tipo_asignatura" [value]="1" [checked]="tipo_asignatura === '1'">
+                <label class="form-check-label" for="tipoInstrumentoBanda">
+                  Instrumento Banda
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="tipoAsignatura" id="tipoInstrumentoNoBanda" [(ngModel)]="tipo_asignatura" [value]="2" [checked]="tipo_asignatura === '2'">
+                <label class="form-check-label" for="tipoInstrumentoNoBanda">
+                 Instrumento No Banda
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="tipoAsignatura" id="tipoBanda" [(ngModel)]="tipo_asignatura" [value]="3" [checked]="tipo_asignatura === '3'">
+                <label class="form-check-label" for="tipoBanda">
+                 Banda
+                </label>
+              </div>
+        </div>
         <div class="col">
             <label>
                 Precio
@@ -14,6 +39,7 @@
             <input type="text" class="form-control" [(ngModel)] = "precio" />
         </div>
     </div>
+    
     <div class="row mt-3">
         <div class="col">
             <button  class="btn btn-primary mb-3 tp-3" (click)="guardar()"> Guardar </button>

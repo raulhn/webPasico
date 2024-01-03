@@ -42,17 +42,25 @@
         </table>
     </div>
 
-    <div class="card" *ngIf="bCargado">
-        <div>
-            Precio: {{mensualidad_matricula['precio']}}
+    <div class="card mt-3" *ngIf="bCargado">
+        <div class="card-header">
+            <b>Precio Mensualidad: </b> {{mensualidad_matricula['precio']}} €
         </div>
-
-        <div *ngFor="let linea of mensualidad_matricula['linea_remesas']">
-            {{linea['precio']}} - {{linea['concepto']}}
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item" *ngFor="let linea of mensualidad_matricula['linea_remesas']">
+                {{linea['precio']}}€ - {{linea['concepto']}}
+            </li>
+        </ul>
+        <div class="card-headear bg-light" *ngIf=" mensualidad_matricula['descuentos'].length > 0">
+            <b class="ms-3">Descuentos y otros conceptos aplicados</b>
         </div>
-
-        <div *ngFor="let descuento of mensualidad_matricula['descuentos']">
-            {{descuento}}
-        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item"*ngFor="let descuento of mensualidad_matricula['descuentos']">
+                {{descuento}}
+            </li>
+        </ul>
     </div>
+
+    
+
 </div>

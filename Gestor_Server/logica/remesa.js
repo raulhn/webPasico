@@ -223,7 +223,7 @@ async function precio_matricula(nid_matricula, num_familiar)
 	var es_socio = await existe_socio(v_forma_pago['nid_forma_pago']);
 
 
-	if (datos_matricula['precio_manual'] != null || datos_matricula['precio_manual'] == "")
+	if (datos_matricula['precio_manual'] != null && datos_matricula['precio_manual'] != "")
 	{
 		var linea_remesa = new Object();
 
@@ -253,7 +253,7 @@ async function precio_matricula(nid_matricula, num_familiar)
 			
 			v_precio_persona = v_precio_persona  + asignaturas_precio[z]['precio'];
 
-			if (asignaturas_precio[z]['instrumento_banda'] == 1 && es_socio)
+			if (asignaturas_precio[z]['instrumento_banda'] == 1 && !es_socio)
 			{
 				v_precio_persona = v_precio_persona + SUMA_PRECIO_ASIGNATURA_NO_SOCIO; 
 			}
@@ -281,8 +281,6 @@ async function precio_matricula(nid_matricula, num_familiar)
 
 			descuentos.push('Descuento por familiar ' + descuento_familiar + '% ' + num_miembro + ' miembro');
 		}
-		console.log('aqui')
-		console.log(es_socio)
 		if (!es_socio)
 		{
 			resumen_matricula.precio = resumen_matricula.precio + SUMA_PRECIO_NO_SOCIO;

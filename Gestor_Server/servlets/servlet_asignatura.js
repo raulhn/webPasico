@@ -22,8 +22,9 @@ function actualizar_asignatura(req, res)
             let descripcion = req.body.descripcion;
             let nid_asignatura = req.body.nid_asignatura;
             let precio = req.body.precio
+            let tipo_asignatura = req.body.tipo_asignatura; // 0 - Lenguaje musical; 1 - Instrumento banda; 2 - Instrumento no banda //
 
-            await asignatura.actualizar_asignatura(nid_asignatura, descripcion, precio);
+            await asignatura.actualizar_asignatura(nid_asignatura, descripcion, precio, tipo_asignatura);
             res.status(200).send({error:false, message: 'Asignatura actualizada'});
         }
     )
