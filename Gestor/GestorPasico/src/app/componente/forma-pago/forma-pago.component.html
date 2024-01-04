@@ -1,11 +1,13 @@
 <div class="row form-row">
+    <div *ngIf="bCargado_formas_pago">
     <label> Forma de Pago:</label>
-    <ng-select [items]="formas_pago"
-        bindLabel="etiqueta" 
-        bindValue="nid"
-        [(ngModel)]="forma_pago"
-        [compareWith]="compareForma_pago">
-    </ng-select>
+        <ng-select [items]="formas_pago"
+            bindLabel="etiqueta" 
+            bindValue="nid"
+            [(ngModel)]="forma_pago"
+            [compareWith]="compareForma_pago">
+        </ng-select>
+    </div>
 
     <button type="button"  class="btn btn-primary mb-3 tp-3" data-bs-toggle="modal" data-bs-target="#registro-forma-pago">
         Nueva forma de pago

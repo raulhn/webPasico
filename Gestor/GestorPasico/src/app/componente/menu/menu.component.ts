@@ -33,7 +33,6 @@ export class MenuComponent implements OnInit {
         else{
           this.usuario = res.login;
           this.logueado = res.logueado;
-   //       this.router.navigate(['']);
         }
       }
     )

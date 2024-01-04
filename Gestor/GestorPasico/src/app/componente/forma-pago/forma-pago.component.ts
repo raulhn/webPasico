@@ -29,6 +29,7 @@ export class FormaPagoComponent implements OnInit{
   {
     next: (respuesta: any) =>
     {
+      console.log('Obtenida forma pago')
       this.formas_pago = respuesta.formas_pago;
       this.bCargado_formas_pago = true;
     }
