@@ -307,7 +307,7 @@ function obtener_persona(nid)
             {
                 if(error) {console.log('Error'); console.log(error); reject(error);}
                 else if (results.length < 1) {reject('No se ha encontrado la persona')}
-                else {console.log('Obtenido'); console.log(results[0]); resolve(results[0])}
+                else { resolve(results[0])}
             }
             )
         }
@@ -380,6 +380,8 @@ function registrar_forma_pago(nid_titular, iban)
     )
 }
 
+
+
 function obtener_forma_pago(nid_titular)
 {
     return new Promise(
@@ -392,6 +394,22 @@ function obtener_forma_pago(nid_titular)
                 {
                     if(error) {console.log(error); reject();}
                     else {resolve(results);}
+                }
+            )
+        }
+    )
+}
+
+function tiene_forma_pago(nid_titular)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.query('select count(*) cont from ' + constantes.ESQUEMA_BD + '.persona where nid_forma_pago is not null',
+                (error, results, fields) =>
+                {
+                    if(error) {console.log(error); reject();}
+                    else{resolve(results[0]['cont'])}
                 }
             )
         }
@@ -477,6 +495,7 @@ module.exports.obtener_persona = obtener_persona
 
 module.exports.registrar_forma_pago = registrar_forma_pago;
 module.exports.obtener_forma_pago = obtener_forma_pago;
+module.exports.tiene_forma_pago = tiene_forma_pago;
 module.exports.obtener_pago_persona = obtener_pago_persona;
 module.exports.obtener_formas_pago = obtener_formas_pago;
 module.exports.asociar_pago_persona = asociar_pago_persona;

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RemesaService } from 'src/app/servicios/remesa.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-remesas',
@@ -17,11 +18,19 @@ export class RemesasComponent {
   {
     next: (respuesta: any) =>
     {
-      console.log(respuesta)
+      Swal.fire({
+        icon: 'success',
+        title: 'Remesa creada',
+        text:  'Se ha registrado correctamente',
+      })
     },
     error: (respuesta: any) =>
     {
-
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text:  respuesta.error.info,
+      })
     }
   }
 

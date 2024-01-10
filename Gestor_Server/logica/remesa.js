@@ -102,7 +102,7 @@ function obtener_siguiente_lote()
 	)
 }
 
-function registrar_remesa(v_persona)
+function registrar_remesa(v_persona, v_siguiente_lote)
 {
 	return new Promise(
 		(resolve, reject) =>
@@ -110,19 +110,28 @@ function registrar_remesa(v_persona)
 			conexion.dbConn.beginTransaction(
 				async () =>
 				{
-					let v_forma_pago = await persona.obtener_forma_pago(v_persona)
-					let siguiente_lote = await obtener_siguiente_lote();
+					let tiene_forma_pago = await persona.tiene_forma_pago(v_persona);
+					if (tiene_forma_pago > 0)
+					{
+						let v_forma_pago = await persona.obtener_pago_persona(v_persona)
+						let persona_recuperada = await persona.obtener_persona(v_persona);
+					
+						conexion.dbConn.query("insert into " + constantes.ESQUEMA_BD + ".remesa(nid_forma_pago, nid_persona, concepto, fecha, lote) " +
+								"values(" + conexion.dbConn.escape(v_forma_pago['nid_forma_pago']) + ", " + conexion.dbConn.escape(v_persona) + ", " +
+								"'Pago Mensual  " + persona_recuperada['etiqueta'] + "' , sysdate(), " + conexion.dbConn.escape(v_siguiente_lote) +")",
+							(error, results, fields) =>
+							{
+								if(error) {conexion.dbConn.rollback(); console.log(error); reject();}
+								else {conexion.dbConn.commit(); console.log('Remesa registrada'); resolve(results.insertId);}
+							})
+					}
+					else
+					{
+						await limpiar_lote(v_siguiente_lote)
+						conexion.dbConn.rollback();
+						reject('Existen personas que no tienen forma de pago');
+					}
 
-					let persona_recuperada = await persona.obtener_persona(v_persona);
-
-					conexion.dbConn.query("insert into " + constantes.ESQUEMA_BD + ".remesa(nid_forma_pago, nid_persona, concepto, fecha, lote) " +
-							"values(" + conexion.dbConn.escape(v_forma_pago[0]['nid']) + ", " + conexion.dbConn.escape(v_persona) + ", " +
-							"'Pago Mensual  " + persona_recuperada['etiqueta'] + "' , sysdate(), " + conexion.dbConn.escape(siguiente_lote) +")",
-						(error, results, fields) =>
-						{
-							if(error) {conexion.dbConn.rollback(); console.log(error); reject();}
-							else {conexion.dbConn.commit(); console.log('Remesa registrada'); resolve(results.insertId);}
-						})
 				}
 			);
 		}
@@ -168,8 +177,6 @@ function registrar_descuento(nid_remesa, concepto)
 
     )
 }
-
-
 
 
 function obtener_personas_activas(v_forma_pago)
@@ -327,6 +334,74 @@ async function precio_matricula(nid_matricula, num_familiar)
 }
 
 
+function eliminar_descuento_lote(v_lote)
+{
+	return new Promise(
+		(resolve, reject) =>
+		{
+			conexion.dbConn.query('delete from ' + constantes.ESQUEMA_BD + '.remesa_descuento ' +
+			                      ' where nid_remesa in (select nid_remesa from ' + constantes.ESQUEMA_BD + 
+								  '.remesa where lote = ' + conexion.dbConn.escape(v_lote) + ')',
+				(error, results, fields) =>
+				{
+					if(error) {console.log(error); reject()}
+					else {resolve();}
+				}
+			)
+		}
+	)
+}
+
+function eliminar_linea_remesa_lote(v_lote)
+{
+	return new Promise(
+		(resolve, reject) =>
+		{
+			conexion.dbConn.query('delete from ' + constantes.ESQUEMA_BD + '.linea_remesa ' +
+			                      ' where nid_remesa in (select nid_remesa from ' + constantes.ESQUEMA_BD + 
+								  '.remesa where lote = ' + conexion.dbConn.escape(v_lote) + ')',
+				(error, results, fields) =>
+				{
+					if(error) {console.log(error); reject()}
+					else {resolve();}
+				}
+			)
+		}
+	)
+}
+
+function limpiar_lote(v_lote)
+{
+	return new Promise (
+		(resolve, reject) =>
+		{
+			conexion.dbConn.beginTransaction(
+				async () =>
+				{
+					try
+					{
+						await eliminar_descuento_lote(v_lote);
+						await eliminar_linea_remesa_lote(v_lote);
+						conexion.dbConn.query('delete from ' + constantes.ESQUEMA_BD + '.remesa ' +
+										' where lote = ' + conexion.dbConn.escape(v_lote),
+							(error, results, fields) =>
+							{
+								if(error) {console.log(error); reject(); conexion.dbConn.rollback();}
+								else {conexion.dbConn.commit(); resolve();}
+							}		
+						)
+					}
+					catch(error)
+					{
+						conexion.dbConn.rollback();
+						reject();
+					}
+				}
+			)
+		}
+	);
+}
+
 function registrar_remesa_persona(nid_persona)
 {
 	return new Promise(
@@ -346,32 +421,57 @@ function registrar_remesa_persona(nid_persona)
 				{
 					let formas_pago = results;
 					
-					for (let i = 0; i < formas_pago.length; i++)
+					var v_siguiente_lote = await obtener_siguiente_lote();
+
+					try
 					{
-
-						let personas_pago = await obtener_personas_activas(formas_pago[i]['nid']);
-
-						if (personas_pago !== undefined)
+						for (let i = 0; i < formas_pago.length; i++)
 						{
-							for(let j = 0; j < personas_pago.length; j++)
+
+							let personas_pago = await obtener_personas_activas(formas_pago[i]['nid']);
+
+							if (personas_pago !== undefined)
 							{
-								var resumen_matricula = await precio_matricula(personas_pago[j]['nid_matricula'], j);
+								for(let j = 0; j < personas_pago.length; j++)
+								{
+							
+									var resumen_matricula = await precio_matricula(personas_pago[j]['nid_matricula'], j);
 
-								let nid_remesa = await registrar_remesa(personas_pago[j]['nid_persona']);
+									let tiene_forma_pago = await persona.tiene_forma_pago(personas_pago[j]['nid_persona']);
+						
+									if (tiene_forma_pago > 0)
+									{
+										let nid_remesa = await registrar_remesa(personas_pago[j]['nid_persona'], v_siguiente_lote);
+
+									for (let z = 0; z < resumen_matricula.linea_remesas.length; z++)
+									{
+										await registrar_linea_remesa(nid_remesa, resumen_matricula.linea_remesas[z].precio, resumen_matricula.linea_remesas[z].concepto)
+									}
+
+									for (let z = 0; z < resumen_matricula.descuentos.length; z++)
+									{
+										await registrar_descuento(nid_remesa, resumen_matricula.descuentos[z]);
+									}
 								
-								for (let z = 0; z < resumen_matricula.linea_remesas.length; z++)
-								{
-									await registrar_linea_remesa(nid_remesa, resumen_matricula.linea_remesas[z].precio, resumen_matricula.linea_remesas[z].concepto)
+									}
 								}
-
-								for (let z = 0; z < resumen_matricula.descuentos.length; z++)
-								{
-									await registrar_descuento(nid_remesa, resumen_matricula.descuentos[z]);
-								}
-
+									
+							}
+							else
+							{
+								console.log('Hay personas con matriculas que no tienen definida una forma de pago')
+								await limpiar_lote(v_siguiente_lote);
+								reject();
 							}
 						}
-						}
+					resolve();
+					}
+					catch(error)
+					{
+						await limpiar_lote(v_siguiente_lote);
+						console.log(error)
+						reject()
+					}
 				}
             )
 		}
@@ -395,6 +495,55 @@ function obtener_remesas(fecha_desde, fecha_hasta)
 					else  {resolve(results)}
 				}
 			)
+		}
+	)
+}
+
+function obtener_remesa(lote)
+{
+	return new Promise(
+		(resolve, reject) =>
+		{
+			conexion.dbConn.query('select * from ' + constantes.ESQUEMA_BD +
+			   		".remesa where lote = " + conexion.dbConn.escape(lote),
+			    (error, results, fields) =>
+				{
+					if (error) {console.log(error); reject();}
+					else {resolve(results)}
+				} 
+		  )
+		}
+	)
+}
+
+function obtener_lineas_remesa(nid_remesa)
+{
+	return new Promise(
+		(resolve, reject) =>
+		{
+			conexion.dbConn.query('select * from ' + constantes.ESQUEMA_BD + '.linea_remesa where nid_remesa = '
+					+ conexion.dbConn.escape(nid_remesa),
+				(error, results, fields) =>
+				{
+					if (error) {console.log(error); reject();}
+					else {resolve(results)}
+				} );
+		}
+	)
+}
+
+function obtener_descuentos_remesa(nid_remesa)
+{
+	return new Promise(
+		(resolve, reject) =>
+		{
+			conexion.dbConn.query('select * from ' + constantes.ESQUEMA_BD + '.descuento_remesas where nid_remesa = '
+					+ conexion.dbConn.escape(nid_remesa),
+				(error, results, fields) =>
+				{
+					if (error) {console.log(error); reject();}
+					else {resolve(results)}
+				} );
 		}
 	)
 }
@@ -432,3 +581,7 @@ module.exports.registrar_remesa = registrar_remesa;
 module.exports.registrar_remesa_persona = registrar_remesa_persona;
 module.exports.obtener_remesas = obtener_remesas;
 module.exports.obtener_precio_matricula = obtener_precio_matricula;
+
+module.exports.obtener_remesa = obtener_remesa;
+module.exports.obtener_lineas_remesa = obtener_lineas_remesa;
+module.exports.obtener_descuentos_remesa = obtener_descuentos_remesa;

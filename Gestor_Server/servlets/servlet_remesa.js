@@ -8,8 +8,9 @@ function registrar_remesa_persona(req, res)
         async () =>
         {
             let nid = req.body.nid;
-
             await remesa.registrar_remesa_persona(nid);
+
+            res.status(200).send({error:false, message: 'Registra remesa'})
         }
     );
 }
