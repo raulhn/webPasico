@@ -1,4 +1,26 @@
-<p>remesas works!</p>
 
+<app-menu class=""></app-menu>
+<div class="container pt-4">
+    <div class="card p-3 mb-1">
+    <button class="btn btn-primary mb-3 mt-2 tp-3" (click)="crear_remesa()" > Crear nueva remesa </button>
+    </div>
+    <div class="card p-3 mb-1">
 
-<button (click)="crear_remesa()" > Crear remesa </button>
+    <div class="row">
+        <div class="col">
+            <input class="form-control" type="text" [(ngModel)] = "lote"/> 
+            <div class="m-2">
+            <button class="btn btn-primary" (click) ="buscar()"> Buscar </button>
+        </div>
+        </div>
+    </div>
+</div>
+<div class="card p-3 mb-1">
+    <div *ngIf="bCargado_remesas">
+        <table datatable [dtOptions]="dtOpciones_remesas" class="table" id="tabla_remesas"></table>
+        <div *ngIf="remesa_seleccionada !== undefined" class="float-end p-3">
+            <a [href]="obtenerUrlFicha()"> <button class="btn btn-primary"> Ver Ficha</button></a>
+        </div>
+    </div>
+</div>
+</div>

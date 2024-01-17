@@ -21,4 +21,34 @@ export class RemesaService {
     let API_URL = this.url + '/obtener_mensualidad/' + nid_matricula;
     return this.http.get(API_URL, {withCredentials: true});
   }
+
+  obtener_ultimo_lote()
+  {
+    let API_URL = this.url + '/obtener_ultimo_lote';
+    return this.http.get(API_URL, {withCredentials: true})
+  }
+
+  obtener_remesas(lote: string)
+  {
+    let API_URL = this.url + '/obtener_remesa/' + lote;
+    return this.http.get(API_URL, {withCredentials:true})
+  }
+
+  obtener_remesa(nid_remesa: string)
+  {
+    let API_URL = this.url + '/obtener_remesa_nid/' + nid_remesa;
+    return this.http.get(API_URL, {withCredentials: true})
+  }
+
+  obtener_lineas_remesa(nid_remesa: string)
+  {
+    let API_URL = this.url + '/obtener_lineas_remesa/' + nid_remesa;
+    return this.http.get(API_URL, {withCredentials: true});
+  }
+
+  obtener_descuentos_remesa(nid_remesa: string)
+  {
+    let API_URL = this.url + '/obtener_descuentos_remesa/'+ nid_remesa;
+    return this.http.get(API_URL, {withCredentials: true});
+  }
 }

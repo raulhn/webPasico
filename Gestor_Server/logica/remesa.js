@@ -4,7 +4,7 @@ const persona = require('./persona.js')
 const gestor_matricula = require('./matricula.js')
 const parametros = require('./parametros.js')
 
-const { obtener_instrumentos } = require('./musico.js')
+const { obtener_instrumentos, registrar_instrumento_persona } = require('./musico.js')
 
 
 function existe_persona_sin_foma_pago()
@@ -102,7 +102,7 @@ function obtener_siguiente_lote()
 	)
 }
 
-function registrar_remesa(v_persona, v_siguiente_lote)
+function registrar_remesa(v_persona, v_siguiente_lote, v_precio)
 {
 	return new Promise(
 		(resolve, reject) =>
@@ -116,9 +116,10 @@ function registrar_remesa(v_persona, v_siguiente_lote)
 						let v_forma_pago = await persona.obtener_pago_persona(v_persona)
 						let persona_recuperada = await persona.obtener_persona(v_persona);
 					
-						conexion.dbConn.query("insert into " + constantes.ESQUEMA_BD + ".remesa(nid_forma_pago, nid_persona, concepto, fecha, lote) " +
+						conexion.dbConn.query("insert into " + constantes.ESQUEMA_BD + ".remesa(nid_forma_pago, nid_persona, concepto, fecha, lote, precio) " +
 								"values(" + conexion.dbConn.escape(v_forma_pago['nid_forma_pago']) + ", " + conexion.dbConn.escape(v_persona) + ", " +
-								"'Pago Mensual  " + persona_recuperada['etiqueta'] + "' , sysdate(), " + conexion.dbConn.escape(v_siguiente_lote) +")",
+								"'Pago Mensual  " + persona_recuperada['etiqueta'] + "' , sysdate(), " + conexion.dbConn.escape(v_siguiente_lote) +
+								", " + conexion.dbConn.escape(v_precio) +")",
 							(error, results, fields) =>
 							{
 								if(error) {conexion.dbConn.rollback(); console.log(error); reject();}
@@ -441,17 +442,18 @@ function registrar_remesa_persona(nid_persona)
 						
 									if (tiene_forma_pago > 0)
 									{
-										let nid_remesa = await registrar_remesa(personas_pago[j]['nid_persona'], v_siguiente_lote);
+										let v_precio_remesa = resumen_matricula.precio;
+										let nid_remesa = await registrar_remesa(personas_pago[j]['nid_persona'], v_siguiente_lote, v_precio_remesa);
 
-									for (let z = 0; z < resumen_matricula.linea_remesas.length; z++)
-									{
-										await registrar_linea_remesa(nid_remesa, resumen_matricula.linea_remesas[z].precio, resumen_matricula.linea_remesas[z].concepto)
-									}
+										for (let z = 0; z < resumen_matricula.linea_remesas.length; z++)
+										{
+											await registrar_linea_remesa(nid_remesa, resumen_matricula.linea_remesas[z].precio, resumen_matricula.linea_remesas[z].concepto)
+										}
 
-									for (let z = 0; z < resumen_matricula.descuentos.length; z++)
-									{
-										await registrar_descuento(nid_remesa, resumen_matricula.descuentos[z]);
-									}
+										for (let z = 0; z < resumen_matricula.descuentos.length; z++)
+										{
+											await registrar_descuento(nid_remesa, resumen_matricula.descuentos[z]);
+										}
 								
 									}
 								}
@@ -516,6 +518,8 @@ function obtener_remesa(lote)
 	)
 }
 
+
+
 function obtener_lineas_remesa(nid_remesa)
 {
 	return new Promise(
@@ -537,7 +541,7 @@ function obtener_descuentos_remesa(nid_remesa)
 	return new Promise(
 		(resolve, reject) =>
 		{
-			conexion.dbConn.query('select * from ' + constantes.ESQUEMA_BD + '.descuento_remesas where nid_remesa = '
+			conexion.dbConn.query('select * from ' + constantes.ESQUEMA_BD + '.remesa_descuento where nid_remesa = '
 					+ conexion.dbConn.escape(nid_remesa),
 				(error, results, fields) =>
 				{
@@ -577,11 +581,47 @@ function obtener_precio_matricula(nid_matricula)
 	)
 }
 
+function obtener_ultimo_lote()
+{
+	return new Promise(
+		async (resolve, reject) =>
+		{
+			conexion.dbConn.query('select ifnull(max(lote), 0) ultimo_lote from ' + constantes.ESQUEMA_BD + '.remesa',
+				(error, results, fields) =>
+				{
+					if(error) {console.log(error); reject();}
+					else {resolve(results[0]['ultimo_lote'])}
+				}
+			
+			)
+		}
+
+	)
+}
+
+function obtener_remesa_nid(nid_remesa)
+{
+	return new Promise(
+		async (resolve, reject) =>
+		{
+			conexion.dbConn.query('select * from ' + constantes.ESQUEMA_BD +
+			   		".remesa where nid_remesa = " + conexion.dbConn.escape(nid_remesa),
+			    (error, results, fields) =>
+				{
+					if (error) {console.log(error); reject();}
+					else {resolve(results)}
+				} 
+		  )
+		}
+	)
+}
+
 module.exports.registrar_remesa = registrar_remesa;
 module.exports.registrar_remesa_persona = registrar_remesa_persona;
 module.exports.obtener_remesas = obtener_remesas;
 module.exports.obtener_precio_matricula = obtener_precio_matricula;
-
 module.exports.obtener_remesa = obtener_remesa;
 module.exports.obtener_lineas_remesa = obtener_lineas_remesa;
 module.exports.obtener_descuentos_remesa = obtener_descuentos_remesa;
+module.exports.obtener_ultimo_lote = obtener_ultimo_lote;
+module.exports.obtener_remesa_nid = obtener_remesa_nid;

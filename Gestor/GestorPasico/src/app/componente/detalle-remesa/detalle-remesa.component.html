@@ -1,1 +1,26 @@
-<p>detalle-remesa works!</p>
+
+<app-menu class=""></app-menu>
+<div class="container pt-4">
+    <div class="card mt-3" *ngIf="bCargado">
+    <div class="card-header">
+        <b>Precio Mensualidad: </b> {{remesa['precio']}} €
+    </div>
+    <div *ngIf="bCargadas_lineas">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item" *ngFor="let linea of lineas_remesa">
+                {{linea['precio']}}€ - {{linea['concepto']}}
+            </li>
+        </ul>
+    </div>
+    <div *ngIf="bCargados_descuentos">
+        <div class="card-headear bg-light" *ngIf="descuentos_remesa.length > 0">
+            <b class="ms-3">Descuentos y otros conceptos aplicados</b>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item"*ngFor="let descuento of descuentos_remesa">
+                {{descuento['concepto']}}
+            </li>
+        </ul>
+    </div>
+</div>
+</div>

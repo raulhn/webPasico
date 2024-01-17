@@ -17,6 +17,7 @@ import { FichaProfesorComponent } from './componente/ficha-profesor/ficha-profes
 import { ListadoPreinscripcionesComponent } from './componente/listado-preinscripciones/listado-preinscripciones.component';
 import { RemesasComponent } from './componente/remesas/remesas.component';
 import { ParametrosComponent } from './componente/parametros/parametros.component';
+import { DetalleRemesaComponent } from './componente/detalle-remesa/detalle-remesa.component';
 
 
 const routes: Routes = [
@@ -79,6 +80,10 @@ const routes: Routes = [
   {
     path: 'registrar_remesa',
     component: RemesasComponent
+  },
+  {
+    path: 'detalle_remesa/:nid_remesa',
+    component: DetalleRemesaComponent
   },
   {
     path: 'parametros',
