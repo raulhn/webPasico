@@ -20,6 +20,8 @@ export class DireccionComponent implements OnInit{
   escalera: string = "";
   puerta: string = "";
 
+  bCargado: boolean = false;
+
   constructor(private direccionService: DireccionService)
   {
 
@@ -30,16 +32,18 @@ export class DireccionComponent implements OnInit{
     next: (respuesta: any) =>
     {
       this.direccion = respuesta.direccion;
-
+      console.log(respuesta.direccion)
+      this.direccion_postal = this.direccion['direccion'];
+      console.log(this.direccion_postal)
       this.provincia = this.direccion.provincia;
-      console.log('Provincia ' + this.provincia);
       this.municipio = this.direccion.municipio;
-      this.direccion_postal = this.direccion.direccion_postal;
       this.codigo_postal = this.direccion.codigo_postal;
 
       this.numero = this.direccion.numero;
       this.escalera = this.direccion.escalera;
       this.puerta = this.direccion.puerta;
+
+      this.bCargado = true;
     }
   }
 
@@ -49,7 +53,8 @@ export class DireccionComponent implements OnInit{
 
   construye_direccion()
   {
-    return {nid_persona: this.nid_persona, direccion: this.direccion, provincia: this.provincia, municipio: this.municipio,
+    console.log('Direccion ' + this.direccion_postal)
+    return {nid_persona: this.nid_persona, direccion: this.direccion_postal, provincia: this.provincia, municipio: this.municipio,
         codigo_postal: this.codigo_postal, numero: this.numero, escalera: this.escalera, puerta: this.puerta};
   }
 }

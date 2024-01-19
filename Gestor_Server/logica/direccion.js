@@ -84,10 +84,9 @@ function registrar_direccion(nid_persona, direccion, municipio, provincia, codig
                     }
                     else
                     {
-                      console.log('Existe')
+
                         let nid_direccion = await obtiene_nid_direccion(nid_persona);
-                        console.log(nid_direccion)
-                        
+                        console.log('Domicilio ' + direccion)
                         conexion.dbConn.query('update ' + constantes.ESQUEMA_BD + '.direccion set ' +
                                 'direccion = ' + conexion.dbConn.escape(direccion) + ', ' +
                                 'municipio = ' + conexion.dbConn.escape(municipio) + ', ' +

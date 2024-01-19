@@ -6,7 +6,7 @@ function registrar_direccion(req, res)
     comun.comprobaciones(req, res,
         async () =>
         {
-            let domicilio = req.body.direcion;
+            let domicilio = req.body.direccion;
             let municipio = req.body.municipio;
             let provincia = req.body.provincia;
             let codigo_postal = req.body.codigo_postal;
@@ -14,6 +14,7 @@ function registrar_direccion(req, res)
             let puerta = req.body.puerta;
             let escalera = req.body.escalera;
 
+        console.log('Domicilio ' + domicilio)
             let nid_persona = req.body.nid_persona;
             await direccion.registrar_direccion(nid_persona, domicilio, municipio, provincia, codigo_postal, numero, puerta, escalera);
 
