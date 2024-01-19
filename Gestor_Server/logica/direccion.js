@@ -20,6 +20,22 @@ function tiene_direccion(nid_persona)
     )
 }
 
+function obtiene_nid_direccion(nid_persona)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.query('select nid_direccion from ' + constantes.ESQUEMA_BD + '.persona where nid = ' + conexion.dbConn.escape(nid_persona),
+                (error, results, fields) =>
+                {
+                    if (error) {console.log(error); reject();}
+                    else {resolve(results[0]['nid_direccion'])}
+                }
+            
+            )
+        }
+    )
+}
 
 function registrar_direccion_persona(nid_persona, nid_direccion)
 {
@@ -51,6 +67,7 @@ function registrar_direccion(nid_persona, direccion, municipio, provincia, codig
                     let bExiste = await tiene_direccion(nid_persona);
                     if(!bExiste)
                     {
+                        console.log('No existe')
                         conexion.dbConn.query('insert into ' + constantes.ESQUEMA_BD + '.direccion(direccion, municipio, provincia, codigo_postal, numero, puerta, escalera) values('
                                 + conexion.dbConn.escape(direccion) + ', ' + conexion.dbConn.escape(municipio) + ', ' + conexion.dbConn.escape(provincia) + ', '
                                 + conexion.dbConn.escape(codigo_postal) + ', ' + conexion.dbConn.escape(numero) + ', ' + conexion.dbConn.escape(puerta) + ', '
@@ -67,14 +84,19 @@ function registrar_direccion(nid_persona, direccion, municipio, provincia, codig
                     }
                     else
                     {
+                      console.log('Existe')
+                        let nid_direccion = await obtiene_nid_direccion(nid_persona);
+                        console.log(nid_direccion)
+                        
                         conexion.dbConn.query('update ' + constantes.ESQUEMA_BD + '.direccion set ' +
                                 'direccion = ' + conexion.dbConn.escape(direccion) + ', ' +
                                 'municipio = ' + conexion.dbConn.escape(municipio) + ', ' +
                                 'provincia = ' + conexion.dbConn.escape(provincia) + ', ' +
                                 'codigo_postal = ' + conexion.dbConn.escape(codigo_postal) + ', ' +
-                                'numero = ' + conexion.dbConn.escape(puerta) + ', ' +
+                                'numero = ' + conexion.dbConn.escape(numero) + ', ' +
                                 'puerta = ' + conexion.dbConn.escape(puerta) + ', ' +
-                                'escalera = ' + conexion.dbConn.escape(escalera),
+                                'escalera = ' + conexion.dbConn.escape(escalera) +
+                                ' where nid_direccion = ' + conexion.dbConn.escape(nid_direccion),
                             (error, results, fields) =>
                             {
                                 if(error) {console.log(error); conexion.dbConn.rollback(); reject();}
