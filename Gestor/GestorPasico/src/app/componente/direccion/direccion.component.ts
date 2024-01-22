@@ -8,7 +8,7 @@ import { DireccionService } from 'src/app/servicios/direccion.service';
 })
 export class DireccionComponent implements OnInit{
 
-  direccion: any;
+  datos_direccion: any;
   @Input() nid_persona: string = "";
 
   provincia: string = "";
@@ -19,6 +19,7 @@ export class DireccionComponent implements OnInit{
   numero: string = "";
   escalera: string = "";
   puerta: string = "";
+  planta: string = "";
 
   bCargado: boolean = false;
 
@@ -31,18 +32,22 @@ export class DireccionComponent implements OnInit{
   {
     next: (respuesta: any) =>
     {
-      this.direccion = respuesta.direccion;
-      console.log(respuesta.direccion)
-      this.direccion_postal = this.direccion['direccion'];
-      console.log(this.direccion_postal)
-      this.provincia = this.direccion.provincia;
-      this.municipio = this.direccion.municipio;
-      this.codigo_postal = this.direccion.codigo_postal;
+      this.datos_direccion = respuesta.direccion;
+      this.direccion_postal = this.datos_direccion['direccion'];
+      this.provincia = this.datos_direccion.provincia;
+      this.municipio = this.datos_direccion.municipio;
+      this.codigo_postal = this.datos_direccion.codigo_postal;
+      this.planta = this.datos_direccion.planta;
 
-      this.numero = this.direccion.numero;
-      this.escalera = this.direccion.escalera;
-      this.puerta = this.direccion.puerta;
+      this.numero = this.datos_direccion.numero;
+      this.escalera = this.datos_direccion.escalera;
+      this.puerta = this.datos_direccion.puerta;
 
+      this.bCargado = true;
+    },
+    error: (respuesta: any) =>
+    {
+      // Se considera que aún no se ha registado una dirección //
       this.bCargado = true;
     }
   }
@@ -55,6 +60,6 @@ export class DireccionComponent implements OnInit{
   {
     console.log('Direccion ' + this.direccion_postal)
     return {nid_persona: this.nid_persona, direccion: this.direccion_postal, provincia: this.provincia, municipio: this.municipio,
-        codigo_postal: this.codigo_postal, numero: this.numero, escalera: this.escalera, puerta: this.puerta};
+        codigo_postal: this.codigo_postal, numero: this.numero, escalera: this.escalera, puerta: this.puerta, planta: this.planta};
   }
 }

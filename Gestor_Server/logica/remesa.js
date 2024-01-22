@@ -616,6 +616,47 @@ function obtener_remesa_nid(nid_remesa)
 	)
 }
 
+function actualizar_estado(nid_remesa, estado)
+{
+	return new Promise(
+		async (resolve, reject) =>
+		{
+			conexion.dbConn.beginTransaction(
+				() =>
+			conexion.dbConn.query('update ' + constantes.ESQUEMA_BD + '.remesa set estado = ' + conexion.dbConn.escape(estado) +
+					' where nid_remesa = ' + conexion.dbConn.escape(nid_remesa),
+				(error, results, fields) =>
+				{
+					if(error) {console.log(error); reject()}
+					else {resolve()}
+				}
+
+			)
+			);
+		}
+	)
+}
+
+async function aprobar_remesas(lote)
+{
+	let remesas = await obtener_remesa(lote);
+
+	for (let i=0; i<remesas.length; i++)
+	{
+		await actualizar_estado(remesas[i]['nid_remesa'], 'PAGADO')
+	}
+}
+
+async function rechazar_remesa(nid_remesa)
+{
+	await actualizar_estado(nid_remesa, 'RECHAZADO')
+}
+
+async function aprobar_remesa(nid_remesa)
+{
+	await actualizar_estado(nid_remesa, 'PAGADO');
+}
+
 module.exports.registrar_remesa = registrar_remesa;
 module.exports.registrar_remesa_persona = registrar_remesa_persona;
 module.exports.obtener_remesas = obtener_remesas;
@@ -625,3 +666,7 @@ module.exports.obtener_lineas_remesa = obtener_lineas_remesa;
 module.exports.obtener_descuentos_remesa = obtener_descuentos_remesa;
 module.exports.obtener_ultimo_lote = obtener_ultimo_lote;
 module.exports.obtener_remesa_nid = obtener_remesa_nid;
+
+module.exports.aprobar_remesas = aprobar_remesas;
+module.exports.rechazar_remesa = rechazar_remesa;
+module.exports.aprobar_remesa = aprobar_remesa;

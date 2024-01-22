@@ -131,7 +131,9 @@ app.get('/obtener_descuentos_remesa/:nid_remesa', servlet_remesa.obtener_descuen
 
 app.get('/obtener_ultimo_lote', servlet_remesa.obtener_ultimo_lote);
 
-
+app.post('/aprobar_remesa', servlet_remesa.aprobar_remesa);
+app.post('/rechazar_remesa', servlet_remesa.rechazar_remesa);
+app.post('/aprobar_remesas', servlet_remesa.aprobar_remesas);
 
 /** Parámetros **/
 app.get('/obtener_valor/:nombre', servlet_parametros.obtener_valor);

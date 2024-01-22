@@ -56,7 +56,7 @@ function registrar_direccion_persona(nid_persona, nid_direccion)
     )
 }
 
-function registrar_direccion(nid_persona, direccion, municipio, provincia, codigo_postal, numero, puerta, escalera)
+function registrar_direccion(nid_persona, direccion, municipio, provincia, codigo_postal, numero, puerta, escalera, planta)
 {   
     return new Promise(
         (resolve, reject) =>
@@ -68,10 +68,10 @@ function registrar_direccion(nid_persona, direccion, municipio, provincia, codig
                     if(!bExiste)
                     {
                         console.log('No existe')
-                        conexion.dbConn.query('insert into ' + constantes.ESQUEMA_BD + '.direccion(direccion, municipio, provincia, codigo_postal, numero, puerta, escalera) values('
+                        conexion.dbConn.query('insert into ' + constantes.ESQUEMA_BD + '.direccion(direccion, municipio, provincia, codigo_postal, numero, puerta, escalera, planta) values('
                                 + conexion.dbConn.escape(direccion) + ', ' + conexion.dbConn.escape(municipio) + ', ' + conexion.dbConn.escape(provincia) + ', '
                                 + conexion.dbConn.escape(codigo_postal) + ', ' + conexion.dbConn.escape(numero) + ', ' + conexion.dbConn.escape(puerta) + ', '
-                                + conexion.dbConn.escape(escalera) + ')',
+                                + conexion.dbConn.escape(escalera) + ', ' + conexion.dbConn.escape(planta) + ')',
                             async (error, results, fields) =>
                             {
                                 if(error) {console.log(error); conexion.dbConn.rollback(); reject();}
@@ -94,7 +94,8 @@ function registrar_direccion(nid_persona, direccion, municipio, provincia, codig
                                 'codigo_postal = ' + conexion.dbConn.escape(codigo_postal) + ', ' +
                                 'numero = ' + conexion.dbConn.escape(numero) + ', ' +
                                 'puerta = ' + conexion.dbConn.escape(puerta) + ', ' +
-                                'escalera = ' + conexion.dbConn.escape(escalera) +
+                                'escalera = ' + conexion.dbConn.escape(escalera) + ', ' +
+                                'planta = ' + conexion.dbConn.escape(planta) +
                                 ' where nid_direccion = ' + conexion.dbConn.escape(nid_direccion),
                             (error, results, fields) =>
                             {

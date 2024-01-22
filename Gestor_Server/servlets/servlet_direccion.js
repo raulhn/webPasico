@@ -13,10 +13,11 @@ function registrar_direccion(req, res)
             let numero = req.body.numero;
             let puerta = req.body.puerta;
             let escalera = req.body.escalera;
+            let planta = req.body.planta;
 
         console.log('Domicilio ' + domicilio)
             let nid_persona = req.body.nid_persona;
-            await direccion.registrar_direccion(nid_persona, domicilio, municipio, provincia, codigo_postal, numero, puerta, escalera);
+            await direccion.registrar_direccion(nid_persona, domicilio, municipio, provincia, codigo_postal, numero, puerta, escalera, planta);
 
             res.status(200).send({error:false, message: 'Direccion registrada'});
         }

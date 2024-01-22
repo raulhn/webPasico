@@ -119,6 +119,40 @@ function obtener_remesa_nid(req, res)
     )
 }
 
+function aprobar_remesa(req, res)
+{
+    comun.comprobaciones(req, res,
+       async () =>
+       {
+          let nid_remesa = req.body.nid_remesa;
+
+          await remesa.aprobar_remesa(nid_remesa);
+       } 
+    )
+}
+
+function rechazar_remesa(req, res)
+{
+    comun.comprobaciones(req, res,
+        async() =>
+        {
+            let nid_remesa = req.body.nid_remesa;
+            await remesa.rechazar_remesa(nid_remesa)
+        }   
+    )
+}
+
+function aprobar_remesas(req, res)
+{
+    comun.comprobaciones(req, res,
+        async() =>
+        {
+            let lote = req.body.lote;
+            await remesa.aprobar_remesas(lote);
+        }
+    )
+}
+
 module.exports.registrar_remesa_persona = registrar_remesa_persona;
 module.exports.obtener_remesas = obtener_remesas;
 module.exports.obtener_mensualidad = obtener_mensualidad;
@@ -129,3 +163,7 @@ module.exports.obtener_descuentos_remesa = obtener_descuentos_remesa;
 module.exports.obtener_remesa_nid = obtener_remesa_nid;
 
 module.exports.obtener_ultimo_lote = obtener_ultimo_lote;
+
+module.exports.rechazar_remesa = rechazar_remesa;
+module.exports.aprobar_remesa = aprobar_remesa;
+module.exports.aprobar_remesas = aprobar_remesas;
