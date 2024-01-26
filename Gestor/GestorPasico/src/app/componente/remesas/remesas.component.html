@@ -17,10 +17,32 @@
 </div>
 <div class="card p-3 mb-1">
     <div *ngIf="bCargado_remesas">
+        <div class = "mb-2">
+            <label>Estado</label>
+            <select class="form-select" [(ngModel)]="estado" (change)="cambia_seleccion_estado()">
+                <option selected value="Todos">Todos</option>
+                <option value="Pendiente">Pendientes</option>
+                <option value="Rechazado">Rechazados</option>
+                <option value="Pagado">Pagados</option>
+            </select>
+        </div>
+        
         <table datatable [dtOptions]="dtOpciones_remesas" class="table" id="tabla_remesas"></table>
         <div *ngIf="remesa_seleccionada !== undefined" class="float-end p-3">
-            <a [href]="obtenerUrlFicha()"> <button class="btn btn-primary"> Ver Ficha</button></a>
+            <a [href]="obtenerUrlFicha()"> <button class="btn btn-primary m-1"> Ver Ficha</button></a>
+            <button class="btn btn-danger m-1" (click) ="rechazar_recibo()">Rechazar recibo</button>
+            <button class="btn btn-primary m-1" (click) ="aceptar_recibo()">Aceptar recibo</button>
         </div>
     </div>
+    <button class="btn btn-primary" (click) ="aceptar_recibos()">Aceptar lote</button>
 </div>
+</div>
+
+<div class="mb-1 mt-1" style="display: none;">
+
+    <div #instancia_remesa>
+        <div  >
+          <input class="mb-2 mt-2" type="text" id="id_anotaciones" class="swal2-input" placeholder=""  [value]="anotaciones"/>
+        </div>
+    </div>
 </div>

@@ -34,6 +34,11 @@ export class RemesaService {
     return this.http.get(API_URL, {withCredentials:true})
   }
 
+  obtener_remesas_estado(lote: string, estado: string)
+  {
+    let API_URL = this.url + '/obtener_remesa_estado/' + lote + "/" + estado;
+    return this.http.get(API_URL, {withCredentials:true})
+  }
   obtener_remesa(nid_remesa: string)
   {
     let API_URL = this.url + '/obtener_remesa_nid/' + nid_remesa;
@@ -50,5 +55,23 @@ export class RemesaService {
   {
     let API_URL = this.url + '/obtener_descuentos_remesa/'+ nid_remesa;
     return this.http.get(API_URL, {withCredentials: true});
+  }
+
+  aprobar_remesa(nid_remesa: string, anotaciones: string)
+  {
+    let API_URL = this.url + '/aprobar_remesa';
+    return this.http.post(API_URL, {nid_remesa: nid_remesa, anotaciones: anotaciones}, {withCredentials:true})
+  }
+
+  rechazar_remesa(nid_remesa: string, anotaciones: string)
+  {
+    let API_URL = this.url + '/rechazar_remesa';
+    return this.http.post(API_URL, {nid_remesa: nid_remesa, anotaciones: anotaciones}, {withCredentials: true})
+  }
+
+  aprobar_remesas(lote: string, anotaciones: string)
+  {
+    let API_URL = this.url + '/aprobar_remesas';
+    return this.http.post(API_URL, {lote: lote, anotaciones: anotaciones}, {withCredentials:true});
   }
 }

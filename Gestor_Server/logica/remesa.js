@@ -116,10 +116,10 @@ function registrar_remesa(v_persona, v_siguiente_lote, v_precio)
 						let v_forma_pago = await persona.obtener_pago_persona(v_persona)
 						let persona_recuperada = await persona.obtener_persona(v_persona);
 					
-						conexion.dbConn.query("insert into " + constantes.ESQUEMA_BD + ".remesa(nid_forma_pago, nid_persona, concepto, fecha, lote, precio) " +
+						conexion.dbConn.query("insert into " + constantes.ESQUEMA_BD + ".remesa(nid_forma_pago, nid_persona, concepto, fecha, lote, precio, estado) " +
 								"values(" + conexion.dbConn.escape(v_forma_pago['nid_forma_pago']) + ", " + conexion.dbConn.escape(v_persona) + ", " +
 								"'Pago Mensual  " + persona_recuperada['etiqueta'] + "' , sysdate(), " + conexion.dbConn.escape(v_siguiente_lote) +
-								", " + conexion.dbConn.escape(v_precio) +")",
+								", " + conexion.dbConn.escape(v_precio) +", 'Pendiente')",
 							(error, results, fields) =>
 							{
 								if(error) {conexion.dbConn.rollback(); console.log(error); reject();}
@@ -518,6 +518,43 @@ function obtener_remesa(lote)
 	)
 }
 
+function obtener_remesa_pendiente(lote)
+{
+	return new Promise(
+		(resolve, reject) =>
+		{
+			conexion.dbConn.query('select * from ' + constantes.ESQUEMA_BD +
+			   		".remesa where lote = " + conexion.dbConn.escape(lote) +
+					" and estado = 'Pendiente'",
+			    (error, results, fields) =>
+				{
+					if (error) {console.log(error); reject();}
+					else {resolve(results)}
+				} 
+		  )
+		}
+	)
+}
+
+function obtener_remesa_estado(lote, estado)
+{
+	return new Promise(
+		(resolve, reject) =>
+		{
+			console.log('Estado ' + estado)
+			conexion.dbConn.query('select * from ' + constantes.ESQUEMA_BD +
+			   		".remesa where lote = " + conexion.dbConn.escape(lote)
+					 + ' and estado = ' + conexion.dbConn.escape(estado),
+			    (error, results, fields) =>
+				{
+					if (error) {console.log(error); reject();}
+					else {resolve(results)}
+				} 
+		  )
+		}
+	)
+}
+
 
 
 function obtener_lineas_remesa(nid_remesa)
@@ -616,7 +653,7 @@ function obtener_remesa_nid(nid_remesa)
 	)
 }
 
-function actualizar_estado(nid_remesa, estado)
+function actualizar_estado(nid_remesa, estado, anotaciones)
 {
 	return new Promise(
 		async (resolve, reject) =>
@@ -624,6 +661,7 @@ function actualizar_estado(nid_remesa, estado)
 			conexion.dbConn.beginTransaction(
 				() =>
 			conexion.dbConn.query('update ' + constantes.ESQUEMA_BD + '.remesa set estado = ' + conexion.dbConn.escape(estado) +
+					', anotaciones = ' + conexion.dbConn.escape(anotaciones) +
 					' where nid_remesa = ' + conexion.dbConn.escape(nid_remesa),
 				(error, results, fields) =>
 				{
@@ -637,24 +675,24 @@ function actualizar_estado(nid_remesa, estado)
 	)
 }
 
-async function aprobar_remesas(lote)
+async function aprobar_remesas(lote, anotaciones)
 {
-	let remesas = await obtener_remesa(lote);
+	let remesas = await obtener_remesa_pendiente(lote);
 
 	for (let i=0; i<remesas.length; i++)
 	{
-		await actualizar_estado(remesas[i]['nid_remesa'], 'PAGADO')
+		await actualizar_estado(remesas[i]['nid_remesa'], 'Pagado', anotaciones)
 	}
 }
 
-async function rechazar_remesa(nid_remesa)
+async function rechazar_remesa(nid_remesa, anotaciones)
 {
-	await actualizar_estado(nid_remesa, 'RECHAZADO')
+	await actualizar_estado(nid_remesa, 'Rechazado', anotaciones)
 }
 
-async function aprobar_remesa(nid_remesa)
+async function aprobar_remesa(nid_remesa, anotaciones)
 {
-	await actualizar_estado(nid_remesa, 'PAGADO');
+	await actualizar_estado(nid_remesa, 'Pagado', anotaciones);
 }
 
 module.exports.registrar_remesa = registrar_remesa;
@@ -662,6 +700,8 @@ module.exports.registrar_remesa_persona = registrar_remesa_persona;
 module.exports.obtener_remesas = obtener_remesas;
 module.exports.obtener_precio_matricula = obtener_precio_matricula;
 module.exports.obtener_remesa = obtener_remesa;
+module.exports.obtener_remesa_estado = obtener_remesa_estado;
+
 module.exports.obtener_lineas_remesa = obtener_lineas_remesa;
 module.exports.obtener_descuentos_remesa = obtener_descuentos_remesa;
 module.exports.obtener_ultimo_lote = obtener_ultimo_lote;

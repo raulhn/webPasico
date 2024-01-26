@@ -125,6 +125,7 @@ app.get('/obtener_preinscripciones', servlet_preinscripciones.obtener_preinscrip
 app.post('/registrar_remesa_persona', servlet_remesa.registrar_remesa_persona);
 app.get('/obtener_mensualidad/:nid_matricula', servlet_remesa.obtener_mensualidad);
 app.get('/obtener_remesa/:lote', servlet_remesa.obtener_remesa);
+app.get('/obtener_remesa_estado/:lote/:estado', servlet_remesa.obtener_remesa_estado);
 app.get('/obtener_remesa_nid/:nid_remesa', servlet_remesa.obtener_remesa_nid)
 app.get('/obtener_lineas_remesa/:nid_remesa', servlet_remesa.obtener_lineas_remesa);
 app.get('/obtener_descuentos_remesa/:nid_remesa', servlet_remesa.obtener_descuentos_remesa);

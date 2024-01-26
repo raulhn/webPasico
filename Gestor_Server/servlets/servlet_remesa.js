@@ -61,6 +61,22 @@ function obtener_remesa(req, res)
     )
 }
 
+function obtener_remesa_estado(req, res)
+{
+    comun.comprobaciones(req, res,
+        async() =>
+        {
+            let lote = req.params.lote;
+            let estado = req.params.estado;
+
+            let remesas = await remesa.obtener_remesa_estado(lote, estado)
+            res.status(200).send({error:false, remesas: remesas})
+        }
+        
+    )
+}
+
+
 
 function obtener_lineas_remesa(req, res)
 {
@@ -125,8 +141,10 @@ function aprobar_remesa(req, res)
        async () =>
        {
           let nid_remesa = req.body.nid_remesa;
+          let anotaciones = req.body.anotaciones;
 
-          await remesa.aprobar_remesa(nid_remesa);
+          await remesa.aprobar_remesa(nid_remesa, anotaciones);
+          res.status(200).send({error:false, message: 'Recibo aprobado'})
        } 
     )
 }
@@ -137,7 +155,10 @@ function rechazar_remesa(req, res)
         async() =>
         {
             let nid_remesa = req.body.nid_remesa;
-            await remesa.rechazar_remesa(nid_remesa)
+            let anotaciones = req.body.anotaciones;
+
+            await remesa.rechazar_remesa(nid_remesa, anotaciones)
+            res.status(200).send({error:false, message: 'Recibo rechazado'})
         }   
     )
 }
@@ -148,7 +169,10 @@ function aprobar_remesas(req, res)
         async() =>
         {
             let lote = req.body.lote;
-            await remesa.aprobar_remesas(lote);
+            let anotaciones = req.body.anotaciones;
+
+            await remesa.aprobar_remesas(lote, anotaciones);
+            res.status(200).send({error:false, message: 'Lote aprobado'})
         }
     )
 }
@@ -158,6 +182,7 @@ module.exports.obtener_remesas = obtener_remesas;
 module.exports.obtener_mensualidad = obtener_mensualidad;
 
 module.exports.obtener_remesa = obtener_remesa;
+module.exports.obtener_remesa_estado = obtener_remesa_estado;
 module.exports.obtener_lineas_remesa = obtener_lineas_remesa;
 module.exports.obtener_descuentos_remesa = obtener_descuentos_remesa;
 module.exports.obtener_remesa_nid = obtener_remesa_nid;
