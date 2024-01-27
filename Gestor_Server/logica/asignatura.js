@@ -232,7 +232,7 @@ function obtener_profesores_asignatura(nid_asignatura)
     return new Promise(
         (resolve, reject) =>
         {
-            conexion.dbConn.query("select p.*, p.nid nid_persona, a.nid nid_asignatura, a.descripcion from " + constantes.ESQUEMA_BD + ".persona p, " + 
+            conexion.dbConn.query("select p.*, p.nid nid_persona, concat(p.nif, \' \',  p.nombre, \' \', p.primer_apellido, \' \' , p.segundo_apellido) etiqueta, a.nid nid_asignatura, a.descripcion from " + constantes.ESQUEMA_BD + ".persona p, " + 
                     constantes.ESQUEMA_BD + ".asignatura a, " + constantes.ESQUEMA_BD + ".profesor pr where p.nid = pr.nid_persona and pr.nid_asignatura = a.nid and " +
                     "a.nid = " + conexion.dbConn.escape(nid_asignatura),
                 (error, results, fields) =>

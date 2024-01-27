@@ -253,8 +253,9 @@ function sustituir_profesor(req, res)
         {
             let nid_profesor = req.body.nid_profesor;
             let nid_profesor_sustituto = req.body.nid_profesor_sustituto;
+            let nid_asignatura = req.body.nid_asignatura;
 
-            await matricula.sustituir_profesor_curso_actual(nid_profesor, nid_profesor_sustituto);
+            await matricula.sustituir_profesor_curso_actual(nid_profesor, nid_profesor_sustituto, nid_asignatura);
             res.status(200).send({error: false, message: "Sustitución realizada"})
         }        
     )

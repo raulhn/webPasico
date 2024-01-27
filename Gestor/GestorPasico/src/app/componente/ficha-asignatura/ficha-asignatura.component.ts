@@ -3,6 +3,7 @@ import { AsignaturasService } from 'src/app/servicios/asignaturas.service';
 import { PersonasService } from 'src/app/servicios/personas.service';
 import { DataTablesOptions } from 'src/app/logica/constantes';
 import Swal from 'sweetalert2';
+import { MatriculasService } from 'src/app/servicios/matriculas.service';
 
 @Component({
   selector: 'app-ficha-asignatura',
@@ -15,6 +16,7 @@ export class FichaAsignaturaComponent implements OnInit{
 
   
   @ViewChild('instancia_asignatura') instancia_asignatura!: ElementRef;
+  @ViewChild('instancia_sustituir') instancia_sustituir!: ElementRef;
 
   descripcion: string = "";
 
@@ -31,7 +33,11 @@ export class FichaAsignaturaComponent implements OnInit{
 
   bCargadaAsignatura:boolean = false;
 
-  constructor(private asignaturaServices: AsignaturasService, private personaService: PersonasService)
+  profesor_sustituto: string ="";
+  profesor_a_sustituir: string = "";
+
+
+  constructor(private asignaturaServices: AsignaturasService, private matriculaServices: MatriculasService, private personaService: PersonasService)
   {
 
   }
@@ -133,8 +139,6 @@ add_profesor =
   
 addProfesor()
 {
-
-
     Swal.fire({
       title: 'Crear profesor',
       html: this.instancia_asignatura.nativeElement,
@@ -152,7 +156,46 @@ addProfesor()
         }
       }
     )
-   
+}
+
+  
+peticion_sustitucion =
+{
+  next: (respuesta: any) =>
+  {
+    Swal.fire({
+      icon: 'success',
+      title: 'Profesor sustituido',
+      text: 'Se ha sustituido el profesor',
+    });
+    this.asignaturaServices.obtener_profesores_asingatura(this.nid_asignatura).subscribe(this.obtener_profesores);
+  },
+  error: (respuesta: any) =>
+  {
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: 'Se ha producido un error al registrar el profesor',
+    })
+  }
+}
+
+sustituir_profesor()
+{
+    Swal.fire({
+      title: 'Sustituir Profesor',
+      html: this.instancia_sustituir.nativeElement,
+      confirmButtonText: 'Sustituir',
+      showCancelButton: true
+    }).then(
+      (results: any) =>
+        {
+        if(results.isConfirmed)
+        {
+          this.matriculaServices.sustituir_profesor(this.profesor_a_sustituir, this.profesor_sustituto, this.nid_asignatura).subscribe(this.peticion_sustitucion)
+        }
+      }
+    )
 }
 
   guardar()

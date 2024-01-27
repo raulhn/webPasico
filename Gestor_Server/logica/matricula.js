@@ -1,6 +1,6 @@
 const conexion = require('../conexion.js')
 const constantes = require('../constantes.js')
-
+const logica_asignatura = require('./asignatura.js')
 
 function existe_matricula(nid_persona, nid_curso)
 {
@@ -534,7 +534,7 @@ function registrar_precio_manual(nid_matricula, precio)
 
 
 // Funciones para dar de baja en matriculas a un profesor //
-function obtener_matriculas_activas_profesor(nid_profesor)
+function obtener_matriculas_activas_profesor(nid_profesor, nid_asignatura)
 {
     return new Promise(
         (resolve, reject) =>
@@ -545,7 +545,8 @@ function obtener_matriculas_activas_profesor(nid_profesor)
                                   "where pam.nid_matricula_asignatura = ma.nid and " +
                                         "ma.nid_matricula = m.nid and " +
                                         " m.nid_curso = (select max(nid_curso) from pasico_gestor.curso) and " +
-                                        " pam.nid_profesor = " + conexion.dbConn.escape(nid_profesor),
+                                        " pam.nid_profesor = " + conexion.dbConn.escape(nid_profesor) + " and " +
+                                        " ma.nid_asignatura = " + conexion.dbConn.escape(nid_asignatura),
                 (error, results, fields) =>
                 {
                     if (error)  {console.log(error); reject();}
@@ -593,7 +594,7 @@ function alta_profesor_alumno_matricula_baja(nid_profesor_sustituto, nid_profeso
 }
 
 
-function sustituir_profesor_curso_actual(nid_profesor, nid_profesor_sustituto)
+function sustituir_profesor_curso_actual(nid_profesor, nid_profesor_sustituto, nid_asignatura)
 {
     return new Promise(
         async (resolve, reject) =>
@@ -603,19 +604,22 @@ function sustituir_profesor_curso_actual(nid_profesor, nid_profesor_sustituto)
                 {
                     try
                     {
-                        let matriculas_a_susituir = await obtener_matriculas_activas_profesor(nid_profesor);
+                        let matriculas_a_susituir = await obtener_matriculas_activas_profesor(nid_profesor, nid_asignatura);
 
                         for(let i=0; i < matriculas_a_susituir.length; i++)
                         {
                             await alta_profesor_alumno_matricula_baja(nid_profesor_sustituto, matriculas_a_susituir[i]['nid']);
-                            await baja_profesor_alumno_matricula( matriculas_a_susituir[i]['nid'])
+                            await baja_profesor_alumno_matricula( matriculas_a_susituir[i]['nid']);
                         }
+
+                        await logica_asignatura.eliminar_profesor(nid_asignatura, nid_profesor);
 
                         conexion.dbConn.commit();
                         resolve();
                     }
                     catch(e)
                     {
+                        console.log(e)
                         conexion.dbConn.rollback();
                         reject();
                     }
