@@ -146,7 +146,7 @@ export class RemesasComponent implements OnInit{
         icon: 'success',
         title: 'Recibo aprobado',
         text:  'Se ha registrado correctamente',
-      }).then(()=> {location.reload()})
+      }).then(()=> {this.cambia_seleccion_estado()})
     },
     error: (respuesta: any) =>
     {
@@ -166,7 +166,7 @@ export class RemesasComponent implements OnInit{
         icon: 'success',
         title: 'Recibo rechazado',
         text:  'Se ha registrado correctamente',
-      }).then(()=> {location.reload()})
+      }).then(()=> {this.cambia_seleccion_estado()})
     },
     error: (respuesta: any) =>
     {
@@ -186,7 +186,7 @@ export class RemesasComponent implements OnInit{
         icon: 'success',
         title: 'Lote aceptado',
         text:  'Se ha registrado correctamente',
-      }).then(()=> {location.reload()})
+      }).then(()=> {this.cambia_seleccion_estado()})
     },
     error: (respuesta: any) =>
     {

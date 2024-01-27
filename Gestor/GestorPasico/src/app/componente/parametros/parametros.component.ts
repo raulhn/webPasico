@@ -15,12 +15,14 @@ export class ParametrosComponent implements OnInit{
   NOMBRE_PARAMETRO_PORCENTAJE_FAMILIA = 'PORCENTAJE_DESCUENTO_FAMILIA';
   NOMBRE_PARAMETRO_VIENTO_CUERDA = 'REBAJA_VIENTO_CUERDA';
   NOMBRE_PARAMETRO_NO_SOCIO = 'SUMA_PRECIO_NO_SOCIO';
+  NOMBRE_PARAMETRO_PRECIO_SOCIO = 'PRECIO_SOCIO';
 
   NUM_PETICIONES: number = 6;
 
   precio_instrumento_banda: string = "";
   precio_instrumento_no_banda: string = "";
   precio_lenguaje: string = "";
+  precio_socio: string = "";
 
   porcentaje_familia: string = "";
   rebaja_viento_cuerda: string = "";
@@ -95,6 +97,10 @@ export class ParametrosComponent implements OnInit{
       {
         this.suma_precio_no_socio = respuesta['valor']['valor'];
       }
+      else if(respuesta['valor']['nombre'] == this.NOMBRE_PARAMETRO_PRECIO_SOCIO)
+      {
+        this.precio_socio = respuesta['valor']['valor'];
+      }
     }
   }
 
@@ -105,7 +111,7 @@ export class ParametrosComponent implements OnInit{
     this.parametrosService.obtener_valor(this.NOMBRE_PARAMETRO_PORCENTAJE_FAMILIA).subscribe(this.recuperar_valores)
     this.parametrosService.obtener_valor(this.NOMBRE_PARAMETRO_VIENTO_CUERDA).subscribe(this.recuperar_valores)
     this.parametrosService.obtener_valor(this.NOMBRE_PARAMETRO_NO_SOCIO).subscribe(this.recuperar_valores)
-      
+    this.parametrosService.obtener_valor(this.NOMBRE_PARAMETRO_PRECIO_SOCIO).subscribe(this.recuperar_valores)
   }
 
   guardar()
@@ -119,5 +125,6 @@ export class ParametrosComponent implements OnInit{
     this.parametrosService.actualizar_valor(this.NOMBRE_PARAMETRO_PORCENTAJE_FAMILIA, this.porcentaje_familia).subscribe(this.peticion_guardar);
     this.parametrosService.actualizar_valor(this.NOMBRE_PARAMETRO_VIENTO_CUERDA, this.rebaja_viento_cuerda).subscribe(this.peticion_guardar);
     this.parametrosService.actualizar_valor(this.NOMBRE_PARAMETRO_NO_SOCIO, this.suma_precio_no_socio).subscribe(this.peticion_guardar);
+    this.parametrosService.actualizar_valor(this.NOMBRE_PARAMETRO_PRECIO_SOCIO, this.precio_socio).subscribe(this.peticion_guardar);
   }
 }
