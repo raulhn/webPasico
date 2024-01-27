@@ -533,6 +533,99 @@ function registrar_precio_manual(nid_matricula, precio)
 
 
 
+// Funciones para dar de baja en matriculas a un profesor //
+function obtener_matriculas_activas_profesor(nid_profesor)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.query(" select pam.* from " + constantes.ESQUEMA_BD  + ".profesor_alumno_matricula pam, " +
+                                                      constantes.ESQUEMA_BD  + ".matricula_asignatura ma, " +
+                                                      constantes.ESQUEMA_BD  + ".matricula m " +
+                                  "where pam.nid_matricula_asignatura = ma.nid and " +
+                                        "ma.nid_matricula = m.nid and " +
+                                        " m.nid_curso = (select max(nid_curso) from pasico_gestor.curso) and " +
+                                        " pam.nid_profesor = " + conexion.dbConn.escape(nid_profesor),
+                (error, results, fields) =>
+                {
+                    if (error)  {console.log(error); reject();}
+                    else {resolve(results)}
+                });
+        }
+
+    )
+}
+
+function baja_profesor_alumno_matricula(nid_profesor_alumno_matricula)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.query("update " + constantes.ESQUEMA_BD + '.profesor_alumno_matricula set fecha_baja = sysdate() where nid = '
+                                  + conexion.dbConn.escape(nid_profesor_alumno_matricula),
+                (error, results, fields) =>
+                {
+                    if(error) {console.log(error); reject();}
+                    else {resolve();}
+                }                  
+            )
+        }
+    )
+}
+
+function alta_profesor_alumno_matricula_baja(nid_profesor_sustituto, nid_profesor_alumno_matricula)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.query("insert into " + constantes.ESQUEMA_BD + '.profesor_alumno_matricula(nid_profesor, nid_matricula_asignatura, fecha_alta)' +
+                                  " select " + conexion.dbConn.escape(nid_profesor_sustituto) + 
+                                  ", nid_matricula_asignatura, sysdate() from pasico_gestor.profesor_alumno_matricula where nid = " +
+                                  conexion.dbConn.escape(nid_profesor_alumno_matricula),
+                (error, results, fields) =>
+                {
+                    if(error) {console.log(error); reject();}
+                    else {resolve()}
+                }
+            )
+        }
+    )
+}
+
+
+function sustituir_profesor_curso_actual(nid_profesor, nid_profesor_sustituto)
+{
+    return new Promise(
+        async (resolve, reject) =>
+        {
+            conexion.dbConn.beginTransaction(
+                async () =>
+                {
+                    try
+                    {
+                        let matriculas_a_susituir = await obtener_matriculas_activas_profesor(nid_profesor);
+
+                        for(let i=0; i < matriculas_a_susituir.length; i++)
+                        {
+                            await alta_profesor_alumno_matricula_baja(nid_profesor_sustituto, matriculas_a_susituir[i]['nid']);
+                            await baja_profesor_alumno_matricula( matriculas_a_susituir[i]['nid'])
+                        }
+
+                        conexion.dbConn.commit();
+                        resolve();
+                    }
+                    catch(e)
+                    {
+                        conexion.dbConn.rollback();
+                        reject();
+                    }
+
+                }
+            )
+        }
+    )
+}
+
 module.exports.existe_matricula = existe_matricula;
 module.exports.obtener_nid_matricula = obtener_nid_matricula;
 
@@ -565,3 +658,5 @@ module.exports.dar_baja_asignatura = dar_baja_asignatura;
 module.exports.obtener_cursos_profesor = obtener_cursos_profesor;
 
 module.exports.registrar_precio_manual = registrar_precio_manual;
+
+module.exports.sustituir_profesor_curso_actual = sustituir_profesor_curso_actual;

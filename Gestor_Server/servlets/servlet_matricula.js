@@ -240,13 +240,25 @@ function obtener_matricula(req, res)
         {
             let nid_matricula = req.params.nid_matricula;
 
-            console.log(nid_matricula)
             let matricula_retorno = await matricula.obtener_matricula(nid_matricula)
             res.status(200).send({error: false, matricula: matricula_retorno})
         }
     )
 }
 
+function sustituir_profesor(req, res)
+{
+    comun.comprobaciones(req, res,
+        async() =>
+        {
+            let nid_profesor = req.body.nid_profesor;
+            let nid_profesor_sustituto = req.body.nid_profesor_sustituto;
+
+            await matricula.sustituir_profesor_curso_actual(nid_profesor, nid_profesor_sustituto);
+            res.status(200).send({error: false, message: "Sustitución realizada"})
+        }        
+    )
+}
 
 
 module.exports.registrar_matricula = registrar_matricula;
@@ -267,3 +279,5 @@ module.exports.dar_baja_asignatura = dar_baja_asignatura;
 module.exports.registrar_precio_manual = registrar_precio_manual;
 
 module.exports.obtener_matricula = obtener_matricula;
+
+module.exports.sustituir_profesor = sustituir_profesor;

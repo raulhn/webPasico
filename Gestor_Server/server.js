@@ -111,6 +111,8 @@ app.post('/dar_baja_asignatura', servlet_matricula.dar_baja_asignatura);
 app.post('/actualizar_precio_manual', servlet_matricula.registrar_precio_manual);
 app.get('/obtener_matricula/:nid_matricula', servlet_matricula.obtener_matricula);
 
+app.post('/sustituir_profesor', servlet_matricula.sustituir_profesor);
+
 /** Forma de pago **/
 app.post('/registrar_forma_pago', servlet_persona.registrar_forma_pago);
 app.get('/obtener_forma_pago/:nid_titular', servlet_persona.obtener_forma_pago);
