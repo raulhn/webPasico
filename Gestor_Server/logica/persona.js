@@ -187,6 +187,28 @@ function obtener_madre(nid_persona)
     )
 }
 
+function obtener_hijos(nid_persona)
+{
+    return new Promise(
+        async (resolve, reject) =>
+        {
+            bExiste = await existe_nid(nid_persona);
+
+            if(bExiste)
+            {
+                conexion.dbConn.query('select concat(p.nif, \' \',  p.nombre, \' \', p.primer_apellido, \' \' , p.segundo_apellido) etiqueta, p.* from ' +
+                        constantes.ESQUEMA_BD + '.persona p where nid_madre = ' + conexion.dbConn.escape(nid_persona) + ' or nid_padre = ' +conexion.dbConn.escape(nid_persona),
+                    (error, results, fields) =>
+                    {
+                        if (error) {console.log(error); reject();}
+                        else {resolve(results)}
+                    }    
+                )
+            }
+        }
+    )
+}
+
 
 function registrar_padre(nid_persona, nid_padre)
 {
@@ -485,6 +507,7 @@ module.exports.obtener_nid_persona = obtener_nid_persona
 
 module.exports.obtener_padre = obtener_padre;
 module.exports.obtener_madre = obtener_madre;
+module.exports.obtener_hijos = obtener_hijos;
 
 module.exports.registrar_padre = registrar_padre;
 module.exports.registrar_madre = registrar_madre;

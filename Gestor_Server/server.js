@@ -60,6 +60,7 @@ app.get('/obtener_direccion/:nid_persona', servlet_direcciones.obtener_direccion
 /** Padres **/
 app.get('/obtener_padre/:nid_persona', servlet_persona.obtener_padre);
 app.get('/obtener_madre/:nid_persona', servlet_persona.obtener_madre);
+app.get('/obtener_hijos/:nid_persona', servlet_persona.obtener_hijos);
 app.post('/registrar_padre', servlet_persona.registrar_padre);
 app.post('/registrar_madre', servlet_persona.registrar_madre)
 

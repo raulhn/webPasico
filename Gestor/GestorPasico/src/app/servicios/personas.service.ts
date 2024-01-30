@@ -87,6 +87,12 @@ export class PersonasService {
     return this.http.get(API_URL, {withCredentials: true})
   }
 
+  obtener_hijos(nid_persona: string)
+  {
+    let API_URL = this.url + '/obtener_hijos/' + nid_persona;
+    return this.http.get(API_URL, {withCredentials: true})
+  }
+
   obtener_formas_pago()
   {
     let API_URL = this.url + '/obtener_formas_pago';

@@ -141,6 +141,19 @@ async function obtener_padre(req, res)
     )
 }
 
+async function obtener_hijos(req, res)
+{
+    comun.comprobaciones(req, res,
+        async() =>
+        {
+            let nid_persona = req.params.nid_persona;
+
+            let resultado_hijos = await persona.obtener_hijos(nid_persona);
+            res.status(200).send({error: false, hijos: resultado_hijos})
+        }
+    )
+}
+
 
 async function obtener_madre(req, res)
 {
@@ -267,6 +280,7 @@ module.exports.obtener_ficha_persona = obtener_ficha_persona
 
 module.exports.obtener_padre = obtener_padre;
 module.exports.obtener_madre = obtener_madre;
+module.exports.obtener_hijos = obtener_hijos;
 
 module.exports.registrar_madre = registrar_madre;
 module.exports.registrar_padre = registrar_padre;

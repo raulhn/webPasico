@@ -1,0 +1,10 @@
+<div class="card" *ngIf="bCargado && hijos.length > 0">
+<legend>Hijos</legend>
+<ul class="list-group">
+    <li *ngFor="let hijo of hijos" class="list-group-item"> 
+          {{hijo.etiqueta}} 
+           <a [href]="enlaceFicha + hijo.nid"> <button class="btn btn-primary float-end"> Ver Ficha</button></a>
+    </li>
+</ul>
+</div>
+  
