@@ -85,7 +85,7 @@ function registrar_persona(nombre, primer_apellido, segundo_apellido, telefono, 
                                             'cast(nullif(' + conexion.dbConn.escape(telefono) + ', \'\') as unsigned)'
                                             + ',' + 
                                             'str_to_date(nullif(' + conexion.dbConn.escape(fecha_nacimiento) + ', \'\') , \'%Y-%m-%d\')' + 
-                                            ', ' + conexion.dbConn.escape(nif) + ', ' + conexion.dbConn.escape(correo_electronico) + ',' 
+                                            ', ' + 'nullif(' + conexion.dbConn.escape(nif) + ', \'\')), ' + conexion.dbConn.escape(correo_electronico) + ',' 
                                              + 'nullif(' + conexion.dbConn.escape(codigo) + ', \'\'))',
                                             (error, results, fields) =>
                                             {
@@ -196,7 +196,7 @@ function obtener_hijos(nid_persona)
 
             if(bExiste)
             {
-                conexion.dbConn.query('select concat(p.nif, \' \',  p.nombre, \' \', p.primer_apellido, \' \' , p.segundo_apellido) etiqueta, p.* from ' +
+                conexion.dbConn.query('select concat(ifnull(p.nif, \'\'), \' \',  ifnull(p.nombre, \'\'), \' \', ifnull(p.primer_apellido, \'\'), \' \' , ifnull(p.segundo_apellido, \'\')) etiqueta, p.* from ' +
                         constantes.ESQUEMA_BD + '.persona p where nid_madre = ' + conexion.dbConn.escape(nid_persona) + ' or nid_padre = ' +conexion.dbConn.escape(nid_persona),
                     (error, results, fields) =>
                     {
@@ -285,7 +285,7 @@ function obtener_personas()
     return new Promise(
         (resolve, reject) =>
         {
-            conexion.dbConn.query('select concat(p.nif, \' \',  p.nombre, \' \', p.primer_apellido, \' \' , p.segundo_apellido) etiqueta, p.* from ' + constantes.ESQUEMA_BD + '.persona p', 
+            conexion.dbConn.query('select concat(ifnull(p.nif, \'\'), \' \',  ifnull(p.nombre, \'\'), \' \', ifnull(p.primer_apellido, \'\'), \' \' , ifnull(p.segundo_apellido, \'\')) etiqueta, p.* from ' + constantes.ESQUEMA_BD + '.persona p', 
               (error, results, fields) =>
               {
                 if(error) {console.log(error);  reject();}
@@ -323,7 +323,7 @@ function obtener_persona(nid)
     return new Promise(
         (resolve, reject) =>
         {
-            conexion.dbConn.query('select concat(p.nif, \' \',  p.nombre, \' \', p.primer_apellido, \' \' , p.segundo_apellido) etiqueta, p.* from ' 
+            conexion.dbConn.query('select concat(ifnull(p.nif, \'\'), \' \',  ifnull(p.nombre, \'\'), \' \', ifnull(p.primer_apellido, \'\'), \' \' , ifnull(p.segundo_apellido, \'\')) etiqueta, p.* from ' 
                                         + constantes.ESQUEMA_BD + '.persona p where nid = ' + conexion.dbConn.escape(nid),
             (error, results, fields) =>
             {
@@ -349,14 +349,14 @@ function actualizar_persona(nid, nif, nombre, primer_apellido, segundo_apellido,
                     if(bExistePersona)
                     {
                         conexion.dbConn.query('update ' + constantes.ESQUEMA_BD + '.persona set' +
-                            ' nif = ' + conexion.dbConn.escape(nif) +
+                            ' nif = ' + 'nullif(' + conexion.dbConn.escape(nif)  + ', \'\')' +
                             ', nombre = ' +  constantes.ESQUEMA_BD + '.initcap(' + conexion.dbConn.escape(nombre) + ')' +
                             ', primer_apellido = ' +  constantes.ESQUEMA_BD + '.initcap(' + conexion.dbConn.escape(primer_apellido) + ')' +
                             ', segundo_apellido = ' +  constantes.ESQUEMA_BD + '.initcap(' + conexion.dbConn.escape(segundo_apellido) + ')' +
                             ', telefono = cast(nullif(' +  conexion.dbConn.escape(telefono) + ', \'\') as unsigned)' +
                             ', fecha_nacimiento = str_to_date(nullif(' + conexion.dbConn.escape(fecha_nacimiento) + ', \'\') , \'%Y-%m-%d\')'  +
-                            ', correo_electronico = ' + conexion.dbConn.escape(correo_electronico) +
-                            ', codigo = ' + conexion.dbConn.escape(codigo) +
+                            ', correo_electronico = nullif(' + conexion.dbConn.escape(correo_electronico) + ', \'\')' +
+                            ', codigo = ' + 'nullif(' + conexion.dbConn.escape(codigo) + ', \'\')' +
                             ' where nid = ' + conexion.dbConn.escape(nid),
                             (error, results, fields) => 
                             {
@@ -402,7 +402,7 @@ function registrar_forma_pago(nid_titular, iban)
     )
 }
 
-
+ 
 
 function obtener_forma_pago(nid_titular)
 {
