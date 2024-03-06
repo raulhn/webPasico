@@ -85,7 +85,7 @@ function registrar_persona(nombre, primer_apellido, segundo_apellido, telefono, 
                                             'cast(nullif(' + conexion.dbConn.escape(telefono) + ', \'\') as unsigned)'
                                             + ',' + 
                                             'str_to_date(nullif(' + conexion.dbConn.escape(fecha_nacimiento) + ', \'\') , \'%Y-%m-%d\')' + 
-                                            ', ' + 'nullif(' + conexion.dbConn.escape(nif) + ', \'\')), ' + conexion.dbConn.escape(correo_electronico) + ',' 
+                                            ', ' + 'nullif(' + conexion.dbConn.escape(nif) + ', \'\'), ' + conexion.dbConn.escape(correo_electronico) + ',' 
                                              + 'nullif(' + conexion.dbConn.escape(codigo) + ', \'\'))',
                                             (error, results, fields) =>
                                             {
