@@ -2,7 +2,7 @@ const conexion = require('../conexion.js')
 const constantes = require('../constantes.js')
 
 
-function registrar_horario_clase(hora_inicio, minutos_inicio, duracion_clase)
+function registrar_horario_clase(hora_inicio, minutos_inicio, duracion_clase, num_clase, nid_horario)
 {
     return new Promise(
         (resolve, reject) =>
@@ -16,8 +16,13 @@ function registrar_horario_clase(hora_inicio, minutos_inicio, duracion_clase)
                     conexion.dbConn.query(
                         'insert into ' + constantes.ESQUEMA_BD + '.horario_clase(hora_inicio, minutos_inicio, duracion_clase, nid_horario) ' +
                         ' values(' + conexion.dbConn.escape(hora_inicio) + ', ' + conexion.dbConn.escape(minutos_inicio) + ', ' +
-                            conexion.dbConn.escape(duracion_clase) + ')'
-                        +
+                            conexion.dbConn.escape(duracion_clase) + ', ' + conexion.dbConn.escape(nid_horario) + ')',
+                        (error, results, fields) =>
+                        {
+                            if(error) {conexion.dbConn.rollback(); reject();}
+                            else {resolve();}
+                        }
+                        
                     )
                 }
             )
@@ -36,7 +41,7 @@ function crear_horario(dia, hora_inicio, minutos_inicio, hora_fin, minutos_fin, 
                     conexion.dbConn.query('insert into ' + constantes.ESQUEMA_BD + '.horario(dia, nid_asignatura, nid_profesor)' +
                         ' values(' + conexion.dbConn.escape(dia) + ', ' + conexion.dbConn.escape(hora_inicio) + ', ' + conexion.dbConn.escape(hora_fin) +
                         ', ' + conexion.dbConn.escape(nid_asignatura) + ', ' + conexion.dbConn.escape(nid_profesor),
-                        (error, results, fields) =>
+                        async (error, results, fields) =>
                         {
                             if(error) {console.log(error); conexion.dbConn.rollback(); reject();}
                             else {
@@ -46,7 +51,10 @@ function crear_horario(dia, hora_inicio, minutos_inicio, hora_fin, minutos_fin, 
 
                                 for (i = 0; i < num_clases; i++)
                                 {
-
+                                    try
+                                    {
+                                        await registrar_horario_clase(hora_inicio, minutos_inicio, duracion_clase, i, results.id)
+                                    }
                                 }
                                 conexion.dbConn.commit(); 
                                 resolve(); 
