@@ -19,6 +19,7 @@ var servlet_preinscripciones = require('./servlets/servlet_preinscripcion.js')
 var servlet_direcciones = require('./servlets/servlet_direccion.js');
 var servlet_remesa = require('./servlets/servlet_remesa.js');
 var servlet_parametros = require('./servlets/servlet_parametros.js');
+var servlet_horarios = require('./servlets/servlet_horarios.js');
 
 var fs = require('fs');
 
@@ -143,6 +144,16 @@ app.post('/aprobar_remesas', servlet_remesa.aprobar_remesas);
 app.get('/obtener_valor/:nombre', servlet_parametros.obtener_valor);
 app.post('/actualizar_valor', servlet_parametros.actualizar_valor);
 
+/** Horarios **/
+app.get('/obtener_horarios/:nid_profesor/:nid_asignatura', servlet_horarios.obtener_horarios);
+app.post('/registrar_horario', servlet_horarios.registrar_horario);
+app.post('/registrar_horario_clase', servlet_horarios.registrar_horario_clase);
+
+app.post('/eliminar_horario_clase', servlet_horarios.eliminar_horario_clase);
+app.post('/eliminar_horario', servlet_horarios.eliminar_horario);
+
+app.post('/asignar_horario', servlet_horarios.asignar_horario_clase);
+app.post('/liberar_horario', servlet_horarios.liberar_horario_clase);
 
 https.createServer({
     key: fs.readFileSync('apache.key'),
