@@ -17,4 +17,10 @@ export class HorariosService {
     return this.http.post(API_URL, data, {withCredentials: true});
   }
 
+  obtener_horario(nid_profesor: string, nid_asignatura:string)
+  {
+    let API_URL = this.url + '/obtener_horarios/' + nid_profesor + '/' + nid_asignatura;
+    return this.http.get(API_URL, {withCredentials: true})
+  }
+
 }

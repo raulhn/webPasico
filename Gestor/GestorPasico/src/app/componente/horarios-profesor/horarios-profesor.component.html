@@ -1,6 +1,33 @@
-<ng-select  [items]="asignaturas"
-bindLabel="etiqueta" 
-bindValue="nid"
-[(ngModel)]="nid_asignatura"
-[compareWith]="compare_asignatura">
-</ng-select>
+<div *ngIf="bCargado_asignaturas">
+    <ng-select  [items]="asignaturas"
+    bindLabel="descripcion" 
+    bindValue="nid"
+    [(ngModel)]="nid_asignatura"
+    [compareWith]="compare_asignatura"
+    (change)="actualizar_asignatura()">
+    </ng-select>
+</div>
+
+<div *ngIf="num_horarios == 0 && nid_asignatura != ''">
+    No hay horario
+    <div>
+        <label>Día</label>
+        <select [(ngModel)]="formulario_dia" name="Día" id="dia">
+            <option value="1">Lunes</option>
+            <option value="2">Martes</option>
+            <option value="3">Miércoles</option>
+            <option value="4">Jueves</option>
+            <option value="5">Viernes</option>
+            <option value="6">Sábado</option>
+            <option value="7">Domingo</option>
+        </select>
+        <label>Hora Inicio:</label>
+        <input type="time" [(ngModel)]="formulario_hora_inicio" id="hora_inicio" name="hora_inicio" />
+        <label>Hora Fin:</label>
+        <input type="time" [(ngModel)]="formulario_hora_fin" id="hora_fin" name="hora_fin" />
+        <label>Duración</label>
+        <input type="number" />
+
+        <button (click)="registrar_horario()">Registrar Horario</button>
+    </div>
+</div>
