@@ -230,6 +230,25 @@ function obtener_horarios(nid_profesor, nid_asignatura)
     return new Promise(
         (resolve, reject) =>
             {
+                conexion.dbConn.beginTransaction("select h.* from " + constantes.ESQUEMA_BD + ".horario h " +
+                     "where (h.nid_profesor = " + conexion.dbConn.escape(nid_profesor) + " or nullif(" +  conexion.dbConn.escape(nid_profesor) + ", \'\') is null) " +
+                      " and (h.nid_asignatura = " + conexion.dbConn.escape(nid_asignatura) + " or nullif(" + conexion.dbConn.escape(nid_asignatura) + ", \'\') is null) ",
+                  (error, results, fields) =>
+                    {
+                        if(error) {console.log(error); reject();}
+                        else {resolve(results)}
+                    }
+                )
+            }
+    )
+}
+
+
+function obtener_horarios_clase(nid_profesor, nid_asignatura)
+{
+    return new Promise(
+        (resolve, reject) =>
+            {
                 conexion.dbConn.beginTransaction("select hc.* from " + constantes.ESQUEMA_BD + ".horario h, " + constantes.ESQUEMA_BD +  ".horario_clase hc " +
                      "where h.nid_horario = hc.nid_horario " +
                       " and (h.nid_profesor = " + conexion.dbConn.escape(nid_profesor) + " or nullif(" +  conexion.dbConn.escape(nid_profesor) + ", \'\') is null) " +
@@ -276,4 +295,5 @@ module.exports.eliminar_horario_clase = eliminar_horario_clase;
 module.exports.eliminar_horario = eliminar_horario;
 
 module.exports.obtener_horarios = obtener_horarios;
+module.exports.obtener_horarios_clase = obtener_horarios_clase;
 module.exports.obtener_horarios_asignados = obtener_horarios_asignados;

@@ -113,9 +113,10 @@ function obtener_horarios(req, res)
                 let nid_asignatura = req.params.nid_asignatura;
 
                 let horarios_recuperados = await horarios.obtener_horarios(nid_profesor, nid_asignatura);
+                let horarios_clase_recuperados = await horarios.obtener_horarios_clase(nid_profesor, nid_asignatura);
                 let horarios_asignados = await horarios.obtener_horarios_asignados(nid_profesor, nid_asignatura);
 
-                res.status(200).send({error: false, horarios: horarios_recuperados, horarios_asignados: horarios_asignados})
+                res.status(200).send({error: false, horarios: horarios_recuperados, horarios_clase: horarios_clase_recuperados, horarios_asignados: horarios_asignados})
             }
 
     )
