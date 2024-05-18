@@ -18,6 +18,8 @@ import { ListadoPreinscripcionesComponent } from './componente/listado-preinscri
 import { RemesasComponent } from './componente/remesas/remesas.component';
 import { ParametrosComponent } from './componente/parametros/parametros.component';
 import { DetalleRemesaComponent } from './componente/detalle-remesa/detalle-remesa.component';
+import { HorarioComponent } from './componente/horario/horario.component';
+import { HorariosProfesorComponent } from './componente/horarios-profesor/horarios-profesor.component';
 
 
 const routes: Routes = [
@@ -88,6 +90,14 @@ const routes: Routes = [
   {
     path: 'parametros',
     component: ParametrosComponent
+  },
+  {
+    path: 'horario',
+    component: HorarioComponent
+  },
+  {
+    path: 'horario_profesor/:nid_profesor',
+    component: HorariosProfesorComponent
   }
 
 ];

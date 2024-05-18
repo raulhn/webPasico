@@ -133,7 +133,7 @@ add_profesor =
     }
    }
 
-   comparePersona_profesor(item: any, selected: any) {
+  comparePersona_profesor(item: any, selected: any) {
     return item['nid'] == selected;
   }
   

@@ -42,6 +42,8 @@ import { RemesasComponent } from './componente/remesas/remesas.component';
 import { DetalleRemesaComponent } from './componente/detalle-remesa/detalle-remesa.component';
 import { ParametrosComponent } from './componente/parametros/parametros.component';
 import { HijosPersonaComponent } from './componente/hijos-persona/hijos-persona.component';
+import { HorarioComponent } from './componente/horario/horario.component';
+import { HorariosProfesorComponent } from './componente/horarios-profesor/horarios-profesor.component';
 
 
 
@@ -76,7 +78,9 @@ import { HijosPersonaComponent } from './componente/hijos-persona/hijos-persona.
     RemesasComponent,
     DetalleRemesaComponent,
     ParametrosComponent,
-    HijosPersonaComponent
+    HijosPersonaComponent,
+    HorarioComponent,
+    HorariosProfesorComponent
   ],
   imports: [
     FormsModule,
