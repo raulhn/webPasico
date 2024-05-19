@@ -146,6 +146,7 @@ app.post('/actualizar_valor', servlet_parametros.actualizar_valor);
 
 /** Horarios **/
 app.get('/obtener_horarios/:nid_profesor/:nid_asignatura', servlet_horarios.obtener_horarios);
+app.get('/obtener_horario/:nid_horario', servlet_horarios.obtener_horario);
 app.post('/registrar_horario', servlet_horarios.registrar_horario);
 app.post('/registrar_horario_clase', servlet_horarios.registrar_horario_clase);
 

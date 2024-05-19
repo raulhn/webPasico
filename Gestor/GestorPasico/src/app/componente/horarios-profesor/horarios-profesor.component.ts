@@ -74,7 +74,7 @@ export class HorariosProfesorComponent {
   
   actualizar_asignatura()
   {
-    this.horariosService.obtener_horario(this.nid_profesor, this.nid_asignatura).subscribe(this.recuperar_horario)
+    this.horariosService.obtener_horarios(this.nid_profesor, this.nid_asignatura).subscribe(this.recuperar_horario)
   }
 
   registrar_horario()
