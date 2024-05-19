@@ -18,6 +18,7 @@ export class HorariosProfesorComponent {
   nid_asignatura: string = "";
 
   bCargado_asignaturas: boolean = false;
+  bCargado_horario: boolean = false;
 
   num_horarios: number = 0;
 
@@ -44,6 +45,7 @@ export class HorariosProfesorComponent {
         this.num_horarios = this.horarios.length;
         console.log('Respuesta')
         console.log(respuesta)
+        this.bCargado_horario = true;
       }
   }
 

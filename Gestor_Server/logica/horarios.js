@@ -291,7 +291,7 @@ function obtener_horario(nid_horario)
         (resolve, reject) =>
             {
                 conexion.dbConn.beginTransaction("select h.* from " + constantes.ESQUEMA_BD + ".horario h " +
-                     "where h.nid_horario = " + conexion.dbConn.escape(nid_profesor) ,
+                     "where h.nid_horario = " + conexion.dbConn.escape(nid_horario) ,
                   (error, results, fields) =>
                     {
                         if(error) {console.log(error); reject();}
@@ -310,7 +310,7 @@ function obtener_horario_clase(nid_horario)
             {
                 conexion.dbConn.beginTransaction("select hc.* from " + constantes.ESQUEMA_BD + ".horario h, " + constantes.ESQUEMA_BD +  ".horario_clase hc " +
                      "where h.nid_horario = hc.nid_horario " +
-                      " and (h.nid_horario = " + conexion.dbConn.escape(nid_horario),
+                      " and h.nid_horario = " + conexion.dbConn.escape(nid_horario),
                   (error, results, fields) =>
                     {
                         if(error) {console.log(error); reject();}
@@ -330,7 +330,7 @@ function obtener_horario_asignado(nid_horario)
                                                 "from " + constantes.ESQUEMA_BD + ".horario h, " + constantes.ESQUEMA_BD +  ".horario_clase hc, " +
                                                         constantes.ESQUEMA_BD + ".matricula_asignatura ma " +
                                                 "where h.nid_horario = hc.nid_horario " +
-                                                 " and (h.nid_profesor = " + conexion.dbConn.escape(nid_horario) + " and ma.nid_horario_clase = hc.nid_horario_clase",
+                                                 " and h.nid_profesor = " + conexion.dbConn.escape(nid_horario) + " and ma.nid_horario_clase = hc.nid_horario_clase",
                   (error, results, fields) =>
                     {
                         if(error) {console.log(error); reject();}

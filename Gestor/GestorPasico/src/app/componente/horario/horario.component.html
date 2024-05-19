@@ -6,29 +6,29 @@
     </div>
     <div class="row">
     <div class="col-md-12">
-    <div class="schedule-table">
-    <table class="table bg-white">
-    <thead>
-    <tr>
-        <th>Horario</th>
-        <th>Lunes/th>
-        <th>Martes</th>
-        <th>Miércoles</th>
-        <th>Jueves</th>
-        <th>Viernes</th>
-        <th>Sábado</th>
-        <th class="last">Domingo</th>
-    </tr>
-    </thead>
-    <tbody>
-       
-        <div *ngFor="let hora_actual of horas"></div>
-        <tr *ngFor="let minuto_actual of minutos"></tr>
+    <div class="schedule-table" *ngIf="bCargado_horario">
+        <table class="table bg-white">
+        <thead>
         <tr>
-            <td *ngFor="let dia_actual of dias"> </td>
+            <th>Horario</th>
+            <th>Lunes </th>
+            <th>Martes</th>
+            <th>Miércoles</th>
+            <th>Jueves</th>
+            <th>Viernes</th>
+            <th>Sábado</th>
+            <th class="last">Domingo</th>
         </tr>
-    </tbody>
-    </table>
+        </thead>
+        <tbody>
+        
+            <div *ngFor="let hora_actual of horas">
+                <tr *ngFor="let minuto_actual of minutos">
+                    <td *ngFor="let dia_actual of dias" [attr.rowspan]="obtener_valor(dia_actual, hora_actual, minuto_actual)" > </td>
+                </tr>
+            </div>
+        </tbody>
+        </table>
     </div>
     </div>
     </div>

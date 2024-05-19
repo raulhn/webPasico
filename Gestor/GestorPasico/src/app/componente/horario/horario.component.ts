@@ -12,11 +12,10 @@ export class HorarioComponent implements OnInit {
 
   constructor(private horariosServices: HorariosService)
   {
-     horariosServices.obtener_horario(this.nid_horario).subscribe(this.recuperar_horario)
   }
 
   dias = [1, 2, 3, 4, 5, 6, 7];
-  horas:Array<Number> = [];
+  horas:Array<number> = [];
   minutos = [0, 15, 30, 45]
 
   horario:string[][] = [];
@@ -61,10 +60,10 @@ export class HorarioComponent implements OnInit {
   }
 
   ngOnInit(): void {
-     
+    this.horariosServices.obtener_horario(this.nid_horario).subscribe(this.recuperar_horario)
   }
 
-  obtener_valor(dia: number, hora: string, minutos:string)
+  obtener_valor(dia: number, hora: number, minutos:number)
   {
     
     let v_minutos_entrada = Number(minutos);

@@ -31,3 +31,6 @@
         <button (click)="registrar_horario()">Registrar Horario</button>
     </div>
 </div>
+<div *ngIf="bCargado_horario">
+  <app-horario  nid_horario=17></app-horario>
+</div>
