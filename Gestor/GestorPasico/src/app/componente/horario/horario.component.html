@@ -4,7 +4,10 @@
     <div class="subtitle alt-font"><span class="text-primary">#04</span><span class="title">Timetable</span></div>
     <h2 class="display-18 display-md-16 display-lg-14 mb-0">Committed to fabulous and great <span class="text-primary">#Timetable</span></h2>
     </div>
+    {{hora_maxima}}
+    {{hora_minima}}
     <div class="row">
+
     <div class="col-md-12">
     <div class="schedule-table" *ngIf="bCargado_horario">
         <table class="table bg-white">
@@ -22,11 +25,9 @@
         </thead>
         <tbody>
         
-            <div *ngFor="let hora_actual of horas">
-                <tr *ngFor="let minuto_actual of minutos">
-                    <td *ngFor="let dia_actual of dias" [attr.rowspan]="obtener_valor(dia_actual, hora_actual, minuto_actual)" > </td>
-                </tr>
-            </div>
+            <tr *ngFor="let hora_actual of horas">
+                    <td *ngFor="let dia_actual of dias" [attr.rowspan]="obtener_valor(dia_actual, hora_actual)" > </td>
+            </tr>
         </tbody>
         </table>
     </div>
