@@ -33,6 +33,11 @@ export class HorarioComponent implements OnInit {
   {
     next: (respuesta: any) =>
       {
+        for(let i = this.hora_minima; i < this.hora_maxima + 1; i++)
+        {
+          this.horas.push(i);
+        }
+
         this.horarios_recuperados = respuesta.horarios_clase;
 
         for(let i=0; i < this.horarios_recuperados.length; i++)
@@ -47,14 +52,11 @@ export class HorarioComponent implements OnInit {
           {
             this.hora_maxima = hora_fin;
           }
-
-          this.horarios_recuperados_dia[this.horarios_recuperados[i]['dia']].push(this.horarios_recuperados[i]);
+          console.log(this.horarios_recuperados[i])
+          this.horarios_recuperados_dia.push(this.horarios_recuperados[i]);
        }
 
-       for(let i = this.hora_minima; i < this.hora_maxima + 1; i++)
-        {
-          this.horas.push(i);
-        }
+
        this.bCargado_horario = true;
       }
   }

@@ -308,7 +308,7 @@ function obtener_horario_clase(nid_horario)
     return new Promise(
         (resolve, reject) =>
             {
-                conexion.dbConn.beginTransaction("select hc.* from " + constantes.ESQUEMA_BD + ".horario h, " + constantes.ESQUEMA_BD +  ".horario_clase hc " +
+                conexion.dbConn.beginTransaction("select h.dia, hc.* from " + constantes.ESQUEMA_BD + ".horario h, " + constantes.ESQUEMA_BD +  ".horario_clase hc " +
                      "where h.nid_horario = hc.nid_horario " +
                       " and h.nid_horario = " + conexion.dbConn.escape(nid_horario),
                   (error, results, fields) =>
