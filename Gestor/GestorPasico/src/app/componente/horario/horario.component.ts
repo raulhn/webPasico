@@ -36,6 +36,11 @@ export class HorarioComponent implements OnInit {
 
         this.horarios_recuperados = respuesta.horarios_clase;
 
+        for(let i=0; i<8; i++)
+        {
+          this.horarios_recuperados_dia[i] = [];
+        }
+
         for(let i=0; i < this.horarios_recuperados.length; i++)
         {
           if(this.hora_minima == 0 || this.hora_minima > this.horarios_recuperados[i].hora_inicio)
@@ -52,12 +57,12 @@ export class HorarioComponent implements OnInit {
           }
           console.log('Dia')
           console.log(Number(this.horarios_recuperados[i].dia))
-          this.horarios_recuperados_dia[Number(this.horarios_recuperados[i].dia)] = this.horarios_recuperados[i];
+          this.horarios_recuperados_dia[Number(this.horarios_recuperados[i].dia)].push(this.horarios_recuperados[i]);
        }
        console.log('comparacion')
        console.log(this.hora_maxima)
        console.log(this.hora_minima)
-       for(let i = 0; i < ((this.hora_maxima - this.hora_minima) * 4) + 1; i++)
+       for(let i = 0; i < ((this.hora_maxima - this.hora_minima + 1) * 4) ; i++)
         {
           this.horas.push(i);
         }
@@ -77,36 +82,42 @@ export class HorarioComponent implements OnInit {
     let v_minutos_entrada = (Number(hora) % 4) * 15;
     let v_hora_entrada = Number(hora) / 4;
 
+    console.log('entrada')
+    console.log(v_minutos_entrada)
+    console.log(v_hora_entrada)
     let v_total_minutos_entrada = v_minutos_entrada + (v_hora_entrada * 60)
 
+    for (let i=0; i<this.horarios_recuperados_dia[dia].length; i++)
+    {
 
-      if (typeof this.horarios_recuperados_dia[dia] !== 'undefined')
-      {
-        let v_hora_inicio = Number(this.horarios_recuperados_dia[dia].hora_inicio);
-        let v_minutos_inicio = Number(this.horarios_recuperados_dia[dia].minutos_inicio);
+        let v_hora_inicio = Number(this.horarios_recuperados_dia[dia][i].hora_inicio);
+        let v_minutos_inicio = Number(this.horarios_recuperados_dia[dia][i].minutos_inicio);
 
-        let v_total_minutos_inicio = v_minutos_inicio + (v_hora_inicio * 60);
+        let v_total_minutos_inicio = v_minutos_inicio + ((this.hora_minima - v_hora_inicio) * 60);
 
-        let v_duracion = (Number(this.horarios_recuperados_dia[dia].duracion) / 60);
+        let v_duracion = (Number(this.horarios_recuperados_dia[dia][i].duracion_clase));
 
         let v_hora_fin = v_hora_inicio + (v_duracion / 60);
         let v_minutos_fin = (v_minutos_inicio + v_duracion) % 60;
 
-        let v_total_minutos_fin = v_minutos_fin + (v_hora_fin * 60);
-
+        let v_total_minutos_fin = v_minutos_fin + ((v_hora_fin - v_hora_inicio) * 60);
+     
         if (v_total_minutos_entrada == v_total_minutos_inicio)
         {
           return v_duracion / 15;
         }
         else if (v_total_minutos_inicio < v_total_minutos_entrada &&
-                v_total_minutos_fin >= v_total_minutos_entrada)
+                v_total_minutos_fin > v_total_minutos_entrada)
         {
+          console.log('eee')
+          console.log(v_total_minutos_entrada)
+          console.log(v_total_minutos_inicio)
+          console.log(v_total_minutos_fin)
+          console.log(v_duracion)
           return 0; 
         }
-      }
-      else
-      {
-        return 1;
+
+        console.log('x');
       }
     
     return 1;
