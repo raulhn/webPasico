@@ -1,8 +1,5 @@
 create table pasico_gestor.horario(
 	nid_horario integer primary key auto_increment,
-	dia integer,
-	hora_inicio varchar(5),
-	hora_fin varchar(5),
 	nid_asignatura integer,
 	nid_profesor integer
 );
@@ -20,7 +17,8 @@ create table pasico_gestor.horario_clase(
 	nid_horario integer,
 	duracion_clase integer,
 	hora_inicio integer,
-	minutos_nicio integer
+	minutos_nicio integer,
+	dia integer
 );
 
 alter table pasico_gestor.horario_clase add constraint fk_horario_clase foreign key(nid_horario) references pasico_gestor.horario(nid_horario);

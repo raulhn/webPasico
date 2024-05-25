@@ -2,7 +2,7 @@ const conexion = require('../conexion.js')
 const constantes = require('../constantes.js')
 
 
-function registrar_horario_clase(hora_inicio, minutos_inicio, duracion_clase, num_clase, nid_horario)
+function registrar_horario_clase(hora_inicio, minutos_inicio, duracion_clase, num_clase, nid_horario, dia)
 {
     return new Promise(
         (resolve, reject) =>
@@ -14,7 +14,7 @@ function registrar_horario_clase(hora_inicio, minutos_inicio, duracion_clase, nu
                     var minutos_comienzo_clase = Number(minutos_totales) + (Number(duracion_clase) * Number(num_clase));
 
                     var hora_comienzo_clase = Math.trunc(Number(minutos_comienzo_clase) / 60);
-                    var minuto_comienzo_clase = Math.abs(Number(minutos_totales) - Number(minutos_comienzo_clase)) % 60;
+                    var minuto_comienzo_clase = Math.abs(Number(minutos_comienzo_clase)) % 60;
 
                     console.log('Inserta clase')
 
@@ -22,9 +22,9 @@ function registrar_horario_clase(hora_inicio, minutos_inicio, duracion_clase, nu
                     ' values(' + conexion.dbConn.escape(hora_comienzo_clase) + ', ' + conexion.dbConn.escape(minuto_comienzo_clase) + ', ' +
                         conexion.dbConn.escape(duracion_clase) + ', ' + conexion.dbConn.escape(nid_horario) + ')');
                     conexion.dbConn.query(
-                        'insert into ' + constantes.ESQUEMA_BD + '.horario_clase(hora_inicio, minutos_inicio, duracion_clase, nid_horario) ' +
+                        'insert into ' + constantes.ESQUEMA_BD + '.horario_clase(hora_inicio, minutos_inicio, duracion_clase, nid_horario, dia) ' +
                         ' values(' + conexion.dbConn.escape(hora_comienzo_clase) + ', ' + conexion.dbConn.escape(minuto_comienzo_clase) + ', ' +
-                            conexion.dbConn.escape(duracion_clase) + ', ' + conexion.dbConn.escape(nid_horario) + ')',
+                            conexion.dbConn.escape(duracion_clase) + ', ' + conexion.dbConn.escape(nid_horario) + ', ' + conexion.dbConn.escape(dia) + ')',
                         (error, results, fields) =>
                         {
                             if(error) {conexion.dbConn.rollback(); console.log(error); reject();}
@@ -134,44 +134,71 @@ function eliminar_horario(nid_horario)
     )
 }
 
+function registrar_horario(nid_profesor, nid_asignatura)
+{
+    return new Promise(
+        async (resolve, reject) =>
+        {
+            let horario = await obtener_horarios(nid_profesor, nid_asignatura);
+
+            if(horario.length > 0)
+            {
+                resolve(horario[0]['nid_horario']);
+            }
+            else
+            {
+                conexion.dbConn.beginTransaction(
+                    () =>
+                    {
+                        conexion.dbConn.query('insert into ' + constantes.ESQUEMA_BD + '.horario(dia, nid_asignatura, nid_profesor)' +
+                            ' values(' + conexion.dbConn.escape(dia) + ', ' + conexion.dbConn.escape(nid_asignatura) + ', ' + conexion.dbConn.escape(nid_profesor) + ')',
+
+                            (error, results, fields) =>
+                            {
+                                if(error) {conexion.dbConn.rollback(); console.log(error); reject();}
+                                else {conexion.dbConn.commit(); results.insertId;}
+                            }
+                       )
+                    });
+            }
+        }
+        );
+
+}
+
 function crear_horario(dia, hora_inicio, minutos_inicio, hora_fin, minutos_fin, nid_asignatura, nid_profesor, duracion_clase)
 {
     return new Promise(
         (resolve, reject) =>
         {
             conexion.dbConn.beginTransaction(
-                () =>
+                async () =>
                 {
-                    conexion.dbConn.query('insert into ' + constantes.ESQUEMA_BD + '.horario(dia, nid_asignatura, nid_profesor)' +
-                        ' values(' + conexion.dbConn.escape(dia) + ', ' + conexion.dbConn.escape(nid_asignatura) + ', ' + conexion.dbConn.escape(nid_profesor) + ')',
-                        async (error, results, fields) =>
+                    let nid_horario = await registrar_horario(nid_profesor, nid_asignatura);
+
+                    let total_minutos_inicio = Number(minutos_inicio) + (Number(hora_inicio) * 60);
+                    let total_minutos_fin = Number(minutos_fin) + (Number(hora_fin) * 60);
+
+                    total = Math.abs(total_minutos_fin - total_minutos_inicio);
+
+                    num_clases = total / Number(duracion_clase);
+
+                    for (i = 0; i < num_clases; i++)
+                    {
+                        try
                         {
-                            if(error) {console.log(error); conexion.dbConn.rollback(); reject();}
-                            else {
-                                total = Math.abs((Number(hora_inicio) - Number(hora_fin))) * 60;
-
-                                total = total + Math.abs((Number(minutos_inicio) - Number(minutos_fin)));
-                                num_clases = total / Number(duracion_clase);
-
-
-                                for (i = 0; i < num_clases; i++)
-                                {
-                                    try
-                                    {
-                                        await registrar_horario_clase(hora_inicio, minutos_inicio, duracion_clase, i, results.insertId);
-                                    }
-                                    catch(error)
-                                    {
-                                        conexion.dbConn.rollback();
-                                        console.log(error);
-                                        resolve();
-                                    }
-                                }
-                                conexion.dbConn.commit(); 
-                                resolve(); 
-                            }
+                            console.log(hora_inicio + ':' + minutos_inicio)
+                            await registrar_horario_clase(hora_inicio, minutos_inicio, duracion_clase, i, nid_horario, dia);
                         }
-                    )
+                        catch(error)
+                        {
+                            conexion.dbConn.rollback();
+                            console.log(error);
+                            resolve();
+                        }
+                    }
+                    conexion.dbConn.commit(); 
+                    resolve(); 
                 }
             )
         }
@@ -230,6 +257,7 @@ function obtener_horarios(nid_profesor, nid_asignatura)
     return new Promise(
         (resolve, reject) =>
             {
+
                 conexion.dbConn.beginTransaction("select h.* from " + constantes.ESQUEMA_BD + ".horario h " +
                      "where (h.nid_profesor = " + conexion.dbConn.escape(nid_profesor) + " or nullif(" +  conexion.dbConn.escape(nid_profesor) + ", \'\') is null) " +
                       " and (h.nid_asignatura = " + conexion.dbConn.escape(nid_asignatura) + " or nullif(" + conexion.dbConn.escape(nid_asignatura) + ", \'\') is null) ",
@@ -268,7 +296,7 @@ function obtener_horarios_asignados(nid_profesor, nid_asignatura)
     return new Promise(
         (resolve, reject) =>
             {
-                conexion.dbConn.beginTransaction("select ma.* " +
+                conexion.dbConn.beginTransaction("select ma.*, hc.hora_inicio, hc.minutos_inicio " +
                                                 "from " + constantes.ESQUEMA_BD + ".horario h, " + constantes.ESQUEMA_BD +  ".horario_clase hc, " +
                                                         constantes.ESQUEMA_BD + ".matricula_asignatura ma " +
                                                 "where h.nid_horario = hc.nid_horario " +
@@ -308,7 +336,7 @@ function obtener_horario_clase(nid_horario)
     return new Promise(
         (resolve, reject) =>
             {
-                conexion.dbConn.beginTransaction("select h.dia, hc.* from " + constantes.ESQUEMA_BD + ".horario h, " + constantes.ESQUEMA_BD +  ".horario_clase hc " +
+                conexion.dbConn.beginTransaction("select hc.* from " + constantes.ESQUEMA_BD + ".horario h, " + constantes.ESQUEMA_BD +  ".horario_clase hc " +
                      "where h.nid_horario = hc.nid_horario " +
                       " and h.nid_horario = " + conexion.dbConn.escape(nid_horario),
                   (error, results, fields) =>
