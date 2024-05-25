@@ -27,7 +27,11 @@
         
             <tr *ngFor="let hora_actual of horas">
                 <ng-container *ngFor="let dia_actual of dias">
-                    <td *ngIf="obtener_valor(dia_actual, hora_actual) > 0" [attr.rowspan]="obtener_valor(dia_actual, hora_actual)" > </td>
+                    <td *ngIf="obtener_valor(dia_actual, hora_actual) > 0" [attr.rowspan]="obtener_valor(dia_actual, hora_actual)" 
+                        [ngClass]="{'bg-light': obtener_valor(dia_actual, hora_actual) === 1}">
+                       <div *ngIf="dia_actual == 0"> {{(horas[hora_actual] / 4) + hora_minima}} </div>
+                       <div *ngIf="obtener_valor(dia_actual, hora_actual) > 1 && dia_actual != 0">Clase</div>
+                    </td>
                 </ng-container>
             </tr>
         </tbody>
