@@ -113,11 +113,8 @@ export class HorarioComponent implements OnInit {
         let v_hora_inicio = Number(this.horarios_recuperados_dia[dia][i].hora_inicio);
         let v_minutos_inicio = Number(this.horarios_recuperados_dia[dia][i].minutos_inicio);
 
-
         let v_total_minutos_inicio = v_minutos_inicio + Math.trunc((Math.abs((this.hora_minima - v_hora_inicio))) * 60);
-
         let v_duracion = (Number(this.horarios_recuperados_dia[dia][i].duracion_clase));
-
         let v_total_minutos_fin = v_total_minutos_inicio + v_duracion;
 
         if (v_total_minutos_entrada == v_total_minutos_inicio)

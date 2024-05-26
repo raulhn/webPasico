@@ -18,9 +18,7 @@ function registrar_horario_clase(hora_inicio, minutos_inicio, duracion_clase, nu
 
                     console.log('Inserta clase')
 
-                    console.log('insert into ' + constantes.ESQUEMA_BD + '.horario_clase(hora_inicio, minutos_inicio, duracion_clase, nid_horario) ' +
-                    ' values(' + conexion.dbConn.escape(hora_comienzo_clase) + ', ' + conexion.dbConn.escape(minuto_comienzo_clase) + ', ' +
-                        conexion.dbConn.escape(duracion_clase) + ', ' + conexion.dbConn.escape(nid_horario) + ')');
+
                     conexion.dbConn.query(
                         'insert into ' + constantes.ESQUEMA_BD + '.horario_clase(hora_inicio, minutos_inicio, duracion_clase, nid_horario, dia) ' +
                         ' values(' + conexion.dbConn.escape(hora_comienzo_clase) + ', ' + conexion.dbConn.escape(minuto_comienzo_clase) + ', ' +

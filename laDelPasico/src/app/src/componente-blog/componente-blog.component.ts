@@ -130,4 +130,20 @@ export class ComponenteBlogComponent implements OnInit {
   {
     return Math.trunc(id_pagina / this.NUM_PAGINAS);
   }
+
+  obtener_categoria()
+  {
+    if (this.id_componente == '326')
+    {
+      return "Imágenes"
+    }
+    else if (this.id_componente == '320')
+    {
+      return "Vídeo"
+    }
+    else
+    {
+      return "Noticias"
+    }
+  }
 }

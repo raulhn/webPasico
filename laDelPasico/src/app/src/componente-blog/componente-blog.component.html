@@ -8,7 +8,7 @@
             </div>
             <div class="row ">
                 <div class="col p-4 d-flex flex-column position-static">
-                    <strong class="d-inline-block mb-2 text-primary">Noticias</strong>
+                    <strong  class="d-inline-block mb-2 text-primary">{{obtener_categoria()}}</strong>
                     <h3 class="mb-0">{{blog['titulo']}}</h3>
                     <div class="mb-1 text-muted">{{obtiene_fecha(blog['fecha'])}}</div>
                     <p class="card-text mb-auto">{{blog['descripcion']}}</p>
