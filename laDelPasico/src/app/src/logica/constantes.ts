@@ -5,16 +5,20 @@ export namespace Constantes
     export class General
     {
         /** Producción **/
-      
+      /*
        public static readonly URL_BACKED = 'https://ladelpasico.es:8443';
        public static readonly URL_FRONTED = 'https://ladelpasico.es';
-       
+       */
 
        /** Desarrollo **/
 /*
        public static readonly URL_BACKED = 'https://80.240.127.138:8444';
        public static readonly URL_FRONTED = 'https://80.240.127.138:8081';
- */
+*/
+       /** Pre-Producción */
+       public static readonly URL_BACKED = 'https://80.240.127.138:8444';
+       public static readonly URL_FRONTED = 'https://ladelpasico:2096';
+ 
     };
 
     export class TipoComponente

@@ -33,6 +33,8 @@ function registrar_preinscripcion(req, res)
             let instrumento = req.body.instrumento;
             let familia_instrumento = req.body.familia_instrumento;
 
+            let sucursal = req.body.sucursal;
+
             let token = req.body.token;
 
             const url = 'https://www.google.com/recaptcha/api/siteverify?secret=' + constantes_email.CLAVE + '&response=' + token + '';
@@ -46,12 +48,13 @@ function registrar_preinscripcion(req, res)
             {
                 await preinscripcion.registrar_preinscripcion(nombre, primer_apellido, segundo_apellido, dni, fecha_nacimiento, nombre_padre, primer_apellido_padre,
                     segundo_apellido_padre, dni_padre, correo_electronico, telefono, municipio, provincia, direccion, numero, puerta, escalera, codigo_postal, instrumento,
-                    familia_instrumento);
+                    familia_instrumento, sucursal);
                
                 res.status(200).send({error: false, message: 'Preinscripcion realizada'})
-                 
+                 /*
                 await enviar_email(nombre, primer_apellido, segundo_apellido, fecha_nacimiento);
                 await enviar_email_respuesta(correo_electronico);
+                */
             }
             else
             {

@@ -1,0 +1,325 @@
+<div class="card p-3 m-1">
+    <legend>Alumno</legend>
+    <div class="row">
+        <div class="col-md-12 col-lg-4">
+            <label>Nombre*</label>
+            <input class="form-control" [(ngModel)]="nombre_alumno" type="text" />
+        </div>
+        <div class="col-md-12 col-lg-4">
+            <label>Primer apellido*</label>
+            <input class="form-control" [(ngModel)]="primer_apellido_alumno" type="text" />
+        </div>
+        <div class="col-md-12 col-lg-4">
+            <label>Segundo apellido</label>
+            <input class="form-control" [(ngModel)]="segundo_apellido_alumno" type="text" />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-5 col-lg-2">
+            <label>DNI</label>
+            <input class="form-control" [(ngModel)]="dni_alumno" type="text" />
+        </div>
+
+        <div class="col-md-5 col-lg-2">
+            <label>Fecha nacimiento*</label>
+            <input class="form-control" [(ngModel)]="fecha_nacimiento" type="date" required />
+        </div>
+    </div>
+
+    <div class="row">
+        <legend>Tipo de Preinscripción</legend>
+
+        <div class="form-check">
+            <input class="form-check-input" type="radio" (change)="actualiza_tipo_inscripcion('1')"
+                name="tipoInscripcion" id="Nueva" checked="checked">
+            <label class="form-check-label" for="Nueva">
+                Nueva Inscripción
+            </label>
+        </div>
+
+        <div class="form-check">
+            <input class="form-check-input" type="radio" (change)="actualiza_tipo_inscripcion('2')"
+                name="tipoInscripcion" id="Renovacion">
+            <label class="form-check-label" for="Renovacion">
+                Renovación (Matriculados en años anteriores)
+            </label>
+        </div>
+    </div>
+</div>
+
+<div class="card p-3 m-1" *ngIf="tipo_inscripcion == '1' && comprueba_edad_primero()">
+    <legend> Horario </legend>
+    <b>Curso: Primero</b>
+    <br>
+    <div class="form-check">
+        <input class="form-check-input" type="radio"
+            (change)="actualiza_horario('Lunes y Miércoles (18:00 - 19:00)')" name="Horario"
+            id="horario_primero_LX" checked="checked">
+        <label class="form-check-label" for="horario_primero_LX">
+            Lunes y Miércoles (18:00 - 19:00)
+        </label>
+    </div>
+
+    <div class="form-check">
+        <input class="form-check-input" type="radio"
+            (change)="actualiza_horario('Lunes y Miércoles (18:00 - 19:00)')" name="Horario"
+            id="horario_primero_MJ">
+        <label class="form-check-label" for="horario_primero_MJ">
+            Martes y Jueves (19:00 - 20:00)
+        </label>
+    </div>
+</div>
+
+<div class="card p-3 m-1" *ngIf="tipo_inscripcion == '1' && calculo_edad() == 7">
+    <legend> Horario </legend>
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="Horario" id="horario_preparatorio_MJ"
+            checked="checked">
+        <label class="form-check-label" for="horario_preparatorio_MJ">
+            <b>Curso: Preparatorio</b>
+            <br>
+            Martes y Jueves (19:00 - 20:00)
+        </label>
+    </div>
+</div>
+
+<div class="card p-3 m-1" *ngIf="tipo_inscripcion == '1' && calculo_edad() < 7">
+    <legend> Horario </legend>
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="Horario" id="horario_iniciacion_MJ"
+            checked="checked">
+        <label class="form-check-label" for="horario_iniciacion_MJ">
+            <b>Curso: Iniciación</b>
+            <br>
+            Viernes (17:30 - 20:00)
+        </label>
+    </div>
+</div>
+
+
+<div class="card p-3 m-1">
+    <legend>Padre / Madre / Tutor</legend>
+    <div class="row">
+        <div class="col-lg-4 col-12">
+            <label>Nombre</label>
+            <input class="form-control" [(ngModel)]="nombre_padre" type="text" />
+        </div>
+        <div class="col-lg-4 col-12">
+            <label>Primer apellido</label>
+            <input class="form-control" [(ngModel)]="primer_apellido_padre" type="text" />
+        </div>
+        <div class="col-lg-4 col-12">
+            <label>Segundo apellido</label>
+            <input class="form-control" [(ngModel)]="segundo_apellido_padre" type="text" />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-2 col-5">
+            <label>DNI</label>
+            <input class="form-control" [(ngModel)]="dni_padre" type="text" />
+        </div>
+
+        <div class="col-lg-2 col-5">
+            <label>Teléfono*</label>
+            <input class="form-control" [(ngModel)]="telefono" type="text" required />
+        </div>
+        <div class="col-lg-8 col-12">
+            <label>Correo electrónico*</label>
+            <input class="form-control" [(ngModel)]="correo_electronico" type="text" required />
+        </div>
+
+    </div>
+</div>
+
+<div [ngClass]="{'oculto': !comprueba_edad()}" class="card p-3 m-1">
+    <legend>Instrumento</legend>
+   
+    <div class="row">
+        <div class="col input-group mb-3">
+            <input class="form-control" id="disabledInput" [(ngModel)]="instrumentos_seleccionados[0].instrumento" type="text" placeholder="Primera Opción" disabled />
+            <div class="input-group-append">
+                <button class="btn btn-outline-primary" (click)="add_instrumento(0)"> Seleccionar </button>
+            </div>
+        </div>   
+    </div>
+
+    <div class="row">
+        <div class="col input-group mb-3">
+            <input class="form-control" id="disabledInput" [(ngModel)]="instrumentos_seleccionados[1].instrumento" type="text"  placeholder="Segunda Opción" disabled />
+            <div class="input-group-append">
+                <button class="btn btn-outline-primary" (click)="add_instrumento(1)"> Seleccionar </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col input-group mb-3">
+            <input class="form-control" id="disabledInput" [(ngModel)]="instrumentos_seleccionados[2].instrumento" type="text" placeholder="Tercera Opción" disabled />
+            <div class="input-group-append">
+                <button class="btn btn-outline-primary" (click)="add_instrumento(2)"> Seleccionar  </button>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+
+<div class="card p-3 m-1">
+    <div class="row">
+        <div class="col">
+            <legend>Dirección Postal</legend>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-2 col-4">
+            <label>Provincia</label>
+            <input class="form-control" [(ngModel)]="provincia" type="text" />
+        </div>
+
+        <div class="col-lg-2 col-4">
+            <label>Municipio</label>
+            <input class="form-control" [(ngModel)]="municipio" type="text" />
+        </div>
+
+        <div class="col-lg-2 col-4">
+            <label>Código Postal</label>
+            <input class="form-control" [(ngModel)]="codigo_postal" type="text" />
+        </div>
+
+        <div class="col-lg-12 col-12">
+            <label>Dirección</label>
+            <input class="form-control" [(ngModel)]="direccion" type="text" />
+        </div>
+    </div>
+    <div class="row">
+
+        <div class="col-lg-1 col-4">
+            <label>Número</label>
+            <input class="form-control" [(ngModel)]="numero" type="text" />
+        </div>
+        <div class="col-lg-1 col-4">
+            <label>Puerta</label>
+            <input class="form-control" [(ngModel)]="puerta" type="text" />
+        </div>
+
+        <div class="col-lg-1 col-4">
+            <label>Escalera</label>
+            <input class="form-control" [(ngModel)]="escalera" type="text" />
+        </div>
+    </div>
+    <div class="row pt-3">
+        <div class="col-3">
+            <button (click)="registrar()" class="btn btn-primary mb-3 "> Registrar </button>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="mb-1 mt-1" style="display: none;">
+
+    <div #instancia_sustituir>
+   <div class="form-check">
+            <input class="form-check-input" type="radio" (change)="actualiza_instrumento('2')"
+                name="familiaInstrumentos" id="Viento Metal">
+            <label class="form-check-label" for="Viento Madera">
+                Viento Madera
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" (change)="actualiza_instrumento('3')"
+                name="familiaInstrumentos" id="Viento Metal">
+            <label class="form-check-label" for="Viento Percusión">
+                Percusión
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" (change)="actualiza_instrumento('4')"
+                name="familiaInstrumentos" id="Cuerda" checked>
+            <label class="form-check-label" for="Cuerda">
+                Cuerda
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" (change)="actualiza_instrumento('5')"
+                name="familiaInstrumentos" id="Musica Flamenca">
+            <label class="form-check-label" for="Musica Flamenca">
+                Música Flamenca
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" (change)="actualiza_instrumento('6')"
+                name="familiaInstrumentos" id="Musica Moderna">
+            <label class="form-check-label" for="Musica Moderna">
+                Música Moderna
+            </label>
+        </div>
+
+        <div class="form-check">
+            <input class="form-check-input" type="radio" (change)="actualiza_instrumento('1')"
+                name="familiaInstrumentos" id="Viento Metal" checked="checked">
+            <label class="form-check-label" for="Viento Metal">
+                Viento Metal
+            </label>
+        </div>
+
+        <div *ngIf="familia_instrumento == '1'">
+            <label>Elige instrumento</label>
+            <select class="form-select" [(ngModel)]="instrumento" aria-label="Default select example">
+                <option value="Trompeta">Trompeta</option>
+                <option value="Trompa">Trompa</option>
+                <option value="Trombón">Trombón</option>
+                <option value="Bombardino">Bombardino</option>
+                <option value="Tuba">Tuba</option>
+            </select>
+        </div>
+
+        <div *ngIf="familia_instrumento=='2'">
+            <label>Elige instrumento</label>
+            <select class="form-select" [(ngModel)]="instrumento" aria-label="Default select example">
+                <option value="Clarinete">Clarinete</option>
+                <option value="Saxofón">Saxofón</option>
+                <option value="Flauta">Flauta</option>
+                <option value="Oboe">Oboe</option>
+                <option value="Fagot">Fagot</option>
+            </select>
+        </div>
+
+        <div *ngIf="familia_instrumento=='4'">
+            <label>Elige instrumento</label>
+            <select class="form-select" [(ngModel)]="instrumento" aria-label="Default select example">
+                <option value="Contrabajo">Contrabajo</option>
+                <option value="Violonchelo">Violonchelo</option>
+                <option value="Piano">Piano</option>
+                <option value="Guitarra">Guitarra</option>
+                <option value="Violín">Violín</option>
+                <option value="Viola">Viola</option>
+            </select>
+        </div>
+
+        <div *ngIf="familia_instrumento=='5'">
+            <label>
+                Elige instrumento
+            </label>
+            <select class="form-select" [(ngModel)]="instrumento" aria-label="Default select example">
+                <option value="Cante"> Cante Flamenco </option>
+                <option value="Cajón"> Cajón </option>
+                <option value="Guitarra"> Guitarra </option>
+            </select>
+        </div>
+
+        <div *ngIf="familia_instrumento=='6'">
+            <label>
+                Elige instrumento
+            </label>
+            <select class="form-select" [(ngModel)]="instrumento" aria-label="Default select example">
+                <option value="Bajo_Electrico"> Bajo Eléctrico </option>
+                <option value="Guitarra_Electrica"> Guitarra Eléctrrica </option>
+                <option value="Batería">Batería</option>
+            </select>
+        </div>
+    </div>
+</div>

@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { HorariosService } from 'src/app/servicios/horarios.service';
+import { faFloppyDisk, faPen, faX} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-horario',
@@ -8,6 +9,8 @@ import { HorariosService } from 'src/app/servicios/horarios.service';
 })
 export class HorarioComponent implements OnInit {
 
+  faXmark = faX;
+  
   @Input() nid_horario: string = ""
 
   constructor(private horariosServices: HorariosService)

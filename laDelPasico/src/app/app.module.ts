@@ -45,6 +45,8 @@ import { ComponenteBlogReducidoComponent } from './src/componente-blog-reducido/
 import { FormularioPreinscripcionComponent } from './src/formulario-preinscripcion/formulario-preinscripcion.component';
 import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module } from 'ng-recaptcha';
 import { environment } from 'src/environments/environment';
+import { FormularioPreinscripcionPedaniaComponent } from './src/formulario-preinscripcion-pedania/formulario-preinscripcion-pedania.component';
+import { FormularioPreinscripcionTorrePachecoComponent } from './src/formulario-preinscripcion-torre-pacheco/formulario-preinscripcion-torre-pacheco.component';
 
 @NgModule({
   declarations: [
@@ -75,7 +77,9 @@ import { environment } from 'src/environments/environment';
     ComponenteBlogComponent,
     EditarComponenteBlogComponent,
     ComponenteBlogReducidoComponent,
-    FormularioPreinscripcionComponent
+    FormularioPreinscripcionComponent,
+    FormularioPreinscripcionPedaniaComponent,
+    FormularioPreinscripcionTorrePachecoComponent
   ],
   imports: [
     BrowserModule,

@@ -1,281 +1,44 @@
 <!-- https://www.bootdey.com/snippets/view/calendar-schedule-table -->
 <div class="container">
     <div class="w-95 w-md-75 w-lg-60 w-xl-55 mx-auto mb-6 text-center">
-    <div class="subtitle alt-font"><span class="text-primary">#04</span><span class="title">Timetable</span></div>
-    <h2 class="display-18 display-md-16 display-lg-14 mb-0">Committed to fabulous and great <span class="text-primary">#Timetable</span></h2>
-    </div>
-    {{hora_maxima}}
-    {{hora_minima}}
-    <div class="row">
-
-    <div class="col-md-12">
-    <div class="schedule-table" *ngIf="bCargado_horario">
-        <table class="table bg-white">
-        <thead>
-        <tr>
-            <th>Horario</th>
-            <th>Lunes </th>
-            <th>Martes</th>
-            <th>Miércoles</th>
-            <th>Jueves</th>
-            <th>Viernes</th>
-            <th>Sábado</th>
-            <th class="last">Domingo</th>
-        </tr>
-        </thead>
-        <tbody>
-        
-            <tr *ngFor="let hora_actual of horas">
-                <ng-container *ngFor="let dia_actual of dias">
-                    <td *ngIf="obtener_valor(dia_actual, hora_actual) > 0" [attr.rowspan]="obtener_valor(dia_actual, hora_actual)" 
-                        [ngClass]="{'bg-light': obtener_valor(dia_actual, hora_actual) === 1}">
-                       <div *ngIf="dia_actual == 0"> {{(horas[hora_actual] / 4) + hora_minima}} </div>
-                       <div *ngIf="obtener_valor(dia_actual, hora_actual) > 1 && dia_actual != 0"> {{descripcion_clase(dia_actual, hora_actual)}} </div>
-
-                    </td>
-                </ng-container>
-            </tr>
-        </tbody>
-        </table>
-    </div>
-    </div>
-    </div>
-    </div>
-
-<!-- https://www.bootdey.com/snippets/view/calendar-schedule-table -->
-<div class="container">
-    <div class="w-95 w-md-75 w-lg-60 w-xl-55 mx-auto mb-6 text-center">
-    <div class="subtitle alt-font"><span class="text-primary">#04</span><span class="title">Timetable</span></div>
-    <h2 class="display-18 display-md-16 display-lg-14 mb-0">Committed to fabulous and great <span class="text-primary">#Timetable</span></h2>
+        <div class="subtitle alt-font"><span class="text-primary">#04</span><span class="title">Timetable</span></div>
+        <h2 class="display-18 display-md-16 display-lg-14 mb-0">Committed to fabulous and great <span class="text-primary">#Timetable</span></h2>
     </div>
     <div class="row">
-    <div class="col-md-12">
-    <div class="schedule-table">
-    <table class="table bg-white">
-    <thead>
-    <tr>
-        <th>Horario</th>
-        <th>Lunes/th>
-        <th>Martes</th>
-        <th>Miércoles</th>
-        <th>Jueves</th>
-        <th>Viernes</th>
-        <th>Sábado</th>
-        <th class="last">Domingo</th>
-    </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td class="day">Sunday</td>
-            <td class="active">
-            <h4>Weight Loss</h4>
-            <p>10 am - 11 am</p>
-            <div class="hover">
-            <h4>Weight Loss</h4>
-            <p>10 am - 11 am</p>
-            <span>Wayne Ponce</span>
+
+        <div class="col-md-12">
+            <div class="schedule-table" *ngIf="bCargado_horario">
+                <table class="table bg-white">
+                <thead>
+                <tr>
+                    <th>Horario</th>
+                    <th>Lunes </th>
+                    <th>Martes</th>
+                    <th>Miércoles</th>
+                    <th>Jueves</th>
+                    <th>Viernes</th>
+                    <th>Sábado</th>
+                    <th class="last">Domingo</th>
+                </tr>
+                </thead>
+                <tbody>
+                
+                    <tr *ngFor="let hora_actual of horas">
+                        <ng-container *ngFor="let dia_actual of dias">
+                            <td *ngIf="obtener_valor(dia_actual, hora_actual) > 0" [attr.rowspan]="obtener_valor(dia_actual, hora_actual)" 
+                                [ngClass]="{'bg-light': obtener_valor(dia_actual, hora_actual) === 1}">
+                            <div *ngIf="dia_actual == 0"> {{(horas[hora_actual] / 4) + hora_minima}} </div>
+                            <div *ngIf="obtener_valor(dia_actual, hora_actual) > 1 && dia_actual != 0"> 
+                                <button  style="float: right; color:rgb(23, 5, 126); border-color:rgb(23, 5, 126); background-color: white; border-style: solid; " 
+                                      type="button" class="btn" ><fa-icon [icon]="faXmark"></fa-icon></button>
+                                {{descripcion_clase(dia_actual, hora_actual)}} </div>
+
+                            </td>
+                        </ng-container>
+                    </tr>
+                </tbody>
+                </table>
             </div>
-            </td>
-            <td></td>
-            <td class="active">
-            <h4>Yoga</h4>
-            <p>03 pm - 04 pm</p>
-            <div class="hover">
-            <h4>Yoga</h4>
-            <p>03 pm - 04 pm</p>
-            <span>Francisco Watt</span>
-            </div>
-            </td>
-            <td class="active">
-            <h4>Boxing</h4>
-            <p>05 pm - 06 pm</p>
-            <div class="hover">
-            <h4>Boxing</h4>
-            <p>05 pm - 046am</p>
-            <span>Charles King</span>
-            </div>
-            </td>
-            <td></td>
-        </tr>
-        <tr>
-            <td class="day">Monday</td>
-            <td></td>
-            <td class="active">
-            <h4>Cycling</h4>
-            <p>11 am - 12 pm</p>
-            <div class="hover">
-            <h4>Cycling</h4>
-            <p>11 am - 12 pm</p>
-            <span>Tabitha Potter</span>
-            </div>
-            </td>
-            <td class="active">
-            <h4>Karate</h4>
-            <p>03 pm - 05 pm</p>
-            <div class="hover">
-            <h4>Karate</h4>
-            <p>03 pm - 05 pm</p>
-            <span>Lester Gray</span>
-            </div>
-            </td>
-            <td></td>
-            <td class="active">
-            <h4>Crossfit</h4>
-            <p>07 pm - 08 pm</p>
-            <div class="hover">
-            <h4>Crossfit</h4>
-            <p>07 pm - 08 pm</p>
-            <span>Candi Yip</span>
-            </div>
-            </td>
-        </tr>
-    <tr>
-    <td class="day">Tuesday</td>
-    <td class="active">
-    <h4>Spinning</h4>
-    <p>10 am - 11 am</p>
-    <div class="hover">
-    <h4>Spinning</h4>
-    <p>10 am - 11 am</p>
-    <span>Mary Cass</span>
+        </div>
     </div>
-    </td>
-    <td></td>
-    <td></td>
-    <td class="active">
-    <h4>Bootcamp</h4>
-    <p>05 pm - 06 pm</p>
-    <div class="hover">
-    <h4>Bootcamp</h4>
-    <p>05 pm - 06 pm</p>
-    <span>Brenda Mastropietro</span>
-    </div>
-    </td>
-    <td class="active">
-    <h4>Boxercise</h4>
-    <p>07 pm - 08 pm</p>
-    <div class="hover">
-    <h4>Boxercise</h4>
-    <p>07 pm - 08 pm</p>
-    <span>Marlene Bruce</span>
-    </div>
-    </td>
-    </tr>
-    <tr>
-    <td class="day">Wednesday</td>
-    <td class="active">
-    <h4>Body Building</h4>
-    <p>10 am - 12 pm</p>
-    <div class="hover">
-    <h4>Body Building</h4>
-    <p>10 am - 12 pm</p>
-    <span>Brenda Hester</span>
-    </div>
-    </td>
-    <td></td>
-    <td class="active">
-    <h4>Dance</h4>
-    <p>03 pm - 05 pm</p>
-    <div class="hover">
-    <h4>Dance</h4>
-    <p>03 pm - 05 pm</p>
-    <span>Brian Ashworth</span>
-    </div>
-    </td>
-    <td></td>
-    <td class="active">
-    <h4>Health</h4>
-    <p>07 pm - 08 pm</p>
-    <div class="hover">
-    <h4>Health</h4>
-    <p>07 pm - 08 pm</p>
-    <span>Mark Croteau</span>
-    </div>
-    </td>
-    </tr>
-    <tr>
-    <td class="day">Thursday</td>
-    <td></td>
-    <td class="active">
-    <h4>Bootcamp</h4>
-    <p>11 am - 12 pm</p>
-    <div class="hover">
-    <h4>Bootcamp</h4>
-    <p>1 am - 12 pm</p>
-    <span>Elisabeth Schreck</span>
-    </div>
-    </td>
-    <td></td>
-    <td class="active">
-    <h4>Boday Building</h4>
-    <p>05 pm - 06 pm</p>
-    <div class="hover">
-    <h4>Boday Building</h4>
-    <p>05 pm - 06 pm</p>
-    <span>Edward Garcia</span>
-    </div>
-    </td>
-    <td></td>
-    </tr>
-    <tr>
-    <td class="day">Friday</td>
-    <td class="active">
-    <h4>Racing</h4>
-    <p>10 am - 11 am</p>
-    <div class="hover">
-    <h4>Racing</h4>
-    <p>10 am - 11 am</p>
-    <span>Jackie Potts</span>
-    </div>
-    </td>
-    <td></td>
-    <td class="active">
-    <h4>Energy Blast</h4>
-    <p>03 pm - 05 pm</p>
-    <div class="hover">
-    <h4>Energy Blast</h4>
-    <p>03 pm - 05 pm</p>
-    <span>Travis Brown</span>
-    </div>
-    </td>
-    <td></td>
-    <td class="active">
-    <h4>Jumping</h4>
-    <p>07 pm - 08 pm</p>
-    <div class="hover">
-    <h4>Jumping</h4>
-    <p>07 pm - 08 pm</p>
-    <span>Benjamin Barnett</span>
-    </div>
-    </td>
-    </tr>
-    <tr>
-    <td class="day">Satarday</td>
-    <td></td>
-    <td></td>
-    <td class="active">
-    <h4>Aerobics</h4>
-    <p>03 pm - 04 pm</p>
-    <div class="hover">
-    <h4>Aerobics</h4>
-    <p>03 pm - 04 pm</p>
-    <span>Andre Walls</span>
-    </div>
-    </td>
-    <td class="active">
-    <h4>Cycling</h4>
-    <p>05 pm - 06 pm</p>
-    <div class="hover">
-    <h4>Cycling</h4>
-    <p>05 pm - 06 pm</p>
-    <span>Margaret Thomas</span>
-    </div>
-    </td>
-    <td></td>
-    </tr>
-    </tbody>
-    </table>
-    </div>
-    </div>
-    </div>
-    </div>
+</div>

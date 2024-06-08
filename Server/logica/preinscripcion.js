@@ -21,7 +21,8 @@ function registrar_preinscripcion(
     escalera,
     codigo_postal,
     instrumento,
-    familia_instrumento
+    familia_instrumento,
+    sucursal
 )
 {
     return new Promise(
@@ -33,7 +34,7 @@ function registrar_preinscripcion(
                     conexion.dbConn.query('insert into ' + constantes.ESQUEMA_BD + 
                             '.preinscripcion(nombre, primer_apellido, segundo_apellido, dni, fecha_nacimiento, nombre_padre, primer_apellido_padre, ' + 
                             'segundo_apellido_padre, dni_padre, correo_electronico, telefono, municipio, provincia, direccion, ' + 
-                            'numero, puerta, escalera, codigo_postal, instrumento, familia_instrumento) values(' + conexion.dbConn.escape(nombre) + ', ' + conexion.dbConn.escape(primer_apellido) + ', ' +
+                            'numero, puerta, escalera, codigo_postal, instrumento, familia_instrumento, sucursal) values(' + conexion.dbConn.escape(nombre) + ', ' + conexion.dbConn.escape(primer_apellido) + ', ' +
                             conexion.dbConn.escape(segundo_apellido) + ', ' + conexion.dbConn.escape(dni) + 
                             ', str_to_date(nullif(' + conexion.dbConn.escape(fecha_nacimiento) + ', \'\') , \'%Y-%m-%d\'), ' + conexion.dbConn.escape(nombre_padre) +
                             ', ' + conexion.dbConn.escape(primer_apellido_padre) + ', ' + conexion.dbConn.escape(segundo_apellido_padre) + ', ' +
@@ -41,7 +42,7 @@ function registrar_preinscripcion(
                             ', ' + conexion.dbConn.escape(municipio) + ', ' + conexion.dbConn.escape(provincia) + ', ' + conexion.dbConn.escape(direccion) + ', '  +
                             conexion.dbConn.escape(numero) + ', ' + conexion.dbConn.escape(puerta) + ', ' + conexion.dbConn.escape(escalera) + 
                             ', ' + conexion.dbConn.escape(codigo_postal) + ', ' + conexion.dbConn.escape(instrumento) + ', ' 
-                            + 'nullif(' +conexion.dbConn.escape(familia_instrumento) + ',\'\'))',
+                            + 'nullif(' +conexion.dbConn.escape(familia_instrumento) + ',\'\'), ' + conexion.dbConn.escape(sucursal) + ')',
                         (error, results, fields) =>
                         {
                             if(error) {console.log(error); conexion.dbConn.rollback(); reject()}

@@ -1,26 +1,36 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 import { ServicioPreinscripcionService } from 'src/app/servicios/servicio-preinscripcion.service';
 import Swal from 'sweetalert2';
 import { ReCaptchaV3Service } from 'ng-recaptcha';
 import { Instrumento } from '../logica/instrumento';
 
 @Component({
-  selector: 'app-formulario-preinscripcion',
-  templateUrl: './formulario-preinscripcion.component.html',
-  styleUrls: ['./formulario-preinscripcion.component.css']
+  selector: 'app-formulario-preinscripcion-pedania',
+  templateUrl: './formulario-preinscripcion-pedania.component.html',
+  styleUrls: ['./formulario-preinscripcion-pedania.component.css']
 })
 
 
 
-export class FormularioPreinscripcionComponent implements OnInit {
+export class FormularioPreinscripcionPedaniaComponent implements OnInit {
+ 
+  
+  @ViewChild('instancia_sustituir') instancia_sustituir!: ElementRef;
+
+  instrumentos_seleccionados:Instrumento [] = [];
+
+  constructor(private recaptchaV3Service: ReCaptchaV3Service, private servicioPreinscripcion: ServicioPreinscripcionService) { 
+     for(let i=0; i<3; i++)
+      {
+        this.instrumentos_seleccionados[i] = new Instrumento;
+      }
+  }
 
 
-  sucursal: string = "1";
+  @Input() sucursal: string = "";
 
   familia_instrumento: string = "1";
-
   instrumento: string ="";
-
 
   token: string ="";
 
@@ -46,47 +56,8 @@ export class FormularioPreinscripcionComponent implements OnInit {
   puerta: string = "";
   escalera: string = "";
 
-  instrumentos_seleccionados_tp:Instrumento [] = [];
-
-    
-  @ViewChild('instancia_sustituir') instancia_sustituir!: ElementRef;
-
-  constructor(private recaptchaV3Service: ReCaptchaV3Service, private servicioPreinscripcion: ServicioPreinscripcionService) { 
-    for(let i=0; i<3; i++)
-      {
-        this.instrumentos_seleccionados_tp[i] = new Instrumento;
-      }
-  }
-
-  datos_formulario_torre_pacheco = 
-  { };
-  datos_formulario_roldan =  {};
-  datos_formulario_balsicas = {};
-  datos_formulario_dolores = {};
-
 
   ngOnInit(): void {
-
-  }
-
-  realiza_registro =
-  {
-    next: (respuesta: any) =>
-    {  
-      Swal.fire({
-      icon: 'success',
-      title: 'Registro correcto',
-      text: 'Gracias por su solicitud, nos pondremos en contacto con usted lo antes posible'
-    })
-  },
-  error: (respuesta: any) =>
-  {
-    Swal.fire({
-      icon: 'error',
-      title: 'Oops...',
-      text: 'Se ha producido un error',
-    })
-  }
   }
 
   calculo_edad()
@@ -98,17 +69,7 @@ export class FormularioPreinscripcionComponent implements OnInit {
     return Math.trunc(resta / (1000*60*60*24*365))
   }
 
-  comprueba_edad()
-  {
-    return this.calculo_edad() > 7;
-  }
   
-  comprueba_edad_primero()
-  {
-    return this.calculo_edad() > 7 && this.calculo_edad() < 18;
-  }
-
-
   lanza_registro =
   {
     next: (respuesta: any) =>
@@ -191,14 +152,16 @@ export class FormularioPreinscripcionComponent implements OnInit {
     return true;
   }
 
-  registrar()
+  comprueba_edad()
   {
-    if(this.valida_formulario())
-    {
-      this.recaptchaV3Service.execute('importantAction')
-      .subscribe(this.lanza_registro);
-    }
+    return this.calculo_edad() > 7;
   }
+  
+  comprueba_edad_primero()
+  {
+    return this.calculo_edad() > 7 && this.calculo_edad() < 18;
+  }
+
 
   actualiza_instrumento(nueva_familia: string)
   {
@@ -210,6 +173,7 @@ export class FormularioPreinscripcionComponent implements OnInit {
     }
   }
 
+  
   actualiza_tipo_inscripcion(tipo_inscripcion: string)
   {
     this.tipo_inscripcion = tipo_inscripcion;
@@ -218,6 +182,36 @@ export class FormularioPreinscripcionComponent implements OnInit {
   actualiza_horario(horario: string)
   {
     this.horario_seleccionado = horario;
+  }
+
+  realiza_registro =
+  {
+    next: (respuesta: any) =>
+    {  
+      Swal.fire({
+      icon: 'success',
+      title: 'Registro correcto',
+      text: 'Gracias por su solicitud, nos pondremos en contacto con usted lo antes posible'
+    })
+  },
+  error: (respuesta: any) =>
+  {
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'Se ha producido un error',
+    })
+  }
+  }
+
+  
+  registrar()
+  {
+    if(this.valida_formulario())
+    {
+      this.recaptchaV3Service.execute('importantAction')
+      .subscribe(this.lanza_registro);
+    }
   }
 
   add_instrumento(num_instrumento: number)
@@ -232,8 +226,8 @@ export class FormularioPreinscripcionComponent implements OnInit {
           {
             if(results.isConfirmed)
               {
-                this.instrumentos_seleccionados_tp[num_instrumento].familia_instrumento = this.familia_instrumento;
-                this.instrumentos_seleccionados_tp[num_instrumento].instrumento = this.instrumento;
+                this.instrumentos_seleccionados[num_instrumento].familia_instrumento = this.familia_instrumento;
+                this.instrumentos_seleccionados[num_instrumento].instrumento = this.instrumento;
               }
           }
       )

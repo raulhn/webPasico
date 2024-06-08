@@ -1,0 +1,1 @@
+alter table pasico.preinscripcion add sucursal integer;
