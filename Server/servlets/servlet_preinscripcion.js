@@ -135,5 +135,21 @@ function obtener_preinscripciones(req, res)
     )
 }
 
+function obtener_preinscripciones_detalle(req, res)
+{
+    comun.comprobaciones_login(req, res,
+        async () =>
+        {
+            let nid_preinscripcion = req.params.nid_preinscripcion;
+
+            let resultado = await preinscripcion.obtener_preincripciones_detalle(nid_preinscripcion);
+
+            res.status(200).send({error: false, preinscripciones: resultado})
+        }
+
+    )
+}
+
 module.exports.obtener_preinscripciones = obtener_preinscripciones;
 module.exports.registrar_preinscripcion = registrar_preinscripcion;
+module.exports.obtener_preinscripciones_detalle = obtener_preinscripciones_detalle;

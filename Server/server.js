@@ -50,10 +50,11 @@ const PORT = 8444;*/
 
 /** Producción **/
 var url_web = 'https://ladelpasico.es';
+var url_web_gestor = 'https://pasico.ddns.net';
 const PORT = 8443;
 
-app.use(cors({origin: url_web, credentials: true})); // Se configura el control de peticiones permitidas para poder recibir peticiones del front-end
-                                                                     // credentials: true permite la comunicación de la sesión
+app.use(cors({origin: [url_web, url_web_gestor], credentials: true})); // Se configura el control de peticiones permitidas para poder recibir peticiones del front-end
+                                                                     // credentials: true permite la comunicaciÃ³n de la sesiÃ³n
 
 // Habilitar la subida de documentos
 app.use(fileUpload({
@@ -1181,7 +1182,8 @@ app.post('/actualizar_password', servlet_usuarios.actualizar_password);
    * Preinscripcion
    */
   app.post('/registrar_preinscripcion', servlet_preinscripcion.registrar_preinscripcion);
-  //app.get('/obtener_preinscripciones', servlet_preinscripcion.obtener_preinscripciones);
+  app.get('/obtener_preinscripciones', servlet_preinscripcion.obtener_preinscripciones);
+  app.get('/obtener_preinscripciones_detalle/:nid_preinscripcion', servlet_preinscripcion.obtener_preinscripciones_detalle)
 
   https.createServer({
     key: fs.readFileSync('apache.key'),

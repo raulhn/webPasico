@@ -11,8 +11,15 @@ export class ListadoPreinscripcionesComponent implements OnInit {
 
   lista_preinscripcion: any[] = [];
 
-  dtOptions: any = {}
+  lista_preinscripcion2: any[] = [];
+
+  dtOptions: any = {};
+  dtOptions_2: any = {};
+
   bCargadoPreinscripciones: boolean = false;
+  bCargadoPreinscripciones2: boolean = false;
+
+  preinscripcion_seleccionada: any;
 
   constructor(private preinscripcionService: PreinscripcionesService)
   {}
@@ -28,7 +35,58 @@ export class ListadoPreinscripcionesComponent implements OnInit {
     this.preinscripcionService.obtener_preinscripciones().subscribe(this.refrescar_personas);
   }
 
+  refrescar_personas2 =
+  {
+    next: (respuesta: any) =>
+    {
+      var datatable = $('#tabla_preinscripciones_2').DataTable();
+      datatable.destroy();
+      this.lista_preinscripcion2 = respuesta.preinscripciones;
+
+      this.dtOptions_2 =
+      {
+        language: DataTablesOptions.spanish_datatables,
+        data: this.lista_preinscripcion2,
+        dom: 'Bfrtip',
+        buttons: [{extend: 'excel', text: 'Generar Excel', className: 'btn btn-dark mb-3'}],
+        columns:
+        [
+          {title: 'Segundo Instrumento',
+            data: 'instrumento2'
+          },
+          {title: 'Tercer Instrumento',
+            data: 'instrumento3'
+          },
+          {title: 'Sucursal',
+           data: 'nombre_sucursal'
+          },
+          {title: 'Horario',
+            data: 'horario'
+          }],
+          rowCallback: (row: Node, data: any[] | Object, index: number) => {
+            $('td', row).off('click');
+            $('td', row).on('click', () => {
+              $('#tabla_preinscripciones_2 tr').removeClass('selected')
+              $(row).addClass('selected');
+            });
+
+            return row;
+            }
+        }
+        $('#tabla_preinscripciones_2').DataTable(this.dtOptions_2);
+        this.bCargadoPreinscripciones2 = true;
+
+      }
   
+
+  }
+
+  preinscripcion_marcada(data: any)
+  {
+    this.preinscripcion_seleccionada = data;
+    this.preinscripcionService.obtener_preinscripciones_detalle(this.preinscripcion_seleccionada.nid_preinscripcion).subscribe(this.refrescar_personas2);
+  }
+
   refrescar_personas = 
   {
     next: (respuesta: any) =>
@@ -89,13 +147,19 @@ export class ListadoPreinscripcionesComponent implements OnInit {
             $('td', row).on('click', () => {
               $('#tabla_preinscripciones tr').removeClass('selected')
               $(row).addClass('selected');
+              this.preinscripcion_marcada(data);
             });
+
             return row;
             }
         }
         $('#tabla_preinscripciones').DataTable(this.dtOptions);
         this.bCargadoPreinscripciones = true;
+
+
+        
       }
+  
       
   }
 }

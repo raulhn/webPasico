@@ -17,4 +17,10 @@ export class PreinscripcionesService {
     let API_URL = this.url + '/obtener_preinscripciones';
     return this.http.get(API_URL, {withCredentials: true});
   }
+
+  obtener_preinscripciones_detalle(nid_preinscripcion: string)
+  {
+    let API_URL = this.url + '/obtener_preinscripciones_detalle/' + nid_preinscripcion;
+    return this.http.get(API_URL, {withCredentials: true})
+  }
 }

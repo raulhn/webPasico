@@ -83,6 +83,26 @@ function obtener_preinscripciones()
     )
 }
 
+function obtener_preincripciones_detalle(nid_preinscripcion)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.query('select p.*, case p.sucursal ' +
+                   ' when 1 then \'Torre Pacheco\' when 2 then \'Roldán\' when 3 then \'Balsicas\' when 4 then \'Dolores de Pacheco\' else \'\' end as nombre_sucursal ' +
+                ' from ' + constantes.ESQUEMA_BD + '.preinscripcion p where nid_preinscripcion = ' +
+                    conexion.dbConn.escape(nid_preinscripcion),
+               (error, results, fields) =>
+                {
+                    if(error) {console.log(error); reject();}
+                    else {resolve(results)}
+                }
+            )
+        }
+    )
+}
+
 
 module.exports.obtener_preinscripciones = obtener_preinscripciones;
 module.exports.registrar_preinscripcion = registrar_preinscripcion;
+module.exports.obtener_preincripciones_detalle = obtener_preincripciones_detalle;
