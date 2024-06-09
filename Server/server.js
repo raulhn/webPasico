@@ -44,12 +44,13 @@ var url_web = 'https://80.240.127.138:8081';
 const PORT = 8444;*/
 
 /** Pre-Producción */
+/*
 var url_web = 'https://ladelpasico.es:2096';
-const PORT = 8444;
+const PORT = 8444;*/
 
 /** Producción **/
-//var url_web = 'https://ladelpasico.es';
-//const PORT = 8443;
+var url_web = 'https://ladelpasico.es';
+const PORT = 8443;
 
 app.use(cors({origin: url_web, credentials: true})); // Se configura el control de peticiones permitidas para poder recibir peticiones del front-end
                                                                      // credentials: true permite la comunicación de la sesión

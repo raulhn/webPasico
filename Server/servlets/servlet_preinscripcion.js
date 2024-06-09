@@ -58,10 +58,10 @@ function registrar_preinscripcion(req, res)
                     familia_instrumento, sucursal, curso, horario, tipo_inscripcion, instrumento2, familia_instrumento2, instrumento3, familia_instrumento3);
                
                 res.status(200).send({error: false, message: 'Preinscripcion realizada'})
-                 /*
+
                 await enviar_email(nombre, primer_apellido, segundo_apellido, fecha_nacimiento);
                 await enviar_email_respuesta(correo_electronico);
-                */
+                
             }
             else
             {
