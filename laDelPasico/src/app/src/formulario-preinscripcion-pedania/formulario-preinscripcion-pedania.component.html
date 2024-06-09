@@ -31,69 +31,24 @@
         <legend>Tipo de Preinscripción</legend>
 
         <div class="form-check">
-            <input class="form-check-input" type="radio" (change)="actualiza_tipo_inscripcion('1')"
-                name="tipoInscripcion" id="Nueva" checked="checked">
+            <input class="form-check-input" type="radio"
+            value = "1"
+            (change)="actualiza_horario('')" 
+            [(ngModel)] = "tipo_inscripcion" />
             <label class="form-check-label" for="Nueva">
                 Nueva Inscripción
             </label>
         </div>
 
         <div class="form-check">
-            <input class="form-check-input" type="radio" (change)="actualiza_tipo_inscripcion('2')"
-                name="tipoInscripcion" id="Renovacion">
+            <input class="form-check-input" type="radio"
+            value = "2"
+            (change)="actualiza_horario('')" 
+            [(ngModel)] = "tipo_inscripcion" />
             <label class="form-check-label" for="Renovacion">
                 Renovación (Matriculados en años anteriores)
             </label>
         </div>
-    </div>
-</div>
-
-<div class="card p-3 m-1" *ngIf="tipo_inscripcion == '1' && comprueba_edad_primero()">
-    <legend> Horario </legend>
-    <b>Curso: Primero</b>
-    <br>
-    <div class="form-check">
-        <input class="form-check-input" type="radio"
-            (change)="actualiza_horario('Lunes y Miércoles (18:00 - 19:00)')" name="Horario"
-            id="horario_primero_LX" checked="checked">
-        <label class="form-check-label" for="horario_primero_LX">
-            Lunes y Miércoles (18:00 - 19:00)
-        </label>
-    </div>
-
-    <div class="form-check">
-        <input class="form-check-input" type="radio"
-            (change)="actualiza_horario('Lunes y Miércoles (18:00 - 19:00)')" name="Horario"
-            id="horario_primero_MJ">
-        <label class="form-check-label" for="horario_primero_MJ">
-            Martes y Jueves (19:00 - 20:00)
-        </label>
-    </div>
-</div>
-
-<div class="card p-3 m-1" *ngIf="tipo_inscripcion == '1' && calculo_edad() == 7">
-    <legend> Horario </legend>
-    <div class="form-check">
-        <input class="form-check-input" type="radio" name="Horario" id="horario_preparatorio_MJ"
-            checked="checked">
-        <label class="form-check-label" for="horario_preparatorio_MJ">
-            <b>Curso: Preparatorio</b>
-            <br>
-            Martes y Jueves (19:00 - 20:00)
-        </label>
-    </div>
-</div>
-
-<div class="card p-3 m-1" *ngIf="tipo_inscripcion == '1' && calculo_edad() < 7">
-    <legend> Horario </legend>
-    <div class="form-check">
-        <input class="form-check-input" type="radio" name="Horario" id="horario_iniciacion_MJ"
-            checked="checked">
-        <label class="form-check-label" for="horario_iniciacion_MJ">
-            <b>Curso: Iniciación</b>
-            <br>
-            Viernes (17:30 - 20:00)
-        </label>
     </div>
 </div>
 
@@ -163,53 +118,6 @@
         </div>
     </div>
 
-    <!--
-    <div class="form-check">
-        <input class="form-check-input" type="radio" (change)="actualiza_instrumento('2')"
-            name="familiaInstrumentos" id="Viento Metal">
-        <label class="form-check-label" for="Viento Madera">
-            Viento Madera
-        </label>
-    </div>
-    <div class="form-check">
-        <input class="form-check-input" type="radio" (change)="actualiza_instrumento('3')"
-            name="familiaInstrumentos" id="Viento Metal">
-        <label class="form-check-label" for="Viento Percusión">
-            Percusión
-        </label>
-    </div>
-
-    <div class="form-check">
-        <input class="form-check-input" type="radio" (change)="actualiza_instrumento('1')"
-            name="familiaInstrumentos" id="Viento Metal" checked="checked">
-        <label class="form-check-label" for="Viento Metal">
-            Viento Metal
-        </label>
-    </div>
-
-    <div *ngIf="familia_instrumento == '1'">
-        <label>Elige instrumento</label>
-        <select class="form-select" [(ngModel)]="instrumento" aria-label="Default select example">
-            <option value="Trompeta">Trompeta</option>
-            <option value="Trompa">Trompa</option>
-            <option value="Trombón">Trombón</option>
-            <option value="Bombardino">Bombardino</option>
-            <option value="Tuba">Tuba</option>
-        </select>
-    </div>
-
-    <div *ngIf="familia_instrumento=='2'">
-
-        <label>Elige instrumento</label>
-        <select class="form-select" [(ngModel)]="instrumento" aria-label="Default select example">
-            <option value="Clarinete">Clarinete</option>
-            <option value="Saxofón">Saxofón</option>
-            <option value="Flauta">Flauta</option>
-            <option value="Oboe">Oboe</option>
-            <option value="Fagot">Fagot</option>
-        </select>
-    </div>
--->
 
 </div>
 
@@ -298,7 +206,6 @@
                 <option value="Trompa">Trompa</option>
                 <option value="Trombón">Trombón</option>
                 <option value="Bombardino">Bombardino</option>
-                <option value="Tuba">Tuba</option>
             </select>
         </div>
     
@@ -308,8 +215,6 @@
                 <option value="Clarinete">Clarinete</option>
                 <option value="Saxofón">Saxofón</option>
                 <option value="Flauta">Flauta</option>
-                <option value="Oboe">Oboe</option>
-                <option value="Fagot">Fagot</option>
             </select>
         </div>
     </div>

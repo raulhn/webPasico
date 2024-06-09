@@ -29,6 +29,8 @@ export class FormularioPreinscripcionPedaniaComponent implements OnInit {
 
   @Input() sucursal: string = "";
 
+  CURSO_PRIMERO: number = 1;
+
   familia_instrumento: string = "1";
   instrumento: string ="";
 
@@ -69,6 +71,14 @@ export class FormularioPreinscripcionPedaniaComponent implements OnInit {
     return Math.trunc(resta / (1000*60*60*24*365))
   }
 
+  obtener_curso()
+  {
+    if (this.tipo_inscripcion == "1" && this.calculo_edad() >= 7)
+      return this.CURSO_PRIMERO;
+    return 0; // Se tendrá que controlar
+  }
+  
+
   
   lanza_registro =
   {
@@ -87,7 +97,10 @@ export class FormularioPreinscripcionPedaniaComponent implements OnInit {
         fecha_nacimiento: this.fecha_nacimiento, dni: this.dni_alumno, nombre_padre: this.nombre_padre, primer_apellido_padre: this.primer_apellido_padre, 
         segundo_apellido_padre: this.segundo_apellido_padre, dni_padre: this.dni_padre, correo_electronico: this.correo_electronico, telefono: this.telefono,
         provincia: this.provincia, municipio: this.municipio, direccion: this.direccion, codigo_postal: this.codigo_postal, numero: this.numero, 
-        escalera: this.escalera, puerta: this.puerta, instrumento: this.instrumento, familia_instrumento: this.familia_instrumento, sucursal: this.sucursal};
+        escalera: this.escalera, puerta: this.puerta, instrumento: this.instrumento, familia_instrumento: this.familia_instrumento, sucursal: this.sucursal,  
+        curso: this.obtener_curso(), horario: this.horario_seleccionado, tipo_inscripcion: this.tipo_inscripcion,
+        instrumento2: this.instrumentos_seleccionados[1].instrumento, familia_instrumento2: this.instrumentos_seleccionados[1].familia_instrumento,
+        instrumento3: this.instrumentos_seleccionados[2].instrumento, familia_instrumento3: this.instrumentos_seleccionados[2].familia_instrumento};
 
         this.servicioPreinscripcion.registrar_preinscripcion(data).subscribe(this.realiza_registro);
       }
@@ -97,7 +110,9 @@ export class FormularioPreinscripcionPedaniaComponent implements OnInit {
         fecha_nacimiento: this.fecha_nacimiento, dni: this.dni_alumno, nombre_padre: this.nombre_padre, primer_apellido_padre: this.primer_apellido_padre, 
         segundo_apellido_padre: this.segundo_apellido_padre, dni_padre: this.dni_padre, correo_electronico: this.correo_electronico, telefono: this.telefono,
         provincia: this.provincia, municipio: this.municipio, direccion: this.direccion, codigo_postal: this.codigo_postal, numero: this.numero, 
-        escalera: this.escalera, puerta: this.puerta, instrumento: "", familia_instrumento: "", sucursal: this.sucursal};
+        escalera: this.escalera, puerta: this.puerta, instrumento: "", familia_instrumento: "", sucursal: this.sucursal, curso: this.obtener_curso(), 
+        horario: this.horario_seleccionado, tipo_inscripcion: this.tipo_inscripcion,
+        instrumento2: "", familia_instrumento2: "",  instrumento3: "", familia_instrumento3: ""};
         
         this.servicioPreinscripcion.registrar_preinscripcion(data).subscribe(this.realiza_registro);
       }

@@ -22,6 +22,16 @@ export class FormularioPreinscripcionTorrePachecoComponent implements OnInit {
       }
   }
 
+  CURSO_PRIMERO: number = 1;
+  CURSO_SEGUNDO: number = 2;
+  CURSO_TERCERO: number = 3;
+  CURSO_CUARTO: number = 4;
+  CURSO_QUINTO: number = 5;
+  CURSO_ADULTO: number = 6;
+  CURSO_INICIACION: number = 7;
+  CURSO_PREPARATORIO: number = 8;
+
+  curso_seleccionado: number = 1;
 
   @Input() sucursal: string = "";
 
@@ -65,7 +75,25 @@ export class FormularioPreinscripcionTorrePachecoComponent implements OnInit {
     return Math.trunc(resta / (1000*60*60*24*365))
   }
 
+
+  obtener_curso()
+  {
+    if (this.tipo_inscripcion == "1" && this.calculo_edad() > 7 && this.calculo_edad() < 18)
+      return this.CURSO_PRIMERO;
+    else if(this.tipo_inscripcion == "2"  && this.calculo_edad() > 7 && this.calculo_edad() < 18)
+      return this.curso_seleccionado;
+    else if(this.calculo_edad() > 18)
+      return this.CURSO_ADULTO;
+    else if(this.calculo_edad() == 7)
+      return this.CURSO_PREPARATORIO
+    else if(this.calculo_edad() < 7)
+      return this.CURSO_INICIACION;
+    return 0; // No se debería de dar
+  }
   
+
+
+
   lanza_registro =
   {
     next: (respuesta: any) =>
@@ -83,7 +111,10 @@ export class FormularioPreinscripcionTorrePachecoComponent implements OnInit {
         fecha_nacimiento: this.fecha_nacimiento, dni: this.dni_alumno, nombre_padre: this.nombre_padre, primer_apellido_padre: this.primer_apellido_padre, 
         segundo_apellido_padre: this.segundo_apellido_padre, dni_padre: this.dni_padre, correo_electronico: this.correo_electronico, telefono: this.telefono,
         provincia: this.provincia, municipio: this.municipio, direccion: this.direccion, codigo_postal: this.codigo_postal, numero: this.numero, 
-        escalera: this.escalera, puerta: this.puerta, instrumento: this.instrumento, familia_instrumento: this.familia_instrumento, sucursal: this.sucursal};
+        escalera: this.escalera, puerta: this.puerta, instrumento: this.instrumentos_seleccionados[0].instrumento, familia_instrumento: this.instrumentos_seleccionados[0].familia_instrumento
+        , sucursal: this.sucursal,  curso: this.obtener_curso(), horario: this.horario_seleccionado, tipo_inscripcion: this.tipo_inscripcion,
+        instrumento2: this.instrumentos_seleccionados[1].instrumento, familia_instrumento2: this.instrumentos_seleccionados[1].familia_instrumento,
+        instrumento3: this.instrumentos_seleccionados[2].instrumento, familia_instrumento3: this.instrumentos_seleccionados[2].familia_instrumento} ;
 
         this.servicioPreinscripcion.registrar_preinscripcion(data).subscribe(this.realiza_registro);
       }
@@ -93,7 +124,9 @@ export class FormularioPreinscripcionTorrePachecoComponent implements OnInit {
         fecha_nacimiento: this.fecha_nacimiento, dni: this.dni_alumno, nombre_padre: this.nombre_padre, primer_apellido_padre: this.primer_apellido_padre, 
         segundo_apellido_padre: this.segundo_apellido_padre, dni_padre: this.dni_padre, correo_electronico: this.correo_electronico, telefono: this.telefono,
         provincia: this.provincia, municipio: this.municipio, direccion: this.direccion, codigo_postal: this.codigo_postal, numero: this.numero, 
-        escalera: this.escalera, puerta: this.puerta, instrumento: "", familia_instrumento: "", sucursal: this.sucursal};
+        escalera: this.escalera, puerta: this.puerta, instrumento: "", familia_instrumento: "", sucursal: this.sucursal, curso: this.obtener_curso(), 
+        horario: this.horario_seleccionado, tipo_inscripcion: this.tipo_inscripcion,
+        instrumento2: "", familia_instrumento2: "",  instrumento3: "", familia_instrumento3: ""};
         
         this.servicioPreinscripcion.registrar_preinscripcion(data).subscribe(this.realiza_registro);
       }
@@ -170,10 +203,7 @@ export class FormularioPreinscripcionTorrePachecoComponent implements OnInit {
   }
 
   
-  actualiza_tipo_inscripcion(tipo_inscripcion: string)
-  {
-    this.tipo_inscripcion = tipo_inscripcion;
-  }
+
 
   actualiza_horario(horario: string)
   {

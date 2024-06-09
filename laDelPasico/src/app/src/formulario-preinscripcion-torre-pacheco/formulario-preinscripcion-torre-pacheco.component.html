@@ -23,7 +23,7 @@
 
         <div class="col-md-5 col-lg-2">
             <label>Fecha nacimiento*</label>
-            <input class="form-control" [(ngModel)]="fecha_nacimiento" type="date" required />
+            <input class="form-control" (change)="actualiza_horario('')" [(ngModel)]="fecha_nacimiento" type="date" required />
         </div>
     </div>
 
@@ -31,16 +31,20 @@
         <legend>Tipo de Preinscripción</legend>
 
         <div class="form-check">
-            <input class="form-check-input" type="radio" (change)="actualiza_tipo_inscripcion('1')"
-                name="tipoInscripcion" id="Nueva" checked="checked">
+            <input class="form-check-input" type="radio"
+            value = "1"
+            (change)="actualiza_horario('')" 
+            [(ngModel)] = "tipo_inscripcion" />
             <label class="form-check-label" for="Nueva">
                 Nueva Inscripción
             </label>
         </div>
 
         <div class="form-check">
-            <input class="form-check-input" type="radio" (change)="actualiza_tipo_inscripcion('2')"
-                name="tipoInscripcion" id="Renovacion">
+            <input class="form-check-input" type="radio"
+            value = "2"
+            (change)="actualiza_horario('')" 
+            [(ngModel)] = "tipo_inscripcion" />
             <label class="form-check-label" for="Renovacion">
                 Renovación (Matriculados en años anteriores)
             </label>
@@ -48,14 +52,19 @@
     </div>
 </div>
 
-<div class="card p-3 m-1" *ngIf="tipo_inscripcion == '1' && comprueba_edad_primero()">
+
+<!-- Horario Matricula Nueva -->
+<div class="card p-3 m-1" *ngIf="(tipo_inscripcion == '1' && comprueba_edad_primero()) || 
+                                 (tipo_inscripcion == '2' && comprueba_edad_primero() && curso_seleccionado == CURSO_PRIMERO)">
     <legend> Horario </legend>
     <b>Curso: Primero</b>
     <br>
     <div class="form-check">
         <input class="form-check-input" type="radio"
-            (change)="actualiza_horario('Lunes y Miércoles (18:00 - 19:00)')" name="Horario"
-            id="horario_primero_LX" checked="checked">
+            value="(Primero) Lunes y Miércoles (18:00 - 19:00)"
+            name="Horario"
+            [(ngModel)]="horario_seleccionado"
+            id="horario_primero_LX">
         <label class="form-check-label" for="horario_primero_LX">
             Lunes y Miércoles (18:00 - 19:00)
         </label>
@@ -63,7 +72,8 @@
 
     <div class="form-check">
         <input class="form-check-input" type="radio"
-            (change)="actualiza_horario('Lunes y Miércoles (18:00 - 19:00)')" name="Horario"
+            [(ngModel)]="horario_seleccionado"
+            value="(Primero) Martes y Jueves (19:00 - 20:00)" name="Horario"
             id="horario_primero_MJ">
         <label class="form-check-label" for="horario_primero_MJ">
             Martes y Jueves (19:00 - 20:00)
@@ -74,8 +84,9 @@
 <div class="card p-3 m-1" *ngIf="tipo_inscripcion == '1' && calculo_edad() == 7">
     <legend> Horario </legend>
     <div class="form-check">
-        <input class="form-check-input" type="radio" name="Horario" id="horario_preparatorio_MJ"
-            checked="checked">
+        <input class="form-check-input" type="radio" 
+            [(ngModel)]="horario_seleccionado"
+            value="(Preparatorio) Martes y Jueves (19:00 - 20:00)" name="Horario" id="horario_preparatorio_MJ">
         <label class="form-check-label" for="horario_preparatorio_MJ">
             <b>Curso: Preparatorio</b>
             <br>
@@ -87,13 +98,128 @@
 <div class="card p-3 m-1" *ngIf="tipo_inscripcion == '1' && calculo_edad() < 7">
     <legend> Horario </legend>
     <div class="form-check">
-        <input class="form-check-input" type="radio" name="Horario" id="horario_iniciacion_MJ"
-            checked="checked">
+        <input class="form-check-input" type="radio"
+        [(ngModel)]="horario_seleccionado"
+        value="(Iniciación) (17:30 - 20:00)" name="Horario" id="horario_iniciacion_MJ">
         <label class="form-check-label" for="horario_iniciacion_MJ">
             <b>Curso: Iniciación</b>
             <br>
             Viernes (17:30 - 20:00)
         </label>
+    </div>
+</div>
+
+<div class="card p-3 m-1" *ngIf="calculo_edad() >= 18">
+    <legend> Horario </legend>
+    <div class="form-check">
+        <input class="form-check-input" type="radio"  
+        [(ngModel)]="horario_seleccionado"
+        value="(Adultos) Martes (20:00 - 21:00)"  name="Horario" id="horario_adulto">
+        <label class="form-check-label" for="horario_adulto">
+            <b>Curso: Adultos</b>
+            <br>
+            Martes (20:00 - 21:00)
+        </label>
+    </div>
+</div>
+
+<!-- Horario Matricula Renovación -->
+<div class="card p-3 m-1" *ngIf="tipo_inscripcion == '2' && comprueba_edad_primero()">
+    <legend> Horario </legend>
+
+    <select class="form-select" [(ngModel)]="curso_seleccionado" (change)="actualiza_horario('')" aria-label="select_curso">
+        <option value="1">Primero</option>
+        <option value="2">Segundo</option>
+        <option value="3">Tercero</option>
+        <option value="4">Cuarto</option>
+        <option value="5">Quinto</option>
+    </select>
+
+    <div *ngIf="curso_seleccionado == CURSO_SEGUNDO">
+        <b>Curso: Segundo</b>
+        <br>
+        <div class="form-check">
+            <input class="form-check-input" type="radio"
+                value="(Segundo) Lunes y Miércoles (19:00 - 20:00)"
+                name="Horario"
+                [(ngModel)]="horario_seleccionado"
+                id="horario_segundo_LX">
+            <label class="form-check-label" for="horario_segundo_LX">
+                Lunes y Miércoles (19:00 - 20:00)
+            </label>
+        </div>
+
+        <div class="form-check">
+            <input class="form-check-input" type="radio"
+                [(ngModel)]="horario_seleccionado"
+                value="(Segundo) Martes y Jueves (18:00 - 19:00)" name="Horario"
+                id="horario_segundo_MJ">
+            <label class="form-check-label" for="horario_segundo_MJ">
+                Martes y Jueves (18:00 - 19:00)
+            </label>
+        </div>
+    </div>
+
+    <div *ngIf="curso_seleccionado == CURSO_TERCERO">
+        <b>Curso: Tercero</b>
+        <br>
+        <div class="form-check">
+            <input class="form-check-input" type="radio"
+                 [(ngModel)]="horario_seleccionado"
+                value="(Tercero) Lunes y Miércoles (17:00 - 18:00)" name="Horario"
+                id="horario_tercero_LX">
+            <label class="form-check-label" for="horario_tercero_LX">
+                Lunes y Miércoles (17:00 - 18:00)
+            </label>
+        </div>
+
+        <div class="form-check">
+            <input class="form-check-input" type="radio"
+                [(ngModel)]="horario_seleccionado"
+                id="horario_tercero_MJ"
+                value="(Tercero) Martes y Jueves (16:00 - 17:00)">
+            <label class="form-check-label" for="horario_tercero_MJ">
+                Martes y Jueves (16:00 - 17:00)
+            </label>
+        </div>
+    </div>
+
+    <div *ngIf="curso_seleccionado == CURSO_CUARTO">
+        <b>Curso: Cuarto</b>
+        <br>
+        <div class="form-check">
+            <input class="form-check-input" type="radio"
+                 [(ngModel)]="horario_seleccionado"
+                value="(Cuarto) Lunes y Miércoles (16:00 - 17:00)" name="Horario"
+                id="horario_cuarto_LX">
+            <label class="form-check-label" for="horario_cuarto_LX">
+                Lunes y Miércoles (16:00 - 17:00)
+            </label>
+        </div>
+
+        <div class="form-check">
+            <input class="form-check-input" type="radio"
+                [(ngModel)]="horario_seleccionado"
+                value="(Cuarto) Martes y Jueves (1700 - 18:00)"
+                id="horario_cuarto_MJ">
+            <label class="form-check-label" for="horario_cuarto_MJ">
+                Martes y Jueves (1700 - 18:00)
+            </label>
+        </div>
+    </div>
+
+    <div *ngIf="curso_seleccionado == CURSO_QUINTO">
+        <b>Curso: Quinto (Perfeccionamiento)</b>
+        <br>
+        <div class="form-check">
+            <input class="form-check-input" type="radio"
+                [(ngModel)]="horario_seleccionado"
+                value="(Quinto) Lunes y Miércoles (20:00 - 21:00)"
+                id="horario_quinto_LX">
+            <label class="form-check-label" for="horario_quinto_LX">
+                Lunes y Miércoles (20:00 - 21:00)
+            </label>
+        </div>
     </div>
 </div>
 
@@ -319,6 +445,7 @@
                 <option value="Bajo_Electrico"> Bajo Eléctrico </option>
                 <option value="Guitarra_Electrica"> Guitarra Eléctrrica </option>
                 <option value="Batería">Batería</option>
+                <option value="Cante_Moderno">Cante Moderno</option>
             </select>
         </div>
     </div>
