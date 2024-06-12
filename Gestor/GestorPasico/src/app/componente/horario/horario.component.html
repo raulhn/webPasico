@@ -26,12 +26,27 @@
                     <tr *ngFor="let hora_actual of horas">
                         <ng-container *ngFor="let dia_actual of dias">
                             <td *ngIf="obtener_valor(dia_actual, hora_actual) > 0" [attr.rowspan]="obtener_valor(dia_actual, hora_actual)" 
-                                [ngClass]="{'bg-light': obtener_valor(dia_actual, hora_actual) === 1}">
+                                [ngClass]="{'bg-light': obtener_valor(dia_actual, hora_actual) === 1, 'active': obtener_valor(dia_actual, hora_actual) > 1}">
                             <div *ngIf="dia_actual == 0"> {{(horas[hora_actual] / 4) + hora_minima}} </div>
                             <div *ngIf="obtener_valor(dia_actual, hora_actual) > 1 && dia_actual != 0"> 
-                                <button  style="float: right; color:rgb(23, 5, 126); border-color:rgb(23, 5, 126); background-color: white; border-style: solid; " 
-                                      type="button" class="btn" ><fa-icon [icon]="faXmark"></fa-icon></button>
-                                {{descripcion_clase(dia_actual, hora_actual)}} </div>
+                                <p> {{descripcion_clase(dia_actual, hora_actual)}} </p>
+                                <div class="hover align-middle">
+                                    <div class="container align-middle" style="margin: auto;  position: relative; top: 25%; left: 0;  right: 0; ">
+                                        <div class="row">
+                                            <div class="col">
+                                            <span>{{descripcion_clase(dia_actual, hora_actual)}} </span>
+                                            </div>
+                                        </div>
+                                    
+                                        <div class="row pt-3">
+                                            <div class="col">
+                                            <button  style=" color:rgb(23, 5, 126); border-color:rgb(23, 5, 126); background-color: white; border-style: solid; " 
+                                                type="button" class="btn" ><fa-icon [icon]="faXmark"></fa-icon></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
                             </td>
                         </ng-container>

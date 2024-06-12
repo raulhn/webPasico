@@ -105,6 +105,7 @@ transition: all 0.3s linear 0s;
 transform: translate(-50%, -50%) scale(1);
 visibility: visible;
 opacity: 1;
+vertical-align: middle;
 }
 .schedule-table table tbody td.day:hover {
 background: #86d4f5;
