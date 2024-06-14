@@ -35,7 +35,7 @@ export class FormularioPreinscripcionTorrePachecoComponent implements OnInit {
 
   @Input() sucursal: string = "";
 
-  familia_instrumento: string = "1";
+  familia_instrumento: string = "1"; 
   instrumento: string ="";
 
   token: string ="";
@@ -70,9 +70,10 @@ export class FormularioPreinscripcionTorrePachecoComponent implements OnInit {
   {
     let date_nacimiento = new Date(this.fecha_nacimiento) 
     var fecha_actual = new Date();
-    let resta =  fecha_actual.getTime() - date_nacimiento.getTime() 
+    let resta =  fecha_actual.getFullYear() - date_nacimiento.getFullYear() 
 
-    return Math.trunc(resta / (1000*60*60*24*365))
+//    return Math.trunc(resta / (1000*60*60*24*365))
+    return resta;
   }
 
 
@@ -104,6 +105,7 @@ export class FormularioPreinscripcionTorrePachecoComponent implements OnInit {
       {
         this.instrumento = 'Percusión'
       }
+
 
       if(this.comprueba_edad())
       {
@@ -178,6 +180,12 @@ export class FormularioPreinscripcionTorrePachecoComponent implements OnInit {
       this.lanza_error("Es necesario introducir un apellido para el alumno")
       return false;
     }
+    else if(this.calculo_edad() < 3)
+    {
+      this.lanza_error("El alumno tiene que tener al menos 3 años para poder matricularse");
+      return false;
+    }
+
     return true;
   }
 

@@ -25,6 +25,18 @@
             <label>Fecha nacimiento*</label>
             <input class="form-control" [(ngModel)]="fecha_nacimiento" type="date" required />
         </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-lg-2 col-5">
+            <label>Teléfono*</label>
+            <input class="form-control" [(ngModel)]="telefono" type="text" required />
+        </div>
+        <div class="col-lg-8 col-12">
+            <label>Correo electrónico*</label>
+            <input class="form-control" [(ngModel)]="correo_electronico" type="text" required />
+        </div>
     </div>
 
     <div class="row">
@@ -53,7 +65,7 @@
 </div>
 
 
-<div class="card p-3 m-1">
+<div class="card p-3 m-1" *ngIf="calculo_edad() < 18">
     <legend>Padre / Madre / Tutor</legend>
     <div class="row">
         <div class="col-lg-4 col-12">
@@ -76,14 +88,6 @@
             <input class="form-control" [(ngModel)]="dni_padre" type="text" />
         </div>
 
-        <div class="col-lg-2 col-5">
-            <label>Teléfono*</label>
-            <input class="form-control" [(ngModel)]="telefono" type="text" required />
-        </div>
-        <div class="col-lg-8 col-12">
-            <label>Correo electrónico*</label>
-            <input class="form-control" [(ngModel)]="correo_electronico" type="text" required />
-        </div>
 
     </div>
 </div>

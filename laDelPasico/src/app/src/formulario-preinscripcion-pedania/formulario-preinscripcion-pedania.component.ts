@@ -164,6 +164,13 @@ export class FormularioPreinscripcionPedaniaComponent implements OnInit {
       this.lanza_error("Es necesario introducir un apellido para el alumno")
       return false;
     }
+
+    else if(this.calculo_edad() < 7)
+    {
+      this.lanza_error("El alumno tiene que tener al menos 7 años para poder matricularse");
+      return false;
+    }
+
     return true;
   }
 
