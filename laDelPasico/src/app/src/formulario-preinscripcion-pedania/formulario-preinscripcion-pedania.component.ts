@@ -171,6 +171,25 @@ export class FormularioPreinscripcionPedaniaComponent implements OnInit {
       return false;
     }
 
+    if (this.calculo_edad() < 18)
+    {
+      if(this.nombre_padre == "")
+      {
+        this.lanza_error("Es necesario introducir un nombre para el Padre / Madre / Tutor")
+        return false;
+      }
+      else if(this.primer_apellido_padre == "")
+      {
+        this.lanza_error("Es necesario introducir un apellido para el Padre / Madre / Tutor")
+        return false;
+      }
+      else if(this.dni_padre == "")
+      {
+        this.lanza_error("Es necesario introducir un DNI para el Padre / Madre / Tutor")
+        return false;
+      }
+    }
+    
     return true;
   }
 

@@ -47,6 +47,9 @@ import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module } from 'ng-recaptcha';
 import { environment } from 'src/environments/environment';
 import { FormularioPreinscripcionPedaniaComponent } from './src/formulario-preinscripcion-pedania/formulario-preinscripcion-pedania.component';
 import { FormularioPreinscripcionTorrePachecoComponent } from './src/formulario-preinscripcion-torre-pacheco/formulario-preinscripcion-torre-pacheco.component';
+import { ListadoPreinscripcionesComponent } from './src/listado-preinscripciones/listado-preinscripciones.component';
+
+import { DataTablesModule } from 'angular-datatables';
 
 @NgModule({
   declarations: [
@@ -79,13 +82,15 @@ import { FormularioPreinscripcionTorrePachecoComponent } from './src/formulario-
     ComponenteBlogReducidoComponent,
     FormularioPreinscripcionComponent,
     FormularioPreinscripcionPedaniaComponent,
-    FormularioPreinscripcionTorrePachecoComponent
+    FormularioPreinscripcionTorrePachecoComponent,
+    ListadoPreinscripcionesComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
+    DataTablesModule,
     FontAwesomeModule,
     AngularEditorModule,
     CarouselModule,

@@ -127,7 +127,7 @@
         <label class="form-check-label" for="horario_iniciacion_MJ">
             <b>Curso: Iniciación</b>
             <br>
-            Viernes (17:30 - 20:00)
+            Viernes (17:30 - 19:00)
         </label>
     </div>
 </div>
@@ -139,13 +139,13 @@
     <legend> Horario (Lenguaje Musical) </legend>
 
     <select class="form-select" [(ngModel)]="curso_seleccionado" (change)="actualiza_horario('')" aria-label="select_curso">
+        <option value="{{CURSO_INICIACION}}">Iniciación</option>
+        <option value="{{CURSO_PREPARATORIO}}">Preparatorio</option>
         <option value="{{CURSO_PRIMERO}}">Primero</option>
         <option value="{{CURSO_SEGUNDO}}">Segundo</option>
         <option value="{{CURSO_TERCERO}}">Tercero</option>
         <option value="{{CURSO_CUARTO}}">Cuarto</option>
         <option value="{{CURSO_QUINTO}}">Quinto</option>
-        <option value="{{CURSO_INICIACION}}">Inicación</option>
-        <option value="{{CURSO_PREPARATORIO}}">Preparatorio</option>
         <option value="{{CURSO_ADULTO}}">Adultos</option>
     </select>
 
@@ -291,22 +291,22 @@
     <legend>Padre / Madre / Tutor</legend>
     <div class="row">
         <div class="col-lg-4 col-12">
-            <label>Nombre</label>
+            <label>Nombre*</label>
             <input class="form-control" [(ngModel)]="nombre_padre" type="text" />
         </div>
         <div class="col-lg-4 col-12">
-            <label>Primer apellido</label>
+            <label>Primer apellido*</label>
             <input class="form-control" [(ngModel)]="primer_apellido_padre" type="text" />
         </div>
         <div class="col-lg-4 col-12">
-            <label>Segundo apellido</label>
+            <label>Segundo apellido*</label>
             <input class="form-control" [(ngModel)]="segundo_apellido_padre" type="text" />
         </div>
     </div>
 
     <div class="row">
         <div class="col-lg-2 col-5">
-            <label>DNI</label>
+            <label>DNI*</label>
             <input class="form-control" [(ngModel)]="dni_padre" type="text" />
         </div>
 
@@ -315,7 +315,7 @@
     </div>
 </div>
 
-<div [ngClass]="{'oculto': calculo_edad() < 7}" class="card p-3 m-1">
+<div [ngClass]="{'oculto': !(calculo_edad() >= 7)}" class="card p-3 m-1">
     <legend>Instrumento / Especialidad</legend>
    
     <div class="row">
@@ -435,6 +435,23 @@
                 Cuerda
             </label>
         </div>
+
+        <div class="form-check">
+            <input class="form-check-input" type="radio" (change)="actualiza_instrumento('7')"
+                name="familiaInstrumentos" id="piano" checked>
+            <label class="form-check-label" for="Piano">
+                Piano
+            </label>
+        </div>
+
+        <div class="form-check">
+            <input class="form-check-input" type="radio" (change)="actualiza_instrumento('8')"
+                name="familiaInstrumentos" id="Guitarra" checked>
+            <label class="form-check-label" for="Guitarra">
+                Guitarra
+            </label>
+        </div>
+
         <div class="form-check">
             <input class="form-check-input" type="radio" (change)="actualiza_instrumento('5')"
                 name="familiaInstrumentos" id="Musica Flamenca">
@@ -442,6 +459,8 @@
                 Música Flamenca
             </label>
         </div>
+
+
         <div class="form-check">
             <input class="form-check-input" type="radio" (change)="actualiza_instrumento('6')"
                 name="familiaInstrumentos" id="Musica Moderna">
@@ -504,10 +523,10 @@
             
             <div *ngIf="calculo_edad() >= 18">
                 <select class="form-select" [(ngModel)]="instrumento" aria-label="Default select example">
-                    <option value="Bajo_Electrico"> Bajo Eléctrico </option>
-                    <option value="Guitarra_Electrica"> Guitarra Eléctrrica </option>
+                    <option value="Bajo Electrico"> Bajo Eléctrico </option>
+                    <option value="Guitarra Electrica"> Guitarra Eléctrrica </option>
                     <option value="Batería">Batería</option>
-                    <option value="Cante_Moderno">Canto  Moderno</option>
+                    <option value="Canto Moderno">Canto  Moderno</option>
                     <option value="Improvisacion">Jazz / Improvisación</option>
                     <option value="Coro Adultos"> Coro Adultos</option> 
                 </select>
@@ -515,10 +534,10 @@
 
             <div *ngIf="calculo_edad() < 18">
                 <select class="form-select" [(ngModel)]="instrumento" aria-label="Default select example">
-                    <option value="Bajo_Electrico"> Bajo Eléctrico </option>
-                    <option value="Guitarra_Electrica"> Guitarra Eléctrrica </option>
+                    <option value="Bajo Electrico"> Bajo Eléctrico </option>
+                    <option value="Guitarra Electrica"> Guitarra Eléctrrica </option>
                     <option value="Batería">Batería</option>
-                    <option value="Cante_Moderno">Canto  Moderno</option>
+                    <option value="Canto Moderno">Canto  Moderno</option>
                     <option value="Improvisacion">Jazz / Improvisación</option>
                     <option value="Coro">Coro</option>
                 </select>

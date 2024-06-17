@@ -106,6 +106,15 @@ export class FormularioPreinscripcionTorrePachecoComponent implements OnInit {
         this.instrumento = 'Percusión'
       }
 
+      if (this.familia_instrumento == "7")
+      {
+        this.instrumento = 'Piano'
+      }
+
+      if (this.familia_instrumento == "8")
+      {
+        this.instrumento = 'Guitarra'
+      }
 
       if(this.comprueba_edad())
       {
@@ -186,6 +195,25 @@ export class FormularioPreinscripcionTorrePachecoComponent implements OnInit {
       return false;
     }
 
+    if (this.calculo_edad() < 18)
+    {
+      if(this.nombre_padre == "")
+      {
+        this.lanza_error("Es necesario introducir un nombre para el Padre / Madre / Tutor")
+        return false;
+      }
+      else if(this.primer_apellido_padre == "")
+      {
+        this.lanza_error("Es necesario introducir un apellido para el Padre / Madre / Tutor")
+        return false;
+      }
+      else if(this.dni_padre == "")
+      {
+        this.lanza_error("Es necesario introducir un DNI para el Padre / Madre / Tutor")
+        return false;
+      }
+    }
+
     return true;
   }
 
@@ -207,6 +235,16 @@ export class FormularioPreinscripcionTorrePachecoComponent implements OnInit {
     if(this.familia_instrumento == "3")
     {
       this.instrumento = "Percusión";
+    }
+
+    if (this.familia_instrumento == "7")
+    {
+      this.instrumento = 'Piano'
+    }
+
+    if (this.familia_instrumento == "8")
+    {
+      this.instrumento = 'Guitarra'
     }
   }
 
