@@ -33,7 +33,7 @@ import { PieComponent } from './src/pie/pie.component';
 import { ComponenteGaleriaComponent } from './src/componente-galeria/componente-galeria.component';
 import { EditarComponenteGaleriaComponent } from './src/editar_componente/editar-componente-galeria/editar-componente-galeria.component';
 import { CarouselModule } from 'ngx-owl-carousel-o';
-
+import { NgxGalleryModule } from '@kolkov/ngx-gallery';
 import { NgxGoogleAnalyticsModule, NgxGoogleAnalyticsRouterModule } from 'ngx-google-analytics';
 import { EditarComponentePaginasComponent } from './src/editar_componente/editar-componente-paginas/editar-componente-paginas.component';
 import { ComponentePaginasComponent } from './src/componente-paginas/componente-paginas.component';
@@ -47,9 +47,6 @@ import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module } from 'ng-recaptcha';
 import { environment } from 'src/environments/environment';
 import { FormularioPreinscripcionPedaniaComponent } from './src/formulario-preinscripcion-pedania/formulario-preinscripcion-pedania.component';
 import { FormularioPreinscripcionTorrePachecoComponent } from './src/formulario-preinscripcion-torre-pacheco/formulario-preinscripcion-torre-pacheco.component';
-import { ListadoPreinscripcionesComponent } from './src/listado-preinscripciones/listado-preinscripciones.component';
-
-import { DataTablesModule } from 'angular-datatables';
 
 @NgModule({
   declarations: [
@@ -82,17 +79,18 @@ import { DataTablesModule } from 'angular-datatables';
     ComponenteBlogReducidoComponent,
     FormularioPreinscripcionComponent,
     FormularioPreinscripcionPedaniaComponent,
-    FormularioPreinscripcionTorrePachecoComponent,
-    ListadoPreinscripcionesComponent
+    FormularioPreinscripcionTorrePachecoComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    DataTablesModule,
     FontAwesomeModule,
+    AngularEditorModule,
     CarouselModule,
+    QuillModule.forRoot(),
+    NgxGalleryModule,
     NgxGoogleAnalyticsModule.forRoot('G-WCP2Y4KYHT'),
     NgxGoogleAnalyticsRouterModule,
     RecaptchaV3Module
