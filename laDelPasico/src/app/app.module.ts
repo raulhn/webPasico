@@ -33,7 +33,7 @@ import { PieComponent } from './src/pie/pie.component';
 import { ComponenteGaleriaComponent } from './src/componente-galeria/componente-galeria.component';
 import { EditarComponenteGaleriaComponent } from './src/editar_componente/editar-componente-galeria/editar-componente-galeria.component';
 import { CarouselModule } from 'ngx-owl-carousel-o';
-import { NgxGalleryModule } from '@kolkov/ngx-gallery';
+
 import { NgxGoogleAnalyticsModule, NgxGoogleAnalyticsRouterModule } from 'ngx-google-analytics';
 import { EditarComponentePaginasComponent } from './src/editar_componente/editar-componente-paginas/editar-componente-paginas.component';
 import { ComponentePaginasComponent } from './src/componente-paginas/componente-paginas.component';
@@ -92,10 +92,7 @@ import { DataTablesModule } from 'angular-datatables';
     FormsModule,
     DataTablesModule,
     FontAwesomeModule,
-    AngularEditorModule,
     CarouselModule,
-    QuillModule.forRoot(),
-    NgxGalleryModule,
     NgxGoogleAnalyticsModule.forRoot('G-WCP2Y4KYHT'),
     NgxGoogleAnalyticsRouterModule,
     RecaptchaV3Module
