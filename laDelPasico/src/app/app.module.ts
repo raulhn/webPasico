@@ -26,6 +26,7 @@ import { EditarCompomenteComponentesComponent } from './src/editar_componente/ed
 import { NuevoComponenteComponentesComponent } from './src/editar_componente/nuevo-componente-componentes/nuevo-componente-componentes.component';
 import { ComponenteComponenteComponent } from './src/componente-componente/componente-componente.component';
 
+import { DataTablesModule } from 'angular-datatables';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { ComponenteVideoComponent } from './src/componente-video/componente-video.component';
 import { EditarComponenteVideoComponent } from './src/editar_componente/editar-componente-video/editar-componente-video.component';
@@ -47,6 +48,7 @@ import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module } from 'ng-recaptcha';
 import { environment } from 'src/environments/environment';
 import { FormularioPreinscripcionPedaniaComponent } from './src/formulario-preinscripcion-pedania/formulario-preinscripcion-pedania.component';
 import { FormularioPreinscripcionTorrePachecoComponent } from './src/formulario-preinscripcion-torre-pacheco/formulario-preinscripcion-torre-pacheco.component';
+import { ListadoPreinscripcionesComponent } from './src/listado-preinscripciones/listado-preinscripciones.component';
 
 @NgModule({
   declarations: [
@@ -79,7 +81,8 @@ import { FormularioPreinscripcionTorrePachecoComponent } from './src/formulario-
     ComponenteBlogReducidoComponent,
     FormularioPreinscripcionComponent,
     FormularioPreinscripcionPedaniaComponent,
-    FormularioPreinscripcionTorrePachecoComponent
+    FormularioPreinscripcionTorrePachecoComponent,
+    ListadoPreinscripcionesComponent
   ],
   imports: [
     BrowserModule,
@@ -93,7 +96,8 @@ import { FormularioPreinscripcionTorrePachecoComponent } from './src/formulario-
     NgxGalleryModule,
     NgxGoogleAnalyticsModule.forRoot('G-WCP2Y4KYHT'),
     NgxGoogleAnalyticsRouterModule,
-    RecaptchaV3Module
+    RecaptchaV3Module,
+    DataTablesModule
   ],
   providers: [Usuario,
   {

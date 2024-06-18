@@ -175,17 +175,17 @@ export class FormularioPreinscripcionPedaniaComponent implements OnInit {
     {
       if(this.nombre_padre == "")
       {
-        this.lanza_error("Es necesario introducir un nombre para el Padre / Madre / Tutor")
+        this.lanza_error("Es necesario instroducir un nombre para el Padre / Madre / Tutor");
         return false;
       }
       else if(this.primer_apellido_padre == "")
       {
-        this.lanza_error("Es necesario introducir un apellido para el Padre / Madre / Tutor")
+        this.lanza_error("Es necesario instroducir el primer apellido para el Padre / Madre / Tutor");
         return false;
-      }
+      }  
       else if(this.dni_padre == "")
       {
-        this.lanza_error("Es necesario introducir un DNI para el Padre / Madre / Tutor")
+        this.lanza_error("Es necesario introducir el DNI para el Padre / Madre / Tutor");
         return false;
       }
     }

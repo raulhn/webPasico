@@ -1,0 +1,11 @@
+
+<legend>Preinscripciones</legend>
+<div class="container pt-4">
+<div *ngIf="bCargadoPreinscripciones">
+<table datatable [dtOptions]="dtOptions" class="row-border hover" id="tabla_preinscripciones"></table>
+    <div *ngIf="bCargadoPreinscripciones2">
+        <table datatable [dtOptions]="dtOptions_3" class="row-border hover" id="tabla_preinscripciones_3"></table>
+        <table datatable [dtOptions]="dtOptions_2" class="row-border hover" id="tabla_preinscripciones_2"></table>
+    </div>
+</div>
+</div>
