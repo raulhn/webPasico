@@ -350,7 +350,7 @@
     </div>
 </div>
 
-<div [ngClass]="{'oculto': calculo_edad() < 7}" class="card p-3 m-1">
+<div [ngClass]="{'oculto': !(calculo_edad() >= 7)}" class="card p-3 m-1">
     <legend>Instrumento / Especialidad</legend>
    
     <div class="row">
