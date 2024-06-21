@@ -73,7 +73,9 @@ function obtener_preinscripciones()
     return new Promise(
         (resolve, reject) =>
         {
-            conexion.dbConn.query('select * from ' + constantes.ESQUEMA_BD + '.preinscripcion',
+            conexion.dbConn.query('select p.*, case p.sucursal ' +
+                   ' when 1 then \'Torre Pacheco\' when 2 then \'Roldán\' when 3 then \'Balsicas\' when 4 then \'Dolores de Pacheco\' else \'\' end as nombre_sucursal  from ' 
+                   + constantes.ESQUEMA_BD + '.preinscripcion p where fecha_solicitud > now() - interval 3 month',
                 (error, results, fields) =>
                 {
                     if(error) {console.log(error); reject();}

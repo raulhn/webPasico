@@ -49,6 +49,7 @@ import { environment } from 'src/environments/environment';
 import { FormularioPreinscripcionPedaniaComponent } from './src/formulario-preinscripcion-pedania/formulario-preinscripcion-pedania.component';
 import { FormularioPreinscripcionTorrePachecoComponent } from './src/formulario-preinscripcion-torre-pacheco/formulario-preinscripcion-torre-pacheco.component';
 import { ListadoPreinscripcionesComponent } from './src/listado-preinscripciones/listado-preinscripciones.component';
+import { ListadoPreinscripcionesCompletoComponent } from './src/listado-preinscripciones-completo/listado-preinscripciones-completo.component';
 
 @NgModule({
   declarations: [
@@ -82,7 +83,8 @@ import { ListadoPreinscripcionesComponent } from './src/listado-preinscripciones
     FormularioPreinscripcionComponent,
     FormularioPreinscripcionPedaniaComponent,
     FormularioPreinscripcionTorrePachecoComponent,
-    ListadoPreinscripcionesComponent
+    ListadoPreinscripcionesComponent,
+    ListadoPreinscripcionesCompletoComponent
   ],
   imports: [
     BrowserModule,

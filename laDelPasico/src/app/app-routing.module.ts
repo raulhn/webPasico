@@ -6,6 +6,7 @@ import { FormularioLoginComponent } from './src/login/formulario-login/formulari
 import { PaginaComponent } from './src/pagina/pagina.component';
 import { FormularioPreinscripcionComponent } from './src/formulario-preinscripcion/formulario-preinscripcion.component';
 import { ListadoPreinscripcionesComponent } from './src/listado-preinscripciones/listado-preinscripciones.component';
+import { ListadoPreinscripcionesCompletoComponent } from './src/listado-preinscripciones-completo/listado-preinscripciones-completo.component';
 
 
 const routes: Routes = [
@@ -28,6 +29,10 @@ const routes: Routes = [
   {
     path: 'info_preinscripcion',
     component: ListadoPreinscripcionesComponent
+  },
+  {
+    path: 'info_preinscripcion_completa',
+    component: ListadoPreinscripcionesCompletoComponent
   }
 
 ];

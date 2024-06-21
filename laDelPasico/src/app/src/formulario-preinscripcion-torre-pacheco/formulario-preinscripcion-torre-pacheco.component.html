@@ -44,7 +44,7 @@
         <legend>Tipo de Preinscripción</legend>
 
         <div class="form-check">
-            <input class="form-check-input" type="radio"
+            <input class="form-check-input" type="radio" id="Nueva"
             value = "1"
             (change)="actualiza_horario('')" 
             [(ngModel)] = "tipo_inscripcion" />
@@ -54,7 +54,7 @@
         </div>
 
         <div class="form-check">
-            <input class="form-check-input" type="radio"
+            <input class="form-check-input" type="radio" id="Renovacion"
             value = "2"
             (change)="actualiza_horario('')" 
             [(ngModel)] = "tipo_inscripcion" />
@@ -105,8 +105,8 @@
     <br>
     <div class="form-check">
         <input class="form-check-input" type="radio"
-            [(ngModel)]="horario_seleccionado"
-            value="(Quinto) Lunes y Miércoles (20:00 - 21:00)"
+            [(ngModel)]="horario_seleccionado" name="Horario"
+            value="(Preparatorio)  Miércoles (18:00 - 19:30)"
             id="horario_preparatorio_X">
         <label class="form-check-label" for="horario_preparatorio_X">
             Miércoles (18:00 - 19:30)
@@ -115,8 +115,8 @@
 
     <div class="form-check">
         <input class="form-check-input" type="radio"
-            [(ngModel)]="horario_seleccionado"
-            value="(Quinto) Lunes y Miércoles (20:00 - 21:00)"
+            [(ngModel)]="horario_seleccionado" name="Horario"
+            value="(Preparatorio) Jueves (18:00 - 19:30)"
             id="horario_preparatorio_M">
         <label class="form-check-label" for="horario_preparatorio_M">
             Jueves (18:00 - 19:30)
@@ -243,7 +243,7 @@
             <input class="form-check-input" type="radio"
                 [(ngModel)]="horario_seleccionado"
                 id="horario_tercero_MJ"
-                value="(Tercero) Martes y Jueves (16:00 - 17:00)">
+                value="(Tercero) Martes y Jueves (16:00 - 17:00)" name="Horario">
             <label class="form-check-label" for="horario_tercero_MJ">
                 Martes y Jueves (16:00 - 17:00)
             </label>
@@ -266,7 +266,7 @@
         <div class="form-check">
             <input class="form-check-input" type="radio"
                 [(ngModel)]="horario_seleccionado"
-                value="(Cuarto) Martes y Jueves (1700 - 18:00)"
+                value="(Cuarto) Martes y Jueves (1700 - 18:00)" name="Horario"
                 id="horario_cuarto_MJ">
             <label class="form-check-label" for="horario_cuarto_MJ">
                 Martes y Jueves (1700 - 18:00)
@@ -280,7 +280,7 @@
         <div class="form-check">
             <input class="form-check-input" type="radio"
                 [(ngModel)]="horario_seleccionado"
-                value="(Quinto) Lunes y Miércoles (20:00 - 21:00)"
+                value="(Quinto) Lunes y Miércoles (20:00 - 21:00)" name="Horario"
                 id="horario_quinto_LX">
             <label class="form-check-label" for="horario_quinto_LX">
                 Martes y Jueves (20:00 - 21:00)
@@ -294,7 +294,7 @@
         <div class="form-check">
             <input class="form-check-input" type="radio"
                 [(ngModel)]="horario_seleccionado"
-                value="(Quinto) Lunes y Miércoles (20:00 - 21:00)"
+                value="(Preparatorio) Miercoles (18:00 - 19:30)" name="Horario"
                 id="horario_preparatorio_X">
             <label class="form-check-label" for="horario_preparatorio_X">
                 Miércoles (18:00 - 19:30)
@@ -304,7 +304,7 @@
         <div class="form-check">
             <input class="form-check-input" type="radio"
                 [(ngModel)]="horario_seleccionado"
-                value="(Quinto) Lunes y Miércoles (20:00 - 21:00)"
+                value="(Preparatorio) Jueves (18:00 - 19:30)" name="Horario"
                 id="horario_preparatorio_M">
             <label class="form-check-label" for="horario_preparatorio_M">
                 Jueves (18:00 - 19:30)
