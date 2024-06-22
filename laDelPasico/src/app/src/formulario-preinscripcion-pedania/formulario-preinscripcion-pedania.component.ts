@@ -91,7 +91,7 @@ export class FormularioPreinscripcionPedaniaComponent implements OnInit {
         this.instrumento = 'Percusión'
       }
 
-      if(this.comprueba_edad())
+      if(this.calculo_edad() >= 7)
       {
         let data = {token: this.token, nombre: this.nombre_alumno, primer_apellido: this.primer_apellido_alumno, segundo_apellido: this.segundo_apellido_alumno,
         fecha_nacimiento: this.fecha_nacimiento, dni: this.dni_alumno, nombre_padre: this.nombre_padre, primer_apellido_padre: this.primer_apellido_padre, 
@@ -193,10 +193,7 @@ export class FormularioPreinscripcionPedaniaComponent implements OnInit {
     return true;
   }
 
-  comprueba_edad()
-  {
-    return this.calculo_edad() > 7;
-  }
+
   
   comprueba_edad_primero()
   {

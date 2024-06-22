@@ -10,7 +10,7 @@
             <input class="form-control" [(ngModel)]="primer_apellido_alumno" type="text" />
         </div>
         <div class="col-md-12 col-lg-4">
-            <label>Segundo apellido</label>
+            <label>Segundo apellido*</label>
             <input class="form-control" [(ngModel)]="segundo_apellido_alumno" type="text" />
         </div>
     </div>
@@ -92,7 +92,7 @@
     </div>
 </div>
 
-<div [ngClass]="{'oculto': !comprueba_edad()}" class="card p-3 m-1">
+<div [ngClass]="{'oculto':  !(calculo_edad() >= 7)}" class="card p-3 m-1">
     <legend>Instrumento</legend>
    
     <div class="row">

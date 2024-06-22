@@ -1,16 +1,8 @@
-<div class="container-fluid pb-1 pt-4">
-  <div class="row">
-    <div class="col-12">
-      <a href="./">
-        <img src="./assets/img/Logo.png" style="max-width: 100%;width:auto"/> 
-      </a>
-    </div>
 
-
-  </div>
-</div>
 <nav *ngIf="bCargado | async"  class="navbar navbar-expand-lg navbar-light bg-light" role="navigation">
-  <div class="container-fluid">
+  <div class="container">
+    <a class="navbar-brand" href="./"><img style="max-height:100px" src="/assets/img/logobandagris2.jpg"></a>
+    
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -75,17 +67,9 @@
           <button  style="color:rgb(23, 5, 126); border-color:rgb(23, 5, 126); background-color: white; border-style: solid; " 
           type="button" class="btn" (click)="desactivar_edicion()"><fa-icon [icon]="faXmark"></fa-icon> Cerrar edición</button>
       </li>
-      <li>
-       <a href="https://ladelpasico.es/preinscripcion" target="_blank"> <button class="btn btn-primary">¡Preinscripción!</button></a>
-       </li>
     </ul>
    
-      <div  style="float:right; text-align:right;">
-        <a href="https://twitter.com/losDelPasico"   target="_blank" class="pl-2 enlace_menu"> <fa-icon [icon]="faTwitter"></fa-icon>  Twitter </a>
-        <a href="https://m.facebook.com/BandaDelPasico/"    target="_blank" class="pl-2 enlace_menu">  <fa-icon [icon]="faFacebook"></fa-icon> Facebook </a>
-        <a href="https://www.instagram.com/los_del_pasico/"    target="_blank" class="pl-2 enlace_menu">  <fa-icon [icon]="faInstagram"></fa-icon>  Instagram </a>
-        </div>
-   
+
      
       <span *ngIf="esLogueado">
         <div class="row">
@@ -103,5 +87,24 @@
     </div>
   </div>
 </nav>
+<div class="container align-self-center"> 
+  <div class="row">
+    <div class="col pt-3">
+       <a href="https://ladelpasico.es/preinscripcion" target="_blank"> <button class="btn btn-primary">¡Preinscripción!</button></a>
+    </div>
+    <div style="float: right; text-align: right;" class="col-auto pt-3">
+      <div class="row">
+        <div class="col-auto">
+          <a href="https://twitter.com/losDelPasico"   target="_blank" class="pl-2 enlace_menu"> <fa-icon [icon]="faTwitter"></fa-icon>  Twitter </a>
+        </div>
+        <div class="col-auto">
+        <a href="https://m.facebook.com/BandaDelPasico/"    target="_blank" class="pl-2 enlace_menu">  <fa-icon [icon]="faFacebook"></fa-icon> Facebook </a>
+        </div>
+          <div class="col-auto">
+          <a href="https://www.instagram.com/los_del_pasico/"    target="_blank" class="pl-2 enlace_menu">  <fa-icon [icon]="faInstagram"></fa-icon>  Instagram </a>
+        </div>
+      </div>
+    </div>
+  </div>
 <br>
 
