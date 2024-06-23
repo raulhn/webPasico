@@ -1,5 +1,7 @@
-.navegacion_home:hover {
-    background-color: #3e8e41;
-    color: white;
-    transform: scale(1.25, 1.25)
-  };
+@media (hover: hover) and (pointer: fine) {
+    .navegacion_home:hover {
+        background-color: #3e8e41;
+        color: white;
+        transform: scale(1.25, 1.25)
+    }
+}
