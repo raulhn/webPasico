@@ -107,6 +107,12 @@ export class ListadoPreinscripcionesComponent implements OnInit {
           },
           {title: 'DNI (Padre)',
           data: 'dni_padre'
+          },
+          {title: 'Sucursal',
+            data: 'nombre_sucursal'
+          },
+          {title: "Curso",
+            data: 'nombre_curso'
           }
         ],
           rowCallback: (row: Node, data: any[] | Object, index: number) => {

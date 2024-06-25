@@ -74,7 +74,8 @@ function obtener_preinscripciones()
         (resolve, reject) =>
         {
             conexion.dbConn.query('select p.*, case p.sucursal ' +
-                   ' when 1 then \'Torre Pacheco\' when 2 then \'Roldán\' when 3 then \'Balsicas\' when 4 then \'Dolores de Pacheco\' else \'\' end as nombre_sucursal  from ' 
+                   ' when 1 then \'Torre Pacheco\' when 2 then \'Roldán\' when 3 then \'Balsicas\' when 4 then \'Dolores de Pacheco\'  when 5 then \'El Jimenado\' else \'\' end as nombre_sucursal ' +
+                   ', case p.curso when 6 then \'Adultos\' when 7 then \'Iniciación\' when 8 then \'Preparatorio\' else p.curso end nombre_curso from ' 
                    + constantes.ESQUEMA_BD + '.preinscripcion p where fecha_solicitud > now() - interval 3 month',
                 (error, results, fields) =>
                 {
@@ -91,8 +92,8 @@ function obtener_preincripciones_detalle(nid_preinscripcion)
         (resolve, reject) =>
         {
             conexion.dbConn.query('select p.*, case p.sucursal ' +
-                   ' when 1 then \'Torre Pacheco\' when 2 then \'Roldán\' when 3 then \'Balsicas\' when 4 then \'Dolores de Pacheco\' else \'\' end as nombre_sucursal ' +
-                ' from ' + constantes.ESQUEMA_BD + '.preinscripcion p where nid_preinscripcion = ' +
+                   ' when 1 then \'Torre Pacheco\' when 2 then \'Roldán\' when 3 then \'Balsicas\' when 4 then \'Dolores de Pacheco\'  when 5 then \'El Jimenado\' else \'\' end as nombre_sucursal ' +
+                    ', case p.curso when 6 then \'Adultos\' when 7 then \'Iniciación\' when 8 then \'Preparatorio\' else p.curso end nombre_curso from ' + constantes.ESQUEMA_BD + '.preinscripcion p where nid_preinscripcion = ' +
                     conexion.dbConn.escape(nid_preinscripcion),
                (error, results, fields) =>
                 {

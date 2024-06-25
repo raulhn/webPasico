@@ -117,7 +117,7 @@ export class ListadoPreinscripcionesCompletoComponent implements OnInit {
             data: 'horario'
           },
           {title: 'Curso',
-            data: 'curso'
+            data: 'nombre_curso'
           }
         
         ],
