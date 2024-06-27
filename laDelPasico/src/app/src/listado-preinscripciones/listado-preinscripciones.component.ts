@@ -167,6 +167,9 @@ export class ListadoPreinscripcionesComponent implements OnInit {
           {title: 'DNI',
           data: 'dni'
           },
+          {title: 'Tipo Preinscripción',
+            data: 'tipo_matricula'
+          },
           {
             title:"Fecha solicitud",
             data: 'fecha_solicitud'

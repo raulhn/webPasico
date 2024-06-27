@@ -87,6 +87,9 @@ export class ListadoPreinscripcionesCompletoComponent implements OnInit {
             title: 'Correo electrónico',
             data: 'correo_electronico'
           },
+          {title: 'Tipo Preinscripción',
+            data: 'tipo_matricula'
+          },
           {title: 'Nombre (Padre)',
             data: 'nombre_padre'
           },
