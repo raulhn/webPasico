@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { HorariosService } from 'src/app/servicios/horarios.service';
 import { faFloppyDisk, faPen, faX} from '@fortawesome/free-solid-svg-icons';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-horario',
@@ -36,9 +37,12 @@ export class HorarioComponent implements OnInit {
 
   horarios_asignados: any = {};
 
+  horarios: any = new Array(8);
+
 
   recuperar_horario =
   {
+
     next: (respuesta: any) =>
       {
 
@@ -48,10 +52,13 @@ export class HorarioComponent implements OnInit {
         {
           this.horarios_recuperados_dia[i] = [];
           this.horarios_asignados[i] = [];
+          this.horarios[i] = {};
         }
 
         for(let i=0; i < this.horarios_recuperados.length; i++)
         {
+          this.horarios[this.horarios_recuperados[i].dia][Number(this.horarios_recuperados[i].minutos_inicio) + (Number(this.horarios_recuperados[i].hora_inicio) * 60)] = this.horarios_recuperados[i];
+
           if(this.hora_minima == 0 || this.hora_minima > this.horarios_recuperados[i].hora_inicio)
           {
             this.hora_minima = this.horarios_recuperados[i].hora_inicio;
@@ -80,7 +87,6 @@ export class HorarioComponent implements OnInit {
                   this.hora_maxima = this.hora_maxima + 1;
               }
           }
-
           this.horarios_recuperados_dia[Number(this.horarios_recuperados[i].dia)].push(this.horarios_recuperados[i]);
        }
 
@@ -104,7 +110,6 @@ export class HorarioComponent implements OnInit {
 
   obtener_valor(dia: number, hora: number)
   {
-    
     let v_minutos_entrada = (Number(hora) % 4) * 15;
     let v_hora_entrada = Math.trunc(Number(hora) / 4);
 
@@ -149,12 +154,11 @@ export class HorarioComponent implements OnInit {
 
     let v_total_minutos_entrada = v_minutos_entrada + (v_hora_entrada * 60)
 
-    for (let i=0; i<this.horarios_recuperados_dia[dia].length; i++)
+    for (let i=0; i < this.horarios_recuperados_dia[dia].length; i++)
     {
 
         let v_hora_inicio = Number(this.horarios_recuperados_dia[dia][i].hora_inicio);
         let v_minutos_inicio = Number(this.horarios_recuperados_dia[dia][i].minutos_inicio);
-
 
         let v_total_minutos_inicio = v_minutos_inicio + Math.trunc((Math.abs((this.hora_minima - v_hora_inicio))) * 60);
 
@@ -187,11 +191,11 @@ export class HorarioComponent implements OnInit {
           desc_minutos_inicio = v_minutos_inicio;
         }
 
-        if (v_total_minutos_entrada == v_total_minutos_inicio && this.es_asignado(dia, hora) == '')
+        if (v_total_minutos_entrada == v_total_minutos_inicio && this.obtener_nid_horario_clase(dia, hora) === null)
         {
           return 'Clase libre ' + v_hora_inicio + ':' + desc_minutos_inicio + ' - ' + v_hora_fin + ':' + desc_minutos_fin; 
         }
-        else if(v_total_minutos_entrada == v_total_minutos_inicio && this.es_asignado(dia, hora) != '')
+        else if(v_total_minutos_entrada == v_total_minutos_inicio && this.obtener_nid_horario_clase(dia, hora) !== null)
         {
           return 'Clase asignada ' + v_hora_inicio + ':' + desc_minutos_inicio + ' - ' + v_hora_fin + ':' + desc_minutos_fin; 
         }
@@ -199,27 +203,65 @@ export class HorarioComponent implements OnInit {
     return '';
   }
 
-  es_asignado(dia: number, hora: number)
+
+  obtener_nid_horario_clase(dia:number, hora:number)
   {
     let v_minutos_entrada = (Number(hora) % 4) * 15;
-    let v_hora_entrada = Math.trunc(Number(hora) / 4);
+    let v_hora_entrada = Math.trunc(Number(hora) / 4) + this.hora_minima;
 
-    let v_total_minutos_entrada = v_minutos_entrada + (v_hora_entrada * 60)
+    let total_minutos = v_minutos_entrada + (v_hora_entrada * 60);
 
-    for (let i=0; i<this.horarios_asignados[dia].length; i++)
+    if (this.horarios[dia][total_minutos] !== undefined)
     {
-        let v_hora_inicio = Number(this.horarios_recuperados_dia[dia][i].hora_inicio);
-        let v_minutos_inicio = Number(this.horarios_recuperados_dia[dia][i].minutos_inicio);
-
-
-        let v_total_minutos_inicio = v_minutos_inicio + Math.trunc((Math.abs((this.hora_minima - v_hora_inicio))) * 60);
-
-      if (v_total_minutos_entrada == v_total_minutos_inicio)
-      {
-        return 'Asignada';
-      }
+      return this.horarios[dia][total_minutos]['nid_horario_clase'];
     }
+    return null;
+  }
+
     
-    return '';
+
+
+  respuesta_elimina_clase =
+  {
+    next: (respuesta: any) =>
+    {
+      Swal.fire({
+        icon: 'success',
+        title: 'Clase eliminada',
+        text: 'Se ha eliminado la clase',
+      }).then(() => {  window.location.reload();});
+    },
+    error: (respuesta: any) =>
+    {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Se ha producido un error'
+      })
+    }
+  }
+
+  eliminar_clase(dia: number, hora: number)
+  {
+    Swal.fire({
+      title: "Eliminar clase",
+      text: "Se eliminará la clase seleccionada",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Eliminar",
+      cancelButtonText: "Cancelar"
+    }).then(
+      (results: any) =>
+        {
+        if(results.isConfirmed)
+        {
+          let nid_horario_clase = this.obtener_nid_horario_clase(dia, hora);
+          var data = {nid_horario_clase: nid_horario_clase};
+          this.horariosServices.eliminar_horario_clase(data).subscribe(this.respuesta_elimina_clase)
+        }
+      }
+    )
   }
 }

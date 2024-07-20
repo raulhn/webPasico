@@ -16,7 +16,6 @@ function registrar_horario_clase(hora_inicio, minutos_inicio, duracion_clase, nu
                     var hora_comienzo_clase = Math.trunc(Number(minutos_comienzo_clase) / 60);
                     var minuto_comienzo_clase = Math.abs(Number(minutos_comienzo_clase)) % 60;
 
-                    console.log('Inserta clase')
 
 
                     conexion.dbConn.query(
@@ -42,7 +41,7 @@ function eliminar_horario_clase(nid_horario_clase)
     return new Promise(
         (resolve, reject) =>
             {
-                conexion.beginTransaction(
+                conexion.dbConn.beginTransaction(
                     () =>
                         {
                             conexion.dbConn.query("delete from " + constantes.ESQUEMA_BD + ".horario_clase where nid_horario_clase = " + 
@@ -101,7 +100,7 @@ function eliminar_horario(nid_horario)
     return new Promise(
         (resolve, reject) =>
             {
-                conexion.beginTransaction(
+                conexion.dbConn.beginTransaction(
                     async () =>
                         {
                             let horario_clase = await obtener_horario(nid_horario);
@@ -180,23 +179,31 @@ function crear_horario(dia, hora_inicio, minutos_inicio, hora_fin, minutos_fin, 
                     total = Math.abs(total_minutos_fin - total_minutos_inicio);
 
                     num_clases = total / Number(duracion_clase);
-
-                    for (i = 0; i < num_clases; i++)
+                    
+                    if (total % Number(duracion_clase) > 0)
                     {
-                        try
-                        {
-                            console.log(hora_inicio + ':' + minutos_inicio)
-                            await registrar_horario_clase(hora_inicio, minutos_inicio, duracion_clase, i, nid_horario, dia);
-                        }
-                        catch(error)
-                        {
-                            conexion.dbConn.rollback();
-                            console.log(error);
-                            resolve();
-                        }
+                        conexion.dbConn.rollback();
+                        reject('No coincide la duración de la clase con el rango de tiempo dado')
                     }
-                    conexion.dbConn.commit(); 
-                    resolve(); 
+                    else
+                    {
+                        for (i = 0; i < num_clases; i++)
+                        {
+                            try
+                            {
+                                console.log(hora_inicio + ':' + minutos_inicio)
+                                await registrar_horario_clase(hora_inicio, minutos_inicio, duracion_clase, i, nid_horario, dia);
+                            }
+                            catch(error)
+                            {
+                                conexion.dbConn.rollback();
+                                console.log(error);
+                                resolve();
+                            }
+                        }
+                        conexion.dbConn.commit(); 
+                        resolve(); 
+                    }
                 }
             )
         }

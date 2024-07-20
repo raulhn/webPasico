@@ -37,11 +37,11 @@
                                             <span>{{descripcion_clase(dia_actual, hora_actual)}} </span>
                                             </div>
                                         </div>
-                                    
+                                        
                                         <div class="row pt-3">
                                             <div class="col">
                                             <button  style=" color:rgb(23, 5, 126); border-color:rgb(23, 5, 126); background-color: white; border-style: solid; " 
-                                                type="button" class="btn" ><fa-icon [icon]="faXmark"></fa-icon></button>
+                                                type="button" class="btn" (click) ="eliminar_clase(dia_actual, hora_actual)" ><fa-icon [icon]="faXmark"></fa-icon></button>
                                             </div>
                                         </div>
                                     </div>

@@ -29,4 +29,10 @@ export class HorariosService {
     return this.http.get(API_URL, {withCredentials: true})
   }
 
+  eliminar_horario_clase( data:any)
+  {
+    let API_URL = this.url + '/eliminar_horario_clase';
+    return this.http.post(API_URL, data, {withCredentials: true})
+  }
+
 }

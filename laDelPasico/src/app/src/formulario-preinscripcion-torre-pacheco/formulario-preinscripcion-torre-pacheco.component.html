@@ -76,24 +76,25 @@
     <br>
     <div class="form-check">
         <input class="form-check-input" type="radio"
-            value="(Primero) Lunes y Miércoles (18:00 - 19:00)"
+            value="(Primero) Lunes y Miércoles (18:15 - 19:15)"
             name="Horario"
             [(ngModel)]="horario_seleccionado"
             id="horario_primero_LX">
         <label class="form-check-label" for="horario_primero_LX">
-            Lunes y Miércoles (18:00 - 19:00)
+            Lunes y Miércoles (18:15 - 19:15)
         </label>
     </div>
-
+    <!--
     <div class="form-check">
         <input class="form-check-input" type="radio"
             [(ngModel)]="horario_seleccionado"
-            value="(Primero) Martes y Jueves (19:00 - 20:00)" name="Horario"
+            value="(Primero) Martes y Jueves (19:15 - 20:15)" name="Horario"
             id="horario_primero_MJ">
         <label class="form-check-label" for="horario_primero_MJ">
-            Martes y Jueves (19:00 - 20:00)
+            Martes y Jueves (19:15 - 20:15)
         </label>
     </div>
+    -->
 </div>
 
 <div class="card p-3 m-1" *ngIf="tipo_inscripcion == '1' && calculo_edad() == 7">
@@ -106,20 +107,20 @@
     <div class="form-check">
         <input class="form-check-input" type="radio"
             [(ngModel)]="horario_seleccionado" name="Horario"
-            value="(Preparatorio)  Miércoles (18:00 - 19:30)"
+            value="(Preparatorio)  Miércoles (18:15 - 19:45)"
             id="horario_preparatorio_X">
         <label class="form-check-label" for="horario_preparatorio_X">
-            Miércoles (18:00 - 19:30)
+            Miércoles (18:15 - 19:45)
         </label>
     </div>
 
     <div class="form-check">
         <input class="form-check-input" type="radio"
             [(ngModel)]="horario_seleccionado" name="Horario"
-            value="(Preparatorio) Jueves (18:00 - 19:30)"
+            value="(Preparatorio) Jueves (18:15 - 19:45)"
             id="horario_preparatorio_M">
         <label class="form-check-label" for="horario_preparatorio_M">
-            Jueves (18:00 - 19:30)
+            Jueves (18:15 - 19:45)
         </label>
     </div>
 </div>
@@ -181,22 +182,22 @@
         <br>
         <div class="form-check">
             <input class="form-check-input" type="radio"
-                value="(Primero) Lunes y Miércoles (18:00 - 19:00)"
+                value="(Primero) Lunes y Miércoles (18:15 - 19:15)"
                 name="Horario"
                 [(ngModel)]="horario_seleccionado"
                 id="horario_primero_LX">
             <label class="form-check-label" for="horario_primero_LX">
-                Lunes y Miércoles (18:00 - 19:00)
+                Lunes y Miércoles (18:15 - 19:15)
             </label>
         </div>
 
         <div class="form-check">
             <input class="form-check-input" type="radio"
                 [(ngModel)]="horario_seleccionado"
-                value="(Primero) Martes y Jueves (19:00 - 20:00)" name="Horario"
+                value="(Primero) Martes y Jueves (19:15 - 20:15)" name="Horario"
                 id="horario_primero_MJ">
             <label class="form-check-label" for="horario_primero_MJ">
-                Martes y Jueves (19:00 - 20:00)
+                Martes y Jueves (19:15 - 20:15)
             </label>
         </div>
     </div>
@@ -206,22 +207,22 @@
         <br>
         <div class="form-check">
             <input class="form-check-input" type="radio"
-                value="(Segundo) Lunes y Miércoles (19:00 - 20:00)"
+                value="(Segundo) Lunes y Miércoles (19:15 - 20:15)"
                 name="Horario"
                 [(ngModel)]="horario_seleccionado"
                 id="horario_segundo_LX">
             <label class="form-check-label" for="horario_segundo_LX">
-                Lunes y Miércoles (19:00 - 20:00)
+                Lunes y Miércoles (19:15 - 20:15)
             </label>
         </div>
 
         <div class="form-check">
             <input class="form-check-input" type="radio"
                 [(ngModel)]="horario_seleccionado"
-                value="(Segundo) Martes y Jueves (18:00 - 19:00)" name="Horario"
+                value="(Segundo) Martes y Jueves (18:15 - 19:15)" name="Horario"
                 id="horario_segundo_MJ">
             <label class="form-check-label" for="horario_segundo_MJ">
-                Martes y Jueves (18:00 - 19:00)
+                Martes y Jueves (18:15 - 19:15)
             </label>
         </div>
     </div>
@@ -232,10 +233,10 @@
         <div class="form-check">
             <input class="form-check-input" type="radio"
                  [(ngModel)]="horario_seleccionado"
-                value="(Tercero) Lunes y Miércoles (17:00 - 18:00)" name="Horario"
+                value="(Tercero) Lunes y Miércoles (17:15 - 18:15)" name="Horario"
                 id="horario_tercero_LX">
             <label class="form-check-label" for="horario_tercero_LX">
-                Lunes y Miércoles (17:00 - 18:00)
+                Lunes y Miércoles (17:15 - 18:15)
             </label>
         </div>
 
@@ -243,9 +244,9 @@
             <input class="form-check-input" type="radio"
                 [(ngModel)]="horario_seleccionado"
                 id="horario_tercero_MJ"
-                value="(Tercero) Martes y Jueves (16:00 - 17:00)" name="Horario">
+                value="(Tercero) Martes y Jueves (16:15 - 17:15)" name="Horario">
             <label class="form-check-label" for="horario_tercero_MJ">
-                Martes y Jueves (16:00 - 17:00)
+                Martes y Jueves (16:15 - 17:15)
             </label>
         </div>
     </div>
@@ -256,20 +257,20 @@
         <div class="form-check">
             <input class="form-check-input" type="radio"
                  [(ngModel)]="horario_seleccionado"
-                value="(Cuarto) Lunes y Miércoles (16:00 - 17:00)" name="Horario"
+                value="(Cuarto) Lunes y Miércoles (16:15 - 17:15)" name="Horario"
                 id="horario_cuarto_LX">
             <label class="form-check-label" for="horario_cuarto_LX">
-                Lunes y Miércoles (16:00 - 17:00)
+                Lunes y Miércoles (16:15 - 17:15)
             </label>
         </div>
 
         <div class="form-check">
             <input class="form-check-input" type="radio"
                 [(ngModel)]="horario_seleccionado"
-                value="(Cuarto) Martes y Jueves (17:00 - 18:00)" name="Horario"
+                value="(Cuarto) Martes y Jueves (17:15 - 18:15)" name="Horario"
                 id="horario_cuarto_MJ">
             <label class="form-check-label" for="horario_cuarto_MJ">
-                Martes y Jueves (17:00 - 18:00)
+                Martes y Jueves (17:15 - 18:15)
             </label>
         </div>
     </div>
@@ -280,10 +281,10 @@
         <div class="form-check">
             <input class="form-check-input" type="radio"
                 [(ngModel)]="horario_seleccionado"
-                value="(Quinto) Lunes y Miércoles (20:00 - 21:00)" name="Horario"
+                value="(Quinto) Lunes y Miércoles (20:15 - 21:15)" name="Horario"
                 id="horario_quinto_LX">
             <label class="form-check-label" for="horario_quinto_LX">
-                Martes y Jueves (20:00 - 21:00)
+                Martes y Jueves (20:15 - 21:15)
             </label>
         </div>
     </div>
@@ -294,20 +295,20 @@
         <div class="form-check">
             <input class="form-check-input" type="radio"
                 [(ngModel)]="horario_seleccionado"
-                value="(Preparatorio) Miercoles (18:00 - 19:30)" name="Horario"
+                value="(Preparatorio) Miercoles (18:15 - 19:45)" name="Horario"
                 id="horario_preparatorio_X">
             <label class="form-check-label" for="horario_preparatorio_X">
-                Miércoles (18:00 - 19:30)
+                Miércoles (18:15 - 19:45)
             </label>
         </div>
 
         <div class="form-check">
             <input class="form-check-input" type="radio"
                 [(ngModel)]="horario_seleccionado"
-                value="(Preparatorio) Jueves (18:00 - 19:30)" name="Horario"
+                value="(Preparatorio) Jueves (18:15 - 19:45)" name="Horario"
                 id="horario_preparatorio_M">
             <label class="form-check-label" for="horario_preparatorio_M">
-                Jueves (18:00 - 19:30)
+                Jueves (18:15 - 19:45)
             </label>
         </div>
     </div>

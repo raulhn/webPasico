@@ -43,8 +43,7 @@ export class HorariosProfesorComponent {
       {
         this.horarios = respuesta.horarios;
         this.num_horarios = this.horarios.length;
-        console.log('Respuesta')
-        console.log(respuesta)
+
         this.bCargado_horario = true;
       }
   }
