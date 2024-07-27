@@ -35,7 +35,6 @@ export class HorarioComponent implements OnInit {
 
   bCargado_horario: boolean = false;
 
-  horarios_asignados: any = {};
 
   horarios: any = new Array(8);
 
@@ -45,13 +44,11 @@ export class HorarioComponent implements OnInit {
 
     next: (respuesta: any) =>
       {
-
         this.horarios_recuperados = respuesta.horarios_clase;
 
         for(let i=0; i<8; i++)
         {
           this.horarios_recuperados_dia[i] = [];
-          this.horarios_asignados[i] = [];
           this.horarios[i] = {};
         }
 
@@ -90,11 +87,6 @@ export class HorarioComponent implements OnInit {
           this.horarios_recuperados_dia[Number(this.horarios_recuperados[i].dia)].push(this.horarios_recuperados[i]);
        }
 
-       for (let i = 0; i < respuesta.horarios_asignados.length; i++)
-       {
-          this.horarios_asignados[Number(respuesta.horarios_asignados[i].dia)].push(respuesta.horarios_asignados[i]);
-       }
-
        for(let i = 0; i < ((this.hora_maxima - this.hora_minima) * 4) ; i++)
        {
           this.horas.push(i);
@@ -117,7 +109,6 @@ export class HorarioComponent implements OnInit {
 
     for (let i=0; i<this.horarios_recuperados_dia[dia].length; i++)
     {
-
         let v_hora_inicio = Number(this.horarios_recuperados_dia[dia][i].hora_inicio);
         let v_minutos_inicio = Number(this.horarios_recuperados_dia[dia][i].minutos_inicio);
 

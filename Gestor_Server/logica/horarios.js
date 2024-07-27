@@ -318,6 +318,24 @@ function obtener_horarios_asignados(nid_profesor, nid_asignatura)
     )
 }
 
+function obtener_horarios_profesor(nid_profesor)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.query("select hc.* from " + constantes.ESQUEMA_BD + ".horario h, " + constantes.ESQUEMA_BD + ".horario_clase hc " +
+                    "where h.nid_horario = hc.nid_horario " + 
+                    " and h.nid_profesor = " + conexion.dbConn.escape(nid_profesor),
+                (error, results, fields) =>
+                {
+                    if(error) {console.log(error); reject();}
+                    else {resolve(results)}
+                }
+            )
+        }
+    )
+}
+
 function obtener_horario(nid_horario)
 {
     return new Promise(
@@ -387,6 +405,7 @@ module.exports.obtener_horarios = obtener_horarios;
 module.exports.obtener_horarios_clase = obtener_horarios_clase;
 module.exports.obtener_horarios_asignados = obtener_horarios_asignados;
 
+module.exports.obtener_horarios_profesor = obtener_horarios_profesor;
 module.exports.obtener_horario = obtener_horario;
 module.exports.obtener_horario_clase = obtener_horario_clase;
 module.exports.obtener_horario_asignado = obtener_horario_asignado;

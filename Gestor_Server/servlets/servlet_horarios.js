@@ -139,6 +139,21 @@ function obtener_horario(req, res)
     )
 }
 
+function obtener_horario_profesor(req, res)
+{
+    comun.comprobaciones(req, res,
+        async () =>
+        {
+            let nid_profesor = req.params.nid_profesor;
+
+            let horarios_clase_recuperados = await horarios.obtener_horarios_profesor(nid_profesor);
+
+            res.status(200).send({error: false, horarios_clase: horarios_clase_recuperados})
+
+        }
+    )
+}
+
 
 
 module.exports.registrar_horario = registrar_horario;
@@ -150,3 +165,4 @@ module.exports.eliminar_horario = eliminar_horario;
 
 module.exports.obtener_horarios = obtener_horarios;
 module.exports.obtener_horario = obtener_horario;
+module.exports.obtener_horario_profesor = obtener_horario_profesor;
