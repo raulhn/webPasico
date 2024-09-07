@@ -34,4 +34,35 @@
             <a [href]="obtiene_url_ficha()"> <button class="btn btn-primary"> Ver Ficha</button></a>
         </div>
     </div>
+
+    <div *ngIf="bhorario_asignatura_recuperado">
+        <a [href]="obtiene_url_horario()"> <button class="btn btn-primary"> Ver Horario</button></a>
+    </div>
+
+    <div *ngIf="bNo_existe_horario">
+     <button class="btn btn-primary" (click)="add_horario()"> Registrar Horario</button>
+    </div>
+
+    <div  style="display: none;">
+        <div #instancia_sustituir>
+            <label>Día</label>
+            <select class="form-select" [(ngModel)]="formulario_dia" name="Día" id="dia">
+                <option value="1">Lunes</option>
+                <option value="2">Martes</option>
+                <option value="3">Miércoles</option>
+                <option value="4">Jueves</option>
+                <option value="5">Viernes</option>
+                <option value="6">Sábado</option>
+                <option value="7">Domingo</option>
+            </select>
+            <label>Hora Inicio:</label>
+            <input class="form-control" type="time" [(ngModel)]="formulario_hora_inicio" id="hora_inicio" name="hora_inicio" />
+            <label>Hora Fin:</label>
+            <input class="form-control" type="time" [(ngModel)]="formulario_hora_fin" id="hora_fin" name="hora_fin" />
+            <label>Duración (Minutos)</label>
+            <input class="form-control" type="number" [(ngModel)]="duracion_clase"/>
+
+       
+        </div>
+    </div>
 </div>

@@ -147,9 +147,13 @@ app.post('/actualizar_valor', servlet_parametros.actualizar_valor);
 /** Horarios **/
 app.get('/obtener_horarios/:nid_profesor/:nid_asignatura', servlet_horarios.obtener_horarios);
 app.get('/obtener_horario/:nid_horario', servlet_horarios.obtener_horario);
-app.get('/obtener_horario_profesor/:nid_profesor', servlet_horarios.obtener_horario_profesor)
+app.get('/obtener_horario_profesor/:nid_profesor', servlet_horarios.obtener_horario_profesor);
+app.get('/obtener_horario_clase_alumno/:nid_alumno', servlet_horarios.obtener_horario_clase_alumno);
 app.post('/registrar_horario', servlet_horarios.registrar_horario);
 app.post('/registrar_horario_clase', servlet_horarios.registrar_horario_clase);
+
+app.get('/obtener_alumnos_horario_clase/:nid_horario_clase', servlet_horarios.obtener_alumnos_horario_clase);
+app.get('/obtener_alumnos_sin_asignar/:nid_horario_clase', servlet_horarios.obtener_alumnos_sin_asignar);
 
 app.post('/eliminar_horario_clase', servlet_horarios.eliminar_horario_clase);
 app.post('/eliminar_horario', servlet_horarios.eliminar_horario);

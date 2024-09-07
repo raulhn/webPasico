@@ -20,6 +20,7 @@ import { ParametrosComponent } from './componente/parametros/parametros.componen
 import { DetalleRemesaComponent } from './componente/detalle-remesa/detalle-remesa.component';
 import { HorarioComponent } from './componente/horario/horario.component';
 import { HorariosProfesorComponent } from './componente/horarios-profesor/horarios-profesor.component';
+import { HorarioClaseComponent } from './componente/horario-clase/horario-clase.component';
 
 
 const routes: Routes = [
@@ -92,12 +93,16 @@ const routes: Routes = [
     component: ParametrosComponent
   },
   {
-    path: 'horario',
+    path: 'horario/:nid_horario',
     component: HorarioComponent
   },
   {
     path: 'horario_profesor/:nid_profesor',
     component: HorariosProfesorComponent
+  },
+  {
+    path: 'horario_clase/:nid_horario_clase',
+    component: HorarioClaseComponent
   }
 
 ];

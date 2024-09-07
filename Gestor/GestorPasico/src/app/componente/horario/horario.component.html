@@ -1,9 +1,6 @@
+<app-menu class=""></app-menu>
 <!-- https://www.bootdey.com/snippets/view/calendar-schedule-table -->
 <div class="container">
-    <div class="w-95 w-md-75 w-lg-60 w-xl-55 mx-auto mb-6 text-center">
-        <div class="subtitle alt-font"><span class="text-primary">#04</span><span class="title">Timetable</span></div>
-        <h2 class="display-18 display-md-16 display-lg-14 mb-0">Committed to fabulous and great <span class="text-primary">#Timetable</span></h2>
-    </div>
     <div class="row">
 
         <div class="col-md-12">
@@ -43,6 +40,10 @@
                                             <button  style=" color:rgb(23, 5, 126); border-color:rgb(23, 5, 126); background-color: white; border-style: solid; " 
                                                 type="button" class="btn" (click) ="eliminar_clase(dia_actual, hora_actual)" ><fa-icon [icon]="faXmark"></fa-icon></button>
                                             </div>
+                                            <div class="col">
+                                                <a [href]="obtenerUrlHorario(dia_actual, hora_actual)"> <button  style=" color:rgb(23, 5, 126); border-color:rgb(23, 5, 126); background-color: white; border-style: solid; " 
+                                                type="button" class="btn"  ><fa-icon [icon]="faPen"></fa-icon></button> </a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -53,6 +54,33 @@
                     </tr>
                 </tbody>
                 </table>
+            </div>
+        </div>
+
+        <div>
+          <button class="btn btn-primary" (click)="add_horario()"> Añadir Clase </button>
+        </div>
+
+        <div  style="display: none;">
+            <div #instancia_sustituir>
+                <label>Día</label>
+                <select class="form-select" [(ngModel)]="formulario_dia" name="Día" id="dia">
+                    <option value="1">Lunes</option>
+                    <option value="2">Martes</option>
+                    <option value="3">Miércoles</option>
+                    <option value="4">Jueves</option>
+                    <option value="5">Viernes</option>
+                    <option value="6">Sábado</option>
+                    <option value="7">Domingo</option>
+                </select>
+                <label>Hora Inicio:</label>
+                <input class="form-control" type="time" [(ngModel)]="formulario_hora_inicio" id="hora_inicio" name="hora_inicio" />
+                <label>Hora Fin:</label>
+                <input class="form-control" type="time" [(ngModel)]="formulario_hora_fin" id="hora_fin" name="hora_fin" />
+                <label>Duración (Minutos)</label>
+                <input class="form-control" type="number" [(ngModel)]="duracion_clase"/>
+    
+           
             </div>
         </div>
     </div>

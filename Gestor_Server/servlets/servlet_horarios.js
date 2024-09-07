@@ -111,13 +111,28 @@ function obtener_horarios(req, res)
             {   
                 let nid_profesor = req.params.nid_profesor;
                 let nid_asignatura = req.params.nid_asignatura;
+                let nid_curso = req.params.nid_curso;
 
-                let horarios_recuperados = await horarios.obtener_horarios(nid_profesor, nid_asignatura);
-                let horarios_clase_recuperados = await horarios.obtener_horarios_clase(nid_profesor, nid_asignatura);
-                let horarios_asignados = await horarios.obtener_horarios_asignados(nid_profesor, nid_asignatura);
+                let horarios_recuperados = await horarios.obtener_horarios(nid_profesor, nid_asignatura, nid_curso);
+                let horarios_clase_recuperados = await horarios.obtener_horarios_clase(nid_profesor, nid_asignatura, nid_curso);
+                let horarios_asignados = await horarios.obtener_horarios_asignados(nid_profesor, nid_asignatura, nid_curso);
 
                 res.status(200).send({error: false, horarios: horarios_recuperados, horarios_clase: horarios_clase_recuperados, horarios_asignados: horarios_asignados})
             }
+
+    )
+}
+
+function obtener_horario_clase_alumno(req, res)
+{
+    comun.comprobaciones(req, res,
+        async() =>
+        {
+            let nid_alumno = req.params.nid_alumno;
+
+            let horarios_clase_recuperados = await horarios.obtener_horario_clase_alumno(nid_alumno);
+            res.status(200).send({error:false, horarios_clase: horarios_clase_recuperados})
+        }
 
     )
 }
@@ -139,6 +154,7 @@ function obtener_horario(req, res)
     )
 }
 
+
 function obtener_horario_profesor(req, res)
 {
     comun.comprobaciones(req, res,
@@ -154,7 +170,35 @@ function obtener_horario_profesor(req, res)
     )
 }
 
+function obtener_alumnos_horario_clase(req, res)
+{
+    comun.comprobaciones(req, res,
+        async () =>
+        {
+            let nid_horario_clase = req.params.nid_horario_clase;
 
+            let alumnos_recuperados = await horarios.obtener_alumnos_horario_clase(nid_horario_clase);
+
+            res.status(200).send({error: false, alumnos: alumnos_recuperados})
+
+        }
+    )
+}
+
+function obtener_alumnos_sin_asignar(req, res)
+{
+    comun.comprobaciones(req, res,
+        async() =>
+        {
+            let nid_horario_clase = req.params.nid_horario_clase;
+
+            let alumnos_recuperados = await horarios.obtener_alumnos_sin_asignar(nid_horario_clase);
+
+            res.status(200).send({error: false, alumnos: alumnos_recuperados})
+        }
+
+    )
+}
 
 module.exports.registrar_horario = registrar_horario;
 module.exports.registrar_horario_clase = registrar_horario_clase;
@@ -166,3 +210,7 @@ module.exports.eliminar_horario = eliminar_horario;
 module.exports.obtener_horarios = obtener_horarios;
 module.exports.obtener_horario = obtener_horario;
 module.exports.obtener_horario_profesor = obtener_horario_profesor;
+module.exports.obtener_horario_clase_alumno = obtener_horario_clase_alumno;
+
+module.exports.obtener_alumnos_horario_clase = obtener_alumnos_horario_clase;
+module.exports.obtener_alumnos_sin_asignar = obtener_alumnos_sin_asignar;

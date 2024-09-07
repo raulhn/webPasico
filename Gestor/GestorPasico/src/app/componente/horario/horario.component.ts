@@ -1,7 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { HorariosService } from 'src/app/servicios/horarios.service';
 import { faFloppyDisk, faPen, faX} from '@fortawesome/free-solid-svg-icons';
 import Swal from 'sweetalert2';
+import { ActivatedRoute } from '@angular/router';
+import { URL } from 'src/app/logica/constantes';
 
 @Component({
   selector: 'app-horario',
@@ -10,12 +12,21 @@ import Swal from 'sweetalert2';
 })
 export class HorarioComponent implements OnInit {
 
-  faXmark = faX;
-  
-  @Input() nid_horario: string = ""
+  @ViewChild('instancia_sustituir') instancia_sustituir!: ElementRef;
 
-  constructor(private horariosServices: HorariosService)
+  faXmark = faX;
+  faPen = faPen;
+
+  nid_horario: string = "";
+
+  formulario_dia: string = "";
+  formulario_hora_inicio: string = "";
+  formulario_hora_fin: string = "";
+  duracion_clase: string = "";
+
+  constructor(private horariosServices: HorariosService, private rutaActiva: ActivatedRoute)
   {
+    this.nid_horario = rutaActiva.snapshot.params['nid_horario'];
   }
 
   dias = [0, 1, 2, 3, 4, 5, 6, 7];
@@ -38,6 +49,11 @@ export class HorarioComponent implements OnInit {
 
   horarios: any = new Array(8);
 
+  nid_asignatura: string ="";
+  nid_profesor: string = "";
+
+  enlaceHorario: string = URL.URL_FRONT_END + "/horario_clase/";
+
 
   recuperar_horario =
   {
@@ -45,6 +61,9 @@ export class HorarioComponent implements OnInit {
     next: (respuesta: any) =>
       {
         this.horarios_recuperados = respuesta.horarios_clase;
+
+        this.nid_asignatura = respuesta.horarios[0]['nid_asignatura'];
+        this.nid_profesor = respuesta.horarios[0]['nid_profesor'];
 
         for(let i=0; i<8; i++)
         {
@@ -254,5 +273,55 @@ export class HorarioComponent implements OnInit {
         }
       }
     )
+  }
+
+
+  peticion_registrar_horario =
+  {
+    next: (respuesta: any) =>
+      {
+        console.log('Funciona')
+      },
+    error: (respuesta: any) =>
+      {
+        console.log('No funciona')
+      }
+  }
+
+   
+  registrar_horario()
+  {
+    var horario_inicio_array = this.formulario_hora_inicio.split(':');
+    var horario_fin_array = this.formulario_hora_fin.split(':');
+
+    let peticion = {dia: this.formulario_dia, hora_inicio: horario_inicio_array[0], minutos_inicio: horario_inicio_array[1], hora_fin: horario_fin_array[0],
+        minutos_fin: horario_fin_array[1], nid_asignatura: this.nid_asignatura, nid_profesor: this.nid_profesor, duracion_clase: this.duracion_clase
+    }
+
+    this.horariosServices.registrar_horario(peticion).subscribe(this.peticion_registrar_horario);
+  }
+
+
+  add_horario()
+  {
+    Swal.fire({
+      title: 'Crear profesor',
+      html: this.instancia_sustituir.nativeElement,
+      confirmButtonText: 'Crear',
+      showCancelButton: true,
+    }).then(
+      (results: any) =>
+        {
+        if(results.isConfirmed)
+        {
+          this.registrar_horario();
+        }
+      }
+    )
+  }
+
+  obtenerUrlHorario(dia: number, hora: number)
+  {
+    return this.enlaceHorario + this.obtener_nid_horario_clase(dia, hora);
   }
 }

@@ -24,3 +24,8 @@ create table pasico_gestor.horario_clase(
 alter table pasico_gestor.horario_clase add constraint fk_horario_clase foreign key(nid_horario) references pasico_gestor.horario(nid_horario);
 
 alter table pasico_gestor.horario add constraint fk_horario_profesor foreign key(nid_profesor, nid_asignatura) references pasico_gestor.profesor(nid_persona, nid_asignatura); 
+
+
+alter table pasico_gestor.horario add nid_curso integer;
+
+alter table pasico_gestor.horario add constraint fk_curso_horario foreign key(nid_curso) references pasico_gestor.curso(nid);

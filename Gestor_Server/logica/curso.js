@@ -84,7 +84,29 @@ function eliminar_curso(nid_curso)
     )
 }
 
+
+function obtener_ultimo_curso()
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.query('select nid from ' + constantes.ESQUEMA_BD + '.curso where ano = (select max(ano) from ' + constantes.ESQUEMA_BD + '.curso)',
+                (error, results, fields) =>
+                {
+                    if(error) {console.log(error); reject();}
+                    else {resolve(results[0]['nid'])}
+                }
+            )
+        }
+    )
+}
+
+
+
+
 module.exports.registrar_curso = registrar_curso;
 module.exports.actualizar_curso = actualizar_curso;
 module.exports.obtener_cursos = obtener_cursos;
 module.exports.eliminar_curso = eliminar_curso;
+
+module.exports.obtener_ultimo_curso = obtener_ultimo_curso;
