@@ -45,6 +45,7 @@ import { HijosPersonaComponent } from './componente/hijos-persona/hijos-persona.
 import { HorarioComponent } from './componente/horario/horario.component';
 import { HorariosProfesorComponent } from './componente/horarios-profesor/horarios-profesor.component';
 import { HorarioClaseComponent } from './componente/horario-clase/horario-clase.component';
+import { HorarioMatriculaComponent } from './componente/horario-matricula/horario-matricula.component';
 
 
 
@@ -82,7 +83,8 @@ import { HorarioClaseComponent } from './componente/horario-clase/horario-clase.
     HijosPersonaComponent,
     HorarioComponent,
     HorariosProfesorComponent,
-    HorarioClaseComponent
+    HorarioClaseComponent,
+    HorarioMatriculaComponent
   ],
   imports: [
     FormsModule,

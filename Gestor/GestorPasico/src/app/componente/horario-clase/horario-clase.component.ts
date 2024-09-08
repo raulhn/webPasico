@@ -174,7 +174,7 @@ export class HorarioClaseComponent implements OnInit {
   liberar_clase()
   {
     console.log(this.nid_matricula_asignatura_tabla)
-    let datos = {nid_matricula_asignatura: this.nid_matricula_asignatura_tabla.nid_matricula_asignatura};
+    let datos = {nid_horario_clase: this.nid_horario_clase, nid_matricula_asignatura: this.nid_matricula_asignatura_tabla.nid_matricula_asignatura};
     this.horariosServices.liberar_horario(datos).subscribe(this.peticion_liberar_clase);
   }
 

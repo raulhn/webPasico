@@ -59,4 +59,10 @@ export class HorariosService {
     return this.http.get(API_URL, {withCredentials:true});
   }
 
+  obtener_horario_matricula(nid_matricula: string)
+  {
+    let API_URL = this.url + '/obtener_horario_clase_alumno/' + nid_matricula;
+    return this.http.get(API_URL, {withCredentials:true});
+  }
+
 }

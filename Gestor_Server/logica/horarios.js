@@ -224,9 +224,8 @@ function asignar_horario_clase(nid_horario_clase, nid_matricula_asignatura)
                 conexion.dbConn.beginTransaction(
                     () =>
                         {
-                            conexion.dbConn.query("update " + constantes.ESQUEMA_BD + ".matricula_asignatura set nid_horario_clase = " +
-                                conexion.dbConn.escape(nid_horario_clase) + " where nid = " + 
-                                conexion.dbConn.escape(nid_matricula_asignatura),
+                            conexion.dbConn.query("insert into " + constantes.ESQUEMA_BD + ".horario_matricula_asignatura(nid_matricula_asignatura, nid_horario_clase)" +
+                                " values(" + conexion.dbConn.escape(nid_matricula_asignatura) + ", " + conexion.dbConn.escape(nid_horario_clase) + ")",
                               (error, results, fields) =>
                                 {
                                     if (error) {console.log(error); conexion.dbConn.rollback(); reject();}
@@ -239,7 +238,7 @@ function asignar_horario_clase(nid_horario_clase, nid_matricula_asignatura)
     )
 }
 
-function liberar_horario_clase(nid_matricula_asignatura)
+function liberar_horario_clase(nid_horario_clase, nid_matricula_asignatura)
 {
     return new Promise(
         (resolve, reject) =>
@@ -247,8 +246,8 @@ function liberar_horario_clase(nid_matricula_asignatura)
                 conexion.dbConn.beginTransaction(
                     () =>
                         {
-                            conexion.dbConn.query("update " + constantes.ESQUEMA_BD + ".matricula_asignatura set nid_horario_clase = null " +
-                                "where nid = " + conexion.dbConn.escape(nid_matricula_asignatura),
+                            conexion.dbConn.query("delete from " + constantes.ESQUEMA_BD + ".horario_matricula_asignatura where nid_horario_clase = " +
+                                conexion.dbConn.escape(nid_horario_clase) + " and nid_matricula_asignatura = " + conexion.dbConn.escape(nid_matricula_asignatura),
                               (error, results, fields) =>
                                 {
                                     if(error) {console.log(error); conexion.dbConn.rollback(); reject();}
@@ -284,7 +283,7 @@ function obtener_horarios(nid_profesor, nid_asignatura, nid_curso)
     )
 }
 
-
+ 
 function obtener_horarios_clase(nid_profesor, nid_asignatura, nid_curso)
 {
     return new Promise(
@@ -292,7 +291,10 @@ function obtener_horarios_clase(nid_profesor, nid_asignatura, nid_curso)
             {
                 let nid_ultimo_curso = await curso.obtener_ultimo_curso();
 
-                conexion.dbConn.beginTransaction("select hc.* from " + constantes.ESQUEMA_BD + ".horario h, " + constantes.ESQUEMA_BD +  ".horario_clase hc " +
+                conexion.dbConn.beginTransaction("select hc.*, " + 
+                      "(select count(*) from " + constantes.ESQUEMA_BD + ".horario_matricula_asignatura hma where hma.nid_horario_clase = hc.nid_horario_clase) num_alumnos " +  
+                     " from " + constantes.ESQUEMA_BD + ".horario h, " 
+                     + constantes.ESQUEMA_BD +  ".horario_clase hc " +
                      "where h.nid_horario = hc.nid_horario " +
                       " and (h.nid_profesor = " + conexion.dbConn.escape(nid_profesor) + " or nullif(" +  conexion.dbConn.escape(nid_profesor) + ", \'\') is null) " +
                       " and (h.nid_asignatura = " + conexion.dbConn.escape(nid_asignatura) + " or nullif(" + conexion.dbConn.escape(nid_asignatura) + ", \'\') is null) " +
@@ -308,31 +310,6 @@ function obtener_horarios_clase(nid_profesor, nid_asignatura, nid_curso)
     )
 }
 
-function obtener_horarios_asignados(nid_profesor, nid_asignatura, nid_curso)
-{
-    return new Promise(
-        async (resolve, reject) =>
-            {
-                let nid_ultimo_curso = await curso.obtener_ultimo_curso();
-
-                conexion.dbConn.beginTransaction("select ma.*, hc.hora_inicio, hc.minutos_inicio " +
-                                                "from " + constantes.ESQUEMA_BD + ".horario h, " + constantes.ESQUEMA_BD +  ".horario_clase hc, " +
-                                                        constantes.ESQUEMA_BD + ".matricula_asignatura ma " +
-                                                "where h.nid_horario = hc.nid_horario " +
-                                                 " and (h.nid_profesor = " + conexion.dbConn.escape(nid_profesor) + " or nullif(" +  conexion.dbConn.escape(nid_profesor) + ", \'\') is null) " +
-                                                 " and (h.nid_asignatura = " + conexion.dbConn.escape(nid_asignatura) + " or nullif(" + conexion.dbConn.escape(nid_asignatura) + ", \'\') is null) " +
-                                                 " and ma.nid_horario_clase = hc.nid_horario_clase" +
-                                                 " and (h.nid_curso = " + conexion.dbConn.escape(nid_curso) + " or nullif(" + conexion.dbConn.escape(nid_curso) + ", " + conexion.dbConn.escape(nid_ultimo_curso)
-                                                   + ") is null) ",
-                  (error, results, fields) =>
-                    {
-                        if(error) {console.log(error); reject();}
-                        else {resolve(results)}
-                    }
-                )
-            }
-    )
-}
 
 function obtener_horarios_profesor(nid_profesor)
 {
@@ -352,21 +329,25 @@ function obtener_horarios_profesor(nid_profesor)
     )
 }
 
-function obtener_horario_clase_alumno(nid_alumno)
+function obtener_horario_clase_alumno(nid_matricula)
 {
     return new Promise(
     (resolve, reject) =>
         {
-            conexion.dbConn.beginTransaction( "select hc.* " +
-                                             " from " + constantes.ESQUEMA_BD +".horario_clase hc" +
-                                             " where nid_horario_clase in ( " +
-                                             "          select nid_horario_clase " +
-                                             "          from " + constantes.ESQUEMA_BD +".matricula m, " + constantes.ESQUEMA_BD +".matricula_asignatura ma " +
-                                             "          where m.nid_persona = " + conexion.dbConn.escape(nid_alumno) +
-                                             "            and m.nid_curso = ( " +
-                                             "                select nid   " +
-                                             "                from " + constantes.ESQUEMA_BD +".curso c " +
-                                             "                where c.ano = (select max(c2.ano) from " + constantes.ESQUEMA_BD +".curso c2)))",
+            conexion.dbConn.beginTransaction("select hc.*, a.descripcion asignatura " +
+                                             "from "+ constantes.ESQUEMA_BD + ".horario_clase hc, " +
+                                                      constantes.ESQUEMA_BD + ".horario h, " +
+                                                      constantes.ESQUEMA_BD + '.asignatura a ' +
+                                             "where hc.nid_horario = h.nid_horario " +
+                                             " and h.nid_asignatura = a.nid " +
+                                             " and nid_horario_clase in  " +
+                                             "   (  " +
+                                             "   select hma.nid_horario_clase " +
+                                             "   from "+ constantes.ESQUEMA_BD + ".horario_matricula_asignatura hma, " +
+                                             "        "+ constantes.ESQUEMA_BD + ".matricula_asignatura ma " +
+                                             "   where hma.nid_matricula_asignatura = ma.nid  " +
+                                             "   and ma.nid_matricula =  " + conexion.dbConn.escape(nid_matricula) +
+                                             "   )",
               (error, results, fields) =>
                 {
                     if(error) {console.log(error); reject();}
@@ -400,7 +381,9 @@ function obtener_horario_clase(nid_horario)
     return new Promise(
         (resolve, reject) =>
             {
-                conexion.dbConn.beginTransaction("select hc.* from " + constantes.ESQUEMA_BD + ".horario h, " + constantes.ESQUEMA_BD +  ".horario_clase hc " +
+                conexion.dbConn.beginTransaction("select hc.*, " + 
+                      "(select count(*) from " + constantes.ESQUEMA_BD + ".horario_matricula_asignatura hma where hma.nid_horario_clase = hc.nid_horario_clase) num_alumnos " + 
+                      " from " + constantes.ESQUEMA_BD + ".horario h, " + constantes.ESQUEMA_BD +  ".horario_clase hc " +
                      "where h.nid_horario = hc.nid_horario " +
                       " and h.nid_horario = " + conexion.dbConn.escape(nid_horario),
                   (error, results, fields) =>
@@ -440,12 +423,14 @@ function obtener_alumnos_horario_clase(nid_horario_clase)
         {
             conexion.dbConn.beginTransaction("select concat(ifnull(p.nif, ''), ' ', ifnull(p.nombre, ''), ' ', ifnull(p.primer_apellido, ''), ' ', ifnull(p.segundo_apellido, '')) etiqueta, p.*, " +
                                              " ma.nid nid_matricula_asignatura " + 
-                                             " from " + constantes.ESQUEMA_BD +".persona p, " +
-                                             "     " + constantes.ESQUEMA_BD +".matricula m, " +
-                                             "     " + constantes.ESQUEMA_BD +".matricula_asignatura ma " +
-                                             "where p.nid = m.nid_persona " +
+                                             " from " + constantes.ESQUEMA_BD + ".persona p, " +
+                                             "     " + constantes.ESQUEMA_BD + ".matricula m, " +
+                                             "     " + constantes.ESQUEMA_BD + ".matricula_asignatura ma, " +
+                                             "     " + constantes.ESQUEMA_BD + ".horario_matricula_asignatura hma" +
+                                             " where p.nid = m.nid_persona " +
                                              "  and m.nid = ma.nid_matricula " +
-                                             "  and ma.nid_horario_clase = " + conexion.dbConn.escape(nid_horario_clase),
+                                             "  and ma.nid = hma.nid_matricula_asignatura " + 
+                                             "  and hma.nid_horario_clase = " + conexion.dbConn.escape(nid_horario_clase),
                 (error, results, fields) =>
                 {
                     if(error) {console.log(error); reject();}
@@ -475,8 +460,7 @@ function obtener_alumnos_sin_asignar(nid_horario_clase)
                                   "           from " + constantes.ESQUEMA_BD +".horario_clase hc, " +
                                   "                " + constantes.ESQUEMA_BD +".horario h " +
                                   "           where hc.nid_horario = h.nid_horario " +
-                                  "             and hc.nid_horario_clase = " + conexion.dbConn.escape(nid_horario_clase)+ ") " +
-                                  "   and ma.nid_horario_clase is null",
+                                  "             and hc.nid_horario_clase = " + conexion.dbConn.escape(nid_horario_clase)+ ") ",
             (error, results, fields) =>
             {
                 if(error) {console.log(error); reject();}
@@ -496,7 +480,7 @@ module.exports.eliminar_horario = eliminar_horario;
 
 module.exports.obtener_horarios = obtener_horarios;
 module.exports.obtener_horarios_clase = obtener_horarios_clase;
-module.exports.obtener_horarios_asignados = obtener_horarios_asignados;
+
 
 module.exports.obtener_horarios_profesor = obtener_horarios_profesor;
 module.exports.obtener_horario_clase_alumno = obtener_horario_clase_alumno;

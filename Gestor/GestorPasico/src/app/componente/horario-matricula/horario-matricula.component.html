@@ -1,0 +1,58 @@
+
+<!-- https://www.bootdey.com/snippets/view/calendar-schedule-table -->
+<div class="container">
+    <div class="row">
+
+        <div class="col-md-12">
+            <div class="schedule-table" *ngIf="bCargado_horario">
+                <table class="table bg-white">
+                <thead>
+                <tr>
+                    <th>Horario</th>
+                    <th>Lunes </th>
+                    <th>Martes</th>
+                    <th>Miércoles</th>
+                    <th>Jueves</th>
+                    <th>Viernes</th>
+                    <th>Sábado</th>
+                    <th class="last">Domingo</th>
+                </tr>
+                </thead>
+                <tbody>
+                
+                    <tr *ngFor="let hora_actual of horas">
+                        <ng-container *ngFor="let dia_actual of dias">
+                            <td *ngIf="obtener_valor(dia_actual, hora_actual) > 0" [attr.rowspan]="obtener_valor(dia_actual, hora_actual)" 
+                                [ngClass]="{'bg-light': obtener_valor(dia_actual, hora_actual) === 1, 'active': obtener_valor(dia_actual, hora_actual) > 1}">
+                            <div *ngIf="dia_actual == 0"> {{(horas[hora_actual] / 4) + hora_minima}} </div>
+                            <div *ngIf="obtener_valor(dia_actual, hora_actual) > 1 && dia_actual != 0"> 
+                                <p> {{descripcion_clase(dia_actual, hora_actual)}} </p>
+                                <div class="hover align-middle">
+                                    <div class="container align-middle" style="margin: auto;  position: relative; top: 25%; left: 0;  right: 0; ">
+                                        <div class="row">
+                                            <div class="col">
+                                            <span>{{descripcion_clase(dia_actual, hora_actual)}} </span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="row pt-3">
+                                            <div class="col">
+                                                <a [href]="obtenerUrlHorario(dia_actual, hora_actual)"> <button  style=" color:rgb(23, 5, 126); border-color:rgb(23, 5, 126); background-color: white; border-style: solid; " 
+                                                type="button" class="btn"  ><fa-icon [icon]="faPen"></fa-icon></button> </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            </td>
+                        </ng-container>
+                    </tr>
+                </tbody>
+                </table>
+            </div>
+        </div>
+
+       
+    </div>
+</div>

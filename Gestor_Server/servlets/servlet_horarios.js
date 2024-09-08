@@ -95,8 +95,9 @@ function liberar_horario_clase(req, res)
         async () =>
             {
                 let nid_matricula_asignatura = req.body.nid_matricula_asignatura;
+                let nid_horario_clase = req.body.nid_horario_clase;
 
-                await horarios.liberar_horario_clase(nid_matricula_asignatura);
+                await horarios.liberar_horario_clase(nid_horario_clase, nid_matricula_asignatura);
 
                 res.status(200).send({error: false, message: 'Se ha liberado el horario'})
             }
@@ -115,9 +116,8 @@ function obtener_horarios(req, res)
 
                 let horarios_recuperados = await horarios.obtener_horarios(nid_profesor, nid_asignatura, nid_curso);
                 let horarios_clase_recuperados = await horarios.obtener_horarios_clase(nid_profesor, nid_asignatura, nid_curso);
-                let horarios_asignados = await horarios.obtener_horarios_asignados(nid_profesor, nid_asignatura, nid_curso);
 
-                res.status(200).send({error: false, horarios: horarios_recuperados, horarios_clase: horarios_clase_recuperados, horarios_asignados: horarios_asignados})
+                res.status(200).send({error: false, horarios: horarios_recuperados, horarios_clase: horarios_clase_recuperados})
             }
 
     )
@@ -128,9 +128,9 @@ function obtener_horario_clase_alumno(req, res)
     comun.comprobaciones(req, res,
         async() =>
         {
-            let nid_alumno = req.params.nid_alumno;
+            let nid_matricula = req.params.nid_matricula;
 
-            let horarios_clase_recuperados = await horarios.obtener_horario_clase_alumno(nid_alumno);
+            let horarios_clase_recuperados = await horarios.obtener_horario_clase_alumno(nid_matricula);
             res.status(200).send({error:false, horarios_clase: horarios_clase_recuperados})
         }
 
@@ -146,9 +146,8 @@ function obtener_horario(req, res)
 
                 let horarios_recuperados = await horarios.obtener_horario(nid_horario);
                 let horarios_clase_recuperados = await horarios.obtener_horario_clase(nid_horario);
-                let horarios_asignados = await horarios.obtener_horario_asignado(nid_horario);
 
-                res.status(200).send({error: false, horarios: horarios_recuperados, horarios_clase: horarios_clase_recuperados, horarios_asignados: horarios_asignados})
+                res.status(200).send({error: false, horarios: horarios_recuperados, horarios_clase: horarios_clase_recuperados})
             }
 
     )
