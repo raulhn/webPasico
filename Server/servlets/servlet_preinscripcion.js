@@ -1,11 +1,10 @@
 const comun = require('./servlet_comun');
 const preinscripcion = require('../logica/preinscripcion')
-const nodemailer = require('nodemailer')
 const constantes_email = require('../config/email_constantes.js')
 const envio_email = require('../config/envio_email.json')
 var respuesta_email = require('../config/respuesta_email.json')
-const jConfig = require('../config/email.json');
 
+const s_transporter = require('../logica/transporter.js')
 
 function registrar_preinscripcion(req, res)
 {
@@ -77,7 +76,7 @@ function enviar_email(nombre, primer_apellido, segundo_apellido, fecha_nacimient
    return new Promise(
     (resolve, reject) =>  
     {
-        let createTransport = nodemailer.createTransport( jConfig);
+        let createTransport = s_transporter.obtener_transporter();
 
         envio_email.html =  "<div> <p>Nueva preinscripción realizada</p> <p>Se ha recibido una soliciud para el alumno " +
             nombre + " " + primer_apellido +  " " + segundo_apellido + "</p>" +
@@ -103,7 +102,7 @@ function enviar_email_respuesta(correo)
    return new Promise(
     (resolve, reject) =>
     {
-        let createTransport = nodemailer.createTransport( jConfig);
+        let createTransport = s_transporter.obtener_transporter();
 
         respuesta_email.to = correo;
  

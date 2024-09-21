@@ -39,7 +39,7 @@
         <a [href]="obtiene_url_horario()"> <button class="btn btn-primary"> Ver Horario</button></a>
     </div>
 
-    <div *ngIf="bNo_existe_horario">
+    <div *ngIf="!bhorario_asignatura_recuperado">
      <button class="btn btn-primary" (click)="add_horario()"> Registrar Horario</button>
     </div>
 

@@ -1,6 +1,7 @@
 const constantes = require('../constantes.js');
 const conexion = require('../conexion.js');
 
+
 function registrar_preinscripcion(
     nombre,
     primer_apellido,
@@ -74,7 +75,8 @@ function obtener_preinscripciones()
         (resolve, reject) =>
         {
             conexion.dbConn.query('select p.*, case p.sucursal ' +
-                   ' when 1 then \'Torre Pacheco\' when 2 then \'Roldán\' when 3 then \'Balsicas\' when 4 then \'Dolores de Pacheco\'  when 5 then \'El Jimenado\' else \'\' end as nombre_sucursal ' +
+                   ' when 1 then \'Torre Pacheco\' when 2 then \'Roldán\' when 3 then \'Balsicas\' when 4 then \'Dolores de Pacheco\'  when 5 then \'El Jimenado\' '+
+                   '  when 6 then \'Los Alcázares\'  when 7 then \'Sucina\' else \'\' end as nombre_sucursal ' +
                    ', case p.curso when 6 then \'Adultos\' when 7 then \'Iniciación\' when 8 then \'Preparatorio\' else p.curso end nombre_curso, ' + 
                    'case p.tipo_inscripcion when 1 then \'Nueva Matricula\' when 2 then \'Renovación\' end as tipo_matricula from ' 
                    + constantes.ESQUEMA_BD + '.preinscripcion p where fecha_solicitud > now() - interval 3 month',
@@ -93,7 +95,8 @@ function obtener_preincripciones_detalle(nid_preinscripcion)
         (resolve, reject) =>
         {
             conexion.dbConn.query('select p.*, case p.sucursal ' +
-                   ' when 1 then \'Torre Pacheco\' when 2 then \'Roldán\' when 3 then \'Balsicas\' when 4 then \'Dolores de Pacheco\'  when 5 then \'El Jimenado\' else \'\' end as nombre_sucursal ' +
+                   ' when 1 then \'Torre Pacheco\' when 2 then \'Roldán\' when 3 then \'Balsicas\' when 4 then \'Dolores de Pacheco\'  when 5 then \'El Jimenado\' '+
+                   '  when 6 then \'Los Alcázares\'  when 7 then \'Sucina\' else \'\' end as nombre_sucursal ' +
                     ', case p.curso when 6 then \'Adultos\' when 7 then \'Iniciación\' when 8 then \'Preparatorio\' else p.curso end nombre_curso, ' +
                      'case p.tipo_inscripcion when 1 then \'Nueva Matricula\' when 2 then \'Renovación\' end as tipo_matricula from ' + constantes.ESQUEMA_BD + '.preinscripcion p where nid_preinscripcion = ' +
                     conexion.dbConn.escape(nid_preinscripcion),

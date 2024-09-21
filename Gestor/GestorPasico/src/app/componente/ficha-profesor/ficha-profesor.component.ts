@@ -169,7 +169,6 @@ export class FichaProfesorComponent implements OnInit{
       }
       else {
         this.bhorario_asignatura_recuperado = false;
-        this.bNo_existe_horario = true;
       }
 
     }
