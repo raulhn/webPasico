@@ -357,7 +357,7 @@ function actualizar_persona(nid, nif, nombre, primer_apellido, segundo_apellido,
                             ', fecha_nacimiento = str_to_date(nullif(' + conexion.dbConn.escape(fecha_nacimiento) + ', \'\') , \'%Y-%m-%d\')'  +
                             ', correo_electronico = nullif(' + conexion.dbConn.escape(correo_electronico) + ', \'\')' +
                             ', codigo = ' + 'nullif(cast(' + conexion.dbConn.escape(codigo) + ' as char), \'\')' +
-                            ', nid_socio = ' + 'nullif(' + conexion.dbConn.escape(nid_socio) + ', \'\')' +
+                            ', nid_socio = ' + 'nullif(cast(' + conexion.dbConn.escape(nid_socio) + 'as char), \'\')' +
                             ' where nid = ' + conexion.dbConn.escape(nid),
                             (error, results, fields) => 
                             {
