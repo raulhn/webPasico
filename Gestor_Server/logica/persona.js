@@ -82,11 +82,11 @@ function registrar_persona(nombre, primer_apellido, segundo_apellido, telefono, 
                                             ' values(' +  constantes.ESQUEMA_BD + '.initcap(' + conexion.dbConn.escape(nombre) + '), ' 
                                                        +  constantes.ESQUEMA_BD + '.initcap(' + conexion.dbConn.escape(primer_apellido) + '), ' 
                                                        +  constantes.ESQUEMA_BD + '.initcap(' + conexion.dbConn.escape(segundo_apellido) + '),'  +
-                                            'cast(nullif(' + conexion.dbConn.escape(telefono) + ', \'\') as unsigned)'
+                                            'cast(nullif(cast(' + conexion.dbConn.escape(telefono) + ' as char), \'\') as unsigned)'
                                             + ',' + 
                                             'str_to_date(nullif(' + conexion.dbConn.escape(fecha_nacimiento) + ', \'\') , \'%Y-%m-%d\')' + 
                                             ', ' + 'nullif(' + conexion.dbConn.escape(nif) + ', \'\'), ' + conexion.dbConn.escape(correo_electronico) + ',' 
-                                             + 'nullif(' + conexion.dbConn.escape(codigo) + ', \'\'))',
+                                             + 'nullif(cast(' + conexion.dbConn.escape(codigo) + ' as char), \'\'))',
                                             (error, results, fields) =>
                                             {
                                                 if (error) {conexion.dbConn.rollback();  console.log(error); reject(error);}
@@ -222,8 +222,8 @@ function registrar_padre(nid_persona, nid_padre)
                 conexion.dbConn.beginTransaction(
                     () =>
                     {
-                        conexion.dbConn.query('update ' + constantes.ESQUEMA_BD + '.persona set nid_padre = nullif(' 
-                            + conexion.dbConn.escape(nid_padre) + ', \'\')' +
+                        conexion.dbConn.query('update ' + constantes.ESQUEMA_BD + '.persona set nid_padre = nullif(cast(' 
+                            + conexion.dbConn.escape(nid_padre) + ' as char), \'\')' +
                             ' where nid = ' + conexion.dbConn.escape(nid_persona),
                             (error, results, fields) =>
                             {
@@ -257,8 +257,8 @@ function registrar_madre(nid_persona, nid_madre)
                 conexion.dbConn.beginTransaction(
                     () =>
                     {
-                        conexion.dbConn.query('update ' + constantes.ESQUEMA_BD + '.persona set nid_madre =  nullif(' +
-                             conexion.dbConn.escape(nid_madre) + ', \'\')' +
+                        conexion.dbConn.query('update ' + constantes.ESQUEMA_BD + '.persona set nid_madre =  nullif(cast(' +
+                             conexion.dbConn.escape(nid_madre) + ' as char), \'\')' +
                             ' where nid = ' + conexion.dbConn.escape(nid_persona),
                             (error, results, fields) =>
                             {
@@ -353,10 +353,10 @@ function actualizar_persona(nid, nif, nombre, primer_apellido, segundo_apellido,
                             ', nombre = ' +  constantes.ESQUEMA_BD + '.initcap(' + conexion.dbConn.escape(nombre) + ')' +
                             ', primer_apellido = ' +  constantes.ESQUEMA_BD + '.initcap(' + conexion.dbConn.escape(primer_apellido) + ')' +
                             ', segundo_apellido = ' +  constantes.ESQUEMA_BD + '.initcap(' + conexion.dbConn.escape(segundo_apellido) + ')' +
-                            ', telefono = cast(nullif(' +  conexion.dbConn.escape(telefono) + ', \'\') as unsigned)' +
+                            ', telefono = cast(nullif(cast(' +  conexion.dbConn.escape(telefono) + ' as char), \'\') as unsigned)' +
                             ', fecha_nacimiento = str_to_date(nullif(' + conexion.dbConn.escape(fecha_nacimiento) + ', \'\') , \'%Y-%m-%d\')'  +
                             ', correo_electronico = nullif(' + conexion.dbConn.escape(correo_electronico) + ', \'\')' +
-                            ', codigo = ' + 'nullif(' + conexion.dbConn.escape(codigo) + ', \'\')' +
+                            ', codigo = ' + 'nullif(cast(' + conexion.dbConn.escape(codigo) + ' as char), \'\')' +
                             ' where nid = ' + conexion.dbConn.escape(nid),
                             (error, results, fields) => 
                             {
