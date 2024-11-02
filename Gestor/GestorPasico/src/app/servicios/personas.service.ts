@@ -38,10 +38,14 @@ export class PersonasService {
       {withCredentials: true});
   }
 
-  actualizar_persona(nid: string, nif: string, nombre: string, primer_apellido: string, segundo_apellido: string, telefono:string, fecha_nacimiento: string, correo_electronico: string, codigo: string)
+  actualizar_persona(nid: string, nif: string, nombre: string, primer_apellido: string, 
+                    segundo_apellido: string, telefono:string, fecha_nacimiento: string, 
+                    correo_electronico: string, codigo: string, nid_socio: string)
   {
     let API_URL = this.url + '/actualizar_persona';
-    return this.http.post(API_URL,{nid: nid, nif: nif, nombre: nombre, primer_apellido: primer_apellido, segundo_apellido, telefono: telefono, fecha_nacimiento: fecha_nacimiento, correo_electronico: correo_electronico, codigo:codigo},
+    return this.http.post(API_URL,{nid: nid, nif: nif, nombre: nombre, primer_apellido: primer_apellido, 
+                                   segundo_apellido, telefono: telefono, fecha_nacimiento: fecha_nacimiento, 
+                                   correo_electronico: correo_electronico, codigo:codigo, nid_socio: nid_socio},
       {withCredentials: true});
   }
 

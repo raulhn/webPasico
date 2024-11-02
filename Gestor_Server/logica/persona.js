@@ -336,7 +336,7 @@ function obtener_persona(nid)
     )
 }
 
-function actualizar_persona(nid, nif, nombre, primer_apellido, segundo_apellido, telefono, fecha_nacimiento, correo_electronico, codigo)
+function actualizar_persona(nid, nif, nombre, primer_apellido, segundo_apellido, telefono, fecha_nacimiento, correo_electronico, codigo, nid_socio)
 {
     return new Promise(
         (resolve, reject) =>
@@ -357,6 +357,7 @@ function actualizar_persona(nid, nif, nombre, primer_apellido, segundo_apellido,
                             ', fecha_nacimiento = str_to_date(nullif(' + conexion.dbConn.escape(fecha_nacimiento) + ', \'\') , \'%Y-%m-%d\')'  +
                             ', correo_electronico = nullif(' + conexion.dbConn.escape(correo_electronico) + ', \'\')' +
                             ', codigo = ' + 'nullif(' + conexion.dbConn.escape(codigo) + ', \'\')' +
+                            ', nid_socio = ' + 'nullif(' + conexion.dbConn.escape(nid_socio) + ', \'\')' +
                             ' where nid = ' + conexion.dbConn.escape(nid),
                             (error, results, fields) => 
                             {
