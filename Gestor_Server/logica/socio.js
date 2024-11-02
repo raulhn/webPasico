@@ -112,7 +112,7 @@ function obtener_socios()
     return new Promise(
         (resolve, reject) =>
         {
-            conexion.dbConn.query('select p.*, date_format(s.fecha_alta, \'%Y-%m-%d\') fecha_alta, date_format(s.fecha_baja, \'%Y-%m-%d\') fecha_baja, from ' + constantes.ESQUEMA_BD + '.socios s, ' + constantes.ESQUEMA_BD + '.persona p where s.nid_persona = p.nid',
+            conexion.dbConn.query('select p.*, date_format(s.fecha_alta, \'%Y-%m-%d\') fecha_alta, date_format(s.fecha_baja, \'%Y-%m-%d\') fecha_baja from ' + constantes.ESQUEMA_BD + '.socios s, ' + constantes.ESQUEMA_BD + '.persona p where s.nid_persona = p.nid',
                 (error, results, fields) =>
                 {
                     if (error) {console.log(error); reject(error)}
