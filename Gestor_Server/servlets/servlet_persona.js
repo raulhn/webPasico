@@ -101,8 +101,10 @@ async function actualizar_persona(req, res)
             let fecha_nacimiento = req.body.fecha_nacimiento
             let correo_electronico = req.body.correo_electronico
             let codigo = req.body.codigo
+            let nid_socio = req.body.nid_socio
 
-            bResultado = await persona.actualizar_persona(nid, nif, nombre, primer_apellido, segundo_apellido, telefono, fecha_nacimiento, correo_electronico, codigo);
+            bResultado = await persona.actualizar_persona(nid, nif, nombre, primer_apellido, 
+                         segundo_apellido, telefono, fecha_nacimiento, correo_electronico, codigo, nid_socio);
             if(bResultado)
             {
                 res.status(200).send({error: false, message: 'Se ha actualizado la persona de forma correcta'})
