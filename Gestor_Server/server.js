@@ -71,6 +71,10 @@ app.get('/obtener_instrumentos', servlet_musico.obtener_instrumentos);
 app.post('/registrar_musico', servlet_musico.registrar_musico);
 app.post('/eliminar_instrumento_musico', servlet_musico.eliminar_instrumento_musico);
 app.get('/obtener_personas_instrumento/:nid_instrumento', servlet_musico.obtener_personas_instrumento);
+app.get('/obtener_musicos', servlet_musico.obtener_musicos);
+app.get('/obtener_instrumentos_filtro', servlet_musico.obtener_instrumentos_filtro);
+
+app.get('/obtener_tipo_musico', servlet_musico.obtener_tipo_musicos);
 
 /** Socios **/
 app.post('/registrar_socio', servlet_socio.registrar_socio);

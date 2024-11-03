@@ -15,4 +15,34 @@ export class MusicosService {
     let API_URL = this.url + '/obtener_personas_instrumento/' + nid_instrumento;
     return this.http.get(API_URL, { withCredentials:true});
   }
+
+  registrar_musico(nid_instrumento: string, nid_persona: string, nid_tipo_musico: string)
+  {
+    let API_URL = this.url + '/registrar_musico';
+    return this.http.post(API_URL, {nid_instrumento: nid_instrumento, nid_persona: nid_persona, nid_tipo_musico: nid_tipo_musico}, {withCredentials: true})
+  }
+
+  obtener_instrumentos()
+  {
+    let API_URL = this.url + '/obtener_instrumentos';
+    return this.http.get(API_URL, {withCredentials:true});
+  }
+
+  obtener_instrumentos_filtro()
+  {
+    let API_URL = this.url + '/obtener_instrumentos_filtro';
+    return this.http.get(API_URL, {withCredentials: true})
+  }
+
+  obtener_musicos()
+  {
+    let API_URL = this.url + '/obtener_musicos';
+    return this.http.get(API_URL, {withCredentials: true})
+  }
+
+  obtener_tipo_musicos()
+  {
+    let API_URL = this.url + '/obtener_tipo_musico';
+    return this.http.get(API_URL, {withCredentials: true})
+  }
 }

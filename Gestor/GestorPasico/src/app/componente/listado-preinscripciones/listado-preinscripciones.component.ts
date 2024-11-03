@@ -62,6 +62,9 @@ export class ListadoPreinscripcionesComponent implements OnInit {
           },
           {title: 'Horario',
             data: 'horario'
+          },
+          {title: 'Curso',
+            data: 'nombre_curso'
           }],
           rowCallback: (row: Node, data: any[] | Object, index: number) => {
             $('td', row).off('click');
@@ -114,6 +117,10 @@ export class ListadoPreinscripcionesComponent implements OnInit {
           },
           {title: 'DNI',
           data: 'dni'
+          },
+          {
+            title:"Fecha solicitud",
+            data: 'fecha_solicitud'
           },
           {
             title: 'Fecha de nacimiento',

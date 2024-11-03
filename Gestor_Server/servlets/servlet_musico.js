@@ -7,11 +7,33 @@ async function obtener_instrumentos(req, res)
     comun.comprobaciones(req, res, 
         async () =>
         {
-            resultado = musico.obtener_instrumentos();
+            resultado = await musico.obtener_instrumentos();
             res.status(200).send({error: false, instrumentos: resultado});
         }
     )
 }
+
+async function obtener_instrumentos_filtro(req, res)
+{
+    comun.comprobaciones(req, res,
+        async() =>
+        {
+            resultado = await musico.obtener_instrumentos_filtro();
+            res.status(200).send({error: false, instrumentos: resultado})
+        }
+    )
+}
+
+async function obtener_musicos(req, res) {
+    comun.comprobaciones(req, res,
+        async() =>
+        {
+            resultado = await musico.obtener_musicos();
+            res.status(200).send({error: false, personas: resultado})
+        }
+    )
+}
+
 
 async function registrar_musico(req, res)
 {
@@ -20,7 +42,9 @@ async function registrar_musico(req, res)
         {
             let nid_persona = req.body.nid_persona;
             let nid_instrumento = req.body.nid_instrumento;
-            await musico.registrar_instrumento_persona(nid_persona, nid_instrumento);
+            let nid_tipo_musico = req.body.nid_tipo_musico;
+
+            await musico.registrar_instrumento_persona(nid_persona, nid_instrumento, nid_tipo_musico);
             res.status(200).send({error: false, message: 'Se ha registrado correctamente'})
         }    
     )
@@ -51,8 +75,24 @@ async function obtener_personas_instrumento(req, res)
     );
 }
 
-module.exports.obtener_instrumentos = obtener_instrumentos;
+async function obtener_tipo_musicos(req, res)
+{
+    comun.comprobaciones(req, res,
+        async() =>
+        {
+            resultado = await musico.obtener_tipo_musicos();
+            res.status(200).send({error: false, tipo_musicos: resultado})
+        }
 
+    )
+}
+
+module.exports.obtener_instrumentos = obtener_instrumentos;
+module.exports.obtener_instrumentos_filtro = obtener_instrumentos_filtro;
+
+module.exports.obtener_musicos = obtener_musicos;
 module.exports.registrar_musico = registrar_musico;
 module.exports.eliminar_instrumento_musico = eliminar_instrumento_persona;
 module.exports.obtener_personas_instrumento = obtener_personas_instrumento;
+
+module.exports.obtener_tipo_musicos = obtener_tipo_musicos;

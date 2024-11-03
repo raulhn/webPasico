@@ -46,6 +46,8 @@ import { HorarioComponent } from './componente/horario/horario.component';
 import { HorariosProfesorComponent } from './componente/horarios-profesor/horarios-profesor.component';
 import { HorarioClaseComponent } from './componente/horario-clase/horario-clase.component';
 import { HorarioMatriculaComponent } from './componente/horario-matricula/horario-matricula.component';
+import { RegistroMusicoComponent } from './componente/registro-musico/registro-musico.component';
+import { BandaTitularComponent } from './componente/banda-titular/banda-titular.component';
 
 
 
@@ -84,7 +86,9 @@ import { HorarioMatriculaComponent } from './componente/horario-matricula/horari
     HorarioComponent,
     HorariosProfesorComponent,
     HorarioClaseComponent,
-    HorarioMatriculaComponent
+    HorarioMatriculaComponent,
+    RegistroMusicoComponent,
+    BandaTitularComponent
   ],
   imports: [
     FormsModule,

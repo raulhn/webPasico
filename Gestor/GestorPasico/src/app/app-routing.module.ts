@@ -21,6 +21,7 @@ import { DetalleRemesaComponent } from './componente/detalle-remesa/detalle-reme
 import { HorarioComponent } from './componente/horario/horario.component';
 import { HorariosProfesorComponent } from './componente/horarios-profesor/horarios-profesor.component';
 import { HorarioClaseComponent } from './componente/horario-clase/horario-clase.component';
+import { RegistroMusicoComponent } from './componente/registro-musico/registro-musico.component';
 
 
 const routes: Routes = [
@@ -103,6 +104,10 @@ const routes: Routes = [
   {
     path: 'horario_clase/:nid_horario_clase',
     component: HorarioClaseComponent
+  },
+  {
+    path: 'musicos',
+    component: RegistroMusicoComponent
   }
 
 ];

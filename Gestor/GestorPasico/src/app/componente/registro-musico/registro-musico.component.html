@@ -1,0 +1,47 @@
+
+
+<app-menu class=""></app-menu>
+<div class="container pt-4">
+    <button (click)="add_musico()"  class="btn btn-primary mb-3 " >Registrar Músico</button>
+
+    <ng-select [items]="lista_instrumentos_filtro"
+    bindLabel="descripcion" 
+    bindValue="nid"
+    [(ngModel)]="nid_instrumento_filtro"
+    [compareWith]="compareInstrumento"
+    (change)="cambia_seleccion_musico()">
+    </ng-select>
+
+
+    <div *ngIf="bCargadosMusicos">
+        <table datatable [dtOptions]="dtOptions_musicos" id="tabla_musicos" class="row-border hover"></table>
+        <div *ngIf="musico_seleccionado !== undefined" class="float-end p-3">
+            <a [href]="obtenerUrlFicha()"> <button class="btn btn-primary"> Ver Ficha</button></a>
+        </div>
+    </div>
+
+    <div class="mb-1 mt-1" style="display: none;">
+        <div *ngIf="bCargadasPersonas" style="min-height: 300px;" #instancia_registrar_musico>
+            <ng-select [items]="lista_personas"
+            bindLabel="etiqueta" 
+            bindValue="nid"
+            [(ngModel)]="nid_persona_seleccionada"
+            [compareWith]="comparePersona">
+            </ng-select>
+
+            <ng-select [items]="lista_instrumentos"
+            bindLabel="descripcion" 
+            bindValue="nid"
+            [(ngModel)]="nid_instrumento"
+            [compareWith]="compareInstrumento">
+            </ng-select>
+
+            <ng-select [items]="lista_tipo_musicos"
+            bindLabel="descripcion" 
+            bindValue="nid_tipo_musico"
+            [(ngModel)]="nid_tipo_musico"
+            [compareWith]="compareTipoInstrumento">
+            </ng-select>
+        </div>
+    </div>
+</div>
