@@ -46,5 +46,14 @@
             </div>
         </div>
 
+        <div *ngIf="!bRecuperadoSocio">
+            <label>Socio asociado:</label>
+            <ng-select [items]="lista_socios"
+                    bindLabel="etiqueta" 
+                    bindValue="nid"
+                    [(ngModel)]="persona.nid_socio"
+                    [compareWith]="comparePersona_socio">
+            </ng-select>
+        </div>
     </form>
 </div>

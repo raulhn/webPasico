@@ -130,7 +130,7 @@ function obtener_socios_alta()
     return new Promise(
         (resolve, reject) =>
         {
-            conexion.dbConn.query('select p.*, date_format(s.fecha_alta, \'%Y-%m-%d\') fecha_alta, date_format(s.fecha_baja, \'%Y-%m-%d\') fecha_baja from ' +
+            conexion.dbConn.query('select concat(ifnull(p.nif, \'\'), \' \',  ifnull(p.nombre, \'\'), \' \', ifnull(p.primer_apellido, \'\'), \' \' , ifnull(p.segundo_apellido, \'\')) etiqueta, p.*, date_format(s.fecha_alta, \'%Y-%m-%d\') fecha_alta, date_format(s.fecha_baja, \'%Y-%m-%d\') fecha_baja from ' +
                     constantes.ESQUEMA_BD + '.socios s, ' + constantes.ESQUEMA_BD + '.persona p ' +
                     ' where s.nid_persona = p.nid and (s.fecha_baja is null or s.fecha_baja > sysdate())',
                 (error, results, fields) =>

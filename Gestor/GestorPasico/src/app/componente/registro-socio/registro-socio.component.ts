@@ -39,6 +39,7 @@ export class RegistroSocioComponent implements OnInit{
     this.personaService.obtener_lista_personas().subscribe(this.obtener_personas);
   }
 
+
   comparePersona_socio(item: any, selected: any) {
     return item['nid'] == selected;
   }
