@@ -1,12 +1,16 @@
 
 
 DELIMITER $$
-CREATE FUNCTION pasico_gestor.obtener_caracter_nif(input VARCHAR(255)) RETURNS VARCHAR(255) 
+CREATE OR REPLACE FUNCTION pasico_gestor.obtener_caracter_nif(input VARCHAR(255)) RETURNS VARCHAR(255) 
 BEGIN
 DECLARE subcadena varchar(8);
 DECLARE parte_numero INT;
 DECLARE digito_control INT;
-set subcadena = substr(input, 1, 8);
+set subcadena = upper(substr(input, 1, 8));
+-- Tratamiento NIE X -> 0; Y -> 1; Z -> 2 --
+set subcadena = replace(subcadena, 'X', '0');
+set subcadena = replace(subcadena, 'Y', '1');
+set subcadena = replace(subcadena, 'Z', '2');
 set parte_numero = convert(subcadena, INTEGER);
 set digito_control = mod(parte_numero, 23);
 if digito_control = 0 then
@@ -54,3 +58,4 @@ return 'N';
 end if;
 END$$
 DELIMITER ;
+
