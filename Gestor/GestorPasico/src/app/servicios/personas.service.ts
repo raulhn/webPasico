@@ -55,6 +55,12 @@ export class PersonasService {
     return this.http.post(API_URL, formData, {withCredentials:true})
   }
 
+  obtener_personas_apellidos(primer_apellido: string, segundo_apellido: string)
+  {
+    let API_URL = this.url + '/obtener_personas_apellidos/' + primer_apellido + '/' + segundo_apellido;
+    return this.http.get(API_URL, {withCredentials: true})
+  }
+
   registrar_padre(nid_persona: string, nid_padre: string)
   {
     let API_URL = this.url + '/registrar_padre';

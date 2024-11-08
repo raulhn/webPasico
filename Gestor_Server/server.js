@@ -54,6 +54,8 @@ app.post('/registrar_persona', servlet_persona.registrar_persona);
 app.get('/obtener_ficha_persona/:nid_persona', servlet_persona.obtener_ficha_persona);
 app.get('/obtener_personas/:tipo', servlet_persona.obtener_personas_tipo);
 
+app.get('/obtener_personas_apellidos/:primer_apellido/:segundo_apellido', servlet_persona.obtener_persona_apellidos);
+
 /** Direcciones **/
 app.post('/registrar_direccion', servlet_direcciones.registrar_direccion);
 app.get('/obtener_direccion/:nid_persona', servlet_direcciones.obtener_direccion);

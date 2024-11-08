@@ -269,7 +269,18 @@ async function asociar_forma_pago(req, res)
     )
 }
 
+async function obtener_persona_apellidos(req, res)
+{
+    comun.comprobaciones(req, res,
+        async() =>
+        {
+            let primer_apellido = req.params.primer_apellido;
+            let segundo_apellido =  req.params.segundo_apellido;
 
+            let resultados = await persona.obtener_persona_apellidos(primer_apellido, segundo_apellido);
+            res.status(200).send({error: false, resultados: resultados})
+        });
+}
 
 module.exports.registrar_persona = registrar_persona
 module.exports.actualizar_persona = actualizar_persona
@@ -292,3 +303,5 @@ module.exports.obtener_forma_pago = obtener_forma_pago;
 module.exports.obtener_formas_pago = obtener_formas_pago;
 module.exports.obtener_pago_persona = obtener_pago_persona;
 module.exports.asociar_forma_pago = asociar_forma_pago;
+
+module.exports.obtener_persona_apellidos = obtener_persona_apellidos;

@@ -55,7 +55,16 @@
     </form>
 
 
+    <div class="mb-1 mt-1" style="display: none;">
 
+        <div #instancia_personas_repetidas>
+            <div *ngIf="bPersonasRepetidas" style="min-height: 300px;" >
+                <table datatable [dtOptions]="dtOptions_personas" id="tabla_persona_repetidas" class="row-border hover">
+                </table>
+            </div>
+        </div>
+    </div>
+    
    
       
 </div>

@@ -73,7 +73,7 @@ export class FormaPagoComponent implements OnInit{
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
-        text: 'Se ha producido un error',
+        text: respuesta['error']['info'],
       })
     }
   }

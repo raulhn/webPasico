@@ -43,6 +43,24 @@ async function existe_nid(nid_persona)
     )
 }
 
+function obtener_persona_apellidos(primer_apellido, segundo_apellido)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.query('select concat(nombre, \' \', primer_apellido, \' \', segundo_apellido) etiqueta from ' +
+                                constantes.ESQUEMA_BD + '.persona where upper(primer_apellido) = upper(' + conexion.dbConn.escape(primer_apellido)
+                                + ') and ifnull(upper(segundo_apellido), \'\') = ifnull(upper(' + conexion.dbConn.escape(segundo_apellido) +'), \'\')',
+                (error, results, fields) =>
+                {
+                    if(error) {console.log(error); reject(error)}
+                    else{resolve(results)}
+                }
+            )
+        }
+    )
+}
+
 function existe_persona(nombre, primer_apellido, segundo_apellido, fecha_nacimiento)
 {
     return new Promise(
@@ -95,9 +113,13 @@ function registrar_persona(nombre, primer_apellido, segundo_apellido, telefono, 
                                             )
                     })
             }
+            else if(bExiste_nif)
+            {
+                reject('Ya existe un nif registrado para esa persona')
+            }
             else
             {
-                reject('La persona ya está registrada');
+                reject('Existe una persona con mismo nombre, apellidos y fecha de nacimiento');
             }
 
         }
@@ -377,6 +399,23 @@ function actualizar_persona(nid, nif, nombre, primer_apellido, segundo_apellido,
     )
 }
 
+
+function valida_iban(iban)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.query('select ' + constantes.ESQUEMA_BD + '.comprueba_iban(' + conexion.dbConn.escape(iban) + ') valido from dual',
+                (error, results, fields) =>
+                {
+                    if(error) {reject('Error al validar el IBAN')}
+                    else {resolve(results['valido'] == 'S')}
+                }
+        )
+        }
+    )
+}
+
 function registrar_forma_pago(nid_titular, iban)
 {
     return new Promise(
@@ -386,7 +425,12 @@ function registrar_forma_pago(nid_titular, iban)
                 async () =>
                 {
                     bExistePersona = await existe_nid(nid_titular);
-                    if(bExistePersona)
+                    bIbanValido = await valida_iban(iban);
+                    if(!bIbanValido)
+                    {
+                        reject('El IBAN no es válido');
+                    }
+                    else if(bExistePersona)
                     {
                         conexion.dbConn.query('insert into ' + constantes.ESQUEMA_BD + '.forma_pago(nid_titular, iban) values(' +
                                 conexion.dbConn.escape(nid_titular) + ', ' + conexion.dbConn.escape(iban) + ')',
@@ -504,6 +548,7 @@ module.exports.actualizar_persona = actualizar_persona
 
 module.exports.existe_nif = existe_nif
 module.exports.existe_nid = existe_nid
+module.exports.obtener_persona_apellidos = obtener_persona_apellidos;
 module.exports.obtener_nid_persona = obtener_nid_persona
 
 module.exports.obtener_padre = obtener_padre;
