@@ -282,6 +282,20 @@ async function obtener_persona_apellidos(req, res)
         });
 }
 
+async function valida_nif(req, res)
+{
+    comun.comprobaciones(req, res,
+        async() =>
+        {
+            let nif = req.params.nif;
+
+            let resultado = await persona.valida_nif(nif);
+            res.status(200).send({error: false, resultados: resultado})
+        }
+
+    )
+}
+
 module.exports.registrar_persona = registrar_persona
 module.exports.actualizar_persona = actualizar_persona
 
@@ -305,3 +319,4 @@ module.exports.obtener_pago_persona = obtener_pago_persona;
 module.exports.asociar_forma_pago = asociar_forma_pago;
 
 module.exports.obtener_persona_apellidos = obtener_persona_apellidos;
+module.exports.valida_nif = valida_nif;

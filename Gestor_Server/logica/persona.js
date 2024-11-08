@@ -4,7 +4,7 @@ const constantes = require('../constantes.js')
 async function existe_nif(nif)
 {
     return new Promise(
-        (resolve, reject) =>
+        async (resolve, reject) =>
         {
             if (nif.length === 0)
             {
@@ -20,6 +20,39 @@ async function existe_nif(nif)
                     }
                   }
                 )
+            }
+        }
+    )
+}
+
+async function valida_nif(nif)
+{
+    return new Promise(
+        async (resolve, reject) =>
+        {
+            let bExisteNif = await existe_nif(nif)
+            if (!bExisteNif)
+            {
+                conexion.dbConn.query('select ' + constantes.ESQUEMA_BD + '.comprueba_nif(' + conexion.dbConn.escape(nif) + ') valido from dual',
+                (error, results, fields) =>
+                {
+                    if(error) {reject('Error al validar el NIF')}
+                    else
+                    {   
+                        if(results['valido'] == 'S')
+                        {
+                            resolve(true);
+                        }
+                        else
+                        {
+                            reject('NIF/NIE no válido');
+                        }
+                    }
+                })
+            }
+            else
+            {
+                reject('El NIF/NIE ya existe');
             }
         }
     )
@@ -547,6 +580,7 @@ module.exports.registrar_persona = registrar_persona
 module.exports.actualizar_persona = actualizar_persona
 
 module.exports.existe_nif = existe_nif
+module.exports.valida_nif = valida_nif;
 module.exports.existe_nid = existe_nid
 module.exports.obtener_persona_apellidos = obtener_persona_apellidos;
 module.exports.obtener_nid_persona = obtener_nid_persona

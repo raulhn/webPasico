@@ -3,6 +3,7 @@ import { PersonasService } from 'src/app/servicios/personas.service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { DataTablesOptions } from 'src/app/logica/constantes';
+import { ElementSchemaRegistry } from '@angular/compiler';
 
 @Component({
   selector: 'app-registro-persona',
@@ -126,13 +127,34 @@ export class RegistroPersonaComponent implements OnInit{
   }
 }
 
-  registrar_persona()
+valida_nif=
+{
+  next:(respuesta:any) =>
+  {
+    this.personasServices.obtener_personas_apellidos(this.primer_apellido, this.segundo_apellido).subscribe(this.obtener_personas_repetidas);
+  },
+  error: (respuesta: any) =>
+    {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: respuesta['error']['info']
+      })
+  }
+}
+
+registrar_persona()
   {
     if (this.valida_formulario())
     {
-
-      this.personasServices.obtener_personas_apellidos(this.primer_apellido, this.segundo_apellido).subscribe(this.obtener_personas_repetidas);
-
+      if(this.nif.length > 0)
+      {
+        this.personasServices.valida_nif(this.nif).subscribe(this.valida_nif)
+      }
+      else
+      {
+        this.personasServices.obtener_personas_apellidos(this.primer_apellido, this.segundo_apellido).subscribe(this.obtener_personas_repetidas);
+      }
     }
   }
 }

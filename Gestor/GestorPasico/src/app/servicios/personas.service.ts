@@ -61,6 +61,13 @@ export class PersonasService {
     return this.http.get(API_URL, {withCredentials: true})
   }
 
+  valida_nif(nif:string)
+  {
+    let API_URL = this.url + '/valida_nif/' + nif;
+    return this.http.get(API_URL, {withCredentials: true})
+  }
+
+
   registrar_padre(nid_persona: string, nid_padre: string)
   {
     let API_URL = this.url + '/registrar_padre';
