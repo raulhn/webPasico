@@ -282,6 +282,19 @@ async function obtener_persona_apellidos(req, res)
         });
 }
 
+
+async function obtener_persona_apellido(req, res)
+{
+    comun.comprobaciones(req, res,
+        async() =>
+        {
+            let primer_apellido = req.params.primer_apellido;
+
+            let resultados = await persona.obtener_persona_apellidos(primer_apellido, '');
+            res.status(200).send({error: false, resultados: resultados})
+        });
+}
+
 async function valida_nif(req, res)
 {
     comun.comprobaciones(req, res,
@@ -319,4 +332,5 @@ module.exports.obtener_pago_persona = obtener_pago_persona;
 module.exports.asociar_forma_pago = asociar_forma_pago;
 
 module.exports.obtener_persona_apellidos = obtener_persona_apellidos;
+module.exports.obtener_persona_apellido = obtener_persona_apellido;
 module.exports.valida_nif = valida_nif;

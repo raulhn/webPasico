@@ -39,7 +39,7 @@ async function valida_nif(nif)
                     if(error) {reject('Error al validar el NIF')}
                     else
                     {   
-                        if(results['valido'] == 'S')
+                        if(results[0]['valido'] == 'S')
                         {
                             resolve(true);
                         }
@@ -442,7 +442,7 @@ function valida_iban(iban)
                 (error, results, fields) =>
                 {
                     if(error) {reject('Error al validar el IBAN')}
-                    else {resolve(results['valido'] == 'S')}
+                    else {resolve(results[0]['valido'] == 'S')}
                 }
         )
         }

@@ -20,6 +20,22 @@ function existe_socio(nid_persona)
     )
 }
 
+function obtener_siguiente_num_socio()
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.query('select max(num_socio) + 1 siguiente_num from ' + constantes.ESQUEMA_BD + '.socios',
+                (error, results, fields) =>
+                {
+                    if(error) {console.log(error); reject(error);}
+                    else {resolve(results[0]['siguiente_num'])}
+                }
+            )
+        }
+    )
+}
+
 function registrar_socio(nid_persona, num_socio, fecha_alta)
 {
     return new Promise(
@@ -27,6 +43,7 @@ function registrar_socio(nid_persona, num_socio, fecha_alta)
         {
             bExistePersona = await persona.existe_nid(nid_persona);
             bExisteSocio = await existe_socio(nid_persona);
+            
             
             if (!bExistePersona)
             {
@@ -38,6 +55,11 @@ function registrar_socio(nid_persona, num_socio, fecha_alta)
             }
             else
             {
+                if(num_socio == '')
+                {
+                    num_socio = await obtener_siguiente_num_socio();
+                }
+                
                 conexion.dbConn.beginTransaction(
                     () =>
                     {

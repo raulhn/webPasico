@@ -55,6 +55,7 @@ app.get('/obtener_ficha_persona/:nid_persona', servlet_persona.obtener_ficha_per
 app.get('/obtener_personas/:tipo', servlet_persona.obtener_personas_tipo);
 
 app.get('/obtener_personas_apellidos/:primer_apellido/:segundo_apellido', servlet_persona.obtener_persona_apellidos);
+app.get('/obtener_personas_apellidos/:primer_apellido', servlet_persona.obtener_persona_apellido);
 app.get('/valida_nif/:nif', servlet_persona.valida_nif);
 
 /** Direcciones **/
