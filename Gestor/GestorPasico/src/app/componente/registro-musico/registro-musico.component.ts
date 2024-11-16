@@ -126,7 +126,6 @@ export class RegistroMusicoComponent implements OnInit{
 
   ngOnInit(): void {
     this.cambia_seleccion_musico();
-    this.personasServices.obtener_lista_personas().subscribe(this.obtener_personas);
     this.musicosService.obtener_instrumentos().subscribe(this.obtener_instrumentos);
     this.musicosService.obtener_instrumentos_filtro().subscribe(this.obtener_instrumentos_filtro);
     this.musicosService.obtener_tipo_musicos().subscribe(this.obtener_tipo_musicos);
@@ -167,6 +166,7 @@ export class RegistroMusicoComponent implements OnInit{
 
   add_musico()
   {
+    this.personasServices.obtener_lista_personas().subscribe(this.obtener_personas);
     Swal.fire({
       title: 'Registrar Músico',
       html: this.instancia_registrar_musico.nativeElement,
@@ -179,6 +179,7 @@ export class RegistroMusicoComponent implements OnInit{
         {
           this.musicosService.registrar_musico(this.nid_instrumento, this.nid_persona_seleccionada, this.nid_tipo_musico).subscribe(this.peticion_registrar_musico);
         }
+        this.bCargadasPersonas = false;
       }
     )
   }

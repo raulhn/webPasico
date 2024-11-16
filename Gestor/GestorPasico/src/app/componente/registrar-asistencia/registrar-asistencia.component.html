@@ -1,0 +1,13 @@
+<div *ngIf="bCargadosMusicos">
+    <table datatable [dtOptions]="dtOptions_musicos" id="tabla_musicos" class="row-border hover"></table>
+    <div *ngIf="musico_seleccionado !== undefined" class="float-end p-3">
+        <a [href]="add_asistente()"> <button class="btn btn-primary"> Ver Ficha</button></a>
+    </div>
+</div>
+
+<div *ngIf="bCargadosMusicos_seleccionados">
+    <table datatable [dtOptions]="dtOptions_musicos_seleccionados" id="tabla_musicos_seleccionados" class="row-border hover"></table>
+    <div *ngIf="musico_seleccionados_seleccionado !== undefined" class="float-end p-3">
+        <a [href]="delete_asistente()"> <button class="btn btn-primary"> Ver Ficha</button></a>
+    </div>
+</div>

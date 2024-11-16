@@ -21,14 +21,15 @@
     </div>
 
     <div class="mb-1 mt-1" style="display: none;">
-        <div *ngIf="bCargadasPersonas" style="min-height: 300px;" #instancia_registrar_musico>
-            <ng-select [items]="lista_personas"
-            bindLabel="etiqueta" 
-            bindValue="nid"
-            [(ngModel)]="nid_persona_seleccionada"
-            [compareWith]="comparePersona">
-            </ng-select>
-
+        <div  style="min-height: 300px;" #instancia_registrar_musico>
+            <div *ngIf="bCargadasPersonas" >
+                <ng-select [items]="lista_personas"
+                bindLabel="etiqueta" 
+                bindValue="nid"
+                [(ngModel)]="nid_persona_seleccionada"
+                [compareWith]="comparePersona">
+                </ng-select>
+            </div>
             <ng-select [items]="lista_instrumentos"
             bindLabel="descripcion" 
             bindValue="nid"
