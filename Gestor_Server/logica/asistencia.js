@@ -67,3 +67,4 @@ function registrar_asistencias(descripcion, personas)
 
 
 module.exports.registrar_asistencias = registrar_asistencias;
+module.exports.registrar_evento_asistencia = registrar_evento_asistencia;

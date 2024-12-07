@@ -20,6 +20,7 @@ var servlet_direcciones = require('./servlets/servlet_direccion.js');
 var servlet_remesa = require('./servlets/servlet_remesa.js');
 var servlet_parametros = require('./servlets/servlet_parametros.js');
 var servlet_horarios = require('./servlets/servlet_horarios.js');
+var servlet_asistencia = require('./servlets/servlet_asistencia.js');
 
 var fs = require('fs');
 
@@ -168,6 +169,9 @@ app.post('/eliminar_horario', servlet_horarios.eliminar_horario);
 
 app.post('/asignar_horario', servlet_horarios.asignar_horario_clase);
 app.post('/liberar_horario', servlet_horarios.liberar_horario_clase);
+
+/** Asistencia **/
+app.post('/registrar_evento', servlet_asistencia.registrar_evento);
 
 https.createServer({
     key: fs.readFileSync('apache.key'),
