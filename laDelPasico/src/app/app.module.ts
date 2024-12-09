@@ -50,6 +50,7 @@ import { FormularioPreinscripcionPedaniaComponent } from './src/formulario-prein
 import { FormularioPreinscripcionTorrePachecoComponent } from './src/formulario-preinscripcion-torre-pacheco/formulario-preinscripcion-torre-pacheco.component';
 import { ListadoPreinscripcionesComponent } from './src/listado-preinscripciones/listado-preinscripciones.component';
 import { ListadoPreinscripcionesCompletoComponent } from './src/listado-preinscripciones-completo/listado-preinscripciones-completo.component';
+import { ListaOrdenadaComponent } from './src/lista-ordenada/lista-ordenada.component';
 
 @NgModule({
   declarations: [
@@ -84,7 +85,8 @@ import { ListadoPreinscripcionesCompletoComponent } from './src/listado-preinscr
     FormularioPreinscripcionPedaniaComponent,
     FormularioPreinscripcionTorrePachecoComponent,
     ListadoPreinscripcionesComponent,
-    ListadoPreinscripcionesCompletoComponent
+    ListadoPreinscripcionesCompletoComponent,
+    ListaOrdenadaComponent
   ],
   imports: [
     BrowserModule,
