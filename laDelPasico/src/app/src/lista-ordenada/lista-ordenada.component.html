@@ -1,15 +1,19 @@
 
-<script>
+	<button (click)="actualizar_votos()" type="button"> Orden</button>
 
-</script>
-    Insert <input type="text" id="input" />
-    <button class="add" (click)="add()" type="button">Go</button>
-    <button (click)="reset()" type="button">Reset</button>
-
-	<ul id="Trees" class="lista">
-		<li id="Ash">Ash</li>
-		<li id="Beech">Beech</li>
-		<li id="Cedar" class="comefromtop">Cedar</li>
-		<li id="Dogwood">Dogwood</li>
-	</ul>
-
+	<div *ngIf="bCargadas_canciones">
+		<div *ngFor="let cancion of canciones">
+			<div class="row">
+				<div class="col">
+					<div *ngIf="cancion[0]" [id]="cancion[0]['nid_cancion_eu']" [class]="obtener_clase(cancion[0]['nid_cancion_eu'])">
+						{{cancion[0]['titulo']}}
+					</div>
+				</div>
+				<div class="col">
+					<div *ngIf="cancion[1]" [id]="cancion[0]['nid_cancion_eu']" [class]="obtener_clase(cancion[1]['nid_cancion_eu'])">
+						{{cancion[1]['titulo']}}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>

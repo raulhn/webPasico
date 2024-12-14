@@ -28,7 +28,8 @@ const imagen = require('./imagen.js');
 const servlet_componente = require('./servlet_componente.js');
 const servlet_componente_blog = require('./servlets/servlet_componente_blog.js')
 const servlet_usuarios = require('./servlets/servlet_usuarios.js')
-const servlet_preinscripcion = require('./servlets/servlet_preinscripcion.js')
+const servlet_preinscripcion = require('./servlets/servlet_preinscripcion.js');
+const servlet_canciones_eu = require('./servlets/servlet_canciones_eu.js')
 
 const ESQUEMA_BD = constantes.ESQUEMA_BD;
 
@@ -1184,6 +1185,12 @@ app.post('/actualizar_password', servlet_usuarios.actualizar_password);
   app.post('/registrar_preinscripcion', servlet_preinscripcion.registrar_preinscripcion);
   app.get('/obtener_preinscripciones', servlet_preinscripcion.obtener_preinscripciones);
   app.get('/obtener_preinscripciones_detalle/:nid_preinscripcion', servlet_preinscripcion.obtener_preinscripciones_detalle)
+
+  /**
+   * Canciones EU
+   */
+  app.get('/obtener_canciones', servlet_canciones_eu.obtener_canciones); 
+  app.get('/obtener_votaciones', servlet_canciones_eu.obtener_votaciones);
 
   https.createServer({
     key: fs.readFileSync('apache.key'),
