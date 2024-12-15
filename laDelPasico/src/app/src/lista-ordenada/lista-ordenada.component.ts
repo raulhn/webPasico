@@ -10,6 +10,10 @@ export class ListaOrdenadaComponent implements OnInit {
 
   constructor(private cancionesService: CancionesEuService) { }
 
+  tiempo_animacion_contador: number = 1;
+  tiempo_animacion_traslado: number = 1;
+
+
   canciones: any;
   bCargadas_canciones: boolean = false;
 
@@ -54,32 +58,6 @@ export class ListaOrdenadaComponent implements OnInit {
     this.cancionesService.obtener_canciones().subscribe(this.recupera_canciones);
   }
 
-  add()
-  {
-    let desplazamiento = [{transform: "translate(0, 100%)"}, {easing: "ease-in-out"}]
-    let duracion = {duration: 1000}
-
-    $('#Beech').addClass('pushdown');
-    let comefromtop = document.querySelector(".comefromtop");
-    comefromtop?.setAttribute("style", "transform: translate(0, -100%); transition-duration: 1s; transition-timing-function: ease-in-out; transition-property: transform;");
-
-  }
-
-  add_2()
-  {
-    $('#Beech').addClass('pushdown');
-    let comefromtop = document.querySelector(".comefromtop");
-    comefromtop?.setAttribute("style", "transform: translate(0, -200%); transition-duration: 1s; transition-timing-function: ease-in-out; transition-property: transform;");
-
-  }
-
-  reset()
-  {
-    $('#Beech').removeClass('pushdown');
-    let comefromtop = document.querySelector(".comefromtop");
-    comefromtop?.setAttribute("style", "transform: translate(0, 0); transition-duration: 1s; transition-timing-function: ease-in-out; transition-property: transform;");
-
-  }
 
   convertir_numero(value: string)
   {
@@ -100,10 +78,10 @@ export class ListaOrdenadaComponent implements OnInit {
               const updateCounter = () => {
               var target = votos;
               var count = + Number(counter.innerHTML);
-              var increment = target / 200;
+              var increment = target / 500;
               if (count < target) {
                 counter.innerHTML = `${Math.ceil(count + increment)}`;
-                setTimeout(updateCounter, 1);
+                setTimeout(updateCounter, 5);
               } 
               else {
                 counter.innerHTML = target.toString()
@@ -147,7 +125,8 @@ export class ListaOrdenadaComponent implements OnInit {
           console.log(fila_nueva + ' - ' +columna_nueva)
           this.lanzar_contador(nombre_clase_contador, Number(this.votos[id_cancion_eu]));
 
-          let transformacion = "transform: translate(" + dif_columna + "%, "+  dif_fila + "%); transition-duration: 1s; transition-timing-function: ease-in-out; transition-property: transform; transition-delay: 1s";
+          let transformacion = "transform: translate(" + dif_columna + "%, "+  dif_fila + "%); transition-duration: " + this.tiempo_animacion_traslado +
+                               "s; transition-timing-function: ease-in-out; transition-property: transform; transition-delay: "+ this.tiempo_animacion_contador + "s";
 
           clase?.setAttribute("style", transformacion);
 
