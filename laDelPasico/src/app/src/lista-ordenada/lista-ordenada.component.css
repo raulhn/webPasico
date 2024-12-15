@@ -19,3 +19,34 @@ input {
    transition-property: transform;
 }
 
+.aumentar
+{
+    transform: scale(3);
+    transition-timing-function: ease-in-out;
+    transition-property: transform;
+}
+
+.disminuir
+{
+    transform: scale(3);
+    transition-timing-function: ease-in-out;
+    transition-property: transform;
+    animation-delay: 1s;
+}
+
+@property --num {
+  syntax: '<integer>';
+  initial-value: 0;
+  inherits: false;
+}
+
+
+.counter {
+  transition: --num 1s;
+  counter-reset: num var(--num);
+}
+
+.counter::after {
+  content: counter(num);
+}
+
