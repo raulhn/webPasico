@@ -49,6 +49,7 @@ import { HorarioMatriculaComponent } from './componente/horario-matricula/horari
 import { RegistroMusicoComponent } from './componente/registro-musico/registro-musico.component';
 import { BandaTitularComponent } from './componente/banda-titular/banda-titular.component';
 import { RegistrarAsistenciaComponent } from './componente/registrar-asistencia/registrar-asistencia.component';
+import { EvaluacionComponent } from './componente/evaluacion/evaluacion.component';
 
 
 
@@ -90,7 +91,8 @@ import { RegistrarAsistenciaComponent } from './componente/registrar-asistencia/
     HorarioMatriculaComponent,
     RegistroMusicoComponent,
     BandaTitularComponent,
-    RegistrarAsistenciaComponent
+    RegistrarAsistenciaComponent,
+    EvaluacionComponent
   ],
   imports: [
     FormsModule,

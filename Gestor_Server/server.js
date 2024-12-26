@@ -107,6 +107,7 @@ app.post('/registrar_curso', servlet_curso.registrar_curso);
 app.get('/obtener_cursos', servlet_curso.obtener_cursos);
 app.post('/eliminar_curso', servlet_curso.eliminar_curso);
 app.get('/obtener_cursos_profesor/:nid_profesor', servlet_matricula.obtener_cursos_profesor);
+app.get('/obtener_nid_ultimo_curso', servlet_curso.obtener_nid_ultimo_curso);
 
 /** Matriculas **/
 app.post('/registrar_matricula', servlet_matricula.registrar_matricula);

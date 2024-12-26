@@ -22,6 +22,7 @@ import { HorarioComponent } from './componente/horario/horario.component';
 import { HorariosProfesorComponent } from './componente/horarios-profesor/horarios-profesor.component';
 import { HorarioClaseComponent } from './componente/horario-clase/horario-clase.component';
 import { RegistroMusicoComponent } from './componente/registro-musico/registro-musico.component';
+import { EvaluacionComponent } from './componente/evaluacion/evaluacion.component';
 
 
 const routes: Routes = [
@@ -108,6 +109,10 @@ const routes: Routes = [
   {
     path: 'musicos',
     component: RegistroMusicoComponent
+  },
+  {
+    path: 'evaluacion',
+    component: EvaluacionComponent
   }
 
 ];

@@ -1,0 +1,20 @@
+<p>evaluacion works!</p>
+
+<div *ngIf="bCargada_asignaturas">
+<ng-select [items]="lista_asignaturas"
+                    bindLabel="descripcion" 
+                    bindValue="nid"
+                    [(ngModel)]="asignatura_seleccionada"
+                    [compareWith]="compare_asignatura" (ngModelChange)="cambia_asignatura()">
+</ng-select>
+</div>
+
+<div *ngIf="bCargados_profesores">
+    <ng-select [items]="lista_profesores"
+                        bindLabel="etiqueta" 
+                        bindValue="nid_persona"
+                        [(ngModel)]="profesor_seleccionado"
+                        [compareWith]="compare_profesor"
+                        (ngModelChange)="cambia_profesor()">
+    </ng-select>
+</div>

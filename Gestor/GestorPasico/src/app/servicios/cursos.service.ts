@@ -33,4 +33,10 @@ export class CursosService {
     return this.http.get(API_URL, {withCredentials: true})
   }
 
+  obtener_nid_ultimo_curso()
+  {
+    let API_URL = this.url + '/obtener_nid_ultimo_curso';
+    return this.http.get(API_URL, {withCredentials: true})
+  }
+
 }

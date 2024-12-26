@@ -39,6 +39,19 @@ function eliminar_curso(req, res)
     )
 }
 
+function obtener_nid_ultimo_curso(req, res)
+{
+    comun.comprobaciones(req, res,
+        async () =>
+        {
+            let nid_ultimo_curso = await curso.obtener_ultimo_curso();
+            res.status(200).send({error: false, nid_ultimo_curso: nid_ultimo_curso})
+        }
+    )
+}
+
 module.exports.registrar_curso = registrar_curso;
 module.exports.obtener_cursos = obtener_cursos;
 module.exports.eliminar_curso = eliminar_curso;
+
+module.exports.obtener_nid_ultimo_curso = obtener_nid_ultimo_curso;
