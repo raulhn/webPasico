@@ -69,4 +69,10 @@ export class MatriculasService {
     let API_URL = this.url + '/sustituir_profesor';
     return this.http.post(API_URL, {nid_profesor: nid_profesor, nid_profesor_sustituto: nid_profesor_sustituto, nid_asignatura: nid_asignatura}, {withCredentials: true})
   }
+
+  obtener_matriculas_profesor(nid_asignatura: string, nid_profesor: string)
+  {
+    let API_URL = this.url + '/obtener_matriculas_activas_profesor/' + nid_asignatura + '/' + nid_profesor;
+    return this.http.get(API_URL, {withCredentials: true});
+  }
 }

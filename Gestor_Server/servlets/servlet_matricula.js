@@ -262,6 +262,22 @@ function sustituir_profesor(req, res)
 }
 
 
+function obtener_matriculas_activas_profesor(req, res)
+{
+    comun.comprobaciones(req, res,
+        async() =>
+        {
+            let nid_asignatura = req.params.nid_asignatura;
+            let nid_profesor = req.params.nid_profesor;
+
+            let lista_matriculas =  await matricula.obtener_matriculas_activas_asignatura(nid_profesor, nid_asignatura);
+
+            res.status(200).send({error: false, matriculas: lista_matriculas})
+        }
+    )
+}
+
+
 module.exports.registrar_matricula = registrar_matricula;
 module.exports.eliminar_asignatura = eliminar_asignatura;
 module.exports.actualizar_matricula = actualizar_matricula;
@@ -282,3 +298,5 @@ module.exports.registrar_precio_manual = registrar_precio_manual;
 module.exports.obtener_matricula = obtener_matricula;
 
 module.exports.sustituir_profesor = sustituir_profesor;
+
+module.exports.obtener_matriculas_activas_profesor =  obtener_matriculas_activas_profesor;

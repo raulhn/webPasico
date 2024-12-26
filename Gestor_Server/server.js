@@ -21,6 +21,7 @@ var servlet_remesa = require('./servlets/servlet_remesa.js');
 var servlet_parametros = require('./servlets/servlet_parametros.js');
 var servlet_horarios = require('./servlets/servlet_horarios.js');
 var servlet_asistencia = require('./servlets/servlet_asistencia.js');
+var servlet_evaluacion = require('./servlets/servlet_evaluacion.js')
 
 var fs = require('fs');
 
@@ -125,6 +126,8 @@ app.get('/obtener_matricula/:nid_matricula', servlet_matricula.obtener_matricula
 
 app.post('/sustituir_profesor', servlet_matricula.sustituir_profesor);
 
+app.get('/obtener_matriculas_activas_profesor/:nid_asignatura/:nid_profesor', servlet_matricula.obtener_matriculas_activas_profesor);
+
 /** Forma de pago **/
 app.post('/registrar_forma_pago', servlet_persona.registrar_forma_pago);
 app.get('/obtener_forma_pago/:nid_titular', servlet_persona.obtener_forma_pago);
@@ -173,6 +176,11 @@ app.post('/liberar_horario', servlet_horarios.liberar_horario_clase);
 
 /** Asistencia **/
 app.post('/registrar_evento', servlet_asistencia.registrar_evento);
+
+
+/** Evaluación **/
+app.post('/registrar_evaluacion', servlet_evaluacion.registrar_evaluacion);
+app.get('/obtener_trimestres', servlet_evaluacion.obtener_trimestres);
 
 https.createServer({
     key: fs.readFileSync('apache.key'),

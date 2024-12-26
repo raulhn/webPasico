@@ -1,20 +1,82 @@
-<p>evaluacion works!</p>
 
-<div *ngIf="bCargada_asignaturas">
-<ng-select [items]="lista_asignaturas"
-                    bindLabel="descripcion" 
-                    bindValue="nid"
-                    [(ngModel)]="asignatura_seleccionada"
-                    [compareWith]="compare_asignatura" (ngModelChange)="cambia_asignatura()">
-</ng-select>
-</div>
+<div class ="container">
 
-<div *ngIf="bCargados_profesores">
-    <ng-select [items]="lista_profesores"
-                        bindLabel="etiqueta" 
-                        bindValue="nid_persona"
-                        [(ngModel)]="profesor_seleccionado"
-                        [compareWith]="compare_profesor"
-                        (ngModelChange)="cambia_profesor()">
-    </ng-select>
+
+    <div  *ngIf="bCargados_trimestres">
+        <ng-select [items]="lista_trimestres"
+                    bindLabel="descripcion"
+                    bindValue="nid_trimestre"
+                    [(ngModel)]="trimestre_seleccionado">
+        </ng-select>
+    </div>
+
+    <div *ngIf="trimestre_seleccionado != ''">
+        <div *ngIf="bCargada_asignaturas">
+            <ng-select [items]="lista_asignaturas"
+                                bindLabel="descripcion" 
+                                bindValue="nid"
+                                [(ngModel)]="asignatura_seleccionada"
+                                [compareWith]="compare_asignatura" (ngModelChange)="cambia_asignatura()">
+            </ng-select>
+        </div>
+
+        <div *ngIf="bCargados_profesores">
+            <ng-select [items]="lista_profesores"
+                                bindLabel="etiqueta" 
+                                bindValue="nid_persona"
+                                [(ngModel)]="profesor_seleccionado"
+                                [compareWith]="compare_profesor"
+                                (ngModelChange)="cambia_profesor()">
+            </ng-select>
+        </div>
+
+
+        <form>
+            
+            <div *ngIf="bCargados_alumnos">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                Nombre
+                            </th>
+                            <th>
+                                Primer Apellido
+                            </th>
+                            <th>
+                                Segundo Apellido
+                            </th>
+                            <th>
+                                Nota
+                            </th>
+                            <th>
+                                Progreso
+                            </th>
+                            <th>
+                                Comentario
+                            </th>
+                        </tr>
+                    </thead>
+                    <tr *ngFor="let alumno of lista_alumnos">
+                        <td> {{alumno['nombre']}} </td>
+                        <td>  {{alumno['primer_apellido']}} </td>
+                        <td>  {{alumno['segundo_apellido']}}</td>
+                        <td> <input type="text" [(ngModel)]="lista_notas[alumno['nid']]"/> </td>
+                        <td> 
+                            <select class="form-select" [(ngModel)]="lista_progreso[alumno['nid']]">
+                                <option  value=0>Progresa Adecuadamente</option>
+                                <option value=1>Necesita Mejorar</option>
+                            </select>
+                        </td>
+                        <td>
+                        
+                            <textarea  [(ngModel)]="lista_comentarios[alumno['nid']]" rows="4" cols="50"> </textarea>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <button class="btn btn-primary mb-3 mt-2 tp-3" (click)="guardar()"> Guardar </button>
+        </form>
+    </div>
 </div>
