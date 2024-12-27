@@ -4,6 +4,8 @@ import { CursosService } from 'src/app/servicios/cursos.service';
 import { EvaluacionService } from 'src/app/servicios/evaluacion.service';
 import { MatriculasService } from 'src/app/servicios/matriculas.service';
 
+import Swal from 'sweetalert2';
+
 @Component({
   selector: 'app-evaluacion',
   templateUrl: './evaluacion.component.html',
@@ -19,7 +21,7 @@ export class EvaluacionComponent implements OnInit{
   bCargados_profesores: boolean = false;
   profesor_seleccionado: string = "";
 
-  nid_ultimo_curso: string = "";
+
 
   lista_alumnos: any;
 
@@ -51,18 +53,10 @@ export class EvaluacionComponent implements OnInit{
 
   ngOnInit(): void {
     this.asignaturasService.obtener_asignaturas().subscribe(this.recupera_asignaturas);
-    this.cursosService.obtener_nid_ultimo_curso().subscribe(this.recupera_nid_ultimo_curso);
 
     this.evaluacionesService.obtener_trimestres().subscribe(this.recuperar_trimestres);
   }
 
-  recupera_nid_ultimo_curso =
-  {
-    next: (respuesta: any) =>
-    {
-      this.nid_ultimo_curso = respuesta.nid_ultimo_curso;
-    }
-  }
 
   recupera_profesores = 
   {
@@ -84,25 +78,41 @@ export class EvaluacionComponent implements OnInit{
     }
   }
 
+
+  recupera_evaluaciones = 
+  {
+    next: (respuesta: any) =>
+    {
+      let evaluaciones_matriculas = respuesta.evaluaciones_matriculas;
+
+      for(let evaluacion_matricula of evaluaciones_matriculas)
+      {
+        let nid_alumno = evaluacion_matricula['nid_alumno'];
+
+        this.lista_progreso[nid_alumno] = evaluacion_matricula['nid_tipo_progreso'];
+        this.lista_comentarios[nid_alumno]  = evaluacion_matricula['comentario'];
+        this.lista_notas[nid_alumno] = evaluacion_matricula['nota'];
+      }
+
+    }
+  }
+
   recupera_alumnos = 
   {
     next: (respuesta: any) =>
     {
       this.lista_alumnos = respuesta.matriculas;
 
+      this.bCargados_alumnos = true;
+
       for (let i = 0; i < this.lista_alumnos.length; i++)
       {
         this.lista_progreso[this.lista_alumnos[i]['nid']] = "0";
         this.lista_matriculas[this.lista_alumnos[i]['nid']] = this.lista_alumnos[i]['nid_matricula_asignatura'];
         this.lista_comentarios[this.lista_alumnos[i]['nid']] = "";
-      }
-
-      for (let i = 0; i < this.lista_alumnos.length; i++)
-      {
         this.lista_notas[this.lista_alumnos[i]['nid']] = "0";
       }
-
-      this.bCargados_alumnos = true;
+      this.evaluacionesService.obtener_evaluacion(this.trimestre_seleccionado, this.asignatura_seleccionada, this.profesor_seleccionado).subscribe(this.recupera_evaluaciones);
     }
     
   }
@@ -116,7 +126,7 @@ export class EvaluacionComponent implements OnInit{
   cambia_profesor()
   {
     this.matriculasService.obtener_matriculas_profesor(this.asignatura_seleccionada, this.profesor_seleccionado).subscribe(this.recupera_alumnos);
-   // this.matriculasService.obtener_alumnos_profesores(this.profesor_seleccionado, this.nid_ultimo_curso, this.asignatura_seleccionada, "1").subscribe(this.recupera_alumnos);
+
   }
 
   compare_asignatura(item: any, selected: any) {
@@ -131,13 +141,25 @@ export class EvaluacionComponent implements OnInit{
   {
     next: (respuesta: any) =>
     {
-      console.log(respuesta)
+      Swal.fire({
+        icon: 'success',
+        title: 'Evaluación registrada',
+        text: 'Se ha registrado la evaluación'
+      });
+    },
+    error: (respuesta: any) =>
+    {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Se ha producido un error'
+      })
     }
   }
 
   guardar()
   {
-    this.evaluacionesService.registrar_evaluacion(this.trimestre_seleccionado, JSON.stringify(this.lista_notas), JSON.stringify(this.lista_progreso), JSON.stringify(this.lista_matriculas),
+    this.evaluacionesService.registrar_evaluacion(this.trimestre_seleccionado, this.asignatura_seleccionada, this.profesor_seleccionado, JSON.stringify(this.lista_notas), JSON.stringify(this.lista_progreso), JSON.stringify(this.lista_matriculas),
                                                 JSON.stringify(this.lista_comentarios)).subscribe(this.peticion_evaluacion);
   }
 }

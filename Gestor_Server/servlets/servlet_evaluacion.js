@@ -13,23 +13,59 @@ function registrar_evaluacion(req, res)
             let comentarios = req.body.comentarios;
 
             let nid_trimestre = req.body.nid_trimestre;
+            let nid_asignatura = req.body.nid_asignatura;
+            let nid_profesor = req.body.nid_profesor;
+
+            let nid_evaluacion = await evaluacion.registrar_evaluacion(nid_trimestre, nid_asignatura, nid_profesor);
 
             let notas_array = JSON.parse(notas);
             let progreso_array = JSON.parse(progresos);
             let matricula_array = JSON.parse(matriculas)
             let comentarios_array = JSON.parse(comentarios);
 
-            for (let nid_persona in notas_array)
+            let array_persona = Object.keys(notas_array);
+
+            console.log('Tamaño array')
+            console.log(array_persona.length)
+            for (let i = 0; i < array_persona.length; i++) 
             {
-                let nota = notas_array[nid_persona];
-                let nid_progreso = progreso_array[nid_persona]
+              
+                let nid_persona = array_persona[i];
+                console.log(nid_persona)
                 let nid_matricula_asignatura = matricula_array[nid_persona];
+
+                let nota = notas_array[nid_persona];
+                let nid_tipo_progreso = progreso_array[nid_persona]
                 let comentario = comentarios_array[nid_persona];
 
-                await evaluacion.registrar_evaluacion(nota, nid_trimestre, nid_progreso, nid_matricula_asignatura, comentario)
+                await evaluacion.registrar_evaluacion_matricula(nid_evaluacion, nid_matricula_asignatura, nota, nid_tipo_progreso, comentario);
             }
 
-            res.status(200).send({error: false})
+            res.status(200).send({error: false, message: 'Evaluacion registrada'})
+        }
+    )
+}
+
+function obtener_evaluacion(req, res)
+{
+    comun.comprobaciones(req, res,
+        async() =>
+        {
+            let nid_trimestre = req.params.nid_trimestre;
+            let nid_asignatura = req.params.nid_asignatura;
+            let nid_profesor = req.params.nid_profesor;
+
+            bExiste_evaluacion = await evaluacion.existe_evaluacion(nid_trimestre, nid_asignatura, nid_profesor);
+            
+            if (bExiste_evaluacion)
+            {
+                let evaluacion_recuperada = await evaluacion.obtener_evaluacion(nid_trimestre, nid_asignatura, nid_profesor);
+
+                let evaluaciones_matriculas = await evaluacion.obtener_evaluaciones_matricula(evaluacion_recuperada['nid_evaluacion']);
+
+                res.status(200).send({error: false, evaluacion: evaluacion_recuperada, evaluaciones_matriculas: evaluaciones_matriculas});
+            }
+            else {res.status(200).send({error: false, evaluacion: null, evaluaciones_matriculas: []});}
         }
     )
 }
@@ -51,3 +87,4 @@ function obtener_trimestres(req, res)
 
 module.exports.registrar_evaluacion = registrar_evaluacion;
 module.exports.obtener_trimestres = obtener_trimestres;
+module.exports.obtener_evaluacion = obtener_evaluacion;

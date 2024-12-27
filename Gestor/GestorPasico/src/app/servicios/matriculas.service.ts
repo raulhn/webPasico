@@ -75,4 +75,6 @@ export class MatriculasService {
     let API_URL = this.url + '/obtener_matriculas_activas_profesor/' + nid_asignatura + '/' + nid_profesor;
     return this.http.get(API_URL, {withCredentials: true});
   }
+
+
 }

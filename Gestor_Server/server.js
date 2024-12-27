@@ -181,6 +181,7 @@ app.post('/registrar_evento', servlet_asistencia.registrar_evento);
 /** Evaluación **/
 app.post('/registrar_evaluacion', servlet_evaluacion.registrar_evaluacion);
 app.get('/obtener_trimestres', servlet_evaluacion.obtener_trimestres);
+app.get('/obtener_evaluacion/:nid_trimestre/:nid_asignatura/:nid_profesor', servlet_evaluacion.obtener_evaluacion)
 
 https.createServer({
     key: fs.readFileSync('apache.key'),

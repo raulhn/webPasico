@@ -31,52 +31,51 @@
         </div>
 
 
-        <form>
             
             <div *ngIf="bCargados_alumnos">
                 <table class="table">
                     <thead>
-                        <tr>
-                            <th>
+                        <tr class="d-flex">
+                            <th class="col-2">
                                 Nombre
                             </th>
-                            <th>
+                            <th class="col-2">
                                 Primer Apellido
                             </th>
-                            <th>
+                            <th class="col-2">
                                 Segundo Apellido
                             </th>
-                            <th>
+                            <th class="col-1">
                                 Nota
                             </th>
-                            <th>
+                            <th class="col-2">
                                 Progreso
                             </th>
-                            <th>
+                            <th class="col-3">
                                 Comentario
                             </th>
                         </tr>
                     </thead>
-                    <tr *ngFor="let alumno of lista_alumnos">
-                        <td> {{alumno['nombre']}} </td>
-                        <td>  {{alumno['primer_apellido']}} </td>
-                        <td>  {{alumno['segundo_apellido']}}</td>
-                        <td> <input type="text" [(ngModel)]="lista_notas[alumno['nid']]"/> </td>
-                        <td> 
+                    <tr *ngFor="let alumno of lista_alumnos" class="d-flex">
+                        <td class="col-2"> {{alumno['nombre']}} </td>
+                        <td  class="col-2">  {{alumno['primer_apellido']}} </td>
+                        <td  class="col-2">  {{alumno['segundo_apellido']}}</td>
+                        <td  class="col-1"> <input type="text" class="form-control pe-2" [(ngModel)]="lista_notas[alumno['nid']]"/> </td>
+                        <td  class="col-2"> 
                             <select class="form-select" [(ngModel)]="lista_progreso[alumno['nid']]">
                                 <option  value=0>Progresa Adecuadamente</option>
                                 <option value=1>Necesita Mejorar</option>
                             </select>
                         </td>
-                        <td>
+                        <td class="col-3">
                         
-                            <textarea  [(ngModel)]="lista_comentarios[alumno['nid']]" rows="4" cols="50"> </textarea>
+                            <textarea class="form-control" [(ngModel)]="lista_comentarios[alumno['nid']]" rows="4" cols="50"> </textarea>
                         </td>
                     </tr>
                 </table>
             </div>
 
             <button class="btn btn-primary mb-3 mt-2 tp-3" (click)="guardar()"> Guardar </button>
-        </form>
+      
     </div>
 </div>
