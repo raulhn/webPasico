@@ -29,4 +29,10 @@ export class EvaluacionService {
     let API_URL = this.url + '/obtener_evaluacion/' + nid_trimestre + '/' + nid_asignatura + '/' + nid_profesor;
     return this.http.get(API_URL, {withCredentials: true})
   }
+
+  obtener_evaluacion_matricula_asignatura(nid_matricula: string)
+  {
+    let API_URL = this.url + '/obtener_evaluacion_matricula_asignatura/' + nid_matricula;
+    return this.http.get(API_URL, {withCredentials: true})
+  }
 }

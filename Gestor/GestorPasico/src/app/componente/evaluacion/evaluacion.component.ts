@@ -125,8 +125,27 @@ export class EvaluacionComponent implements OnInit{
 
   cambia_profesor()
   {
+
+    delete this.lista_progreso;
+    delete this.lista_comentarios;
+    delete this.lista_notas;
+    delete this.lista_matriculas;
+
+    this.lista_notas = {};
+    this.lista_progreso = {};
+    this.lista_matriculas = {};
+    this.lista_comentarios = {};
+
+
     this.matriculasService.obtener_matriculas_profesor(this.asignatura_seleccionada, this.profesor_seleccionado).subscribe(this.recupera_alumnos);
 
+  }
+
+  cambia_trimestre()
+  {
+    this.bCargados_alumnos = false;
+    this.asignatura_seleccionada = "";
+    this.profesor_seleccionado = "";
   }
 
   compare_asignatura(item: any, selected: any) {

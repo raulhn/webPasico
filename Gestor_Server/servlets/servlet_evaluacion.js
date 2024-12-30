@@ -83,8 +83,23 @@ function obtener_trimestres(req, res)
     )
 }
 
+function obtener_evaluacion_matricula_asginatura(req, res)
+{
+    comun.comprobaciones(req, res,
+        async() =>
+        {
+            let nid_matricula = req.params.nid_matricula;
+
+            let resultado = await evaluacion.obtener_evaluacion_matricula_asginatura(nid_matricula);
+
+            res.status(200).send({error: false, evaluaciones: resultado})
+        }
+    )
+}
 
 
 module.exports.registrar_evaluacion = registrar_evaluacion;
 module.exports.obtener_trimestres = obtener_trimestres;
 module.exports.obtener_evaluacion = obtener_evaluacion;
+
+module.exports.obtener_evaluacion_matricula_asignatura = obtener_evaluacion_matricula_asginatura;

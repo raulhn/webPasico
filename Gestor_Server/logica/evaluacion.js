@@ -238,6 +238,41 @@ function registrar_evaluacion_matricula(nid_evaluacion, nid_matricula_asignatura
 }
 
 
+function obtener_evaluacion_matricula_asginatura(nid_matricula)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.query(
+                "select a.descripcion asignatura, t.descripcion trimestre, concat(p.nombre, ' ' , p.primer_apellido, ' ', p.segundo_apellido) profesor, em.*, tp.descripcion progreso " +
+                "from " + constantes.ESQUEMA_BD + ".evaluacion e, " +
+                "      " + constantes.ESQUEMA_BD + ".evaluacion_matricula em, " +
+                "      " + constantes.ESQUEMA_BD + ".matricula m, " +
+                "      " + constantes.ESQUEMA_BD + ".matricula_asignatura ma, " +
+                "      " + constantes.ESQUEMA_BD + ".asignatura a, " +
+                "      " + constantes.ESQUEMA_BD + ".trimestre t, " +
+                "      " + constantes.ESQUEMA_BD + ".persona p, " +
+                "      " + constantes.ESQUEMA_BD + ".tipo_progreso tp " +
+                "where e.nid_evaluacion = em.nid_evaluacion  " +
+                "  and a.nid = e.nid_asignatura " +
+                "  and t.nid_trimestre = e.nid_trimestre " +
+                "  and p.nid = e.nid_profesor " +
+                "  and ma.nid = em.nid_matricula_asignatura " +
+                "  and m.nid = ma.nid_matricula " +
+                "  and em.nid_tipo_progreso = tp.nid_tipo_progreso " +
+                "  and m.nid = " + conexion.dbConn.escape(nid_matricula) +
+                "order by t.nid_trimestre, a.nid",
+               
+                (error, results, fields) => 
+                {
+                    if (error) {console.log(error); reject(error);}
+                    else {resolve(results);}
+                }
+            )
+        }
+    )
+}
+
 
 
 module.exports.obtener_trimestres = obtener_trimestres;
@@ -249,3 +284,5 @@ module.exports.obtener_evaluacion_matricula = obtener_evaluacion_matricula;
 module.exports.obtener_evaluaciones_matricula = obtener_evaluaciones_matricula;
 
 module.exports.existe_evaluacion = existe_evaluacion;
+
+module.exports.obtener_evaluacion_matricula_asginatura = obtener_evaluacion_matricula_asginatura;

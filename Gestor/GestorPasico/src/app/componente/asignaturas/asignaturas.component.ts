@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, OnDestroy, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NgSelectComponent } from '@ng-select/ng-select';
+import { DataTablesOptions } from 'src/app/logica/constantes';
 import { AsignaturasService } from 'src/app/servicios/asignaturas.service';
 import { PersonasService } from 'src/app/servicios/personas.service';
 import Swal from 'sweetalert2';
@@ -40,6 +41,7 @@ export class AsignaturasComponent implements OnInit {
       this.asignaturas = respuesta.asignaturas;
 
       this.dtOptions = {
+        language: DataTablesOptions.spanish_datatables,
         data: this.asignaturas,
         dom: 'Bfrtip',
         buttons: [{extend: 'excel', text: 'Generar Excel', className: 'btn btn-dark mb-3'}],

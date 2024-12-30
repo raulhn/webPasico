@@ -61,8 +61,14 @@
         </ul>
     </div>
 
-    <app-horario-matricula nid_matricula={{nid_matricula}}></app-horario-matricula>
-
+  
+  <div *ngIf="bCargadas_evaluaciones"  class="card mt-4">
+    <div class="card-header">
+        <b>Evaluaciones</b>
+    </div>
+    <table datatable [dtOptions]="dtOptions" id="tabla_evaluaciones" class="row-border hover">
+    </table>
+</div>
     
 
 </div>
