@@ -6,7 +6,7 @@
         <b>Evaluación</b>
     </div>
 
-    <div class="p-3" *ngIf="bCargados_trimestres">
+    <div class="pt-3" *ngIf="bCargados_trimestres">
         <label for="select-trimestres"> <b> Trimestre </b></label>
         <ng-select id="select-trimestres" [items]="lista_trimestres"
                     bindLabel="descripcion"
@@ -68,10 +68,10 @@
                     <td class="col-2"> {{alumno['nombre']}} </td>
                     <td  class="col-2">  {{alumno['primer_apellido']}} </td>
                     <td  class="col-2">  {{alumno['segundo_apellido']}}</td>
-                    <td  class="col-1 pe-3"> <input type="text" class="form-control" [(ngModel)]="lista_notas[alumno['nid']]"/> </td>
+                    <td  class="col-1 pe-3"> <input type="number" lang="en" step="0.01" class="form-control" [(ngModel)]="lista_notas[alumno['nid']]"/> </td>
                     <td  class="col-2 pe-3"> 
-                        <select class="form-select" [(ngModel)]="lista_progreso[alumno['nid']]">
-                            <option  value=0>Progreso Adecuado</option>
+                        <select class="form-select" style="font-size: 0.9em;" [(ngModel)]="lista_progreso[alumno['nid']]">
+                            <option  value=0>Progresa Adecuadamente</option>
                             <option value=1>Necesita Mejorar</option>
                         </select>
                     </td>

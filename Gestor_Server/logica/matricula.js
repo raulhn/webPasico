@@ -1,6 +1,7 @@
 const conexion = require('../conexion.js')
 const constantes = require('../constantes.js')
 const logica_asignatura = require('./asignatura.js')
+const curso = require('./curso.js')
 
 function existe_matricula(nid_persona, nid_curso)
 {
@@ -561,8 +562,9 @@ function obtener_matriculas_activas_profesor(nid_profesor, nid_asignatura)
 function obtener_matriculas_activas_asignatura(nid_profesor, nid_asignatura)
 {
     return new Promise(
-        (resolve, reject) =>
+        async (resolve, reject) =>
         {
+            nid_ultimo_curso = await curso.obtener_ultimo_curso();
             conexion.dbConn.query(" select pam.nid_matricula_asignatura, p.* from " + 
                                                       constantes.ESQUEMA_BD  + ".profesor_alumno_matricula pam, " +
                                                       constantes.ESQUEMA_BD  + ".matricula_asignatura ma, " +
@@ -573,7 +575,9 @@ function obtener_matriculas_activas_asignatura(nid_profesor, nid_asignatura)
                                         "ma.nid_matricula = m.nid and " +
                                         " m.nid_curso = (select max(nid_curso) from pasico_gestor.curso) and " +
                                         " pam.nid_profesor = " + conexion.dbConn.escape(nid_profesor) + " and " +
-                                        " ma.nid_asignatura = " + conexion.dbConn.escape(nid_asignatura),
+                                        " ma.nid_asignatura = " + conexion.dbConn.escape(nid_asignatura) + " and " +
+                                        " (ma.fecha_baja is null or ma.fecha_baja > sysdate()) " + " and " +
+                                        " m.nid_curso = " + conexion.dbConn.escape(nid_ultimo_curso) ,
                 (error, results, fields) =>
                 {
                     if (error)  {console.log(error); reject();}

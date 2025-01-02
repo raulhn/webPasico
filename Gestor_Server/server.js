@@ -184,6 +184,11 @@ app.get('/obtener_trimestres', servlet_evaluacion.obtener_trimestres);
 app.get('/obtener_evaluacion/:nid_trimestre/:nid_asignatura/:nid_profesor', servlet_evaluacion.obtener_evaluacion);
 app.get('/obtener_evaluacion_matricula_asignatura/:nid_matricula', servlet_evaluacion.obtener_evaluacion_matricula_asignatura);
 
+
+/** Boletin **/
+app.get('/generar_boletin/:nid_matricula/:nid_trimestre', servlet_evaluacion.generar_boletin);
+
+
 https.createServer({
     key: fs.readFileSync('apache.key'),
     cert: fs.readFileSync('apache-certificate.crt')

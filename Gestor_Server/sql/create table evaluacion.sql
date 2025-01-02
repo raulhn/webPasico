@@ -20,7 +20,7 @@ create table pasico_gestor.evaluacion_matricula(
 	nid_evaluacion_matricula integer primary key auto_increment,
 	nid_evaluacion integer,
     nid_matricula_asignatura integer,
-	nota integer,
+	nota decimal(4, 2),
 	nid_tipo_progreso integer,
 	comentario varchar(1000)
 );

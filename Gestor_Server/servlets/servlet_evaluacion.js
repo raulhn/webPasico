@@ -2,6 +2,7 @@ const evaluacion = require('../logica/evaluacion.js')
 const comun = require('./servlet_comun.js')
 
 
+
 function registrar_evaluacion(req, res)
 {
     comun.comprobaciones(req, res,
@@ -97,9 +98,48 @@ function obtener_evaluacion_matricula_asginatura(req, res)
     )
 }
 
+function generar_boletin(req, res)
+{
+    comun.comprobaciones(req, res,
+        async() =>
+        {
+            let nid_matricula = req.params.nid_matricula;
+            let nid_trimestre = req.params.nid_trimestre;
+
+            let fichero = await evaluacion.generar_boletin(nid_matricula, nid_trimestre);
+
+            res.setHeader('Content-Type', 'application/msword');
+            res.setHeader('Content-Disposition', 'attachment; filename=Boletin');
+            res.write(fichero);
+            res.end();
+
+         /*   
+            docxConverter(path,'/home/pasico/Boletines/' + 'descarga' + '.pdf',
+                function(err,result){
+                if(err){
+                   console.log(err);
+                  }
+                else {
+                    res.download('/home/pasico/Boletines/' + 'descarga' + '.pdf', 'demo.docx', function(err){
+                        if (err) {
+                          // if the file download fails, we throw an error
+                          throw err;
+                        }
+                      });
+                }
+              });
+
+          */
+        }
+    )
+}
+
+
 
 module.exports.registrar_evaluacion = registrar_evaluacion;
 module.exports.obtener_trimestres = obtener_trimestres;
 module.exports.obtener_evaluacion = obtener_evaluacion;
 
 module.exports.obtener_evaluacion_matricula_asignatura = obtener_evaluacion_matricula_asginatura;
+
+module.exports.generar_boletin = generar_boletin;
