@@ -105,9 +105,6 @@ export class ListaOrdenadaComponent implements OnInit {
         {
           let id_cancion_eu = this.canciones[i][j]['nid_cancion_eu'];
 
-          console.log('orden')
-          console.log(this.orden_votaciones[id_cancion_eu])
-
           let fila_nueva = Number(Math.trunc(Number(this.orden_votaciones[id_cancion_eu]) % this.filas));
 
           let columna_nueva = Math.trunc(this.orden_votaciones[id_cancion_eu] / this.filas)
@@ -116,13 +113,10 @@ export class ListaOrdenadaComponent implements OnInit {
           let nombre_clase_contador = this.obtener_clase_contador(id_cancion_eu);
 
           let clase = document.querySelector('.' + nombre_clase);
-          let clase_contador = document.querySelector('.' + nombre_clase_contador);
+
 
           let dif_columna = (columna_nueva - j) * 100;
           let dif_fila = (fila_nueva - i) * 100;
-
-          console.log(nombre_clase_contador)
-          console.log(fila_nueva + ' - ' +columna_nueva)
           this.lanzar_contador(nombre_clase_contador, Number(this.votos[id_cancion_eu]));
 
           let transformacion = "transform: translate(" + dif_columna + "%, "+  dif_fila + "%); transition-duration: " + this.tiempo_animacion_traslado +

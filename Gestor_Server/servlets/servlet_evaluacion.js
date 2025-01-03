@@ -108,10 +108,7 @@ function generar_boletin(req, res)
 
             let fichero = await evaluacion.generar_boletin(nid_matricula, nid_trimestre);
 
-            res.setHeader('Content-Type', 'application/msword');
-            res.setHeader('Content-Disposition', 'attachment; filename=Boletin');
-            res.write(fichero);
-            res.end();
+            res.status(200).send({error: false, fichero: fichero});
 
          /*   
             docxConverter(path,'/home/pasico/Boletines/' + 'descarga' + '.pdf',

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatriculasService } from 'src/app/servicios/matriculas.service';
 import { ActivatedRoute } from '@angular/router';
 import Swal from 'sweetalert2';
@@ -29,9 +29,25 @@ export class FichaMatriculaComponent implements OnInit{
 
   bCargadas_evaluaciones: boolean = false;
 
-  constructor(private rutaActiva: ActivatedRoute, private matriculaService: MatriculasService, private remesaService: RemesaService, private evaluacionesServcie: EvaluacionService)
+  bCargados_trimestres: boolean = false;
+  bCargado_mensualidad: boolean = false;
+  lista_trimestres: any;
+  trimestre_seleccionado: string ="";
+
+    @ViewChild('instancia_sustituir') instancia_sustituir!: ElementRef;
+
+  constructor(private rutaActiva: ActivatedRoute, private matriculaService: MatriculasService, private remesaService: RemesaService, private evaluacionesService: EvaluacionService)
   {
     this.nid_matricula = rutaActiva.snapshot.params['nid_matricula'];
+  }
+
+  recuperar_trimestres =
+  {
+    next: (respuesta: any) =>
+    {
+      this.lista_trimestres = respuesta.trimestres;
+      this.bCargados_trimestres = true;
+    }
   }
 
   obtener_asignaturas =
@@ -39,6 +55,7 @@ export class FichaMatriculaComponent implements OnInit{
     next: (respuesta: any) =>
     {
       this.asignaturas = respuesta['asignaturas'];
+      this.bCargado = true;
     }
   }  
 
@@ -131,19 +148,93 @@ export class FichaMatriculaComponent implements OnInit{
     next: (respuesta: any) =>
     {
       this.mensualidad_matricula = respuesta['resumen_mensualidad'];
-      this.bCargado = true;
+      
+      if (this.mensualidad_matricula === undefined || this.mensualidad_matricula === null)
+      {
+        this.bCargado_mensualidad = false
+      }
+      else
+      {
+        this.bCargado_mensualidad = true;
+      }
     }
   }
 
   ngOnInit(): void {
     this.matriculaService.obtener_matricula(this.nid_matricula).subscribe(this.recuperar_matricula);
     this.matriculaService.obtener_asignaturas_matriculas(this.nid_matricula).subscribe(this.obtener_asignaturas);
-    this.evaluacionesServcie.obtener_evaluacion_matricula_asignatura(this.nid_matricula).subscribe(this.recuperar_evaluaciones);
+    this.evaluacionesService.obtener_evaluacion_matricula_asignatura(this.nid_matricula).subscribe(this.recuperar_evaluaciones);
     this.remesaService.obtener_precio_mensualidad(this.nid_matricula).subscribe(this.obtener_mensualidad_matricula);
+    this.evaluacionesService.obtener_trimestres().subscribe(this.recuperar_trimestres);
   }
 
   guardar()
   {
       this.matriculaService.registrar_precio_manual(this.nid_matricula, this.precio_manual).subscribe(this.registrar_precio);
   }
+
+
+  peticion_generar_boletin =
+  {
+    next: (respuesta: any) =>
+    {
+      let fichero = respuesta.fichero;
+      this.descargarFichero(fichero);
+          Swal.fire({
+            icon: 'success',
+            title: 'Boletín generado',
+            text: 'Se ha generado el boletín',
+          });
+    },
+    error: (respuesta: any) =>
+    {
+      console.log(respuesta);
+      Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Se ha producido un error al generar el boletín',
+          })
+    }
+  }
+
+
+
+  descargarFichero(fichero: string) {
+    const contenidoFichero = fichero;
+    const blob = new Blob([contenidoFichero], { type: 'application/xml' });
+    const url = window.URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'boletin.doc';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+  }
+
+
+
+  generar_boletin()
+  {
+      Swal.fire({
+        title: 'Generar boletín',
+        html: this.instancia_sustituir.nativeElement,
+        confirmButtonText: 'Generar',
+        showCancelButton: true
+      }).then(
+        (results: any) =>
+          {
+          if(results.isConfirmed)
+          {
+            this.evaluacionesService.generar_boletin(this.nid_matricula, this.trimestre_seleccionado).subscribe(this.peticion_generar_boletin)
+          }
+        }
+      )
+  }
+
+  compareTrimestre(item: any, selected: any) {
+    return item['nid_trimestre'] == selected;
+  }
+  
 }

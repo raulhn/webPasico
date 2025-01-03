@@ -35,4 +35,10 @@ export class EvaluacionService {
     let API_URL = this.url + '/obtener_evaluacion_matricula_asignatura/' + nid_matricula;
     return this.http.get(API_URL, {withCredentials: true})
   }
+
+  generar_boletin(nid_matricula: string, nid_trimestre: string)
+  {
+    let API_URL = this.url + '/generar_boletin/' + nid_matricula + '/' + nid_trimestre;
+    return this.http.get(API_URL, {withCredentials: true})
+  }
 }
