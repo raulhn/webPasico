@@ -125,7 +125,7 @@ export class RemesasComponent implements OnInit{
   crear_remesa()
   {
     console.log('Registrar remesa')
-    this.remesaService.registrar_remesa_persona(this.nid_prueba).subscribe(this.peticion_registrar_remesa);
+    this.remesaService.registrar_remesa_matriculas().subscribe(this.peticion_registrar_remesa);
   }
 
   buscar()

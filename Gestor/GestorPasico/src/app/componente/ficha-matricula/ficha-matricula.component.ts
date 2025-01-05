@@ -201,7 +201,7 @@ export class FichaMatriculaComponent implements OnInit{
 
   descargarFichero(fichero: string) {
     const contenidoFichero = fichero;
-    const blob = new Blob([contenidoFichero], { type: 'application/xml' });
+    const blob = new Blob([contenidoFichero], { type: 'application/msword' });
     const url = window.URL.createObjectURL(blob);
 
     const a = document.createElement('a');

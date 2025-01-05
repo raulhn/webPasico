@@ -368,10 +368,10 @@ function generar_boletin(nid_matricula, nid_trimestre)
 
             if (evaluacion_tutor !== null)
             {
-                    profesor = evaluacion_tutor['profesor'];
-                    curso = evaluacion_tutor['curso'];
-                    trimestre = evaluacion_tutor['trimestre'];
-                    alumno = evaluacion_tutor['alumno'];
+                profesor = evaluacion_tutor['profesor'];
+                curso = evaluacion_tutor['curso'];
+                trimestre = evaluacion_tutor['trimestre'];
+                alumno = evaluacion_tutor['alumno'];
                 
 
                 texto = texto.toString().replace('||NOMBRE_PROFESOR||', profesor);
@@ -414,6 +414,11 @@ function generar_boletin(nid_matricula, nid_trimestre)
                     let texto_instrumento_parametro =await parametros.obtener_valor('PLANTILLA_NOTAS_INSTRUMENTO');
                     let texto_instrumento_aux = texto_instrumento_parametro['valor'];
 
+                    if(evaluacion_instrumento['nota'] == 0)
+                    {
+                        texto_instrumento_aux = texto_instrumento_aux.toString().replace('||NOTA_INSTRUMENTO||', '');
+                    }
+
                     texto_instrumento_aux = texto_instrumento_aux.toString().replace('||NOTA_INSTRUMENTO||', '(' + evaluacion_instrumento['nota'] + ')');
                     texto_instrumento_aux = texto_instrumento_aux.toString().replace('||ASIGNATURA_INSTRUMENTO||', evaluacion_instrumento['asignatura']);
                     texto_instrumento_aux = texto_instrumento_aux.toString().replace('||PROGRESO_INSTRUMENTO||', evaluacion_instrumento['progreso']);
@@ -430,6 +435,12 @@ function generar_boletin(nid_matricula, nid_trimestre)
                     let texto_instrumento_parametro =await parametros.obtener_valor('PLANTILLA_NOTAS_INSTRUMENTO');
                     let texto_instrumento_aux = texto_instrumento_parametro['valor'];
 
+                    
+                    if(evaluacion_instrumento['nota'] == 0)
+                    {
+                        texto_instrumento_aux = texto_instrumento_aux.toString().replace('||NOTA_INSTRUMENTO||', '');
+                    }
+
                     texto_instrumento_aux = texto_instrumento_aux.toString().replace('||NOTA_INSTRUMENTO||','(' + evaluacion_instrumento['nota'] + ')');
                     texto_instrumento_aux = texto_instrumento_aux.toString().replace('||ASIGNATURA_INSTRUMENTO||', evaluacion_instrumento['asignatura']);
                     texto_instrumento_aux = texto_instrumento_aux.toString().replace('||PROGRESO_INSTRUMENTO||', evaluacion_instrumento['progreso']);
@@ -445,6 +456,12 @@ function generar_boletin(nid_matricula, nid_trimestre)
                     let evaluacion_instrumento = array_evaluacion_banda[i];
                     let texto_instrumento_parametro =await parametros.obtener_valor('PLANTILLA_NOTAS_INSTRUMENTO');
                     let texto_instrumento_aux = texto_instrumento_parametro['valor'];
+
+                    
+                    if(evaluacion_instrumento['nota'] == 0)
+                    {
+                        texto_instrumento_aux = texto_instrumento_aux.toString().replace('||NOTA_INSTRUMENTO||', '');
+                    }
 
                     texto_instrumento_aux = texto_instrumento_aux.toString().replace('||NOTA_INSTRUMENTO||', '(' + evaluacion_instrumento['nota'] + ')');
                     texto_instrumento_aux = texto_instrumento_aux.toString().replace('||ASIGNATURA_INSTRUMENTO||', evaluacion_instrumento['asignatura']);

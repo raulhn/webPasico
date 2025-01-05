@@ -8,13 +8,25 @@ function registrar_remesa_persona(req, res)
         async () =>
         {
             let nid = req.body.nid;
-            await remesa.registrar_remesa_persona(nid);
+            var v_siguiente_lote = await remesa.obtener_siguiente_lote();
+            await remesa.registrar_remesa_persona(nid, v_siguiente_lote);
 
             res.status(200).send({error:false, message: 'Registra remesa'})
         }
     );
 }
 
+function registrar_remesa_matriculas(req, res)
+{
+    comun.comprobaciones(req, res,
+        async ()=>
+        {
+            await remesa.registrar_remesa_matriculas();
+            res.status(200).send({error:false, message: 'Registra remesa'})
+        }
+
+    )
+}
 
 function obtener_remesas(req, res)
 {
@@ -192,3 +204,5 @@ module.exports.obtener_ultimo_lote = obtener_ultimo_lote;
 module.exports.rechazar_remesa = rechazar_remesa;
 module.exports.aprobar_remesa = aprobar_remesa;
 module.exports.aprobar_remesas = aprobar_remesas;
+
+module.exports.registrar_remesa_matriculas = registrar_remesa_matriculas;
