@@ -262,6 +262,7 @@ async function precio_matricula(nid_matricula, num_familiar)
 		valor_recuperado = await parametros.obtener_valor('PRECIO_LENGUAJE');
 		const PRECIO_LENGUAJE = valor_recuperado['valor'];
 
+		
 		valor_recuperado = await parametros.obtener_valor('PORCENTAJE_DESCUENTO_FAMILIA');
 		const PORCENTAJE_FAMILIA = valor_recuperado['valor'];
 
@@ -333,6 +334,11 @@ async function precio_matricula(nid_matricula, num_familiar)
 				{
 					v_precio_persona = PRECIO_LENGUAJE;
 					info = 'Precio Lenguaje Musical';
+				}
+				else if(v_tipo_asignatura = ASIGNATURA_BANDA)
+				{
+					v_precio_persona = 0;
+					info = 'Precio Banda / Conjunto';
 				}
 
 				linea_remesa.precio = v_precio_persona;
