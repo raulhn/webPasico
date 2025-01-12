@@ -514,12 +514,13 @@ function obtener_cursos_profesor(nid_profesor)
 }
 
 
-function registrar_precio_manual(nid_matricula, precio)
+function registrar_precio_manual(nid_matricula, precio, comentario_precio)
 {
     return new Promise(
         (resolve, reject) =>
         {
             conexion.dbConn.query("update " + constantes.ESQUEMA_BD + ".matricula set precio_manual = " + conexion.dbConn.escape(precio) +
+                    ", comentario_precio_manual = " + conexion.dbConn.escape(comentario_precio) +
                     " where nid = " + conexion.dbConn.escape(nid_matricula),
                 (error, results, fields) =>
                 {

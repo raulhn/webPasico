@@ -52,10 +52,10 @@ export class MatriculasService {
     return this.http.get(API_URL, {withCredentials: true});
   }
 
-  registrar_precio_manual(nid_matricula: string, precio: string)
+  registrar_precio_manual(nid_matricula: string, precio: string, comentario_precio: string)
   {
     let API_URL = this.url + '/actualizar_precio_manual';
-    return this.http.post(API_URL, {nid_matricula: nid_matricula, precio: precio}, {withCredentials: true});
+    return this.http.post(API_URL, {nid_matricula: nid_matricula, precio: precio, comentario_precio: comentario_precio}, {withCredentials: true});
   }
 
   obtener_matricula(nid_matricula: string)

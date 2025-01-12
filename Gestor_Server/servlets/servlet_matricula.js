@@ -225,9 +225,10 @@ function registrar_precio_manual(req, res)
         async() =>
         {
             let nid_matricula = req.body.nid_matricula;
+            let comentario_precio = req.body.comentario_precio;
             let precio = req.body.precio;
 
-            await matricula.registrar_precio_manual(nid_matricula, precio);
+            await matricula.registrar_precio_manual(nid_matricula, precio, comentario_precio);
             res.status(200).send({error: false, message: 'Precio actualizado'})
         }
     )

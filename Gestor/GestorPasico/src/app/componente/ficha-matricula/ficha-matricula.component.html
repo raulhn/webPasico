@@ -6,6 +6,10 @@
                 <label>Precio Manual: </label>
                 <input class="form-control" [(ngModel)]="precio_manual"/>
             </div>
+            <div class="col-10">
+                <label>Comentario Precio:</label>
+                <input class="form-control" [(ngModel)]="comentario_precio"/>
+            </div>
         </div>
         <div class="row">
             <div class="col">
@@ -24,6 +28,9 @@
                 <th>
                     Fecha alta
                 </th>
+                <th>
+                    Fecha baja
+                </th>
             </thead>
             <tbody>
                 <tr *ngFor="let asignatura of asignaturas">
@@ -35,6 +42,9 @@
                     </td>
                     <td>
                         {{asignatura.fecha_alta}}
+                    </td>
+                    <td>
+                        {{asignatura.fecha_baja}}
                     </td>
                 </tr>
             </tbody>

@@ -298,7 +298,7 @@ async function precio_matricula(nid_matricula, num_familiar)
 			var linea_remesa = new Object();
 
 			linea_remesa.precio = datos_matricula['precio_manual'];
-			linea_remesa.concepto = 'Precio manual para el alumno ' + datos_matricula['nombre_alumno'];
+			linea_remesa.concepto = 'Precio manual para el alumno ' + datos_matricula['nombre_alumno'] + ' - ' + datos_matricula['comentario_precio_manual'];
 
 			linea_remesas.push(linea_remesa);
 

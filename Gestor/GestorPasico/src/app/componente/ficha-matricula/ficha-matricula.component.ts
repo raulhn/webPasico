@@ -19,6 +19,7 @@ export class FichaMatriculaComponent implements OnInit{
   bCargado: boolean = false;
 
   precio_manual: string ="";
+  comentario_precio: string=";"
 
   mensualidad_matricula: any;
 
@@ -64,6 +65,7 @@ export class FichaMatriculaComponent implements OnInit{
     next: (respuesta: any) =>
     {
       this.precio_manual = respuesta['matricula']['precio_manual'];
+      this.comentario_precio = respuesta['matricula']['comentario_precio_manual'];
     }
   }
 
@@ -170,7 +172,7 @@ export class FichaMatriculaComponent implements OnInit{
 
   guardar()
   {
-      this.matriculaService.registrar_precio_manual(this.nid_matricula, this.precio_manual).subscribe(this.registrar_precio);
+      this.matriculaService.registrar_precio_manual(this.nid_matricula, this.precio_manual, this.comentario_precio).subscribe(this.registrar_precio);
   }
 
 
