@@ -82,8 +82,8 @@ export class RegistroMatriculaComponent implements OnInit{
   {
     next: (respuesta: any) =>
     {
-      this.lista_profesores = respuesta.profesores.map((elemento: any) =>{return{etiqueta_profesor: elemento.nif + ' ' + elemento.nombre + ' ' 
-          + elemento.primer_apellido + ' ' + elemento.segundo_apellido, clave_profesor: elemento.nid_persona}});
+      this.lista_profesores = respuesta.profesores.map((elemento: any) =>{
+        return{etiqueta_profesor: elemento.etiqueta, clave_profesor: elemento.nid_persona}});
     }
   }
 
@@ -197,7 +197,7 @@ export class RegistroMatriculaComponent implements OnInit{
     this.personasServices.obtener_lista_personas().subscribe(this.obtener_personas);
     this.asignaturasServices.obtener_asignatura(this.nid_asignatura).subscribe(this.obtener_asignatura);
     this.cursosServices.obtener_cursos().subscribe(this.obtener_cursos);
-    this.asignaturasServices.obtener_profesores_asingatura(this.nid_asignatura).subscribe(this.obtener_profesores);
+    this.asignaturasServices.obtener_profesores_asignatura(this.nid_asignatura).subscribe(this.obtener_profesores);
   }
 
   comparePersona_alumno(item: any, selected: any) {

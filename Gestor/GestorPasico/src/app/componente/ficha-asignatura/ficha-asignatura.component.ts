@@ -121,7 +121,7 @@ add_profesor =
         title: 'Profesor registrado',
         text: 'Se ha registrado el profesor',
       });
-      this.asignaturaServices.obtener_profesores_asingatura(this.nid_asignatura).subscribe(this.obtener_profesores);
+      this.asignaturaServices.obtener_profesores_asignatura(this.nid_asignatura).subscribe(this.obtener_profesores);
     },
     error: (respuesta: any) =>
     {
@@ -168,7 +168,7 @@ peticion_sustitucion =
       title: 'Profesor sustituido',
       text: 'Se ha sustituido el profesor',
     });
-    this.asignaturaServices.obtener_profesores_asingatura(this.nid_asignatura).subscribe(this.obtener_profesores);
+    this.asignaturaServices.obtener_profesores_asignatura(this.nid_asignatura).subscribe(this.obtener_profesores);
   },
   error: (respuesta: any) =>
   {
@@ -206,7 +206,7 @@ sustituir_profesor()
   ngOnInit(): void {
     this.personaService.obtener_lista_personas().subscribe(this.obtener_personas);
     this.asignaturaServices.obtener_asignatura(this.nid_asignatura).subscribe(this.recuperar_asignatura);
-    this.asignaturaServices.obtener_profesores_asingatura(this.nid_asignatura).subscribe(this.obtener_profesores);
+    this.asignaturaServices.obtener_profesores_asignatura(this.nid_asignatura).subscribe(this.obtener_profesores);
         // Inicializa el dataTable de los profesores vacío //
         this.dtOptions_profesor =
         {

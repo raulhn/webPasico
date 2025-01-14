@@ -119,7 +119,7 @@ export class EvaluacionComponent implements OnInit{
   
   cambia_asignatura()
   {
-    this.asignaturasService.obtener_profesores_asingatura(this.asignatura_seleccionada).subscribe(this.recupera_profesores);
+    this.asignaturasService.obtener_profesores_asignatura(this.asignatura_seleccionada).subscribe(this.recupera_profesores);
     this.bCargados_alumnos = false;
   }
 
