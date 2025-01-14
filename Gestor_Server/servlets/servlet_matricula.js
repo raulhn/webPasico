@@ -145,7 +145,7 @@ function obtener_alumnos_profesor(req, res)
 
             let resultados;
 
-            if(activo == 1)
+            if(activo == 3)
             {
                 resultados = await matricula.obtener_alumnos_profesor(nid_profesor, nid_curso, nid_asignatura);
             }
@@ -153,7 +153,7 @@ function obtener_alumnos_profesor(req, res)
             {
                 resultados = await matricula.obtener_alumnos_profesor_baja(nid_profesor, nid_curso, nid_asignatura);
             }
-            else if(activo == 3)
+            else if(activo == 1)
             {
                 resultados = await matricula.obtener_alumnos_profesor_alta(nid_profesor, nid_curso, nid_asignatura);
             }

@@ -231,7 +231,14 @@ export class ListaPersonasComponent {
 
   cambia_profesor()
   {
-    this.matriculasService.obtener_alumnos_profesores(this.profesor_seleccionado, this.curso_seleccionado, this.asignatura_seleccionada, this.alumno_activo).subscribe(this.refrescar_alumnos);
+    if (this.profesor_seleccionado == '0')
+    {
+      this.matriculasService.obtener_alumnos_asignaturas(this.curso_seleccionado, this.asignatura_seleccionada, this.alumno_activo).subscribe(this.refrescar_alumnos);
+    }
+    else
+    {
+      this.matriculasService.obtener_alumnos_profesores(this.profesor_seleccionado, this.curso_seleccionado, this.asignatura_seleccionada, this.alumno_activo).subscribe(this.refrescar_alumnos);
+    }
   }
 
   cambia_seleccion()
@@ -250,15 +257,18 @@ export class ListaPersonasComponent {
     }
   }
 
-  cambia_seleccion_asignatura()
+
+
+  cambia_seleccion_estado_alumno()
   {
-    this.cambia_seleccion();
-    
-    if (this.asignatura_seleccionada != '0')
-    {
-      this.bCargadoProfesores = false;
-      this.matriculasService.obtener_alumnos_asignaturas(this.curso_seleccionado, this.asignatura_seleccionada, this.alumno_activo).subscribe(this.refrescar_alumnos);
-    }
+    if (this.asignatura_seleccionada == '0')
+      {
+        this.matriculasService.obtener_alumnos_cursos(this.curso_seleccionado, this.alumno_activo).subscribe(this.refrescar_alumnos);
+      }
+      else
+      {
+        this.matriculasService.obtener_alumnos_asignaturas(this.curso_seleccionado, this.asignatura_seleccionada, this.alumno_activo).subscribe(this.refrescar_alumnos);
+      }
   }
 
   obtenerEnlaceFicha(nid: string)

@@ -96,7 +96,7 @@ function obtener_asignaturas()
     return new Promise(
         (resolve, reject) =>
         {
-            conexion.dbConn.query("select nid, descripcion from " + constantes.ESQUEMA_BD + '.asignatura',
+            conexion.dbConn.query("select nid, descripcion from " + constantes.ESQUEMA_BD + '.asignatura order by descripcion',
                 (error, results, fields) =>
                 {
                     if(error) {console.log(error); reject();}
