@@ -27,6 +27,7 @@ export class ListaPersonasComponent {
   bCargado: boolean = false;
   bCargadoPersonas: boolean = false;
   bCargado_cursos: boolean = false;
+  bCargadoProfesores: boolean = false;
 
   dtOptions: any = {}
   dtOptions_personas: any= {}
@@ -41,10 +42,12 @@ export class ListaPersonasComponent {
 
   lista_asignaturas: any[] = [];
   lista_cursos: any[] = [];
+  lista_profesores: any;
 
   asignatura_seleccionada: string = "0";
   curso_seleccionado: string = "0";
   alumno_activo: string = "1";
+  profesor_seleccionado: string = "0";
 
 
   constructor(private personasService:PersonasService, private sociosService: SociosService, private asignaturasService: AsignaturasService,
@@ -201,17 +204,34 @@ export class ListaPersonasComponent {
     }
   }
 
+  recupera_profesores =
+  {
+    next: (respuesta: any) =>
+    {
+      this.profesor_seleccionado = "0";
+      this.lista_profesores = respuesta.profesores;
+      this.bCargadoProfesores = true;
+    }
+  }
 
   cambia_seleccion_curso()
   {
     if (this.asignatura_seleccionada == '0')
     {
-      this.matriculasService.obtener_alumnos_cursos(this.curso_seleccionado, this.alumno_activo).subscribe(this.refrescar_alumnos)
+      this.bCargadoProfesores = false;
+      this.matriculasService.obtener_alumnos_cursos(this.curso_seleccionado, this.alumno_activo).subscribe(this.refrescar_alumnos);
     }
     else
     {
-      this.matriculasService.obtener_alumnos_asignaturas(this.curso_seleccionado, this.asignatura_seleccionada, this.alumno_activo).subscribe(this.refrescar_alumnos)
+      this.bCargadoProfesores = false;
+      this.asignaturasService.obtener_profesores_asignatura_curso(this.asignatura_seleccionada, this.curso_seleccionado).subscribe(this.recupera_profesores);
+      this.matriculasService.obtener_alumnos_asignaturas(this.curso_seleccionado, this.asignatura_seleccionada, this.alumno_activo).subscribe(this.refrescar_alumnos);
     }
+  }
+
+  cambia_profesor()
+  {
+    this.matriculasService.obtener_alumnos_profesores(this.profesor_seleccionado, this.curso_seleccionado, this.asignatura_seleccionada, this.alumno_activo).subscribe(this.refrescar_alumnos);
   }
 
   cambia_seleccion()
@@ -227,6 +247,17 @@ export class ListaPersonasComponent {
     else
     {
       this.personasService.obtener_personas(this.tipo).subscribe(this.refrescar_personas);
+    }
+  }
+
+  cambia_seleccion_asignatura()
+  {
+    this.cambia_seleccion();
+    
+    if (this.asignatura_seleccionada != '0')
+    {
+      this.bCargadoProfesores = false;
+      this.matriculasService.obtener_alumnos_asignaturas(this.curso_seleccionado, this.asignatura_seleccionada, this.alumno_activo).subscribe(this.refrescar_alumnos);
     }
   }
 

@@ -31,12 +31,22 @@
         </div>
 
         <label>Asignatura</label>
-        <select  class="form-select" [(ngModel)]="asignatura_seleccionada" (change)="cambia_seleccion()">
+        <select  class="form-select" [(ngModel)]="asignatura_seleccionada" (change)="cambia_seleccion_asignatura()">
             <option selected value="0">Todas las asignaturas</option>
             <option *ngFor="let asignatura_actual of lista_asignaturas" [value]="asignatura_actual.nid">
                 {{asignatura_actual.descripcion}}
             </option>
         </select>
+
+        <div *ngIf="bCargadoProfesores">
+            <label>Profesor</label>
+            <select  class="form-select" [(ngModel)]="profesor_seleccionado" (change)="cambia_profesor()">
+                <option selected value="0">Todos los profesores</option>
+                <option *ngFor="let profesor_actual of lista_profesores" [value]="profesor_actual.nid">
+                    {{profesor_actual.etiqueta}}
+                </option>
+            </select>
+        </div>
 
         <label>Estado</label>
         <select class="form-select" [(ngModel)]="alumno_activo" (change)="cambia_seleccion()" aria-label="Default select example">

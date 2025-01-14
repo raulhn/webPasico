@@ -119,6 +119,20 @@ function obtener_profesores_asignatura(req, res)
     )
 }
 
+function obtener_profesores_asginatura_curso(req, res)
+{
+    comun.comprobaciones(req, res,
+        async() =>
+        {
+            let nid_asignatura = req.params.nid_asignatura;
+            let nid_curso = req.params.nid_curso;
+
+            resultado_profesores = await asignatura.obtener_profesores_asignatura_curso(nid_asignatura, nid_curso);
+            res.status(200).send({error: false, profesores: resultado_profesores})
+        }
+    )
+}
+
 function obtener_asignaturas_profesor(req, res)
 {
     comun.comprobaciones(req, res,
@@ -145,3 +159,5 @@ module.exports.obtener_profesores = obtener_profesores;
 module.exports.obtener_profesores_asignatura = obtener_profesores_asignatura;
 
 module.exports.obtener_asignaturas_profesor = obtener_asignaturas_profesor;
+
+module.exports.obtener_profesores_asginatura_curso = obtener_profesores_asginatura_curso;

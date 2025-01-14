@@ -102,6 +102,7 @@ app.post('/add_profesor', servlet_asignatura.add_profesor);
 app.post('/eliminar_profesor', servlet_asignatura.eliminar_profesor);
 app.get('/obtener_profesores', servlet_asignatura.obtener_profesores);
 app.get('/obtener_profesores_asignatura/:nid_asignatura', servlet_asignatura.obtener_profesores_asignatura);
+app.get('/obtener_profesores_asginatura_curso/:nid_curso/:nid_asignatura', servlet_asignatura.obtener_profesores_asginatura_curso);
 
 /** Cursos **/
 app.post('/registrar_curso', servlet_curso.registrar_curso);

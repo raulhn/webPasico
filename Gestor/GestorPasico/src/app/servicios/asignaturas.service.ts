@@ -39,6 +39,12 @@ export class AsignaturasService {
     return this.http.get(API_URL, {withCredentials:true})
   }
 
+  obtener_profesores_asignatura_curso(nid_asignatura:string, nid_curso: string)
+  {
+    let API_URL = this.url + '/obtener_profesores_asginatura_curso/' + nid_curso + '/' + nid_asignatura;
+    return this.http.get(API_URL, {withCredentials: true});
+  }
+
   obtener_asignaturas_profesor(nid_profesor: string)
   {
     let API_URL = this.url + '/obtener_asignaturas_profesor/' + nid_profesor;

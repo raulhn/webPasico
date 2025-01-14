@@ -245,7 +245,31 @@ function obtener_profesores_asignatura(nid_asignatura)
     )
 }
 
-
+function obtener_profesores_asignatura_curso(nid_asignatura, nid_curso)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.query("select p.nid, concat(p.nombre, \' \', p.primer_apellido, \' \', p.segundo_apellido) etiqueta " +
+                                  "from pasico_gestor.persona p,                                                                " +
+                                  "	 pasico_gestor.matricula m,                                                               " +
+                                  "	 pasico_gestor.matricula_asignatura ma,                                                   " +
+                                  "	 pasico_gestor.profesor_alumno_matricula pam                                              " +
+                                  "where p.nid = pam.nid_profesor                                                               " +
+                                  "  and m.nid = ma.nid_matricula                                                               " +
+                                  "  and pam.nid_matricula_asignatura = ma.nid                                                  " +
+                                  "  and m.nid_curso = " +  conexion.dbConn.escape(nid_curso) + " " +
+                                  "  and ma.nid_asignatura = " + conexion.dbConn.escape(nid_asignatura) + "   " +
+                                  "group by p.nid, concat(p.nombre, \' \', p.primer_apellido, \' \', p.segundo_apellido)        ",
+                                
+                (error, results, fields) =>
+                {
+                    if(error) {console.log(error); reject(error);}
+                    else {resolve(results)}
+                })
+        }
+    )
+}
 
 module.exports.registrar_asignatura = registrar_asignatura;
 module.exports.actualizar_asignatura = actualizar_asignatura;
@@ -262,4 +286,6 @@ module.exports.eliminar_profesor = eliminar_profesor;
 module.exports.obtener_profesores = obtener_profesores;
 module.exports.obtener_profesores_distinct = obtener_profesores_distinct;
 module.exports.obtener_profesores_asignatura = obtener_profesores_asignatura;
+
+module.exports. obtener_profesores_asignatura_curso =  obtener_profesores_asignatura_curso;
 
