@@ -136,7 +136,7 @@ async function actualizar_password_usu(req, res)
 
 function actualizar_password(req, res)
 {
-  comun.comprobaciones(req, res,
+  comun.comprobaciones_general(req, res,
     async () =>
     {
       let usuario = req.session.nombre;
@@ -185,6 +185,17 @@ async function obtener_usuarios(req, res)
   }
 }
 
+
+async function obtener_rol(req, res)
+{
+  comun.comprobaciones_general(req, res,
+    async() =>
+    {
+
+    }
+
+  )
+}
 
 
 module.exports.login = login; 

@@ -397,6 +397,31 @@ function obtener_asignaturas_matricula(nid_matricula)
     )
 }
 
+function obtener_asignaturas_matricula_activas(nid_matricula)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.query('select a.*, m.nid_persona nid_alumno, ma.*, a.descripcion nombre_asignatura, p.*, p.nid nid_profesor ' +
+                    'from ' + constantes.ESQUEMA_BD + '.matricula_asignatura ma, ' + 
+                              constantes.ESQUEMA_BD + '.matricula m, ' +
+                              constantes.ESQUEMA_BD + '.asignatura a, ' + 
+                              constantes.ESQUEMA_BD + '.persona p, ' +
+                              constantes.ESQUEMA_BD + '.profesor_alumno_matricula pam ' +
+                    'where ma.nid_asignatura = a.nid and ' +   'm.nid = ma.nid_matricula and ' + 'nid_matricula = ' +
+                    conexion.dbConn.escape(nid_matricula) + ' and ma.nid = pam.nid_matricula_asignatura and pam.nid_profesor = p.nid and ' +
+                    " (ma.fecha_baja is null or ma.fecha_baja > sysdate()) " ,
+                (error, results, fields) =>
+                {
+                    if(error) {console.log(error); reject();}
+                    else {resolve(results)}
+                }
+            )
+        }
+    )
+}
+
+
 
 function alta_profesor_matricula(nid_matricula_asignatura, nid_profesor)
 {
@@ -760,3 +785,5 @@ module.exports.obtener_matriculas_activas_asignatura = obtener_matriculas_activa
 
 module.exports.obtener_matriculas_activas = obtener_matriculas_activas;
 module.exports.obtener_personas_con_matricula_activa = obtener_personas_con_matricula_activa;
+
+module.exports.obtener_asignaturas_matricula_activas = obtener_asignaturas_matricula_activas

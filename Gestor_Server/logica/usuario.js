@@ -139,6 +139,26 @@ function esAdministrador(user)
     )
 }
 
+function esProfesor(user)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.query('select count(*) ncont from ' + constantes.ESQUEMA_BD + '.usuario where usuario = ' + conexion.dbConn.escape(user) +
+              ' and nid_rol = ' + conexion.dbConn.escape(constantes.ROL_PROFESOR),
+            (error, results, fileds) =>
+            {
+                if (error) {console.log(error); resolve(false);}
+                else{
+                    resolve(results[0].ncont > 0);
+                }
+            } 
+            )
+        }
+    )
+}
+
+
 /**
  * Función que registra a un usuario nuevo con el rol por defecto de gestor
  * @param {*} user 
@@ -216,4 +236,5 @@ module.exports.existe_login = existe_login;
 module.exports.obtener_usuarios = obtener_usuarios;
 module.exports.registrar_usuario = registrar_usuario;
 module.exports.esAdministrador = esAdministrador;
+module.exports.esProfesor = esProfesor;
 module.exports.actualizar_password = actualizar_password;

@@ -277,7 +277,7 @@ async function precio_matricula(nid_matricula, num_familiar)
 		let instrumento_banda = 0;
 		let instrumento_cuerda = 0;
 
-		let asignaturas_precio = await gestor_matricula.obtener_asignaturas_matricula(nid_matricula);
+		let asignaturas_precio = await gestor_matricula.obtener_asignaturas_matricula_activas(nid_matricula);
 		let datos_matricula = await gestor_matricula.obtener_matricula(nid_matricula);
 
 		var resumen_matricula = new Object();
