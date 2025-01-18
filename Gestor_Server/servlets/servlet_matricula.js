@@ -279,6 +279,7 @@ function obtener_matriculas_activas_profesor(req, res)
 }
 
 
+
 module.exports.registrar_matricula = registrar_matricula;
 module.exports.eliminar_asignatura = eliminar_asignatura;
 module.exports.actualizar_matricula = actualizar_matricula;

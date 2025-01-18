@@ -22,6 +22,8 @@ var servlet_parametros = require('./servlets/servlet_parametros.js');
 var servlet_horarios = require('./servlets/servlet_horarios.js');
 var servlet_asistencia = require('./servlets/servlet_asistencia.js');
 var servlet_evaluacion = require('./servlets/servlet_evaluacion.js')
+var servlet_ficha_asistencia = require('./servlets/servlet_ficha_asistencia.js')
+
 
 var fs = require('fs');
 
@@ -47,6 +49,7 @@ app.get('/logout', servlet_usuario.logout);
 app.post('/registrar', servlet_usuario.registrar_usuario);
 app.get('/obtener_usuarios', servlet_usuario.obtener_usuarios);
 app.post('/actualiza_password', servlet_usuario.actualizar_password);
+app.get('/obtener_rol', servlet_usuario.obtener_rol);
 
 /** Personas **/
 app.get('/obtener_personas', servlet_persona.obtener_personas);
@@ -189,6 +192,18 @@ app.get('/obtener_evaluacion_matricula_asignatura/:nid_matricula', servlet_evalu
 
 /** Boletin **/
 app.get('/generar_boletin/:nid_matricula/:nid_trimestre', servlet_evaluacion.generar_boletin);
+
+///////////////////////////////
+/**  ROL DE PROFESOR **/
+///////////////////////////////
+
+/** Ficha Asistencia **/
+app.post('/crear_ficha_asistencia', servlet_ficha_asistencia.crear_ficha_asistencia);
+app.get('/obtener_fichas_asistencias', servlet_ficha_asistencia.obtener_fichas_asistencias);
+app.get('/obtener_alumnos_seleccion_asistencia/:nid_ficha_asistencia', servlet_ficha_asistencia.obtener_alumnos_seleccion);
+
+/** Asignaturas **/
+app.get('/obtener_asignaturas_rol_profesor', servlet_asignatura.obtener_asignaturas_rol_profesor);
 
 
 https.createServer({

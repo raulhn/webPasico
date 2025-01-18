@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav  *ngIf="nid_rol == nid_administrador" class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
     <a class="navbar-brand" href="/">Gestor Pasico</a>
       <button *ngIf="logueado" class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarGestor" aria-controls="navbarGestor" aria-expanded="true" aria-label="Toggle navigation">
@@ -51,6 +51,43 @@
   </div>
 </nav>
 
+<nav  *ngIf="nid_rol == nid_profesor" class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">Gestor Pasico</a>
+      <button *ngIf="logueado" class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarGestor" aria-controls="navbarGestor" aria-expanded="true" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div *ngIf="logueado" class="navbar-collapse collapse show" id="navbarGestor">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+         
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarPersonas" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Asitencias
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="/crea_ficha_asistencia">Crear Ficha Asitencia </a></li>
+              <li><a class="dropdown-item" href="/lista_ficha_asistencias">Lista Fichas Asistencia</a></li>
+            </ul>
+          </li>
+         
+        </ul>
+
+        <span *ngIf="logueado">
+          <div class="float-end p-3 text-light">
+
+              <b>Usuario:</b> {{this.usuario}}
+              <span class="p-1"></span>
+              <button (click) ="cambiar_password()" class="btn btn-dark btn-outline-light">Cambiar contraseña</button>
+              <span class="p-1"></span>
+              <button (click)="[logout()]" type="button" class="btn btn-dark btn-outline-light">
+                Logout
+              </button>
+
+          </div>
+        </span>
+      </div>
+  </div>
+</nav>
 <div style="display: none;">
   <div #instancia_cambio_password>
     <div style="min-height: 100px;">

@@ -229,6 +229,58 @@ async function actualizar_password(user, pass)
     )
 }
 
+function obtener_rol(user)
+{
+    return new Promise(
+        async (resolve, reject) =>
+        {
+            conexion.dbConn.query('select nid_rol from ' + constantes.ESQUEMA_BD + '.usuario where usuario = ' + conexion.dbConn.escape(user),
+            (error, results, fields) =>
+            {
+                if(error) {console.log(error); reject(error)}
+                else
+                {
+                    if(results.length > 0)
+                    {
+                        resolve(results[0]['nid_rol']);
+                    } 
+                    else
+                    {
+                        reject('Usuario no encontrado');
+                    }
+                }
+            })
+
+        }
+    )
+}
+
+
+function obtener_nid_persona(user)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.query('select nid_persona from ' +  constantes.ESQUEMA_BD + '.persona_usuario where usuario = ' + conexion.dbConn.escape(user),
+            (error, results, fields) =>
+            {
+                if(error) {console.log(error); reject(error);}
+                else
+                {
+                    if(results.length > 0)
+                    {
+                        resolve(results[0]['nid_persona']);
+                    }
+                    else
+                    {
+                        reject('Usuario no encontrado')
+                    }
+                }
+            }
+        )
+        }
+    )
+}
 
 
 module.exports.login = login;
@@ -238,3 +290,5 @@ module.exports.registrar_usuario = registrar_usuario;
 module.exports.esAdministrador = esAdministrador;
 module.exports.esProfesor = esProfesor;
 module.exports.actualizar_password = actualizar_password;
+module.exports.obtener_rol = obtener_rol;
+module.exports.obtener_nid_persona = obtener_nid_persona;

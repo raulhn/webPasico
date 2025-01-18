@@ -23,6 +23,8 @@ import { HorariosProfesorComponent } from './componente/horarios-profesor/horari
 import { HorarioClaseComponent } from './componente/horario-clase/horario-clase.component';
 import { RegistroMusicoComponent } from './componente/registro-musico/registro-musico.component';
 import { EvaluacionComponent } from './componente/evaluacion/evaluacion.component';
+import { CreaFichaAsistenciaComponent } from './componente/crea-ficha-asistencia/crea-ficha-asistencia.component';
+import { ListaFichasAsistenciasComponent } from './componente/lista-fichas-asistencias/lista-fichas-asistencias.component';
 
 
 const routes: Routes = [
@@ -113,8 +115,15 @@ const routes: Routes = [
   {
     path: 'evaluacion',
     component: EvaluacionComponent
+  },
+  {
+    path: 'crea_ficha_asistencia',
+    component: CreaFichaAsistenciaComponent
+  },
+  {
+    path: 'lista_ficha_asistencias',
+    component: ListaFichasAsistenciasComponent
   }
-
 ];
 
 @NgModule({

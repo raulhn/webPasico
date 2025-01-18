@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { UsuariosService } from 'src/app/servicios/usuarios.service';
 import { faUser as faUser } from '@fortawesome/free-regular-svg-icons';
+import { ROL } from 'src/app/logica/constantes';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -18,9 +19,25 @@ export class MenuComponent implements OnInit {
 
   nuevo_password: string = "";
 
+  nid_rol:string = "";
+
+  nid_administrador: string = ROL.ADMINISTRADOR;
+  nid_profesor: string = ROL.PROFESOR;
+
   @ViewChild('instancia_cambio_password') instancia_cambio_password!: ElementRef;
 
   constructor(private usuariosService: UsuariosService, private router: Router) { }
+
+
+  recupera_rol =
+  {
+    next: (respuesta: any) =>
+    {
+      console.log(respuesta)
+       this.nid_rol = respuesta['nid_rol'];
+    }
+
+  }
 
   ngOnInit(): void {
     this.usuariosService.logueado().subscribe(
@@ -36,6 +53,8 @@ export class MenuComponent implements OnInit {
         }
       }
     )
+
+    this.usuariosService.obtener_rol().subscribe(this.recupera_rol);
   }
 
   logout()

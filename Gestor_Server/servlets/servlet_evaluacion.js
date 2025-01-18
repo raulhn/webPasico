@@ -26,8 +26,6 @@ function registrar_evaluacion(req, res)
 
             let array_persona = Object.keys(notas_array);
 
-            console.log('Tamaño array')
-            console.log(array_persona.length)
             for (let i = 0; i < array_persona.length; i++) 
             {
               

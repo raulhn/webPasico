@@ -50,6 +50,9 @@ import { RegistroMusicoComponent } from './componente/registro-musico/registro-m
 import { BandaTitularComponent } from './componente/banda-titular/banda-titular.component';
 import { RegistrarAsistenciaComponent } from './componente/registrar-asistencia/registrar-asistencia.component';
 import { EvaluacionComponent } from './componente/evaluacion/evaluacion.component';
+import { CreaFichaAsistenciaComponent } from './componente/crea-ficha-asistencia/crea-ficha-asistencia.component';
+import { ListaFichasAsistenciasComponent } from './componente/lista-fichas-asistencias/lista-fichas-asistencias.component';
+import { FichaAsistenciaComponent } from './componente/ficha-asistencia/ficha-asistencia.component';
 
 
 
@@ -92,7 +95,10 @@ import { EvaluacionComponent } from './componente/evaluacion/evaluacion.componen
     RegistroMusicoComponent,
     BandaTitularComponent,
     RegistrarAsistenciaComponent,
-    EvaluacionComponent
+    EvaluacionComponent,
+    CreaFichaAsistenciaComponent,
+    ListaFichasAsistenciasComponent,
+    FichaAsistenciaComponent
   ],
   imports: [
     FormsModule,

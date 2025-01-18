@@ -67,4 +67,16 @@ export class AsignaturasService {
   {
     let API_URL = this.url + '/obtener_cursos'
   }
+
+
+  //////////////////
+  // ROL PROFESOR //
+  //////////////////
+
+  obtener_asignaturas_rol_profesor()
+  {
+    let API_URL = this.url + '/obtener_asignaturas_rol_profesor';
+    return this.http.get(API_URL, {withCredentials: true})
+  }
+
 }

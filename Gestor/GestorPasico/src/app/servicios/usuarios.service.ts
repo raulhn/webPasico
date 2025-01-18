@@ -73,5 +73,10 @@ export class UsuariosService {
     return this.http.post(API_URL, {password: password}, {withCredentials: true})
   }
 
+  obtener_rol()
+  {
+    let API_URL = this.url + '/obtener_rol';
+    return this.http.get(API_URL, {withCredentials: true});
+  }
 
 }

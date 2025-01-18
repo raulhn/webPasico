@@ -1,5 +1,6 @@
 const asignatura = require('../logica/asignatura.js')
 const comun = require('./servlet_comun.js')
+const gestion_usuarios = require('../logica/usuario.js')
 
 function registrar_asignatura(req, res)
 {
@@ -147,6 +148,20 @@ function obtener_asignaturas_profesor(req, res)
     )
 }
 
+function obtener_asignaturas_rol_profesor(req, res)
+{
+    comun.comprobaciones_general(req, res,
+        async() =>
+        {
+            let usuario = req.session.nombre;
+            let nid_persona = await gestion_usuarios.obtener_nid_persona(usuario);
+
+            let resultados = await asignatura.obtener_asignaturas_profesor(nid_persona);
+            res.status(200).send({error: false, asignaturas: resultados});
+        }
+    )
+}
+
 module.exports.registrar_asignatura = registrar_asignatura;
 module.exports.actualizar_asignatura = actualizar_asignatura;
 module.exports.eliminar_asignatura = eliminar_asignatura;
@@ -161,3 +176,4 @@ module.exports.obtener_profesores_asignatura = obtener_profesores_asignatura;
 module.exports.obtener_asignaturas_profesor = obtener_asignaturas_profesor;
 
 module.exports.obtener_profesores_asginatura_curso = obtener_profesores_asginatura_curso;
+module.exports.obtener_asignaturas_rol_profesor = obtener_asignaturas_rol_profesor;

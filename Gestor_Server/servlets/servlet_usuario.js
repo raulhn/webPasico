@@ -154,6 +154,7 @@ function actualizar_password(req, res)
 }
 
 
+
 /*
 * Recupera los usuarios registrados en la aplicación,
 * es neceasrio estar logueado con un usuario con rol de administrador
@@ -191,11 +192,17 @@ async function obtener_rol(req, res)
   comun.comprobaciones_general(req, res,
     async() =>
     {
+       let usuario = req.session.nombre;
 
+       let nid_rol = await gestion_usuarios.obtener_rol(usuario);
+
+       res.status(200).send({error:false, nid_rol: nid_rol})
     }
 
   )
 }
+
+
 
 
 module.exports.login = login; 
@@ -205,3 +212,5 @@ module.exports.registrar_usuario = registrar_usuario;
 module.exports.actualizar_password_usu = actualizar_password_usu;
 module.exports.actualizar_password = actualizar_password;
 module.exports.obtener_usuarios = obtener_usuarios;
+
+module.exports.obtener_rol = obtener_rol;

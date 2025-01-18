@@ -32,6 +32,10 @@ async function comprobaciones_profesor(req, res, funcion_especifica)
 {
     let usuario = req.session.nombre;
 
+    console.log(usuario);
+    console.log(await gestion_usuarios.existe_login(usuario))
+    console.log(await gestion_usuarios.esProfesor(usuario));
+    
     if(await gestion_usuarios.existe_login(usuario) && await gestion_usuarios.esProfesor(usuario))
     {
         try{
@@ -70,5 +74,5 @@ async function comprobaciones_general(req, res, funcion_especifica)
 
 
 module.exports.comprobaciones = comprobaciones;
-module.exports.comprobaciones_profeesor = comprobaciones_profesor;
+module.exports.comprobaciones_profesor = comprobaciones_profesor;
 module.exports.comprobaciones_general = comprobaciones_general;
