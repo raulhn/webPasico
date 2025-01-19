@@ -1,18 +1,43 @@
 <app-menu></app-menu>
 
-
+<div class="container">
 <label>Nombre</label>
 <input class="form-control" name = "Nombre" [(ngModel)] = "nombre"/>
 
 <label>Fecha</label>
 <input class="form-control" name ="Fecha" [(ngModel)] = "fecha" type="date"/>
 
-<label>Asignatura</label>
-<select  class="form-select" [(ngModel)]="asignatura_seleccionada">
-    <option selected value="0">------------</option>
-    <option *ngFor="let asignatura_actual of lista_asignaturas" [value]="asignatura_actual.nid">
-        {{asignatura_actual.descripcion}}
-    </option>
-</select>
+<div class="form-check">
+<input class="form-check-input" type="radio" name="tipoFicha" id="tipoNueva" [(ngModel)]="bTipo_creacion" [value]="'N'" [checked]="bTipo_creacion === 'N'">
+<label class="form-check-label" for="tipoNueva">
+    Nueva Ficha
+</label>
+</div>
+<div class="form-check">
+<input class="form-check-input" type="radio" name="tipoFicha" id="tipoCopia" [(ngModel)]="bTipo_creacion" [value]="'C'" [checked]="bTipo_creacion === 'C'">
+<label class="form-check-label" for="tipoCopia">
+    Copiar de Otra Ficha
+</label>
+</div>
+
+  
+<div *ngIf="bTipo_creacion == 'N'">
+    <label>Asignatura</label>
+    <select  class="form-select" [(ngModel)]="asignatura_seleccionada">
+        <option *ngFor="let asignatura_actual of lista_asignaturas" [value]="asignatura_actual.nid">
+            {{asignatura_actual.descripcion}}
+        </option>
+    </select>
+</div>
+
+<div *ngIf="bTipo_creacion == 'C'">
+    <ng-select  [items]="lista_ficha_asistencias"
+    bindLabel="etiqueta" 
+    bindValue="nid_ficha_asistencia"
+    [(ngModel)]="ficha_seleccionada"
+    [compareWith]="compare_ficha"/>
+</div>
 
 <button (click)="crear_ficha_asistencia()"> Crear </button>
+
+</div>

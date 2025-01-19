@@ -16,13 +16,15 @@ export class ListaFichasAsistenciasComponent implements OnInit{
 
   dtOptions_fichas_asistencias: any= {}
 
+  URL_FICHA_ASISTENCIA = "/ficha_asistencia/";
+
 
   constructor(private fichaAsistenciaService: FichaAsistenciaService)
   {}
 
   click_ficha(ficha_marcada: any)
   {
-    this.ficha_seleccionada = ficha_marcada;
+    this.ficha_seleccionada = ficha_marcada['nid_ficha_asistencia'];
   }
 
 
@@ -62,5 +64,10 @@ export class ListaFichasAsistenciasComponent implements OnInit{
 
   ngOnInit(): void {
     this.fichaAsistenciaService.obtener_fichas_asistencias().subscribe(this.recuperar_ficha_asistencias);
+  }
+
+  obtener_url_ficha()
+  {
+    return this.URL_FICHA_ASISTENCIA + this.ficha_seleccionada;
   }
 }

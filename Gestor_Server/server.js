@@ -199,8 +199,14 @@ app.get('/generar_boletin/:nid_matricula/:nid_trimestre', servlet_evaluacion.gen
 
 /** Ficha Asistencia **/
 app.post('/crear_ficha_asistencia', servlet_ficha_asistencia.crear_ficha_asistencia);
+app.post('/copiar_ficha_asistencia', servlet_ficha_asistencia.copiar_ficha_asistencia);
 app.get('/obtener_fichas_asistencias', servlet_ficha_asistencia.obtener_fichas_asistencias);
+app.get('/obtener_ficha_asistencia/:nid_ficha_asistencia', servlet_ficha_asistencia.obtener_ficha_asistencia);
 app.get('/obtener_alumnos_seleccion_asistencia/:nid_ficha_asistencia', servlet_ficha_asistencia.obtener_alumnos_seleccion);
+app.get('/obtener_fichas_asistencia_alumnos/:nid_ficha_asistencia', servlet_ficha_asistencia.obtener_fichas_asistencias_alumno);
+app.post('/registrar_ficha_asistencia_alumno', servlet_ficha_asistencia.registrar_ficha_asistencia_alumno);
+app.post('/eliminar_ficha_asistencia_alumno', servlet_ficha_asistencia.eliminar_ficha_asistencia_alumno);
+app.post('/actualizar_ficha_asistencia_alumnos', servlet_ficha_asistencia.actualizar_ficha_asistencia_alumnos);
 
 /** Asignaturas **/
 app.get('/obtener_asignaturas_rol_profesor', servlet_asignatura.obtener_asignaturas_rol_profesor);

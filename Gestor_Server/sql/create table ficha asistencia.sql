@@ -21,6 +21,7 @@ create table pasico_gestor.ficha_asistencia_alumno(
 alter table pasico_gestor.ficha_asistencia_alumno add constraint fk_ficha_asistencia_alumno foreign key (nid_alumno) references pasico_gestor.persona(nid);
 alter table pasico_gestor.ficha_asistencia_alumno add constraint fk_ficha_asistencia foreign key(nid_ficha_asistencia) references pasico_gestor.ficha_asistencia(nid_ficha_asistencia);
 
+alter table pasico_gestor.ficha_asistencia_alumno add constraint uk_ficha_asistencia_alumno unique(nid_alumno, nid_ficha_asistencia);
 
 
 create table pasico_gestor.persona_usuario(

@@ -14,12 +14,33 @@ export class CreaFichaAsistenciaComponent implements OnInit{
 
   lista_asignaturas: any;
   asignatura_seleccionada: string= "";
+  bCargadas_fichas_asistencias: boolean = false;
+
+  lista_ficha_asistencias: any;
+
+  bTipo_creacion: string = "";
+
+  ficha_seleccionada: string= "";
 
   constructor(private fichaAsistenciaService: FichaAsistenciaService, private asignaturaService: AsignaturasService)
   {}
 
   ngOnInit(): void {
     this.asignaturaService.obtener_asignaturas_rol_profesor().subscribe(this.recuperar_asignaturas);
+    this.fichaAsistenciaService.obtener_fichas_asistencias().subscribe(this.recuperar_fichas_asistencias)
+  }
+
+  recuperar_fichas_asistencias =
+  {
+    next: (respuesta: any) =>
+    {
+      this.lista_ficha_asistencias = respuesta['fichas_asistencias'];
+      this.bCargadas_fichas_asistencias = true;
+    }
+  }
+
+  compare_ficha(item: any, selected: any) {
+    return item['nid_ficha_asistencia'] == selected;
   }
 
   peticion_crear_ficha =
@@ -63,7 +84,13 @@ export class CreaFichaAsistenciaComponent implements OnInit{
     }
     else
     {
-      this.fichaAsistenciaService.crear_remesa(this.nombre, this.fecha, this.asignatura_seleccionada).subscribe(this.peticion_crear_ficha);
+      if (this.bTipo_creacion == 'N')
+      {
+        this.fichaAsistenciaService.crear_ficha(this.nombre, this.fecha, this.asignatura_seleccionada).subscribe(this.peticion_crear_ficha);
+      }
+      else{
+        this.fichaAsistenciaService.copiar_ficha(this.nombre, this.fecha, this.ficha_seleccionada).subscribe(this.peticion_crear_ficha);
+      }
     }
   }
 }

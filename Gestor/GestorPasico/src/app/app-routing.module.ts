@@ -25,6 +25,7 @@ import { RegistroMusicoComponent } from './componente/registro-musico/registro-m
 import { EvaluacionComponent } from './componente/evaluacion/evaluacion.component';
 import { CreaFichaAsistenciaComponent } from './componente/crea-ficha-asistencia/crea-ficha-asistencia.component';
 import { ListaFichasAsistenciasComponent } from './componente/lista-fichas-asistencias/lista-fichas-asistencias.component';
+import { FichaAsistenciaComponent } from './componente/ficha-asistencia/ficha-asistencia.component';
 
 
 const routes: Routes = [
@@ -123,6 +124,10 @@ const routes: Routes = [
   {
     path: 'lista_ficha_asistencias',
     component: ListaFichasAsistenciasComponent
+  },
+  {
+    path: 'ficha_asistencia/:nid_ficha_asistencia',
+    component: FichaAsistenciaComponent
   }
 ];
 

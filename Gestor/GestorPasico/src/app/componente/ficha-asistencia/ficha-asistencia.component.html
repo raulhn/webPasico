@@ -1,1 +1,53 @@
-<p>ficha-asistencia works!</p>
+<app-menu></app-menu>
+<div class="container">
+<div class="card p-3"  >
+    <div *ngIf="bCargada_ficha">
+        <legend> {{ficha_asistencia.etiqueta}} </legend>
+    </div>
+<label>Alumno:</label>
+<ng-select [items]="lista_alumnos"
+        bindLabel="etiqueta" 
+        bindValue="nid"
+        [(ngModel)]="alumno_seleccionado"
+        [compareWith]="compare_alumno">
+</ng-select>
+
+<div *ngIf="alumno_seleccionado != ''">
+<button (click)="registrar_ficha_alumno()"> Registrar </button>
+</div>
+
+<div *ngIf="bCargadas_fichas && lista_ficha_asistencia_alumno.length > 0">
+    <table class="table">
+        <thead>
+            <tr class="d-flex">
+                <th class="col-2">
+                    Nombre
+                </th>
+                <th>
+                   Asistencia
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tr *ngFor="let ficha_asistencia_alumno of lista_ficha_asistencia_alumno" class="d-flex">
+            <td class="col-2"> {{ficha_asistencia_alumno['etiqueta']}} </td>
+            <td class="col-1">
+                <select class="form-select" [(ngModel)]="ficha_asistencia_alumno['asistencia']" >
+                    <option selected value="S">Sí</option>
+                    <option value="N">No</option>
+                </select>
+            </td>
+            <td class="col-3">
+                    
+                <textarea class="form-control" [(ngModel)]="ficha_asistencia_alumno['comentario']" rows="4" cols="50"> </textarea>
+            </td>
+           <td>
+                <button (click)="eliminar_ficha_asistencia_alumno(ficha_asistencia_alumno['nid_ficha_asistencia_alumno'])"> Eliminar </button>
+           </td>
+        </tr>
+    </table>
+
+    <button (click)="actualizar_ficha_asistencia_alumno()"> Actualizar</button>
+</div>
+</div>
+</div>
