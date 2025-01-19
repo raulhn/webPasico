@@ -32,9 +32,6 @@ async function comprobaciones_profesor(req, res, funcion_especifica)
 {
     let usuario = req.session.nombre;
 
-    console.log(usuario);
-    console.log(await gestion_usuarios.existe_login(usuario))
-    console.log(await gestion_usuarios.esProfesor(usuario));
     
     if(await gestion_usuarios.existe_login(usuario) && await gestion_usuarios.esProfesor(usuario))
     {
@@ -43,7 +40,6 @@ async function comprobaciones_profesor(req, res, funcion_especifica)
         }
         catch(error)
         {
-            console.log(error);
             res.status(400).send({error: true, message: 'Se ha producido un error', info: error})
         }
     }

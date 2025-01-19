@@ -1,6 +1,6 @@
 <app-menu></app-menu>
 <div class="container">
-<div class="card p-3"  >
+<div class="card p-3 m-3"  >
     <div *ngIf="bCargada_ficha">
         <legend> {{ficha_asistencia.etiqueta}} </legend>
     </div>
@@ -13,41 +13,46 @@
 </ng-select>
 
 <div *ngIf="alumno_seleccionado != ''">
-<button (click)="registrar_ficha_alumno()"> Registrar </button>
+<button class="btn btn-primary mb-3 mt-2" (click)="registrar_ficha_alumno()"> Registrar </button>
 </div>
-
+</div>
+<div class="card p-3 m-3"  >
 <div *ngIf="bCargadas_fichas && lista_ficha_asistencia_alumno.length > 0">
     <table class="table">
         <thead>
             <tr class="d-flex">
-                <th class="col-2">
+                <th class="col-3">
                     Nombre
                 </th>
-                <th>
+                <th class="col-2">
                    Asistencia
                 </th>
-                <th></th>
+                <th class="col-5">
+                    Comentario
+                </th>
+                <th class="col-2"></th>
             </tr>
         </thead>
         <tr *ngFor="let ficha_asistencia_alumno of lista_ficha_asistencia_alumno" class="d-flex">
-            <td class="col-2"> {{ficha_asistencia_alumno['etiqueta']}} </td>
-            <td class="col-1">
+            <td class="col-3"> {{ficha_asistencia_alumno['etiqueta']}} </td>
+            <td class="col-2">
                 <select class="form-select" [(ngModel)]="ficha_asistencia_alumno['asistencia']" >
                     <option selected value="S">Sí</option>
                     <option value="N">No</option>
                 </select>
             </td>
-            <td class="col-3">
+            <td class="col-5">
                     
                 <textarea class="form-control" [(ngModel)]="ficha_asistencia_alumno['comentario']" rows="4" cols="50"> </textarea>
             </td>
-           <td>
-                <button (click)="eliminar_ficha_asistencia_alumno(ficha_asistencia_alumno['nid_ficha_asistencia_alumno'])"> Eliminar </button>
+           <td class="col-2">
+                <button class="btn" style=" color:white; background-color:rgb(229, 15, 8);  border-color:rgb(229, 15, 8);" (click)="eliminar_ficha_asistencia_alumno(ficha_asistencia_alumno['nid_ficha_asistencia_alumno'])"> 
+                    Eliminar </button>
            </td>
         </tr>
     </table>
 
-    <button (click)="actualizar_ficha_asistencia_alumno()"> Actualizar</button>
+    <button class="btn btn-primary mb-3 mt-2 tp-3" (click)="actualizar_ficha_asistencia_alumno()"> Guardar </button>
 </div>
 </div>
 </div>

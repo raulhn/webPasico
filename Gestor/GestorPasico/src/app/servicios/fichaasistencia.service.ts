@@ -66,4 +66,10 @@ export class FichaAsistenciaService {
     let API_URL = this.url + '/actualizar_ficha_asistencia_alumnos';
     return this.http.post(API_URL, {fichas_asistencias_alumno: lista_ficha_asistencia_alumno}, {withCredentials: true})
   }
+
+  cancelar_ficha_asistencia(nid_ficha_asistencia: string)
+  {
+    let API_URL = this.url + '/cancelar_ficha_asistencia';
+    return this.http.post(API_URL, {nid_ficha_asistencia: nid_ficha_asistencia}, {withCredentials: true})
+  }
 }

@@ -10,7 +10,7 @@ function crear_ficha_asistencia(nombre, fecha, nid_asignatura, nid_profesor)
                 () =>
                 {
                     conexion.dbConn.query('insert into ' + constantes.ESQUEMA_BD + '.ficha_asistencia(nombre, fecha, nid_asignatura, nid_profesor) values(' + 
-                        conexion.dbConn.escape(nombre) + ', ' + 'str_to_date(nullif(' + conexion.dbConn.escape(fecha) + ', \'\') , \'%Y-%m-%d\') ' + 
+                        conexion.dbConn.escape(nombre) + ', ' + 'ifnull(str_to_date(nullif(' + conexion.dbConn.escape(fecha) + ', \'\') , \'%Y-%m-%d\'), sysdate()) ' + 
                           ', ' + conexion.dbConn.escape(nid_asignatura) + ', ' + conexion.dbConn.escape(nid_profesor) + ')',
                         (error, results, fields) =>
                         {
@@ -32,7 +32,6 @@ function copiar_ficha_asistencia_alumno(nid_ficha_asistencia, nid_nueva_ficha_as
             conexion.dbConn.beginTransaction(
                 () =>
                 {
-
                     conexion.dbConn.query(
                         'insert into ' + constantes.ESQUEMA_BD + '.ficha_asistencia_alumno(nid_ficha_asistencia, nid_alumno) ' +
                          'select ' + conexion.dbConn.escape(nid_nueva_ficha_asistencia)+ ', nid_alumno from ' + constantes.ESQUEMA_BD + '.ficha_asistencia_alumno ' +
@@ -61,7 +60,7 @@ function copiar_ficha_asistencia(nombre, fecha, nid_profesor, nid_ficha_asistenc
 
                     conexion.dbConn.query(
                         'insert into ' + constantes.ESQUEMA_BD + '.ficha_asistencia(nombre, fecha, nid_profesor, nid_asignatura) ' +
-                         'select ' + conexion.dbConn.escape(nombre)+ ', str_to_date(nullif(' + conexion.dbConn.escape(fecha) + ', \'\') , \'%Y-%m-%d\') ' +
+                         'select ' + conexion.dbConn.escape(nombre)+ ', ifnull(str_to_date(nullif(' + conexion.dbConn.escape(fecha) + ', \'\') , \'%Y-%m-%d\'), sysdate()) ' +
                          ' , nid_profesor, nid_asignatura from ' + constantes.ESQUEMA_BD + '.ficha_asistencia ' +
                          ' where nid_ficha_asistencia = ' + conexion.dbConn.escape(nid_ficha_asistencia) + 
                          '  and nid_profesor = ' + conexion.dbConn.escape(nid_profesor),
@@ -69,8 +68,9 @@ function copiar_ficha_asistencia(nombre, fecha, nid_profesor, nid_ficha_asistenc
                         {
                             if(error) {console.log(error); conexion.dbConn.rollback(); reject(error);}
                             else{conexion.dbConn.commit(); 
-                                await copiar_ficha_asistencia_alumno(nid_ficha_asistencia, results.insertId);
-                                resolve(results.insertId)}
+                                let nid_nueva_ficha_asistencia = results.insertId
+                                await copiar_ficha_asistencia_alumno(nid_ficha_asistencia, nid_nueva_ficha_asistencia);
+                                resolve(nid_nueva_ficha_asistencia)}
                         }
                     )
                 }
@@ -134,6 +134,7 @@ function obtener_alumnos_ficha_seleccion(nid_ficha_asistencia, nid_profesor)
                                    ' and ma.nid_matricula = m.nid ' +
                                    ' and ma.nid_asignatura = fa.nid_asignatura ' +
                                    ' and m.nid_persona = p.nid ' +
+                                   ' and (ma.fecha_baja is null or ma.fecha_baja > sysdate()) ' +
                                    ' and fa.nid_ficha_asistencia = ' + conexion.dbConn.escape(nid_ficha_asistencia) +
                                    ' and fa.nid_profesor = ' + conexion.dbConn.escape(nid_profesor),
                 (error, results, fields) =>
@@ -236,6 +237,50 @@ function actualizar_ficha_asistencia_alumnos(nid_ficha_asistencia_alumno, asiste
     )
 }
 
+function cancelar_fichas_asistencia_alumnos(nid_ficha_asistencia)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.beginTransaction(
+                () =>
+                {
+                conexion.dbConn.query('delete from ' + constantes.ESQUEMA_BD + '.ficha_asistencia_alumno where nid_ficha_asistencia = ' + conexion.dbConn.escape(nid_ficha_asistencia),
+                (error, results, fields)=>
+                {
+                    if(error) {console.log(error); conexion.dbConn.rollback(); reject(error);}
+                    else {conexion.dbConn.commit(); resolve();}
+                })
+            }
+            
+            )
+        }
+    )
+}
+
+function cancelar_ficha_asistencia(nid_ficha_asistencia)
+{
+    return new Promise(
+        async (resolve, reject) =>
+        {
+            await cancelar_fichas_asistencia_alumnos(nid_ficha_asistencia);
+
+            conexion.dbConn.beginTransaction(
+                () =>
+                    {
+                conexion.dbConn.query('delete from ' + constantes.ESQUEMA_BD + '.ficha_asistencia where nid_ficha_asistencia = ' + conexion.dbConn.escape(nid_ficha_asistencia),
+                (error, results, fields)=>
+                {
+                    if(error) {console.log(error); conexion.dbConn.rollback(); reject(error);}
+                    else {conexion.dbConn.commit(); resolve();}
+                }
+            )}
+            )
+        
+        }
+    )
+}
+
 module.exports.crear_ficha_asistencia = crear_ficha_asistencia;
 module.exports.copiar_ficha_asistencia = copiar_ficha_asistencia
 module.exports.obtener_fichas_asistencias = obtener_fichas_asistencias;
@@ -246,3 +291,5 @@ module.exports.eliminar_ficha_asistencia_alumno = eliminar_ficha_asistencia_alum
 module.exports.obtener_fichas_asistencias_alumno = obtener_fichas_asistencias_alumno;
 
 module.exports.actualizar_ficha_asistencia_alumnos = actualizar_ficha_asistencia_alumnos;
+
+module.exports.cancelar_ficha_asistencia = cancelar_ficha_asistencia;

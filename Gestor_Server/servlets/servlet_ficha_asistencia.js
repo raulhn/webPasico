@@ -16,7 +16,7 @@ function crear_ficha_asistencia(req, res)
 
             let nid_profesor = await gestion_usuarios.obtener_nid_persona(usuario);
 
-            let nid_ficha_asistencia = ficha_asistencia.crear_ficha_asistencia(nombre, fecha, nid_asignatura, nid_profesor);
+            let nid_ficha_asistencia = await ficha_asistencia.crear_ficha_asistencia(nombre, fecha, nid_asignatura, nid_profesor);
 
             res.status(200).send({error:false, nid_ficha_asistencia: nid_ficha_asistencia})
         }
@@ -36,7 +36,7 @@ function copiar_ficha_asistencia(req, res)
 
             let nid_profesor = await gestion_usuarios.obtener_nid_persona(usuario);
 
-            let nid_nueva_ficha_asistencia = ficha_asistencia.copiar_ficha_asistencia(nombre, fecha, nid_profesor, nid_ficha_asistencia);
+            let nid_nueva_ficha_asistencia = await ficha_asistencia.copiar_ficha_asistencia(nombre, fecha, nid_profesor, nid_ficha_asistencia);
 
             res.status(200).send({error:false, nid_ficha_asistencia: nid_nueva_ficha_asistencia})
         }
@@ -159,6 +159,20 @@ function actualizar_ficha_asistencia_alumnos(req, res)
     )
 }
 
+function cancelar_ficha_asistencia(req, res)
+{
+    comun.comprobaciones_profesor(req, res,
+        async() =>
+        {
+            let nid_ficha_asistencia = req.body.nid_ficha_asistencia;
+
+            await ficha_asistencia.cancelar_ficha_asistencia(nid_ficha_asistencia);
+
+            res.status(200).send({error: false, mensaje: 'Ficha eliminada'})
+        }
+    )
+}
+
 
 module.exports.crear_ficha_asistencia = crear_ficha_asistencia;
 module.exports.copiar_ficha_asistencia = copiar_ficha_asistencia;
@@ -171,3 +185,5 @@ module.exports.obtener_fichas_asistencias_alumno = obtener_fichas_asistencias_al
 module.exports.registrar_ficha_asistencia_alumno = registrar_ficha_asistencia_alumno;
 module.exports.eliminar_ficha_asistencia_alumno = eliminar_ficha_asistencia_alumno;
 module.exports.actualizar_ficha_asistencia_alumnos = actualizar_ficha_asistencia_alumnos;
+
+module.exports.cancelar_ficha_asistencia = cancelar_ficha_asistencia;

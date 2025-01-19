@@ -207,6 +207,7 @@ app.get('/obtener_fichas_asistencia_alumnos/:nid_ficha_asistencia', servlet_fich
 app.post('/registrar_ficha_asistencia_alumno', servlet_ficha_asistencia.registrar_ficha_asistencia_alumno);
 app.post('/eliminar_ficha_asistencia_alumno', servlet_ficha_asistencia.eliminar_ficha_asistencia_alumno);
 app.post('/actualizar_ficha_asistencia_alumnos', servlet_ficha_asistencia.actualizar_ficha_asistencia_alumnos);
+app.post('/cancelar_ficha_asistencia', servlet_ficha_asistencia.cancelar_ficha_asistencia);
 
 /** Asignaturas **/
 app.get('/obtener_asignaturas_rol_profesor', servlet_asignatura.obtener_asignaturas_rol_profesor);

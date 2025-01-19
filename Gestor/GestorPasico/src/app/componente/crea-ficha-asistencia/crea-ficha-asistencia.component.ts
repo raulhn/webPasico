@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AsignaturasService } from 'src/app/servicios/asignaturas.service';
 import { FichaAsistenciaService } from 'src/app/servicios/fichaasistencia.service';
 import Swal from 'sweetalert2';
@@ -22,7 +23,9 @@ export class CreaFichaAsistenciaComponent implements OnInit{
 
   ficha_seleccionada: string= "";
 
-  constructor(private fichaAsistenciaService: FichaAsistenciaService, private asignaturaService: AsignaturasService)
+  URL_FICHA_ASISTENCIA: string = "/ficha_asistencia/";
+
+  constructor(private router: Router, private fichaAsistenciaService: FichaAsistenciaService, private asignaturaService: AsignaturasService)
   {}
 
   ngOnInit(): void {
@@ -47,11 +50,23 @@ export class CreaFichaAsistenciaComponent implements OnInit{
   {
     next: (respuesta: any) =>
     {
+      console.log(respuesta)
       Swal.fire({
         icon: 'success',
         title: 'Registro correcto',
         text: 'Se ha creado la ficha correctamente'
-      })
+      }).then(
+        () =>
+        {
+          let url_ficha = this.URL_FICHA_ASISTENCIA + respuesta.nid_ficha_asistencia;
+     
+          this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
+            {
+              this.router.navigate([url_ficha]);
+            }
+          )
+        }
+      )
     },
     error: (respuesta: any) =>
     {

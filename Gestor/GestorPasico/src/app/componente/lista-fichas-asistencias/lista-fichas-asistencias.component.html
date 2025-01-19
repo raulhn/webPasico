@@ -7,6 +7,8 @@
 
     <div *ngIf="ficha_seleccionada != ''">
         <a [href]="obtener_url_ficha()"> <button class="btn btn-primary"> Ver Ficha</button></a>
+        <button class="btn btn-danger ms-3" (click)="cancelar_ficha_asistencia()"> Eliminar Ficha</button>
+
     </div>
 </div>
 

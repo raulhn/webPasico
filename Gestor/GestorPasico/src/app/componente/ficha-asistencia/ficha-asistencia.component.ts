@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FichaAsistenciaService } from 'src/app/servicios/fichaasistencia.service';
 import Swal from 'sweetalert2';
+import { faX } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-ficha-asistencia',
@@ -21,6 +22,8 @@ export class FichaAsistenciaComponent implements OnInit{
   lista_ficha_asistencia_alumno: any;
   bCargadas_fichas: boolean = false;
 
+  faXmark = faX;
+  
   constructor(private router: Router, private rutaActiva: ActivatedRoute, private fichaAsistenciaService: FichaAsistenciaService)
   {
     this.nid_ficha_asistencia = rutaActiva.snapshot.params['nid_ficha_asistencia'];
