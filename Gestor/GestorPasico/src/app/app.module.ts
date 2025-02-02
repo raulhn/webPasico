@@ -53,6 +53,9 @@ import { EvaluacionComponent } from './componente/evaluacion/evaluacion.componen
 import { CreaFichaAsistenciaComponent } from './componente/crea-ficha-asistencia/crea-ficha-asistencia.component';
 import { ListaFichasAsistenciasComponent } from './componente/lista-fichas-asistencias/lista-fichas-asistencias.component';
 import { FichaAsistenciaComponent } from './componente/ficha-asistencia/ficha-asistencia.component';
+import { FichaInventarioComponent } from './componente/ficha-inventario/ficha-inventario.component';
+import { CrearFichaInventarioComponent } from './componente/crear-ficha-inventario/crear-ficha-inventario.component';
+import { ListaInventariosComponent } from './componente/lista-inventarios/lista-inventarios.component';
 
 
 
@@ -98,7 +101,10 @@ import { FichaAsistenciaComponent } from './componente/ficha-asistencia/ficha-as
     EvaluacionComponent,
     CreaFichaAsistenciaComponent,
     ListaFichasAsistenciasComponent,
-    FichaAsistenciaComponent
+    FichaAsistenciaComponent,
+    FichaInventarioComponent,
+    CrearFichaInventarioComponent,
+    ListaInventariosComponent
   ],
   imports: [
     FormsModule,

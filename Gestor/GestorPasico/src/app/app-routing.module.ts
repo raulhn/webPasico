@@ -26,6 +26,8 @@ import { EvaluacionComponent } from './componente/evaluacion/evaluacion.componen
 import { CreaFichaAsistenciaComponent } from './componente/crea-ficha-asistencia/crea-ficha-asistencia.component';
 import { ListaFichasAsistenciasComponent } from './componente/lista-fichas-asistencias/lista-fichas-asistencias.component';
 import { FichaAsistenciaComponent } from './componente/ficha-asistencia/ficha-asistencia.component';
+import { CrearFichaInventarioComponent } from './componente/crear-ficha-inventario/crear-ficha-inventario.component';
+import { FichaInventarioComponent } from './componente/ficha-inventario/ficha-inventario.component';
 
 
 const routes: Routes = [
@@ -128,6 +130,14 @@ const routes: Routes = [
   {
     path: 'ficha_asistencia/:nid_ficha_asistencia',
     component: FichaAsistenciaComponent
+  },
+  {
+    path: 'registro_inventario',
+    component: CrearFichaInventarioComponent
+  },
+  {
+    path: 'ficha_inventario/:nid_inventario',
+    component: FichaInventarioComponent
   }
 ];
 

@@ -1,0 +1,22 @@
+
+
+<form>
+    <label>Descripcion</label>
+    <input class="form-control" [(ngModel)]="descripcion"/>
+
+    <label>Cantidad</label>
+    <input class="form-control" type="number" [(ngModel)]="cantidad"/>
+
+    <label>Modelo</label>
+    <input class="form-control" [(ngModel)]="modelo"/>
+
+    <label>Número de Serie</label>
+    <input class="form-control" [(ngModel)]="num_serie"/>
+
+    <label>Comentarios</label>
+    <textarea class="form-control" [(ngModel)]="comentarios" rows="4" cols="50">
+
+    </textarea>
+
+    <button (click)="guardar()"> Registrar </button>
+</form>

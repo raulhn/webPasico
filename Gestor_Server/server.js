@@ -23,7 +23,7 @@ var servlet_horarios = require('./servlets/servlet_horarios.js');
 var servlet_asistencia = require('./servlets/servlet_asistencia.js');
 var servlet_evaluacion = require('./servlets/servlet_evaluacion.js')
 var servlet_ficha_asistencia = require('./servlets/servlet_ficha_asistencia.js')
-
+var servlet_inventario = require('./servlets/servlet_inventario.js');
 
 var fs = require('fs');
 
@@ -193,6 +193,13 @@ app.get('/obtener_evaluacion_matricula_asignatura/:nid_matricula', servlet_evalu
 /** Boletin **/
 app.get('/generar_boletin/:nid_matricula/:nid_trimestre', servlet_evaluacion.generar_boletin);
 
+
+/** Inventario **/
+app.post('/registrar_inventario', servlet_inventario.registrar_inventario);
+app.get('/obtener_inventarios', servlet_inventario.obtener_inventarios);
+app.get('/obtener_inventario/:nid_inventario', servlet_inventario.obtener_inventario);
+
+
 ///////////////////////////////
 /**  ROL DE PROFESOR **/
 ///////////////////////////////
@@ -211,6 +218,7 @@ app.post('/cancelar_ficha_asistencia', servlet_ficha_asistencia.cancelar_ficha_a
 
 /** Asignaturas **/
 app.get('/obtener_asignaturas_rol_profesor', servlet_asignatura.obtener_asignaturas_rol_profesor);
+
 
 
 https.createServer({

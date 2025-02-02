@@ -1,0 +1,15 @@
+<app-menu class=""></app-menu>
+
+<div class="container">
+    <legend>Lista de fichas de inventario</legend>
+<div *ngIf="bCargados_inventarios">
+    <table datatable [dtOptions]="dtOptions_fichas_inventarios" id="tabla_ficha_inventario" class="row-border hover"></table>
+
+    <div *ngIf="ficha_seleccionada != ''">
+        <a [href]="obtener_url_ficha()"> <button class="btn btn-primary"> Ver Ficha</button></a>
+        <button class="btn btn-danger ms-3" (click)="eliminar_ficha()"> Eliminar Ficha</button>
+
+    </div>
+</div>
+
+</div>
