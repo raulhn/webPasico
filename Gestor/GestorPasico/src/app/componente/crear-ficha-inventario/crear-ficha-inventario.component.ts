@@ -39,7 +39,7 @@ export class CrearFichaInventarioComponent {
             {
               this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
                 {
-                  this.router.navigate(['/ficha_inventario/' + respuesta.nid_persona]);
+                  this.router.navigate(['/ficha_inventario/' + respuesta.nid_inventario]);
                 }
               )
             }

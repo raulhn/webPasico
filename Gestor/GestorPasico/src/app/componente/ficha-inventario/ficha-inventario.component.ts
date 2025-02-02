@@ -17,6 +17,7 @@ export class FichaInventarioComponent implements OnInit{
   num_serie: string = "";
   comentarios: string = "";
 
+  bCargada_ficha: boolean = false;
 
   constructor(private inventarioService: InventarioService, private rutaActiva: ActivatedRoute)
   {
@@ -27,12 +28,15 @@ export class FichaInventarioComponent implements OnInit{
   {
     next: (respuesta: any) =>
     {
-      this.nid_inventario = respuesta.nid_inventario;
-      this.descripcion = respuesta.descripcion;
-      this.cantidad = respuesta.cantidad;
-      this.modelo = respuesta.modelo;
-      this.num_serie = respuesta.num_serie;
-      this.comentarios = respuesta.comentarios;
+
+      this.nid_inventario = respuesta.inventario.nid_inventario;
+      this.descripcion = respuesta.inventario.descripcion;
+      this.cantidad = respuesta.inventario.cantidad;
+      this.modelo = respuesta.inventario.modelo;
+      this.num_serie = respuesta.inventario.num_serie;
+      this.comentarios = respuesta.inventario.comentarios;
+
+      this.bCargada_ficha = true;
     }
   }
 
@@ -49,10 +53,7 @@ export class FichaInventarioComponent implements OnInit{
         icon: 'success',
         title: 'Inventario guardado',
         text: 'Se han guardados los cambios del inventario'
-      }).then(
-       () => { 
-        window.location.reload(); }
-      )
+      })
     },
     error: (respuesta: any) =>
     {

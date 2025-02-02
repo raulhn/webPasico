@@ -14,7 +14,7 @@ export class InventarioService {
 
   registrar_inventario(data: any)
   {
-    let API_URL = this.url + '/registrar_inventairo';
+    let API_URL = this.url + '/registrar_inventario';
     return this.http.post(API_URL, data, {withCredentials: true})
   }
 
@@ -28,6 +28,12 @@ export class InventarioService {
   {
     let API_URL = this.url + '/obtener_inventario/' + nid_inventario;
     return this.http.get(API_URL, {withCredentials: true})
+  }
+
+  eliminar_inventario(nid_inventario: string)
+  {
+    let API_URL = this.url + '/eliminar_inventario';
+    return this.http.post(API_URL, {nid_inventario: nid_inventario}, {withCredentials: true})
   }
 
 }

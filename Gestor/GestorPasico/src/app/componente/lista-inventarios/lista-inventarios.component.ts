@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DataTablesOptions } from 'src/app/logica/constantes';
 import { InventarioService } from 'src/app/servicios/inventario.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-lista-inventarios',
@@ -49,28 +50,35 @@ export class ListaInventariosComponent implements OnInit{
         buttons: [{extend: 'excel', text: 'Generar Excel', className: 'btn btn-dark mb-3'}],
         columns:
         [
-          {title: 'Ficha',
-          data: 'etiqueta'
-          }],
+          {title: 'Descripcion',
+          data: 'descripcion'
+          },
+          {title: 'Cantidad',
+            data:'cantidad'
+          },
+          {title: 'Modelo',
+            data: 'modelo'
+          }
+        ],
           rowCallback: (row: Node, data: any[] | Object, index: number) => {
             $('td', row).off('click');
             $('td', row).on('click', () => {
               this.click_ficha(data);
-              $('#tabla_ficha_asistencias tr').removeClass('selected')
+              $('#tabla_ficha_inventario tr').removeClass('selected')
               $(row).addClass('selected');
             });
             return row;
             }
         }
+
         $('#tabla_ficha_inventario').DataTable(this.dtOptions_fichas_inventarios);
-      this.dtOptions_fichas_inventarios = true;
       
-      this.bCargados_inventarios = true;
+        this.bCargados_inventarios = true;
     }
   }
 
   ngOnInit(): void {
-    this.inventarioService.obtener_inventarios().subscribe();
+    this.inventarioService.obtener_inventarios().subscribe(this.recuperar_inventarios);
   }
 
   obtener_url_ficha()
@@ -78,8 +86,52 @@ export class ListaInventariosComponent implements OnInit{
      return this.URL_FICHA_INVENTARIO + this.ficha_seleccionada;
   }
 
+
+  peticion_eliminar_inventario =
+  {
+  next: (respuesta: any) =>
+    {
+      this.ficha_seleccionada = "";
+      Swal.fire({
+        icon: 'success',
+        title: 'Inventario eliminado',
+        text: 'Se ha eliminado el inventario'
+      }).then( () =>
+                  {
+                    this.bCargados_inventarios = false;
+                    this.inventarioService.obtener_inventarios().subscribe(this.recuperar_inventarios);
+                  }
+              )
+    },
+    error: (respuesta: any) =>
+    {
+      Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Se ha producido un error',
+            })
+    }
+
+
+  }
+
   eliminar_ficha()
   {
-
+    Swal.fire(
+        {
+          title: 'Eliminar ficha de inventario',
+          text: 'Se eliminará la ficha de inventario',
+          confirmButtonText: 'Eliminar',
+          showCancelButton: true
+        }
+      ).then(
+        (results: any) =>
+        {
+          if(results.isConfirmed)
+          {
+            this.inventarioService.eliminar_inventario(this.ficha_seleccionada).subscribe(this.peticion_eliminar_inventario);
+          }
+        }
+      )
   }
 }

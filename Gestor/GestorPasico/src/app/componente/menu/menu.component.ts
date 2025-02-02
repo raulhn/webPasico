@@ -33,7 +33,6 @@ export class MenuComponent implements OnInit {
   {
     next: (respuesta: any) =>
     {
-      console.log(respuesta)
        this.nid_rol = respuesta['nid_rol'];
     }
 

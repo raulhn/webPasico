@@ -28,6 +28,7 @@ import { ListaFichasAsistenciasComponent } from './componente/lista-fichas-asist
 import { FichaAsistenciaComponent } from './componente/ficha-asistencia/ficha-asistencia.component';
 import { CrearFichaInventarioComponent } from './componente/crear-ficha-inventario/crear-ficha-inventario.component';
 import { FichaInventarioComponent } from './componente/ficha-inventario/ficha-inventario.component';
+import { ListaInventariosComponent } from './componente/lista-inventarios/lista-inventarios.component';
 
 
 const routes: Routes = [
@@ -138,6 +139,10 @@ const routes: Routes = [
   {
     path: 'ficha_inventario/:nid_inventario',
     component: FichaInventarioComponent
+  },
+  {
+    path: 'lista_inventario',
+    component: ListaInventariosComponent
   }
 ];
 

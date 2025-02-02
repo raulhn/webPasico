@@ -86,11 +86,11 @@ function obtener_inventario(nid_inventario)
     return new Promise(
         (resolve, reject) =>
         {
-            conexion.dbConn.query('select * from ' + constantes.ESQUEMA_BD + '.inventario where nid_inventariro = ' + conexion.dbConn.escape(nid_inventario),
+            conexion.dbConn.query('select * from ' + constantes.ESQUEMA_BD + '.inventario where nid_inventario = ' + conexion.dbConn.escape(nid_inventario),
                 (error, results, fields) =>
                 {
                     if(error) {console.log(error); reject(error);}
-                    else if(results.length() == 0)
+                    else if(results.length == 0)
                     {
                         let mensaje = 'No se ha encontrado el inventario';
                         console.log(mensaje);
@@ -105,6 +105,28 @@ function obtener_inventario(nid_inventario)
     )
 }
 
+
+function eliminar_inventario(nid_inventario)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.beginTransaction(
+                () =>
+                {
+                    conexion.dbConn.query('delete from ' + constantes.ESQUEMA_BD + '.inventario where nid_inventario = ' + conexion.dbConn.escape(nid_inventario),
+                    (error, results, fields) =>
+                    {
+                        if(error) {console.log(error); conexion.dbConn.rollback(); reject(error);}
+                        else  {conexion.dbConn.commit(); resolve();}
+                    })
+                }
+            )
+        }
+    )
+}
+
 module.exports.registrar_inventario = registrar_inventario;
 module.exports.obtener_inventarios = obtener_inventarios;
 module.exports.obtener_inventario = obtener_inventario;
+module.exports.eliminar_inventario = eliminar_inventario;

@@ -1,6 +1,7 @@
+<app-menu class=""></app-menu>
 
+<div *ngIf="bCargada_ficha" class="container">
 
-<form>
     <label>Descripcion</label>
     <input class="form-control" [(ngModel)]="descripcion"/>
 
@@ -18,5 +19,6 @@
 
     </textarea>
 
-    <button (click)="guardar()"> Guardar </button>
-</form>
+    <button (click)="guardar()" class="btn btn-primary mb-3 mt-2 tp-3"> Guardar </button>
+
+</div>

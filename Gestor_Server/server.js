@@ -198,6 +198,7 @@ app.get('/generar_boletin/:nid_matricula/:nid_trimestre', servlet_evaluacion.gen
 app.post('/registrar_inventario', servlet_inventario.registrar_inventario);
 app.get('/obtener_inventarios', servlet_inventario.obtener_inventarios);
 app.get('/obtener_inventario/:nid_inventario', servlet_inventario.obtener_inventario);
+app.post('/eliminar_inventario', servlet_inventario.eliminar_inventario);
 
 
 ///////////////////////////////
