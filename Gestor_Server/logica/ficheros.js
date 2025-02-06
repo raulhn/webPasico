@@ -1,6 +1,31 @@
 const fs = require('fs');
 var docxConverter = require('docx-pdf');
 
+const constantes = require('../constantes.js')
+
+function subir_ficheros(fichero, nombre_imagen)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            if(!fichero)
+            {
+                reject('Error al subir fichero');
+                
+            }
+            else
+            {
+                let archivo = fichero.imagen;
+                console.log(constantes.DIRECTORIO_IMAGENES + nombre_imagen);
+                archivo.mv(constantes.DIRECTORIO_IMAGENES + nombre_imagen);
+
+                resolve();
+            }
+        }
+    );
+}
+
+
 function createFile(fileName, content) {
   return new Promise(
     (resolve, reject) =>
@@ -58,5 +83,6 @@ function convertir_pdf(path_entrada, path_salida)
 )
 }
 
+module.exports.subir_ficheros = subir_ficheros;
 module.exports.readFile = readFile;
 module.exports.createFile  = createFile;
