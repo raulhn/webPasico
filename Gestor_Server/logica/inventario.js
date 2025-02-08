@@ -1,5 +1,6 @@
 const conexion = require('../conexion.js')
 const constantes = require('../constantes.js')
+const gestor_imagenes = require('./imagenes.js')
 
 function existe_inventario(nid_inventario)
 {
@@ -17,7 +18,7 @@ function existe_inventario(nid_inventario)
     )
 }
 
-function registrar_inventario(nid_inventario, descripcion, cantidad, modelo, num_serie, comentarios)
+function registrar_inventario(nid_inventario, descripcion, modelo, num_serie, comentarios)
 {
     return new Promise(
         async(resolve, reject) =>
@@ -30,7 +31,7 @@ function registrar_inventario(nid_inventario, descripcion, cantidad, modelo, num
                     () =>
                     {
                         conexion.dbConn.query('update ' + constantes.ESQUEMA_BD + '.inventario set descripcion = ' + conexion.dbConn.escape(descripcion) +
-                                ', cantidad = ' + conexion.dbConn.escape(cantidad) + ', modelo = ' + conexion.dbConn.escape(modelo) + 
+                                ', modelo = ' + conexion.dbConn.escape(modelo) + 
                                 ', num_serie = ' + conexion.dbConn.escape(num_serie) + ', comentarios = ' + conexion.dbConn.escape(comentarios) +
                                 ' where nid_inventario = ' + conexion.dbConn.escape(nid_inventario),
                             (error, results, fields) =>
@@ -47,8 +48,8 @@ function registrar_inventario(nid_inventario, descripcion, cantidad, modelo, num
                 conexion.dbConn.beginTransaction(
                     () =>
                     {
-                        conexion.dbConn.query('insert into ' + constantes.ESQUEMA_BD + '.inventario(descripcion, cantidad, modelo, num_serie, comentarios) values(' +
-                                conexion.dbConn.escape(descripcion) + ', ' + conexion.dbConn.escape(cantidad) + ', ' + conexion.dbConn.escape(modelo) +
+                        conexion.dbConn.query('insert into ' + constantes.ESQUEMA_BD + '.inventario(descripcion, modelo, num_serie, comentarios) values(' +
+                                conexion.dbConn.escape(descripcion) + ', ' + conexion.dbConn.escape(modelo) +
                                 ', ' + conexion.dbConn.escape(num_serie) + ', ' + conexion.dbConn.escape(comentarios) + ')',
                             (error, results, fields) =>
                             {
@@ -126,7 +127,43 @@ function eliminar_inventario(nid_inventario)
     )
 }
 
+
+function actualizar_imagen(fichero, nid_inventario)
+{
+    return new Promise(
+        async(resolve, reject) =>
+        {
+            try
+            {
+                let imagen = fichero.imagen;
+                let nombre = imagen.name;
+
+                let nid_imagen = await gestor_imagenes.actualizar_imagen(fichero, nombre);
+                
+                conexion.dbConn.beginTransaction(
+                    () =>
+                    {
+                        conexion.dbConn.query('update ' + constantes.ESQUEMA_BD + '.inventario set nid_imagen = ' + conexion.dbConn.escape(nid_imagen) +
+                              ' where nid_inventario = ' + conexion.dbConn.escape(nid_inventario),
+                            (error, results, fields) =>
+                            {
+                                if(error) {console.log(error); conexion.dbConn.rollback(); reject(error);}
+                                else {conexion.dbConn.commit(); resolve();}
+                            }
+                        )
+                    }
+                )
+            }
+            catch(error) {console.log(error); reject(error);}
+            
+        }
+    )
+}
+
+
+
 module.exports.registrar_inventario = registrar_inventario;
 module.exports.obtener_inventarios = obtener_inventarios;
 module.exports.obtener_inventario = obtener_inventario;
 module.exports.eliminar_inventario = eliminar_inventario;
+module.exports.actualizar_imagen = actualizar_imagen;

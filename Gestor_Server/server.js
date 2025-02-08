@@ -8,6 +8,8 @@ const PORT = 8080;
 var bodyParser = require('body-parser');
 var constantes = require('./constantes.js');
 
+const fileUpload = require('express-fileupload');
+
 var servlet_usuario = require('./servlets/servlet_usuario');
 var servlet_persona = require('./servlets/servlet_persona.js');
 var servlet_musico = require('./servlets/servlet_musico.js');
@@ -29,6 +31,12 @@ var fs = require('fs');
 
 var conexion = require('./conexion.js');
 var sesion_config = require('./config/sesion.json');
+
+
+// Habilitar la subida de documentos
+app.use(fileUpload({
+  createParentPath: true
+}));
 
 app.use(cors({origin: ["https://localhost", "https://pasico.ddns.net"], credentials: true}));
 app.use(bodyParser.json());
@@ -199,6 +207,8 @@ app.post('/registrar_inventario', servlet_inventario.registrar_inventario);
 app.get('/obtener_inventarios', servlet_inventario.obtener_inventarios);
 app.get('/obtener_inventario/:nid_inventario', servlet_inventario.obtener_inventario);
 app.post('/eliminar_inventario', servlet_inventario.eliminar_inventario);
+app.post('/actualizar_imagen_inventario', servlet_inventario.actualizar_imagen);
+app.get('/imagen/:nid_imagen', servlet_inventario.obtener_imagen);
 
 
 ///////////////////////////////

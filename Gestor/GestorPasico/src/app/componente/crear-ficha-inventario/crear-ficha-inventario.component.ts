@@ -12,7 +12,6 @@ export class CrearFichaInventarioComponent {
 
     nid_inventario: string = "";
     descripcion: string = "";
-    cantidad: string = "";
     modelo: string = "";
     num_serie: string = "";
     comentarios: string = "";
@@ -57,7 +56,7 @@ export class CrearFichaInventarioComponent {
   
     guardar()
     {
-      let datos = {nid_inventario: this.nid_inventario, descripcion: this.descripcion, cantidad: this.cantidad, modelo: this.modelo, num_serie: this.num_serie,
+      let datos = {nid_inventario: this.nid_inventario, descripcion: this.descripcion, modelo: this.modelo, num_serie: this.num_serie,
                    comentarios: this.comentarios};
   
       this.inventarioService.registrar_inventario(datos).subscribe(this.peticion_guardar)

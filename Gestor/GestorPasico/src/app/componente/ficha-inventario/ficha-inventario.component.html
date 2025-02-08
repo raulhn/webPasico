@@ -2,12 +2,18 @@
 
 <div *ngIf="bCargada_ficha" class="container">
 
-    <label>Descripcion</label>
-    <input class="form-control" [(ngModel)]="descripcion"/>
-
-    <label>Cantidad</label>
-    <input class="form-control" type="number" [(ngModel)]="cantidad"/>
-
+    <div class = "row">
+        <div class="col-8">
+            <label>Descripcion</label>
+            <input class="form-control" [(ngModel)]="descripcion"/>
+        </div>
+        <div class="col-4">
+            <div class="m-3" >
+                <img class="img-fluid" [src]="obtener_url_imagen()" />
+                <input type="file" class="form-control" (change)="onChange($event)"/>
+            </div>
+        </div>
+    </div>
     <label>Modelo</label>
     <input class="form-control" [(ngModel)]="modelo"/>
 

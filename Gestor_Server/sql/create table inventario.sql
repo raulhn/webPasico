@@ -1,12 +1,14 @@
 create table pasico_gestor.inventario(
 	nid_inventario integer primary key auto_increment,
 	descripcion varchar(400),
-	cantidad integer,
 	modelo varchar(150),
 	num_serie varchar(100),
-	comentarios varchar(500)
+	comentarios varchar(500),
+	nid_imagen integer
 );
 
+
+alter table pasico_gestor.inventario add constraint fk_inventario_imagen foreign key(nid_imagen) references pasico_gestor.imagenes(nid_imagen);
 
 create table pasico_gestor.prestamos(
 	nid_prestamo integer primary key auto_increment,

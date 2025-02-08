@@ -36,4 +36,11 @@ export class InventarioService {
     return this.http.post(API_URL, {nid_inventario: nid_inventario}, {withCredentials: true})
   }
 
+  actualizar_imagen(data: any)
+  { 
+    let API_URL = this.url + '/actualizar_imagen_inventario';
+    return this.http.post(API_URL, data, {withCredentials: true})
+  }
+
+
 }

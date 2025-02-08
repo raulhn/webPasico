@@ -53,9 +53,6 @@ export class ListaInventariosComponent implements OnInit{
           {title: 'Descripcion',
           data: 'descripcion'
           },
-          {title: 'Cantidad',
-            data:'cantidad'
-          },
           {title: 'Modelo',
             data: 'modelo'
           }

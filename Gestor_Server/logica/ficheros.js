@@ -8,18 +8,22 @@ function subir_ficheros(fichero, nombre_imagen)
     return new Promise(
         (resolve, reject) =>
         {
-            if(!fichero)
+            try
             {
-                reject('Error al subir fichero');
-                
-            }
-            else
-            {
-                let archivo = fichero.imagen;
-                console.log(constantes.DIRECTORIO_IMAGENES + nombre_imagen);
-                archivo.mv(constantes.DIRECTORIO_IMAGENES + nombre_imagen);
+                if(!fichero)
+                {
+                    reject('Error al subir fichero');
+                }
+                else
+                {
+                    let archivo = fichero.imagen;
+                    archivo.mv(constantes.RUTA_SUBIDAS + nombre_imagen);
 
-                resolve();
+                    resolve();
+                }
+            }
+            catch(e){
+                reject(e)
             }
         }
     );

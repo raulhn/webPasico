@@ -1,5 +1,5 @@
-const RUTA_SUBIDAS  = './subidas/';
-const IMAGEN_NO_ENCONTRADA = './subidas/imagen_not_found.jpg';
+const RUTA_SUBIDAS  = './imagenes/';
+const IMAGEN_NO_ENCONTRADA = './imagenes/imagen_not_found.jpg';
 
 const ESQUEMA_BD = 'pasico';
 const ROL_ADMINISTRADOR = 1;
