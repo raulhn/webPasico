@@ -1,0 +1,6 @@
+.container-grid
+{
+    display: grid;
+    grid-auto-rows: auto;
+    grid-template-columns: repeat(auto-fill, minmax(15rm, 1fr));
+}

@@ -3,11 +3,11 @@
 <div *ngIf="bCargada_ficha" class="container">
 
     <div class = "row">
-        <div class="col-8">
-            <label>Descripcion</label>
+        <div class="col-5">
+            <label>Descripción</label>
             <input class="form-control" [(ngModel)]="descripcion"/>
         </div>
-        <div class="col-4">
+        <div class="col-7">
             <div class="m-3" >
                 <img class="img-fluid" [src]="obtener_url_imagen()" />
                 <input type="file" class="form-control" (change)="onChange($event)"/>
@@ -27,4 +27,32 @@
 
     <button (click)="guardar()" class="btn btn-primary mb-3 mt-2 tp-3"> Guardar </button>
 
+
+<!--
+<div class="container-grid">
+    <div class="m-3" >
+        <img class="img-fluid" [src]="obtener_url_imagen()" />
+        <input type="file" class="form-control" (change)="onChange($event)"/>
+    </div>
+
+    <div>
+        <label>Descripcion</label>
+        <input class="form-control" [(ngModel)]="descripcion"/>
+
+
+        <label>Modelo</label>
+        <input class="form-control" [(ngModel)]="modelo"/>
+
+        <label>Número de Serie</label>
+        <input class="form-control" [(ngModel)]="num_serie"/>
+
+        <label>Comentarios</label>
+        <textarea class="form-control" [(ngModel)]="comentarios" rows="4" cols="50">
+
+        </textarea>
+    </div>
+</div>
+    -->
+
+<button (click)="guardar()" class="btn btn-primary mb-3 mt-2 tp-3"> Guardar </button>
 </div>
