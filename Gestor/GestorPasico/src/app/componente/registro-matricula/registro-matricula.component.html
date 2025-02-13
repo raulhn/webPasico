@@ -43,6 +43,8 @@
             <button class="btn btn-danger" (click)="dar_baja_alumno()"><fa-icon [icon]="faXmark"></fa-icon> Dar de baja </button>
             <span class="p-1"></span>
             <a [href]="obtener_url_ficha_alumno()"><button class="btn btn-primary"> Ficha alumno </button></a>
+            <span class="p-1"></span>
+            <button class="btn btn-primary" (click)="cambiar_profesor()"> Cambiar Profesor </button>
         </div>
     </div>
 
@@ -72,6 +74,19 @@
             <div style="min-height: 100px;">
             <label>Fecha baja:</label>
             <input class="form-control" name ="Fecha nacimiento" [(ngModel)] = "fecha_baja" type="date" required/>
+            </div>
+        </div>
+    </div>
+
+    <!-- Registrar alumno en asignatura -->
+    <div style="display: none;">
+        <div #instancia_cambio_profesor>
+            <div >
+            <label>Profesor</label>
+            <ng-select [items]="lista_profesores"
+            bindLabel="etiqueta_profesor"
+            bindValue="clave_profesor"
+            [(ngModel)]="profesor"></ng-select>
             </div>
         </div>
     </div>

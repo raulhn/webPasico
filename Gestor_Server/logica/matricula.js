@@ -614,6 +614,24 @@ function obtener_matriculas_activas_asignatura(nid_profesor, nid_asignatura)
     )
 }
 
+function obtener_matricula_asignatura(nid_matricula, nid_asignatura)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.query('select * from ' + constantes.ESQUEMA_BD + '.matricula_asignatura where nid_matricula = ' +
+                                  conexion.dbConn.escape(nid_matricula) + ', nid_asignatura = ' + conexion.dbConn.escape(nid_asignatura),
+                (error, results, fields) =>
+                {
+                    if(error) {console.log(error); reject();}
+                    else if(results.length < 1) {reject();}
+                    else {resolve(results[0])}
+                }
+            )
+        }
+    )
+}
+
 function obtener_matriculas_activas()
 {
     return new Promise(
@@ -707,6 +725,25 @@ function alta_profesor_alumno_matricula_baja(nid_profesor_sustituto, nid_profeso
     )
 }
 
+function obtener_profesor_alumno_matricula(nid_matricula_asignatura)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.query('select * from ' + constantes.ESQUEMA_BD + '.profesor_alumno_matricula where nid_matricula_asignatura = '
+                 + conexion.dbConn.escape(nid_matricula_asignatura) +
+                 ' and fecha_baja is null',
+                (error, results, fields) =>
+                {
+                    if(error) {console.log(error); reject()}
+                    else if(results.length < 1) {reject()}
+                    else {resolve(results[0])}
+                }
+           )
+        }
+    )
+}
+
 
 function sustituir_profesor_curso_actual(nid_profesor, nid_profesor_sustituto, nid_asignatura)
 {
@@ -740,6 +777,46 @@ function sustituir_profesor_curso_actual(nid_profesor, nid_profesor_sustituto, n
 
                 }
             )
+        }
+    )
+}
+
+
+function sustituir_profesor_alumno(nid_profesor, nid_matricula_asignatura, nid_asignatura)
+{
+    return new Promise(
+        async (resolve, reject) =>
+        {
+            try
+            {
+
+                conexion.dbConn.beginTransaction(
+                    async () =>
+                    {
+                        try
+                        {
+                            let profesor_alumno_matricula = await obtener_profesor_alumno_matricula(nid_matricula_asignatura);
+                            await baja_profesor_alumno_matricula(profesor_alumno_matricula['nid']);
+                            await alta_profesor_alumno_matricula_baja(nid_profesor, profesor_alumno_matricula['nid'])
+
+                            conexion.dbConn.commit();
+                            resolve();
+                        }
+                        catch(error)
+                        {
+                            console.log(error);
+                            conexion.dbConn.rollback();
+                            reject();
+                        }
+                    }
+                )
+
+            }
+            catch(error)
+            {
+                console.log(error);
+                reject();
+            }
         }
     )
 }
@@ -787,3 +864,5 @@ module.exports.obtener_matriculas_activas = obtener_matriculas_activas;
 module.exports.obtener_personas_con_matricula_activa = obtener_personas_con_matricula_activa;
 
 module.exports.obtener_asignaturas_matricula_activas = obtener_asignaturas_matricula_activas
+
+module.exports.sustituir_profesor_alumno = sustituir_profesor_alumno;

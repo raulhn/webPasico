@@ -137,6 +137,7 @@ app.post('/actualizar_precio_manual', servlet_matricula.registrar_precio_manual)
 app.get('/obtener_matricula/:nid_matricula', servlet_matricula.obtener_matricula);
 
 app.post('/sustituir_profesor', servlet_matricula.sustituir_profesor);
+app.post('/sustituir_profesor_alumno', servlet_matricula.sustituir_profesor_alumno);
 
 app.get('/obtener_matriculas_activas_profesor/:nid_asignatura/:nid_profesor', servlet_matricula.obtener_matriculas_activas_profesor);
 

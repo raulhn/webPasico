@@ -49,6 +49,7 @@ export class RegistroMatriculaComponent implements OnInit{
 
   @ViewChild('instancia_alumno') instancia_alumno!: ElementRef;
   @ViewChild('instancia_baja') instancia_baja!: ElementRef;
+  @ViewChild('instancia_cambio_profesor') instancia_cambio_profesor!: ElementRef;
 
   obtener_cursos = 
   {
@@ -283,6 +284,29 @@ export class RegistroMatriculaComponent implements OnInit{
     }
   }
 
+  registrar_cambio_profesor =
+  {
+    next: (respuesta: any) =>
+    {
+      Swal.fire({
+        icon: 'success',
+        title: 'Cambio realizado',
+        text: 'Se ha registrado el cambio correctamente'
+      })
+      this.fecha_baja = "";
+    },
+    error: (respuesta: any) =>
+    {
+      Swal.fire(
+        {
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Se ha producido un error'
+        }
+      )
+    }
+  }
+
   dar_baja_alumno()
   {
     Swal.fire(
@@ -311,5 +335,25 @@ export class RegistroMatriculaComponent implements OnInit{
   obtener_url_ficha_alumno()
   {
     return this.enlaceFicha + this.alumno_seleccionado.nid
+  }
+
+  cambiar_profesor()
+  {
+    Swal.fire(
+      {
+        title: 'Cambiar Profesor',
+        html: this.instancia_cambio_profesor.nativeElement,
+        confirmButtonText: 'Actualizar',
+        showCancelButton: true
+      }
+    ).then(
+      (results: any) =>
+      {
+        if(results.isConfirmed)
+        {
+          this.matriculasServices.sustituir_profesor_alumno(this.profesor, this.alumno_seleccionado.nid_matricula_asignatura, this.nid_asignatura).subscribe(this.registrar_cambio_profesor)
+        }
+      }
+    )
   }
 }
