@@ -1,0 +1,20 @@
+
+@media screen and (max-width: 600px) {
+   .oculta-movil {
+      display: none;
+    }
+
+    .visible-movil{
+        display: block;
+    }
+  }
+
+@media screen and (min-width: 600px) {
+    .oculta-movil {
+       display: block;
+     }
+ 
+     .visible-movil{
+         display: none;
+     }
+   }

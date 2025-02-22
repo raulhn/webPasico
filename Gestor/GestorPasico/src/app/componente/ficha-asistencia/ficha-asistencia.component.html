@@ -45,9 +45,17 @@
                     
                 <textarea class="form-control" [(ngModel)]="ficha_asistencia_alumno['comentario']" rows="4" cols="50"> </textarea>
             </td>
-           <td class="col-2">
-                <button class="btn" style=" color:white; background-color:rgb(229, 15, 8);  border-color:rgb(229, 15, 8);" (click)="eliminar_ficha_asistencia_alumno(ficha_asistencia_alumno['nid_ficha_asistencia_alumno'])"> 
-                    Eliminar </button>
+           <td class="col-2" style="text-align: center">
+                <div class="visible-movil">
+                    <button class="btn" style=" color:white; background-color:rgb(229, 15, 8);  border-color:rgb(229, 15, 8);" (click)="eliminar_ficha_asistencia_alumno(ficha_asistencia_alumno['nid_ficha_asistencia_alumno'])"> 
+                        <fa-icon [icon]="faXmark"/> 
+                    </button>
+                </div>
+                <div class="oculta-movil">
+                    <button class="btn" style=" color:white; background-color:rgb(229, 15, 8);  border-color:rgb(229, 15, 8);" (click)="eliminar_ficha_asistencia_alumno(ficha_asistencia_alumno['nid_ficha_asistencia_alumno'])"> 
+                       Eliminar
+                    </button>
+                </div>
            </td>
         </tr>
     </table>

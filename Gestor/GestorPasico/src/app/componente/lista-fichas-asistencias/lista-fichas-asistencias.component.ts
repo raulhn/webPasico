@@ -42,6 +42,7 @@ export class ListaFichasAsistenciasComponent implements OnInit{
         language: DataTablesOptions.spanish_datatables,
         data: this.lista_ficha_asistencias,
         dom: 'Bfrtip',
+        responsive: true,
         buttons: [{extend: 'excel', text: 'Generar Excel', className: 'btn btn-dark mb-3'}],
         columns:
         [

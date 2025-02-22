@@ -535,6 +535,27 @@ function obtener_pago_persona(nid_persona)
 }
 
 
+function obtener_forma_pago_nid(nid_forma_pago)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+
+            conexion.dbConn.query('select concat(p.nombre, \' \', p.primer_apellido, \' \', p.segundo_apellido, \' - \', iban) etiqueta, fp.* from ' 
+                + constantes.ESQUEMA_BD + '.forma_pago fp, ' + constantes.ESQUEMA_BD + '.persona p ' +
+                'where fp.nid_titular = p.nid and fp.nid = ' + conexion.dbConn.escape(nid_forma_pago) ,
+            (error, results, fields) =>
+            {
+                if(error) {console.log(error); reject();}
+                else if(results.length < 1) {console.log('(persona.js): No encontrada forma de pago'); reject();}
+                else {resolve(results[0]);}
+            }
+            )
+        }
+    )
+}
+
+
 function obtener_formas_pago()
 {
     return new Promise(
@@ -576,6 +597,65 @@ function asociar_pago_persona(nid_persona, nid_forma_pago)
     )
 }
 
+
+function actualizar_user_pasarela_pago(nid_persona, nid_user_pasarela)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.beginTransaction(
+                () =>
+                {
+                    conexion.dbConn.query('update ' + constantes.ESQUEMA_BD + '.persona set nid_pasarela_pago = ' + conexion.dbConn.escape(nid_user_pasarela) +
+                            ' where nid = ' + conexion.dbConn.escape(nid_persona),
+                       (error, results, fields)=>
+                    {
+                        if(error)
+                        {
+                            console.log(error);
+                            conexion.dbConn.rollback()
+                            reject('Error al asignar el usuario pasarela de pago');
+                        }
+                        else {conexion.dbConn.commit(); resolve()}
+                    })
+                }
+            )
+        }
+    )
+}
+
+
+function actualizar_metodo_pasarela_pago(nid_forma_pago, nid_metodo_pasarela_pago)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.beginTransaction(
+                ()=>
+                {
+                    conexion.dbConn.query('update ' + constantes.ESQUEMA_BD + '.forma_pago set nid_metodo_pasarela_pago = ' + conexion.dbConn.escape(nid_metodo_pasarela_pago) +
+                            ' where nid = ' + conexion.dbConn.escape(nid_forma_pago),
+                    (error, results, fields) =>
+                    {
+                        if(error)
+                        {
+                            console.log(error);
+                            conexion.dbConn.rollback();
+                            reject('Error al asignar el método de pago');
+                        }
+                        else{
+                            conexion.dbConn.commit();
+                            resolve();
+                        }
+                    })
+                }
+            )
+        }
+    )
+}
+
+
+
 module.exports.registrar_persona = registrar_persona
 module.exports.actualizar_persona = actualizar_persona
 
@@ -598,7 +678,11 @@ module.exports.obtener_persona = obtener_persona
 
 module.exports.registrar_forma_pago = registrar_forma_pago;
 module.exports.obtener_forma_pago = obtener_forma_pago;
+module.exports.obtener_forma_pago_nid = obtener_forma_pago_nid;
 module.exports.tiene_forma_pago = tiene_forma_pago;
 module.exports.obtener_pago_persona = obtener_pago_persona;
 module.exports.obtener_formas_pago = obtener_formas_pago;
 module.exports.asociar_pago_persona = asociar_pago_persona;
+
+module.exports.actualizar_user_pasarela_pago = actualizar_user_pasarela_pago;
+module.exports.actualizar_metodo_pasarela_pago = actualizar_metodo_pasarela_pago;
