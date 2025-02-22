@@ -123,6 +123,12 @@ export class PersonasService {
     return this.http.get(API_URL, {withCredentials: true});
   }
 
+  obtener_forma_pago_nid(nid_forma_pago: string)
+  {
+    let API_URL = this.url + '/obtener_forma_pago_nid/' + nid_forma_pago;
+    return this.http.get(API_URL, {withCredentials: true})
+  }
+
   obtener_pago_persona(nid_persona: string)
   {
     let API_URL = this.url + '/obtener_pago_persona/' + nid_persona;
@@ -139,5 +145,11 @@ export class PersonasService {
   {
     let API_URL = this.url + '/asociar_forma_pago';
     return this.http.post(API_URL, peticion, {withCredentials: true})
+  }
+
+  obtener_forma_pagos_persona(nid_titular: string)
+  {
+    let API_URL = this.url + '/obtener_forma_pagos_persona/' + nid_titular;
+    return this.http.get(API_URL, {withCredentials: true});
   }
 }

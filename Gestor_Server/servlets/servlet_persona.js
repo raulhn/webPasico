@@ -253,6 +253,19 @@ async function obtener_pago_persona(req, res)
     )
 }
 
+async function obtener_forma_pagos_persona(req, res)
+{
+    comun.comprobaciones(req, res,
+        async() =>
+        {
+            let nid_titular = req.params.nid_titular;
+            let formas_pago = await persona.obtener_formas_pago_persona(nid_titular);
+
+            res.status(200).send({error: false, formas_pago: formas_pago})
+        }
+    )
+}
+
 async function asociar_forma_pago(req, res)
 
 {
@@ -329,6 +342,7 @@ module.exports.registrar_forma_pago = registrar_forma_pago;
 module.exports.obtener_forma_pago = obtener_forma_pago;
 module.exports.obtener_formas_pago = obtener_formas_pago;
 module.exports.obtener_pago_persona = obtener_pago_persona;
+module.exports.obtener_forma_pagos_persona = obtener_forma_pagos_persona;
 module.exports.asociar_forma_pago = asociar_forma_pago;
 
 module.exports.obtener_persona_apellidos = obtener_persona_apellidos;

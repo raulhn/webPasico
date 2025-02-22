@@ -29,6 +29,7 @@ import { FichaAsistenciaComponent } from './componente/ficha-asistencia/ficha-as
 import { CrearFichaInventarioComponent } from './componente/crear-ficha-inventario/crear-ficha-inventario.component';
 import { FichaInventarioComponent } from './componente/ficha-inventario/ficha-inventario.component';
 import { ListaInventariosComponent } from './componente/lista-inventarios/lista-inventarios.component';
+import { ListaFormaPagosComponent } from './componente/lista-forma-pagos/lista-forma-pagos.component';
 
 
 const routes: Routes = [
@@ -143,6 +144,10 @@ const routes: Routes = [
   {
     path: 'lista_inventario',
     component: ListaInventariosComponent
+  },
+  {
+    path: 'lista_forma_pagos/:nid_persona',
+    component: ListaFormaPagosComponent
   }
 ];
 

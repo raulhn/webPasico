@@ -535,6 +535,23 @@ function obtener_pago_persona(nid_persona)
 }
 
 
+function obtener_formas_pago_persona(nid_persona)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.query('select * from ' + constantes.ESQUEMA_BD + '.forma_pago fp '
+                    + ' where fp.nid_titular = ' + conexion.dbConn.escape(nid_persona),
+                (error, results, fields) =>
+                {
+                    if(error) {console.log(error); reject('Error al recuperar las formas de pago')}
+                    else {resolve(results);}
+                }
+            )
+        }
+    )
+}
+
 function obtener_forma_pago_nid(nid_forma_pago)
 {
     return new Promise(
@@ -678,6 +695,7 @@ module.exports.obtener_persona = obtener_persona
 
 module.exports.registrar_forma_pago = registrar_forma_pago;
 module.exports.obtener_forma_pago = obtener_forma_pago;
+module.exports.obtener_formas_pago_persona = obtener_formas_pago_persona;
 module.exports.obtener_forma_pago_nid = obtener_forma_pago_nid;
 module.exports.tiene_forma_pago = tiene_forma_pago;
 module.exports.obtener_pago_persona = obtener_pago_persona;
