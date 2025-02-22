@@ -36,7 +36,12 @@ function cobrar_pago(req, res)
         async() =>
         {
             let nid_forma_pago = req.params.nid_forma_pago;
-            await pasarela_pago.cobrar_pago(nid_forma_pago);
+            let cantidad_pago = req.params.cantidad;
+
+            let user_agent = req.headers['user-agent'];
+            let ip_address = req.socket.remoteAddress; 
+
+            await pasarela_pago.cobrar_pago(nid_forma_pago, cantidad, ip_address, user_agent);
 
             res.status(200).send({error: false, message: 'Pago realizado'});
         }

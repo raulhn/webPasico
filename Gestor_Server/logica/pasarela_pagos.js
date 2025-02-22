@@ -117,7 +117,7 @@ function crear_metodo_pago_cuenta_bancaria(nid_forma_pago)
     );
 }
 
-function cobrar_pago(nid_forma_pago)
+function cobrar_pago(nid_forma_pago, cantidad, p_ip_address, p_user_agent)
 {
     return new Promise(
         async (resolve, reject) =>
@@ -130,12 +130,21 @@ function cobrar_pago(nid_forma_pago)
 
                 let servicio_stripe = stripe(pagos.KEY);
 
-                let data =  { amount: 2000,
+                let data =  { amount: cantidad,
                             currency: 'eur',
                             payment_method: v_forma_pago.nid_metodo_pasarela_pago,
                             payment_method_types: ['sepa_debit'],
                             customer: v_persona.nid_pasarela_pago,
-                            confirm: true
+                            confirm: true,
+                            mandate_data: {
+                                customer_acceptance:{
+                                    type: 'online',
+                                    online: {
+                                        ip_address: p_ip_address,
+                                        user_agent: p_user_agent
+                                    }
+                                }
+                            }
                 }
                 
                 console.log(data)
