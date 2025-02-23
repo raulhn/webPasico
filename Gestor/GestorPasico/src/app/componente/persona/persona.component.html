@@ -33,9 +33,17 @@
         </div>
 
         <div class="row form-row">
-            <div class="col">
+            <div class="col-6">
                 <label> Telefono: </label>
                 <input class="form-control" name="Teléfono" [(ngModel)] = "persona['telefono']" type="text" />
+            </div>
+            <div class="col-6">
+                <label> Usuario Pasarela de Pago</label>
+                <input disabled class="form-control" [(ngModel)]="persona['nid_pasarela_pago']" name="Usuario de Pasarela de Pago">
+
+                <div *ngIf="existe_usuario_pasarela_pago()">
+                    <button  class="btn btn-primary mb-3 mt-2 tp-3" (click)="registrar_usuario_pasarela_pago()"> Crear Usuario Pago</button>
+                </div>
             </div>
         </div>
 
@@ -55,5 +63,7 @@
                     [compareWith]="comparePersona_socio">
             </ng-select>
         </div>
+
+        
     </form>
 </div> 

@@ -215,7 +215,7 @@ app.get('/imagen/:nid_imagen', servlet_inventario.obtener_imagen);
 
 
 /** Pasarela pago **/
-app.get('/registrar_usuario_pago/:nid_persona', servlet_pasarela_pago.crear_usuario);
+app.post('/registrar_usuario_pago', servlet_pasarela_pago.crear_usuario);
 app.get('/crear_metodo_pago_cuenta/:nid_forma_pago', servlet_pasarela_pago.crear_metodo_pago_cuenta_bancaria)
 app.get('/cobrar_pago/:nid_forma_pago', servlet_pasarela_pago.cobrar_pago)
 

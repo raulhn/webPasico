@@ -11,6 +11,8 @@ export class FichaFormaPagoComponent implements OnInit{
 
   nid_forma_pago: string ="";
 
+  iban: string ="";
+
   forma_pago: any;
 
   constructor(private personaService: PersonasService, private rutaActiva: ActivatedRoute)

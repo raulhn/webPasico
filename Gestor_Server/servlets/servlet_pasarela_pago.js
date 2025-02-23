@@ -9,7 +9,7 @@ function crear_usuario(req, res)
     servlet_comun.comprobaciones(req, res,
         async () =>
         {
-            let nid_persona = req.params.nid_persona;
+            let nid_persona = req.body.nid_persona;
             await pasarela_pago.crear_usuario(nid_persona);
 
             res.status(200).send({error: false, message: 'Usuario pasarela creado'});

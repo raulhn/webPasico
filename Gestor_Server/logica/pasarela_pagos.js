@@ -13,8 +13,8 @@ function existe_usuario_pasarela_pago(nid_persona)
             try
             {
                 let v_persona = await persona.obtener_persona(nid_persona);
-
-                resolve(v_persona['nid_pasarela_pago'].length > 0);
+                v_nid_pasarela_pago = v_persona['nid_pasarela_pago'];
+                resolve(v_nid_pasarela_pago !== null || v_nid_pasarela_pago.length > 0);
            }
            catch(error)
            {

@@ -152,4 +152,10 @@ export class PersonasService {
     let API_URL = this.url + '/obtener_forma_pagos_persona/' + nid_titular;
     return this.http.get(API_URL, {withCredentials: true});
   }
+
+  registrar_usuario_pago(nid_titular: string)
+  {
+    let API_URL = this.url + '/registrar_usuario_pago';
+    return this.http.post(API_URL, {nid_persona: nid_titular}, {withCredentials: true})
+  }
 }
