@@ -148,7 +148,9 @@ app.get('/obtener_forma_pago/:nid_titular', servlet_persona.obtener_forma_pago);
 app.get('/obtener_formas_pago', servlet_persona.obtener_formas_pago);
 app.post('/asociar_forma_pago', servlet_persona.asociar_forma_pago);
 app.get('/obtener_pago_persona/:nid_titular', servlet_persona.obtener_pago_persona);
-app.get('/obtener_forma_pagos_persona/:nid_titular', servlet_persona.obtener_forma_pagos_persona)
+app.get('/obtener_forma_pagos_persona/:nid_titular', servlet_persona.obtener_forma_pagos_persona);
+app.get('/obtener_forma_pago_nid/:nid_forma_pago', servlet_persona.obtener_forma_pago_nid);
+app.post('/actualizar_forma_pago', servlet_persona.actualizar_forma_pago);
 
 /** Preinscripciones **/
 app.get('/obtener_preinscripciones', servlet_preinscripciones.obtener_preinscripciones);
@@ -216,7 +218,7 @@ app.get('/imagen/:nid_imagen', servlet_inventario.obtener_imagen);
 
 /** Pasarela pago **/
 app.post('/registrar_usuario_pago', servlet_pasarela_pago.crear_usuario);
-app.get('/crear_metodo_pago_cuenta/:nid_forma_pago', servlet_pasarela_pago.crear_metodo_pago_cuenta_bancaria)
+app.post('/crear_metodo_pago_cuenta', servlet_pasarela_pago.crear_metodo_pago_cuenta_bancaria)
 app.get('/cobrar_pago/:nid_forma_pago', servlet_pasarela_pago.cobrar_pago)
 
 ///////////////////////////////

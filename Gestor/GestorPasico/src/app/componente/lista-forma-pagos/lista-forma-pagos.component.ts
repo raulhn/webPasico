@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { DataTablesOptions } from 'src/app/logica/constantes';
+import { DataTablesOptions, URL } from 'src/app/logica/constantes';
 import { PersonasService } from 'src/app/servicios/personas.service';
 
 @Component({
@@ -14,9 +14,10 @@ export class ListaFormaPagosComponent implements OnInit{
   id_persona: string = "";
 
   bCargadasFormaPago: boolean = false;
-  fomrra_pago_seleccionada: string = "";
+  forma_pago_seleccionada: string = "";
 
   dtOptions_forma_pagos: any= {}
+  URL_FICHA_FORMA_PAGO = "/ficha_forma_pago/";
 
 
   constructor(private personaServices: PersonasService, private rutaActiva: ActivatedRoute)
@@ -26,7 +27,7 @@ export class ListaFormaPagosComponent implements OnInit{
 
   click_ficha(forma_pago: any)
   {
-    this.fomrra_pago_seleccionada = forma_pago['nid'];
+    this.forma_pago_seleccionada = forma_pago['nid'];
   }
 
   peticion_forma_pagos =
@@ -75,5 +76,11 @@ export class ListaFormaPagosComponent implements OnInit{
 
   ngOnInit(): void {
       this.personaServices.obtener_forma_pagos_persona(this.id_persona).subscribe(this.peticion_forma_pagos);
+  }
+
+  obtener_url_ficha()
+  {
+
+    return this.URL_FICHA_FORMA_PAGO + this.forma_pago_seleccionada;
   }
 }

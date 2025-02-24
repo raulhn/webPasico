@@ -22,7 +22,7 @@ function crear_metodo_pago_cuenta_bancaria(req, res)
     servlet_comun.comprobaciones(req, res,
         async() =>
         {
-            let nid_forma_pago = req.params.nid_forma_pago;
+            let nid_forma_pago = req.body.nid_forma_pago;
             await pasarela_pago.crear_metodo_pago_cuenta_bancaria(nid_forma_pago);
 
             res.status(200).send({error: false, message: 'Método de pago creado'});

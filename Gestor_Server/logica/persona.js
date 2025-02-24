@@ -671,7 +671,35 @@ function actualizar_metodo_pasarela_pago(nid_forma_pago, nid_metodo_pasarela_pag
     )
 }
 
-
+function actualizar_forma_pago(nid_forma_pago, activo)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.beginTransaction(
+                () =>
+                {
+                    conexion.dbConn.query('update ' + constantes.ESQUEMA_BD + '.forma_pago set activo = ' + conexion.dbConn.escape(activo) + 
+                          ' where nid = ' + conexion.dbConn.escape(nid_forma_pago),
+                        (error, results, fields) =>
+                        {
+                            if(error)
+                            {
+                                console.log(error);
+                                conexion.dbConn.rollback();
+                                reject('Error al actualizar la forma de pago');
+                            }
+                            else
+                            {
+                                conexion.dbConn.commit();
+                                resolve();
+                            }
+                        })
+                }
+            )
+        }
+    )
+}
 
 module.exports.registrar_persona = registrar_persona
 module.exports.actualizar_persona = actualizar_persona
@@ -704,3 +732,4 @@ module.exports.asociar_pago_persona = asociar_pago_persona;
 
 module.exports.actualizar_user_pasarela_pago = actualizar_user_pasarela_pago;
 module.exports.actualizar_metodo_pasarela_pago = actualizar_metodo_pasarela_pago;
+module.exports.actualizar_forma_pago = actualizar_forma_pago;

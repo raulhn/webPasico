@@ -1,7 +1,11 @@
 <app-menu class=""></app-menu>
 
-<div class="container">
+<div class="container mt-2 pt-2">
     <div *ngIf="bCargadasFormaPago">
         <table datatable [dtOptions]="dtOptions_forma_pagos" id="tabla_forma_pago" class="row-border hover"></table>
+    </div>
+
+    <div *ngIf="forma_pago_seleccionada != ''">
+        <a [href]="obtener_url_ficha()"> <button class="btn btn-primary"> Ver Ficha</button></a>
     </div>
 </div>

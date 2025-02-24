@@ -8,10 +8,12 @@
             [compareWith]="compareForma_pago">
         </ng-select>
     </div>
-
-    <button type="button"  class="btn btn-primary mb-3 tp-3" data-bs-toggle="modal" data-bs-target="#registro-forma-pago">
+    <a [href]="obtener_lista_forma_pagos()"> <button class="btn btn-primary" class="btn btn-primary mb-3 mt-2 tp-3"> Revisar Forma de Pagos </button></a>
+    
+    <button type="button"  class="btn btn-primary mb-3 mt-2 tp-3" data-bs-toggle="modal" data-bs-target="#registro-forma-pago">
         Nueva forma de pago
     </button>
+    
 
     <div class="modal fade" id="registro-forma-pago" tabindex="-1" aria-labelledby="registro-forma-pago-label" aria-hidden="true">
         <div class="modal-dialog">

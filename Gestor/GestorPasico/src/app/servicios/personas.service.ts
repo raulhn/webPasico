@@ -158,4 +158,16 @@ export class PersonasService {
     let API_URL = this.url + '/registrar_usuario_pago';
     return this.http.post(API_URL, {nid_persona: nid_titular}, {withCredentials: true})
   }
+
+  registrar_forma_pago_pasarela(nid_forma_pago: string)
+  {
+    let API_URL = this.url + '/crear_metodo_pago_cuenta';
+    return this.http.post(API_URL, {nid_forma_pago: nid_forma_pago}, {withCredentials: true})
+  }
+
+  actualizar_forma_pago(nid_forma_pago: string, activo: string)
+  {
+    let API_URL = this.url + '/actualizar_forma_pago';
+    return this.http.post(API_URL, {nid_forma_pago: nid_forma_pago, activo: activo}, {withCredentials: true})
+  }
 }

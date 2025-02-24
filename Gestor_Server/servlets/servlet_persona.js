@@ -266,6 +266,19 @@ async function obtener_forma_pagos_persona(req, res)
     )
 }
 
+async function obtener_forma_pago_nid(req, res)
+{
+    comun.comprobaciones(req, res,
+        async() =>
+        {
+            let nid_forma_pago = req.params.nid_forma_pago;
+            let forma_pago = await persona.obtener_forma_pago_nid(nid_forma_pago);
+
+            res.status(200).send({error:false, forma_pago: forma_pago})
+        }
+    )
+}
+
 async function asociar_forma_pago(req, res)
 
 {
@@ -322,6 +335,21 @@ async function valida_nif(req, res)
     )
 }
 
+async function actualizar_forma_pago(req, res)
+{
+    comun.comprobaciones(req, res,
+        async() =>
+        {
+            let nid_forma_pago = req.body.nid_forma_pago;
+            let activo = req.body.activo;
+
+            await persona.actualizar_forma_pago(nid_forma_pago, activo);
+
+            res.status(200).send({error: false, message: 'Registro actualizado'});
+        }
+    )
+}
+
 module.exports.registrar_persona = registrar_persona
 module.exports.actualizar_persona = actualizar_persona
 
@@ -342,9 +370,12 @@ module.exports.registrar_forma_pago = registrar_forma_pago;
 module.exports.obtener_forma_pago = obtener_forma_pago;
 module.exports.obtener_formas_pago = obtener_formas_pago;
 module.exports.obtener_pago_persona = obtener_pago_persona;
+module.exports.obtener_forma_pago_nid = obtener_forma_pago_nid;
 module.exports.obtener_forma_pagos_persona = obtener_forma_pagos_persona;
 module.exports.asociar_forma_pago = asociar_forma_pago;
 
 module.exports.obtener_persona_apellidos = obtener_persona_apellidos;
 module.exports.obtener_persona_apellido = obtener_persona_apellido;
 module.exports.valida_nif = valida_nif;
+
+module.exports.actualizar_forma_pago = actualizar_forma_pago;

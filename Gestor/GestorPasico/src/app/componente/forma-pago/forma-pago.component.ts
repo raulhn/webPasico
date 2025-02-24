@@ -19,6 +19,8 @@ export class FormaPagoComponent implements OnInit{
 
   @Input() id: string="";
 
+  URL_LISTA_FORMA_PAGO: string = "/lista_forma_pagos/"
+
 
   constructor(private personaService: PersonasService)
   {
@@ -90,5 +92,10 @@ export class FormaPagoComponent implements OnInit{
 
   compareForma_pago(item: any, selected: any) {
     return item['nid'] == selected;
+  }
+
+  obtener_lista_forma_pagos()
+  {
+    return this.URL_LISTA_FORMA_PAGO + this.id;
   }
 }
