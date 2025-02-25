@@ -80,4 +80,16 @@ export class RemesaService {
     let API_URL = this.url + '/aprobar_remesas';
     return this.http.post(API_URL, {lote: lote, anotaciones: anotaciones}, {withCredentials:true});
   }
+
+  cobrar_remesa(nid_remesa: string)
+  {
+    let API_URL = this.url + '/cobrar_remesa';
+    return this.http.post(API_URL, {nid_remesa: nid_remesa}, {withCredentials: true})
+  }
+
+  cobrar_lote(nid_lote: string)
+  {
+    let API_URL = this.url + '/cobrar_lote';
+    return this.http.post(API_URL, {nid_lote: nid_lote}, {withCredentials: true})
+  }
 }

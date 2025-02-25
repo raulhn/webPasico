@@ -43,7 +43,41 @@ function cobrar_pago(req, res)
 
             await pasarela_pago.cobrar_pago(nid_forma_pago, cantidad, ip_address, user_agent);
 
-            res.status(200).send({error: false, message: 'Pago realizado'});
+            res.status(200).send({error: false, message: 'Cobro realizado'});
+        }
+    )
+}
+
+function cobrar_remesa(req, res)
+{
+    servlet_comun.comprobaciones(req, res,
+        async() =>
+        {
+            let nid_remesa = req.body.nid_remesa;
+
+            let user_agent = req.headers['user-agent'];
+            let ip_address = req.socket.remoteAddress; 
+
+            await pasarela_pago.cobrar_remesa(nid_remesa, ip_address, user_agent);
+
+            res.status(200).send({error: false, message: 'Cobro realizado'});
+        }
+    )
+}
+
+function cobrar_lote(req, res)
+{
+    servlet_comun.comprobaciones(req, res,
+        async() =>
+        {
+            let nid_lote = req.body.nid_lote;
+
+            let user_agent = req.headers['user-agent'];
+            let ip_address = req.socket.remoteAddress; 
+
+            await pasarela_pago.cobrar_lote(nid_lote, ip_address, user_agent);
+
+            res.status(200).send({error: false, message: 'Cobro de lote realizado'});
         }
     )
 }
@@ -51,3 +85,5 @@ function cobrar_pago(req, res)
 module.exports.crear_usuario = crear_usuario;
 module.exports.crear_metodo_pago_cuenta_bancaria = crear_metodo_pago_cuenta_bancaria;
 module.exports.cobrar_pago = cobrar_pago;
+module.exports.cobrar_remesa = cobrar_remesa;
+module.exports.cobrar_lote = cobrar_lote;

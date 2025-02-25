@@ -29,12 +29,15 @@
         
         <table datatable [dtOptions]="dtOpciones_remesas" class="table" id="tabla_remesas"></table>
         <div *ngIf="remesa_seleccionada !== undefined" class="float-end p-3">
+            <button class="btn btn-primary m-1" (click)="cobrar_remesa()">Cobrar recibo</button>
             <a [href]="obtenerUrlFicha()"> <button class="btn btn-primary m-1"> Ver Ficha</button></a>
             <button class="btn btn-danger m-1" (click) ="rechazar_recibo()">Rechazar recibo</button>
             <button class="btn btn-primary m-1" (click) ="aceptar_recibo()">Aceptar recibo</button>
+
         </div>
     </div>
-    <button class="btn btn-primary" (click) ="aceptar_recibos()">Aceptar lote</button>
+    <button class="btn btn-primary mb-1" (click) ="aceptar_recibos()">Aceptar lote</button>
+    <button class="btn btn-primary mt-1" (click) ="cobrar_lote()">Cobrar lote</button>
 </div>
 </div>
 

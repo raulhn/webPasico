@@ -241,7 +241,85 @@ export class RemesasComponent implements OnInit{
     )
   
   }
+
+
+  peticion_cobrar = 
+  {
+    next: (respuesta: any) =>
+      {
+        Swal.fire({
+          icon: 'success',
+          title: 'Cobro realizado',
+          text:  'Se ha registrado el cobro correctamente',
+        }).then(()=> {this.cambia_seleccion_estado()})
+      },
+      error: (respuesta: any) =>
+      {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text:  'Se ha producido un error al realizar el cobro',
+        })
+      }
+  }
   
+  cobrar_remesa()
+  {
+    Swal.fire({
+      title: 'Cobro de recibo',
+      text: 'Se va a realizar el cobro de recibo',
+      confirmButtonText: 'Confirmar',
+      showCancelButton: true,
+    }).then(
+      (results: any) =>
+        {
+        if(results.isConfirmed)
+        {
+          this.remesaService.cobrar_remesa(this.remesa_seleccionada.nid_remesa).subscribe(this.peticion_cobrar);
+        }
+      }
+    )
+  }
+
+  
+  peticion_cobrar_lote = 
+  {
+    next: (respuesta: any) =>
+      {
+        Swal.fire({
+          icon: 'success',
+          title: 'Cobro de lote realizado',
+          text:  'Se ha registrado el cobro correctamente',
+        }).then(()=> {this.cambia_seleccion_estado()})
+      },
+      error: (respuesta: any) =>
+      {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text:  'Se ha producido un error al realizar el cobro',
+        })
+      }
+  }
+
+  cobrar_lote()
+  {
+    Swal.fire({
+      title: 'Cobro de lote',
+      text: 'Se va a realizar el cobro de todo el lote, esto puede llevar unos minutos',
+      confirmButtonText: 'Confirmar',
+      showCancelButton: true,
+    }).then(
+      (results: any) =>
+        {
+        if(results.isConfirmed)
+        {
+          this.remesaService.cobrar_lote(this.lote).subscribe(this.peticion_cobrar_lote);
+        }
+      }
+    )
+  }
+
   cambia_seleccion_estado()
   {
     if (this.estado == "Todos")

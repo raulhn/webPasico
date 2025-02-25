@@ -115,7 +115,7 @@ function registrar_remesa(v_persona, v_siguiente_lote, v_precio, v_nid_forma_pag
 					conexion.dbConn.query("insert into " + constantes.ESQUEMA_BD + ".remesa(nid_forma_pago, nid_persona, concepto, fecha, lote, precio, estado) " +
 							"values(" + conexion.dbConn.escape(v_nid_forma_pago) + ", " + conexion.dbConn.escape(v_persona) + ", " +
 							"'Pago Mensual  " + persona_recuperada['etiqueta'] + "' , sysdate(), " + conexion.dbConn.escape(v_siguiente_lote) +
-							", " + conexion.dbConn.escape(v_precio) +", 'Pendiente')",
+							", " + conexion.dbConn.escape(v_precio) +", '" + constantes.ESTADO_REMESA_PENDIENTE +"')",
 						(error, results, fields) =>
 						{
 							if(error) {conexion.dbConn.rollback(); console.log(error); reject();}
@@ -570,6 +570,7 @@ function obtener_remesa(lote)
 	)
 }
 
+
 function obtener_remesa_pendiente(lote)
 {
 	return new Promise(
@@ -577,7 +578,7 @@ function obtener_remesa_pendiente(lote)
 		{
 			conexion.dbConn.query('select * from ' + constantes.ESQUEMA_BD +
 			   		".remesa where lote = " + conexion.dbConn.escape(lote) +
-					" and estado = 'Pendiente'",
+					" and estado = '" + constantes.ESTADO_REMESA_PENDIENTE + "'",
 			    (error, results, fields) =>
 				{
 					if (error) {console.log(error); reject();}
@@ -728,8 +729,8 @@ function actualizar_estado(nid_remesa, estado, anotaciones)
 					' where nid_remesa = ' + conexion.dbConn.escape(nid_remesa),
 				(error, results, fields) =>
 				{
-					if(error) {console.log(error); reject()}
-					else {resolve()}
+					if(error) {console.log(error); conexion.dbConn.rollback(); reject()}
+					else {conexion.dbConn.commit(); resolve()}
 				}
 
 			)
@@ -740,22 +741,105 @@ function actualizar_estado(nid_remesa, estado, anotaciones)
 
 async function aprobar_remesas(lote, anotaciones)
 {
-	let remesas = await obtener_remesa_pendiente(lote);
+	return new Promise(
+		async(resolve, reject) =>
+		{
+			try
+			{
+				let remesas = await obtener_remesa_pendiente(lote);
 
-	for (let i=0; i<remesas.length; i++)
-	{
-		await actualizar_estado(remesas[i]['nid_remesa'], 'Pagado', anotaciones)
-	}
+				for (let i=0; i<remesas.length; i++)
+				{
+					await actualizar_estado(remesas[i]['nid_remesa'], constantes.ESTADO_REMESA_PAGADO, anotaciones)
+				}
+				resolve();
+			}
+			catch(error)
+			{
+				console.log('remesa.js - aprobar_remesas -> ' + error);
+				reject('Error al aprobar las remesas');
+			}
+		}
+	)
 }
 
 async function rechazar_remesa(nid_remesa, anotaciones)
 {
-	await actualizar_estado(nid_remesa, 'Rechazado', anotaciones)
+	return new Promise(
+		async(resolve, reject) =>
+  	    {
+			try
+			{
+				await actualizar_estado(nid_remesa, constantes.ESTADO_REMESA_RECHAZADO, anotaciones)
+				resolve();
+			}
+			catch(error)
+			{
+				console.log('remesa.js - rechazar_remesa -> ' + error);
+				reject('Error al rechazar la remesa')
+			}
+		}
+	)
 }
 
 async function aprobar_remesa(nid_remesa, anotaciones)
 {
-	await actualizar_estado(nid_remesa, 'Pagado', anotaciones);
+	return new Promise(
+		async(resolve, reject) =>
+		{
+			try
+			{
+				await actualizar_estado(nid_remesa, constantes.ESTADO_REMESA_PAGADO, anotaciones);
+				resolve();
+			}
+			catch(error)
+			{
+				console.log('remesa.js - aprobar_remesa -> ' + error);
+				reject('Error al aprobar la remesa')
+			}
+		}
+	)
+}
+
+async function remesa_erronea(nid_remesa, anotaciones)
+{
+	return new Promise(
+		async(resolve, reject) =>
+		{
+			try
+			{
+				await actualizar_estado(nid_remesa, constantes.ESTADO_REMESA_ERRONEO, anotaciones);
+				resolve();
+			}
+			catch(error)
+			{
+				console.log('remesa.js - remesa_erronea -> ' + error);
+				reject('Error al aprobar la remesa')
+			}
+		}
+	)
+}
+
+function actualizar_id_cobro_pasarela_pago(nid_remesa, nid_cobro_pasarela)
+{
+	return new Promise(
+		(resolve, reject) =>
+		{
+			conexion.dbConn.beginTransaction(
+				()=>
+				{
+					conexion.dbConn.query('update ' + constantes.ESQUEMA_BD + '.remesa set nid_cobro_pasarela_pago = ' + conexion.dbConn.escape(nid_cobro_pasarela) +
+				      ' where nid_remesa = ' + conexion.dbConn.escape(nid_remesa),
+					(error, results, fields) =>
+					{
+						if(error) {console.log('remesa.js - actualizar_id_cobro_pasarela_pago -> ' + error); conexion.dbConn.rollback(); reject('Error al actualizar el cobro')}
+						else {conexion.dbConn.commit(); resolve();}
+
+					})
+				}
+			)
+		}
+	)
 }
 
 module.exports.registrar_remesa = registrar_remesa;
@@ -775,3 +859,6 @@ module.exports.obtener_remesa_nid = obtener_remesa_nid;
 module.exports.aprobar_remesas = aprobar_remesas;
 module.exports.rechazar_remesa = rechazar_remesa;
 module.exports.aprobar_remesa = aprobar_remesa;
+module.exports.remesa_erronea = remesa_erronea;
+
+module.exports.actualizar_id_cobro_pasarela_pago = actualizar_id_cobro_pasarela_pago;
