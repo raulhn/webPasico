@@ -392,11 +392,11 @@ function precio_matricula_fecha(nid_matricula, num_familiar, fecha_desde, fecha_
 			var array_fecha_desde = fecha_desde.toString().split('-');
 			var array_fecha_hasta = fecha_hasta.toString().split('-');
 
-			var v_fecha_desde = new Date(array_fecha_desde[2], Number(array_fecha_desde[1]) -1 , array_fecha_desde[0]);
+			var v_fecha_desde = new Date(array_fecha_desde[2] + "-" + array_fecha_desde[1] + "-" + array_fecha_desde[0] );
 			console.log('y')
 			console.log(v_fecha_desde)
 			console.log(array_fecha_desde)
-			var v_fecha_hasta = new Date(array_fecha_hasta[2],  Number(array_fecha_hasta[1]) -1, array_fecha_hasta[0]);
+			var v_fecha_hasta = new Date(array_fecha_hasta[2]  + "-" + array_fecha_hasta[1]  + "-" +  array_fecha_hasta[0]);
 			console.log(v_fecha_hasta)
 
 			if (array_fecha_desde[1] !== array_fecha_hasta[1] || array_fecha_desde[2] !== array_fecha_hasta[2])
@@ -480,9 +480,8 @@ function precio_matricula_fecha(nid_matricula, num_familiar, fecha_desde, fecha_
 					
 					if (v_cadena_fecha_fin !== null && v_cadena_fecha_fin !== undefined  && v_cadena_fecha_fin.length > 0)
 					{
-						console.log('Cadena ' + v_cadena_fecha_fin)
 						v_array_fecha_fin = v_cadena_fecha_fin.toString().split('-');
-						v_fecha_fin = new Date(v_array_fecha_fin[2], Number(v_array_fecha_fin[1]) - 1, v_array_fecha_fin[0]);
+						v_fecha_fin = new Date(v_array_fecha_fin[2]  + "-" + v_array_fecha_fin[1]  + "-" + v_array_fecha_fin[0]);
 
 						if(v_fecha_fin < v_fecha_hasta)
 						{
@@ -492,15 +491,12 @@ function precio_matricula_fecha(nid_matricula, num_familiar, fecha_desde, fecha_
 
 
 					v_array_fecha_inicio = v_cadena_fecha_inicio.toString().split('-');
-					v_fecha_inicio = new Date(v_array_fecha_inicio[2], Number(v_array_fecha_inicio[1]) -1, v_array_fecha_inicio[0]);
+					v_fecha_inicio = new Date(v_array_fecha_inicio[2] + "-" + v_array_fecha_inicio[1] + "-" + v_array_fecha_inicio[0] );
 
-					console.log('a')
-					console.log(v_fecha_desde)
 					if(v_fecha_inicio > v_fecha_desde)
 					{
 						v_fecha_desde = v_fecha_inicio;
 					}
-					console.log(v_fecha_desde)
 
 					v_precio_persona = 0;
 					var linea_remesa = new Object();
@@ -535,16 +531,16 @@ function precio_matricula_fecha(nid_matricula, num_familiar, fecha_desde, fecha_
 						info = 'Precio Banda / Conjunto';
 					}
 
-					console.log(v_fecha_desde)
-					console.log(v_fecha_hasta)
 
-					var diferencia_dias = (v_fecha_desde - v_fecha_hasta) / (24 * 3600 * 1000);
+					var diferencia_dias = Math.round(((v_fecha_hasta - v_fecha_desde) ) / (24 * 3600 * 1000));
 
 					console.log(diferencia_dias);
 					console.log(diasMes)
 
-					var porcentaje_mes = diasMes / diferencia_dias;
-					v_precio_persona = v_precio_persona * porcentaje_mes;
+					var porcentaje_mes = (Number(diferencia_dias) + 1) / Number(diasMes);
+
+					console.log('Porcentaje ' + porcentaje_mes)
+					v_precio_persona = Math.round(v_precio_persona * porcentaje_mes * 100) / 100;
 
 					linea_remesa.precio = v_precio_persona;
 					linea_remesa.concepto = 'Precio para el alumno ' + datos_matricula['nombre_alumno'] + ' en la asignatura ' + asignaturas_precio[z]['nombre_asignatura'] + ' ('+ info +')';
