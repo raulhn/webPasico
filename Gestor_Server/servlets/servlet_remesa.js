@@ -58,6 +58,23 @@ function obtener_mensualidad(req, res)
     )
 }
 
+function obtener_mensualidad_fecha(req, res)
+{
+    comun.comprobaciones(req, res,
+        async() =>
+        {
+            let nid_matricula = req.params.nid_matricula;
+            let fecha_desde = req.params.fecha_desde;
+            let fecha_hasta = req.params.fecha_hasta;
+            let v_resumen_matricula = await remesa.obtener_precio_matricula_fecha(nid_matricula, fecha_desde, fecha_hasta);
+            
+
+            res.status(200).send({error:false, resumen_mensualidad: v_resumen_matricula})
+        }
+        
+    )
+}
+
 
 function obtener_remesa(req, res)
 {
@@ -192,6 +209,7 @@ function aprobar_remesas(req, res)
 module.exports.registrar_remesa_persona = registrar_remesa_persona;
 module.exports.obtener_remesas = obtener_remesas;
 module.exports.obtener_mensualidad = obtener_mensualidad;
+module.exports.obtener_mensualidad_fecha = obtener_mensualidad_fecha;
 
 module.exports.obtener_remesa = obtener_remesa;
 module.exports.obtener_remesa_estado = obtener_remesa_estado;

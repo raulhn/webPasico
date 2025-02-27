@@ -381,6 +381,216 @@ async function precio_matricula(nid_matricula, num_familiar)
 }
 
 
+function precio_matricula_fecha(nid_matricula, num_familiar, fecha_desde, fecha_hasta)
+{
+	return new Promise(
+	  async (resolve, reject) =>
+	  {
+
+		try
+		{
+			var array_fecha_desde = fecha_desde.toString().split('-');
+			var array_fecha_hasta = fecha_hasta.toString().split('-');
+
+			var v_fecha_desde = new Date(array_fecha_desde[2], Number(array_fecha_desde[1]) -1 , array_fecha_desde[0]);
+			console.log('y')
+			console.log(v_fecha_desde)
+			console.log(array_fecha_desde)
+			var v_fecha_hasta = new Date(array_fecha_hasta[2],  Number(array_fecha_hasta[1]) -1, array_fecha_hasta[0]);
+			console.log(v_fecha_hasta)
+
+			if (array_fecha_desde[1] !== array_fecha_hasta[1] || array_fecha_desde[2] !== array_fecha_hasta[2])
+			{
+				reject('Las fechas desde y hasta son de un mes distinto')
+			}
+			console.log('x')
+			console.log(v_fecha_desde)
+			var diasMes = new Date(array_fecha_desde[2], array_fecha_desde[1], 0).getDate(); 
+
+			var valor_recuperado = await parametros.obtener_valor('REBAJA_VIENTO_CUERDA');
+			const REBAJA_VIENTO_CUERDA = valor_recuperado['valor'];
+
+			valor_recuperado = await parametros.obtener_valor('SUMA_PRECIO_NO_SOCIO');
+			const SUMA_PRECIO_NO_SOCIO = valor_recuperado['valor'];
+
+			valor_recuperado = await parametros.obtener_valor('PRECIO_INSTRUMENTO_BANDA');
+			const PRECIO_INSTRUMENTO_BANDA = valor_recuperado['valor'];
+
+			valor_recuperado = await parametros.obtener_valor('PRECIO_INSTRUMENTO_NO_BANDA');
+			const PRECIO_INSTRUMENTO_NO_BANDA = valor_recuperado['valor'];
+
+			valor_recuperado = await parametros.obtener_valor('PRECIO_LENGUAJE');
+			const PRECIO_LENGUAJE = valor_recuperado['valor'];
+
+			
+			valor_recuperado = await parametros.obtener_valor('PORCENTAJE_DESCUENTO_FAMILIA');
+			const PORCENTAJE_FAMILIA = valor_recuperado['valor'];
+
+
+			const ASIGNATURA_INSTRUMENTO_BANDA = 1;
+			const ASIGNATURA_INSTRUMENTO_NO_BANDA = 2;
+			const ASIGNATURA_LENGUAJE = 0;
+			const ASIGNATURA_BANDA = 3;
+
+			let v_precio_persona = 0;
+								
+			let instrumento_banda = 0;
+			let instrumento_cuerda = 0;
+
+			let asignaturas_precio = await gestor_matricula.obtener_asignaturas_matricula_activas(nid_matricula);
+			let datos_matricula = await gestor_matricula.obtener_matricula(nid_matricula);
+
+			var resumen_matricula = new Object();
+			resumen_matricula.precio = 0;
+			resumen_matricula.nid_matricula = nid_matricula;
+
+			var info = "";
+
+			let descuentos = [];
+			let linea_remesas = [];
+
+			// Obtiene si es socio //
+			var es_socio = await comprueba_es_socio(datos_matricula['nid_persona']);
+
+
+			if (datos_matricula['precio_manual'] != null && datos_matricula['precio_manual'] != "")
+			{
+				var linea_remesa = new Object();
+
+				linea_remesa.precio = datos_matricula['precio_manual'];
+				linea_remesa.concepto = 'Precio manual para el alumno ' + datos_matricula['nombre_alumno'] + ' - ' + datos_matricula['comentario_precio_manual'];
+
+				linea_remesas.push(linea_remesa);
+
+				resumen_matricula.precio = linea_remesa.precio
+			}
+			else
+			{
+				for(let z = 0; z < asignaturas_precio.length; z++)
+				{
+					let v_cadena_fecha_inicio = asignaturas_precio[z]['fecha_alta'];
+					let v_cadena_fecha_fin = asignaturas_precio[z]['fecha_baja'];
+
+					let v_array_fecha_fin = null;
+					let v_array_fecha_inicio = null;
+
+					let v_fecha_fin;
+					let v_fecha_inicio;
+
+					
+					if (v_cadena_fecha_fin !== null && v_cadena_fecha_fin !== undefined  && v_cadena_fecha_fin.length > 0)
+					{
+						console.log('Cadena ' + v_cadena_fecha_fin)
+						v_array_fecha_fin = v_cadena_fecha_fin.toString().split('-');
+						v_fecha_fin = new Date(v_array_fecha_fin[2], Number(v_array_fecha_fin[1]) - 1, v_array_fecha_fin[0]);
+
+						if(v_fecha_fin < v_fecha_hasta)
+						{
+							v_fecha_hasta = v_fecha_fin;
+						}
+					}
+
+
+					v_array_fecha_inicio = v_cadena_fecha_inicio.toString().split('-');
+					v_fecha_inicio = new Date(v_array_fecha_inicio[2], Number(v_array_fecha_inicio[1]) -1, v_array_fecha_inicio[0]);
+
+					console.log('a')
+					console.log(v_fecha_desde)
+					if(v_fecha_inicio > v_fecha_desde)
+					{
+						v_fecha_desde = v_fecha_inicio;
+					}
+					console.log(v_fecha_desde)
+
+					v_precio_persona = 0;
+					var linea_remesa = new Object();
+
+					v_tipo_asignatura = asignaturas_precio[z]['tipo_asignatura'];
+
+					if (v_tipo_asignatura == ASIGNATURA_INSTRUMENTO_BANDA && es_socio)
+					{
+						instrumento_banda = 1;
+						v_precio_persona = PRECIO_INSTRUMENTO_BANDA;	
+						info = 'Precio Instrumento de Banda';
+					}
+					else if(v_tipo_asignatura == ASIGNATURA_INSTRUMENTO_BANDA && !es_socio)
+					{
+						v_precio_persona = PRECIO_INSTRUMENTO_NO_BANDA;
+						info = 'Precio Instrumento no de Banda al no estar asociado a un Socio';
+					}
+					else if(v_tipo_asignatura == ASIGNATURA_INSTRUMENTO_NO_BANDA)
+					{
+						instrumento_cuerda = 1;
+						v_precio_persona = PRECIO_INSTRUMENTO_NO_BANDA;
+						info = 'Precio Instrumento no de Banda';
+					}
+					else if(v_tipo_asignatura == ASIGNATURA_LENGUAJE)
+					{
+						v_precio_persona = PRECIO_LENGUAJE;
+						info = 'Precio Lenguaje Musical';
+					}
+					else if(v_tipo_asignatura = ASIGNATURA_BANDA)
+					{
+						v_precio_persona = 0;
+						info = 'Precio Banda / Conjunto';
+					}
+
+					console.log(v_fecha_desde)
+					console.log(v_fecha_hasta)
+
+					var diferencia_dias = (v_fecha_desde - v_fecha_hasta) / (24 * 3600 * 1000);
+
+					console.log(diferencia_dias);
+					console.log(diasMes)
+
+					var porcentaje_mes = diasMes / diferencia_dias;
+					v_precio_persona = v_precio_persona * porcentaje_mes;
+
+					linea_remesa.precio = v_precio_persona;
+					linea_remesa.concepto = 'Precio para el alumno ' + datos_matricula['nombre_alumno'] + ' en la asignatura ' + asignaturas_precio[z]['nombre_asignatura'] + ' ('+ info +')';
+					linea_remesas.push(linea_remesa);
+
+					resumen_matricula.precio = parseFloat(v_precio_persona) + parseFloat(resumen_matricula.precio);
+				}
+
+				// Descuento por familia //
+				if (num_familiar > 0 && es_socio)
+				{
+					let descuento_familiar =  (parseFloat(PORCENTAJE_FAMILIA) * num_familiar);
+					let num_miembro = num_familiar + 1;
+					resumen_matricula.precio =  parseFloat(resumen_matricula.precio) * (1 - (descuento_familiar/ 100));
+
+					descuentos.push('Descuento por familiar ' + descuento_familiar + '% ' + num_miembro + 'º miembro');
+				}
+
+				// Se comprueba si se añade el extra por no ser socio //
+				if (!es_socio)
+				{
+					resumen_matricula.precio = parseFloat(resumen_matricula.precio)+ parseFloat(SUMA_PRECIO_NO_SOCIO);
+					descuentos.push(SUMA_PRECIO_NO_SOCIO + '€ - Precio extra por no ser socio ');
+				}
+
+				// Descuento por instrumento de banda y cuerda //
+				if (instrumento_banda && instrumento_cuerda && es_socio)
+				{
+					resumen_matricula.precio =  parseFloat(resumen_matricula.precio) -  parseFloat(REBAJA_VIENTO_CUERDA);
+					descuentos.push('-' + REBAJA_VIENTO_CUERDA + '€ - Descuento por instrumento de banda y cuerda')
+				}
+			}
+
+			resumen_matricula.descuentos = descuentos;
+			resumen_matricula.linea_remesas = linea_remesas;
+
+			resolve(resumen_matricula);
+		}
+		catch(error)
+		{console.log(error); reject('Error al recuperar el precio de la mensualidad')}
+	
+	}
+	);
+}
+
+
 function eliminar_descuento_lote(v_lote)
 {
 	return new Promise(
@@ -682,6 +892,54 @@ function obtener_precio_matricula(nid_matricula)
 	)
 }
 
+function obtener_precio_matricula_fecha(nid_matricula, fecha_desde, fecha_hasta)
+{
+	return new Promise(
+	 async (resolve, reject) =>
+	 {
+		try
+		{
+			let v_matricula = await gestor_matricula.obtener_matricula(nid_matricula);
+			let nid_persona = v_matricula['nid_persona'];
+
+			// Comprueba si es socio o tiene un socio asociado //
+			let bEs_socio = await comprueba_es_socio(nid_persona);
+
+			if (bEs_socio)
+			{
+				let nid_socio = await obtener_nid_socio(nid_persona);
+				let v_personas_activas = await obtener_matriculas_activas(nid_socio);
+
+				var v_resumen_matricula = null;
+
+				if (v_personas_activas !== undefined)
+				{
+					for(let i = 0; i < v_personas_activas.length; i++)
+					{
+						if (v_personas_activas[i]['nid_matricula'] == nid_matricula)
+						{
+							v_resumen_matricula = await precio_matricula_fecha(nid_matricula, i, fecha_desde, fecha_hasta);
+							resolve(v_resumen_matricula);
+						}
+					}
+				}
+			}
+			else
+			{ 
+				v_resumen_matricula = await precio_matricula(nid_matricula, 0);
+				resolve(v_resumen_matricula);
+			}
+		}
+		catch(error)
+		{
+			console.log(error);
+			reject('Error al recupera el precio de la matricula')
+		}
+	 }
+	)
+}
+
+
 function obtener_ultimo_lote()
 {
 	return new Promise(
@@ -862,3 +1120,5 @@ module.exports.aprobar_remesa = aprobar_remesa;
 module.exports.remesa_erronea = remesa_erronea;
 
 module.exports.actualizar_id_cobro_pasarela_pago = actualizar_id_cobro_pasarela_pago;
+
+module.exports.obtener_precio_matricula_fecha = obtener_precio_matricula_fecha;
