@@ -28,6 +28,26 @@ function registrar_remesa_matriculas(req, res)
     )
 }
 
+
+
+function registrar_remesa_matriculas_fecha(req, res)
+{
+    comun.comprobaciones(req, res,
+        async ()=>
+        {
+            let fecha_desde = req.body.fecha_desde;
+            let fecha_hasta = req.body.fecha_hasta;
+
+            await remesa.registrar_remesa_matriculas_fecha(fecha_desde, fecha_hasta);
+            res.status(200).send({error:false, message: 'Registra remesa'})
+        }
+
+    )
+}
+
+
+
+
 function obtener_remesas(req, res)
 {
     comun.comprobaciones(req, res,
@@ -50,7 +70,14 @@ function obtener_mensualidad(req, res)
         async() =>
         {
             let nid_matricula = req.params.nid_matricula;
-            let v_resumen_matricula = await remesa.obtener_precio_matricula(nid_matricula);
+            
+            let fecha = new Date();
+            var diasMes = new Date(fecha.getFullYear(), fecha.getMonth, 0).getDate(); 
+
+            let fecha_desde = new Date(fecha.getFullYear(), Number(fecha.getMonth) + 1, 1);
+            let fecha_hasta = new Date(fecha.getFullYear(), Number(fecha.getMonth) + 1, diasMes);
+
+            let v_resumen_matricula = await remesa.obtener_precio_matricula_fecha(nid_matricula, fecha_desde, fecha_hasta);
 
             res.status(200).send({error:false, resumen_mensualidad: v_resumen_matricula})
         }
@@ -224,3 +251,4 @@ module.exports.aprobar_remesa = aprobar_remesa;
 module.exports.aprobar_remesas = aprobar_remesas;
 
 module.exports.registrar_remesa_matriculas = registrar_remesa_matriculas;
+module.exports.registrar_remesa_matriculas_fecha = registrar_remesa_matriculas_fecha;

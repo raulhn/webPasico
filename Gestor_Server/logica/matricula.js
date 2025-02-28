@@ -689,6 +689,37 @@ function obtener_personas_con_matricula_activa()
     )
 }
 
+
+function obtener_personas_matricula_activa_fecha(fecha_desde, fecha_hasta)
+{
+    return new Promise(
+        async (resolve, reject) =>
+        {
+            nid_ultimo_curso = await curso.obtener_ultimo_curso();
+            conexion.dbConn.query(" select p.nid, ma.nid_matricula from " + 
+                                                      constantes.ESQUEMA_BD  + ".profesor_alumno_matricula pam, " +
+                                                      constantes.ESQUEMA_BD  + ".matricula_asignatura ma, " +
+                                                      constantes.ESQUEMA_BD  + ".matricula m, " +
+                                                      constantes.ESQUEMA_BD + ".persona p " +
+                                  "where pam.nid_matricula_asignatura = ma.nid and " +
+                                        "m.nid_persona = p.nid and "+ 
+                                        "ma.nid_matricula = m.nid and " +
+                                        " m.nid_curso = (select max(nid_curso) from pasico_gestor.curso) and " +
+                                        " (ma.fecha_baja is null or ma.fecha_baja >= " + 
+                                        'str_to_date(nullif(' + conexion.dbConn.escape(fecha_desde) + ', \'\') , \'%Y-%m-%d\')+") ' + " and " +
+                                        ' ma.fecha_alta <= ' + 'str_to_date(nullif(' + conexion.dbConn.escape(fecha_hasta) + ', \'\') , \'%Y-%m-%d\')+") ' + " and "+
+                                        " m.nid_curso = " + conexion.dbConn.escape(nid_ultimo_curso) + " " +
+                                   "group by p.nid, ma.nid_matricula ",
+                (error, results, fields) =>
+                {
+                    if (error)  {console.log(error); reject();}
+                    else {resolve(results)}
+                });
+        }
+
+    )
+}
+
 function baja_profesor_alumno_matricula(nid_profesor_alumno_matricula)
 {
     return new Promise(
@@ -862,6 +893,7 @@ module.exports.obtener_matriculas_activas_asignatura = obtener_matriculas_activa
 
 module.exports.obtener_matriculas_activas = obtener_matriculas_activas;
 module.exports.obtener_personas_con_matricula_activa = obtener_personas_con_matricula_activa;
+module.exports.obtener_personas_matricula_activa_fecha = obtener_personas_matricula_activa_fecha;
 
 module.exports.obtener_asignaturas_matricula_activas = obtener_asignaturas_matricula_activas
 

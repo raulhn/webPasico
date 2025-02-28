@@ -192,6 +192,33 @@ function obtener_matriculas_activas(nid_socio)
 	);
 }
 
+function obtener_matriculas_activas_fecha(nid_socio, fecha_desde, fecha_hasta)
+{
+	return new Promise(
+	  (resolve, reject) =>
+	  {
+		conexion.dbConn.query("select  p.nid nid_persona, m.nid nid_matricula, p.nid_forma_pago " +
+		                      "from " + constantes.ESQUEMA_BD + ".matricula m, " + constantes.ESQUEMA_BD + ".persona p, " + constantes.ESQUEMA_BD + ".matricula_asignatura ma " +
+							  "where m.nid_persona = p.nid " +
+							    "and m.nid = ma.nid_matricula " +
+								"and m.nid_curso = (select max(nid) from " + constantes.ESQUEMA_BD + ".curso) " +
+								"and (nid_persona = " + conexion.dbConn.escape(nid_socio) + " or nid_socio = " + conexion.dbConn.escape(nid_socio) + ") " +
+								" and (ma.fecha_baja is null or ma.fecha_baja >= " + 
+								'str_to_date(nullif(' + conexion.dbConn.escape(fecha_desde) + ', \'\') , \'%Y-%m-%d\')+") ' + " and " +
+								' ma.fecha_alta <= ' + 'str_to_date(nullif(' + conexion.dbConn.escape(fecha_hasta) + ', \'\') , \'%Y-%m-%d\')+") ' + " and "+
+							  "group by p.nid, m.nid, p.nid_forma_pago " +
+							  "order by p.fecha_nacimiento, p.nid",
+			(error, results, fields) =>
+			{
+				if(error) {console.log(error); reject()}
+				else {resolve(results);}
+			}
+        )
+	  }
+	);
+}
+
+
 function comprueba_es_socio(nid_persona)
 {
 	return new Promise(
@@ -393,18 +420,14 @@ function precio_matricula_fecha(nid_matricula, num_familiar, fecha_desde, fecha_
 			var array_fecha_hasta = fecha_hasta.toString().split('-');
 
 			var v_fecha_desde = new Date(array_fecha_desde[2] + "-" + array_fecha_desde[1] + "-" + array_fecha_desde[0] );
-			console.log('y')
-			console.log(v_fecha_desde)
-			console.log(array_fecha_desde)
+
 			var v_fecha_hasta = new Date(array_fecha_hasta[2]  + "-" + array_fecha_hasta[1]  + "-" +  array_fecha_hasta[0]);
-			console.log(v_fecha_hasta)
 
 			if (array_fecha_desde[1] !== array_fecha_hasta[1] || array_fecha_desde[2] !== array_fecha_hasta[2])
 			{
 				reject('Las fechas desde y hasta son de un mes distinto')
 			}
-			console.log('x')
-			console.log(v_fecha_desde)
+
 			var diasMes = new Date(array_fecha_desde[2], array_fecha_desde[1], 0).getDate(); 
 
 			var valor_recuperado = await parametros.obtener_valor('REBAJA_VIENTO_CUERDA');
@@ -675,6 +698,27 @@ function registrar_remesa_matriculas()
 	)
 }
 
+function registrar_remesa_matriculas_fecha(fecha_desde, fecha_hasta)
+{
+	return new Promise(
+		async (resolve, reject) =>
+		{
+			let personas_matricula_activa = await gestor_matricula.obtener_personas_matricula_activa_fecha(fecha_desde, fecha_hasta);
+			var v_siguiente_lote = await obtener_siguiente_lote();
+			for (let i=0; i < personas_matricula_activa.length; i++)
+			{
+				let nid_persona = personas_matricula_activa[i]['nid'];
+				let nid_matricula = personas_matricula_activa[i]['nid_matricula'];
+
+				await registrar_remesa_persona_fecha(nid_matricula, v_siguiente_lote, fecha_desde, fecha_hasta);
+			}
+
+			resolve();
+		}
+	)
+
+}
+
 function registrar_remesa_persona(nid_matricula, lote)
 {
 	return new Promise(
@@ -738,6 +782,69 @@ function registrar_remesa_persona(nid_matricula, lote)
 	);
 }
 
+
+function registrar_remesa_persona_fecha(nid_matricula, lote, fecha_desde, fecha_hasta)
+{
+	return new Promise(
+		async (resolve, reject) =>
+		{
+			let v_matricula = await gestor_matricula.obtener_matricula(nid_matricula);
+			let nid_persona = v_matricula['nid_persona'];
+
+			let bEs_socio = await comprueba_es_socio(nid_persona);
+			let persona_recuperada = await persona.obtener_persona(nid_persona);
+
+			if (bEs_socio)
+			{
+				let nid_socio = await obtener_nid_socio(nid_persona);
+				let v_personas_activas = await obtener_matriculas_activas_fecha(nid_socio, fecha_desde, fecha_hasta);
+
+				var v_resumen_matricula = null;
+
+				if (v_personas_activas !== undefined)
+				{
+					for(let i = 0; i < v_personas_activas.length; i++)
+					{
+						if (v_personas_activas[i]['nid_matricula'] == nid_matricula)
+						{
+							v_resumen_matricula = await precio_matricula_fecha(nid_matricula, i, fecha_desde, fecha_hasta);
+							let v_precio_remesa = v_resumen_matricula.precio;
+							let nid_remesa = await registrar_remesa(persona_recuperada['nid'], lote, v_precio_remesa, persona_recuperada['nid_forma_pago']);
+
+							for (let z = 0; z < v_resumen_matricula.linea_remesas.length; z++)
+							{
+								await registrar_linea_remesa(nid_remesa, v_resumen_matricula.linea_remesas[z].precio, v_resumen_matricula.linea_remesas[z].concepto)
+							}
+
+							for (let z = 0; z < v_resumen_matricula.descuentos.length; z++)
+							{
+								await registrar_descuento(nid_remesa, v_resumen_matricula.descuentos[z]);
+							}
+							resolve();
+						}
+					}
+				}
+			}
+			else
+			{
+				v_resumen_matricula = await precio_matricula_fecha(nid_matricula, 0, fecha_desde, fecha_hasta);
+				let v_precio_remesa = v_resumen_matricula.precio;
+				let nid_remesa = await registrar_remesa(persona_recuperada['nid'], lote, v_precio_remesa, persona_recuperada['nid_forma_pago']);
+
+				for (let z = 0; z < v_resumen_matricula.linea_remesas.length; z++)
+				{
+					await registrar_linea_remesa(nid_remesa, v_resumen_matricula.linea_remesas[z].precio, v_resumen_matricula.linea_remesas[z].concepto)
+				}
+
+				for (let z = 0; z < v_resumen_matricula.descuentos.length; z++)
+				{
+					await registrar_descuento(nid_remesa, v_resumen_matricula.descuentos[z]);
+				}
+				resolve();
+			}	
+		}
+	);
+}
 
 function obtener_remesas(fecha_desde, fecha_hasta)
 {
@@ -904,7 +1011,7 @@ function obtener_precio_matricula_fecha(nid_matricula, fecha_desde, fecha_hasta)
 			if (bEs_socio)
 			{
 				let nid_socio = await obtener_nid_socio(nid_persona);
-				let v_personas_activas = await obtener_matriculas_activas(nid_socio);
+				let v_personas_activas = await obtener_matriculas_activas_fecha(nid_socio, fecha_desde, fecha_hasta);
 
 				var v_resumen_matricula = null;
 
@@ -1099,6 +1206,7 @@ function actualizar_id_cobro_pasarela_pago(nid_remesa, nid_cobro_pasarela)
 module.exports.registrar_remesa = registrar_remesa;
 module.exports.registrar_remesa_persona = registrar_remesa_persona;
 module.exports.registrar_remesa_matriculas = registrar_remesa_matriculas;
+module.exports.registrar_remesa_matriculas_fecha = registrar_remesa_matriculas_fecha;
 
 module.exports.obtener_remesas = obtener_remesas;
 module.exports.obtener_precio_matricula = obtener_precio_matricula;
