@@ -22,6 +22,12 @@ export class RemesaService {
     return this.http.post(API_URL, {},{withCredentials: true})
   }
 
+  registrar_remesa_matriculas_fecha(fecha_desde: string, fecha_hasta: string)
+  {
+    let API_URL = this.url + '/registrar_remesa_matriculas_fecha';
+    return this.http.post(API_URL, {fecha_desde: fecha_desde, fecha_hasta: fecha_hasta}, {withCredentials: true})
+  }
+
   obtener_precio_mensualidad(nid_matricula: string)
   {
     let API_URL = this.url + '/obtener_mensualidad/' + nid_matricula;

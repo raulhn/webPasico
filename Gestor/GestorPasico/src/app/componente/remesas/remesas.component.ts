@@ -28,6 +28,9 @@ export class RemesasComponent implements OnInit{
 
   remesa_seleccionada: any;
 
+  fecha_hasta: string = ""
+  fecha_desde: string = ""
+
   constructor(private remesaService: RemesaService)
   {}
 
@@ -124,8 +127,18 @@ export class RemesasComponent implements OnInit{
 
   crear_remesa()
   {
-    console.log('Registrar remesa')
-    this.remesaService.registrar_remesa_matriculas().subscribe(this.peticion_registrar_remesa);
+    if(this.fecha_desde.length > 0 && this.fecha_hasta.length > 0)
+    {
+      this.remesaService.registrar_remesa_matriculas_fecha(this.fecha_desde, this.fecha_hasta).subscribe(this.peticion_registrar_remesa);
+    }
+    else
+    {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Es obligatorio indicar una fecha desde y fecha hasta',
+      })
+    }
   }
 
   buscar()

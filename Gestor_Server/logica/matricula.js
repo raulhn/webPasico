@@ -421,6 +421,32 @@ function obtener_asignaturas_matricula_activas(nid_matricula)
     )
 }
 
+function obtener_asignaturas_matricula_activas_fecha(nid_matricula, fecha_desde, fecha_hasta)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.query('select a.*, m.nid_persona nid_alumno, ma.*, a.descripcion nombre_asignatura, p.*, p.nid nid_profesor ' +
+                    'from ' + constantes.ESQUEMA_BD + '.matricula_asignatura ma, ' + 
+                              constantes.ESQUEMA_BD + '.matricula m, ' +
+                              constantes.ESQUEMA_BD + '.asignatura a, ' + 
+                              constantes.ESQUEMA_BD + '.persona p, ' +
+                              constantes.ESQUEMA_BD + '.profesor_alumno_matricula pam ' +
+                    'where ma.nid_asignatura = a.nid and ' +   'm.nid = ma.nid_matricula and ' + 'nid_matricula = ' +
+                    conexion.dbConn.escape(nid_matricula) + ' and ma.nid = pam.nid_matricula_asignatura and pam.nid_profesor = p.nid and ' +
+                    " (ma.fecha_baja is null or ma.fecha_baja >= " + 
+                    'str_to_date(nullif(' + conexion.dbConn.escape(fecha_desde) + ', \'\') , \'%Y-%m-%d\')) ' + " and " +
+                    ' ma.fecha_alta <= ' + 'str_to_date(nullif(' + conexion.dbConn.escape(fecha_hasta) + ', \'\') , \'%Y-%m-%d\')'   ,
+                (error, results, fields) =>
+                {
+                    if(error) {console.log(error); reject();}
+                    else {resolve(results)}
+                }
+            )
+        }
+    )
+}
+
 
 
 function alta_profesor_matricula(nid_matricula_asignatura, nid_profesor)
@@ -696,7 +722,7 @@ function obtener_personas_matricula_activa_fecha(fecha_desde, fecha_hasta)
         async (resolve, reject) =>
         {
             nid_ultimo_curso = await curso.obtener_ultimo_curso();
-            conexion.dbConn.query(" select p.nid, ma.nid_matricula from " + 
+            conexion.dbConn.query("select p.nid, ma.nid_matricula from " + 
                                                       constantes.ESQUEMA_BD  + ".profesor_alumno_matricula pam, " +
                                                       constantes.ESQUEMA_BD  + ".matricula_asignatura ma, " +
                                                       constantes.ESQUEMA_BD  + ".matricula m, " +
@@ -706,8 +732,8 @@ function obtener_personas_matricula_activa_fecha(fecha_desde, fecha_hasta)
                                         "ma.nid_matricula = m.nid and " +
                                         " m.nid_curso = (select max(nid_curso) from pasico_gestor.curso) and " +
                                         " (ma.fecha_baja is null or ma.fecha_baja >= " + 
-                                        'str_to_date(nullif(' + conexion.dbConn.escape(fecha_desde) + ', \'\') , \'%Y-%m-%d\')+") ' + " and " +
-                                        ' ma.fecha_alta <= ' + 'str_to_date(nullif(' + conexion.dbConn.escape(fecha_hasta) + ', \'\') , \'%Y-%m-%d\')+") ' + " and "+
+                                        'str_to_date(nullif(' + conexion.dbConn.escape(fecha_desde) + ', \'\') , \'%Y-%m-%d\')) ' + " and " +
+                                        ' ma.fecha_alta <= ' + 'str_to_date(nullif(' + conexion.dbConn.escape(fecha_hasta) + ', \'\') , \'%Y-%m-%d\') and ' +
                                         " m.nid_curso = " + conexion.dbConn.escape(nid_ultimo_curso) + " " +
                                    "group by p.nid, ma.nid_matricula ",
                 (error, results, fields) =>
@@ -896,5 +922,6 @@ module.exports.obtener_personas_con_matricula_activa = obtener_personas_con_matr
 module.exports.obtener_personas_matricula_activa_fecha = obtener_personas_matricula_activa_fecha;
 
 module.exports.obtener_asignaturas_matricula_activas = obtener_asignaturas_matricula_activas
+module.exports.obtener_asignaturas_matricula_activas_fecha = obtener_asignaturas_matricula_activas_fecha;
 
 module.exports.sustituir_profesor_alumno = sustituir_profesor_alumno;

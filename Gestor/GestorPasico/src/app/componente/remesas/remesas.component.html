@@ -2,6 +2,10 @@
 <app-menu class=""></app-menu>
 <div class="container pt-4">
     <div class="card p-3 mb-1">
+    <label>Fecha Desde</label>
+    <input class="form-control" name ="Fecha desde" [(ngModel)] = "fecha_desde" type="date"/>
+    <label>Fecha Hasta</label>
+    <input class="form-control" name ="Fecha Hasta" [(ngModel)] = "fecha_hasta" type="date"/>
     <button class="btn btn-primary mb-3 mt-2 tp-3" (click)="crear_remesa()" > Crear nueva remesa </button>
     </div>
     <div class="card p-3 mb-1">
