@@ -98,19 +98,27 @@ function existe_login(user)
     return new Promise(
         (resolve, reject) =>
         {
-            conexion.dbConn.query('select count(*) nCont from '+ constantes.ESQUEMA_BD + '.usuario where usuario = ' + conexion.dbConn.escape(user) , 
-            (error, results, fields) =>
+            try
             {
-                if (error)  {console.log(error); reject();}
-                if (results.length < 1 || results.length > 1)
+                conexion.dbConn.query('select count(*) nCont from '+ constantes.ESQUEMA_BD + '.usuario where usuario = ' + conexion.dbConn.escape(user) , 
+                (error, results, fields) =>
                 {
-                    resolve(false)
+                    if (error)  {console.log(error); reject();}
+                    if (results.length < 1 || results.length > 1)
+                    {
+                        resolve(false)
+                    }
+                    else{
+                        resolve(results[0].nCont > 0);
+                    }
                 }
-                else{
-                    resolve(results[0].nCont > 0);
-                }
+                );
             }
-            );
+            catch(error)
+            {
+                console.log(error);
+                reject('Error al consultar login')
+            }
         }
     );
 }

@@ -379,7 +379,8 @@ function obtener_asignaturas_matricula(nid_matricula)
     return new Promise(
         (resolve, reject) =>
         {
-            conexion.dbConn.query('select a.*, m.nid_persona nid_alumno, ma.*, a.descripcion nombre_asignatura, p.*, p.nid nid_profesor ' +
+            conexion.dbConn.query('select a.*, m.nid_persona nid_alumno, ma.*, a.descripcion nombre_asignatura, p.*, p.nid nid_profesor, ' +
+                    'concat(p.nombre, \' \', p.primer_apellido, \' \', p.segundo_apellido) nombre_profesor ' +
                     'from ' + constantes.ESQUEMA_BD + '.matricula_asignatura ma, ' + 
                               constantes.ESQUEMA_BD + '.matricula m, ' +
                               constantes.ESQUEMA_BD + '.asignatura a, ' + 
@@ -878,6 +879,59 @@ function sustituir_profesor_alumno(nid_profesor, nid_matricula_asignatura, nid_a
     )
 }
 
+function actualizar_fecha_alta_matricula_asignatura(nid_matricula_asignatura, fecha_alta)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            try
+            {
+                connexion.dbConn.beginTransaction(
+                        'update ' + constantes.ESQUEMA_BD + '.matricula_asignatura set fecha_alta = ' +
+                          'str_to_date(nullif(' + conexion.dbConn.escape(fecha_alta) + ', \'\') , \'%Y-%m-%d\')) ' +
+                        ' where nid_matricula_asignatura = ' + conexion.dbConn.escape(nid_matricula_asignatura),
+                    (error, results, fields) =>
+                    {
+                        if(error) {console.log(error); conexion.dbConn.rollback(); reject('Error al actualizar la fecha de alta')}
+                        else {conexion.dbConn.commit(); resolve();}
+                    }
+                )
+            }
+            catch(error)
+            {
+                console.log(error);
+                reject();
+            }
+        }
+    )
+}
+
+function actualizar_fecha_baja_matricula_asignatura(nid_matricula_asignatura, fecha_baja)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            try
+            {
+                connexion.dbConn.beginTransaction(
+                        'update ' + constantes.ESQUEMA_BD + '.matricula_asignatura set fecha_baja = ' +
+                        'str_to_date(nullif(' + conexion.dbConn.escape(fecha_baja) + ', \'\') , \'%Y-%m-%d\')) '  +
+                        ' where nid_matricula_asignatura = ' + conexion.dbConn.escape(nid_matricula_asignatura),
+                    (error, results, fields) =>
+                    {
+                        if(error) {console.log(error); conexion.dbConn.rollback(); reject('Error al actualizar la fecha de baja')}
+                        else {conexion.dbConn.commit(); resolve();}
+                    }
+                )
+            }
+            catch(error)
+            {
+                console.log(error);
+                reject();
+            }
+        }
+    )
+}
 
 
 module.exports.existe_matricula = existe_matricula;
@@ -925,3 +979,6 @@ module.exports.obtener_asignaturas_matricula_activas = obtener_asignaturas_matri
 module.exports.obtener_asignaturas_matricula_activas_fecha = obtener_asignaturas_matricula_activas_fecha;
 
 module.exports.sustituir_profesor_alumno = sustituir_profesor_alumno;
+
+module.exports.actualizar_fecha_alta_matricula_asignatura = actualizar_fecha_alta_matricula_asignatura;
+module.exports.actualizar_fecha_baja_matricula_asignatura = actualizar_fecha_baja_matricula_asignatura;

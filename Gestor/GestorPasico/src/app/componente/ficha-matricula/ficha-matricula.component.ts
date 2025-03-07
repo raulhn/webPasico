@@ -15,6 +15,8 @@ export class FichaMatriculaComponent implements OnInit{
 
   nid_matricula: string = "";
 
+  matricula_asignatura_seleccionada: string ="";
+
   asignaturas: any;
   bCargado: boolean = false;
 
@@ -27,11 +29,13 @@ export class FichaMatriculaComponent implements OnInit{
 
 
   dtOptions: any = {};
+  dtOptionsAsignaturas: any = {}
 
   bCargadas_evaluaciones: boolean = false;
 
   bCargados_trimestres: boolean = false;
   bCargado_mensualidad: boolean = false;
+  bCargadas_asignaturas: boolean = false;
   lista_trimestres: any;
   trimestre_seleccionado: string ="";
 
@@ -51,13 +55,61 @@ export class FichaMatriculaComponent implements OnInit{
     }
   }
 
+  click_matricula_asignatura(asignatura_seleccionada: any)
+  {
+    this.matricula_asignatura_seleccionada = asignatura_seleccionada['nid_inventario'];
+  }
+
+
+
   obtener_asignaturas =
   {
     next: (respuesta: any) =>
     {
       this.asignaturas = respuesta['asignaturas'];
       this.bCargado = true;
-    }
+
+      var datatable = $('#tabla_asignaturas').DataTable();
+      datatable.destroy();
+
+      this.dtOptionsAsignaturas =
+      {
+          language: DataTablesOptions.spanish_datatables,
+          data: this.asignaturas,
+          dom: 'Bfrtip',
+          buttons: [{extend: 'excel', text: 'Generar Excel', className: 'btn btn-dark mb-3'}],
+          columns:
+          [
+            {title: 'Asignatura',
+              data: 'descripcion'
+            },
+            {
+              title: 'Profesor',
+              data: 'nombre_profesor'
+            },
+            {
+              title: 'Fecha Alta',
+              data: 'fecha_alta'
+            },
+            {
+              title: 'Fecha Baja',
+              data: 'fecha_baja'
+            }],
+            rowCallback: (row: Node, data: any[] | Object, index: number) => {
+              $('td', row).off('click');
+              $('td', row).on('click', () => {
+                this.click_matricula_asignatura(data);
+                $('#tabla_asignaturas tr').removeClass('selected')
+                $(row).addClass('selected');
+              });
+              return row;
+          }
+      };
+  
+        $('#tabla_asignaturas').DataTable(this.dtOptionsAsignaturas);
+  
+        this.bCargadas_asignaturas = true;
+      } 
   }  
 
   recuperar_matricula =
