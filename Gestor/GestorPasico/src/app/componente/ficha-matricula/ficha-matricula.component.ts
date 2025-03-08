@@ -306,9 +306,7 @@ export class FichaMatriculaComponent implements OnInit{
   {
     next: (respuesta: any) =>
       {
-        let fichero = respuesta.fichero;
         this.matriculaService.obtener_asignaturas_matriculas(this.nid_matricula).subscribe(this.obtener_asignaturas);
-        this.bCargadas_evaluaciones = false;
         this.remesaService.obtener_precio_mensualidad(this.nid_matricula).subscribe(this.obtener_mensualidad_matricula);
         Swal.fire({
           icon: 'success',
