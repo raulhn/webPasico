@@ -205,7 +205,6 @@ function cobrar_remesa(nid_remesa, p_ip_address, p_user_agent)
         {
             try
             {
-
                 let v_remesa = await remesa.obtener_remesa_nid(nid_remesa);
 
                 if (v_remesa.length > 0)
@@ -255,6 +254,18 @@ function cobrar_remesa(nid_remesa, p_ip_address, p_user_agent)
     )
 }
 
+function recuperar_pago(nid_pasarela_pago)
+{
+    return new Promise(
+        async (resolve, reject) =>
+        {
+            let servicio_stripe = stripe(pagos.KEY);
+            let pago_recuperado = await servicio_stripe.paymentIntents.retrieve(nid_pasarela_pago);
+
+            console.log(pago_recuperado.status)
+        }
+    )
+}
 
 function cobrar_lote(nid_lote, p_ip_address, p_user_agent)
 {

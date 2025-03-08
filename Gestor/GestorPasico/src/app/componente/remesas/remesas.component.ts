@@ -31,6 +31,9 @@ export class RemesasComponent implements OnInit{
   fecha_hasta: string = ""
   fecha_desde: string = ""
 
+  bCargaRemesa: boolean = false;
+  bCargaLote: boolean = false;
+
   constructor(private remesaService: RemesaService)
   {}
 
@@ -109,6 +112,7 @@ export class RemesasComponent implements OnInit{
   {
     next: (respuesta: any) =>
     {
+      this.bCargaRemesa = false;
       Swal.fire({
         icon: 'success',
         title: 'Remesa creada',
@@ -117,6 +121,7 @@ export class RemesasComponent implements OnInit{
     },
     error: (respuesta: any) =>
     {
+      this.bCargaRemesa = false;
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
@@ -129,6 +134,7 @@ export class RemesasComponent implements OnInit{
   {
     if(this.fecha_desde.length > 0 && this.fecha_hasta.length > 0)
     {
+      this.bCargaRemesa = true;
       this.remesaService.registrar_remesa_matriculas_fecha(this.fecha_desde, this.fecha_hasta).subscribe(this.peticion_registrar_remesa);
     }
     else
@@ -299,6 +305,7 @@ export class RemesasComponent implements OnInit{
   {
     next: (respuesta: any) =>
       {
+        this.bCargaLote = false;
         Swal.fire({
           icon: 'success',
           title: 'Cobro de lote realizado',
@@ -307,6 +314,7 @@ export class RemesasComponent implements OnInit{
       },
       error: (respuesta: any) =>
       {
+        this.bCargaLote = false;
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
@@ -327,6 +335,7 @@ export class RemesasComponent implements OnInit{
         {
         if(results.isConfirmed)
         {
+          this.bCargaLote = true;
           this.remesaService.cobrar_lote(this.lote).subscribe(this.peticion_cobrar_lote);
         }
       }

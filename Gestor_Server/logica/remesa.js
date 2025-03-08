@@ -324,8 +324,19 @@ async function precio_matricula(nid_matricula, num_familiar)
 		{
 			var linea_remesa = new Object();
 
+			var comentario_manual = datos_matricula['comentario_precio_manual'];
+
+			if(comentario_manual === null || comentario_manual === undefined || comentario_manual.length == 0)
+			{
+				comentario_manual = "";
+			}
+			else
+			{
+				comentario_manual = ' - ' + comentario_manual
+			}
+
 			linea_remesa.precio = datos_matricula['precio_manual'];
-			linea_remesa.concepto = 'Precio para el alumno ' + datos_matricula['nombre_alumno'] + ' - ' + datos_matricula['comentario_precio_manual'];
+			linea_remesa.concepto = 'Precio para el alumno ' + datos_matricula['nombre_alumno'] + comentario_manual;
 
 			linea_remesas.push(linea_remesa);
 
@@ -490,7 +501,18 @@ function precio_matricula_fecha(nid_matricula, num_familiar, fecha_desde, fecha_
 				let v_precio_persona = Math.round(Number(linea_remesa.precio) * porcentaje_mes * 100) / 100;
 
 
-				linea_remesa.concepto = 'Precio para el alumno ' + datos_matricula['nombre_alumno'] + ' - ' + datos_matricula['comentario_precio_manual'];
+				var comentario_manual = datos_matricula['comentario_precio_manual'];
+
+				if(comentario_manual === null || comentario_manual === undefined || comentario_manual.length == 0)
+				{
+					comentario_manual = "";
+				}
+				else
+				{
+					comentario_manual = ' - ' + comentario_manual
+				}
+
+				linea_remesa.concepto = 'Precio para el alumno ' + datos_matricula['nombre_alumno'] + comentario_manual;
 
 				linea_remesas.push(linea_remesa);
 
@@ -509,8 +531,6 @@ function precio_matricula_fecha(nid_matricula, num_familiar, fecha_desde, fecha_
 					let v_fecha_fin;
 					let v_fecha_inicio;
 
-					console.log('Fecha fin')
-					console.log(v_cadena_fecha_fin)
 					
 					if (v_cadena_fecha_fin !== null && v_cadena_fecha_fin !== undefined  && v_cadena_fecha_fin.length > 0)
 					{
@@ -524,7 +544,6 @@ function precio_matricula_fecha(nid_matricula, num_familiar, fecha_desde, fecha_
 
 					v_fecha_inicio = new Date(v_cadena_fecha_inicio);
 
-					console.log(v_fecha_inicio);
 					if(v_fecha_inicio > v_fecha_desde)
 					{
 						v_fecha_desde = v_fecha_inicio;
@@ -563,15 +582,11 @@ function precio_matricula_fecha(nid_matricula, num_familiar, fecha_desde, fecha_
 						info = 'Precio Banda / Conjunto';
 					}
 
-					console.log('Fecha desde - hasta')
-					console.log(v_fecha_hasta);
-					console.log(v_fecha_desde);
 
 					var diferencia_dias = Math.round(((v_fecha_hasta - v_fecha_desde) ) / (24 * 3600 * 1000));
 
 					var porcentaje_mes = (Number(diferencia_dias) + 1) / Number(diasMes);
 
-					console.log('Porcentaje ' + porcentaje_mes)
 					v_precio_persona = Math.round(v_precio_persona * porcentaje_mes * 100) / 100;
 
 					linea_remesa.precio = v_precio_persona;
@@ -944,7 +959,6 @@ function obtener_remesa_estado(lote, estado)
 	return new Promise(
 		(resolve, reject) =>
 		{
-			console.log('Estado ' + estado)
 			conexion.dbConn.query('select * from ' + constantes.ESQUEMA_BD +
 			   		".remesa where lote = " + conexion.dbConn.escape(lote)
 					 + ' and estado = ' + conexion.dbConn.escape(estado),
@@ -1127,7 +1141,7 @@ function obtener_concepto(nid_remesa)
 
 			if(v_remesa.concepto !== undefined && v_remesa.concepto !== null && v_remesa.length > 0)
 			{
-				concepto = v_remesa[0].concepto;
+				concepto = v_remesa[0].precio + '€ ' + v_remesa[0].concepto;
 			}
 
 			var v_lineas_remesas = await obtener_lineas_remesa(nid_remesa);
@@ -1136,7 +1150,7 @@ function obtener_concepto(nid_remesa)
 			{
 				if (v_lineas_remesas[i]['concepto'] !== undefined &&  v_lineas_remesas[i]['concepto'] !== null)
 				{
-					concepto = concepto + String.fromCharCode(10) + v_lineas_remesas[i]['concepto'];
+					concepto = concepto + String.fromCharCode(10) + v_lineas_remesas[i]['precio'] + '€ ' + v_lineas_remesas[i]['concepto'];
 				}
 	
 			}
