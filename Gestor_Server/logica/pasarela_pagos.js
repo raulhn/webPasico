@@ -69,14 +69,11 @@ function crear_metodo_pago_cuenta_bancaria(nid_forma_pago)
     return new Promise(
         async(resolve, reject) =>
         {
-
             try
             {
-
                 let v_forma_pago = await persona.obtener_forma_pago_nid(nid_forma_pago);
 
                 let v_persona = await persona.obtener_persona(v_forma_pago.nid_titular);
-
 
                 let bExiste_persona = await existe_usuario_pasarela_pago(v_persona.nid);
                 
@@ -84,14 +81,31 @@ function crear_metodo_pago_cuenta_bancaria(nid_forma_pago)
                 {
                     let v_iban = v_forma_pago.iban;
 
+                    var correo_electronico = v_persona.correo_electronico;
+                    let data;
+
                     let servicio_stripe = stripe(pagos.KEY);
-                    let data = {
+                    if(correo_electronico === undefined || correo_electronico === null || correo_electronico.length == 0)
+                    {
+                       data = {
                         type: 'sepa_debit',
                         sepa_debit: {iban: v_iban},
                         billing_details:{
                             name: v_persona.nombre + ' ' + v_persona.primer_apellido + ' ' + v_persona.segundo_apellido,
-                            email: v_persona.correo_electronico
+                            email: pagos.correo_defecto
                         }
+                        }
+                    }
+                    else
+                    {
+                        data = {
+                            type: 'sepa_debit',
+                            sepa_debit: {iban: v_iban},
+                            billing_details:{
+                                name: v_persona.nombre + ' ' + v_persona.primer_apellido + ' ' + v_persona.segundo_apellido,
+                                email: v_persona.correo_electronico
+                            }
+                            }
                     }
 
                     metodo_pago = await servicio_stripe.paymentMethods.create(data)
@@ -120,7 +134,7 @@ function crear_metodo_pago_cuenta_bancaria(nid_forma_pago)
     );
 }
 
-function cobrar_pago(nid_forma_pago, cantidad, p_ip_address, p_user_agent)
+function cobrar_pago(nid_forma_pago, descripcion, cantidad, p_ip_address, p_user_agent)
 {
     return new Promise(
         async (resolve, reject) =>
@@ -133,7 +147,7 @@ function cobrar_pago(nid_forma_pago, cantidad, p_ip_address, p_user_agent)
                 {
                     let v_forma_pago = await persona.obtener_forma_pago_nid(nid_forma_pago);
 
-
+                    
                     if (v_forma_pago.nid_metodo_pasarela_pago !== null && v_forma_pago.nid_metodo_pasarela_pago.length > 0)
                     {
                         let v_persona = await persona.obtener_persona(v_forma_pago.nid_titular);
@@ -145,6 +159,7 @@ function cobrar_pago(nid_forma_pago, cantidad, p_ip_address, p_user_agent)
                                       payment_method: v_forma_pago.nid_metodo_pasarela_pago,
                                       payment_method_types: ['sepa_debit'],
                                       customer: v_persona.nid_pasarela_pago,
+                                      description: descripcion,
                                       confirm: true,
                                       mandate_data: {
                                         customer_acceptance:{
@@ -203,7 +218,8 @@ function cobrar_remesa(nid_remesa, p_ip_address, p_user_agent)
                         let v_precio = Number(v_remesa_actual.precio) * 100 
                         let v_nid_forma_pago = v_remesa_actual.nid_forma_pago;
 
-                        let cobro = await cobrar_pago(v_nid_forma_pago, v_precio, p_ip_address, p_user_agent);   
+                        let concepto = await remesa.obtener_concepto(nid_remesa);
+                        let cobro = await cobrar_pago(v_nid_forma_pago, concepto,v_precio, p_ip_address, p_user_agent);   
 
                         await remesa.actualizar_id_cobro_pasarela_pago(nid_remesa, cobro.id);
                      

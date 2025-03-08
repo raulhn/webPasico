@@ -176,6 +176,8 @@ app.post('/aprobar_remesa', servlet_remesa.aprobar_remesa);
 app.post('/rechazar_remesa', servlet_remesa.rechazar_remesa);
 app.post('/aprobar_remesas', servlet_remesa.aprobar_remesas);
 
+app.get('/obtener_concepto/:nid_remesa', servlet_remesa.obtener_concepto);
+
 /** Parámetros **/
 app.get('/obtener_valor/:nombre', servlet_parametros.obtener_valor);
 app.post('/actualizar_valor', servlet_parametros.actualizar_valor);

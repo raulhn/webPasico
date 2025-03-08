@@ -325,7 +325,7 @@ async function precio_matricula(nid_matricula, num_familiar)
 			var linea_remesa = new Object();
 
 			linea_remesa.precio = datos_matricula['precio_manual'];
-			linea_remesa.concepto = 'Precio manual para el alumno ' + datos_matricula['nombre_alumno'] + ' - ' + datos_matricula['comentario_precio_manual'];
+			linea_remesa.concepto = 'Precio para el alumno ' + datos_matricula['nombre_alumno'] + ' - ' + datos_matricula['comentario_precio_manual'];
 
 			linea_remesas.push(linea_remesa);
 
@@ -490,7 +490,7 @@ function precio_matricula_fecha(nid_matricula, num_familiar, fecha_desde, fecha_
 				let v_precio_persona = Math.round(Number(linea_remesa.precio) * porcentaje_mes * 100) / 100;
 
 
-				linea_remesa.concepto = 'Precio manual para el alumno ' + datos_matricula['nombre_alumno'] + ' - ' + datos_matricula['comentario_precio_manual'];
+				linea_remesa.concepto = 'Precio para el alumno ' + datos_matricula['nombre_alumno'] + ' - ' + datos_matricula['comentario_precio_manual'];
 
 				linea_remesas.push(linea_remesa);
 
@@ -976,6 +976,7 @@ function obtener_lineas_remesa(nid_remesa)
 	)
 }
 
+
 function obtener_descuentos_remesa(nid_remesa)
 {
 	return new Promise(
@@ -1114,6 +1115,48 @@ function obtener_remesa_nid(nid_remesa)
 		}
 	)
 }
+
+function obtener_concepto(nid_remesa)
+{
+	return new Promise(
+		async (resolve, reject) =>
+		{
+			var v_remesa = await obtener_remesa_nid(nid_remesa);
+
+			var concepto = "";
+
+			if(v_remesa.concepto !== undefined && v_remesa.concepto !== null && v_remesa.length > 0)
+			{
+				concepto = v_remesa[0].concepto;
+			}
+
+			var v_lineas_remesas = await obtener_lineas_remesa(nid_remesa);
+
+			for (let i=0; i < v_lineas_remesas.length; i++)
+			{
+				if (v_lineas_remesas[i]['concepto'] !== undefined &&  v_lineas_remesas[i]['concepto'] !== null)
+				{
+					concepto = concepto + String.fromCharCode(10) + v_lineas_remesas[i]['concepto'];
+				}
+	
+			}
+
+			var v_descuentos_remesas = await obtener_descuentos_remesa(nid_remesa);
+
+			for(let i=0; i < v_descuentos_remesas.length; i++)
+			{
+				if (v_descuentos_remesas[i]['concepto'] !== undefined &&  v_descuentos_remesas[i]['concepto'])
+				{
+					concepto = concepto + String.fromCharCode(10) + v_descuentos_remesas[i]['concepto'];
+					console.log(concepto)
+				}
+			}
+
+			resolve(concepto);
+		}
+	)
+}
+
 
 function actualizar_estado(nid_remesa, estado, anotaciones)
 {
@@ -1254,6 +1297,8 @@ module.exports.obtener_lineas_remesa = obtener_lineas_remesa;
 module.exports.obtener_descuentos_remesa = obtener_descuentos_remesa;
 module.exports.obtener_ultimo_lote = obtener_ultimo_lote;
 module.exports.obtener_remesa_nid = obtener_remesa_nid;
+
+module.exports.obtener_concepto = obtener_concepto;
 
 module.exports.aprobar_remesas = aprobar_remesas;
 module.exports.rechazar_remesa = rechazar_remesa;

@@ -152,6 +152,19 @@ function obtener_lineas_remesa(req, res)
     )
 }
 
+function obtener_concepto(req, res)
+{
+    comun.comprobaciones(req, res,
+        async () =>
+        {
+            let nid_remesa = req.params.nid_remesa;
+            let concepto = await remesa.obtener_concepto(nid_remesa);
+
+            res.status(200).send({error:false, concepto: concepto})
+        }
+    )
+}
+
 function obtener_descuentos_remesa(req, res)
 {
     comun.comprobaciones(req, res,
@@ -244,6 +257,7 @@ module.exports.obtener_mensualidad_fecha = obtener_mensualidad_fecha;
 module.exports.obtener_remesa = obtener_remesa;
 module.exports.obtener_remesa_estado = obtener_remesa_estado;
 module.exports.obtener_lineas_remesa = obtener_lineas_remesa;
+module.exports.obtener_concepto = obtener_concepto;
 module.exports.obtener_descuentos_remesa = obtener_descuentos_remesa;
 module.exports.obtener_remesa_nid = obtener_remesa_nid;
 
