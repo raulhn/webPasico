@@ -142,6 +142,9 @@ app.post('/sustituir_profesor_alumno', servlet_matricula.sustituir_profesor_alum
 
 app.get('/obtener_matriculas_activas_profesor/:nid_asignatura/:nid_profesor', servlet_matricula.obtener_matriculas_activas_profesor);
 
+app.post('/actualizar_fecha_alta_matricula_asignatura', servlet_matricula.actualizar_fecha_alta_matricula_asignatura);
+app.post('/actualizar_fecha_baja_matricula_asignatura', servlet_matricula.actualizar_fecha_baja_matricula_asignatura);
+
 /** Forma de pago **/
 app.post('/registrar_forma_pago', servlet_persona.registrar_forma_pago);
 app.get('/obtener_forma_pago/:nid_titular', servlet_persona.obtener_forma_pago);

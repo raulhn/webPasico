@@ -416,10 +416,13 @@ function precio_matricula_fecha(nid_matricula, num_familiar, fecha_desde, fecha_
 
 		try
 		{
+		
 
-			var v_fecha_desde = new Date(fecha_desde);
+			var v_fecha_desde_original = new Date(fecha_desde);
+			var v_fecha_hasta_original = new Date(fecha_hasta);
 
-			var v_fecha_hasta = new Date(fecha_hasta);
+			var v_fecha_desde = v_fecha_desde_original;
+			var v_fecha_hasta = v_fecha_hasta_original;
 
 			if (v_fecha_desde.getMonth() !== v_fecha_hasta.getMonth() || v_fecha_desde.getFullYear() !== v_fecha_hasta.getFullYear())
 			{
@@ -497,12 +500,17 @@ function precio_matricula_fecha(nid_matricula, num_familiar, fecha_desde, fecha_
 			{
 				for(let z = 0; z < asignaturas_precio.length; z++)
 				{
+					v_fecha_desde = v_fecha_desde_original;
+					v_fecha_hasta = v_fecha_hasta_original;
+
 					let v_cadena_fecha_inicio = asignaturas_precio[z]['fecha_alta'];
 					let v_cadena_fecha_fin = asignaturas_precio[z]['fecha_baja'];
 
 					let v_fecha_fin;
 					let v_fecha_inicio;
 
+					console.log('Fecha fin')
+					console.log(v_cadena_fecha_fin)
 					
 					if (v_cadena_fecha_fin !== null && v_cadena_fecha_fin !== undefined  && v_cadena_fecha_fin.length > 0)
 					{
@@ -516,6 +524,7 @@ function precio_matricula_fecha(nid_matricula, num_familiar, fecha_desde, fecha_
 
 					v_fecha_inicio = new Date(v_cadena_fecha_inicio);
 
+					console.log(v_fecha_inicio);
 					if(v_fecha_inicio > v_fecha_desde)
 					{
 						v_fecha_desde = v_fecha_inicio;
@@ -554,6 +563,9 @@ function precio_matricula_fecha(nid_matricula, num_familiar, fecha_desde, fecha_
 						info = 'Precio Banda / Conjunto';
 					}
 
+					console.log('Fecha desde - hasta')
+					console.log(v_fecha_hasta);
+					console.log(v_fecha_desde);
 
 					var diferencia_dias = Math.round(((v_fecha_hasta - v_fecha_desde) ) / (24 * 3600 * 1000));
 

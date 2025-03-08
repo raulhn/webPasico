@@ -41,4 +41,6 @@ export class EvaluacionService {
     let API_URL = this.url + '/generar_boletin/' + nid_matricula + '/' + nid_trimestre;
     return this.http.get(API_URL, {withCredentials: true})
   }
+
+
 }

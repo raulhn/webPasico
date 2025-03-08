@@ -294,6 +294,36 @@ function obtener_matriculas_activas_profesor(req, res)
 
 
 
+function actualizar_fecha_alta_matricula_asignatura(req, res)
+{
+    comun.comprobaciones(req, res,
+        async() =>
+        {
+            let nid_matricula_asignatura = req.body.nid_matricula_asignatura;
+            let fecha_alta = req.body.fecha_alta;
+
+            await matricula.actualizar_fecha_alta_matricula_asignatura(nid_matricula_asignatura, fecha_alta);
+
+            res.status(200).send({error: false, message: "Fecha actualizada"})
+        }
+    )
+}
+
+function actualizar_fecha_baja_matricula_asignatura(req, res)
+{
+    comun.comprobaciones(req, res,
+        async() =>
+        {
+            let nid_matricula_asignatura = req.body.nid_matricula_asignatura;
+            let fecha_baja = req.body.fecha_baja;
+
+            await matricula.actualizar_fecha_baja_matricula_asignatura(nid_matricula_asignatura, fecha_baja);
+
+            res.status(200).send({error: false, message: "Fecha actualizada"})
+        }
+    )
+}
+
 module.exports.registrar_matricula = registrar_matricula;
 module.exports.eliminar_asignatura = eliminar_asignatura;
 module.exports.actualizar_matricula = actualizar_matricula;
@@ -317,3 +347,6 @@ module.exports.sustituir_profesor = sustituir_profesor;
 
 module.exports.sustituir_profesor_alumno = sustituir_profesor_alumno
 module.exports.obtener_matriculas_activas_profesor =  obtener_matriculas_activas_profesor;
+
+module.exports.actualizar_fecha_alta_matricula_asignatura = actualizar_fecha_alta_matricula_asignatura;
+module.exports.actualizar_fecha_baja_matricula_asignatura = actualizar_fecha_baja_matricula_asignatura;

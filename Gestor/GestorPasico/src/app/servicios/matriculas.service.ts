@@ -82,5 +82,18 @@ export class MatriculasService {
     return this.http.get(API_URL, {withCredentials: true});
   }
 
+  
+  actualizar_fecha_alta(nid_matricula_asignatura: string, fecha_alta: string)
+  {
+    let API_URL = this.url + '/actualizar_fecha_alta_matricula_asignatura';
+    return this.http.post(API_URL, {nid_matricula_asignatura: nid_matricula_asignatura, fecha_alta: fecha_alta}, {withCredentials: true});
+  }
+
+  actualizar_fecha_baja(nid_matricula_asignatura: string, fecha_baja: string)
+  {
+    let API_URL = this.url + '/actualizar_fecha_baja_matricula_asignatura';
+    return this.http.post(API_URL, {nid_matricula_asignatura: nid_matricula_asignatura, fecha_baja: fecha_baja}, {withCredentials: true});
+  }
+
 
 }

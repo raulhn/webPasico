@@ -39,7 +39,12 @@ export class FichaMatriculaComponent implements OnInit{
   lista_trimestres: any;
   trimestre_seleccionado: string ="";
 
-    @ViewChild('instancia_sustituir') instancia_sustituir!: ElementRef;
+  fecha_alta_seleccionada: string ="";
+  fecha_baja_seleccionada: string = "";
+
+  @ViewChild('instancia_sustituir') instancia_sustituir!: ElementRef;
+  @ViewChild('instancia_fecha_alta') instancia_fecha_alta!: ElementRef;
+  @ViewChild('instancia_fecha_baja') instancia_fecha_baja!: ElementRef;
 
   constructor(private rutaActiva: ActivatedRoute, private matriculaService: MatriculasService, private remesaService: RemesaService, private evaluacionesService: EvaluacionService)
   {
@@ -57,7 +62,11 @@ export class FichaMatriculaComponent implements OnInit{
 
   click_matricula_asignatura(asignatura_seleccionada: any)
   {
-    this.matricula_asignatura_seleccionada = asignatura_seleccionada['nid_inventario'];
+    this.matricula_asignatura_seleccionada = asignatura_seleccionada['nid_matricula_asignatura'];
+
+
+    this.fecha_alta_seleccionada = asignatura_seleccionada['fecha_alta'];
+    this.fecha_baja_seleccionada = asignatura_seleccionada['fecha_baja'];
   }
 
 
@@ -89,11 +98,11 @@ export class FichaMatriculaComponent implements OnInit{
             },
             {
               title: 'Fecha Alta',
-              data: 'fecha_alta'
+              data: 'fecha_alta_local'
             },
             {
               title: 'Fecha Baja',
-              data: 'fecha_baja'
+              data: 'fecha_baja_local'
             }],
             rowCallback: (row: Node, data: any[] | Object, index: number) => {
               $('td', row).off('click');
@@ -275,6 +284,7 @@ export class FichaMatriculaComponent implements OnInit{
         title: 'Generar boletín',
         html: this.instancia_sustituir.nativeElement,
         confirmButtonText: 'Generar',
+        cancelButtonText: 'Cancelar',
         showCancelButton: true
       }).then(
         (results: any) =>
@@ -289,6 +299,81 @@ export class FichaMatriculaComponent implements OnInit{
 
   compareTrimestre(item: any, selected: any) {
     return item['nid_trimestre'] == selected;
+  }
+
+
+  peticion_actualizar_fecha = 
+  {
+    next: (respuesta: any) =>
+      {
+        let fichero = respuesta.fichero;
+        this.matriculaService.obtener_asignaturas_matriculas(this.nid_matricula).subscribe(this.obtener_asignaturas);
+        this.bCargadas_evaluaciones = false;
+        this.remesaService.obtener_precio_mensualidad(this.nid_matricula).subscribe(this.obtener_mensualidad_matricula);
+        Swal.fire({
+          icon: 'success',
+          title: 'Fecha Actualizada',
+          text: 'Se ha actualizado la fecha',
+        });
+      },
+      error: (respuesta: any) =>
+      {
+        console.log(respuesta);
+        Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Se ha producido un error al actualizar la fecha',
+            })
+      }
+  }
+
+  actualizar_fecha_alta()
+  {
+    Swal.fire({
+      title: 'Actualizar Fecha Alta',
+      html: this.instancia_fecha_alta.nativeElement,
+      confirmButtonText: 'Actualizar',
+      cancelButtonText: 'Cancelar',
+      showCancelButton: true
+    }).then(
+      (results: any) =>
+      {
+        if(results.isConfirmed)
+        {
+          if(this.fecha_alta_seleccionada == "")
+          {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Es obligatorio indicar una fecha de alta',
+            })
+          } 
+          else
+          {
+            this.matriculaService.actualizar_fecha_alta(this.matricula_asignatura_seleccionada, this.fecha_alta_seleccionada).subscribe(this.peticion_actualizar_fecha);
+          }
+        }
+      }
+    )
+  }
+
+  actualizar_fecha_baja()
+  {
+    Swal.fire({
+      title: 'Actualizar Fecha Baja',
+      html: this.instancia_fecha_baja.nativeElement,
+      confirmButtonText: 'Actualizar',
+      cancelButtonText: 'Cancelar',
+      showCancelButton: true
+    }).then(
+      (results: any) =>
+      {
+        if(results.isConfirmed)
+        {
+          this.matriculaService.actualizar_fecha_baja(this.matricula_asignatura_seleccionada, this.fecha_baja_seleccionada).subscribe(this.peticion_actualizar_fecha);
+        }
+      }
+    )
   }
   
 }

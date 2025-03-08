@@ -379,7 +379,9 @@ function obtener_asignaturas_matricula(nid_matricula)
     return new Promise(
         (resolve, reject) =>
         {
-            conexion.dbConn.query('select a.*, m.nid_persona nid_alumno, ma.*, a.descripcion nombre_asignatura, p.*, p.nid nid_profesor, ' +
+            conexion.dbConn.query('select a.*, m.nid_persona nid_alumno, date_format(ma.fecha_alta, \'%Y-%m-%d\') fecha_alta, '+
+                    ' date_format(ma.fecha_alta, \'%d-%m-%Y\') fecha_alta_local, date_format(ma.fecha_baja, \'%d-%m-%Y\') fecha_baja_local, '+
+                    ' date_format(ma.fecha_baja, \'%Y-%m-%d\') fecha_baja, ma.nid nid_matricula_asignatura, a.descripcion nombre_asignatura, p.*, p.nid nid_profesor, ' +
                     'concat(p.nombre, \' \', p.primer_apellido, \' \', p.segundo_apellido) nombre_profesor ' +
                     'from ' + constantes.ESQUEMA_BD + '.matricula_asignatura ma, ' + 
                               constantes.ESQUEMA_BD + '.matricula m, ' +
@@ -427,7 +429,8 @@ function obtener_asignaturas_matricula_activas_fecha(nid_matricula, fecha_desde,
     return new Promise(
         (resolve, reject) =>
         {
-            conexion.dbConn.query('select a.*, m.nid_persona nid_alumno, ma.*, a.descripcion nombre_asignatura, p.*, p.nid nid_profesor ' +
+            conexion.dbConn.query('select a.*, m.nid_persona nid_alumno, date_format(ma.fecha_alta, \'%Y-%m-%d\') fecha_alta, ' + 
+                    ' date_format(ma.fecha_baja, \'%Y-%m-%d\') fecha_baja, ma.nid nid_matricula_asignatura, a.descripcion nombre_asignatura, p.*, p.nid nid_profesor ' +
                     'from ' + constantes.ESQUEMA_BD + '.matricula_asignatura ma, ' + 
                               constantes.ESQUEMA_BD + '.matricula m, ' +
                               constantes.ESQUEMA_BD + '.asignatura a, ' + 
@@ -886,10 +889,10 @@ function actualizar_fecha_alta_matricula_asignatura(nid_matricula_asignatura, fe
         {
             try
             {
-                connexion.dbConn.beginTransaction(
+                conexion.dbConn.beginTransaction(
                         'update ' + constantes.ESQUEMA_BD + '.matricula_asignatura set fecha_alta = ' +
-                          'str_to_date(nullif(' + conexion.dbConn.escape(fecha_alta) + ', \'\') , \'%Y-%m-%d\')) ' +
-                        ' where nid_matricula_asignatura = ' + conexion.dbConn.escape(nid_matricula_asignatura),
+                          'str_to_date(nullif(' + conexion.dbConn.escape(fecha_alta) + ', \'\') , \'%Y-%m-%d\') ' +
+                        ' where nid = ' + conexion.dbConn.escape(nid_matricula_asignatura),
                     (error, results, fields) =>
                     {
                         if(error) {console.log(error); conexion.dbConn.rollback(); reject('Error al actualizar la fecha de alta')}
@@ -913,10 +916,10 @@ function actualizar_fecha_baja_matricula_asignatura(nid_matricula_asignatura, fe
         {
             try
             {
-                connexion.dbConn.beginTransaction(
+                conexion.dbConn.beginTransaction(
                         'update ' + constantes.ESQUEMA_BD + '.matricula_asignatura set fecha_baja = ' +
-                        'str_to_date(nullif(' + conexion.dbConn.escape(fecha_baja) + ', \'\') , \'%Y-%m-%d\')) '  +
-                        ' where nid_matricula_asignatura = ' + conexion.dbConn.escape(nid_matricula_asignatura),
+                        'str_to_date(nullif(' + conexion.dbConn.escape(fecha_baja) + ', \'\') , \'%Y-%m-%d\') '  +
+                        ' where nid = ' + conexion.dbConn.escape(nid_matricula_asignatura),
                     (error, results, fields) =>
                     {
                         if(error) {console.log(error); conexion.dbConn.rollback(); reject('Error al actualizar la fecha de baja')}

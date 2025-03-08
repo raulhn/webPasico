@@ -13,50 +13,21 @@
         </div>
         <div class="row">
             <div class="col">
-                <button class="form-control" class="btn btn-primary mb-2 mt-2 tp-3" (click)="guardar()"> Guardar </button>
+                <button  class="btn btn-primary mb-2 mt-2 tp-3" (click)="guardar()"> Guardar </button>
             </div>
         </div>
 
         <div *ngIf="bCargadas_asignaturas">
             <table datatable [dtOptions]="dtOptionsAsignaturas" id="tabla_asignaturas" class="row-border hover">
             </table>
+
+            <div *ngIf="matricula_asignatura_seleccionada != ''">
+                <button class="btn btn-primary mb-2 mt-2 tp-3 me-1" (click)="actualizar_fecha_alta()">Cambiar Fecha Alta</button>
+                <button class="btn btn-primary mb-2 mt-2 tp-3 ms-1" (click)="actualizar_fecha_baja()">Cambiar Fecha Baja</button>
+            </div>
         </div>
         
-        <!--
-        <table class="table table-striped">
-            <thead>
-                <th>
-                    Asignatura
-                </th>
-                <th>
-                    Profesor
-                </th>
-                <th>
-                    Fecha alta
-                </th>
-                <th>
-                    Fecha baja
-                </th>
-            </thead>
-            <tbody>
-                <tr *ngFor="let asignatura of asignaturas">
-                    <td>
-                        {{asignatura.descripcion}}
-                    </td>
-                        <td>
-                        {{asignatura.nombre}} {{asignatura.primer_apellido}} {{asignatura.segundo_apellido}}
-                    </td>
-                    <td>
-                        {{asignatura.fecha_alta}}
-                    </td>
-                    <td>
-                        {{asignatura.fecha_baja}}
-                    </td>
-                </tr>
-            </tbody>
-            
-        </table>
-        -->
+
     </div>
 
     <div class="card mt-3" *ngIf="bCargado_mensualidad">
@@ -108,6 +79,29 @@
                             [(ngModel)]="trimestre_seleccionado"
                             [compareWith]="compareTrimestre">
                 </ng-select>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mb-1 mt-1" style="display: none;">
+
+    <div #instancia_fecha_alta>
+        <div  >
+            <div  class="m-2" *ngIf="bCargados_trimestres">
+                <label for="select-trimestres"> <b> Fecha de Alta </b></label>
+                <input class="form-control mt-2" type="date" [(ngModel)]="fecha_alta_seleccionada"/>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mb-1 mt-1" style="display: none;">
+    <div #instancia_fecha_baja>
+        <div  >
+            <div  class="m-2" *ngIf="bCargados_trimestres">
+                <label for="select-trimestres"> <b> Fecha de Baja </b></label>
+                <input class="form-control mt-2" type="date" [(ngModel)]="fecha_baja_seleccionada"/>
             </div>
         </div>
     </div>
