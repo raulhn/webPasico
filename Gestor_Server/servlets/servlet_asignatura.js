@@ -46,7 +46,7 @@ function eliminar_asignatura(req, res)
 
 function obtener_asignaturas(req, res)
 {
-    comun.comprobaciones(req, res,
+    comun.comprobaciones_general(req, res,
         async () =>
         {
             resultado_asignaturas = await asignatura.obtener_asignaturas();
@@ -150,7 +150,7 @@ function obtener_asignaturas_profesor(req, res)
 
 function obtener_asignaturas_rol_profesor(req, res)
 {
-    comun.comprobaciones_general(req, res,
+    comun.comprobaciones_profesor(req, res,
         async() =>
         {
             let usuario = req.session.nombre;

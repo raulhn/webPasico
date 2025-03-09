@@ -114,9 +114,7 @@ function obtener_alumnos_asignaturas(nid_curso, nid_asignatura)
                 (error, results, fields) =>
                 {
                     if(error) {console.log(error); reject();}
-                    else {console.log('select  p.*, ma.nid_matricula from ' + constantes.ESQUEMA_BD + '.matricula_asignatura ma, '+ constantes.ESQUEMA_BD +
-                    '.persona p, ' + constantes.ESQUEMA_BD +'.matricula m where p.nid = m.nid_persona and ma.nid_matricula = m.nid and m.nid_curso = ' + 
-                     conexion.dbConn.escape(nid_curso) + ' and ma.nid_asignatura = ' + conexion.dbConn.escape(nid_asignatura)); console.log(results); resolve(results)}
+                    else { resolve(results)}
                 }   
             )
         }

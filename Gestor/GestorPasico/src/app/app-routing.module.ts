@@ -31,6 +31,7 @@ import { FichaInventarioComponent } from './componente/ficha-inventario/ficha-in
 import { ListaInventariosComponent } from './componente/lista-inventarios/lista-inventarios.component';
 import { ListaFormaPagosComponent } from './componente/lista-forma-pagos/lista-forma-pagos.component';
 import { FichaFormaPagoComponent } from './componente/ficha-forma-pago/ficha-forma-pago.component';
+import { EvaluacionProfesorComponent } from './componente/evaluacion-profesor/evaluacion-profesor.component';
 
 
 const routes: Routes = [
@@ -121,6 +122,10 @@ const routes: Routes = [
   {
     path: 'evaluacion',
     component: EvaluacionComponent
+  },
+  {
+    path: 'evaluacion_profesor',
+    component: EvaluacionProfesorComponent
   },
   {
     path: 'crea_ficha_asistencia',

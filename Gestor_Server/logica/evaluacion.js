@@ -30,8 +30,6 @@ function existe_evaluacion(nid_trimestre, nid_asignatura, nid_profesor)
                                 ' and nid_profesor = ' + conexion.dbConn.escape(nid_profesor),
                     (error, results, fields) =>
                     {
-                        
-                        console.log('Numero ' + results[0]['num'])
                         if(error) {console.log(error); reject(error);}
                         else {resolve(results[0]['num'] > 0)}
                     }
@@ -316,7 +314,6 @@ function obtener_evaluacion_tutor(nid_matricula, nid_trimestre)
 
 
             let array_evaluacion_matricula = await obtener_evaluacion_matricula_asginatura_tipo(nid_matricula, constantes.ASIGNATURA_INSTRUMENTO_BANDA, nid_trimestre);
-            let evaluacion_matricula = null;
 
             if(array_evaluacion_matricula.length > 0 )
                 {

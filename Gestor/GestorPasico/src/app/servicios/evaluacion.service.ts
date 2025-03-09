@@ -18,6 +18,13 @@ export class EvaluacionService {
     return this.http.post(API_URL, {nid_asignatura: nid_asignatura, nid_profesor: nid_profesor, notas: notas, progresos: progresos, matriculas: matriculas, nid_trimestre: nid_trimestre, comentarios: comentarios}, {withCredentials: true});
   }
 
+  registrar_evaluacion_profesor(nid_trimestre: string, nid_asignatura: string, notas: string, progresos: string, matriculas: string, comentarios: string)
+  {
+    let API_URL = this.url + '/registrar_evaluacion_profesor';
+    return this.http.post(API_URL, {nid_asignatura: nid_asignatura, notas: notas, progresos: progresos, matriculas: matriculas, nid_trimestre: nid_trimestre, comentarios: comentarios}, {withCredentials: true});
+  }
+
+
   obtener_trimestres()
   {
     let API_URL = this.url + '/obtener_trimestres';
@@ -27,6 +34,13 @@ export class EvaluacionService {
   obtener_evaluacion(nid_trimestre: string, nid_asignatura: string, nid_profesor: string)
   {
     let API_URL = this.url + '/obtener_evaluacion/' + nid_trimestre + '/' + nid_asignatura + '/' + nid_profesor;
+    return this.http.get(API_URL, {withCredentials: true})
+  }
+
+  // Llamada obtener evaluación con el rol de profesor //
+  obtener_evaluacion_profesor(nid_trimestre: string, nid_asignatura: string)
+  {
+    let API_URL = this.url + '/obtener_evaluacion_profesor/' + nid_trimestre + '/' + nid_asignatura;
     return this.http.get(API_URL, {withCredentials: true})
   }
 
@@ -42,5 +56,6 @@ export class EvaluacionService {
     return this.http.get(API_URL, {withCredentials: true})
   }
 
+  
 
 }

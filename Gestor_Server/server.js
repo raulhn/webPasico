@@ -248,6 +248,12 @@ app.post('/cancelar_ficha_asistencia', servlet_ficha_asistencia.cancelar_ficha_a
 /** Asignaturas **/
 app.get('/obtener_asignaturas_rol_profesor', servlet_asignatura.obtener_asignaturas_rol_profesor);
 
+/** Matriculas **/
+app.get('/obtener_matriculas_activas_rol_profesor/:nid_asignatura', servlet_matricula.obtener_matriculas_activas_rol_profesor);
+
+/** Evaluación **/
+app.get('/obtener_evaluacion_profesor/:nid_trimestre/:nid_asignatura', servlet_evaluacion.obtener_evaluacion_profesor)
+app.post('/registrar_evaluacion_profesor', servlet_evaluacion.registrar_evaluacion_profesor);
 
 
 https.createServer({

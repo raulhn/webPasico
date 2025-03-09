@@ -82,6 +82,12 @@ export class MatriculasService {
     return this.http.get(API_URL, {withCredentials: true});
   }
 
+  obtener_matriculas_activas_profesor(nid_asignatura: string)
+  {
+    let API_URL = this.url + '/obtener_matriculas_activas_rol_profesor/' + nid_asignatura;
+    return this.http.get(API_URL, {withCredentials: true});
+
+  }
   
   actualizar_fecha_alta(nid_matricula_asignatura: string, fecha_alta: string)
   {

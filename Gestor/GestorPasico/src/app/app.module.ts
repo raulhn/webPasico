@@ -58,6 +58,7 @@ import { CrearFichaInventarioComponent } from './componente/crear-ficha-inventar
 import { ListaInventariosComponent } from './componente/lista-inventarios/lista-inventarios.component';
 import { ListaFormaPagosComponent } from './componente/lista-forma-pagos/lista-forma-pagos.component';
 import { FichaFormaPagoComponent } from './componente/ficha-forma-pago/ficha-forma-pago.component';
+import { EvaluacionProfesorComponent } from './componente/evaluacion-profesor/evaluacion-profesor.component';
 
 
 
@@ -108,7 +109,8 @@ import { FichaFormaPagoComponent } from './componente/ficha-forma-pago/ficha-for
     CrearFichaInventarioComponent,
     ListaInventariosComponent,
     ListaFormaPagosComponent,
-    FichaFormaPagoComponent
+    FichaFormaPagoComponent,
+    EvaluacionProfesorComponent
   ],
   imports: [
     FormsModule,

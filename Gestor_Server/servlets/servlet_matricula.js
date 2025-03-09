@@ -1,7 +1,7 @@
 const matricula = require('../logica/matricula.js')
 const asignatura = require('../logica/asignatura.js')
 const comun = require('./servlet_comun.js')
-
+const gestion_usuarios = require('../logica/usuario.js')
 
 function registrar_matricula(req, res)
 {
@@ -292,6 +292,22 @@ function obtener_matriculas_activas_profesor(req, res)
     )
 }
 
+function obtener_matriculas_activas_rol_profesor(req, res)
+{
+    comun.comprobaciones_profesor(req, res,
+        async() =>
+        {
+            let usuario = req.session.nombre;
+            let nid_profesor = await gestion_usuarios.obtener_nid_persona(usuario);
+            let nid_asignatura = req.params.nid_asignatura;
+
+            let lista_matriculas =  await matricula.obtener_matriculas_activas_asignatura(nid_profesor, nid_asignatura);
+
+            res.status(200).send({error: false, matriculas: lista_matriculas})
+        }
+    )
+}
+
 
 
 function actualizar_fecha_alta_matricula_asignatura(req, res)
@@ -347,6 +363,7 @@ module.exports.sustituir_profesor = sustituir_profesor;
 
 module.exports.sustituir_profesor_alumno = sustituir_profesor_alumno
 module.exports.obtener_matriculas_activas_profesor =  obtener_matriculas_activas_profesor;
+module.exports.obtener_matriculas_activas_rol_profesor = obtener_matriculas_activas_rol_profesor;
 
 module.exports.actualizar_fecha_alta_matricula_asignatura = actualizar_fecha_alta_matricula_asignatura;
 module.exports.actualizar_fecha_baja_matricula_asignatura = actualizar_fecha_baja_matricula_asignatura;

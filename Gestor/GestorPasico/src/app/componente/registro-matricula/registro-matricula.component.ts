@@ -34,7 +34,7 @@ export class RegistroMatriculaComponent implements OnInit{
   cursos: any[] = [];
 
   bCargadoProfesores: boolean = false;
-  profesor_seleccionado: string = "";
+  profesor_seleccionado: string = "0";
 
   alumno: any ;
   curso: any = '3';
@@ -223,11 +223,11 @@ export class RegistroMatriculaComponent implements OnInit{
   {
     if (this.profesor_seleccionado == '0')
     {
-      this.matriculasServices.obtener_alumnos_asignaturas(this.curso, this.asignatura, this.activo).subscribe(this.refrescar_alumnos);
+      this.matriculasServices.obtener_alumnos_asignaturas(this.curso, this.nid_asignatura, this.activo).subscribe(this.refrescar_alumnos);
     }
     else
     {
-      this.matriculasServices.obtener_alumnos_profesores(this.profesor_seleccionado, this.curso, this.asignatura, this.activo).subscribe(this.refrescar_alumnos);
+      this.matriculasServices.obtener_alumnos_profesores(this.profesor_seleccionado, this.curso, this.nid_asignatura, this.activo).subscribe(this.refrescar_alumnos);
     }
   }
 
@@ -346,7 +346,14 @@ export class RegistroMatriculaComponent implements OnInit{
 
   cambia_seleccion()
   {
-    this.matriculasServices.obtener_alumnos_asignaturas(this.curso, this.nid_asignatura, this.activo).subscribe(this.refrescar_alumnos);
+    if (this.profesor_seleccionado == '0')
+    {
+      this.matriculasServices.obtener_alumnos_asignaturas(this.curso, this.nid_asignatura, this.activo).subscribe(this.refrescar_alumnos);
+    }
+    else
+    {
+      this.matriculasServices.obtener_alumnos_profesores(this.profesor_seleccionado, this.curso, this.nid_asignatura, this.activo).subscribe(this.refrescar_alumnos);
+    }
   }
 
   obtener_url_ficha_alumno()
@@ -373,4 +380,5 @@ export class RegistroMatriculaComponent implements OnInit{
       }
     )
   }
+
 }
