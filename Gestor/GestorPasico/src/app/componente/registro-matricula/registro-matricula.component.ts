@@ -33,6 +33,9 @@ export class RegistroMatriculaComponent implements OnInit{
   lista_personas: any[] = [];
   cursos: any[] = [];
 
+  bCargadoProfesores: boolean = false;
+  profesor_seleccionado: string = "";
+
   alumno: any ;
   curso: any = '3';
   profesor: any;
@@ -85,6 +88,7 @@ export class RegistroMatriculaComponent implements OnInit{
     {
       this.lista_profesores = respuesta.profesores.map((elemento: any) =>{
         return{etiqueta_profesor: elemento.etiqueta, clave_profesor: elemento.nid_persona}});
+        this.bCargadoProfesores = true;
     }
   }
 
@@ -214,6 +218,19 @@ export class RegistroMatriculaComponent implements OnInit{
   {
     return item['clave_profesor'] == selected
   }
+
+  cambia_profesor()
+  {
+    if (this.profesor_seleccionado == '0')
+    {
+      this.matriculasServices.obtener_alumnos_asignaturas(this.curso, this.asignatura, this.activo).subscribe(this.refrescar_alumnos);
+    }
+    else
+    {
+      this.matriculasServices.obtener_alumnos_profesores(this.profesor_seleccionado, this.curso, this.asignatura, this.activo).subscribe(this.refrescar_alumnos);
+    }
+  }
+
 
   registrar_alumno = 
   {
