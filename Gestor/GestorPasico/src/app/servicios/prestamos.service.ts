@@ -17,4 +17,16 @@ export class PrestamosService {
     return this.http.post(API_URL, {nid_persona: nid_persona, nid_inventario: nid_inventario, fecha_inicio: fecha_inicio}, {withCredentials: true});
   }
 
+  obtener_prestamo(nid_prestamo:string)
+  {
+    let API_URL = this.url + '/obtener_prestamo/' + nid_prestamo;
+    return this.http.get(API_URL, {withCredentials: true});
+  }
+
+  obtener_prestamos()
+  {
+    let API_URL = this.url + '/obtener_prestamos';
+    return this.http.get(API_URL, {withCredentials: true});
+  }
+
 }

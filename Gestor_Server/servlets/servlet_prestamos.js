@@ -53,8 +53,6 @@ function obtener_prestamo(req, res)
         async() =>
         {
             let nid_prestamo = req.params.nid_prestamo;
-            console.log('a')
-            console.log(nid_prestamo)
             let resultado = await prestamos.obtener_prestamo(nid_prestamo);
 
             res.status(200).send({error: false, prestamo: resultado});
