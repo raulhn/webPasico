@@ -1,0 +1,26 @@
+
+
+<div class="container">
+
+<div *ngIf="bCargadasPersonas">
+    <ng-select [items]="lista_personas"
+    bindLabel="etiqueta" 
+    bindValue="nid"
+    [(ngModel)]="persona_seleccionada"
+    [compareWith]="comparePersona">
+    </ng-select>
+</div>
+
+<div *ngIf="bCargadoInventario">
+    <ng-select [items]="lista_inventario"
+    bindLabel="descripcion" 
+    bindValue="nid_inventario"
+    [(ngModel)]="inventario_seleccionado"
+    [compareWith]="compareInventario">
+    </ng-select>
+</div>
+
+<input class="form-control" type="date" [(ngModel)]="fecha_inicio"/>
+
+<button class="button" (click)="registrar_inventario()">Registrar</button>
+</div>

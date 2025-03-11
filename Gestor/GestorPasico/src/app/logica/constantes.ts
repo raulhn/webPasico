@@ -2,14 +2,14 @@ export class URL
 {
     /*Pruebas*/
     
-    /*
+    
     public static readonly URL_SERVICIO = "https://gestorpasicopru.com/api";
     public static readonly URL_FRONT_END= "https://gestorpasicopru.com";
-    */
     
+     /*
     public static readonly URL_SERVICIO = "https://gestorpasico.com/api";
     public static readonly URL_FRONT_END= "https://gestorpasico.com";
-    
+    */
     
     public static readonly URL_WEB = "https://ladelpasico.es:8443"
 }

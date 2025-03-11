@@ -27,6 +27,7 @@ var servlet_evaluacion = require('./servlets/servlet_evaluacion.js')
 var servlet_ficha_asistencia = require('./servlets/servlet_ficha_asistencia.js')
 var servlet_inventario = require('./servlets/servlet_inventario.js');
 var servlet_pasarela_pago = require('./servlets/servlet_pasarela_pago.js');
+var servlet_prestamo = require('./servlets/servlet_prestamos.js')
 
 var fs = require('fs');
 
@@ -228,6 +229,12 @@ app.post('/registrar_usuario_pago', servlet_pasarela_pago.crear_usuario);
 app.post('/crear_metodo_pago_cuenta', servlet_pasarela_pago.crear_metodo_pago_cuenta_bancaria)
 app.post('/cobrar_remesa', servlet_pasarela_pago.cobrar_remesa);
 app.post('/cobrar_lote', servlet_pasarela_pago.cobrar_lote);
+
+/** Prestamos **/
+app.post('/registrar_prestamo', servlet_prestamo.registrar_prestamo);
+app.post('/actualizar_prestamo', servlet_prestamo.actualizar_prestamo);
+app.get('/obtener_prestamos', servlet_prestamo.obtener_prestamos);
+app.get('/obtener_prestamo/:nid_prestamo', servlet_prestamo.obtener_prestamo);
 
 ///////////////////////////////
 /**  ROL DE PROFESOR **/

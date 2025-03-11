@@ -1,46 +1,23 @@
 const conexion = require('../conexion.js')
 const constantes = require('../constantes.js')
 
-
-function obtener_cantidad_prestada(nid_inventario)
-{
-    return new Promise(
-        (resolve, reject) =>
-        {
-            conexion.dbConn.query('select sum(cantidad) cantidad_prestada' + 
-                                 ' from ' + constantes.ESQUEMA_BD + '.prestamos ' +
-                                 ' where nid_inventario = ' + conexion.dbConn.escape(nid_inventario) +
-                                 '   and fecha_inicio <=  ' + 'str_to_date(nullif(' + conexion.dbConn.escape(fecha_inicio) + ', \'\') , \'%Y-%m-%d\')' +
-                                        'and (fecha_fin is null or fecha_fin >= ' +'str_to_date(nullif(' + conexion.dbConn.escape(fecha_inicio) + ', \'\') , \'%Y-%m-%d\'))) ',
-                (error, results, fields) =>
-                {
-                    if(error) {console.log(error); reject(error)}
-                    else {resolve(results['cantidad_prestada'])}
-                }
-            )
-        }
-    )
-}
-
-
-function comprueba_prestamo(nid_inventario, fecha_inicio, cantidad)
+function comprueba_prestamo(nid_inventario, fecha_inicio)
 {
     return new Promise(
         async (resolve, reject) =>
         {
-            let cantidad_prestada = await obtener_cantidad_prestada(nid_inventario);
 
             conexion.dbConn.query('select count(*) num' +
                 ' from ' + constantes.ESQUEMA_BD + '.inventario i, ' +
-                         + constantes.ESQUEMA_BD + '.prestamos p ' +
+                          constantes.ESQUEMA_BD + '.prestamos p ' +
                 ' where i.nid_inventario = p.nid_inventario ' +
+                '   and i.nid_inventario = ' + conexion.dbConn.escape(nid_inventario) +
                 '   and not (fecha_inicio <=  ' + 'str_to_date(nullif(' + conexion.dbConn.escape(fecha_inicio) + ', \'\') , \'%Y-%m-%d\')' +
-                               'and (fecha_fin is null or fecha_fin >= ' +'str_to_date(nullif(' + conexion.dbConn.escape(fecha_inicio) + ', \'\') , \'%Y-%m-%d\'))) ' +
-                '   and i.cantidad - ' + conexion.dbConn.escape(cantidad_prestada) + ' >= ' + conexion.dbConn.escape(cantidad),
+                               'and (fecha_fin is null or fecha_fin >= ' +'str_to_date(nullif(' + conexion.dbConn.escape(fecha_inicio) + ', \'\') , \'%Y-%m-%d\'))) ' ,
             (error, results, fields) =>
             {
                 if(error)  {console.log(error); reject(error)}
-                else {resolve(results[0][num] > 0)}
+                else {resolve(results[0]['num'] == 0)}
             } 
         )
         }
@@ -48,35 +25,159 @@ function comprueba_prestamo(nid_inventario, fecha_inicio, cantidad)
 
 }
 
-function registrar_prestamo(nid_persona, nid_inventario, fecha_inicio, cantidad)
+function registrar_prestamo(nid_persona, nid_inventario, fecha_inicio)
 {
     return new Promise(
         async (resolve, reject) =>
         {
-            bComprueba_prestamo = await(comprueba_prestamo(nid_inventario, fecha_inicio, cantidad))
-
-            if(bComprueba_prestamo)
+            try
             {
-                conexion.dbConn.beginTransaction(
-                    () =>
-                    {
-                        conexion.dbConn('insert into ' + constantes.ESQUEMA_BD + '.prestamos(nid_persona, nid_inventario, fecha_inicio, cantidad) values(' +
-                                conexion.dbConn.escape(nid_persona) + ', ' + conexion.dbConn.escape(nid_inventario) + ', ' + 
-                                'str_to_date(nullif(' + conexion.dbConn.escape(fecha_inicio) + ', \'\') , \'%Y-%m-%d\'))) ' + ', ' +
-                                conexion.dbConn.escape(cantidad),
-                            (error, results, fields) =>
-                            {
-                                if(error) {console.log(error); conexion.dbConn.rollback(), reject(error)}
-                                else {conexion.dbConn.commit(); resolve()}
-                            }
+                let disponible = await comprueba_prestamo(nid_inventario, fecha_inicio);
 
-                        )
-                    }
-                )
+                if(disponible)
+                {
+                    conexion.dbConn.beginTransaction(
+                        () =>
+                        {
+                            conexion.dbConn.query('insert into ' + constantes.ESQUEMA_BD + '.prestamos(nid_persona, nid_inventario, fecha_inicio) values(' +
+                                    conexion.dbConn.escape(nid_persona) + ', ' + conexion.dbConn.escape(nid_inventario) + ', ' + 
+                                    'str_to_date(nullif(' + conexion.dbConn.escape(fecha_inicio) + ', \'\') , \'%Y-%m-%d\')) ' ,
+                                (error, results, fields) =>
+                                {
+                                    if(error) {console.log(error); conexion.dbConn.rollback(); reject(error)}
+                                    else {conexion.dbConn.commit(); resolve()}
+                                }
+
+                            )
+                        }
+                    )
+                }
+                else
+                {
+                    console.log('El instrumento no está disponible')
+                    reject('El instrumento no está disponible');
+                }
+            }
+            catch(error)
+            {
+                console.log('prestamos.js - registrar_prestamo -> ' + error);
+                reject('Error al registrar el prestamo')
             }
         }
     )
 
 }
 
+function actualizar_prestamo(nid_prestamo, fecha_inicio, fecha_fin)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.beginTransaction(
+            ()=>
+            {
+                conexion.dbConn.query('update ' + constantes.ESQUEMA_BD + '.prestamos set fecha_inicio = ' +
+                    'str_to_date(nullif(' + conexion.dbConn.escape(fecha_inicio) + ', \'\') , \'%Y-%m-%d\'))) ' +
+                    ', fecha_fin = ' + 'str_to_date(nullif(' + conexion.dbConn.escape(fecha_fin) + ', \'\') , \'%Y-%m-%d\'))) ' +
+                    ' where nid_prestamo = ' + conexion.dbConn.escape(nid_prestamo),
+                  (error, results, fields) =>
+                  {
+                    if(error)
+                    {
+                        console.log(error);
+                        conexion.dbConn.rollback();
+                        reject('Error al actualizar el prestamo');
+                    }
+                    else
+                    {
+                        conexion.dbConn.commit();
+                        resolve();
+                    }
+                  }
+                    
+                )
+            }
+            )
+        }
+    )
+}
+
+function obtener_prestamos()
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.query('select concat(p.nombre, \' \', p.primer_apellido, \' \', p.segundo_apellido) etiqueta_persona, i.descripcion, pr.* ' +
+                            ' from ' + constantes.ESQUEMA_BD + '.persona p, ' + constantes.ESQUEMA_BD + '.inventario i, ' + constantes.ESQUEMA_BD + '.prestamos pr' +
+                            ' where p.nid = pr.nid_persona  ' +
+                            '   and i.nid_inventario = pr.nid_inventario',
+                (error, results, fields) =>
+                {
+                    if(error)
+                    {
+                        console.log(error);
+                        reject();
+                    }
+                    else {resolve(results);}
+                }
+            )
+        }
+    )
+}
+
+function obtener_prestamo(nid_prestamo)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+
+            conexion.dbConn.query('select concat(p.nombre, \' \', p.primer_apellido, \' \', p.segundo_apellido) etiqueta_persona, i.descripcion, pr.* ' +
+                ' from ' + constantes.ESQUEMA_BD + '.persona p, ' + constantes.ESQUEMA_BD + '.inventario i, ' + constantes.ESQUEMA_BD + '.prestamos pr ' +
+                ' where p.nid = pr.nid_persona  ' +
+                '   and i.nid_inventario = pr.nid_inventario ' +
+                '   and pr.nid_prestamo = ' + conexion.dbConn.escape(nid_prestamo),
+                (error, results, fields) =>
+                {
+                    if(error)
+                    {
+                        console.log(error);
+                        reject();
+                    }
+                    else if (results.length < 1)
+                    {
+                        console.log('No se ha encontrado el prestamo')
+                        reject();
+                    }
+                    else {resolve(results[0]);}
+                }
+            )
+        }
+    )
+}
+
+function eliminar_prestamo(nid_prestamo)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            conexion.dbConn.beginTransaction(
+                () =>
+                {
+                    conexion.dbConn.query('delete from ' + constantes.ESQUEMA_BD + 'prestamos where nid_prestamo = ' + conexion.dbConn.escape(nid_prestamo),
+                        (error, results, fields) =>
+                        {
+                            if(error) {console.log(error); conexion.dbConn.rollback(); reject('Error al eliminar el prestamo')}
+                            else {conexion.dbConn.commit(); resolve();}
+                        })
+                }
+            )
+        }
+    );
+   
+}
+
 module.exports.registrar_prestamo = registrar_prestamo;
+module.exports.actualizar_prestamo = actualizar_prestamo;
+module.exports.obtener_prestamos = obtener_prestamos;
+module.exports.obtener_prestamo = obtener_prestamo;
+module.exports.eliminar_prestamo = eliminar_prestamo;

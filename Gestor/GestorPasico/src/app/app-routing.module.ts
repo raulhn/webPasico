@@ -32,6 +32,7 @@ import { ListaInventariosComponent } from './componente/lista-inventarios/lista-
 import { ListaFormaPagosComponent } from './componente/lista-forma-pagos/lista-forma-pagos.component';
 import { FichaFormaPagoComponent } from './componente/ficha-forma-pago/ficha-forma-pago.component';
 import { EvaluacionProfesorComponent } from './componente/evaluacion-profesor/evaluacion-profesor.component';
+import { RegistrarPrestamoComponent } from './componente/registrar-prestamo/registrar-prestamo.component';
 
 
 const routes: Routes = [
@@ -158,6 +159,10 @@ const routes: Routes = [
   {
     path: 'ficha_forma_pago/:nid_forma_pago',
     component: FichaFormaPagoComponent
+  },
+  {
+    path: 'registrar_prestamo',
+    component: RegistrarPrestamoComponent
   }
 ];
 
