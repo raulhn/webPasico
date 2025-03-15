@@ -261,7 +261,7 @@ function obtener_alumnos_profesor(nid_profesor, nid_curso, nid_asignatura)
                       'and ma.nid_asignatura = a.nid ' +
                       'and m.nid_curso = ' + conexion.dbConn.escape(nid_curso) + ' ' +
                       'and pam.nid_profesor = ' + conexion.dbConn.escape(nid_profesor) + ' ' +
-                      'and a.nid = ' + conexion.dbConn.escape(nid_asignatura),
+                      'and (a.nid = ' + conexion.dbConn.escape(nid_asignatura)  + ' or ' + conexion.dbConn.escape(nid_asignatura) + ' = 0) ' ,
                 (error, results, fields) =>
                 {
                     if(error) {console.log(error); reject();}
@@ -290,7 +290,7 @@ function obtener_alumnos_profesor_alta(nid_profesor, nid_curso, nid_asignatura)
                     'and ma.nid_asignatura = a.nid ' +
                     'and m.nid_curso = ' + conexion.dbConn.escape(nid_curso) + ' ' +
                     'and pam.nid_profesor = ' + conexion.dbConn.escape(nid_profesor) + ' ' +
-                    'and a.nid = ' + conexion.dbConn.escape(nid_asignatura),
+                    'and (a.nid = ' + conexion.dbConn.escape(nid_asignatura)  + ' or ' + conexion.dbConn.escape(nid_asignatura) + ' = 0) ' ,
                 (error, results, fields) =>
                 {
                     if(error) {console.log(error); reject();}
@@ -319,7 +319,7 @@ function obtener_alumnos_profesor_baja(nid_profesor, nid_curso, nid_asignatura)
             'and ma.nid_asignatura = a.nid ' +
             'and m.nid_curso = ' + conexion.dbConn.escape(nid_curso) + ' ' +
             'and pam.nid_profesor = ' + conexion.dbConn.escape(nid_profesor) + ' ' +
-            'and a.nid = ' + conexion.dbConn.escape(nid_asignatura),
+            'and (a.nid = ' + conexion.dbConn.escape(nid_asignatura)  + ' or ' + conexion.dbConn.escape(nid_asignatura) + ' = 0) ' ,
         (error, results, fields) =>
         {
             if(error) {console.log(error); reject();}

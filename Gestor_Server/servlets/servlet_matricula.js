@@ -133,12 +133,45 @@ function obtener_alumnos_curso(req, res)
     )
 }
 
+
 function obtener_alumnos_profesor(req, res)
 {
     comun.comprobaciones(req, res,
         async () =>
         {
             let nid_profesor = req.params.nid_profesor;
+            let nid_curso = req.params.nid_curso;
+            let activo = req.params.activo;
+            let nid_asignatura = req.params.nid_asignatura;
+
+            let resultados;
+
+            if(activo == 3)
+            {
+                resultados = await matricula.obtener_alumnos_profesor(nid_profesor, nid_curso, nid_asignatura);
+            }
+            else if(activo == 2)
+            {
+                resultados = await matricula.obtener_alumnos_profesor_baja(nid_profesor, nid_curso, nid_asignatura);
+            }
+            else if(activo == 1)
+            {
+                resultados = await matricula.obtener_alumnos_profesor_alta(nid_profesor, nid_curso, nid_asignatura);
+            }
+
+            res.status(200).send({error:false, alumnos: resultados})
+        }
+    )
+}
+
+function obtener_alumnos_profesor_rol_profesor(req, res)
+{
+    comun.comprobaciones_profesor(req, res,
+        async () =>
+        {
+            let usuario = req.session.nombre;
+            let nid_profesor = await gestion_usuarios.obtener_nid_persona(usuario);
+
             let nid_curso = req.params.nid_curso;
             let activo = req.params.activo;
             let nid_asignatura = req.params.nid_asignatura;
@@ -367,3 +400,5 @@ module.exports.obtener_matriculas_activas_rol_profesor = obtener_matriculas_acti
 
 module.exports.actualizar_fecha_alta_matricula_asignatura = actualizar_fecha_alta_matricula_asignatura;
 module.exports.actualizar_fecha_baja_matricula_asignatura = actualizar_fecha_baja_matricula_asignatura;
+
+module.exports.obtener_alumnos_profesor_rol_profesor = obtener_alumnos_profesor_rol_profesor;

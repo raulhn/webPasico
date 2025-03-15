@@ -170,4 +170,10 @@ export class PersonasService {
     let API_URL = this.url + '/actualizar_forma_pago';
     return this.http.post(API_URL, {nid_forma_pago: nid_forma_pago, activo: activo}, {withCredentials: true})
   }
+
+  obtener_alumnos_rol_profesor(nid_asignatura: string, activo: string, nid_curso: string)
+  {
+    let API_URL = this.url + '/obtener_alumnos_rol_profesor/' + nid_curso + '/' + nid_asignatura + '/' + activo;
+    return this.http.get(API_URL, {withCredentials: true})
+  }
 }

@@ -60,6 +60,9 @@ import { ListaFormaPagosComponent } from './componente/lista-forma-pagos/lista-f
 import { FichaFormaPagoComponent } from './componente/ficha-forma-pago/ficha-forma-pago.component';
 import { EvaluacionProfesorComponent } from './componente/evaluacion-profesor/evaluacion-profesor.component';
 import { RegistrarPrestamoComponent } from './componente/registrar-prestamo/registrar-prestamo.component';
+import { FichaPrestamoComponent } from './componente/ficha-prestamo/ficha-prestamo.component';
+import { ListaPrestamosComponent } from './componente/lista-prestamos/lista-prestamos.component';
+import { ListaAlumnosComponent } from './componente/lista-alumnos/lista-alumnos.component';
 
 
 
@@ -112,7 +115,10 @@ import { RegistrarPrestamoComponent } from './componente/registrar-prestamo/regi
     ListaFormaPagosComponent,
     FichaFormaPagoComponent,
     EvaluacionProfesorComponent,
-    RegistrarPrestamoComponent
+    RegistrarPrestamoComponent,
+    FichaPrestamoComponent,
+    ListaPrestamosComponent,
+    ListaAlumnosComponent
   ],
   imports: [
     FormsModule,

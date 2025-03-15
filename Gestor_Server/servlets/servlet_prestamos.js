@@ -9,12 +9,10 @@ function registrar_prestamo(req, res)
             let nid_persona = req.body.nid_persona;
             let fecha_inicio = req.body.fecha_inicio;
             let nid_inventario = req.body.nid_inventario;
-            console.log('x')
 
-            await prestamos.registrar_prestamo(nid_persona, nid_inventario, fecha_inicio);
-            console.log('y')
+            let nid_prestamo = await prestamos.registrar_prestamo(nid_persona, nid_inventario, fecha_inicio);
 
-            res.status(200).send({error:false, message: 'Prestamo registrado'});
+            res.status(200).send({error:false, message: 'Prestamo registrado', nid_prestamo: nid_prestamo});
         }
     )
 }
@@ -26,9 +24,11 @@ function actualizar_prestamo(req, res)
         {
             let nid_prestamo = req.body.nid_prestamo;
             let fecha_inicio = req.body.fecha_inicio;
+            let nid_persona = req.body.nid_persona;
+            let nid_inventario = req.body.nid_inventario;
             let fecha_fin = req.body.fecha_fin;
 
-            await prestamos.actualizar_prestamo(nid_prestamo, fecha_inicio, fecha_fin);
+            await prestamos.actualizar_prestamo(nid_prestamo, nid_persona, nid_inventario, fecha_inicio, fecha_fin);
 
             res.status(200).send({error:false, message: 'Prestamo actualizado'})
         }
@@ -60,13 +60,13 @@ function obtener_prestamo(req, res)
     )
 }
 
-function eliminar_prestamo(req, res)
+function dar_baja_prestamo(req, res)
 {
     comun.comprobaciones(req, res,
         async() =>
         {
             let nid_prestamo = req.body.nid_prestamo;
-            await prestamos.eliminar_prestamo(nid_prestamo);
+            await prestamos.dar_baja_prestamo(nid_prestamo);
 
             res.status(200).send({error: false, message: 'Prestamo elminado'})
         }
@@ -77,5 +77,5 @@ module.exports.registrar_prestamo = registrar_prestamo;
 module.exports.actualizar_prestamo = actualizar_prestamo;
 module.exports.obtener_prestamos = obtener_prestamos;
 module.exports.obtener_prestamo = obtener_prestamo;
-module.exports.eliminar_prestamo = eliminar_prestamo;
+module.exports.dar_baja_prestamo = dar_baja_prestamo;
 

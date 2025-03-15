@@ -50,7 +50,6 @@ function registrar_evaluacion_profesor(req, res)
         async() =>
         {
 
-            console.log('x1')
             let notas = req.body.notas;
             let progresos = req.body.progresos;
             let matriculas = req.body.matriculas;
@@ -59,14 +58,12 @@ function registrar_evaluacion_profesor(req, res)
             let nid_trimestre = req.body.nid_trimestre;
             let nid_asignatura = req.body.nid_asignatura;
 
-            console.log('x2')
             let usuario = req.session.nombre;
             let nid_profesor = await gestion_usuarios.obtener_nid_persona(usuario)
 
             
             let nid_evaluacion = await evaluacion.registrar_evaluacion(nid_trimestre, nid_asignatura, nid_profesor);
 
-            console.log('x3')
             let notas_array = JSON.parse(notas);
             let progreso_array = JSON.parse(progresos);
             let matricula_array = JSON.parse(matriculas)

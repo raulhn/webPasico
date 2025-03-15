@@ -45,7 +45,7 @@ function registrar_prestamo(nid_persona, nid_inventario, fecha_inicio)
                                 (error, results, fields) =>
                                 {
                                     if(error) {console.log(error); conexion.dbConn.rollback(); reject(error)}
-                                    else {conexion.dbConn.commit(); resolve()}
+                                    else {conexion.dbConn.commit(); resolve(results.insertId)}
                                 }
 
                             )
@@ -68,7 +68,7 @@ function registrar_prestamo(nid_persona, nid_inventario, fecha_inicio)
 
 }
 
-function actualizar_prestamo(nid_prestamo, fecha_inicio, fecha_fin)
+function actualizar_prestamo(nid_prestamo, nid_persona, nid_inventario, fecha_inicio, fecha_fin)
 {
     return new Promise(
         (resolve, reject) =>
@@ -77,8 +77,10 @@ function actualizar_prestamo(nid_prestamo, fecha_inicio, fecha_fin)
             ()=>
             {
                 conexion.dbConn.query('update ' + constantes.ESQUEMA_BD + '.prestamos set fecha_inicio = ' +
-                    'str_to_date(nullif(' + conexion.dbConn.escape(fecha_inicio) + ', \'\') , \'%Y-%m-%d\'))) ' +
-                    ', fecha_fin = ' + 'str_to_date(nullif(' + conexion.dbConn.escape(fecha_fin) + ', \'\') , \'%Y-%m-%d\'))) ' +
+                    'str_to_date(nullif(' + conexion.dbConn.escape(fecha_inicio) + ', \'\') , \'%Y-%m-%d\') ' +
+                    ', fecha_fin = ' + 'str_to_date(nullif(' + conexion.dbConn.escape(fecha_fin) + ', \'\') , \'%Y-%m-%d\') ' +
+                    ', nid_persona = ' + conexion.dbConn.escape(nid_persona) +
+                    ', nid_inventario = ' + conexion.dbConn.escape(nid_inventario) +
                     ' where nid_prestamo = ' + conexion.dbConn.escape(nid_prestamo),
                   (error, results, fields) =>
                   {
@@ -107,10 +109,12 @@ function obtener_prestamos()
     return new Promise(
         (resolve, reject) =>
         {
-            conexion.dbConn.query('select concat(p.nombre, \' \', p.primer_apellido, \' \', p.segundo_apellido) etiqueta_persona, i.descripcion, pr.* ' +
+            conexion.dbConn.query('select concat(p.nombre, \' \', p.primer_apellido, \' \', p.segundo_apellido) etiqueta_persona, i.descripcion etiqueta_inventario, ' +
+                           ' pr.nid_inventario, pr.nid_persona, pr.nid_prestamo, date_format(pr.fecha_fin, \'%Y-%m-%d\') fecha_fin, date_format(pr.fecha_inicio, \'%Y-%m-%d\') fecha_inicio ' +
                             ' from ' + constantes.ESQUEMA_BD + '.persona p, ' + constantes.ESQUEMA_BD + '.inventario i, ' + constantes.ESQUEMA_BD + '.prestamos pr' +
                             ' where p.nid = pr.nid_persona  ' +
-                            '   and i.nid_inventario = pr.nid_inventario',
+                            '   and i.nid_inventario = pr.nid_inventario ' +
+                            '   and pr.activo = \'S\'',
                 (error, results, fields) =>
                 {
                     if(error)
@@ -131,11 +135,13 @@ function obtener_prestamo(nid_prestamo)
         (resolve, reject) =>
         {
 
-            conexion.dbConn.query('select concat(p.nombre, \' \', p.primer_apellido, \' \', p.segundo_apellido) etiqueta_persona, i.descripcion, pr.* ' +
+            conexion.dbConn.query('select concat(p.nombre, \' \', p.primer_apellido, \' \', p.segundo_apellido) etiqueta_persona, i.descripcion etiqueta_inventario, ' +
+                ' pr.nid_inventario, pr.nid_persona, pr.nid_prestamo, date_format(pr.fecha_fin, \'%Y-%m-%d\') fecha_fin, date_format(pr.fecha_inicio, \'%Y-%m-%d\') fecha_inicio ' +
                 ' from ' + constantes.ESQUEMA_BD + '.persona p, ' + constantes.ESQUEMA_BD + '.inventario i, ' + constantes.ESQUEMA_BD + '.prestamos pr ' +
                 ' where p.nid = pr.nid_persona  ' +
                 '   and i.nid_inventario = pr.nid_inventario ' +
-                '   and pr.nid_prestamo = ' + conexion.dbConn.escape(nid_prestamo),
+                '   and pr.nid_prestamo = ' + conexion.dbConn.escape(nid_prestamo) +
+                '   and pr.activo = \'S\'',
                 (error, results, fields) =>
                 {
                     if(error)
@@ -155,7 +161,7 @@ function obtener_prestamo(nid_prestamo)
     )
 }
 
-function eliminar_prestamo(nid_prestamo)
+function dar_baja_prestamo(nid_prestamo)
 {
     return new Promise(
         (resolve, reject) =>
@@ -163,7 +169,7 @@ function eliminar_prestamo(nid_prestamo)
             conexion.dbConn.beginTransaction(
                 () =>
                 {
-                    conexion.dbConn.query('delete from ' + constantes.ESQUEMA_BD + 'prestamos where nid_prestamo = ' + conexion.dbConn.escape(nid_prestamo),
+                    conexion.dbConn.query('update ' + constantes.ESQUEMA_BD + '.prestamos set activo = \'N\' where nid_prestamo = ' + conexion.dbConn.escape(nid_prestamo),
                         (error, results, fields) =>
                         {
                             if(error) {console.log(error); conexion.dbConn.rollback(); reject('Error al eliminar el prestamo')}
@@ -180,4 +186,4 @@ module.exports.registrar_prestamo = registrar_prestamo;
 module.exports.actualizar_prestamo = actualizar_prestamo;
 module.exports.obtener_prestamos = obtener_prestamos;
 module.exports.obtener_prestamo = obtener_prestamo;
-module.exports.eliminar_prestamo = eliminar_prestamo;
+module.exports.dar_baja_prestamo = dar_baja_prestamo;

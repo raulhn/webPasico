@@ -1,0 +1,37 @@
+<app-menu class=""></app-menu>
+<div class="container mt-3 card">
+    <div class="card-header">
+        <legend>Ficha de préstamo</legend>
+    </div>
+<div *ngIf="bCargado_Prestamo">
+    <div *ngIf="bCargadas_Personas">
+        <label>Préstamo a</label>
+        <ng-select [items]="lista_personas" [(ngModel)]="prestamo['nid_persona']" bindValue="nid" bindLabel="etiqueta" name="nid_persona">
+        </ng-select>
+    </div>
+
+    <div *ngIf="bCargado_Inventario">
+        <label>Instrumento</label>
+        <ng-select [items]="lista_inventario" bindValue="nid_inventario"  bindLabel="descripcion" 
+        [(ngModel)]="prestamo['nid_inventario']" name="nid_instrumento">
+        </ng-select>
+    </div>
+
+    <div class="row">
+        <div class="col-4">
+            <label>Fecha de préstamo</label>
+            <input type="date" [(ngModel)]="prestamo['fecha_inicio']" name="fecha_prestamo" class="form-control">
+        </div>
+        <div class="col-4">
+            <label>Fecha de devolución</label>
+            <input type="date" [(ngModel)]="prestamo['fecha_fin']" name="fecha_devolucion" class="form-control">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-4">
+            <button class="btn btn-primary mt-3" (click)="guardar()">Guardar</button>
+        </div>
+
+    </div>
+</div>

@@ -235,6 +235,7 @@ app.post('/registrar_prestamo', servlet_prestamo.registrar_prestamo);
 app.post('/actualizar_prestamo', servlet_prestamo.actualizar_prestamo);
 app.get('/obtener_prestamos', servlet_prestamo.obtener_prestamos);
 app.get('/obtener_prestamo/:nid_prestamo', servlet_prestamo.obtener_prestamo);
+app.post('/dar_baja_prestamo', servlet_prestamo.dar_baja_prestamo);
 
 ///////////////////////////////
 /**  ROL DE PROFESOR **/
@@ -257,6 +258,7 @@ app.get('/obtener_asignaturas_rol_profesor', servlet_asignatura.obtener_asignatu
 
 /** Matriculas **/
 app.get('/obtener_matriculas_activas_rol_profesor/:nid_asignatura', servlet_matricula.obtener_matriculas_activas_rol_profesor);
+app.get('/obtener_alumnos_rol_profesor/:nid_curso/:nid_asignatura/:activo', servlet_matricula.obtener_alumnos_profesor_rol_profesor);
 
 /** Evaluación **/
 app.get('/obtener_evaluacion_profesor/:nid_trimestre/:nid_asignatura', servlet_evaluacion.obtener_evaluacion_profesor)

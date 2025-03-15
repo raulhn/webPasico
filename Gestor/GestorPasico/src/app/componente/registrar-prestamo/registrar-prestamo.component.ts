@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { InventarioService } from 'src/app/servicios/inventario.service';
 import { PersonasService } from 'src/app/servicios/personas.service';
 import { PrestamosService } from 'src/app/servicios/prestamos.service';
@@ -22,7 +23,8 @@ export class RegistrarPrestamoComponent implements OnInit{
 
   fecha_inicio: string ="";
 
-  constructor(private personasService: PersonasService, private inventarioService: InventarioService, private prestamosServices: PrestamosService)
+  constructor(private personasService: PersonasService, private inventarioService: InventarioService, 
+              private prestamosServices: PrestamosService, private router : Router)
   {}
 
 
@@ -64,7 +66,15 @@ export class RegistrarPrestamoComponent implements OnInit{
             icon: 'success',
             title: 'Registro correcto',
             text: 'Se ha registrado correctamente'
-          }).then( () => {} )
+          }).then( () =>
+            {
+              this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
+                {
+                  this.router.navigate(['/ficha_prestamo/' + respuesta.nid_prestamo]);
+                }
+              )
+            }
+          )
         },
         error: (respuesta: any) =>
         {

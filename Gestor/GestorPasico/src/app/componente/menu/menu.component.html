@@ -41,6 +41,15 @@
               <li><a class="dropdown-item" href="/lista_inventario">Lista Inventario</a></li>
             </ul>
           </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarPersonas" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Préstamos
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="/registrar_prestamo">Crear Préstamo</a></li>
+              <li><a class="dropdown-item" href="/lista_prestamos">Lista Préstamos</a></li>
+            </ul> 
+          </li>
         </ul>
 
         <span *ngIf="logueado">
@@ -80,6 +89,9 @@
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/evaluacion_profesor">Evaluación</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/lista_alumnos">Alumnos</a>
           </li>
          
         </ul>

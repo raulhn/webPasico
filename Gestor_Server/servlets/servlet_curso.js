@@ -16,7 +16,7 @@ function registrar_curso(req, res)
 
 function obtener_cursos(req, res)
 {
-    comun.comprobaciones(req, res,
+    comun.comprobaciones_general(req, res,
         async () =>
         {
             resultado = await curso.obtener_cursos();
