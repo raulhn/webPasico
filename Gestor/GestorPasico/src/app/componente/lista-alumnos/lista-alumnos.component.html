@@ -1,7 +1,7 @@
 <app-menu class=""></app-menu>
 <div class="container">
 <label>Curso</label>
-    <div *ngIf="bCargadoCursos" class="row form-row">
+    <div *ngIf="bCargadoCursos && bObtenidoUltimoCurso" class="row form-row">
         <div class="col">
             <ng-select [items]="lista_cursos"
                     bindLabel="descripcion" 

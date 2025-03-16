@@ -1,7 +1,8 @@
 const evaluacion = require('../logica/evaluacion.js')
 const comun = require('./servlet_comun.js')
 const gestion_usuarios = require('../logica/usuario.js')
-
+const profesor = require('../logica/profesor.js')
+const matricula = require('../logica/matricula.js')
 
 
 function registrar_evaluacion(req, res)
@@ -168,6 +169,35 @@ function obtener_evaluacion_matricula_asginatura(req, res)
     )
 }
 
+function obtener_evaluacion_matricula_asignatura_profesor(req, res)
+{
+    comun.comprobaciones_profesor(req, res,
+        async() =>
+        {
+            let nid_matricula = req.params.nid_matricula;
+
+            let usuario = req.session.nombre;
+            let nid_profesor = await gestion_usuarios.obtener_nid_persona(usuario);
+
+            let v_matricula = await matricula.obtener_matricula(nid_matricula);
+            let nid_alumno = v_matricula.nid_persona;
+            let nid_curso = v_matricula.nid_curso;
+
+            let bEsProfesor = await profesor.esAlumnoProfesor(nid_alumno, nid_profesor, nid_curso);
+
+            if (bEsProfesor)
+            {
+                let resultado = await evaluacion.obtener_evaluacion_matricula_asginatura(nid_matricula);
+                res.status(200).send({error: false, evaluaciones: resultado})
+            }
+            else
+            {
+                res.status(403).send({error: true, message: 'El profesor no tiene acceso a las evaluaciones de este alumno'});
+            }
+        }
+    )
+}
+
 function generar_boletin(req, res)
 {
     comun.comprobaciones(req, res,
@@ -180,27 +210,40 @@ function generar_boletin(req, res)
 
             res.status(200).send({error: false, fichero: fichero});
 
-         /*   
-            docxConverter(path,'/home/pasico/Boletines/' + 'descarga' + '.pdf',
-                function(err,result){
-                if(err){
-                   console.log(err);
-                  }
-                else {
-                    res.download('/home/pasico/Boletines/' + 'descarga' + '.pdf', 'demo.docx', function(err){
-                        if (err) {
-                          // if the file download fails, we throw an error
-                          throw err;
-                        }
-                      });
-                }
-              });
-
-          */
         }
     )
 }
 
+function generar_boletin_profesor(req, res)
+{
+    comun.comprobaciones_profesor(req, res,
+        async() =>
+        {
+            let nid_matricula = req.params.nid_matricula;
+            let nid_trimestre = req.params.nid_trimestre;
+
+            let usuario = req.session.nombre;
+            let nid_profesor = await gestion_usuarios.obtener_nid_persona(usuario);
+
+            let v_matricula = await matricula.obtener_matricula(nid_matricula);
+            let nid_alumno = v_matricula.nid_persona;
+            let nid_curso = v_matricula.nid_curso;
+
+            let bEsProfesor = await profesor.esAlumnoProfesor(nid_alumno, nid_profesor, nid_curso);
+
+            if(bEsProfesor)
+            {
+                let fichero = await evaluacion.generar_boletin(nid_matricula, nid_trimestre);
+                res.status(200).send({error: false, fichero: fichero});
+            }
+            else
+            {
+                res.status(403).send({error: true, message: 'El profesor no tiene acceso a las evaluaciones de este alumno'});
+            }
+
+        }
+    )
+}
 
 
 module.exports.registrar_evaluacion = registrar_evaluacion;
@@ -210,5 +253,7 @@ module.exports.obtener_trimestres = obtener_trimestres;
 module.exports.obtener_evaluacion = obtener_evaluacion;
 
 module.exports.obtener_evaluacion_matricula_asignatura = obtener_evaluacion_matricula_asginatura;
+module.exports.obtener_evaluacion_matricula_asignatura_profesor = obtener_evaluacion_matricula_asignatura_profesor;
 
 module.exports.generar_boletin = generar_boletin;
+module.exports.generar_boletin_profesor = generar_boletin_profesor;

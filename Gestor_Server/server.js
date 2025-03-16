@@ -28,6 +28,7 @@ var servlet_ficha_asistencia = require('./servlets/servlet_ficha_asistencia.js')
 var servlet_inventario = require('./servlets/servlet_inventario.js');
 var servlet_pasarela_pago = require('./servlets/servlet_pasarela_pago.js');
 var servlet_prestamo = require('./servlets/servlet_prestamos.js')
+var servlet_matricula_asignatura = require('./servlets/servlet_matricula_asignatura.js');
 
 var fs = require('fs');
 
@@ -259,11 +260,13 @@ app.get('/obtener_asignaturas_rol_profesor', servlet_asignatura.obtener_asignatu
 /** Matriculas **/
 app.get('/obtener_matriculas_activas_rol_profesor/:nid_asignatura', servlet_matricula.obtener_matriculas_activas_rol_profesor);
 app.get('/obtener_alumnos_rol_profesor/:nid_curso/:nid_asignatura/:activo', servlet_matricula.obtener_alumnos_profesor_rol_profesor);
+app.get('/obtener_asignaturas_matriculas_rol_profesor/:nid_matricula', servlet_matricula_asignatura.obtener_matriculas_asignaturas_alumno);
 
 /** Evaluación **/
 app.get('/obtener_evaluacion_profesor/:nid_trimestre/:nid_asignatura', servlet_evaluacion.obtener_evaluacion_profesor)
 app.post('/registrar_evaluacion_profesor', servlet_evaluacion.registrar_evaluacion_profesor);
-
+app.get('/obtener_evaluacion_matricula_asignatura_profesor/:nid_matricula', servlet_evaluacion.obtener_evaluacion_matricula_asignatura_profesor);
+app.get('/generar_boletin_profesor/:nid_matricula/:nid_trimestre', servlet_evaluacion.generar_boletin_profesor);
 
 https.createServer({
     key: fs.readFileSync('apache.key'),

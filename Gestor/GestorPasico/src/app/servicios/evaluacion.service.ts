@@ -56,6 +56,15 @@ export class EvaluacionService {
     return this.http.get(API_URL, {withCredentials: true})
   }
 
-  
+  obtener_evaluacion_matricula_asignatura_profesor(nid_matricula: string)
+  {
+    let API_URL = this.url + '/obtener_evaluacion_matricula_asignatura_profesor/' + nid_matricula;
+    return this.http.get(API_URL, {withCredentials: true})
+  }
 
+  generar_boletin_profesor(nid_matricula: string, nid_trimestre: string)
+  {
+    let API_URL = this.url + '/generar_boletin_profesor/' + nid_matricula + '/' + nid_trimestre;
+    return this.http.get(API_URL, {withCredentials: true})
+  }
 }

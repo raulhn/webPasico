@@ -36,6 +36,7 @@ import { RegistrarPrestamoComponent } from './componente/registrar-prestamo/regi
 import { ListaPrestamosComponent } from './componente/lista-prestamos/lista-prestamos.component';
 import { FichaPrestamoComponent } from './componente/ficha-prestamo/ficha-prestamo.component';
 import { ListaAlumnosComponent } from './componente/lista-alumnos/lista-alumnos.component';
+import { FichaMatriculaProfesorComponent } from './componente/ficha-matricula-profesor/ficha-matricula-profesor.component';
 
 
 const routes: Routes = [
@@ -178,6 +179,10 @@ const routes: Routes = [
   {
     path: 'lista_alumnos',
     component: ListaAlumnosComponent
+  },
+  {
+    path: 'ficha_matricula_profesor/:nid_matricula',
+    component: FichaMatriculaProfesorComponent
   }
 ];
 

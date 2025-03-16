@@ -249,7 +249,7 @@ function obtener_alumnos_profesor(nid_profesor, nid_curso, nid_asignatura)
     return new Promise(
         (resolve, reject) =>
         {
-            conexion.dbConn.query('select distinct p.*, a.nid nid_asignatura, a.descripcion descripcion_asignatura ' +
+            conexion.dbConn.query('select distinct p.*, a.nid nid_asignatura, a.descripcion descripcion_asignatura, m.nid nid_matricula ' +
                     'from ' + constantes.ESQUEMA_BD + '.matricula_asignatura ma, '  + 
                               constantes.ESQUEMA_BD + '.matricula m, ' +
                               constantes.ESQUEMA_BD + '.persona p, ' +
@@ -277,7 +277,7 @@ function obtener_alumnos_profesor_alta(nid_profesor, nid_curso, nid_asignatura)
     return new Promise(
         (resolve, reject) =>
         {
-            conexion.dbConn.query('select distinct p.*, a.nid nid_asignatura, a.descripcion descripcion_asignatura ' +
+            conexion.dbConn.query('select distinct p.*, a.nid nid_asignatura, a.descripcion descripcion_asignatura, m.nid nid_matricula ' +
                     'from ' + constantes.ESQUEMA_BD + '.matricula_asignatura ma, '  + 
                               constantes.ESQUEMA_BD + '.matricula m, ' +
                               constantes.ESQUEMA_BD + '.persona p, ' +
@@ -306,7 +306,7 @@ function obtener_alumnos_profesor_baja(nid_profesor, nid_curso, nid_asignatura)
     return new Promise(
         (resolve, reject) =>
         {
-            conexion.dbConn.query('select distinct p.*, a.nid nid_asignatura, a.descripcion descripcion_asignatura ' +
+            conexion.dbConn.query('select distinct p.*, a.nid nid_asignatura, a.descripcion descripcion_asignatura, m.nid_matricula ' +
             'from ' + constantes.ESQUEMA_BD + '.matricula_asignatura ma, '  + 
                       constantes.ESQUEMA_BD + '.matricula m, ' +
                       constantes.ESQUEMA_BD + '.persona p, ' +
@@ -390,8 +390,8 @@ function obtener_asignaturas_matricula(nid_matricula)
                     conexion.dbConn.escape(nid_matricula) + ' and ma.nid = pam.nid_matricula_asignatura and pam.nid_profesor = p.nid' ,
                 (error, results, fields) =>
                 {
-                    if(error) {console.log(error); reject();}
-                    else {resolve(results)}
+                    if(error) {console.log('matricula.js - obtenerr_asignaturas_matricula ->' +error); reject('Se ha producido un error al recuperar las matriculas');}
+                    else { resolve(results)}
                 }
             )
         }
@@ -933,6 +933,8 @@ function actualizar_fecha_baja_matricula_asignatura(nid_matricula_asignatura, fe
         }
     )
 }
+
+
 
 
 module.exports.existe_matricula = existe_matricula;

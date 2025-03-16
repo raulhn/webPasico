@@ -63,6 +63,7 @@ import { RegistrarPrestamoComponent } from './componente/registrar-prestamo/regi
 import { FichaPrestamoComponent } from './componente/ficha-prestamo/ficha-prestamo.component';
 import { ListaPrestamosComponent } from './componente/lista-prestamos/lista-prestamos.component';
 import { ListaAlumnosComponent } from './componente/lista-alumnos/lista-alumnos.component';
+import { FichaMatriculaProfesorComponent } from './componente/ficha-matricula-profesor/ficha-matricula-profesor.component';
 
 
 
@@ -118,7 +119,8 @@ import { ListaAlumnosComponent } from './componente/lista-alumnos/lista-alumnos.
     RegistrarPrestamoComponent,
     FichaPrestamoComponent,
     ListaPrestamosComponent,
-    ListaAlumnosComponent
+    ListaAlumnosComponent,
+    FichaMatriculaProfesorComponent
   ],
   imports: [
     FormsModule,

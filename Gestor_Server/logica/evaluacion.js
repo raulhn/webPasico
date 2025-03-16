@@ -350,132 +350,141 @@ function generar_boletin(nid_matricula, nid_trimestre)
     return new Promise(
         async (resolve, reject) =>
         {
-            // Se recupera la plantilla //
-            let ruta_plantilla = await parametros.obtener_valor('PLANTILLA_NOTAS');
-            let texto = await ficheros.readFile(ruta_plantilla['valor']);
-
-            // Se obtiene la evaluación de tutor //
-            let evaluacion_tutor = null;
-            evaluacion_tutor = await obtener_evaluacion_tutor(nid_matricula, nid_trimestre);
-            
-
-            let profesor = "";
-            let curso = "";
-            let trimestre = "";
-
-            if (evaluacion_tutor !== null)
+            try
             {
-                profesor = evaluacion_tutor['profesor'];
-                curso = evaluacion_tutor['curso'];
-                trimestre = evaluacion_tutor['trimestre'];
-                alumno = evaluacion_tutor['alumno'];
+                // Se recupera la plantilla //
+                let ruta_plantilla = await parametros.obtener_valor('PLANTILLA_NOTAS');
+                let texto = await ficheros.readFile(ruta_plantilla['valor']);
+
+                // Se obtiene la evaluación de tutor //
+                let evaluacion_tutor = null;
+                evaluacion_tutor = await obtener_evaluacion_tutor(nid_matricula, nid_trimestre);
                 
 
-                texto = texto.toString().replace('||NOMBRE_PROFESOR||', profesor);
-                texto = texto.toString().replace('||EVALUACION_REALIZADA||', trimestre);
-                texto = texto.toString().replace('||NOMBRE_ALUMNO||', alumno);
-                texto = texto.toString().replace('||CURSO_BOLETIN||', curso);
+                let profesor = "";
+                let curso = "";
+                let trimestre = "";
 
-
-                let array_evaluacion_lenguaje = await obtener_evaluacion_matricula_asginatura_tipo(nid_matricula, constantes.ASIGNATURA_LENGUAJE, nid_trimestre);
-                
-                let asignatura_lenguaje = "";
-
-                let nota_lenguaje = "";
-                let progreso_lenguaje = "";
-                let comentario_lenguaje = "";
-
-                if(array_evaluacion_lenguaje.length > 0)
+                if (evaluacion_tutor !== null)
                 {
-                    let evaluacion_lenguaje = array_evaluacion_lenguaje[0];
-
-                    asignatura_lenguaje = evaluacion_lenguaje['asignatura'];
-
-                    nota_lenguaje = '(' + evaluacion_lenguaje['nota'] + ')';
-                    progreso_lenguaje = evaluacion_lenguaje['progreso'];
-                    comentario_lenguaje = evaluacion_lenguaje['comentario'];
-                }
-
-                texto = texto.toString().replace('||NOTA_LENGUAJE||',  nota_lenguaje );
-                texto = texto.toString().replace('||ASIGNATURA_LENGUAJE||', asignatura_lenguaje);
-                texto = texto.toString().replace('||PROGRESO_LENGUAJE||', progreso_lenguaje);
-                texto = texto.toString().replace('||COMENTARIO_LENGUAJE||', comentario_lenguaje);
-
-                let texto_instrumento = "";
-
-                let array_evaluacion_instrumento_banda =  await obtener_evaluacion_matricula_asginatura_tipo(nid_matricula, constantes.ASIGNATURA_INSTRUMENTO_BANDA, nid_trimestre);
-
-                for (let i = 0; i < array_evaluacion_instrumento_banda.length; i++)
-                {
-                    let evaluacion_instrumento = array_evaluacion_instrumento_banda[i];
-                    let texto_instrumento_parametro =await parametros.obtener_valor('PLANTILLA_NOTAS_INSTRUMENTO');
-                    let texto_instrumento_aux = texto_instrumento_parametro['valor'];
-
-                    if(evaluacion_instrumento['nota'] == 0)
-                    {
-                        texto_instrumento_aux = texto_instrumento_aux.toString().replace('||NOTA_INSTRUMENTO||', '');
-                    }
-
-                    texto_instrumento_aux = texto_instrumento_aux.toString().replace('||NOTA_INSTRUMENTO||', '(' + evaluacion_instrumento['nota'] + ')');
-                    texto_instrumento_aux = texto_instrumento_aux.toString().replace('||ASIGNATURA_INSTRUMENTO||', evaluacion_instrumento['asignatura']);
-                    texto_instrumento_aux = texto_instrumento_aux.toString().replace('||PROGRESO_INSTRUMENTO||', evaluacion_instrumento['progreso']);
-                    texto_instrumento_aux = texto_instrumento_aux.toString().replace('||COMENTARIO_INSTRUMENTO||', evaluacion_instrumento['comentario']);
-
-                    texto_instrumento = texto_instrumento + texto_instrumento_aux;
-                }
-
-                let array_evaluacion_instrumento_no_banda =  await obtener_evaluacion_matricula_asginatura_tipo(nid_matricula, constantes.ASIGNATURA_INSTRUMENTO_NO_BANDA, nid_trimestre);
-
-                for (let i = 0; i < array_evaluacion_instrumento_no_banda.length; i++)
-                {
-                    let evaluacion_instrumento = array_evaluacion_instrumento_no_banda[i];
-                    let texto_instrumento_parametro =await parametros.obtener_valor('PLANTILLA_NOTAS_INSTRUMENTO');
-                    let texto_instrumento_aux = texto_instrumento_parametro['valor'];
-
+                    profesor = evaluacion_tutor['profesor'];
+                    curso = evaluacion_tutor['curso'];
+                    trimestre = evaluacion_tutor['trimestre'];
+                    alumno = evaluacion_tutor['alumno'];
                     
-                    if(evaluacion_instrumento['nota'] == 0)
-                    {
-                        texto_instrumento_aux = texto_instrumento_aux.toString().replace('||NOTA_INSTRUMENTO||', '');
-                    }
 
-                    texto_instrumento_aux = texto_instrumento_aux.toString().replace('||NOTA_INSTRUMENTO||','(' + evaluacion_instrumento['nota'] + ')');
-                    texto_instrumento_aux = texto_instrumento_aux.toString().replace('||ASIGNATURA_INSTRUMENTO||', evaluacion_instrumento['asignatura']);
-                    texto_instrumento_aux = texto_instrumento_aux.toString().replace('||PROGRESO_INSTRUMENTO||', evaluacion_instrumento['progreso']);
-                    texto_instrumento_aux = texto_instrumento_aux.toString().replace('||COMENTARIO_INSTRUMENTO||', evaluacion_instrumento['comentario']);
+                    texto = texto.toString().replace('||NOMBRE_PROFESOR||', profesor);
+                    texto = texto.toString().replace('||EVALUACION_REALIZADA||', trimestre);
+                    texto = texto.toString().replace('||NOMBRE_ALUMNO||', alumno);
+                    texto = texto.toString().replace('||CURSO_BOLETIN||', curso);
 
-                    texto_instrumento = texto_instrumento + texto_instrumento_aux;
-                }
 
-                let array_evaluacion_banda =  await obtener_evaluacion_matricula_asginatura_tipo(nid_matricula, constantes.ASIGNATURA_BANDA, nid_trimestre);
-
-                for (let i = 0; i < array_evaluacion_banda.length; i++)
-                {
-                    let evaluacion_instrumento = array_evaluacion_banda[i];
-                    let texto_instrumento_parametro =await parametros.obtener_valor('PLANTILLA_NOTAS_INSTRUMENTO');
-                    let texto_instrumento_aux = texto_instrumento_parametro['valor'];
-
+                    let array_evaluacion_lenguaje = await obtener_evaluacion_matricula_asginatura_tipo(nid_matricula, constantes.ASIGNATURA_LENGUAJE, nid_trimestre);
                     
-                    if(evaluacion_instrumento['nota'] == 0)
+                    let asignatura_lenguaje = "";
+
+                    let nota_lenguaje = "";
+                    let progreso_lenguaje = "";
+                    let comentario_lenguaje = "";
+
+                    if(array_evaluacion_lenguaje.length > 0)
                     {
-                        texto_instrumento_aux = texto_instrumento_aux.toString().replace('||NOTA_INSTRUMENTO||', '');
+                        let evaluacion_lenguaje = array_evaluacion_lenguaje[0];
+
+                        asignatura_lenguaje = evaluacion_lenguaje['asignatura'];
+
+                        nota_lenguaje = '(' + evaluacion_lenguaje['nota'] + ')';
+                        progreso_lenguaje = evaluacion_lenguaje['progreso'];
+                        comentario_lenguaje = evaluacion_lenguaje['comentario'];
                     }
 
-                    texto_instrumento_aux = texto_instrumento_aux.toString().replace('||NOTA_INSTRUMENTO||', '(' + evaluacion_instrumento['nota'] + ')');
-                    texto_instrumento_aux = texto_instrumento_aux.toString().replace('||ASIGNATURA_INSTRUMENTO||', evaluacion_instrumento['asignatura']);
-                    texto_instrumento_aux = texto_instrumento_aux.toString().replace('||PROGRESO_INSTRUMENTO||', evaluacion_instrumento['progreso']);
-                    texto_instrumento_aux = texto_instrumento_aux.toString().replace('||COMENTARIO_INSTRUMENTO||', evaluacion_instrumento['comentario']);
+                    texto = texto.toString().replace('||NOTA_LENGUAJE||',  nota_lenguaje );
+                    texto = texto.toString().replace('||ASIGNATURA_LENGUAJE||', asignatura_lenguaje);
+                    texto = texto.toString().replace('||PROGRESO_LENGUAJE||', progreso_lenguaje);
+                    texto = texto.toString().replace('||COMENTARIO_LENGUAJE||', comentario_lenguaje);
 
-                    texto_instrumento = texto_instrumento + texto_instrumento_aux;
+                    let texto_instrumento = "";
+
+                    let array_evaluacion_instrumento_banda =  await obtener_evaluacion_matricula_asginatura_tipo(nid_matricula, constantes.ASIGNATURA_INSTRUMENTO_BANDA, nid_trimestre);
+
+                    for (let i = 0; i < array_evaluacion_instrumento_banda.length; i++)
+                    {
+                        let evaluacion_instrumento = array_evaluacion_instrumento_banda[i];
+                        let texto_instrumento_parametro =await parametros.obtener_valor('PLANTILLA_NOTAS_INSTRUMENTO');
+                        let texto_instrumento_aux = texto_instrumento_parametro['valor'];
+
+                        if(evaluacion_instrumento['nota'] == 0)
+                        {
+                            texto_instrumento_aux = texto_instrumento_aux.toString().replace('||NOTA_INSTRUMENTO||', '');
+                        }
+
+                        texto_instrumento_aux = texto_instrumento_aux.toString().replace('||NOTA_INSTRUMENTO||', '(' + evaluacion_instrumento['nota'] + ')');
+                        texto_instrumento_aux = texto_instrumento_aux.toString().replace('||ASIGNATURA_INSTRUMENTO||', evaluacion_instrumento['asignatura']);
+                        texto_instrumento_aux = texto_instrumento_aux.toString().replace('||PROGRESO_INSTRUMENTO||', evaluacion_instrumento['progreso']);
+                        texto_instrumento_aux = texto_instrumento_aux.toString().replace('||COMENTARIO_INSTRUMENTO||', evaluacion_instrumento['comentario']);
+
+                        texto_instrumento = texto_instrumento + texto_instrumento_aux;
+                    }
+
+                    let array_evaluacion_instrumento_no_banda =  await obtener_evaluacion_matricula_asginatura_tipo(nid_matricula, constantes.ASIGNATURA_INSTRUMENTO_NO_BANDA, nid_trimestre);
+
+                    for (let i = 0; i < array_evaluacion_instrumento_no_banda.length; i++)
+                    {
+                        let evaluacion_instrumento = array_evaluacion_instrumento_no_banda[i];
+                        let texto_instrumento_parametro =await parametros.obtener_valor('PLANTILLA_NOTAS_INSTRUMENTO');
+                        let texto_instrumento_aux = texto_instrumento_parametro['valor'];
+
+                        
+                        if(evaluacion_instrumento['nota'] == 0)
+                        {
+                            texto_instrumento_aux = texto_instrumento_aux.toString().replace('||NOTA_INSTRUMENTO||', '');
+                        }
+
+                        texto_instrumento_aux = texto_instrumento_aux.toString().replace('||NOTA_INSTRUMENTO||','(' + evaluacion_instrumento['nota'] + ')');
+                        texto_instrumento_aux = texto_instrumento_aux.toString().replace('||ASIGNATURA_INSTRUMENTO||', evaluacion_instrumento['asignatura']);
+                        texto_instrumento_aux = texto_instrumento_aux.toString().replace('||PROGRESO_INSTRUMENTO||', evaluacion_instrumento['progreso']);
+                        texto_instrumento_aux = texto_instrumento_aux.toString().replace('||COMENTARIO_INSTRUMENTO||', evaluacion_instrumento['comentario']);
+
+                        texto_instrumento = texto_instrumento + texto_instrumento_aux;
+                    }
+
+                    let array_evaluacion_banda =  await obtener_evaluacion_matricula_asginatura_tipo(nid_matricula, constantes.ASIGNATURA_BANDA, nid_trimestre);
+
+                    for (let i = 0; i < array_evaluacion_banda.length; i++)
+                    {
+                        let evaluacion_instrumento = array_evaluacion_banda[i];
+                        let texto_instrumento_parametro =await parametros.obtener_valor('PLANTILLA_NOTAS_INSTRUMENTO');
+                        let texto_instrumento_aux = texto_instrumento_parametro['valor'];
+
+                        
+                        if(evaluacion_instrumento['nota'] == 0)
+                        {
+                            texto_instrumento_aux = texto_instrumento_aux.toString().replace('||NOTA_INSTRUMENTO||', '');
+                        }
+
+                        texto_instrumento_aux = texto_instrumento_aux.toString().replace('||NOTA_INSTRUMENTO||', '(' + evaluacion_instrumento['nota'] + ')');
+                        texto_instrumento_aux = texto_instrumento_aux.toString().replace('||ASIGNATURA_INSTRUMENTO||', evaluacion_instrumento['asignatura']);
+                        texto_instrumento_aux = texto_instrumento_aux.toString().replace('||PROGRESO_INSTRUMENTO||', evaluacion_instrumento['progreso']);
+                        texto_instrumento_aux = texto_instrumento_aux.toString().replace('||COMENTARIO_INSTRUMENTO||', evaluacion_instrumento['comentario']);
+
+                        texto_instrumento = texto_instrumento + texto_instrumento_aux;
+                    }
+
+                    texto = texto.toString().replace('||PLANTILLA_INSTRUMENTO||', texto_instrumento);
+                    resolve(texto);
                 }
-
-                texto = texto.toString().replace('||PLANTILLA_INSTRUMENTO||', texto_instrumento);
-                resolve(texto);
+                else
+                {
+                    reject('No se han encontrado evaluaciones')
+                }
             }
-            else
+            catch (error)
             {
-                reject('No se han encontrado evaluaciones')
+                console.log('evaluacion.js - genrar_boletin ->' + error);
+                reject('Error al generar el boletín');
             }
-       }
+        }
+      
     )
 }
 

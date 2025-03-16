@@ -1,0 +1,40 @@
+<app-menu></app-menu>
+
+<div class="container">
+    <div *ngIf="bCargadasAsignaturas">
+        <table datatable [dtOptions]="dtOptionsAsignaturas" id="tabla_asignaturas" class="row-border hover">
+        </table>
+    </div>
+
+
+    <div clas="card">
+        <div class="card-header">
+            <b>Boletin</b>
+        </div>
+        <button class="form-control" class="btn btn-primary mb-2 mt-2 tp-3" (click)='generar_boletin()'> Generar Boletín</button>
+    </div>
+
+    <div *ngIf="bCargadasEvaluciones"  class="card mt-4">
+    <div class="card-header">
+        <b>Evaluaciones</b>
+    </div>
+    <table datatable [dtOptions]="dtOptions" id="tabla_evaluaciones" class="row-border hover">
+    </table>
+
+    <div class="mb-1 mt-1" style="display: none;">
+
+        <div #instancia_sustituir>
+            <div style="min-height: 300px;" >
+                <div  class="m-2" *ngIf="bCargadosTrimestres">
+                    <label for="select-trimestres"> <b> Trimestre </b></label>
+                    <ng-select id="select-trimestres" [items]="lista_trimestres"
+                                bindLabel="descripcion"
+                                bindValue="nid_trimestre"
+                                [(ngModel)]="trimestre_seleccionado"
+                                [compareWith]="compareTrimestre">
+                    </ng-select>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -41,7 +41,7 @@ function eliminar_curso(req, res)
 
 function obtener_nid_ultimo_curso(req, res)
 {
-    comun.comprobaciones(req, res,
+    comun.comprobaciones_general(req, res,
         async () =>
         {
             let nid_ultimo_curso = await curso.obtener_ultimo_curso();

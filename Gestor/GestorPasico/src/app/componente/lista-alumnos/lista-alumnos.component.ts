@@ -12,7 +12,7 @@ import { DataTablesOptions, URL } from 'src/app/logica/constantes';
   styleUrls: ['./lista-alumnos.component.css']
 })
 export class ListaAlumnosComponent implements OnInit {
-  enlaceFicha: string = URL.URL_FRONT_END + "/ficha_persona/";
+  enlaceFicha: string = URL.URL_FRONT_END + "/ficha_matricula_profesor/";
 
   lista_cursos: any;
   lista_personas: any;
@@ -21,6 +21,7 @@ export class ListaAlumnosComponent implements OnInit {
   bCargadoCursos: boolean = false;
   bCargadoPersonas: boolean = false;
   bCargadasAsignaturas: boolean = false;
+  bObtenidoUltimoCurso: boolean = false;
 
   curso_seleccionado: string = "";
   asignatura_seleccionada: string = "0";
@@ -30,7 +31,8 @@ export class ListaAlumnosComponent implements OnInit {
 
   persona_seleccionada: any;
 
-  constructor(private cursoService: CursosService, private personasService: PersonasService, private asignaturasService: AsignaturasService) { }
+  constructor(private cursoService: CursosService, private personasService: PersonasService, 
+              private asignaturasService: AsignaturasService, private cursosService: CursosService) { }
 
   peticion_obtener_cursos =
   {
@@ -51,6 +53,7 @@ export class ListaAlumnosComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.cursosService.obtener_nid_ultimo_curso().subscribe(this.peticion_obtener_ultimo_curso);
     this.cursoService.obtener_cursos().subscribe(this.peticion_obtener_cursos);
     this.asignaturasService.obtener_asignaturas_rol_profesor().subscribe(this.peticion_obtener_asignaturas);
   }
@@ -92,6 +95,18 @@ export class ListaAlumnosComponent implements OnInit {
     }
   }
 
+
+  peticion_obtener_ultimo_curso =
+  {
+    next: (respuesta: any) =>
+    {
+      this.curso_seleccionado = respuesta['nid_ultimo_curso']
+      this.bObtenidoUltimoCurso = true;
+      this.cambia_seleccion_curso();
+    }
+  }
+
+
   cambia_seleccion_curso()
   {
     this.personasService.obtener_alumnos_rol_profesor(this.asignatura_seleccionada, this.alumno_activo, this.curso_seleccionado).subscribe(this.peticion_obtener_personas);
@@ -99,7 +114,7 @@ export class ListaAlumnosComponent implements OnInit {
 
   obtenerUrlFicha()
   {
-    return this.enlaceFicha + this.persona_seleccionada.nid;
+    return this.enlaceFicha + this.persona_seleccionada.nid_matricula;
   }
 
 }
