@@ -39,32 +39,53 @@
             <input type="text" class="form-control" [(ngModel)]="remesa['precio']">
             <label>Concepto</label>
             <input type="text" class="form-control" [(ngModel)]="remesa['concepto']">
+
+            <label>Estado</label>
+            <select class="form-control" [(ngModel)]="remesa['estado']">
+                <option value="PENDIENTE">
+                    PENDIENTE
+                </option>
+                <option value="ERROR">
+                    ERROR
+                </option>
+                <option value="PAGADO">
+                    PAGADO
+                </option>
+            </select>
         </div>
         <div class="card-header">
            <legend> Lineas </legend>
         </div>
         <div class="card" *ngIf="bCargadas_lineas">
-            <div class="card" *ngFor="let linea of lineas_remesa; let i = index">
-                <label>Precio</label>
-                <input type="text" class="form-control" [(ngModel)]="lineas_remesa[i]['precio']">
-                <label>Concepto</label>
-                <input type="text" class="form-control" [(ngModel)]="lineas_remesa[i]['concepto']">
+            <div class="card m-2" *ngFor="let linea of lineas_remesa; let i = index">
+                <div class="form-control">
+                    <label>Precio</label>
+                    <input type="text" class="form-control" [(ngModel)]="lineas_remesa[i]['precio']">
+                    <label>Concepto</label>
+                    <input type="text" class="form-control" [(ngModel)]="lineas_remesa[i]['concepto']">
 
-                <button class="btn btn-danger mt-3" (click)="eliminar_linea(lineas_remesa[i]['nid_linea_remesa'])">Eliminar</button>
+                    <button class="btn btn-danger mt-3" (click)="eliminar_linea(lineas_remesa[i]['nid_linea_remesa'])">Eliminar</button>
+                </div>
             </div>
-            <button class="btn btn-primary mt-3" (click)="nueva_linea()">Nueva linea</button>
+            <div class="m-2">
+                <button class="btn btn-primary mt-3" (click)="nueva_linea()">Nueva linea</button>
+            </div>
         </div>
         <div class="card-header">
            <legend> Descuentos </legend>
         </div>
         <div class="card" *ngIf="bCargados_descuentos">
-            <div class="card" *ngFor="let descuento of descuentos_remesa; let i = index">
-                <label>Concepto</label>
-                <input type="text" class="form-control" [(ngModel)]="descuentos_remesa[i]['concepto']">
+            <div class="card m-2" *ngFor="let descuento of descuentos_remesa; let i = index">
+                <div class="form-control">
+                    <label>Concepto</label>
+                    <input type="text" class="form-control" [(ngModel)]="descuentos_remesa[i]['concepto']">
 
-                <button class="btn btn-danger mt-3" (click)="eliminar_descuento(descuentos_remesa[i]['nid_remesa_descuento'])">Eliminar</button>
+                    <button class="btn btn-danger mt-3" (click)="eliminar_descuento(descuentos_remesa[i]['nid_remesa_descuento'])">Eliminar</button>
+                </div>
             </div>
-            <button class="btn btn-primary mt-3" (click)="nuevo_descuento()">Nuevo descuento</button>
+            <div class="m-2">
+                <button class="btn btn-primary mt-3" (click)="nuevo_descuento()">Nuevo descuento</button>
+            </div>
         </div>
         <button class="btn btn-primary mt-3" (click)="guardar()">Guardar</button>
     </div>

@@ -1297,13 +1297,13 @@ function actualizar_id_cobro_pasarela_pago(nid_remesa, nid_cobro_pasarela)
 	)
 }
 
-function actualizar_remesa(nid_remesa, precio, concepto)
+function actualizar_remesa(nid_remesa, precio, concepto, estado)
 {
 	return new Promise(
 		(resolve, reject) =>
 		{
 			conexion.dbConn.query('update ' + constantes.ESQUEMA_BD + '.remesa set precio = ' + conexion.dbConn.escape(precio) +
-				', concepto = ' + conexion.dbConn.escape(concepto) +
+				', concepto = ' + conexion.dbConn.escape(concepto) + ', estado = ' + conexion.dbConn.escape(estado) +
 				' where nid_remesa = ' + conexion.dbConn.escape(nid_remesa),
 				(error, results, fields) =>
 				{
@@ -1361,7 +1361,7 @@ function actualizacion_remesa(v_remesa, v_linea_remesa, v_descuento_remesa)
 				conexion.dbConn.beginTransaction(
 					async()	=>
 					{
-						await actualizar_remesa(v_remesa.nid_remesa,v_remesa.precio, v_remesa.concepto);
+						await actualizar_remesa(v_remesa.nid_remesa,v_remesa.precio, v_remesa.concepto, v_remesa.estado);
 
 						for (let i=0; i < v_linea_remesa.length; i++)
 						{

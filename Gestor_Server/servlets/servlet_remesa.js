@@ -258,11 +258,6 @@ function actualizar_remesa(req, res)
             let v_linea_remesa = JSON.parse(req.body.linea_remesa);
             let v_descuentos_remesas = JSON.parse(req.body.descuento_remesa);
 
-            console.log('x')
-            console.log(v_remesa);
-            console.log(v_linea_remesa);
-            console.log(v_descuentos_remesas);
-            console.log('y')
 
             await remesa.actualizacion_remesa(v_remesa, v_linea_remesa, v_descuentos_remesas);
             res.status(200).send({error:false, message: 'Recibo actualizado'})
