@@ -98,4 +98,34 @@ export class RemesaService {
     let API_URL = this.url + '/cobrar_lote';
     return this.http.post(API_URL, {nid_lote: nid_lote}, {withCredentials: true})
   }
+
+  actualizar_remesa(remesa: any, linea_remesa: any, descuento_remesa: any)
+  {
+    let API_URL = this.url + '/actualizar_remesa';
+    return this.http.post(API_URL, {remesa: remesa, linea_remesa: linea_remesa, descuento_remesa: descuento_remesa}, {withCredentials: true})
+  }
+
+  nueva_linea_remesa(nid_remesa: string, concepto: string, precio: string)
+  {
+    let API_URL = this.url + '/nueva_linea_remesa';
+    return this.http.post(API_URL, {nid_remesa: nid_remesa, concepto: concepto, precio: precio}, {withCredentials: true})
+  }
+
+  nuevo_descuento_remesa(nid_remesa: string, concepto: string)
+  {
+    let API_URL = this.url + '/nuevo_descuento_remesa';
+    return this.http.post(API_URL, {nid_remesa: nid_remesa, concepto: concepto}, {withCredentials: true})
+  }
+
+  eliminar_linea_remesa(nid_linea_remesa: string)
+  {
+    let API_URL = this.url + '/eliminar_linea_remesa';
+    return this.http.post(API_URL, {nid_linea_remesa: nid_linea_remesa}, {withCredentials: true})
+  }
+
+  eliminar_descuento_remesa(nid_descuento_remesa: string)
+  {
+    let API_URL = this.url + '/eliminar_descuento_remesa';
+    return this.http.post(API_URL, {nid_descuento_remesa: nid_descuento_remesa}, {withCredentials: true})
+  }
 }

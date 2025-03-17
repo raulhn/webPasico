@@ -249,6 +249,82 @@ function aprobar_remesas(req, res)
     )
 }
 
+function actualizar_remesa(req, res)
+{
+    comun.comprobaciones(req, res,
+        async() =>
+        {
+            let v_remesa = JSON.parse(req.body.remesa);
+            let v_linea_remesa = JSON.parse(req.body.linea_remesa);
+            let v_descuentos_remesas = JSON.parse(req.body.descuento_remesa);
+
+            console.log('x')
+            console.log(v_remesa);
+            console.log(v_linea_remesa);
+            console.log(v_descuentos_remesas);
+            console.log('y')
+
+            await remesa.actualizacion_remesa(v_remesa, v_linea_remesa, v_descuentos_remesas);
+            res.status(200).send({error:false, message: 'Recibo actualizado'})
+        }
+    )
+}
+
+function nueva_linea_remesa(req, res)
+{
+    comun.comprobaciones(req, res,
+        async() =>
+        {
+            let v_nid_remesa = req.body.nid_remesa;
+            let v_concepto = req.body.concepto;
+            let v_precio = req.body.precio;
+
+            await remesa.nueva_linea_remesa(v_nid_remesa, v_concepto, v_precio);
+            res.status(200).send({error:false, message: 'Nueva línea de recibo'})
+        }
+    )
+}
+
+function nuevo_descuento_remesa(req, res)
+{
+    comun.comprobaciones(req, res,
+        async() =>
+        {
+            let v_nid_remesa = req.body.nid_remesa;
+            let v_concepto = req.body.concepto;
+
+            await remesa.nuevo_descuento_remesa(v_nid_remesa, v_concepto);
+            res.status(200).send({error:false, message: 'Nuevo descuento de recibo'})
+        }
+    )
+}
+
+function eliminar_linea_remesa(req, res)
+{
+    comun.comprobaciones(req, res,
+        async() =>
+        {
+            let v_nid_linea_remesa = req.body.nid_linea_remesa;
+
+            await remesa.eliminar_linea_remesa(v_nid_linea_remesa);
+            res.status(200).send({error:false, message: 'Línea de recibo eliminada'})
+        }
+    )
+}
+
+function eliminar_descuento_remesa(req, res)
+{
+    comun.comprobaciones(req, res,
+        async() =>
+        {
+            let v_nid_descuento_remesa = req.body.nid_descuento_remesa;
+
+            await remesa.eliminar_descuento_remesa(v_nid_descuento_remesa);
+            res.status(200).send({error:false, message: 'Descuento de recibo eliminado'})
+        }
+    )
+}
+
 module.exports.registrar_remesa_persona = registrar_remesa_persona;
 module.exports.obtener_remesas = obtener_remesas;
 module.exports.obtener_mensualidad = obtener_mensualidad;
@@ -269,3 +345,10 @@ module.exports.aprobar_remesas = aprobar_remesas;
 
 module.exports.registrar_remesa_matriculas = registrar_remesa_matriculas;
 module.exports.registrar_remesa_matriculas_fecha = registrar_remesa_matriculas_fecha;
+
+module.exports.actualizar_remesa = actualizar_remesa;
+module.exports.nueva_linea_remesa = nueva_linea_remesa;
+module.exports.nuevo_descuento_remesa = nuevo_descuento_remesa;
+
+module.exports.eliminar_linea_remesa = eliminar_linea_remesa;
+module.exports.eliminar_descuento_remesa = eliminar_descuento_remesa;

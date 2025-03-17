@@ -163,7 +163,8 @@ app.get('/obtener_preinscripciones', servlet_preinscripciones.obtener_preinscrip
 /** Remesas **/
 app.post('/registrar_remesa_persona', servlet_remesa.registrar_remesa_persona);
 app.post('/registrar_remesa_matriculas', servlet_remesa.registrar_remesa_matriculas);
-app.post('/registrar_remesa_matriculas_fecha', servlet_remesa.registrar_remesa_matriculas_fecha)
+app.post('/registrar_remesa_matriculas_fecha', servlet_remesa.registrar_remesa_matriculas_fecha);
+app.post('/actualizar_remesa', servlet_remesa.actualizar_remesa);
 app.get('/obtener_mensualidad/:nid_matricula', servlet_remesa.obtener_mensualidad);
 app.get('/obtener_mensualidad_fecha/:nid_matricula/:fecha_desde/:fecha_hasta', servlet_remesa.obtener_mensualidad_fecha)
 app.get('/obtener_remesa/:lote', servlet_remesa.obtener_remesa);
@@ -179,6 +180,12 @@ app.post('/rechazar_remesa', servlet_remesa.rechazar_remesa);
 app.post('/aprobar_remesas', servlet_remesa.aprobar_remesas);
 
 app.get('/obtener_concepto/:nid_remesa', servlet_remesa.obtener_concepto);
+
+app.post('/nueva_linea_remesa', servlet_remesa.nueva_linea_remesa);
+app.post('/nuevo_descuento_remesa', servlet_remesa.nuevo_descuento_remesa);
+
+app.post('/eliminar_linea_remesa', servlet_remesa.eliminar_linea_remesa);
+app.post('/eliminar_descuento_remesa', servlet_remesa.eliminar_descuento_remesa);
 
 /** Parámetros **/
 app.get('/obtener_valor/:nombre', servlet_parametros.obtener_valor);

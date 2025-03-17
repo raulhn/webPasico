@@ -1297,6 +1297,183 @@ function actualizar_id_cobro_pasarela_pago(nid_remesa, nid_cobro_pasarela)
 	)
 }
 
+function actualizar_remesa(nid_remesa, precio, concepto)
+{
+	return new Promise(
+		(resolve, reject) =>
+		{
+			conexion.dbConn.query('update ' + constantes.ESQUEMA_BD + '.remesa set precio = ' + conexion.dbConn.escape(precio) +
+				', concepto = ' + conexion.dbConn.escape(concepto) +
+				' where nid_remesa = ' + conexion.dbConn.escape(nid_remesa),
+				(error, results, fields) =>
+				{
+					if(error) {console.log(error); reject()}
+					else {resolve()}
+				}
+			)
+		}
+	)
+}
+
+function actualizar_linea_remesa(nid_linea_remesa, concepto, precio)
+{
+	return new Promise(
+		(resolve, reject) =>
+		{
+			conexion.dbConn.query('update ' + constantes.ESQUEMA_BD + '.linea_remesa set concepto = ' + conexion.dbConn.escape(concepto) +
+				', precio = ' + conexion.dbConn.escape(precio) +
+				' where nid_linea_remesa = ' + conexion.dbConn.escape(nid_linea_remesa),
+				(error, results, fields) =>
+				{
+					if(error) {console.log(error); reject()}
+					else {resolve()}
+				}
+			)
+		}
+	)
+}
+
+function actualizar_remesa_descuento(nid_remesa_descuento, concepto)
+{
+	return new Promise(
+		(resolve, reject) =>
+		{
+			conexion.dbConn.query('update ' + constantes.ESQUEMA_BD + '.remesa_descuento set concepto = ' + conexion.dbConn.escape(concepto) +
+				' where nid_remesa_descuento = ' + conexion.dbConn.escape(nid_remesa_descuento),
+				(error, results, fields) =>
+				{
+					if(error) {console.log(error); reject()}
+					else {resolve()}
+				}
+			)
+		}
+	)
+}
+
+
+function actualizacion_remesa(v_remesa, v_linea_remesa, v_descuento_remesa)
+{
+	return new Promise(
+		async (resolve, reject) =>
+		{
+			try
+			{
+				conexion.dbConn.beginTransaction(
+					async()	=>
+					{
+						await actualizar_remesa(v_remesa.nid_remesa,v_remesa.precio, v_remesa.concepto);
+
+						for (let i=0; i < v_linea_remesa.length; i++)
+						{
+							await actualizar_linea_remesa(v_linea_remesa[i].nid_linea_remesa, v_linea_remesa[i].concepto, v_linea_remesa[i].precio);
+						}
+
+						for (let i=0; i < v_descuento_remesa; i++)
+						{
+							await actualizar_remesa_descuento(v_descuento_remesa[i].nid_descuento_remesa, v_descuento_remesa[i].concepto);
+						}
+
+						conexion.dbConn.commit();
+						resolve();
+					})
+			}
+			catch(error)
+			{
+				conexion.dbConn.rollback();
+				console.log('remesa.js - actualizacion_remesa -> ' + error);
+				reject('Error al actualizar la remesa')
+			}
+		}
+	)
+}
+
+function nueva_linea_remesa(nid_remesa, concepto, precio)
+{
+	return new Promise(
+		async(resolve, reject) =>
+		{
+			conexion.dbConn.beginTransaction(
+				() =>
+				{
+					conexion.dbConn.query('insert into ' + constantes.ESQUEMA_BD + '.linea_remesa (nid_remesa, concepto, precio) values (' +
+						conexion.dbConn.escape(nid_remesa) + ', ' + conexion.dbConn.escape(concepto) + ', ' + conexion.dbConn.escape(precio) + ')',
+						(error, results, fields) =>
+						{
+							if(error) {console.log('remesa.js - nueva_linea_remesa -> ' + error); conexion.dbConn.rollback(); reject()}
+							else {conexion.dbConn.commit(); resolve()}
+						}
+					)
+				}
+
+			)
+		}
+	)
+}
+
+function nuevo_descuento_remesa(nid_remesa, concepto)
+{
+	return new Promise(
+		async(resolve, reject) =>
+		{
+			conexion.dbConn.beginTransaction(
+				() =>
+				{
+					conexion.dbConn.query('insert into ' + constantes.ESQUEMA_BD + '.remesa_descuento (nid_remesa, concepto) values (' +
+						conexion.dbConn.escape(nid_remesa) + ', ' + conexion.dbConn.escape(concepto) + ')',
+						(error, results, fields) =>
+						{
+							if(error) {console.log('remesa.js - nuevo_descuento_remesa -> ' + error); conexion.dbConn.rollback(); reject()}
+							else {conexion.dbConn.commit(); resolve()}
+						}
+					)
+				}
+
+			)
+		}
+	)
+}
+
+function eliminar_linea_remesa(nid_linea_remesa)
+{
+	return new Promise(
+		(resolve, reject) =>
+		{
+			conexion.dbConn.beginTransaction(
+				() =>
+				{
+					conexion.dbConn.query('delete from ' + constantes.ESQUEMA_BD + '.linea_remesa where nid_linea_remesa = ' + conexion.dbConn.escape(nid_linea_remesa),
+						(error, results, fields) =>
+						{
+							if(error) {console.log('remesa.js - eliminar_linea_remesa -> ' + error); conexion.dbConn.rollback(); reject()}
+							else {conexion.dbConn.commit(); resolve()}
+						}
+					)
+				})
+		}
+	)
+}
+
+function eliminar_descuento_remesa(nid_descuento_remesa)
+{
+	return new Promise(
+		(resolve, reject) =>
+		{
+			conexion.dbConn.beginTransaction(
+				() =>
+				{
+					conexion.dbConn.query('delete from ' + constantes.ESQUEMA_BD + '.remesa_descuento where nid_remesa_descuento = ' + conexion.dbConn.escape(nid_descuento_remesa),
+						(error, results, fields) =>
+						{
+							if(error) {console.log('remesa.js - eliminar_descuento_remesa -> ' + error); conexion.dbConn.rollback(); reject()}
+							else {conexion.dbConn.commit(); resolve()}
+						}
+					)
+				})
+		}
+	)
+}
+
+
 module.exports.registrar_remesa = registrar_remesa;
 module.exports.registrar_remesa_persona = registrar_remesa_persona;
 module.exports.registrar_remesa_matriculas = registrar_remesa_matriculas;
@@ -1322,3 +1499,11 @@ module.exports.remesa_erronea = remesa_erronea;
 module.exports.actualizar_id_cobro_pasarela_pago = actualizar_id_cobro_pasarela_pago;
 
 module.exports.obtener_precio_matricula_fecha = obtener_precio_matricula_fecha;
+
+module.exports.actualizacion_remesa = actualizacion_remesa;
+
+module.exports.nueva_linea_remesa = nueva_linea_remesa;
+module.exports.nuevo_descuento_remesa = nuevo_descuento_remesa;
+
+module.exports.eliminar_linea_remesa = eliminar_linea_remesa;
+module.exports.eliminar_descuento_remesa = eliminar_descuento_remesa;

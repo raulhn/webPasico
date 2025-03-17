@@ -1,5 +1,4 @@
 const fs = require('fs');
-var docxConverter = require('docx-pdf');
 
 const constantes = require('../constantes.js')
 
@@ -65,27 +64,7 @@ function readFile(fileName) {
 }
 
 
-function convertir_pdf(path_entrada, path_salida)
-{
-    return new Promise(
-        (resolve, reject) =>
-        {
-            docxConverter(path_entrada, path_salida,
-                function(err,result){
-                    if(err)
-                    {
-                        console.log(err);
-                        reject(err)
-                    }
-                    else
-                    {
-                        resolve();
-                    }
-                }
-        )
-        }
-)
-}
+
 
 module.exports.subir_ficheros = subir_ficheros;
 module.exports.readFile = readFile;
