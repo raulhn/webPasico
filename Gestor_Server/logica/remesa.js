@@ -496,10 +496,25 @@ function precio_matricula_fecha(nid_matricula, num_familiar, fecha_desde, fecha_
 
 				var diferencia_dias = Math.round(((v_fecha_hasta - v_fecha_desde) ) / (24 * 3600 * 1000));
 
-			    var porcentaje_mes = (Number(diferencia_dias) + 1) / Number(diasMes);
+				let proporcion = Math.round(Number(diasMes) / 3);
+				let v_diferencia_dias = Number(diferencia_dias);
 
-				let v_precio_persona = Math.round(Number(linea_remesa.precio) * porcentaje_mes * 100) / 100;
+				let v_precio_persona = Number(linea_remesa.precio);
 
+				if(proporcion > v_diferencia_dias)
+				{
+					// Si lleva menos de un tercio de mes, no se cobra el mes
+					linea_remesa.precio = 0;
+				}
+				else if ((proporcion * 2) > v_diferencia_dias)
+				{
+					// Si lleva menos de dos tercios de mes, se cobra medio mes
+					linea_remesa.precio = v_precio_persona / 2;
+				}
+				else
+				{
+					linea_remesa.precio = v_precio_persona;
+				}
 
 				var comentario_manual = datos_matricula['comentario_precio_manual'];
 
@@ -585,11 +600,24 @@ function precio_matricula_fecha(nid_matricula, num_familiar, fecha_desde, fecha_
 
 					var diferencia_dias = Math.round(((v_fecha_hasta - v_fecha_desde) ) / (24 * 3600 * 1000));
 
-					var porcentaje_mes = (Number(diferencia_dias) + 1) / Number(diasMes);
+					let proporcion = Math.round(Number(diasMes) / 3);
+					let v_diferencia_dias = Number(diferencia_dias);
 
-					v_precio_persona = Math.round(v_precio_persona * porcentaje_mes * 100) / 100;
+					if(proporcion > v_diferencia_dias)
+					{
+						// Si lleva menos de un tercio de mes, no se cobra el mes
+						linea_remesa.precio = 0;
+					}
+					else if ((proporcion * 2) > v_diferencia_dias)
+					{
+						// Si lleva menos de dos tercios de mes, se cobra medio mes
+						linea_remesa.precio = v_precio_persona / 2;
+					}
+					else
+					{
+						linea_remesa.precio = v_precio_persona;
+					}
 
-					linea_remesa.precio = v_precio_persona;
 					linea_remesa.concepto = 'Precio para el alumno ' + datos_matricula['nombre_alumno'] + ' en la asignatura ' + asignaturas_precio[z]['nombre_asignatura'] + ' ('+ info +')';
 					linea_remesas.push(linea_remesa);
 
@@ -903,11 +931,13 @@ function obtener_remesas(fecha_desde, fecha_hasta)
 	return new Promise(
 		(resolve, reject) =>
 		{
-			conexion.dbConn.query("select r.*, p.* " +
-								  "from " + constantes.ESQUEMA_BD + ".remesa r, " + constantes.ESQUEMA_BD + ".persona p " +
+			conexion.dbConn.query("select r.*, p.*, fp.iban " +
+								  "from " + constantes.ESQUEMA_BD + ".remesa r, " + constantes.ESQUEMA_BD + ".persona p, " + 
+								   constantes.ESQUEMA_BD + ".forma_pago fp "+
 								  'where r.fecha >= str_to_date(nullif(' + conexion.dbConn.escape(fecha_desde) + ', \'\') , \'%Y-%m-%d\') ' +
 								    'and r.fecha <= str_to_date(nullif(' + conexion.dbConn.escape(fecha_hasta) + ', \'\') , \'%Y-%m-%d\') ' +
-									'and p.nid = r.nid_persona',
+									'and p.nid = r.nid_persona ' + 
+									'and fp.nid = p.nid_forma_pago ',
 				(error, results, fields) =>
 				{
 					if (error) {console.log(error); reject()}
@@ -923,8 +953,8 @@ function obtener_remesa(lote)
 	return new Promise(
 		(resolve, reject) =>
 		{
-			conexion.dbConn.query('select * from ' + constantes.ESQUEMA_BD +
-			   		".remesa where lote = " + conexion.dbConn.escape(lote),
+			conexion.dbConn.query('select r.*, fp.iban from ' + constantes.ESQUEMA_BD +
+			   		".remesa r, " + constantes.ESQUEMA_BD +  ".forma_pago fp where r.nid_forma_pago = fp.nid and lote = " + conexion.dbConn.escape(lote),
 			    (error, results, fields) =>
 				{
 					if (error) {console.log(error); reject();}
@@ -941,9 +971,9 @@ function obtener_remesa_pendiente(lote)
 	return new Promise(
 		(resolve, reject) =>
 		{
-			conexion.dbConn.query('select * from ' + constantes.ESQUEMA_BD +
-			   		".remesa where lote = " + conexion.dbConn.escape(lote) +
-					" and estado = '" + constantes.ESTADO_REMESA_PENDIENTE + "'",
+			conexion.dbConn.query('select r.* from ' + constantes.ESQUEMA_BD +
+			   		".remesa r where r.lote = " + conexion.dbConn.escape(lote) +
+					" and r.estado = '" + constantes.ESTADO_REMESA_PENDIENTE + "'",
 			    (error, results, fields) =>
 				{
 					if (error) {console.log(error); reject();}

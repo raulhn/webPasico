@@ -69,6 +69,10 @@ export class RemesasComponent implements OnInit{
           {title: 'Fecha',
             data: 'fecha'
           }, 
+          {
+            title: 'Iban',
+            data: 'iban'
+          },
         {
           title: 'Estado',
           data: 'estado'

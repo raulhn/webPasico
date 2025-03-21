@@ -7,6 +7,9 @@ function obtener_preinscripciones(req, res)
     comun.comprobaciones(req, res,
         async () =>
         {
+            console.log('https://ladelpasico.es/api/obtener_preinscripciones')
+           
+
             let resultados = await preinscripcion.obtener_preinscripciones();
 
             res.status(200).send({error: false, preinscripciones: resultados})

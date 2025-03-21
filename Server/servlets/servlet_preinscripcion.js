@@ -134,6 +134,19 @@ function obtener_preinscripciones(req, res)
     )
 }
 
+function obtener_preinscripciones_api(req, res)
+{
+    comun.comprobaciones_api(req, res,
+        async () =>
+        {
+            let resultados = await preinscripcion.obtener_preinscripciones();
+            
+            res.status(200).send({error: false, preinscripciones: resultados})
+        }
+    )   
+    
+}
+
 function obtener_preinscripciones_detalle(req, res)
 {
     comun.comprobaciones_login(req, res,
@@ -152,3 +165,4 @@ function obtener_preinscripciones_detalle(req, res)
 module.exports.obtener_preinscripciones = obtener_preinscripciones;
 module.exports.registrar_preinscripcion = registrar_preinscripcion;
 module.exports.obtener_preinscripciones_detalle = obtener_preinscripciones_detalle;
+module.exports.obtener_preinscripciones_api = obtener_preinscripciones_api;

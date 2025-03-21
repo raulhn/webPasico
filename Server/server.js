@@ -7,6 +7,7 @@ const session = require('express-session');
 const fileUpload = require('express-fileupload');
 var cors = require('cors');
 
+require('dotenv').config();
 
 const conexion = require('./conexion.js');
 const TIPO_COMPONENTE_TEXTO = 1;
@@ -1139,7 +1140,6 @@ app.post('/remove_pagina_componente',
                 {
                     id_componente = req.body.id_componente;
                     id_pagina = req.body.id_pagina;
-                    console.log('id_pagina ' + id_pagina);
                     componente.remove_pagina_componente(id_componente, id_pagina).then(
                         () =>
                         {
@@ -1183,7 +1183,7 @@ app.post('/actualizar_password', servlet_usuarios.actualizar_password);
    * Preinscripcion
    */
   app.post('/registrar_preinscripcion', servlet_preinscripcion.registrar_preinscripcion);
-  app.get('/obtener_preinscripciones', servlet_preinscripcion.obtener_preinscripciones);
+  app.get('/obtener_preinscripciones', servlet_preinscripcion.obtener_preinscripciones_api);
   app.get('/obtener_preinscripciones_detalle/:nid_preinscripcion', servlet_preinscripcion.obtener_preinscripciones_detalle)
 
   /**
