@@ -13,11 +13,14 @@ export class URL
     public static readonly URL_WEB = "https://ladelpasico.es:8443"
 }
 
+
+
 export class ROL 
 {
    public static readonly ADMINISTRADOR = "1";
    public static readonly PROFESOR = "2";
 }
+
 
 
 export class DataTablesOptions

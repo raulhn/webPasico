@@ -160,12 +160,10 @@ function eliminar_menu(id_menu)
                         {
                             if(bTiene_componentes || bTiene_hijos)
                             {
-                                console.log(bTiene_hijos);
                                 reject('La pagina tiene componentes');
                             }
                             else
                             {
-                                console.log("delete from " + constantes.ESQUEMA_BD + ".menu where nid = " + conexion.dbConn.escape(id_menu))
                                 conexion.dbConn.query("delete from " + constantes.ESQUEMA_BD + ".menu where nid = " + conexion.dbConn.escape(id_menu),
                                 (error, results, field) =>
                                 {

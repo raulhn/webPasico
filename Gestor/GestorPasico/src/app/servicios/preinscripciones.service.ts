@@ -9,18 +9,18 @@ export class PreinscripcionesService {
 
   constructor(private http: HttpClient) { }
 
-  private url: string = URL.URL_WEB;
+  private url_servicio: string = URL.URL_SERVICIO;
 
 
   obtener_preinscripciones()
   {
-    let API_URL = this.url + '/obtener_preinscripciones';
+    let API_URL = this.url_servicio + '/obtener_preinscripciones';
     return this.http.get(API_URL, {withCredentials: true});
   }
 
   obtener_preinscripciones_detalle(nid_preinscripcion: string)
   {
-    let API_URL = this.url + '/obtener_preinscripciones_detalle/' + nid_preinscripcion;
+    let API_URL = this.url_servicio + '/obtener_preinscripciones_detalle/' + nid_preinscripcion;
     return this.http.get(API_URL, {withCredentials: true})
   }
 }

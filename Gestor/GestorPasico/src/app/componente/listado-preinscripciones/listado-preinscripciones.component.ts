@@ -47,6 +47,7 @@ export class ListadoPreinscripcionesComponent implements OnInit {
       {
         language: DataTablesOptions.spanish_datatables,
         data: this.lista_preinscripcion2,
+        responsive: true, 
         dom: 'Bfrtip',
         buttons: [{extend: 'excel', text: 'Generar Excel', className: 'btn btn-dark mb-3'}],
         columns:
@@ -101,6 +102,7 @@ export class ListadoPreinscripcionesComponent implements OnInit {
       this.dtOptions =
       {
         language: DataTablesOptions.spanish_datatables,
+        responsive: true, 
         data: this.lista_preinscripcion,
         dom: 'Bfrtip',
         buttons: [{extend: 'excel', text: 'Generar Excel', className: 'btn btn-dark mb-3'}],

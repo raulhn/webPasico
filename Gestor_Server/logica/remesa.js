@@ -102,7 +102,7 @@ function obtener_siguiente_lote()
 	)
 }
 
-function registrar_remesa(v_persona, v_siguiente_lote, v_precio, v_nid_forma_pago)
+function registrar_remesa(v_persona, v_concepto, v_siguiente_lote, v_precio, v_nid_forma_pago)
 {
 	return new Promise(
 		(resolve, reject) =>
@@ -114,7 +114,7 @@ function registrar_remesa(v_persona, v_siguiente_lote, v_precio, v_nid_forma_pag
 				
 					conexion.dbConn.query("insert into " + constantes.ESQUEMA_BD + ".remesa(nid_forma_pago, nid_persona, concepto, fecha, lote, precio, estado) " +
 							"values(" + conexion.dbConn.escape(v_nid_forma_pago) + ", " + conexion.dbConn.escape(v_persona) + ", " +
-							"'Pago Mensual  " + persona_recuperada['etiqueta'] + "' , sysdate(), " + conexion.dbConn.escape(v_siguiente_lote) +
+							conexion.dbConn.escape(v_concepto) + " , sysdate(), " + conexion.dbConn.escape(v_siguiente_lote) +
 							", " + conexion.dbConn.escape(v_precio) +", '" + constantes.ESTADO_REMESA_PENDIENTE +"')",
 						(error, results, fields) =>
 						{
@@ -730,7 +730,7 @@ function limpiar_lote(v_lote)
 	);
 }
 
-function registrar_remesa_matriculas()
+function registrar_remesa_matriculas(v_concepto)
 {
 	return new Promise(
 		async (resolve, reject) =>
@@ -742,7 +742,7 @@ function registrar_remesa_matriculas()
 				let nid_persona = personas_matricula_activa[i]['nid'];
 				let nid_matricula = personas_matricula_activa[i]['nid_matricula'];
 
-				await registrar_remesa_persona(nid_matricula, v_siguiente_lote);
+				await registrar_remesa_persona(nid_matricula, v_concepto, v_siguiente_lote);
 			}
 
 			resolve();
@@ -750,7 +750,7 @@ function registrar_remesa_matriculas()
 	)
 }
 
-function registrar_remesa_matriculas_fecha(fecha_desde, fecha_hasta)
+function registrar_remesa_matriculas_fecha(v_concepto, fecha_desde, fecha_hasta)
 {
 	return new Promise(
 		async (resolve, reject) =>
@@ -763,7 +763,7 @@ function registrar_remesa_matriculas_fecha(fecha_desde, fecha_hasta)
 				{
 					let nid_matricula = personas_matricula_activa[i]['nid_matricula'];
 
-					await registrar_remesa_persona_fecha(nid_matricula, v_siguiente_lote, fecha_desde, fecha_hasta);
+					await registrar_remesa_persona_fecha(nid_matricula, v_concepto, v_siguiente_lote, fecha_desde, fecha_hasta);
 				}
 
 				resolve();
@@ -778,7 +778,7 @@ function registrar_remesa_matriculas_fecha(fecha_desde, fecha_hasta)
 
 }
 
-function registrar_remesa_persona(nid_matricula, lote)
+function registrar_remesa_persona(nid_matricula, v_concepto, lote)
 {
 	return new Promise(
 		async (resolve, reject) =>
@@ -804,7 +804,7 @@ function registrar_remesa_persona(nid_matricula, lote)
 						{
 							v_resumen_matricula = await precio_matricula(nid_matricula, i);
 							let v_precio_remesa = v_resumen_matricula.precio;
-							let nid_remesa = await registrar_remesa(persona_recuperada['nid'], lote, v_precio_remesa, persona_recuperada['nid_forma_pago']);
+							let nid_remesa = await registrar_remesa(persona_recuperada['nid'], v_concepto, lote, v_precio_remesa, persona_recuperada['nid_forma_pago']);
 
 							for (let z = 0; z < v_resumen_matricula.linea_remesas.length; z++)
 							{
@@ -824,7 +824,7 @@ function registrar_remesa_persona(nid_matricula, lote)
 			{
 				v_resumen_matricula = await precio_matricula(nid_matricula, 0);
 				let v_precio_remesa = v_resumen_matricula.precio;
-				let nid_remesa = await registrar_remesa(persona_recuperada['nid'], lote, v_precio_remesa, persona_recuperada['nid_forma_pago']);
+				let nid_remesa = await registrar_remesa(persona_recuperada['nid'], v_concepto, lote, v_precio_remesa, persona_recuperada['nid_forma_pago']);
 
 				for (let z = 0; z < v_resumen_matricula.linea_remesas.length; z++)
 				{
@@ -842,7 +842,7 @@ function registrar_remesa_persona(nid_matricula, lote)
 }
 
 
-function registrar_remesa_persona_fecha(nid_matricula, lote, fecha_desde, fecha_hasta)
+function registrar_remesa_persona_fecha(nid_matricula, v_concepto, lote, fecha_desde, fecha_hasta)
 {
 	return new Promise(
 		async (resolve, reject) =>
@@ -872,7 +872,7 @@ function registrar_remesa_persona_fecha(nid_matricula, lote, fecha_desde, fecha_
 								{
 									v_resumen_matricula = await precio_matricula_fecha(nid_matricula, i, fecha_desde, fecha_hasta);
 									let v_precio_remesa = v_resumen_matricula.precio;
-									let nid_remesa = await registrar_remesa(persona_recuperada['nid'], lote, v_precio_remesa, persona_recuperada['nid_forma_pago']);
+									let nid_remesa = await registrar_remesa(persona_recuperada['nid'], v_concepto, lote, v_precio_remesa, persona_recuperada['nid_forma_pago']);
 
 									for (let z = 0; z < v_resumen_matricula.linea_remesas.length; z++)
 									{
@@ -903,7 +903,7 @@ function registrar_remesa_persona_fecha(nid_matricula, lote, fecha_desde, fecha_
 				{
 					v_resumen_matricula = await precio_matricula_fecha(nid_matricula, 0, fecha_desde, fecha_hasta);
 					let v_precio_remesa = v_resumen_matricula.precio;
-					let nid_remesa = await registrar_remesa(persona_recuperada['nid'], lote, v_precio_remesa, persona_recuperada['nid_forma_pago']);
+					let nid_remesa = await registrar_remesa(persona_recuperada['nid'], v_concepto, lote, v_precio_remesa, persona_recuperada['nid_forma_pago']);
 
 					for (let z = 0; z < v_resumen_matricula.linea_remesas.length; z++)
 					{
@@ -931,7 +931,8 @@ function obtener_remesas(fecha_desde, fecha_hasta)
 	return new Promise(
 		(resolve, reject) =>
 		{
-			conexion.dbConn.query("select r.*, p.*, fp.iban " +
+			conexion.dbConn.query("select r.nid_remesa, r.nid_forma_pago, r.nid_persona, r.concepto, r.lote, r.precio, r.estado, r.anotaciones, r.nid_cobro_pasarela_pago " +
+				                  ", DATE_FORMAT(r.fecha, '%d/%m/%Y') fecha, p.*, fp.iban " +
 								  "from " + constantes.ESQUEMA_BD + ".remesa r, " + constantes.ESQUEMA_BD + ".persona p, " + 
 								   constantes.ESQUEMA_BD + ".forma_pago fp "+
 								  'where r.fecha >= str_to_date(nullif(' + conexion.dbConn.escape(fecha_desde) + ', \'\') , \'%Y-%m-%d\') ' +
@@ -953,8 +954,12 @@ function obtener_remesa(lote)
 	return new Promise(
 		(resolve, reject) =>
 		{
-			conexion.dbConn.query('select r.*, fp.iban from ' + constantes.ESQUEMA_BD +
-			   		".remesa r, " + constantes.ESQUEMA_BD +  ".forma_pago fp where r.nid_forma_pago = fp.nid and lote = " + conexion.dbConn.escape(lote),
+			conexion.dbConn.query("select r.nid_remesa, r.nid_forma_pago, r.nid_persona, r.concepto, r.lote, r.precio, r.estado, r.anotaciones, r.nid_cobro_pasarela_pago " +
+				                  ", DATE_FORMAT(r.fecha, '%d/%m/%Y') fecha, " + 
+				     'fp.iban, concat(p.nombre, \' \', p.primer_apellido, \' \', p.segundo_apellido) etiqueta_nombre from ' 
+				    + constantes.ESQUEMA_BD + ".remesa r, " + constantes.ESQUEMA_BD +  ".forma_pago fp, " + constantes.ESQUEMA_BD + ".persona p " +
+					" where r.nid_forma_pago = fp.nid and lote = " + conexion.dbConn.escape(lote) +
+				    " and r.nid_persona = p.nid",
 			    (error, results, fields) =>
 				{
 					if (error) {console.log(error); reject();}
@@ -971,7 +976,8 @@ function obtener_remesa_pendiente(lote)
 	return new Promise(
 		(resolve, reject) =>
 		{
-			conexion.dbConn.query('select r.* from ' + constantes.ESQUEMA_BD +
+			conexion.dbConn.query("select r.nid_remesa, r.nid_forma_pago, r.nid_persona, r.concepto, r.lote, r.precio, r.estado, r.anotaciones, r.nid_cobro_pasarela_pago " +
+				                  ", DATE_FORMAT(r.fecha, '%d/%m/%Y') fecha from " + constantes.ESQUEMA_BD +
 			   		".remesa r where r.lote = " + conexion.dbConn.escape(lote) +
 					" and r.estado = '" + constantes.ESTADO_REMESA_PENDIENTE + "'",
 			    (error, results, fields) =>
@@ -989,8 +995,9 @@ function obtener_remesa_estado(lote, estado)
 	return new Promise(
 		(resolve, reject) =>
 		{
-			conexion.dbConn.query('select * from ' + constantes.ESQUEMA_BD +
-			   		".remesa where lote = " + conexion.dbConn.escape(lote)
+			conexion.dbConn.query("select r.nid_remesa, r.nid_forma_pago, r.nid_persona, r.concepto, r.lote, r.precio, r.estado, r.anotaciones, r.nid_cobro_pasarela_pago " +
+				                  ", DATE_FORMAT(r.fecha, '%d/%m/%Y') fecha from " + constantes.ESQUEMA_BD +
+			   		".remesa r where lote = " + conexion.dbConn.escape(lote)
 					 + ' and estado = ' + conexion.dbConn.escape(estado),
 			    (error, results, fields) =>
 				{
@@ -1148,8 +1155,9 @@ function obtener_remesa_nid(nid_remesa)
 	return new Promise(
 		async (resolve, reject) =>
 		{
-			conexion.dbConn.query('select * from ' + constantes.ESQUEMA_BD +
-			   		".remesa where nid_remesa = " + conexion.dbConn.escape(nid_remesa),
+			conexion.dbConn.query("select r.nid_remesa, r.nid_forma_pago, r.nid_persona, r.concepto, r.lote, r.precio, r.estado, r.anotaciones, r.nid_cobro_pasarela_pago " +
+				                  ", DATE_FORMAT(r.fecha, '%d/%m/%Y') fecha from " + constantes.ESQUEMA_BD +
+			   		".remesa r where nid_remesa = " + conexion.dbConn.escape(nid_remesa),
 			    (error, results, fields) =>
 				{
 					if (error) {console.log(error); reject();}
@@ -1167,8 +1175,9 @@ function obtener_concepto(nid_remesa)
 		{
 			var v_remesa = await obtener_remesa_nid(nid_remesa);
 
-			var concepto = "";
+			var concepto = v_remesa.concepto;
 
+			/*
 			if(v_remesa.concepto !== undefined && v_remesa.concepto !== null && v_remesa.length > 0)
 			{
 				concepto = v_remesa[0].precio + '€ ' + v_remesa[0].concepto;
@@ -1195,6 +1204,7 @@ function obtener_concepto(nid_remesa)
 					console.log(concepto)
 				}
 			}
+				*/
 
 			resolve(concepto);
 		}

@@ -21,7 +21,8 @@ function registrar_remesa_matriculas(req, res)
     comun.comprobaciones(req, res,
         async ()=>
         {
-            await remesa.registrar_remesa_matriculas();
+            let concepto = req.body.concepto;
+            await remesa.registrar_remesa_matriculas(concepto);
             res.status(200).send({error:false, message: 'Registra remesa'})
         }
 
@@ -37,8 +38,9 @@ function registrar_remesa_matriculas_fecha(req, res)
         {
             let fecha_desde = req.body.fecha_desde;
             let fecha_hasta = req.body.fecha_hasta;
+            let concepto = req.body.concepto;
 
-            await remesa.registrar_remesa_matriculas_fecha(fecha_desde, fecha_hasta);
+            await remesa.registrar_remesa_matriculas_fecha(concepto, fecha_desde, fecha_hasta);
             res.status(200).send({error:false, message: 'Registra remesa'})
         }
 

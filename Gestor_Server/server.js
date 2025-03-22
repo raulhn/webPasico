@@ -160,6 +160,7 @@ app.post('/actualizar_forma_pago', servlet_persona.actualizar_forma_pago);
 
 /** Preinscripciones **/
 app.get('/obtener_preinscripciones', servlet_preinscripciones.obtener_preinscripciones);
+app.get('/obtener_preinscripciones_detalle/:nid_preinscripcion', servlet_preinscripciones.obtener_preinscripciones_detalle);
 
 /** Remesas **/
 app.post('/registrar_remesa_persona', servlet_remesa.registrar_remesa_persona);

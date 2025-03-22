@@ -16,16 +16,16 @@ export class RemesaService {
     return this.http.post(API_URL, {nid: nid} , {withCredentials:true})
   }
 
-  registrar_remesa_matriculas()
+  registrar_remesa_matriculas(concepto: string)
   {
     let API_URL = this.url + '/registrar_remesa_matriculas';
-    return this.http.post(API_URL, {},{withCredentials: true})
+    return this.http.post(API_URL, {concepto: concepto},{withCredentials: true})
   }
 
-  registrar_remesa_matriculas_fecha(fecha_desde: string, fecha_hasta: string)
+  registrar_remesa_matriculas_fecha(concepto: string, fecha_desde: string, fecha_hasta: string)
   {
     let API_URL = this.url + '/registrar_remesa_matriculas_fecha';
-    return this.http.post(API_URL, {fecha_desde: fecha_desde, fecha_hasta: fecha_hasta}, {withCredentials: true})
+    return this.http.post(API_URL, {concepto: concepto, fecha_desde: fecha_desde, fecha_hasta: fecha_hasta}, {withCredentials: true})
   }
 
   obtener_precio_mensualidad(nid_matricula: string)

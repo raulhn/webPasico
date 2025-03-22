@@ -34,11 +34,7 @@ async function comprobaciones_login(req, res, funcion_especifica)
 function comprobaciones_api(req, res, funcion_especifica)
 {
     try{
-        let api_key_solicitud = req.api_key;
-        console.log(req.headers);
-        console.log(req.headers.api_key);
-        console.log(api_key_solicitud);
-        console.log(process.env.API_KEY);
+        let api_key_solicitud = req.header('x-api-key')
         if(api_key_solicitud == process.env.API_KEY)
         {
             funcion_especifica();

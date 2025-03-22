@@ -9,18 +9,17 @@ function obtener_preinscripciones()
         {
             try
             {
-                let API_URL = 'https://ladelpasico.es/api/obtener_preinscripciones';
-                console.log(process.env.API_KEY)
+                let API_URL = constantes.URL_WEB + 'api/obtener_preinscripciones';
                 fetch(API_URL, {
                     method: 'GET',
                     headers: {
                     'Content-Type': 'application/json',
-                    'API_KEY': process.env.API_KEY
+                    'x-api-key': process.env.API_KEY
                     }})
-                    .then(response => 
+                    .then(async (response) => 
                         {
-                            console.log(response)
-                            resolve(response.preinscripciones)
+                            let respuesta = await response.json()
+                            resolve(respuesta.preinscripciones)
                     } )
             }
             catch (error)
@@ -32,4 +31,36 @@ function obtener_preinscripciones()
     )
 }
 
+
+function obtener_preinscripciones_detalle(nid_preinscripcion)
+{
+    return new Promise(
+        (resolve, reject) =>
+        {
+            try
+            {
+                let API_URL = constantes.URL_WEB + 'api/obtener_preinscripciones_detalle/' + nid_preinscripcion;
+
+                fetch(API_URL, {
+                    method: 'GET',
+                    headers: {
+                    'Content-Type': 'application/json',
+                    'x-api-key': process.env.API_KEY
+                    }})
+                    .then(async (response) => 
+                        {
+                            let respuesta = await response.json()
+                            resolve(respuesta.preinscripciones)
+                    } )
+            }
+            catch (error)
+            {
+                console.log('preinscripcion.js - obtener_preinscripciones_detalle -> ' + error);
+                reject('Error en obtener_preinscripciones_detalle');
+            }
+        }
+    )
+}
+
 module.exports.obtener_preinscripciones = obtener_preinscripciones;
+module.exports.obtener_preinscripciones_detalle = obtener_preinscripciones_detalle;

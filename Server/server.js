@@ -556,7 +556,6 @@ app.post('/registrar_componente', function(req, res)
                     }
                     else if(tipo_componente == constantes.TIPO_COMPONENTE_COMPONENTES)
                     {
-                        console.log('Registrar Componente Componentes ' + tipo_asociacion);
                         let nColumnas = req.body.nColumnas;
 
                         if(tipo_asociacion == constantes.TIPO_ASOCIACION_PAGINA)

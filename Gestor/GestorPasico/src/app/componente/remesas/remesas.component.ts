@@ -30,6 +30,7 @@ export class RemesasComponent implements OnInit{
 
   fecha_hasta: string = ""
   fecha_desde: string = ""
+  concepto: string = ""
 
   bCargaRemesa: boolean = false;
   bCargaLote: boolean = false;
@@ -59,6 +60,10 @@ export class RemesasComponent implements OnInit{
         buttons: [{extend: 'excel', text: 'Generar Excel', className: 'btn btn-dark mb-3'}],
         columns:
         [
+          {
+            title: 'Nombre',
+            data: 'etiqueta_nombre'
+          },
           {title: 'Concepto',
             data: 'concepto'
           },
@@ -136,17 +141,17 @@ export class RemesasComponent implements OnInit{
 
   crear_remesa()
   {
-    if(this.fecha_desde.length > 0 && this.fecha_hasta.length > 0)
+    if(this.fecha_desde.length > 0 && this.fecha_hasta.length > 0 && this.concepto.length > 0)
     {
       this.bCargaRemesa = true;
-      this.remesaService.registrar_remesa_matriculas_fecha(this.fecha_desde, this.fecha_hasta).subscribe(this.peticion_registrar_remesa);
+      this.remesaService.registrar_remesa_matriculas_fecha(this.concepto, this.fecha_desde, this.fecha_hasta).subscribe(this.peticion_registrar_remesa);
     }
     else
     {
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
-        text: 'Es obligatorio indicar una fecha desde y fecha hasta',
+        text: 'Es obligatorio indicar una fecha desde, una fecha hasta y un concepto',
       })
     }
   }

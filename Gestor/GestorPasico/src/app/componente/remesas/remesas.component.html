@@ -2,15 +2,19 @@
 <app-menu class=""></app-menu>
 <div class="container pt-4">
     <div class="card p-3 mb-1">
-    <label>Fecha Desde</label>
-    <input class="form-control" name ="Fecha desde" [(ngModel)] = "fecha_desde" type="date"/>
-    <label>Fecha Hasta</label>
-    <input class="form-control" name ="Fecha Hasta" [(ngModel)] = "fecha_hasta" type="date"/>
-    <button class="btn btn-primary mb-3 mt-2 tp-3" (click)="crear_remesa()" >
-        <div *ngIf="bCargaRemesa" class="spinner-border spinner-border-sm" role="status">
+        <label>Concepto</label>
+        <input class="form-control" name ="Concepto" [(ngModel)] = "concepto" type="text"/>
+        <label>Fecha Desde</label>
+        <input class="form-control" name ="Fecha desde" [(ngModel)] = "fecha_desde" type="date"/>
+        <label>Fecha Hasta</label>
+        <input class="form-control" name ="Fecha Hasta" [(ngModel)] = "fecha_hasta" type="date"/>
+        <div>
+            <button class="btn btn-primary mb-3 mt-2 tp-3" (click)="crear_remesa()" >
+                <div *ngIf="bCargaRemesa" class="spinner-border spinner-border-sm" role="status">
+                </div>
+                Crear nueva remesa 
+            </button>
         </div>
-        Crear nueva remesa 
-    </button>
     </div>
     <div class="card p-3 mb-1">
 
@@ -44,12 +48,16 @@
 
         </div>
     </div>
-    <button class="btn btn-primary mb-1" (click) ="aceptar_recibos()">Aceptar lote</button>
-    <button class="btn btn-primary mt-1" (click) ="cobrar_lote()">
-        <div *ngIf="bCargaLote" class="spinner-border spinner-border-sm" role="status">
+    <div class="row">
+        <div class="col-12">
+            <button class="btn btn-primary m-1" (click) ="aceptar_recibos()">Aceptar lote</button>
+            <button class="btn btn-primary m-1" (click) ="cobrar_lote()">
+                <div *ngIf="bCargaLote" class="spinner-border spinner-border-sm" role="status">
+                </div>
+                Cobrar lote
+            </button>
         </div>
-        Cobrar lote
-    </button>
+    </div>
 </div>
 </div>
 

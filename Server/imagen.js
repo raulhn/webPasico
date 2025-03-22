@@ -73,8 +73,7 @@ function actualizar_imagen_servidor(id_imagen, fichero)
         {
             console.log(fichero)
     let imagen = fichero.imagen;
-    console.log('xxxx')
-    console.log(imagen)
+
     let nombre_imagen = id_imagen + "_" + imagen.name;
 
     console.log('Actualiza imagen ' + nombre_imagen)
@@ -84,7 +83,7 @@ function actualizar_imagen_servidor(id_imagen, fichero)
     {
         if(error) {console.log(error); conexion.dbConn.rollback(); reject(error);}
         else{
-            console.log('Subida de fichero')
+
             gestion_ficheros.subir_ficheros(fichero, nombre_imagen).then(
             () => { conexion.dbConn.commit(); resolve();}
             ).catch(
