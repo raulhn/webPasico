@@ -2,7 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Noticias } from "./Noticias";
 import { Image } from "react-native";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Text} from "react-native";
 
 const logo = require("../assets/logo.png");
 
@@ -13,6 +13,9 @@ export function Main() {
         <Image source={logo} style={styles.logo} resizeMode="center"></Image>
       </View>
       <Noticias />
+      <View className="bg-red-500">
+        <Text>Footer</Text>
+      </View>
       <StatusBar style="auto" />
     </SafeAreaView>
   );

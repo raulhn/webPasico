@@ -1,6 +1,6 @@
 import { FlatList } from "react-native";
 import React, { useState, useEffect } from "react";
-import { CardBlog, AnimatedGameCard } from "./CardBlock.jsx";
+import { CardBlog, AnimatedGameCard } from "./CardBlog.jsx";
 const serviceNoticias = require("../servicios/serviceNoticias.js");
 
 export function Noticias() {
