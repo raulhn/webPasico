@@ -1,5 +1,5 @@
 import { Component, Input,Pipe, PipeTransform, OnInit, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { EditorChangeContent, EditorChangeSelection } from "ngx-quill";
 import { ComponenteService } from 'src/app/servicios/componente.service';
 import { Componente_texto } from '../../logica/componentes/componente_texto';
@@ -81,7 +81,7 @@ export class EditarComponenteTextoComponent implements OnInit {
 
   constructor(private componenteService: ComponenteService,  private sanitizer: DomSanitizer) { 
   }
-  control: FormControl = new FormControl();
+  control: UntypedFormControl = new UntypedFormControl();
  
   ngOnInit(): void {
 
