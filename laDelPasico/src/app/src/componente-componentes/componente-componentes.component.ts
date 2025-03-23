@@ -2,9 +2,10 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ComponenteComponentesService } from 'src/app/servicios/componente-componentes.service';
 
 @Component({
-  selector: 'app-componente-componentes',
-  templateUrl: './componente-componentes.component.html',
-  styleUrls: ['./componente-componentes.component.css']
+    selector: 'app-componente-componentes',
+    templateUrl: './componente-componentes.component.html',
+    styleUrls: ['./componente-componentes.component.css'],
+    standalone: false
 })
 export class ComponenteComponentesComponent implements OnInit {
 

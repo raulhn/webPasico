@@ -16,9 +16,10 @@ import { EditarComponentePaginasComponent } from '../editar_componente/editar-co
 import { EditarComponenteCaruselComponent } from '../editar_componente/editar-componente-carusel/editar-componente-carusel.component';
 
 @Component({
-  selector: 'app-componente',
-  templateUrl: './componente.component.html',
-  styleUrls: ['./componente.component.css']
+    selector: 'app-componente',
+    templateUrl: './componente.component.html',
+    styleUrls: ['./componente.component.css'],
+    standalone: false
 })
 
 export class ComponenteComponent implements OnInit {

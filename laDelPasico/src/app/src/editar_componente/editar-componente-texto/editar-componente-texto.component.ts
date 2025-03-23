@@ -12,9 +12,10 @@ import {DomSanitizer} from '@angular/platform-browser';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 
 @Component({
-  selector: 'app-editar-componente-texto',
-  templateUrl: './editar-componente-texto.component.html',
-  styleUrls: ['./editar-componente-texto.component.css']
+    selector: 'app-editar-componente-texto',
+    templateUrl: './editar-componente-texto.component.html',
+    styleUrls: ['./editar-componente-texto.component.css'],
+    standalone: false
 }
 )
 export class EditarComponenteTextoComponent implements OnInit {

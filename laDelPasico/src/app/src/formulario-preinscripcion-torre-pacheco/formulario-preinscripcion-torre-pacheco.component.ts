@@ -6,9 +6,10 @@ import { Instrumento } from '../logica/instrumento';
 
 
 @Component({
-  selector: 'app-formulario-preinscripcion-torre-pacheco',
-  templateUrl: './formulario-preinscripcion-torre-pacheco.component.html',
-  styleUrls: ['./formulario-preinscripcion-torre-pacheco.component.css']
+    selector: 'app-formulario-preinscripcion-torre-pacheco',
+    templateUrl: './formulario-preinscripcion-torre-pacheco.component.html',
+    styleUrls: ['./formulario-preinscripcion-torre-pacheco.component.css'],
+    standalone: false
 })
 export class FormularioPreinscripcionTorrePachecoComponent implements OnInit {
   @ViewChild('instancia_sustituir') instancia_sustituir!: ElementRef;

@@ -3,9 +3,10 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { ComponenteService } from 'src/app/servicios/componente.service';
 
 @Component({
-  selector: 'app-componente-video',
-  templateUrl: './componente-video.component.html',
-  styleUrls: ['./componente-video.component.css']
+    selector: 'app-componente-video',
+    templateUrl: './componente-video.component.html',
+    styleUrls: ['./componente-video.component.css'],
+    standalone: false
 })
 export class ComponenteVideoComponent implements OnInit {
   @Input() id_componente: string = "";

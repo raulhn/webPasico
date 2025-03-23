@@ -7,9 +7,10 @@ import { ifStmt } from '@angular/compiler/src/output/output_ast';
 import { iif } from 'rxjs';
 
 @Component({
-  selector: 'app-editar-componente-paginas',
-  templateUrl: './editar-componente-paginas.component.html',
-  styleUrls: ['./editar-componente-paginas.component.css']
+    selector: 'app-editar-componente-paginas',
+    templateUrl: './editar-componente-paginas.component.html',
+    styleUrls: ['./editar-componente-paginas.component.css'],
+    standalone: false
 })
 export class EditarComponentePaginasComponent implements OnInit {
   @Input() id_componente: string="";

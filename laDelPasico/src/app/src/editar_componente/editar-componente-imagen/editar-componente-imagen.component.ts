@@ -4,9 +4,10 @@ import { FicherosService } from 'src/app/servicios/ficheros.service';
 
 
 @Component({
-  selector: 'app-editar-componente-imagen',
-  templateUrl: './editar-componente-imagen.component.html',
-  styleUrls: ['./editar-componente-imagen.component.css']
+    selector: 'app-editar-componente-imagen',
+    templateUrl: './editar-componente-imagen.component.html',
+    styleUrls: ['./editar-componente-imagen.component.css'],
+    standalone: false
 })
 export class EditarComponenteImagenComponent implements OnInit {
   @Input() nid: string="";

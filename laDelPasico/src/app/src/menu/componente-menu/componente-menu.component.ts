@@ -15,9 +15,10 @@ import { Constantes } from '../../logica/constantes';
 
 
 @Component({
-  selector: 'app-componente-menu',
-  templateUrl: './componente-menu.component.html',
-  styleUrls: ['./componente-menu.component.css']
+    selector: 'app-componente-menu',
+    templateUrl: './componente-menu.component.html',
+    styleUrls: ['./componente-menu.component.css'],
+    standalone: false
 })
 export class ComponenteMenuComponent implements OnInit {
   menu_completo: Menu[][] = [];

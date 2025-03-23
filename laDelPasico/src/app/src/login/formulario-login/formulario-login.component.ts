@@ -8,9 +8,10 @@ import { Router } from '@angular/router';
 
 
 @Component({
-  selector: 'app-formulario-login',
-  templateUrl: './formulario-login.component.html',
-  styleUrls: ['./formulario-login.component.css']
+    selector: 'app-formulario-login',
+    templateUrl: './formulario-login.component.html',
+    styleUrls: ['./formulario-login.component.css'],
+    standalone: false
 })
 
 

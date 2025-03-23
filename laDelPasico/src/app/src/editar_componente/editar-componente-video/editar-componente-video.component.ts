@@ -2,9 +2,10 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ComponenteService } from 'src/app/servicios/componente.service';
 
 @Component({
-  selector: 'app-editar-componente-video',
-  templateUrl: './editar-componente-video.component.html',
-  styleUrls: ['./editar-componente-video.component.css']
+    selector: 'app-editar-componente-video',
+    templateUrl: './editar-componente-video.component.html',
+    styleUrls: ['./editar-componente-video.component.css'],
+    standalone: false
 })
 export class EditarComponenteVideoComponent implements OnInit {
 
