@@ -8,9 +8,10 @@ import { Constantes } from '../../logica/constantes';
 
 
 @Component({
-  selector: 'app-nuevo-componente',
-  templateUrl: './nuevo-componente.component.html',
-  styleUrls: ['./nuevo-componente.component.css']
+    selector: 'app-nuevo-componente',
+    templateUrl: './nuevo-componente.component.html',
+    styleUrls: ['./nuevo-componente.component.css'],
+    standalone: false
 })
 export class NuevoComponenteComponent implements OnInit {
 

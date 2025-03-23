@@ -3,9 +3,10 @@ import { ServicioPreinscripcionService } from 'src/app/servicios/servicio-preins
 import { Constantes } from '../logica/constantes';
 
 @Component({
-  selector: 'app-listado-preinscripciones-completo',
-  templateUrl: './listado-preinscripciones-completo.component.html',
-  styleUrls: ['./listado-preinscripciones-completo.component.css']
+    selector: 'app-listado-preinscripciones-completo',
+    templateUrl: './listado-preinscripciones-completo.component.html',
+    styleUrls: ['./listado-preinscripciones-completo.component.css'],
+    standalone: false
 })
 export class ListadoPreinscripcionesCompletoComponent implements OnInit {
 

@@ -10,9 +10,10 @@ import { Menu } from '../logica/menu';
 import { MenuService } from 'src/app/servicios/menu.service';
 
 @Component({
-  selector: 'app-pagina',
-  templateUrl: './pagina.component.html',
-  styleUrls: ['./pagina.component.css']
+    selector: 'app-pagina',
+    templateUrl: './pagina.component.html',
+    styleUrls: ['./pagina.component.css'],
+    standalone: false
 })
 export class PaginaComponent implements OnInit {
   

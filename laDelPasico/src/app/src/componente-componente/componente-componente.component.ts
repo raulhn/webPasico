@@ -13,9 +13,10 @@ import { Constantes } from '../logica/constantes';
 
 
 @Component({
-  selector: 'app-componente-componente',
-  templateUrl: './componente-componente.component.html',
-  styleUrls: ['./componente-componente.component.css']
+    selector: 'app-componente-componente',
+    templateUrl: './componente-componente.component.html',
+    styleUrls: ['./componente-componente.component.css'],
+    standalone: false
 })
 export class ComponenteComponenteComponent implements OnInit {
   @Input() id_componente: string="";

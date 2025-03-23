@@ -5,9 +5,10 @@ import { faX } from '@fortawesome/free-solid-svg-icons';
 import { MenuService } from 'src/app/servicios/menu.service';
 import { ifStmt } from '@angular/compiler/src/output/output_ast';
 @Component({
-  selector: 'app-componente-paginas',
-  templateUrl: './componente-paginas.component.html',
-  styleUrls: ['./componente-paginas.component.css']
+    selector: 'app-componente-paginas',
+    templateUrl: './componente-paginas.component.html',
+    styleUrls: ['./componente-paginas.component.css'],
+    standalone: false
 })
 export class ComponentePaginasComponent implements OnInit {
   @Input() id_componente: string="";

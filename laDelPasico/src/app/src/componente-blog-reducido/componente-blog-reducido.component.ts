@@ -3,9 +3,10 @@ import { ComponenteService } from 'src/app/servicios/componente.service';
 import { Constantes } from '../logica/constantes';
 
 @Component({
-  selector: 'app-componente-blog-reducido',
-  templateUrl: './componente-blog-reducido.component.html',
-  styleUrls: ['./componente-blog-reducido.component.css']
+    selector: 'app-componente-blog-reducido',
+    templateUrl: './componente-blog-reducido.component.html',
+    styleUrls: ['./componente-blog-reducido.component.css'],
+    standalone: false
 })
 export class ComponenteBlogReducidoComponent implements OnInit {
 

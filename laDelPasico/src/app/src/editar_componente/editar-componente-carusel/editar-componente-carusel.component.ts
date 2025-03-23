@@ -6,9 +6,10 @@ import { Constantes } from '../../logica/constantes';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-editar-componente-carusel',
-  templateUrl: './editar-componente-carusel.component.html',
-  styleUrls: ['./editar-componente-carusel.component.css']
+    selector: 'app-editar-componente-carusel',
+    templateUrl: './editar-componente-carusel.component.html',
+    styleUrls: ['./editar-componente-carusel.component.css'],
+    standalone: false
 })
 export class EditarComponenteCaruselComponent implements OnInit {
   

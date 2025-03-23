@@ -5,9 +5,10 @@ import { ReCaptchaV3Service } from 'ng-recaptcha';
 import { Instrumento } from '../logica/instrumento';
 
 @Component({
-  selector: 'app-formulario-preinscripcion',
-  templateUrl: './formulario-preinscripcion.component.html',
-  styleUrls: ['./formulario-preinscripcion.component.css']
+    selector: 'app-formulario-preinscripcion',
+    templateUrl: './formulario-preinscripcion.component.html',
+    styleUrls: ['./formulario-preinscripcion.component.css'],
+    standalone: false
 })
 
 

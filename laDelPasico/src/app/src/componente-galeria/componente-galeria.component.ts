@@ -8,9 +8,10 @@ import {NgxGalleryAnimation} from '@kolkov/ngx-gallery';
 
 //https://www.npmjs.com/package/@kolkov/ngx-gallery
 @Component({
-  selector: 'app-componente-galeria',
-  templateUrl: './componente-galeria.component.html',
-  styleUrls: ['./componente-galeria.component.css']
+    selector: 'app-componente-galeria',
+    templateUrl: './componente-galeria.component.html',
+    styleUrls: ['./componente-galeria.component.css'],
+    standalone: false
 })
 export class ComponenteGaleriaComponent implements OnInit {
 

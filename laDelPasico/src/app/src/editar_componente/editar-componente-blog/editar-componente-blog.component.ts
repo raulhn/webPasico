@@ -4,9 +4,10 @@ import { ComponenteService } from 'src/app/servicios/componente.service';
 import { Constantes } from '../../logica/constantes';
 
 @Component({
-  selector: 'app-editar-componente-blog',
-  templateUrl: './editar-componente-blog.component.html',
-  styleUrls: ['./editar-componente-blog.component.css']
+    selector: 'app-editar-componente-blog',
+    templateUrl: './editar-componente-blog.component.html',
+    styleUrls: ['./editar-componente-blog.component.css'],
+    standalone: false
 })
 export class EditarComponenteBlogComponent implements OnInit {
 

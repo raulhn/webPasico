@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { CancionesEuService } from 'src/app/servicios/canciones-eu.service';
 
 @Component({
-  selector: 'app-lista-ordenada',
-  templateUrl: './lista-ordenada.component.html',
-  styleUrls: ['./lista-ordenada.component.css']
+    selector: 'app-lista-ordenada',
+    templateUrl: './lista-ordenada.component.html',
+    styleUrls: ['./lista-ordenada.component.css'],
+    standalone: false
 })
 export class ListaOrdenadaComponent implements OnInit {
 

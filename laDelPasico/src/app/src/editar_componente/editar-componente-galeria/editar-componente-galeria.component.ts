@@ -5,9 +5,10 @@ import { Constantes } from '../../logica/constantes';
 
 
 @Component({
-  selector: 'app-editar-componente-galeria',
-  templateUrl: './editar-componente-galeria.component.html',
-  styleUrls: ['./editar-componente-galeria.component.css']
+    selector: 'app-editar-componente-galeria',
+    templateUrl: './editar-componente-galeria.component.html',
+    styleUrls: ['./editar-componente-galeria.component.css'],
+    standalone: false
 })
 export class EditarComponenteGaleriaComponent implements OnInit {
   @Input() id_componente:string ="";

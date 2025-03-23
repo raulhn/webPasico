@@ -4,9 +4,10 @@ import { OwlOptions } from 'ngx-owl-carousel-o';
 import { Constantes } from '../logica/constantes';
 
 @Component({
-  selector: 'app-componente-carusel',
-  templateUrl: './componente-carusel.component.html',
-  styleUrls: ['./componente-carusel.component.css']
+    selector: 'app-componente-carusel',
+    templateUrl: './componente-carusel.component.html',
+    styleUrls: ['./componente-carusel.component.css'],
+    standalone: false
 })
 export class ComponenteCaruselComponent implements OnInit {
   customOptions: OwlOptions = {

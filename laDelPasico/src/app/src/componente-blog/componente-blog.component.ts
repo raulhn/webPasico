@@ -2,9 +2,10 @@ import { Component, OnInit, Input } from '@angular/core';
 import { ComponenteService } from 'src/app/servicios/componente.service';
 import { Constantes } from '../logica/constantes';
 @Component({
-  selector: 'app-componente-blog',
-  templateUrl: './componente-blog.component.html',
-  styleUrls: ['./componente-blog.component.css']
+    selector: 'app-componente-blog',
+    templateUrl: './componente-blog.component.html',
+    styleUrls: ['./componente-blog.component.css'],
+    standalone: false
 })
 export class ComponenteBlogComponent implements OnInit {
 

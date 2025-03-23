@@ -6,9 +6,10 @@ import { UsuariosService } from 'src/app/servicios/usuarios.service';
 import { Constantes } from '../../logica/constantes';
 
 @Component({
-  selector: 'app-nuevo-componente-componentes',
-  templateUrl: './nuevo-componente-componentes.component.html',
-  styleUrls: ['./nuevo-componente-componentes.component.css']
+    selector: 'app-nuevo-componente-componentes',
+    templateUrl: './nuevo-componente-componentes.component.html',
+    styleUrls: ['./nuevo-componente-componentes.component.css'],
+    standalone: false
 })
 export class NuevoComponenteComponentesComponent implements OnInit {
 

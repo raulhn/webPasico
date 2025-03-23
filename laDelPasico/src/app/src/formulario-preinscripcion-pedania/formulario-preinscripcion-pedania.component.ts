@@ -5,9 +5,10 @@ import { ReCaptchaV3Service } from 'ng-recaptcha';
 import { Instrumento } from '../logica/instrumento';
 
 @Component({
-  selector: 'app-formulario-preinscripcion-pedania',
-  templateUrl: './formulario-preinscripcion-pedania.component.html',
-  styleUrls: ['./formulario-preinscripcion-pedania.component.css']
+    selector: 'app-formulario-preinscripcion-pedania',
+    templateUrl: './formulario-preinscripcion-pedania.component.html',
+    styleUrls: ['./formulario-preinscripcion-pedania.component.css'],
+    standalone: false
 })
 
 

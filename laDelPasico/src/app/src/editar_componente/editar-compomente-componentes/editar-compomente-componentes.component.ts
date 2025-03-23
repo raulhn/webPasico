@@ -3,9 +3,10 @@ import { ComponenteComponentesService } from 'src/app/servicios/componente-compo
 import { ComponenteService } from 'src/app/servicios/componente.service';
 
 @Component({
-  selector: 'app-editar-compomente-componentes',
-  templateUrl: './editar-compomente-componentes.component.html',
-  styleUrls: ['./editar-compomente-componentes.component.css']
+    selector: 'app-editar-compomente-componentes',
+    templateUrl: './editar-compomente-componentes.component.html',
+    styleUrls: ['./editar-compomente-componentes.component.css'],
+    standalone: false
 })
 export class EditarCompomenteComponentesComponent implements OnInit {
   @Input() id_componente: string="";
