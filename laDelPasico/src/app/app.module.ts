@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -52,64 +52,57 @@ import { ListadoPreinscripcionesComponent } from './src/listado-preinscripciones
 import { ListadoPreinscripcionesCompletoComponent } from './src/listado-preinscripciones-completo/listado-preinscripciones-completo.component';
 import { ListaOrdenadaComponent } from './src/lista-ordenada/lista-ordenada.component';
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    FormularioLoginComponent,
-    ComponenteMenuComponent,
-    HomeComponent,
-    GaleriaComponent,
-    ComponenteComponent,
-    EditarComponenteTextoComponent,
-    NuevoComponenteComponent,
-    PaginaComponent,
-    EditarComponenteImagenComponent,
-    ComponenteImagenComponent,
-    ComponenteComponentesComponent,
-    EditarCompomenteComponentesComponent,
-    NuevoComponenteComponentesComponent,
-    ComponenteComponenteComponent,
-    ComponenteVideoComponent,
-    EditarComponenteVideoComponent,
-    PieComponent,
-    ComponenteGaleriaComponent,
-    EditarComponenteGaleriaComponent,
-    EditarComponentePaginasComponent,
-    ComponentePaginasComponent,
-    ComponenteCaruselComponent,
-    EditarComponenteCaruselComponent,
-    ComponenteBlogComponent,
-    EditarComponenteBlogComponent,
-    ComponenteBlogReducidoComponent,
-    FormularioPreinscripcionComponent,
-    FormularioPreinscripcionPedaniaComponent,
-    FormularioPreinscripcionTorrePachecoComponent,
-    ListadoPreinscripcionesComponent,
-    ListadoPreinscripcionesCompletoComponent,
-    ListaOrdenadaComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
-    FormsModule,
-    FontAwesomeModule,
-    AngularEditorModule,
-    CarouselModule,
-    QuillModule.forRoot(),
-    NgxGalleryModule,
-    NgxGoogleAnalyticsModule.forRoot('G-WCP2Y4KYHT'),
-    NgxGoogleAnalyticsRouterModule,
-    RecaptchaV3Module,
-    DataTablesModule
-  ],
-  providers: [Usuario,
-  {
-    provide: RECAPTCHA_V3_SITE_KEY,
-    useValue: environment.recaptcha.siteKey
-  }],
-  bootstrap: [AppComponent]
-})
+@NgModule({ declarations: [
+        AppComponent,
+        FormularioLoginComponent,
+        ComponenteMenuComponent,
+        HomeComponent,
+        GaleriaComponent,
+        ComponenteComponent,
+        EditarComponenteTextoComponent,
+        NuevoComponenteComponent,
+        PaginaComponent,
+        EditarComponenteImagenComponent,
+        ComponenteImagenComponent,
+        ComponenteComponentesComponent,
+        EditarCompomenteComponentesComponent,
+        NuevoComponenteComponentesComponent,
+        ComponenteComponenteComponent,
+        ComponenteVideoComponent,
+        EditarComponenteVideoComponent,
+        PieComponent,
+        ComponenteGaleriaComponent,
+        EditarComponenteGaleriaComponent,
+        EditarComponentePaginasComponent,
+        ComponentePaginasComponent,
+        ComponenteCaruselComponent,
+        EditarComponenteCaruselComponent,
+        ComponenteBlogComponent,
+        EditarComponenteBlogComponent,
+        ComponenteBlogReducidoComponent,
+        FormularioPreinscripcionComponent,
+        FormularioPreinscripcionPedaniaComponent,
+        FormularioPreinscripcionTorrePachecoComponent,
+        ListadoPreinscripcionesComponent,
+        ListadoPreinscripcionesCompletoComponent,
+        ListaOrdenadaComponent
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        AppRoutingModule,
+        FormsModule,
+        FontAwesomeModule,
+        AngularEditorModule,
+        CarouselModule,
+        QuillModule.forRoot(),
+        NgxGalleryModule,
+        NgxGoogleAnalyticsModule.forRoot('G-WCP2Y4KYHT'),
+        NgxGoogleAnalyticsRouterModule,
+        RecaptchaV3Module,
+        DataTablesModule], providers: [Usuario,
+        {
+            provide: RECAPTCHA_V3_SITE_KEY,
+            useValue: environment.recaptcha.siteKey
+        }, provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule {
 
 
