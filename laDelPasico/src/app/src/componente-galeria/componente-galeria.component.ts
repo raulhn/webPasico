@@ -2,9 +2,6 @@ import { Component, OnInit, Input, ElementRef, AfterViewInit } from '@angular/co
 import { ComponenteService } from 'src/app/servicios/componente.service';
 import { Constantes } from '../logica/constantes';
 
-import {NgxGalleryOptions} from '@kolkov/ngx-gallery';
-import {NgxGalleryImage} from '@kolkov/ngx-gallery';
-import {NgxGalleryAnimation} from '@kolkov/ngx-gallery';
 
 //https://www.npmjs.com/package/@kolkov/ngx-gallery
 @Component({
@@ -24,8 +21,6 @@ export class ComponenteGaleriaComponent implements OnInit {
 
   items: any[] = [];
 
-  galleryOptions: NgxGalleryOptions[] = [];
-  galleryImages: NgxGalleryImage[] = [];
 
   bCargadaGaleria: Promise<boolean>|null = null;
 
@@ -34,7 +29,7 @@ export class ComponenteGaleriaComponent implements OnInit {
   ngOnInit(): void {
     this.componenteService.obtiene_imagenes_galeria(this.id_componente).subscribe(
       (res:any) =>
-      {
+      {/*
         if (!res.error)
         {
         
@@ -87,7 +82,7 @@ export class ComponenteGaleriaComponent implements OnInit {
       
        
           this.bCargadaGaleria = Promise.resolve(true);
-      }
+      }*/
     }
     )
   }

@@ -1,8 +1,11 @@
 import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 import { ServicioPreinscripcionService } from 'src/app/servicios/servicio-preinscripcion.service';
 import Swal from 'sweetalert2';
-import { ReCaptchaV3Service } from 'ng-recaptcha';
+//import { ReCaptchaV3Service } from 'ng-recaptcha';
+import { ReCaptchaV3Service } from 'ngx-captcha';
+
 import { Instrumento } from '../logica/instrumento';
+import { environment } from 'src/environments/environment';
 
 @Component({
     selector: 'app-formulario-preinscripcion-pedania',
@@ -248,10 +251,54 @@ export class FormularioPreinscripcionPedaniaComponent implements OnInit {
   {
     if(this.valida_formulario())
     {
-      this.recaptchaV3Service.execute('importantAction')
-      .subscribe(this.lanza_registro);
-    }
-  }
+ 
+      try
+      {
+        this.recaptchaV3Service.execute(environment.recaptcha.siteKey, 'importantAction',
+          (token) => {
+            this.token = token;
+            if (this.familia_instrumento == "3")
+            {
+              this.instrumento = 'Percusión'
+            }
+      
+            if(this.calculo_edad() >= 7)
+            {
+              let data = {token: this.token, nombre: this.nombre_alumno, primer_apellido: this.primer_apellido_alumno, segundo_apellido: this.segundo_apellido_alumno,
+              fecha_nacimiento: this.fecha_nacimiento, dni: this.dni_alumno, nombre_padre: this.nombre_padre, primer_apellido_padre: this.primer_apellido_padre, 
+              segundo_apellido_padre: this.segundo_apellido_padre, dni_padre: this.dni_padre, correo_electronico: this.correo_electronico, telefono: this.telefono,
+              provincia: this.provincia, municipio: this.municipio, direccion: this.direccion, codigo_postal: this.codigo_postal, numero: this.numero, 
+              escalera: this.escalera, puerta: this.puerta, instrumento: this.instrumento, familia_instrumento: this.familia_instrumento, sucursal: this.sucursal,  
+              curso: this.obtener_curso(), horario: this.horario_seleccionado, tipo_inscripcion: this.tipo_inscripcion,
+              instrumento2: this.instrumentos_seleccionados[1].instrumento, familia_instrumento2: this.instrumentos_seleccionados[1].familia_instrumento,
+              instrumento3: this.instrumentos_seleccionados[2].instrumento, familia_instrumento3: this.instrumentos_seleccionados[2].familia_instrumento};
+      
+              this.servicioPreinscripcion.registrar_preinscripcion(data).subscribe(this.realiza_registro);
+            }
+            else
+            {
+              let data = {token: this.token, nombre: this.nombre_alumno, primer_apellido: this.primer_apellido_alumno, segundo_apellido: this.segundo_apellido_alumno,
+              fecha_nacimiento: this.fecha_nacimiento, dni: this.dni_alumno, nombre_padre: this.nombre_padre, primer_apellido_padre: this.primer_apellido_padre, 
+              segundo_apellido_padre: this.segundo_apellido_padre, dni_padre: this.dni_padre, correo_electronico: this.correo_electronico, telefono: this.telefono,
+              provincia: this.provincia, municipio: this.municipio, direccion: this.direccion, codigo_postal: this.codigo_postal, numero: this.numero, 
+              escalera: this.escalera, puerta: this.puerta, instrumento: "", familia_instrumento: "", sucursal: this.sucursal, curso: this.obtener_curso(), 
+              horario: this.horario_seleccionado, tipo_inscripcion: this.tipo_inscripcion,
+              instrumento2: "", familia_instrumento2: "",  instrumento3: "", familia_instrumento3: ""};
+              
+              this.servicioPreinscripcion.registrar_preinscripcion(data).subscribe(this.realiza_registro);
+            }
+          });
+      }
+      catch (error)
+      {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Se ha producido un error',
+        })
+      }
+   }
+}
 
   add_instrumento(num_instrumento: number)
   {

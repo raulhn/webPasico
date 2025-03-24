@@ -3,7 +3,6 @@ import { ComponenteService } from 'src/app/servicios/componente.service';
 import { Paginas_componente } from '../logica/componentes/paginas_componente';
 import { faX } from '@fortawesome/free-solid-svg-icons';
 import { MenuService } from 'src/app/servicios/menu.service';
-import { ifStmt } from '@angular/compiler/src/output/output_ast';
 @Component({
     selector: 'app-componente-paginas',
     templateUrl: './componente-paginas.component.html',

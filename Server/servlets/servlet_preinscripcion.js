@@ -47,7 +47,10 @@ function registrar_preinscripcion(req, res)
 
             respuesta = await fetch(url, {method: 'post'});
             respuesta_json = await respuesta.json();
+            console.log(respuesta);
+            console.log(respuesta_json);
             
+            console.log(url)
             let bSuccess = respuesta_json.success;
            
             if (bSuccess)
