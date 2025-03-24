@@ -3,9 +3,10 @@ import { PersonasService } from 'src/app/servicios/personas.service';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-forma-pago',
-  templateUrl: './forma-pago.component.html',
-  styleUrls: ['./forma-pago.component.css']
+    selector: 'app-forma-pago',
+    templateUrl: './forma-pago.component.html',
+    styleUrls: ['./forma-pago.component.css'],
+    standalone: false
 })
 export class FormaPagoComponent implements OnInit{
 

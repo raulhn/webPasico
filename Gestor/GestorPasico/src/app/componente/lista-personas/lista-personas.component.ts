@@ -13,9 +13,10 @@ import 'datatables.net-plugins/filtering/type-based/accent-neutralise.mjs';
 import { DataTableDirective } from 'angular-datatables';
 
 @Component({
-  selector: 'app-lista-personas',
-  templateUrl: './lista-personas.component.html',
-  styleUrls: ['./lista-personas.component.css']
+    selector: 'app-lista-personas',
+    templateUrl: './lista-personas.component.html',
+    styleUrls: ['./lista-personas.component.css'],
+    standalone: false
 })
 export class ListaPersonasComponent {
 

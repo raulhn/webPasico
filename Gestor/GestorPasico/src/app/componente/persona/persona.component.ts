@@ -4,9 +4,10 @@ import { SociosService } from 'src/app/servicios/socios.service';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-persona',
-  templateUrl: './persona.component.html',
-  styleUrls: ['./persona.component.css']
+    selector: 'app-persona',
+    templateUrl: './persona.component.html',
+    styleUrls: ['./persona.component.css'],
+    standalone: false
 })
 export class PersonaComponent {
   @Input() id: string="";

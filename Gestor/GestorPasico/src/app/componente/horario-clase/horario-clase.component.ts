@@ -6,9 +6,10 @@ import Swal from 'sweetalert2';
 import { DataTablesOptions } from 'src/app/logica/constantes';
 
 @Component({
-  selector: 'app-horario-clase',
-  templateUrl: './horario-clase.component.html',
-  styleUrls: ['./horario-clase.component.css']
+    selector: 'app-horario-clase',
+    templateUrl: './horario-clase.component.html',
+    styleUrls: ['./horario-clase.component.css'],
+    standalone: false
 })
 export class HorarioClaseComponent implements OnInit {
 

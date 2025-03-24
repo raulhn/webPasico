@@ -4,9 +4,10 @@ import { FichaAsistenciaService } from 'src/app/servicios/fichaasistencia.servic
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-lista-fichas-asistencias',
-  templateUrl: './lista-fichas-asistencias.component.html',
-  styleUrls: ['./lista-fichas-asistencias.component.css']
+    selector: 'app-lista-fichas-asistencias',
+    templateUrl: './lista-fichas-asistencias.component.html',
+    styleUrls: ['./lista-fichas-asistencias.component.css'],
+    standalone: false
 })
 export class ListaFichasAsistenciasComponent implements OnInit{
 

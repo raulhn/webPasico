@@ -5,9 +5,10 @@ import Swal from 'sweetalert2';
 import { URL } from 'src/app/logica/constantes';
 
 @Component({
-  selector: 'app-ficha-inventario',
-  templateUrl: './ficha-inventario.component.html',
-  styleUrls: ['./ficha-inventario.component.css']
+    selector: 'app-ficha-inventario',
+    templateUrl: './ficha-inventario.component.html',
+    styleUrls: ['./ficha-inventario.component.css'],
+    standalone: false
 })
 export class FichaInventarioComponent implements OnInit{
 

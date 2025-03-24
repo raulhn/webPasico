@@ -3,9 +3,10 @@ import { PersonasService } from 'src/app/servicios/personas.service';
 import { URL } from 'src/app/logica/constantes';
 
 @Component({
-  selector: 'app-padres-persona',
-  templateUrl: './padres-persona.component.html',
-  styleUrls: ['./padres-persona.component.css']
+    selector: 'app-padres-persona',
+    templateUrl: './padres-persona.component.html',
+    styleUrls: ['./padres-persona.component.css'],
+    standalone: false
 })
 export class PadresPersonaComponent implements OnInit{
   @Input() nid_persona: string="";

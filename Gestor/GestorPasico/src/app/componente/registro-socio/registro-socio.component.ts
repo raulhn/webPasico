@@ -4,9 +4,10 @@ import { SociosService } from 'src/app/servicios/socios.service';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-registro-socio',
-  templateUrl: './registro-socio.component.html',
-  styleUrls: ['./registro-socio.component.css']
+    selector: 'app-registro-socio',
+    templateUrl: './registro-socio.component.html',
+    styleUrls: ['./registro-socio.component.css'],
+    standalone: false
 })
 export class RegistroSocioComponent implements OnInit{
 

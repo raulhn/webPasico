@@ -4,9 +4,10 @@ import { AsignaturasService } from 'src/app/servicios/asignaturas.service';
 import { HorariosService } from 'src/app/servicios/horarios.service';
 
 @Component({
-  selector: 'app-horarios-profesor',
-  templateUrl: './horarios-profesor.component.html',
-  styleUrls: ['./horarios-profesor.component.css']
+    selector: 'app-horarios-profesor',
+    templateUrl: './horarios-profesor.component.html',
+    styleUrls: ['./horarios-profesor.component.css'],
+    standalone: false
 })
 export class HorariosProfesorComponent {
 

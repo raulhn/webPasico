@@ -5,9 +5,10 @@ import { SociosService } from 'src/app/servicios/socios.service';
 import { DataTablesOptions } from 'src/app/logica/constantes';
 
 @Component({
-  selector: 'app-lista-socios',
-  templateUrl: './lista-socios.component.html',
-  styleUrls: ['./lista-socios.component.css']
+    selector: 'app-lista-socios',
+    templateUrl: './lista-socios.component.html',
+    styleUrls: ['./lista-socios.component.css'],
+    standalone: false
 })
 export class ListaSociosComponent {
   listaPersonas:Persona[] = [];

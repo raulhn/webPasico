@@ -2,9 +2,10 @@ import { Component, OnInit, Input } from '@angular/core';
 import { DireccionService } from 'src/app/servicios/direccion.service';
 
 @Component({
-  selector: 'app-direccion',
-  templateUrl: './direccion.component.html',
-  styleUrls: ['./direccion.component.css']
+    selector: 'app-direccion',
+    templateUrl: './direccion.component.html',
+    styleUrls: ['./direccion.component.css'],
+    standalone: false
 })
 export class DireccionComponent implements OnInit{
 

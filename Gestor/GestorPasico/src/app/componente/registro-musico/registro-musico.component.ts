@@ -5,9 +5,10 @@ import { PersonasService } from 'src/app/servicios/personas.service';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-registro-musico',
-  templateUrl: './registro-musico.component.html',
-  styleUrls: ['./registro-musico.component.css']
+    selector: 'app-registro-musico',
+    templateUrl: './registro-musico.component.html',
+    styleUrls: ['./registro-musico.component.css'],
+    standalone: false
 })
 export class RegistroMusicoComponent implements OnInit{
 

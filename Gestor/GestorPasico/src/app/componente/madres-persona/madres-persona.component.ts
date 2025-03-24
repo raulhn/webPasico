@@ -3,9 +3,10 @@ import { PersonasService } from 'src/app/servicios/personas.service';
 import { URL } from 'src/app/logica/constantes';
 
 @Component({
-  selector: 'app-madres-persona',
-  templateUrl: './madres-persona.component.html',
-  styleUrls: ['./madres-persona.component.css']
+    selector: 'app-madres-persona',
+    templateUrl: './madres-persona.component.html',
+    styleUrls: ['./madres-persona.component.css'],
+    standalone: false
 })
 export class MadresPersonaComponent {
   @Input() nid_persona: string="";

@@ -3,9 +3,10 @@ import { ParametrosService } from 'src/app/servicios/parametros.service';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-parametros',
-  templateUrl: './parametros.component.html',
-  styleUrls: ['./parametros.component.css']
+    selector: 'app-parametros',
+    templateUrl: './parametros.component.html',
+    styleUrls: ['./parametros.component.css'],
+    standalone: false
 })
 export class ParametrosComponent implements OnInit{
 

@@ -7,9 +7,10 @@ import { DataTablesOptions, URL } from 'src/app/logica/constantes';
 
 
 @Component({
-  selector: 'app-lista-alumnos',
-  templateUrl: './lista-alumnos.component.html',
-  styleUrls: ['./lista-alumnos.component.css']
+    selector: 'app-lista-alumnos',
+    templateUrl: './lista-alumnos.component.html',
+    styleUrls: ['./lista-alumnos.component.css'],
+    standalone: false
 })
 export class ListaAlumnosComponent implements OnInit {
   enlaceFicha: string = URL.URL_FRONT_END + "/ficha_matricula_profesor/";

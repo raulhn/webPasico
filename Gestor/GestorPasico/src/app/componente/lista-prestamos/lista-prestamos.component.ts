@@ -5,9 +5,10 @@ import 'datatables.net-plugins/filtering/type-based/accent-neutralise.mjs';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-lista-prestamos',
-  templateUrl: './lista-prestamos.component.html',
-  styleUrls: ['./lista-prestamos.component.css']
+    selector: 'app-lista-prestamos',
+    templateUrl: './lista-prestamos.component.html',
+    styleUrls: ['./lista-prestamos.component.css'],
+    standalone: false
 })
 export class ListaPrestamosComponent implements OnInit {
 

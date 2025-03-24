@@ -3,9 +3,10 @@ import { PersonasService } from 'src/app/servicios/personas.service';
 import { URL } from 'src/app/logica/constantes';
 
 @Component({
-  selector: 'app-hijos-persona',
-  templateUrl: './hijos-persona.component.html',
-  styleUrls: ['./hijos-persona.component.css']
+    selector: 'app-hijos-persona',
+    templateUrl: './hijos-persona.component.html',
+    styleUrls: ['./hijos-persona.component.css'],
+    standalone: false
 })
 export class HijosPersonaComponent implements OnInit{
 

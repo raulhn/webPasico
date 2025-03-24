@@ -5,9 +5,10 @@ import { MatriculasService } from 'src/app/servicios/matriculas.service';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-evaluacion-profesor',
-  templateUrl: './evaluacion-profesor.component.html',
-  styleUrls: ['./evaluacion-profesor.component.css']
+    selector: 'app-evaluacion-profesor',
+    templateUrl: './evaluacion-profesor.component.html',
+    styleUrls: ['./evaluacion-profesor.component.css'],
+    standalone: false
 })
 export class EvaluacionProfesorComponent implements OnInit{
 

@@ -5,9 +5,10 @@ import Swal from 'sweetalert2';
 import { error } from 'jquery';
 
 @Component({
-  selector: 'app-detalle-remesa',
-  templateUrl: './detalle-remesa.component.html',
-  styleUrls: ['./detalle-remesa.component.css']
+    selector: 'app-detalle-remesa',
+    templateUrl: './detalle-remesa.component.html',
+    styleUrls: ['./detalle-remesa.component.css'],
+    standalone: false
 })
 export class DetalleRemesaComponent implements OnInit{
 

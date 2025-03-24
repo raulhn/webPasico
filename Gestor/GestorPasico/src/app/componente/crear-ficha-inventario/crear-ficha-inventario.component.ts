@@ -4,9 +4,10 @@ import { InventarioService } from 'src/app/servicios/inventario.service';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-crear-ficha-inventario',
-  templateUrl: './crear-ficha-inventario.component.html',
-  styleUrls: ['./crear-ficha-inventario.component.css']
+    selector: 'app-crear-ficha-inventario',
+    templateUrl: './crear-ficha-inventario.component.html',
+    styleUrls: ['./crear-ficha-inventario.component.css'],
+    standalone: false
 })
 export class CrearFichaInventarioComponent {
 

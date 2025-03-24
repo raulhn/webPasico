@@ -4,9 +4,10 @@ import { DataTablesOptions, URL } from 'src/app/logica/constantes';
 import { PersonasService } from 'src/app/servicios/personas.service';
 
 @Component({
-  selector: 'app-lista-forma-pagos',
-  templateUrl: './lista-forma-pagos.component.html',
-  styleUrls: ['./lista-forma-pagos.component.css']
+    selector: 'app-lista-forma-pagos',
+    templateUrl: './lista-forma-pagos.component.html',
+    styleUrls: ['./lista-forma-pagos.component.css'],
+    standalone: false
 })
 export class ListaFormaPagosComponent implements OnInit{
 

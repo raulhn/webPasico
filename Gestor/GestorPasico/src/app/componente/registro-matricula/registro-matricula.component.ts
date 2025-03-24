@@ -12,9 +12,10 @@ import Swal from 'sweetalert2';
 import { faX } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
-  selector: 'app-registro-matricula',
-  templateUrl: './registro-matricula.component.html',
-  styleUrls: ['./registro-matricula.component.css']
+    selector: 'app-registro-matricula',
+    templateUrl: './registro-matricula.component.html',
+    styleUrls: ['./registro-matricula.component.css'],
+    standalone: false
 })
 export class RegistroMatriculaComponent implements OnInit{
   bCargado: boolean = false;

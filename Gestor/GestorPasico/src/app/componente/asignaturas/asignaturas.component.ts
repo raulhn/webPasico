@@ -6,9 +6,10 @@ import { PersonasService } from 'src/app/servicios/personas.service';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-asignaturas',
-  templateUrl: './asignaturas.component.html',
-  styleUrls: ['./asignaturas.component.css']
+    selector: 'app-asignaturas',
+    templateUrl: './asignaturas.component.html',
+    styleUrls: ['./asignaturas.component.css'],
+    standalone: false
 })
 export class AsignaturasComponent implements OnInit {
 

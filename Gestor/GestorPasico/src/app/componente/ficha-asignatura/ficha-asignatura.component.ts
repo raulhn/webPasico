@@ -6,9 +6,10 @@ import Swal from 'sweetalert2';
 import { MatriculasService } from 'src/app/servicios/matriculas.service';
 
 @Component({
-  selector: 'app-ficha-asignatura',
-  templateUrl: './ficha-asignatura.component.html',
-  styleUrls: ['./ficha-asignatura.component.css']
+    selector: 'app-ficha-asignatura',
+    templateUrl: './ficha-asignatura.component.html',
+    styleUrls: ['./ficha-asignatura.component.css'],
+    standalone: false
 })
 export class FichaAsignaturaComponent implements OnInit{
 
