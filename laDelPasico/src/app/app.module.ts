@@ -7,7 +7,7 @@ import { AppComponent } from './app.component';
 
 import { UsuariosService } from './servicios/usuarios.service';
 import { FormularioLoginComponent } from './src/login/formulario-login/formulario-login.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Usuario } from './src/logica/usuario';
 import { ComponenteMenuComponent } from './src/menu/componente-menu/componente-menu.component';
 import { HomeComponent } from './src/home/home.component';
@@ -34,8 +34,6 @@ import { PieComponent } from './src/pie/pie.component';
 import { ComponenteGaleriaComponent } from './src/componente-galeria/componente-galeria.component';
 import { EditarComponenteGaleriaComponent } from './src/editar_componente/editar-componente-galeria/editar-componente-galeria.component';
 import { CarouselModule } from 'ngx-owl-carousel-o';
-import { NgxGalleryModule } from '@kolkov/ngx-gallery';
-import { NgxGoogleAnalyticsModule, NgxGoogleAnalyticsRouterModule } from 'ngx-google-analytics';
 import { EditarComponentePaginasComponent } from './src/editar_componente/editar-componente-paginas/editar-componente-paginas.component';
 import { ComponentePaginasComponent } from './src/componente-paginas/componente-paginas.component';
 import { ComponenteCaruselComponent } from './src/componente-carusel/componente-carusel.component';
@@ -44,13 +42,16 @@ import { ComponenteBlogComponent } from './src/componente-blog/componente-blog.c
 import { EditarComponenteBlogComponent } from './src/editar_componente/editar-componente-blog/editar-componente-blog.component';
 import { ComponenteBlogReducidoComponent } from './src/componente-blog-reducido/componente-blog-reducido.component';
 import { FormularioPreinscripcionComponent } from './src/formulario-preinscripcion/formulario-preinscripcion.component';
-import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module } from 'ng-recaptcha';
+
 import { environment } from 'src/environments/environment';
 import { FormularioPreinscripcionPedaniaComponent } from './src/formulario-preinscripcion-pedania/formulario-preinscripcion-pedania.component';
 import { FormularioPreinscripcionTorrePachecoComponent } from './src/formulario-preinscripcion-torre-pacheco/formulario-preinscripcion-torre-pacheco.component';
 import { ListadoPreinscripcionesComponent } from './src/listado-preinscripciones/listado-preinscripciones.component';
 import { ListadoPreinscripcionesCompletoComponent } from './src/listado-preinscripciones-completo/listado-preinscripciones-completo.component';
 import { ListaOrdenadaComponent } from './src/lista-ordenada/lista-ordenada.component';
+import { RouterModule } from '@angular/router';
+import { NgxCaptchaModule } from 'ngx-captcha';
+
 
 @NgModule({ declarations: [
         AppComponent,
@@ -93,16 +94,20 @@ import { ListaOrdenadaComponent } from './src/lista-ordenada/lista-ordenada.comp
         FontAwesomeModule,
         AngularEditorModule,
         CarouselModule,
+        NgxCaptchaModule, ReactiveFormsModule,
         QuillModule.forRoot(),
-        NgxGalleryModule,
-        NgxGoogleAnalyticsModule.forRoot('G-WCP2Y4KYHT'),
-        NgxGoogleAnalyticsRouterModule,
-        RecaptchaV3Module,
-        DataTablesModule], providers: [Usuario,
+        NgxCaptchaModule,
+        ReactiveFormsModule,
+       // RecaptchaV3Module,
+
+        DataTablesModule], 
+        providers: [Usuario, provideHttpClient(withInterceptorsFromDi())] 
+        /*
         {
             provide: RECAPTCHA_V3_SITE_KEY,
             useValue: environment.recaptcha.siteKey
-        }, provideHttpClient(withInterceptorsFromDi())] })
+        },*/
+        })
 export class AppModule {
 
 
