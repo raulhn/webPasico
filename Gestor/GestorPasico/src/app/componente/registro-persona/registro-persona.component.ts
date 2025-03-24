@@ -6,9 +6,10 @@ import { DataTablesOptions } from 'src/app/logica/constantes';
 import { ElementSchemaRegistry } from '@angular/compiler';
 
 @Component({
-  selector: 'app-registro-persona',
-  templateUrl: './registro-persona.component.html',
-  styleUrls: ['./registro-persona.component.css']
+    selector: 'app-registro-persona',
+    templateUrl: './registro-persona.component.html',
+    styleUrls: ['./registro-persona.component.css'],
+    standalone: false
 })
 export class RegistroPersonaComponent implements OnInit{
  

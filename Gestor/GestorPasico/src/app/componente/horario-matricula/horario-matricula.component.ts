@@ -5,9 +5,10 @@ import { HorariosService } from 'src/app/servicios/horarios.service';
 import { faFloppyDisk, faPen, faX} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
-  selector: 'app-horario-matricula',
-  templateUrl: './horario-matricula.component.html',
-  styleUrls: ['./horario-matricula.component.css']
+    selector: 'app-horario-matricula',
+    templateUrl: './horario-matricula.component.html',
+    styleUrls: ['./horario-matricula.component.css'],
+    standalone: false
 })
 export class HorarioMatriculaComponent {
 

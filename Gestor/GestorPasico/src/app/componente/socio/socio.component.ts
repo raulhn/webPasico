@@ -3,9 +3,10 @@ import { PersonasService } from 'src/app/servicios/personas.service';
 import { SociosService } from 'src/app/servicios/socios.service';
 
 @Component({
-  selector: 'app-socio',
-  templateUrl: './socio.component.html',
-  styleUrls: ['./socio.component.css']
+    selector: 'app-socio',
+    templateUrl: './socio.component.html',
+    styleUrls: ['./socio.component.css'],
+    standalone: false
 })
 export class SocioComponent implements OnInit{
  

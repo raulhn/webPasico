@@ -3,9 +3,10 @@ import { DataTablesOptions } from 'src/app/logica/constantes';
 import { MusicosService } from 'src/app/servicios/musicos.service';
 
 @Component({
-  selector: 'app-registrar-asistencia',
-  templateUrl: './registrar-asistencia.component.html',
-  styleUrls: ['./registrar-asistencia.component.css']
+    selector: 'app-registrar-asistencia',
+    templateUrl: './registrar-asistencia.component.html',
+    styleUrls: ['./registrar-asistencia.component.css'],
+    standalone: false
 })
 export class RegistrarAsistenciaComponent implements OnInit{
 

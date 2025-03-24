@@ -2,9 +2,10 @@ import { Component, OnInit, Input } from '@angular/core';
 import { CursosService } from 'src/app/servicios/cursos.service';
 
 @Component({
-  selector: 'app-cursos-profesor',
-  templateUrl: './cursos-profesor.component.html',
-  styleUrls: ['./cursos-profesor.component.css']
+    selector: 'app-cursos-profesor',
+    templateUrl: './cursos-profesor.component.html',
+    styleUrls: ['./cursos-profesor.component.css'],
+    standalone: false
 })
 export class CursosProfesorComponent implements OnInit {
 

@@ -2,9 +2,10 @@ import { Component, OnInit, Input } from '@angular/core';
 import { MatriculasService } from 'src/app/servicios/matriculas.service';
 
 @Component({
-  selector: 'app-matriculas-alumno',
-  templateUrl: './matriculas-alumno.component.html',
-  styleUrls: ['./matriculas-alumno.component.css']
+    selector: 'app-matriculas-alumno',
+    templateUrl: './matriculas-alumno.component.html',
+    styleUrls: ['./matriculas-alumno.component.css'],
+    standalone: false
 })
 export class MatriculasAlumnoComponent implements OnInit {
 

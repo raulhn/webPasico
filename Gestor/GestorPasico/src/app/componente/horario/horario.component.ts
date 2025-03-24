@@ -6,9 +6,10 @@ import { ActivatedRoute } from '@angular/router';
 import { URL } from 'src/app/logica/constantes';
 
 @Component({
-  selector: 'app-horario',
-  templateUrl: './horario.component.html',
-  styleUrls: ['./horario.component.css']
+    selector: 'app-horario',
+    templateUrl: './horario.component.html',
+    styleUrls: ['./horario.component.css'],
+    standalone: false
 })
 export class HorarioComponent implements OnInit {
 

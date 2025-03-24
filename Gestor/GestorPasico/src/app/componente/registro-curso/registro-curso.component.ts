@@ -3,9 +3,10 @@ import { CursosService } from 'src/app/servicios/cursos.service';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-registro-curso',
-  templateUrl: './registro-curso.component.html',
-  styleUrls: ['./registro-curso.component.css']
+    selector: 'app-registro-curso',
+    templateUrl: './registro-curso.component.html',
+    styleUrls: ['./registro-curso.component.css'],
+    standalone: false
 })
 export class RegistroCursoComponent implements OnInit{
  

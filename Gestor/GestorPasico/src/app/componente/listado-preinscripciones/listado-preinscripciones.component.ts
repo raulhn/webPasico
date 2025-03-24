@@ -3,9 +3,10 @@ import { PreinscripcionesService } from 'src/app/servicios/preinscripciones.serv
 import { DataTablesOptions } from 'src/app/logica/constantes';
 
 @Component({
-  selector: 'app-listado-preinscripciones',
-  templateUrl: './listado-preinscripciones.component.html',
-  styleUrls: ['./listado-preinscripciones.component.css']
+    selector: 'app-listado-preinscripciones',
+    templateUrl: './listado-preinscripciones.component.html',
+    styleUrls: ['./listado-preinscripciones.component.css'],
+    standalone: false
 })
 export class ListadoPreinscripcionesComponent implements OnInit {
 

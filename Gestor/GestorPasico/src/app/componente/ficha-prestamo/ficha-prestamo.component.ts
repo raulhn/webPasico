@@ -6,9 +6,10 @@ import { PrestamosService } from 'src/app/servicios/prestamos.service';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-ficha-prestamo',
-  templateUrl: './ficha-prestamo.component.html',
-  styleUrls: ['./ficha-prestamo.component.css']
+    selector: 'app-ficha-prestamo',
+    templateUrl: './ficha-prestamo.component.html',
+    styleUrls: ['./ficha-prestamo.component.css'],
+    standalone: false
 })
 export class FichaPrestamoComponent implements OnInit {
 

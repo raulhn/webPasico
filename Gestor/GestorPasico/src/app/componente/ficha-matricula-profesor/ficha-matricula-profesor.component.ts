@@ -8,9 +8,10 @@ import { MatriculasService } from 'src/app/servicios/matriculas.service';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-ficha-matricula-profesor',
-  templateUrl: './ficha-matricula-profesor.component.html',
-  styleUrls: ['./ficha-matricula-profesor.component.css']
+    selector: 'app-ficha-matricula-profesor',
+    templateUrl: './ficha-matricula-profesor.component.html',
+    styleUrls: ['./ficha-matricula-profesor.component.css'],
+    standalone: false
 })
 export class FichaMatriculaProfesorComponent implements OnInit {
 

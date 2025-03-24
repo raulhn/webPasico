@@ -5,9 +5,10 @@ import { FichaAsistenciaService } from 'src/app/servicios/fichaasistencia.servic
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-crea-ficha-asistencia',
-  templateUrl: './crea-ficha-asistencia.component.html',
-  styleUrls: ['./crea-ficha-asistencia.component.css']
+    selector: 'app-crea-ficha-asistencia',
+    templateUrl: './crea-ficha-asistencia.component.html',
+    styleUrls: ['./crea-ficha-asistencia.component.css'],
+    standalone: false
 })
 export class CreaFichaAsistenciaComponent implements OnInit{
   nombre: string = "";

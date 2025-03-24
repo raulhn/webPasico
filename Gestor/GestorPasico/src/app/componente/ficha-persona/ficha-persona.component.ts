@@ -13,9 +13,10 @@ import { DireccionComponent } from '../direccion/direccion.component';
 import { DireccionService } from 'src/app/servicios/direccion.service';
 
 @Component({
-  selector: 'app-ficha-persona',
-  templateUrl: './ficha-persona.component.html',
-  styleUrls: ['./ficha-persona.component.css']
+    selector: 'app-ficha-persona',
+    templateUrl: './ficha-persona.component.html',
+    styleUrls: ['./ficha-persona.component.css'],
+    standalone: false
 })
 export class FichaPersonaComponent implements OnInit{
 

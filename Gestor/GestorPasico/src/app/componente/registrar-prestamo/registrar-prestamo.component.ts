@@ -6,9 +6,10 @@ import { PrestamosService } from 'src/app/servicios/prestamos.service';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-registrar-prestamo',
-  templateUrl: './registrar-prestamo.component.html',
-  styleUrls: ['./registrar-prestamo.component.css']
+    selector: 'app-registrar-prestamo',
+    templateUrl: './registrar-prestamo.component.html',
+    styleUrls: ['./registrar-prestamo.component.css'],
+    standalone: false
 })
 export class RegistrarPrestamoComponent implements OnInit{
 

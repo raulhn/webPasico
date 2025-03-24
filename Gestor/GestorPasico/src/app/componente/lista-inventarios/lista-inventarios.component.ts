@@ -4,9 +4,10 @@ import { InventarioService } from 'src/app/servicios/inventario.service';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-lista-inventarios',
-  templateUrl: './lista-inventarios.component.html',
-  styleUrls: ['./lista-inventarios.component.css']
+    selector: 'app-lista-inventarios',
+    templateUrl: './lista-inventarios.component.html',
+    styleUrls: ['./lista-inventarios.component.css'],
+    standalone: false
 })
 export class ListaInventariosComponent implements OnInit{
 

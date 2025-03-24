@@ -5,9 +5,10 @@ import Swal from 'sweetalert2';
 import { faX } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
-  selector: 'app-ficha-asistencia',
-  templateUrl: './ficha-asistencia.component.html',
-  styleUrls: ['./ficha-asistencia.component.css']
+    selector: 'app-ficha-asistencia',
+    templateUrl: './ficha-asistencia.component.html',
+    styleUrls: ['./ficha-asistencia.component.css'],
+    standalone: false
 })
 export class FichaAsistenciaComponent implements OnInit{
 

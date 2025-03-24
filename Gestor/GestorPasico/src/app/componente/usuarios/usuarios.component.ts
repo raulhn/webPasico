@@ -3,9 +3,10 @@ import { UsuariosService } from 'src/app/servicios/usuarios.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-usuarios',
-  templateUrl: './usuarios.component.html',
-  styleUrls: ['./usuarios.component.css']
+    selector: 'app-usuarios',
+    templateUrl: './usuarios.component.html',
+    styleUrls: ['./usuarios.component.css'],
+    standalone: false
 })
 
 

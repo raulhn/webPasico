@@ -11,9 +11,10 @@ import Swal from 'sweetalert2';
 
 
 @Component({
-  selector: 'app-ficha-profesor',
-  templateUrl: './ficha-profesor.component.html',
-  styleUrls: ['./ficha-profesor.component.css']
+    selector: 'app-ficha-profesor',
+    templateUrl: './ficha-profesor.component.html',
+    styleUrls: ['./ficha-profesor.component.css'],
+    standalone: false
 })
 export class FichaProfesorComponent implements OnInit{
   enlaceFicha: string = URL.URL_FRONT_END + "/ficha_persona/";

@@ -4,9 +4,10 @@ import { PersonasService } from 'src/app/servicios/personas.service';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-ficha-forma-pago',
-  templateUrl: './ficha-forma-pago.component.html',
-  styleUrls: ['./ficha-forma-pago.component.css']
+    selector: 'app-ficha-forma-pago',
+    templateUrl: './ficha-forma-pago.component.html',
+    styleUrls: ['./ficha-forma-pago.component.css'],
+    standalone: false
 })
 export class FichaFormaPagoComponent implements OnInit{
 

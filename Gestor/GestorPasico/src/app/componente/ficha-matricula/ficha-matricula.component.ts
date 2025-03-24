@@ -7,9 +7,10 @@ import { EvaluacionService } from 'src/app/servicios/evaluacion.service';
 import { DataTablesOptions } from 'src/app/logica/constantes';
 
 @Component({
-  selector: 'app-ficha-matricula',
-  templateUrl: './ficha-matricula.component.html',
-  styleUrls: ['./ficha-matricula.component.css']
+    selector: 'app-ficha-matricula',
+    templateUrl: './ficha-matricula.component.html',
+    styleUrls: ['./ficha-matricula.component.css'],
+    standalone: false
 })
 export class FichaMatriculaComponent implements OnInit{
 
