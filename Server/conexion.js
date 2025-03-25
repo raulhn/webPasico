@@ -1,5 +1,5 @@
-var mysql = require('mysql');
-var bd_connection = require('./config/bd.json');
-var dbConn = mysql.createConnection(bd_connection);
+const mysql = require('mysql')
+const bdConnection = require('./config/bd.json')
+const dbConn = mysql.createConnection(bdConnection)
 
-module.exports.dbConn = dbConn;
+module.exports.dbConn = dbConn

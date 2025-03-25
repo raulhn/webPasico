@@ -1,56 +1,42 @@
-const gestion_usuarios = require('../usuario.js')
+const gestionUsuarios = require('../logica/usuario.js')
 
-async function comprobaciones(req, res, funcion_especifica)
-{
-    try{
-        await funcion_especifica();
-    }
-    catch(error)
-    {
-        console.log(error);
-        res.status(400).send({error: true, message: 'Se ha producido un error', info: error})
-    }
+async function comprobaciones (req, res, funcionEspecifica) {
+  try {
+    await funcionEspecifica()
+  } catch (error) {
+    console.log(error)
+    res.status(400).send({ error: true, message: 'Se ha producido un error', info: error })
+  }
 }
 
-async function comprobaciones_login(req, res, funcion_especifica)
-{
-    if (await gestion_usuarios.esAdministrador(req.session.nombre))
-    {
-        console.log(req.session.nombre)
-        try{
-            await funcion_especifica();
-        }
-        catch(error)
-        {
-            console.log(error);
-            res.status(400).send({error: true, message: 'Se ha producido un error', info: error})
-        }
+async function comprobacionesLogin (req, res, funcionEspecifica) {
+  if (await gestionUsuarios.esAdministrador(req.session.nombre)) {
+    console.log(req.session.nombre)
+    try {
+      await funcionEspecifica()
+    } catch (error) {
+      console.log(error)
+      res.status(400).send({ error: true, message: 'Se ha producido un error', info: error })
     }
-    else{
-        res.status(404).send({error: true, message: 'No autorizado'})
-    }
+  } else {
+    res.status(404).send({ error: true, message: 'No autorizado' })
+  }
 }
 
-function comprobaciones_api(req, res, funcion_especifica)
-{
-    try{
-        let api_key_solicitud = req.header('x-api-key')
-        if(api_key_solicitud == process.env.API_KEY)
-        {
-            funcion_especifica();
-        }
-        else
-        {
-            res.status(404).send({error: true, message: 'No autorizado'})
-        }
+function comprobacionesApi (req, res, funcionEspecifica) {
+  try {
+    const apiKeySolicitud = req.header('x-api-key')
+    if (apiKeySolicitud === process.env.API_KEY) {
+      funcionEspecifica()
+    } else {
+      res.status(404).send({ error: true, message: 'No autorizado' })
     }
-    catch(error)
-    {
-        console.log(error);
-        res.status(400).send({error: true, message: 'Se ha producido un error', info: error})
-    }
+  } catch (error) {
+    console.log(error)
+    res.status(400).send({ error: true, message: 'Se ha producido un error', info: error })
+  }
 }
 
-module.exports.comprobaciones = comprobaciones;
-module.exports.comprobaciones_login = comprobaciones_login;
-module.exports.comprobaciones_api = comprobaciones_api;
+module.exports.comprobaciones = comprobaciones
+module.exports.comprobacionesLogin = comprobacionesLogin
+module.exports.comprobacionesApi = comprobacionesApi
