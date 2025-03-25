@@ -1,1265 +1,997 @@
-const constantes = require('../constantes.js');
-const conexion = require('../conexion.js');
-const menu = require('../menu.js');
-const imagen = require('../imagen.js');
+const constantes = require('../constantes.js')
+const conexion = require('../conexion.js')
+const menu = require('../menu.js')
 
+function existeComponente (nidComponente) {
+  return new Promise(
+    function (resolve, reject) {
+      conexion.dbConn.query('select * from ' + constantes.ESQUEMA_BD + '.componente where nid = ' + conexion.dbConn.escape(nidComponente),
+        function (error, results, fields) {
+          if (error) return resolve(false)
+          if (results.length <= 0) {
+            resolve(false)
+          }
+          resolve(true)
+        })
+    }
 
-function existe_componente(nid_componente)
-{
-    return new Promise(
-        function(resolve, reject)
-        {
-            conexion.dbConn.query("select * from " + constantes.ESQUEMA_BD + ".componente where nid = " +  conexion.dbConn.escape(nid_componente), 
-            function(error, results, fields) 
-            {
-                if (error)  return resolve(false);
-                if (results.length <= 0)
-                {
-                    resolve(false);
-                }
-                resolve(true);
-            });
-            
-        }
-    
-    );
+  )
 }
 
 /*
     Obtiene la página asociada a un componente
 */
-function obtener_pagina_de_componente(nid_componente)
-{
-    return new Promise(
-        (resolve, reject) =>
-        {
-            conexion.dbConn.query("select max(nid_pagina) pagina from " + constantes.ESQUEMA_BD + ".pagina_componente where nid_componente = " + conexion.dbConn.escape(nid_componente),
-                (error, results, fields) =>
-                {
-                    if(error) {console.log(error); reject();}
-                    else if(results.length <= 0) {console.log('Error al obtener la página'); reject();}
-                    else { resolve(results[0]["pagina"]); }
-                }
-            )
+function obtenerPaginaDeComponente (nidComponente) {
+  return new Promise(
+    (resolve, reject) => {
+      conexion.dbConn.query('select max(nid_pagina) pagina from ' + constantes.ESQUEMA_BD + '.pagina_componente where nid_componente = ' + conexion.dbConn.escape(nidComponente),
+        (error, results, fields) => {
+          if (error) { console.log(error); reject(new Error('Error al obtener la pagina de componente')) } else if (results.length <= 0) {
+            console.log('Error al obtener la página')
+            reject(new Error('Error al obtener la pagina de componentes'))
+          } else { resolve(results[0].pagina) }
         }
-    )
-}
-
-function tipo_componente(nid_componente)
-{
-    return new Promise(
-        function(resolve, reject)
-        {
-            conexion.dbConn.query("select nTipo from " + constantes.ESQUEMA_BD + ".componente where nid = " +  conexion.dbConn.escape(nid_componente), 
-            function(error, results, field)
-            {
-                if (error)  return reject();
-                else if (results.length <= 0)
-                {
-                    reject();
-                }
-                else{
-                console.log(results);
-                resolve(results[0]['nTipo']);
-                }
-            });
-        }
-    
-    );
-}
-
-function esComponente_texto(nid_componente)
-{
-    return new Promise(
-        function(resolve, reject)
-        {
-            existe_componente(nid_componente).then(
-                function(existe)
-                {
-                    if(existe)
-                    {
-                        tipo_componente(nid_componente).then(
-                            function(nTipo)
-                            {
-                                resolve(nTipo == constantes.TIPO_COMPONENTE_TEXTO);
-                            }
-                        );
-                    }
-                   
-                }
-            );
-        }
-    )
-}
-
-function actualizar_texto(texto_html, nid_componente)
-{
-    return new Promise(
-        function(resolve, reject)
-        {
-        conexion.dbConn.beginTransaction(
-            () =>
-            {  
-            esComponente_texto(nid_componente).then(
-                function(bEsComponente_texto)
-                {
-                    if(bEsComponente_texto)
-                    {
-                        conexion.dbConn.query("update " + constantes.ESQUEMA_BD + ".componente_texto set cTexto = " +  conexion.dbConn.escape(texto_html) + 
-                            " where nid = " + conexion.dbConn.escape(nid_componente),
-                            function(error, results, fields)
-                            {
-                            if(error) {conexion.dbConn.rollback(); console.log(error); resolve(false);}
-                            else {conexion.dbConn.commit(); resolve(true);}
-                            });
-                    }
-                }
-            ).catch()
-            {
-                reject();
-            }
-            });
-        });
-}
-
-function obtener_ultimo_orden(id_pagina)
-{
-
-    return new Promise(
-        (resolve, reject) => 
-        {
-            console.log('obtener_ultimo_orden -> llega');
-            conexion.dbConn.query("select ifnull(max(nOrden), 0) orden from " + constantes.ESQUEMA_BD + ".pagina_componente where nid_pagina = " + conexion.dbConn.escape(id_pagina), 
-                function(error, results, field)
-                {
-                    if(error) {console.log(error); resolve(0);}
-                    else { resolve(results[0]['orden']);}
-                }
-            );
-        }
-    );
-}
-
-function registrar_c_texto(nid_componente)
-{
-    return new Promise(
-        (resolve, reject) =>
-        {
-            conexion.dbConn.query("insert into " + constantes.ESQUEMA_BD + ".componente_texto(nid) values(" + conexion.dbConn.escape(nid_componente) + ")",
-                function(error, results, field)
-                {
-                    if(error) {console.log(error); conexion.dbConn.rollback(); reject();}
-                   
-                    resolve();
-                } 
-            );
-        }
-    )
-}
-
-function registrar_imagen(titulo)
-{
-    return new Promise(
-        (resolve, reject) =>
-        {
-            conexion.dbConn.query("insert into " + constantes.ESQUEMA_BD + ".imagen(titulo) values(" + conexion.dbConn.escape(titulo) + ")",
-                (error, results, fields) =>
-                {
-                    if(error) {console.log(error); conexion.dbConn.rollback(); reject();}
-                    let id_imagen = results.insertId;
-                    resolve(id_imagen);
-                }
-            )
-        }
-    )
-}
-
-function registrar_c_imagen(nid_componente, titulo)
-{
-    return new Promise(
-        (resolve, reject) =>
-        {
-            registrar_imagen(titulo).then(
-            (id_imagen) =>
-            {
-                conexion.dbConn.query("insert into " + constantes.ESQUEMA_BD + ".componente_imagen(nid_componente, nid_imagen) values(" +conexion.dbConn.escape(nid_componente) 
-                    + ", " + conexion.dbConn.escape(id_imagen) +")",
-                    function(error, results, field)
-                    {
-                        if(error) {console.log(error); conexion.dbConn.rollback(); reject();}
-                        resolve();
-                    } 
-                );
-            });
-        }
-    )
-}
-
-function registrar_componente(tipo_componente)
-{
-    return new Promise(
-        (resolve, reject) =>
-        {
-            
-            console.log('registrar_componente -> llega');
-            
-            conexion.dbConn.query("insert into " + constantes.ESQUEMA_BD + ".componente(nTipo) values(" + conexion.dbConn.escape(tipo_componente) + ")" ,
-                function(error, results, fields)
-                {
-                    if(error){ console.log('componente->registrar_componente ' + error);  conexion.dbConn.rollback(); reject(error);}
-                    else
-                    {
-                        let id_componente = results.insertId;
-                        resolve(id_componente);
-                    }
-                }
-            );
-          //  reject();
-        }
-    )
-}
-
-function registrar_componente_pagina(id_componente, id_pagina, nOrden)
-{
-    return new Promise(
-        (resolve, reject) =>
-        {
-            // Asocia el componente a la página
-            conexion.dbConn.query("insert into " + constantes.ESQUEMA_BD + ".pagina_componente(nid_pagina, nid_componente, nOrden) values(" + 
-                conexion.dbConn.escape(id_pagina) + ", " + conexion.dbConn.escape(id_componente) + ", " + conexion.dbConn.escape(nOrden) + " + 1)",
-            (error, results, fields) =>
-            {
-                if(error) {console.log(error); reject();}
-                resolve();
-            }
-            );
- 
-        }
-    );
-}
-
-function registrar_componente_componentes(id_componente, id_componente_padre, nOrden)
-{
-    return new Promise(
-        (resolve, reject) =>
-        {
-            // Asocia el componente a la página
-            console.log('registrar_componente_componentes -> ' + nOrden);
-            conexion.dbConn.query("insert into " + constantes.ESQUEMA_BD + ".componente_componentes(nid_componente, nid_componente_hijo, nOrden) values(" + 
-                conexion.dbConn.escape(id_componente_padre) + ", " + conexion.dbConn.escape(id_componente) + ", " + conexion.dbConn.escape(nOrden) + ")",
-            (error, results, fields) =>
-            {
-                if(error) reject();
-                resolve();
-            }
-            );
-     
-        }
-    );
-}
-
-function registrar_componente_comun(tipo_componente, id, tipo_asociacion, nOrden)
-{
-    return new Promise(
-        (resolve, reject) =>
-        {
-            conexion.dbConn.beginTransaction(
-                () =>
-                {   
-                    console.log('componente->registrar_componente_comun ' + tipo_asociacion);
-                    registrar_componente(tipo_componente).then(
-                        (id_componente) =>
-                        {
-                            console.log('componente->registrar_componente_comun ' + id_componente);
-                            if(tipo_asociacion == constantes.TIPO_ASOCIACION_PAGINA)
-                            {
-                                console.log('componente->registrar_componente_comun-> pagina ');
-
-                                registrar_componente_pagina(id_componente, id, nOrden).then(
-                                () => {resolve(id_componente);}
-                                )
-                                .catch(
-                                () => {reject();}
-                                );
-                            
-                            }
-                            else if(tipo_asociacion == constantes.TIPO_ASOCIACION_COMPONENTE)
-                            {
-                                console.log('componente->registrar_componente_comun-> componentes ');
-                                registrar_componente_componentes(id_componente, id, nOrden).then(
-                                    () => {resolve(id_componente);}
-                                ).catch(
-                                    () => {reject();}
-                                );
-                            }
-                        }
-                    ).catch(
-                        (error) => {console.log(error); console.log('error'); reject();},
-                        () => {console.log("Se ha producido un error");}
-                    );
-                }
-
-            );
-        }
-    );
-}
-
-function registrar_componente_texto_orden(id, tipo_asociacion, nOrden)
-{
-    return new Promise(
-        (resolve, reject) =>
-        {
-            console.log('registrar_componente_texto -> llega');
-            registrar_componente_comun(constantes.TIPO_COMPONENTE_TEXTO, id, tipo_asociacion, nOrden).then(
-                (nid_componente) =>
-                {
-                    console.log('registrar_componente_texto -> 1');
-                    registrar_c_texto(nid_componente).then(
-                        () => { conexion.dbConn.commit(); resolve();});
-                }
-
-            ).catch(
-                () =>{
-                    conexion.dbConn.rollback(); reject();
-                }
-            )
-      
-        }
-    );
-}
-
-function registrar_componente_texto(id, tipo_asociacion)
-{
-    return new Promise(
-    (resolve, reject) =>
-    {
-        
-        obtener_ultimo_orden(id).then((max_orden) =>{
-  
-            registrar_componente_texto_orden(id, tipo_asociacion, max_orden).then(
-                () => {resolve();}
-            )
-        }).catch(
-            () => {reject();}
-        )
-        ;
+      )
     }
-    );
+  )
 }
 
-function registrar_componente_imagen_orden(id, titulo, tipo_asociacion, nOrden)
-{
-    return new Promise(
-        (resolve, reject) =>
-        {
-            registrar_componente_comun(constantes.TIPO_COMPONENTE_IMAGEN, id, tipo_asociacion, nOrden).then(
-                (nid_componente) =>
-                {
-                    registrar_c_imagen(nid_componente, titulo).then(
-                        () => { conexion.dbConn.commit(); resolve();});
-                }
+function tipoComponente (nidComponente) {
+  return new Promise(
+    function (resolve, reject) {
+      conexion.dbConn.query('select nTipo from ' + constantes.ESQUEMA_BD + '.componente where nid = ' + conexion.dbConn.escape(nidComponente),
+        function (error, results, field) {
+          if (error) return reject(new Error('Error al obtener el tipo de componente'))
+          else if (results.length <= 0) {
+            reject(new Error('No se ha encontrado el componente'))
+          } else {
+            console.log(results)
+            resolve(results[0].nTipo)
+          }
+        })
+    }
 
-            ).catch(
-                () =>{
-                    conexion.dbConn.rollback(); reject();
-                }
+  )
+}
+
+function esComponenteTexto (nidComponente) {
+  return new Promise(
+    function (resolve, reject) {
+      existeComponente(nidComponente).then(
+        function (existe) {
+          if (existe) {
+            tipoComponente(nidComponente).then(
+              function (nTipo) {
+                resolve(nTipo === constantes.TIPO_COMPONENTE_TEXTO)
+              }
             )
-      
+          }
         }
-    );
+      )
+    }
+  )
 }
 
-function registrar_componente_imagen(id, titulo, tipo_asociacion)
-{
-    return new Promise(
-        (resolve, reject) =>
-        {
-		console.log('Registrar_componente_imagen');
-            obtener_ultimo_orden(id).then(
-            (max_orden) => {
-  			
-                registrar_componente_imagen_orden(id, titulo, tipo_asociacion, max_orden).then(
-                    () => {conexion.dbConn.commit(); resolve();}
-                ).catch(
-                    () => {conexion.dbConn.rollback(); reject();}
-                )
-            
-            }).catch( () => {console.log('Error imagen');});
-        }
-
-    );
-}
-
-function registrar_c_video(nid_componente, url)
-{
-    return new Promise(
-        (resolve, reject) =>
-        {
-        
-            conexion.dbConn.query("insert into " + constantes.ESQUEMA_BD + ".componente_video(nid_componente, url) values(" +conexion.dbConn.escape(nid_componente) 
-                + ", " + conexion.dbConn.escape(url) +")",
-                function(error, results, field)
-                {
-                    if(error) {console.log(error); conexion.dbConn.rollback(); reject();}
-                    resolve();
-                } 
-            );
-        
-        }
-    )
-}
-
-function registrar_componente_video_orden(id, url, tipo_asociacion, nOrden)
-{
-    return new Promise(
-        (resolve, reject) =>
-        {
-            registrar_componente_comun(constantes.TIPO_COMPONENTE_VIDEO, id, tipo_asociacion, nOrden).then(
-                (nid_componente) =>
-                {
-                    registrar_c_video(nid_componente, url).then(
-                        () => { conexion.dbConn.commit(); resolve();});
-                }
-
-            ).catch(
-                () =>{
-                    conexion.dbConn.rollback(); reject();
-                }
-            )
-      
-        }
-    );
-}
-
-function registrar_componente_video(id, url, tipo_asociacion)
-{
-    return new Promise(
-        (resolve, reject) =>
-        {
-            console.log('Registrar_componente_video');
-            obtener_ultimo_orden(id).then(
-                (max_orden) =>
-                {
-                    registrar_componente_video_orden(id, url, tipo_asociacion, max_orden).then(
-                        () => {conexion.dbConn.commit(); resolve();}
-                    ).catch(
-                            () => {conexion.dbConn.rollback(); reject();}
-                    )
-                }
-            ).catch( () => {console.log('Error Video'); reject();});
-        }
-    )
-}
-
-function registrar_c_galeria(nid_componente, titulo, descripcion)
-{
-    return new Promise(
-        (resolve, reject) =>
-        {
-        
-            conexion.dbConn.query("insert into " + constantes.ESQUEMA_BD + ".componente_galeria(nid_componente, titulo, descripcion) values(" +
-                conexion.dbConn.escape(nid_componente) +
-                ", " + conexion.dbConn.escape(titulo) +
-                ", " + conexion.dbConn.escape(descripcion) +
-                ")",
-                function(error, results, field)
-                {
-                    if(error) {console.log(error); conexion.dbConn.rollback(); reject();}
-                    resolve();
-                } 
-            );
-        
-        }
-    )
-}
-
-function registrar_componente_galeria_orden(id, titulo, descripcion, tipo_asociacion, nOrden)
-{
-    return new Promise(
-        (resolve, reject) =>
-        {
-            registrar_componente_comun(constantes.TIPO_COMPONENTE_GALERIA, id, tipo_asociacion, nOrden).then(
-                (nid_componente) =>
-                {
-                    registrar_c_galeria(nid_componente, titulo, descripcion).then(
-                        () => { conexion.dbConn.commit(); resolve();});
-                }
-
-            ).catch(
-                () =>{
-                    conexion.dbConn.rollback(); reject();
-                }
-            )
-      
-        }
-    );
-}
-
-
-function registrar_componente_galeria(id, titulo, descripcion, tipo_asociacion)
-{
-    return new Promise(
-        (resolve, reject) =>
-        {
-            console.log('Registrar componente_galeria');
-            obtener_ultimo_orden(id).then(
-                (max_orden) =>
-                {
-                    registrar_componente_galeria_orden(id, titulo, descripcion, tipo_asociacion, max_orden).then(
-                        () => {conexion.dbConn.commit(); resolve()}
-                    ).catch(
-                        () => {conexion.dbConn.rollback(); reject();}
-                    )
-                }
-            ).catch( () => {console.log('Error galeria'); reject();})
-        }
-    )
-}
-
-
-
-
-/**
- * Componente para listas de páginas
- * @param {Id de la página donde se ubicará el componente} id 
- * @param {Si la asociación del componente es a un a página o a un compoennte de componentes} tipo_asociacion 
- * @param {Orden en el que se va a colocar la página} nOrden 
- * @returns 
- */
-function registrar_componente_paginas_orden(id, tipo_asociacion, nOrden)
-{
-    return new Promise(
-        (resolve, reject) =>
-        {
-            registrar_componente_comun(constantes.TIPO_COMPONENTE_PAGINAS, id, tipo_asociacion, nOrden).then(
-                (nid_componente) =>
-                {
-                     console.log('Nuevo componente ' + nid_componente);
-                     conexion.dbConn.commit(); 
-                     resolve();
+function actualizarTexto (textoHtml, nidComponente) {
+  return new Promise(
+    function (resolve, reject) {
+      conexion.dbConn.beginTransaction(
+        () => {
+          esComponenteTexto(nidComponente).then(
+            function (bEsComponenteTexto) {
+              if (bEsComponenteTexto) {
+                conexion.dbConn.query('update ' + constantes.ESQUEMA_BD + '.componente_texto set cTexto = ' + conexion.dbConn.escape(textoHtml) +
+                            ' where nid = ' + conexion.dbConn.escape(nidComponente),
+                function (error, results, fields) {
+                  if (error) { conexion.dbConn.rollback(); console.log(error); resolve(false) } else { conexion.dbConn.commit(); resolve(true) }
                 })
-            .catch(
-                () =>{
-                    conexion.dbConn.rollback(); reject();
-                }
-            )
-      
+              }
+            }
+          )
+        })
+    })
+}
+
+function obtenerUltimoOrden (idPagina) {
+  return new Promise(
+    (resolve, reject) => {
+      console.log('obtenerUltimoOrden -> llega')
+      conexion.dbConn.query('select ifnull(max(nOrden), 0) orden from ' + constantes.ESQUEMA_BD + '.pagina_componente where nid_pagina = ' + conexion.dbConn.escape(idPagina),
+        function (error, results, field) {
+          if (error) { console.log(error); resolve(0) } else { resolve(results[0].orden) }
         }
-    );
+      )
+    }
+  )
+}
+
+function registrarCTexto (nidComponente) {
+  return new Promise(
+    (resolve, reject) => {
+      conexion.dbConn.query('insert into ' + constantes.ESQUEMA_BD + '.componente_texto(nid) values(' + conexion.dbConn.escape(nidComponente) + ')',
+        function (error, results, field) {
+          if (error) { console.log(error); conexion.dbConn.rollback(); reject(new Error('Error al registrar el componente de texto')) }
+
+          resolve()
+        }
+      )
+    }
+  )
+}
+
+function registrarImagen (titulo) {
+  return new Promise(
+    (resolve, reject) => {
+      conexion.dbConn.query('insert into ' + constantes.ESQUEMA_BD + '.imagen(titulo) values(' + conexion.dbConn.escape(titulo) + ')',
+        (error, results, fields) => {
+          if (error) { console.log(error); conexion.dbConn.rollback(); reject(new Error('Error al registrar la imagen')) }
+          const idImagen = results.insertId
+          resolve(idImagen)
+        }
+      )
+    }
+  )
+}
+
+function registrarCImagen (nidComponente, titulo) {
+  return new Promise(
+    (resolve, reject) => {
+      registrarImagen(titulo).then(
+        (idImagen) => {
+          conexion.dbConn.query('insert into ' + constantes.ESQUEMA_BD + '.componente_imagen(nid_componente, nid_imagen) values(' + conexion.dbConn.escape(nidComponente) +
+                    ', ' + conexion.dbConn.escape(idImagen) + ')',
+          function (error, results, field) {
+            if (error) { console.log(error); conexion.dbConn.rollback(); reject(new Error('Error al registrar el componente de imagen')) }
+            resolve()
+          }
+          )
+        })
+    }
+  )
+}
+
+function registrarComponente (tipoComponente) {
+  return new Promise(
+    (resolve, reject) => {
+      console.log('registrarComponente -> llega')
+
+      conexion.dbConn.query('insert into ' + constantes.ESQUEMA_BD + '.componente(nTipo) values(' + conexion.dbConn.escape(tipoComponente) + ')',
+        function (error, results, fields) {
+          if (error) { console.log('componente->registrarComponente ' + error); conexion.dbConn.rollback(); reject(error) } else {
+            const idComponente = results.insertId
+            resolve(idComponente)
+          }
+        }
+      )
+      //  reject();
+    }
+  )
+}
+
+function registrarComponentePagina (idComponente, idPagina, nOrden) {
+  return new Promise(
+    (resolve, reject) => {
+      // Asocia el componente a la página
+      conexion.dbConn.query('insert into ' + constantes.ESQUEMA_BD + '.pagina_componente(nid_pagina, nid_componente, nOrden) values(' +
+                conexion.dbConn.escape(idPagina) + ', ' + conexion.dbConn.escape(idComponente) + ', ' + conexion.dbConn.escape(nOrden) + ' + 1)',
+      (error, results, fields) => {
+        if (error) { console.log(error); reject(new Error('Error al registrar el componente de Pagina')) }
+        resolve()
+      }
+      )
+    }
+  )
+}
+
+function registrarComponenteComponentes (idComponente, idComponentePadre, nOrden) {
+  return new Promise(
+    (resolve, reject) => {
+      // Asocia el componente a la página
+      console.log('registrarComponenteComponentes -> ' + nOrden)
+      conexion.dbConn.query('insert into ' + constantes.ESQUEMA_BD + '.componente_componentes(nid_componente, nid_componente_hijo, nOrden) values(' +
+                conexion.dbConn.escape(idComponentePadre) + ', ' + conexion.dbConn.escape(idComponente) + ', ' + conexion.dbConn.escape(nOrden) + ')',
+      (error, results, fields) => {
+        if (error) reject(new Error('Error al registrar el componente de Componentes'))
+        resolve()
+      }
+      )
+    }
+  )
+}
+
+function registrarComponenteComun (tipoComponente, id, tipoAsociacion, nOrden) {
+  return new Promise(
+    (resolve, reject) => {
+      conexion.dbConn.beginTransaction(
+        () => {
+          console.log('componente->registrarComponenteComun ' + tipoAsociacion)
+          registrarComponente(tipoComponente).then(
+            (idComponente) => {
+              console.log('componente->registrarComponenteComun ' + idComponente)
+              if (tipoAsociacion === constantes.TIPO_ASOCIACION_PAGINA) {
+                console.log('componente->registrarComponenteComun-> pagina ')
+
+                registrarComponentePagina(idComponente, id, nOrden).then(
+                  () => { resolve(idComponente) }
+                )
+                  .catch(
+                    () => { reject(new Error('Error al registrar el componente Pagina')) }
+                  )
+              } else if (tipoAsociacion === constantes.TIPO_ASOCIACION_COMPONENTE) {
+                console.log('componente->registrarComponenteComun-> componentes ')
+                registrarComponenteComponentes(idComponente, id, nOrden).then(
+                  () => { resolve(idComponente) }
+                ).catch(
+                  () => { reject(new Error('Error al registrar el componeente de componente')) }
+                )
+              }
+            }
+          ).catch(
+            (error) => { console.log(error); console.log('error'); reject(new Error('Se ha producido un error al registrar el componente')) },
+            () => { console.log('Se ha producido un error') }
+          )
+        }
+
+      )
+    }
+  )
+}
+
+function registrarComponenteTextoOrden (id, tipoAsociacion, nOrden) {
+  return new Promise(
+    (resolve, reject) => {
+      console.log('registrarComponenteTexto -> llega')
+      registrarComponenteComun(constantes.TIPO_COMPONENTE_TEXTO, id, tipoAsociacion, nOrden).then(
+        (nidComponente) => {
+          console.log('registrarComponenteTexto -> 1')
+          registrarCTexto(nidComponente).then(
+            () => { conexion.dbConn.commit(); resolve() })
+        }
+
+      ).catch(
+        () => {
+          conexion.dbConn.rollback(); reject(new Error('Error al registrar el componente de texto'))
+        }
+      )
+    }
+  )
+}
+
+function registrarComponenteTexto (id, tipoAsociacion) {
+  return new Promise(
+    (resolve, reject) => {
+      obtenerUltimoOrden(id).then((maxOrden) => {
+        registrarComponenteTextoOrden(id, tipoAsociacion, maxOrden).then(
+          () => { resolve() }
+        )
+      }).catch(
+        () => { reject(new Error('Error al registrar el componente de texto')) }
+      )
+    }
+  )
+}
+
+function registrarComponenteImagenOrden (id, titulo, tipoAsociacion, nOrden) {
+  return new Promise(
+    (resolve, reject) => {
+      registrarComponenteComun(constantes.TIPO_COMPONENTE_IMAGEN, id, tipoAsociacion, nOrden).then(
+        (nidComponente) => {
+          registrarCImagen(nidComponente, titulo).then(
+            () => { conexion.dbConn.commit(); resolve() })
+        }
+
+      ).catch(
+        () => {
+          conexion.dbConn.rollback(); reject(new Error('Error al registrar el componente de imagen'))
+        }
+      )
+    }
+  )
+}
+
+function registrarComponenteImagen (id, titulo, tipoAsociacion) {
+  return new Promise(
+    (resolve, reject) => {
+      console.log('RegistrarComponenteImagen')
+      obtenerUltimoOrden(id).then(
+        (maxOrden) => {
+          registrarComponenteImagenOrden(id, titulo, tipoAsociacion, maxOrden).then(
+            () => { conexion.dbConn.commit(); resolve() }
+          ).catch(
+            () => { conexion.dbConn.rollback(); reject(new Error('Error al registrar el componete de Imagen')) }
+          )
+        }).catch(() => { console.log('Error imagen') })
+    }
+
+  )
+}
+
+function registrarCVideo (nidComponente, url) {
+  return new Promise(
+    (resolve, reject) => {
+      conexion.dbConn.query('insert into ' + constantes.ESQUEMA_BD + '.componente_video(nid_componente, url) values(' + conexion.dbConn.escape(nidComponente) +
+                ', ' + conexion.dbConn.escape(url) + ')',
+      function (error, results, field) {
+        if (error) { console.log(error); conexion.dbConn.rollback(); reject(new Error('Error al registrar el componente de Video')) }
+        resolve()
+      }
+      )
+    }
+  )
+}
+
+function registrarComponenteVideoOrden (id, url, tipoAsociacion, nOrden) {
+  return new Promise(
+    (resolve, reject) => {
+      registrarComponenteComun(constantes.TIPO_COMPONENTE_VIDEO, id, tipoAsociacion, nOrden).then(
+        (nidComponente) => {
+          registrarCVideo(nidComponente, url).then(
+            () => { conexion.dbConn.commit(); resolve() })
+        }
+
+      ).catch(
+        () => {
+          conexion.dbConn.rollback(); reject(new Error('Error al registrar el componente de video'))
+        }
+      )
+    }
+  )
+}
+
+function registrarComponenteVideo (id, url, tipoAsociacion) {
+  return new Promise(
+    (resolve, reject) => {
+      console.log('RegistrarComponenteVideo')
+      obtenerUltimoOrden(id).then(
+        (maxOrden) => {
+          registrarComponenteVideoOrden(id, url, tipoAsociacion, maxOrden).then(
+            () => { conexion.dbConn.commit(); resolve() }
+          ).catch(
+            () => { conexion.dbConn.rollback(); reject(new Error('Error al registrar el componente de video')) }
+          )
+        }
+      ).catch(() => { console.log('Error Video'); reject(new Error('Error al registrar el componente de video')) })
+    }
+  )
+}
+
+function registrarCGaleria (nidComponente, titulo, descripcion) {
+  return new Promise(
+    (resolve, reject) => {
+      conexion.dbConn.query('insert into ' + constantes.ESQUEMA_BD + '.componente_galeria(nid_componente, titulo, descripcion) values(' +
+                conexion.dbConn.escape(nidComponente) +
+                ', ' + conexion.dbConn.escape(titulo) +
+                ', ' + conexion.dbConn.escape(descripcion) +
+                ')',
+      function (error, results, field) {
+        if (error) { console.log(error); conexion.dbConn.rollback(); reject(new Error('Error al registrar el componente de Galería')) }
+        resolve()
+      }
+      )
+    }
+  )
+}
+
+function registrarComponenteGaleriaOrden (id, titulo, descripcion, tipoAsociacion, nOrden) {
+  return new Promise(
+    (resolve, reject) => {
+      registrarComponenteComun(constantes.TIPO_COMPONENTE_GALERIA, id, tipoAsociacion, nOrden).then(
+        (nidComponente) => {
+          registrarCGaleria(nidComponente, titulo, descripcion).then(
+            () => { conexion.dbConn.commit(); resolve() })
+        }
+
+      ).catch(
+        () => {
+          conexion.dbConn.rollback(); reject(new Error('Error al registrar el componente de Galería'))
+        }
+      )
+    }
+  )
+}
+
+function registrarComponenteGaleria (id, titulo, descripcion, tipoAsociacion) {
+  return new Promise(
+    (resolve, reject) => {
+      console.log('Registrar componente_galeria')
+      obtenerUltimoOrden(id).then(
+        (maxOrden) => {
+          registrarComponenteGaleriaOrden(id, titulo, descripcion, tipoAsociacion, maxOrden).then(
+            () => { conexion.dbConn.commit(); resolve() }
+          ).catch(
+            () => { conexion.dbConn.rollback(); reject(new Error('Error al registrar el componente de Galeria')) }
+          )
+        }
+      ).catch(() => { console.log('Error galeria'); reject(new Error('Error al registrar el componente de Galeria')) })
+    }
+  )
 }
 
 /**
  * Componente para listas de páginas
- * @param {Id de la página donde se ubicará el componente} id 
- * @param {Si la asociación del componente es a un a página o a un compoennte de componentes} tipo_asociacion 
- * @returns 
+ * @param {Id de la página donde se ubicará el componente} id
+ * @param {Si la asociación del componente es a un a página o a un compoennte de componentes} tipoAsociacion
+ * @param {Orden en el que se va a colocar la página} nOrden
+ * @returns
  */
-function registrar_componente_paginas(id, tipo_asociacion)
-{
-    return new Promise(
-        (resolve, reject) =>
-        {
-            obtener_ultimo_orden(id).then(
-                (max_orden) =>
-                {
-                    registrar_componente_paginas_orden(id, tipo_asociacion, max_orden).then(
-                        () => {conexion.dbConn.commit(); resolve()}
-                    ).catch(
-                        () => {console.log('Error'); conexion.dbConn.rollback(); reject();}
-                    )
-                }
-            ).catch( () => {console.log('Error componente paginas'); reject();})
+function registrarComponentePaginasOrden (id, tipoAsociacion, nOrden) {
+  return new Promise(
+    (resolve, reject) => {
+      registrarComponenteComun(constantes.TIPO_COMPONENTE_PAGINAS, id, tipoAsociacion, nOrden).then(
+        (nidComponente) => {
+          console.log('Nuevo componente ' + nidComponente)
+          conexion.dbConn.commit()
+          resolve()
+        })
+        .catch(
+          () => {
+            conexion.dbConn.rollback(); reject(new Error('Error al registrar el componente de Paginas'))
+          }
+        )
+    }
+  )
+}
+
+/**
+ * Componente para listas de páginas
+ * @param {Id de la página donde se ubicará el componente} id
+ * @param {Si la asociación del componente es a un a página o a un compoennte de componentes} tipoAsociacion
+ * @returns
+ */
+function registrarComponentePaginas (id, tipoAsociacion) {
+  return new Promise(
+    (resolve, reject) => {
+      obtenerUltimoOrden(id).then(
+        (maxOrden) => {
+          registrarComponentePaginasOrden(id, tipoAsociacion, maxOrden).then(
+            () => { conexion.dbConn.commit(); resolve() }
+          ).catch(
+            () => { console.log('Error'); conexion.dbConn.rollback(); reject(new Error('Error al registrar el componente de Paginas')) }
+          )
         }
+      ).catch(() => { console.log('Error componente paginas'); reject(new Error('Error al registrar el componente de Paginas')) })
+    }
 
-    )
-}
- 
-function registrar_componente_carusel_orden(id, tipo_asociacion, elementos_simultaneos, nOrden)
-{
-    return new Promise(
-        (resolve, reject) =>
-        {
-            console.log('Tipo de asociacion ' + tipo_asociacion)
-            registrar_componente_comun(constantes.TIPO_COMPONENTE_CARUSEL, id, tipo_asociacion, nOrden).then(
-                (nid_componente) =>
-                {
-                    console.log('Nuevo componente ' + nid_componente);
-                    conexion.dbConn.query("insert into " + constantes.ESQUEMA_BD + ".componente_carusel(nid_componente, elementos_simultaneos) values("
-                        + conexion.dbConn.escape(nid_componente) + ", " + conexion.dbConn.escape(elementos_simultaneos) + ")",
-                        (error, results, fields) =>
-                        {
-                            if (error) { console.log(error);  conexion.dbConn.rollback(); reject();}
-                            else{
-                                conexion.dbConn.commit(); 
-                                resolve();
-                            }
-                        }
-                        );
-                }
-            ).catch( () => {console.log('Error componente carusel'); reject();})
-        }
-    )
-}
-function registrar_componente_carusel(id, tipo_asociacion, elementos_simultaneos)
-{
-    return new Promise(
-        (resolve, reject) =>
-        {       console.log('4')
-            obtener_ultimo_orden(id).then(
-                (max_orden) =>
-                {
-                    registrar_componente_carusel_orden(id, tipo_asociacion, elementos_simultaneos, max_orden).then(
-                        () => {conexion.dbConn.commit(); resolve()}
-                    ).catch(
-                        () => {console.log('Error'); conexion.dbConn.rollback(); reject();}
-                    )
-                }
-            )
-        }
-    )
+  )
 }
 
-function obtiene_componente_texto(id_componente)
-{
-    return new Promise(
-        function(resolve, reject)
-        {
-            conexion.dbConn.query("select * from " + constantes.ESQUEMA_BD + ".componente_texto where nid = " + conexion.dbConn.escape(id_componente), function(error, results, field)
-            {
-                if(error) {console.log(error); reject;}
-                if (results.length < 1)
-                {
-                    reject();
-                }
-                resolve(results[0]);
-            });
-        }
-
-    )
-}
-
-function eliminar_componente(id_componente)
-{
-    return new Promise(
-        function(resolve, reject)
-        {
-            conexion.dbConn.query("delete from " +  constantes.ESQUEMA_BD + ".componente where nid = " + conexion.dbConn.escape(id_componente), 
-            function(error, results, field)
-            {
-                if(error) {console.log(error); reject();}
-
-                else{resolve();}
-            });
-        }
-    )
-}
-
-function eliminar_pagina_componente(id_pagina, id_componente)
-{
-    return new Promise(
-        function(resolve, reject)
-        {
-            console.log('eliminar_pagina_componente');
-            obtiene_orden(id_pagina, id_componente).then(
-                (nOrden) =>
-                {
-                    console.log('Orden ' + nOrden);
-                    conexion.dbConn.query("delete from " +  constantes.ESQUEMA_BD + ".pagina_componente where nid_componente = " + conexion.dbConn.escape(id_componente), 
-                    function(error, results, field)
-                    {
-                        if(error) {console.log(error); reject();}
-                    
-                        conexion.dbConn.query("update " + constantes.ESQUEMA_BD + ".pagina_componente set nOrden = nOrden - 1 where nOrden > " + conexion.dbConn.escape(nOrden) + 
-                        " and nid_pagina = " + conexion.dbConn.escape(id_pagina),
-                            (error, results, field) =>
-                            {
-                                console.log('actualiza orden')
-                                if(error) {console.log(error); reject();}
-                                else{
-                                    console.log('elimina componente');
-                                    eliminar_componente(id_componente).then(() => {resolve();}).catch(() => reject());
-                                }
-                            }
-                        );
-                    });
-                }
-                
-            );
-        });
-}
-
-function eliminar_componente_componentes(id_componente)
-{
-    return new Promise(
-        function(resolve, reject)
-        {
-           
-                    conexion.dbConn.query("delete from " +  constantes.ESQUEMA_BD + ".componente_componentes where nid_componente_hijo = " + conexion.dbConn.escape(id_componente), 
-                    function(error, results, field)
-                    {
-                        if(error) {console.log(error); reject();}
-                        resolve();
-                      
-                    });
-                }
-                
-            );
-
-}
-
-function eliminar_componente_texto(id_pagina, id_componente, tipo_asociacion)
-{
-    return new Promise(
-        function(resolve, reject)
-        {
-            conexion.dbConn.beginTransaction(
-            function()
-            {
-              
-            conexion.dbConn.query("delete from " + constantes.ESQUEMA_BD + ".componente_texto where nid = " + conexion.dbConn.escape(id_componente),
-                function(error, results, field)
-                {
-                    if(error) {reject();}
-                    console.log('eliminar_componente_texto-> Eliminar ' +  tipo_asociacion);
-                    if (tipo_asociacion == constantes.TIPO_ASOCIACION_PAGINA)
-                    {
-                      eliminar_pagina_componente(id_pagina, id_componente).then(() => {conexion.dbConn.commit(); resolve();})
-                        .catch(() => { conexion.dbConn.rollback(); reject();});
-                    }
-                    else if(tipo_asociacion == constantes.TIPO_ASOCIACION_COMPONENTE)
-                    {
-                        eliminar_componente_componentes(id_componente).then(() => {conexion.dbConn.commit(); resolve();})
-                        .catch(() => { conexion.dbConn.rollback(); reject();});
-                    }
-                
-                }
-            );
-            });
-        }
-    )
-}
-
-function eliminar_componente_imagen(id_pagina, id_componente, tipo_asociacion)
-{
-    return new Promise(
-        function(resolve, reject)
-        {
-            conexion.dbConn.beginTransaction(
-            function()
-            {
-                console.log('Eliminar ' + id_componente);
-            conexion.dbConn.query("delete from " + constantes.ESQUEMA_BD + ".componente_imagen where nid_componente = " + conexion.dbConn.escape(id_componente),
-                function(error, results, field)
-                {
-                    if(error) {console.log(error); reject();}
-                    if (tipo_asociacion == constantes.TIPO_ASOCIACION_PAGINA)
-                    {
-                      eliminar_pagina_componente(id_pagina, id_componente).then(() => {conexion.dbConn.commit(); resolve();})
-                        .catch(() => { conexion.dbConn.rollback(); reject();});
-                    }
-                    else if(tipo_asociacion == constantes.TIPO_ASOCIACION_COMPONENTE)
-                    {
-                        console.log('componente componentes');
-                        eliminar_componente_componentes(id_componente).then(() => {conexion.dbConn.commit(); resolve();})
-                        .catch(() => { conexion.dbConn.rollback(); reject();});
-                    }
-                
-                }
-            );
-            });
-        }
-    )
-}
-
-function eliminar_componente_video(id_pagina, id_componente, tipo_asociacion)
-{
-    return new Promise(
-        function(resolve, reject)
-        {
-            conexion.dbConn.beginTransaction(
-            function()
-            {
-                console.log('Eliminar ' + id_componente);
-            conexion.dbConn.query("delete from " + constantes.ESQUEMA_BD + ".componente_video where nid_componente = " + conexion.dbConn.escape(id_componente),
-                function(error, results, field)
-                {
-                    if(error) {console.log(error); reject();}
-                    if (tipo_asociacion == constantes.TIPO_ASOCIACION_PAGINA)
-                    {
-                      eliminar_pagina_componente(id_pagina, id_componente).then(() => {conexion.dbConn.commit(); resolve();})
-                        .catch(() => { conexion.dbConn.rollback(); reject();});
-                    }
-                    else if(tipo_asociacion == constantes.TIPO_ASOCIACION_COMPONENTE)
-                    {
-                        console.log('componente componentes');
-                        eliminar_componente_componentes(id_componente).then(() => {conexion.dbConn.commit(); resolve();})
-                        .catch(() => { conexion.dbConn.rollback(); reject();});
-                    }
-                
-                }
-            );
-            });
-        }
-    )
-}
-
-function eliminar_componente_galeria(id_pagina, id_componente, tipo_asociacion)
-{
-    return new Promise(
-        function(resolve, reject)
-        {
-            conexion.dbConn.beginTransaction(
-            function()
-            {
-            
-
-                conexion.dbConn.query("delete from " + constantes.ESQUEMA_BD + ".componente_galeria where nid_componente = " + conexion.dbConn.escape(id_componente),
-                function(error, results, field)
-                {
-                    if(error) {console.log(error); reject();}
-                    if (tipo_asociacion == constantes.TIPO_ASOCIACION_PAGINA)
-                    {
-                      eliminar_pagina_componente(id_pagina, id_componente).then(() => {conexion.dbConn.commit(); resolve();})
-                        .catch(() => { conexion.dbConn.rollback(); reject();});
-                    }
-                    else if(tipo_asociacion == constantes.TIPO_ASOCIACION_COMPONENTE)
-                    {
-                        console.log('componente componentes');
-                        eliminar_componente_componentes(id_componente).then(() => {conexion.dbConn.commit(); resolve();})
-                        .catch(() => { conexion.dbConn.rollback(); reject();});
-                    }
-                
-                }
-            );
-            });
-        }
-    )
-}
-
-
-function eliminar_componente_paginas(id_pagina, id_componente, tipo_asociacion)
-{
-    return new Promise(
-        function(resolve, reject)
-        {
-            conexion.dbConn.beginTransaction(
-            function()
-            {
-                console.log('Eliminar ' + id_componente);
-                console.log('Eliminar ' + id_componente + ' Pagina ' + id_pagina);
-            conexion.dbConn.query("delete from " + constantes.ESQUEMA_BD + ".componente_paginas where nid_componente = " + conexion.dbConn.escape(id_componente),
-                function(error, results, field)
-                {
-                    if(error) {console.log(error); reject();}
-                    if (tipo_asociacion == constantes.TIPO_ASOCIACION_PAGINA)
-                    {
-                      console.log('eliminar_componente_paginas -> Eliminar pagina componente')
-                      eliminar_pagina_componente(id_pagina, id_componente).then(() => {conexion.dbConn.commit(); resolve();})
-                        .catch(() => {console.log('Error al eliminar paginas componente'); conexion.dbConn.rollback(); reject();});
-                    }
-                    else if(tipo_asociacion == constantes.TIPO_ASOCIACION_COMPONENTE)
-                    {
-                        console.log('componente componentes');
-                        eliminar_componente_componentes(id_componente).then(() => {conexion.dbConn.commit(); resolve();})
-                        .catch(() => { conexion.dbConn.rollback(); reject();});
-                    }
-                
-                }
-            );
-            });
-        }
-    )
-}
-
-function eliminar_componente_carusel(id_pagina, id_componente, tipo_asociacion)
-{
-    return new Promise(
-        async (resolve, reject) =>
-        {
-            try
-            {
-                if (tipo_asociacion == constantes.TIPO_ASOCIACION_PAGINA)
-                {
-                    console.log('eliminar_componente_carusel -> Eliminar carusel componente')
-                    await eliminar_pagina_componente(id_pagina, id_componente);
-                    conexion.dbConn.commit();
-                    resolve();
-                }
-                else if(tipo_asociacion == constantes.TIPO_ASOCIACION_COMPONENTE)
-                {
-                    await eliminar_componente_componentes(id_componente);
-                    conexion.dbConn.commit();
-                    resolve();
-                }
+function registrarComponenteCaruselOrden (id, tipoAsociacion, elementosSimultaneos, nOrden) {
+  return new Promise(
+    (resolve, reject) => {
+      console.log('Tipo de asociacion ' + tipoAsociacion)
+      registrarComponenteComun(constantes.TIPO_COMPONENTE_CARUSEL, id, tipoAsociacion, nOrden).then(
+        (nidComponente) => {
+          console.log('Nuevo componente ' + nidComponente)
+          conexion.dbConn.query('insert into ' + constantes.ESQUEMA_BD + '.componente_carusel(nid_componente, elementos_simultaneos) values(' +
+                        conexion.dbConn.escape(nidComponente) + ', ' + conexion.dbConn.escape(elementosSimultaneos) + ')',
+          (error, results, fields) => {
+            if (error) { console.log(error); conexion.dbConn.rollback(); reject(new Error('Error al registrar el componente de Carrusel')) } else {
+              conexion.dbConn.commit()
+              resolve()
             }
-            catch(e)
-            {
-                reject();
-            }
+          }
+          )
         }
-    )
+      ).catch(() => { console.log('Error componente carusel'); reject(new Error('Error al registrar el componente de Carrusel')) })
+    }
+  )
+}
+function registrarComponenteCarusel (id, tipoAsociacion, elementosSimultaneos) {
+  return new Promise(
+    (resolve, reject) => {
+      console.log('4')
+      obtenerUltimoOrden(id).then(
+        (maxOrden) => {
+          registrarComponenteCaruselOrden(id, tipoAsociacion, elementosSimultaneos, maxOrden).then(
+            () => { conexion.dbConn.commit(); resolve() }
+          ).catch(
+            () => { console.log('Error'); conexion.dbConn.rollback(); reject(new Error('Error al registrar el componente de Carrusel')) }
+          )
+        }
+      )
+    }
+  )
 }
 
-function obtiene_url_video(id_componente)
-{
-    return new Promise(
-        (resolve, reject) =>
-        {
-            
-            conexion.dbConn.query("select url from " + constantes.ESQUEMA_BD + ".componente_video where nid_componente = " + conexion.dbConn.escape(id_componente),
-                function(error, results, field)
-                {
-                    if(error) {console.log(error); reject();}
-                    else {resolve(results[0]['url']);}
+function obtieneComponenteTexto (idComponente) {
+  return new Promise(
+    function (resolve, reject) {
+      conexion.dbConn.query('select * from ' + constantes.ESQUEMA_BD + '.componente_texto where nid = ' + conexion.dbConn.escape(idComponente), function (error, results, field) {
+        if (error) { console.log(error); reject(new Error('Error recuperar el componente de texto')) }
+        if (results.length < 1) {
+          reject(new Error('Error recuperar el componente de texto'))
+        }
+        resolve(results[0])
+      })
+    }
+
+  )
+}
+
+function eliminarComponente (idComponente) {
+  return new Promise(
+    function (resolve, reject) {
+      conexion.dbConn.query('delete from ' + constantes.ESQUEMA_BD + '.componente where nid = ' + conexion.dbConn.escape(idComponente),
+        function (error, results, field) {
+          if (error) { console.log(error); reject(new Error('Error al eliminar el componente')) } else { resolve() }
+        })
+    }
+  )
+}
+
+function eliminarPaginaComponente (idPagina, idComponente) {
+  return new Promise(
+    function (resolve, reject) {
+      console.log('eliminarPaginaComponente')
+      obtieneOrden(idPagina, idComponente).then(
+        (nOrden) => {
+          console.log('Orden ' + nOrden)
+          conexion.dbConn.query('delete from ' + constantes.ESQUEMA_BD + '.pagina_componente where nid_componente = ' + conexion.dbConn.escape(idComponente),
+            function (error, results, field) {
+              if (error) { console.log(error); reject(new Error('Error al eliminar la pagina de componente')) }
+
+              conexion.dbConn.query('update ' + constantes.ESQUEMA_BD + '.pagina_componente set nOrden = nOrden - 1 where nOrden > ' + conexion.dbConn.escape(nOrden) +
+                        ' and nid_pagina = ' + conexion.dbConn.escape(idPagina),
+              (error, results, field) => {
+                console.log('actualiza orden')
+                if (error) { console.log(error); reject(new Error('Error al eliminar la pagina de componente')) } else {
+                  console.log('elimina componente')
+                  eliminarComponente(idComponente).then(() => { resolve() }).catch(() => reject(new Error('Error al eliminar la pagina de componente')))
                 }
-            )
-        }
-    )
-}
-
-function obtiene_componentes(id_pagina)
-{
-    return new Promise(
-        function(resolve, reject)
-        {
-            conexion.dbConn.query("select * from " + constantes.ESQUEMA_BD + ".pagina_componente where nid_pagina = " + conexion.dbConn.escape(id_pagina) + " order by nOrden",
-                function(error, results, field)
-                {
-                    if(error) {console.log(error); reject();}
-                    resolve(results);
-                }
-            )
-        });
-}
-
-function decrementa_orden(id_pagina, id_componente)
-{
-    return new Promise(
-        function(resolve, reject)
-        {
-            conexion.dbConn.beginTransaction(
-                function()
-                {
-            obtiene_orden(id_pagina, id_componente).then(
-                (orden) => {
-                    conexion.dbConn.query("update " + constantes.ESQUEMA_BD + ".pagina_componente set nOrden = nOrden + 1 where nOrden = " + conexion.dbConn.escape(orden) + 
-                        " - 1 and nid_pagina = " + conexion.dbConn.escape(id_pagina),
-                    function(error, results, field)
-                    {
-                        if(error) {console.log(error); reject();}
-                        else{
-                            conexion.dbConn.query("update " + constantes.ESQUEMA_BD + ".pagina_componente set nOrden = nOrden - 1 where nid_pagina = " + 
-                                conexion.dbConn.escape(id_pagina) +  " and nid_componente = " + conexion.dbConn.escape(id_componente),
-                            function(error, results, field)
-                            {
-                                if(error) {console.log(error); conexion.dbConn.rollback(); reject();}
-                                else {conexion.dbConn.commit(); resolve();}
-                            });
-                        }
-                    }
-                    )
-                }
-            )
-         });
-                
-           
-        }
-    )
-}
-
-function incrementa_orden(id_pagina, id_componente)
-{
-    return new Promise(
-        function(resolve, reject)
-        {
-            conexion.dbConn.beginTransaction(
-                function()
-                {
-            obtiene_orden(id_pagina, id_componente).then(
-                (orden) => {
-                    conexion.dbConn.query("update " + constantes.ESQUEMA_BD + ".pagina_componente set nOrden = nOrden - 1 where nOrden = " + conexion.dbConn.escape(orden) + 
-                        "+ 1 and nid_pagina = " + conexion.dbConn.escape(id_pagina),
-                    function(error, results, field)
-                    {
-                        if(error) {console.log(error); reject();}
-                        else{
-                            conexion.dbConn.query("update " + constantes.ESQUEMA_BD + ".pagina_componente set nOrden = nOrden + 1 where nid_pagina = " + 
-                                conexion.dbConn.escape(id_pagina) + " and nid_componente = " + conexion.dbConn.escape(id_componente),
-                            function(error, results, field)
-                            {
-                                if(error) {console.log(error); conexion.dbConn.rollback(); reject();}
-                                else {conexion.dbConn.commit(); resolve();}
-                            });
-                         }
-                    }
-                    )
-                }
-            )
-            });
-        }
-    )
-}
-
-function obtiene_numero_componente(id_pagina)
-{
-    return new Promise(
-        function(resolve, reject)
-        {
-            conexion.dbConn.query("select count(*) numero from " + constantes.ESQUEMA_BD + ".pagina_componente where nid_pagina = " + conexion.dbConn.escape(id_pagina),
-                function(error, results, field)
-                {
-                if(error) {console.log(error); reject();}
-                resolve(results[0]['numero']);
-                });
-        }
-    );
-}
-
-function obtiene_orden(id_pagina, id_componente)
-{
-    return new Promise(
-        function(resolve, reject)
-        {
-
-            conexion.dbConn.beginTransaction(
-                () =>
-                {
-                    conexion.dbConn.query("select nOrden from " + constantes.ESQUEMA_BD + ".pagina_componente where nid_pagina = " + 
-                        conexion.dbConn.escape(id_pagina) + " and nid_componente = " + conexion.dbConn.escape(id_componente),
-                        function(error, results, field)
-                        {
-                            if(error) {console.log(error); conexion.dbConn.rollback(); reject();}
-                            else
-                            {
-                                console.log('Error ' + error);
-                                console.log('Resultados', results); 
-                                conexion.dbConn.commit();
-                                resolve(results[0]['nOrden']);
-                            }
-                        });
-                }
-            );
-        }
-    );
-}
-
-function actualiza_orden(nOrden, bAumento)
-{
-    return new Promise(
-        (resolve, reject) =>
-        {
-            var condicion;
-            if(bAumento)
-            {
-                condicion =  'orden + 1';
-            }
-            else{
-                condicion = 'orden - 1';
-            }
-            conexion.dbConn.query("update " + constantes.ESQUEMA_BD + '.componente_paginas set orden = ' + condicion + ' where orden > ' + conexion.dbConn.escape(nOrden),
-                (error, results, fields) =>
-                {
-                    if (error) {console.log(error); reject();}
-                    else {resolve();}
-                }
-            )
-        }
-    )
-}
-
-function get_orden_pagina(nid_componente, nid_pagina)
-{
-    return new Promise(
-        (resolve, reject) =>
-        {
-            conexion.dbConn.query("select orden from " + constantes.ESQUEMA_BD + ".componente_paginas where nid_componente = " +
-            conexion.dbConn.escape(nid_componente) + " and nid_pagina = " + conexion.dbConn.escape(nid_pagina),
-            (error, results, fields) =>
-            {
-                if(error) { console.log(error); reject();}
-                else if(results.length < 1) { console.log('No se han obtenido resultados'); resolve(0);}
-                else { resolve(results[0]['orden']);}
-            } )
-        }
-    )
-}
-
-function add_pagina_componente(nid_componente, padre, titulo, descripcion)
-{
-    return new Promise(
-        (resolve, reject) =>
-        {
-            console.log('Registrar menu');
-            menu.registrar_menu_id(titulo, padre, constantes.TIPO_PAGINA_GENERAL, '').then(
-                (id_pagina) =>
-                {
-                    console.log(id_pagina);
-                    if(id_pagina > 0)
-                    {
-                        actualiza_orden(-1, true).then(
-                            () =>
-                            {
-                                conexion.dbConn.query("insert into " + constantes.ESQUEMA_BD + ".componente_paginas(nid_componente, nid_pagina, descripcion, orden) values(" +
-                                conexion.dbConn.escape(nid_componente) + 
-                                ", " + conexion.dbConn.escape(id_pagina) + 
-                                ", " + conexion.dbConn.escape(descripcion) +
-                                ", 0)",
-                                function(error, results, field)
-                                {
-                                    if(error) {console.log(error); conexion.dbConn.rollback(); reject();}
-                                    else {console.log('INSERTADO'); resolve();}
-                                });
-                         })
-                        .catch(
-                            () => {conexion.dbConn.rollback(); reject();}
-                        )
-                    }
-                    else{
-                        console.log('Error');
-                        reject();
-                    }
-                }            );
-        }
-    );
-    
-}
-
-
-function remove_pagina_componente(nid_componente, nid_pagina)
-{
-    return new Promise(
-        (resolve, reject) =>
-        {
-            conexion.dbConn.beginTransaction(
-            () => {
-
-           get_orden_pagina(nid_componente, nid_pagina).then(
-            (orden) =>
-            {
-                conexion.dbConn.query("delete from " + constantes.ESQUEMA_BD + ".componente_paginas where nid_componente = " +
-                                    conexion.dbConn.escape(nid_componente) + " and nid_pagina = " + conexion.dbConn.escape(nid_pagina),
-                    (error, results, fields) =>
-                    {
-                        if (error) {console.log(error); conexion.dbConn.rollback(); reject();}
-                        else{
-                            actualiza_orden(orden, false);
-                            menu.eliminar_menu(nid_pagina).then(
-                                () => { conexion.dbConn.commit(); resolve();}
-                            )
-                            .catch(
-                                () =>
-                                {
-                                    conexion.dbConn.rollback(); reject();
-                                }
-                            )
-                          
-                        }
-                    });            
-                }
-                )
-            .catch(
-                () =>
-                {
-                    conexion.dbConn.rollback();
-                    reject();
-                }
-            )   
-            });   
-        }
-    )
-
-}
-
-function obtener_paginas_componente(nid_componente)
-{
-    return new Promise(
-        (resolve, reject) =>
-        {
-            conexion.dbConn.query("select * from " + constantes.ESQUEMA_BD + ".componente_paginas where nid_componente = "
-            + conexion.dbConn.escape(nid_componente) + " order by orden asc",
-            
-            (error, results, fields) =>
-            {
-                if(error) {console.log(error); reject();}
-                if(results.length <= 0) {console.log('No hay resultados'); reject();}
-                else{ resolve(results);}
+              }
+              )
             })
         }
-    )
+
+      )
+    })
 }
 
-async function eliminar_componente_comun(id_componente, id_pagina, tipo_asociacion)
-{
-    try
-    {
-        if (tipo_asociacion == constantes.TIPO_ASOCIACION_PAGINA)
-        {
-            await eliminar_componente_paginas(id_pagina, id_componente);
-        }
-        else if(tipo_asociacion = constantes.TIPO_ASOCIACION_COMPONENTE)
-        {
-            await eliminar_componente_componentes(id_componente);
-        }
-        conexion.dbConn.commit();
-        resolve();
+function eliminarComponenteComponentes (idComponente) {
+  return new Promise(
+    function (resolve, reject) {
+      conexion.dbConn.query('delete from ' + constantes.ESQUEMA_BD + '.componente_componentes where nid_componente_hijo = ' + conexion.dbConn.escape(idComponente),
+        function (error, results, field) {
+          if (error) { console.log(error); reject(new Error('Error al eliminar un componente de componentes')) }
+          resolve()
+        })
     }
-    catch(e)
-    {
-        console.log(e);
-        conexion.dbConn.rollback();
-        reject();
-    }
+
+  )
 }
 
-module.exports.tipo_componente = tipo_componente;
-module.exports.existe_componente = existe_componente;
-module.exports.obtener_pagina_de_componente = obtener_pagina_de_componente;
-module.exports.actualizar_texto = actualizar_texto;
+function eliminarComponenteTexto (idPagina, idComponente, tipoAsociacion) {
+  return new Promise(
+    function (resolve, reject) {
+      conexion.dbConn.beginTransaction(
+        function () {
+          conexion.dbConn.query('delete from ' + constantes.ESQUEMA_BD + '.componente_texto where nid = ' + conexion.dbConn.escape(idComponente),
+            function (error, results, field) {
+              if (error) { reject(new Error('Error al eliminar un componente de texto')) }
+              console.log('eliminarComponenteTexto-> Eliminar ' + tipoAsociacion)
+              if (tipoAsociacion === constantes.TIPO_ASOCIACION_PAGINA) {
+                eliminarPaginaComponente(idPagina, idComponente).then(() => { conexion.dbConn.commit(); resolve() })
+                  .catch(() => { conexion.dbConn.rollback(); reject(new Error('Error al eliminar un componente de texto')) })
+              } else if (tipoAsociacion === constantes.TIPO_ASOCIACION_COMPONENTE) {
+                eliminarComponenteComponentes(idComponente).then(() => { conexion.dbConn.commit(); resolve() })
+                  .catch(() => { conexion.dbConn.rollback(); reject(new Error('Error al eliminar un componente de texto')) })
+              }
+            }
+          )
+        })
+    }
+  )
+}
 
-module.exports.registrar_componente_comun = registrar_componente_comun;
+function eliminarComponenteImagen (idPagina, idComponente, tipoAsociacion) {
+  return new Promise(
+    function (resolve, reject) {
+      conexion.dbConn.beginTransaction(
+        function () {
+          console.log('Eliminar ' + idComponente)
+          conexion.dbConn.query('delete from ' + constantes.ESQUEMA_BD + '.componente_imagen where nid_componente = ' + conexion.dbConn.escape(idComponente),
+            function (error, results, field) {
+              if (error) { console.log(error); reject(new Error('Error al eliminar el componente de Imagen')) }
+              if (tipoAsociacion === constantes.TIPO_ASOCIACION_PAGINA) {
+                eliminarPaginaComponente(idPagina, idComponente).then(() => { conexion.dbConn.commit(); resolve() })
+                  .catch(() => { conexion.dbConn.rollback(); reject(new Error('Error al eliminar el componente de Imagen')) })
+              } else if (tipoAsociacion === constantes.TIPO_ASOCIACION_COMPONENTE) {
+                console.log('componente componentes')
+                eliminarComponenteComponentes(idComponente).then(() => { conexion.dbConn.commit(); resolve() })
+                  .catch(() => { conexion.dbConn.rollback(); reject(new Error('Error al eliminar el componente de Imagen')) })
+              }
+            }
+          )
+        })
+    }
+  )
+}
 
-module.exports.registrar_componente_texto = registrar_componente_texto;
-module.exports.registrar_componente_texto_orden = registrar_componente_texto_orden;
+function eliminarComponenteVideo (idPagina, idComponente, tipoAsociacion) {
+  return new Promise(
+    function (resolve, reject) {
+      conexion.dbConn.beginTransaction(
+        function () {
+          console.log('Eliminar ' + idComponente)
+          conexion.dbConn.query('delete from ' + constantes.ESQUEMA_BD + '.componente_video where nid_componente = ' + conexion.dbConn.escape(idComponente),
+            function (error, results, field) {
+              if (error) { console.log(error); reject(new Error('Error al eliminar el componente de Video')) }
+              if (tipoAsociacion === constantes.TIPO_ASOCIACION_PAGINA) {
+                eliminarPaginaComponente(idPagina, idComponente).then(() => { conexion.dbConn.commit(); resolve() })
+                  .catch(() => { conexion.dbConn.rollback(); reject(new Error('Error al eliminar el componente de Video')) })
+              } else if (tipoAsociacion === constantes.TIPO_ASOCIACION_COMPONENTE) {
+                console.log('componente componentes')
+                eliminarComponenteComponentes(idComponente).then(() => { conexion.dbConn.commit(); resolve() })
+                  .catch(() => { conexion.dbConn.rollback(); reject(new Error('Error al eliminar el componente de Video')) })
+              }
+            }
+          )
+        })
+    }
+  )
+}
 
-module.exports.registrar_componente_imagen = registrar_componente_imagen;
-module.exports.registrar_componente_imagen_orden = registrar_componente_imagen_orden;
+function eliminarComponenteGaleria (idPagina, idComponente, tipoAsociacion) {
+  return new Promise(
+    function (resolve, reject) {
+      conexion.dbConn.beginTransaction(
+        function () {
+          conexion.dbConn.query('delete from ' + constantes.ESQUEMA_BD + '.componente_galeria where nid_componente = ' + conexion.dbConn.escape(idComponente),
+            function (error, results, field) {
+              if (error) { console.log(error); reject(new Error('Error al elimianr el componente de Galeria')) }
+              if (tipoAsociacion === constantes.TIPO_ASOCIACION_PAGINA) {
+                eliminarPaginaComponente(idPagina, idComponente).then(() => { conexion.dbConn.commit(); resolve() })
+                  .catch(() => { conexion.dbConn.rollback(); reject(new Error('Error al elimianr el componente de Galeria')) })
+              } else if (tipoAsociacion === constantes.TIPO_ASOCIACION_COMPONENTE) {
+                console.log('componente componentes')
+                eliminarComponenteComponentes(idComponente).then(() => { conexion.dbConn.commit(); resolve() })
+                  .catch(() => { conexion.dbConn.rollback(); reject(new Error('Error al elimianr el componente de Galeria')) })
+              }
+            }
+          )
+        })
+    }
+  )
+}
 
-module.exports.registrar_componente_video = registrar_componente_video;
-module.exports.registrar_componente_video_orden = registrar_componente_video_orden;
+function eliminarComponentePaginas (idPagina, idComponente, tipoAsociacion) {
+  return new Promise(
+    function (resolve, reject) {
+      conexion.dbConn.beginTransaction(
+        function () {
+          conexion.dbConn.query('delete from ' + constantes.ESQUEMA_BD + '.componente_paginas where nid_componente = ' + conexion.dbConn.escape(idComponente),
+            function (error, results, field) {
+              if (error) { console.log(error); reject(new Error('Error al eliminar componente de Pagina')) }
+              if (tipoAsociacion === constantes.TIPO_ASOCIACION_PAGINA) {
+                console.log('eliminar_componente_paginas -> Eliminar pagina componente')
+                eliminarPaginaComponente(idPagina, idComponente).then(() => { conexion.dbConn.commit(); resolve() })
+                  .catch(() => { console.log('Error al eliminar paginas componente'); conexion.dbConn.rollback(); reject(new Error('Error al eliminar componente de Pagina')) })
+              } else if (tipoAsociacion === constantes.TIPO_ASOCIACION_COMPONENTE) {
+                console.log('componente componentes')
+                eliminarComponenteComponentes(idComponente).then(() => { conexion.dbConn.commit(); resolve() })
+                  .catch(() => { conexion.dbConn.rollback(); reject(new Error('Error al eliminar componente de Pagina')) })
+              }
+            }
+          )
+        })
+    }
+  )
+}
 
-module.exports.registrar_componente_galeria = registrar_componente_galeria;
-module.exports.registrar_componente_galeria_orden = registrar_componente_galeria_orden;
+async function asyncEliminarComponente (idPagina, idComponente, tipoAsociacion) {
+  if (tipoAsociacion === constantes.TIPO_ASOCIACION_PAGINA) {
+    console.log('eliminarComponenteCarusel -> Eliminar carusel componente')
+    await eliminarPaginaComponente(idPagina, idComponente)
+    conexion.dbConn.commit()
+  } else if (tipoAsociacion === constantes.TIPO_ASOCIACION_COMPONENTE) {
+    await eliminarComponenteComponentes(idComponente)
+    conexion.dbConn.commit()
+  }
+}
 
-module.exports.registrar_componente_carusel = registrar_componente_carusel;
-module.exports.registrar_componente_carusel_orden = registrar_componente_carusel_orden;
+function eliminarComponenteCarusel (idPagina, idComponente, tipoAsociacion) {
+  return new Promise(
+    (resolve, reject) => {
+      try {
+        asyncEliminarComponente(idPagina, idComponente, tipoAsociacion)
+        resolve()
+      } catch (e) {
+        reject(new Error('Error al eliminar el componente de Carrusel'))
+      }
+    }
+  )
+}
 
-module.exports.registrar_componente_paginas = registrar_componente_paginas;
+function obtieneUrlVideo (idComponente) {
+  return new Promise(
+    (resolve, reject) => {
+      conexion.dbConn.query('select url from ' + constantes.ESQUEMA_BD + '.componente_video where nid_componente = ' + conexion.dbConn.escape(idComponente),
+        function (error, results, field) {
+          if (error) { console.log(error); reject(new Error('Error al recuperar la url del video')) } else { resolve(results[0].url) }
+        }
+      )
+    }
+  )
+}
 
-module.exports.registrar_componente = registrar_componente;
+function obtieneComponentes (idPagina) {
+  return new Promise(
+    function (resolve, reject) {
+      conexion.dbConn.query('select * from ' + constantes.ESQUEMA_BD + '.pagina_componente where nid_pagina = ' + conexion.dbConn.escape(idPagina) + ' order by nOrden',
+        function (error, results, field) {
+          if (error) { console.log(error); reject(new Error('Error al recuperar los componentes')) }
+          resolve(results)
+        }
+      )
+    })
+}
 
-module.exports.obtiene_componente_texto = obtiene_componente_texto;
-module.exports.obtiene_componentes = obtiene_componentes;
+function decrementaOrden (idPagina, idComponente) {
+  return new Promise(
+    function (resolve, reject) {
+      conexion.dbConn.beginTransaction(
+        function () {
+          obtieneOrden(idPagina, idComponente).then(
+            (orden) => {
+              conexion.dbConn.query('update ' + constantes.ESQUEMA_BD + '.pagina_componente set nOrden = nOrden + 1 where nOrden = ' + conexion.dbConn.escape(orden) +
+                ' - 1 and nid_pagina = ' + conexion.dbConn.escape(idPagina),
+              function (error, results, field) {
+                if (error) { console.log(error); reject(new Error('Error al decrementare el orden')) } else {
+                  conexion.dbConn.query('update ' + constantes.ESQUEMA_BD + '.pagina_componente set nOrden = nOrden - 1 where nid_pagina = ' +
+                      conexion.dbConn.escape(idPagina) + ' and nid_componente = ' + conexion.dbConn.escape(idComponente),
+                  function (error, results, field) {
+                    if (error) { console.log(error); conexion.dbConn.rollback(); reject(new Error('Error al decrementare el orden')) } else { conexion.dbConn.commit(); resolve() }
+                  })
+                }
+              }
+              )
+            }
+          )
+        })
+    }
+  )
+}
 
-module.exports.eliminar_componente_texto = eliminar_componente_texto;
-module.exports.eliminar_componente_imagen = eliminar_componente_imagen;
-module.exports.eliminar_componente_video = eliminar_componente_video;
-module.exports.eliminar_componente_galeria = eliminar_componente_galeria;
-module.exports.eliminar_componente_paginas = eliminar_componente_paginas;
-module.exports.eliminar_componente_carusel = eliminar_componente_carusel;
+function incrementaOrden (idPagina, idComponente) {
+  return new Promise(
+    function (resolve, reject) {
+      conexion.dbConn.beginTransaction(
+        function () {
+          obtieneOrden(idPagina, idComponente).then(
+            (orden) => {
+              conexion.dbConn.query('update ' + constantes.ESQUEMA_BD + '.pagina_componente set nOrden = nOrden - 1 where nOrden = ' + conexion.dbConn.escape(orden) +
+                '+ 1 and nid_pagina = ' + conexion.dbConn.escape(idPagina),
+              function (error, results, field) {
+                if (error) { console.log(error); reject(new Error('Error al incrementar el orden')) } else {
+                  conexion.dbConn.query('update ' + constantes.ESQUEMA_BD + '.pagina_componente set nOrden = nOrden + 1 where nid_pagina = ' +
+                      conexion.dbConn.escape(idPagina) + ' and nid_componente = ' + conexion.dbConn.escape(idComponente),
+                  function (error, results, field) {
+                    if (error) { console.log(error); conexion.dbConn.rollback(); reject(new Error('Error al incrementar el orden')) } else { conexion.dbConn.commit(); resolve() }
+                  })
+                }
+              }
+              )
+            }
+          )
+        })
+    }
+  )
+}
 
-module.exports.decrementa_orden = decrementa_orden;
-module.exports.incrementa_orden = incrementa_orden;
-module.exports.obtiene_numero_componente = obtiene_numero_componente;
-module.exports.obtiene_orden = obtiene_orden;
+function obtieneNumeroComponente (idPagina) {
+  return new Promise(
+    function (resolve, reject) {
+      conexion.dbConn.query('select count(*) numero from ' + constantes.ESQUEMA_BD + '.pagina_componente where nid_pagina = ' + conexion.dbConn.escape(idPagina),
+        function (error, results, field) {
+          if (error) { console.log(error); reject(new Error('Error al obtener el numero de componente')) }
+          resolve(results[0].numero)
+        })
+    }
+  )
+}
+function obtieneOrden (idPagina, idComponente) {
+  return new Promise(
+    function (resolve, reject) {
+      conexion.dbConn.beginTransaction(
+        () => {
+          conexion.dbConn.query('select nOrden from ' + constantes.ESQUEMA_BD + '.pagina_componente where nid_pagina = ' +
+              conexion.dbConn.escape(idPagina) + ' and nid_componente = ' + conexion.dbConn.escape(idComponente),
+          function (error, results, field) {
+            if (error) { console.log(error); conexion.dbConn.rollback(); reject(new Error('Error al obtenr el orden')) } else {
+              console.log('Error ' + error)
+              console.log('Resultados', results)
+              conexion.dbConn.commit()
+              resolve(results[0].nOrden)
+            }
+          })
+        }
+      )
+    }
+  )
+}
 
-module.exports.obtiene_url_video = obtiene_url_video;
+function actualizaOrden (nOrden, bAumento) {
+  return new Promise(
+    (resolve, reject) => {
+      let condicion
+      if (bAumento) {
+        condicion = 'orden + 1'
+      } else {
+        condicion = 'orden - 1'
+      }
+      conexion.dbConn.query('update ' + constantes.ESQUEMA_BD + '.componente_paginas set orden = ' + condicion + ' where orden > ' + conexion.dbConn.escape(nOrden),
+        (error, results, fields) => {
+          if (error) { console.log(error); reject(new Error('Error al actualizar el orden')) } else { resolve() }
+        }
+      )
+    }
+  )
+}
 
-module.exports.obtener_ultimo_orden = obtener_ultimo_orden;
+function getOrdenPagina (nidComponente, nidPagina) {
+  return new Promise(
+    (resolve, reject) => {
+      conexion.dbConn.query('select orden from ' + constantes.ESQUEMA_BD + '.componente_paginas where nid_componente = ' +
+              conexion.dbConn.escape(nidComponente) + ' and nid_pagina = ' + conexion.dbConn.escape(nidPagina),
+      (error, results, fields) => {
+        if (error) { console.log(error); reject(new Error('Error al recuperar el orden de página')) } else if (results.length < 1) { console.log('No se han obtenido resultados'); resolve(0) } else { resolve(results[0].orden) }
+      })
+    }
+  )
+}
 
-module.exports.add_pagina_componente = add_pagina_componente;
-module.exports.remove_pagina_componente = remove_pagina_componente;
-module.exports.obtener_paginas_componente = obtener_paginas_componente;
+function addPaginaComponente (nidComponente, padre, titulo, descripcion) {
+  return new Promise(
+    (resolve, reject) => {
+      console.log('Registrar menu')
+      menu.registrarMenuId(titulo, padre, constantes.TIPO_PAGINA_GENERAL, '').then(
+        (idPagina) => {
+          console.log(idPagina)
+          if (idPagina > 0) {
+            actualizaOrden(-1, true).then(
+              () => {
+                conexion.dbConn.query('insert into ' + constantes.ESQUEMA_BD + '.componente_paginas(nid_componente, nid_pagina, descripcion, orden) values(' +
+                                  conexion.dbConn.escape(nidComponente) +
+                                  ', ' + conexion.dbConn.escape(idPagina) +
+                                  ', ' + conexion.dbConn.escape(descripcion) +
+                                  ', 0)',
+                function (error, results, field) {
+                  if (error) { console.log(error); conexion.dbConn.rollback(); reject(new Error('Error al añadir una página al componente')) } else { console.log('INSERTADO'); resolve() }
+                })
+              })
+              .catch(
+                () => { conexion.dbConn.rollback(); reject(new Error('Error al añadir una página al componente')) }
+              )
+          } else {
+            console.log('Error')
+            reject(new Error('Error al añadir una página al componente'))
+          }
+        })
+    }
+  )
+}
 
-module.exports.eliminar_pagina_componente = eliminar_pagina_componente;
-module.exports.eliminar_componente_componentes = eliminar_componente_componentes;
-module.exports.eliminar_componente_comun = eliminar_componente_comun;
+function removePaginaComponente (nidComponente, nidPagina) {
+  return new Promise(
+    (resolve, reject) => {
+      conexion.dbConn.beginTransaction(
+        () => {
+          getOrdenPagina(nidComponente, nidPagina).then(
+            (orden) => {
+              conexion.dbConn.query('delete from ' + constantes.ESQUEMA_BD + '.componente_paginas where nid_componente = ' +
+                                      conexion.dbConn.escape(nidComponente) + ' and nid_pagina = ' + conexion.dbConn.escape(nidPagina),
+              (error, results, fields) => {
+                if (error) { console.log(error); conexion.dbConn.rollback(); reject(new Error('Error al eliminar una página del componente')) } else {
+                  actualizaOrden(orden, false)
+                  menu.eliminarMenu(nidPagina).then(
+                    () => { conexion.dbConn.commit(); resolve() }
+                  )
+                    .catch(
+                      () => {
+                        conexion.dbConn.rollback(); reject(new Error('Error al eliminar una página del componente'))
+                      }
+                    )
+                }
+              })
+            }
+          )
+            .catch(
+              () => {
+                conexion.dbConn.rollback()
+                reject(new Error('Error al eliminar una página del componente'))
+              }
+            )
+        })
+    }
+  )
+}
+
+function obtenerPaginasComponente (nidComponente) {
+  return new Promise(
+    (resolve, reject) => {
+      conexion.dbConn.query('select * from ' + constantes.ESQUEMA_BD + '.componente_paginas where nid_componente = ' +
+              conexion.dbConn.escape(nidComponente) + ' order by orden asc',
+
+      (error, results, fields) => {
+        if (error) { console.log(error); reject(new Error('Error al obtener la paginas del componente')) }
+        if (results.length <= 0) { console.log('No hay resultados'); reject(new Error('Error al obtener la paginas del componente')) } else { resolve(results) }
+      })
+    }
+  )
+}
+
+async function asyncEliminarComponenteComun (idPagina, idComponente, tipoAsociacion) {
+  if (tipoAsociacion === constantes.TIPO_ASOCIACION_PAGINA) {
+    await eliminarComponentePaginas(idPagina, idComponente)
+  } else if (tipoAsociacion === constantes.TIPO_ASOCIACION_COMPONENTE) {
+    await eliminarComponenteComponentes(idComponente)
+  }
+}
+
+async function eliminarComponenteComun (idComponente, idPagina, tipoAsociacion) {
+  return new Promise(
+    (resolve, reject) => {
+      try {
+        asyncEliminarComponenteComun(idPagina, idComponente, tipoAsociacion)
+        conexion.dbConn.commit()
+        resolve()
+      } catch (e) {
+        console.log(e)
+        conexion.dbConn.rollback()
+        reject(new Error('Error al eliminar el componente'))
+      }
+    })
+}
+
+module.exports.tipoComponente = tipoComponente
+module.exports.existeComponente = existeComponente
+module.exports.obtenerPaginaDeComponente = obtenerPaginaDeComponente
+module.exports.actualizarTexto = actualizarTexto
+
+module.exports.registrarComponenteComun = registrarComponenteComun
+
+module.exports.registrarComponenteTexto = registrarComponenteTexto
+module.exports.registrarComponenteTextoOrden = registrarComponenteTextoOrden
+
+module.exports.registrarComponenteImagen = registrarComponenteImagen
+module.exports.registrarComponenteImagenOrden = registrarComponenteImagenOrden
+
+module.exports.registrarComponenteVideo = registrarComponenteVideo
+module.exports.registrarComponenteVideoOrden = registrarComponenteVideoOrden
+
+module.exports.registrarComponenteGaleria = registrarComponenteGaleria
+module.exports.registrarComponenteGaleriaOrden = registrarComponenteGaleriaOrden
+
+module.exports.registrarComponenteCarusel = registrarComponenteCarusel
+module.exports.registrarComponenteCaruselOrden = registrarComponenteCaruselOrden
+
+module.exports.registrarComponentePaginas = registrarComponentePaginas
+
+module.exports.registrarComponente = registrarComponente
+
+module.exports.obtieneComponenteTexto = obtieneComponenteTexto
+module.exports.obtieneComponentes = obtieneComponentes
+
+module.exports.eliminarComponenteTexto = eliminarComponenteTexto
+module.exports.eliminarComponenteImagen = eliminarComponenteImagen
+module.exports.eliminarComponenteVideo = eliminarComponenteVideo
+module.exports.eliminarComponenteGaleria = eliminarComponenteGaleria
+module.exports.eliminarComponentePaginas = eliminarComponentePaginas
+module.exports.eliminarComponenteCarusel = eliminarComponenteCarusel
+
+module.exports.decrementaOrden = decrementaOrden
+module.exports.incrementaOrden = incrementaOrden
+module.exports.obtieneNumeroComponente = obtieneNumeroComponente
+module.exports.obtieneOrden = obtieneOrden
+
+module.exports.obtieneUrlVideo = obtieneUrlVideo
+
+module.exports.obtenerUltimoOrden = obtenerUltimoOrden
+
+module.exports.addPaginaComponente = addPaginaComponente
+module.exports.removePaginaComponente = removePaginaComponente
+module.exports.obtenerPaginasComponente = obtenerPaginasComponente
+
+module.exports.eliminarPaginaComponente = eliminarPaginaComponente
+module.exports.eliminarComponenteComponentes = eliminarComponenteComponentes
+module.exports.eliminarComponenteComun = eliminarComponenteComun
