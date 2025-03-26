@@ -1,306 +1,321 @@
-const pagos = require('../config/pagos.js');
-const persona = require('./persona.js');
-const remesa = require('./remesa.js');
-const conexion = require('../conexion.js')
-const constantes = require('../constantes.js')
-const stripe = require('stripe');
+const pagos = require("../config/pagos.js");
+const persona = require("./persona.js");
+const remesa = require("./remesa.js");
+const constantes = require("../constantes.js");
+const stripe = require("stripe");
 
+// https://docs.stripe.com/api/
 
-//https://docs.stripe.com/api/
-
-function existe_usuario_pasarela_pago(nid_persona)
-{
-    return new Promise(
-        async (resolve, reject) =>
-        {
-            try
-            {
-                let v_persona = await persona.obtener_persona(nid_persona);
-                v_nid_pasarela_pago = v_persona['nid_pasarela_pago'];
-                resolve(v_nid_pasarela_pago !== null || v_nid_pasarela_pago.length > 0);
-           }
-           catch(error)
-           {
-                console.log(error);
-                resolve(false);
-           }
-        }
-    )
+async function asyncExisteUsuarioPasarelaPago(nidPersona, resolve, reject) {
+  try {
+    const personaData = await persona.obtenerPersona(nidPersona);
+    const nidPasarelaPago = personaData.nid_pasarela_pago;
+    resolve(nidPasarelaPago !== null || nidPasarelaPago.length > 0);
+  } catch (error) {
+    console.log(error);
+    resolve(false);
+  }
 }
 
-function crear_usuario(nid_persona)
-{
-    return new Promise(
-        async (resolve, reject) =>
-        {
-            try
-            {
-                let bExiste_persona = await existe_usuario_pasarela_pago(nid_persona);
-                if (!bExiste_persona)
-                {
-                    let servicio_stripe = stripe(pagos.KEY);
-                    let v_persona = await persona.obtener_persona(nid_persona);
-                    let data = {
-                                name: v_persona.etiqueta,
-                                email: v_persona.correo_electronico
-                                };
+function existeUsuarioPasarelaPago(nidPersona) {
+  return new Promise((resolve, reject) => {
+    asyncExisteUsuarioPasarelaPago(nidPersona, resolve, reject);
+  });
+}
 
-                    const cliente = await servicio_stripe.customers.create(data);
+async function asyncCrearUsuario(nidPersona, resolve, reject) {
+  try {
+    const existePersona = await existeUsuarioPasarelaPago(nidPersona);
+    if (!existePersona) {
+      const servicioStripe = stripe(pagos.KEY);
+      const personaData = await persona.obtenerPersona(nidPersona);
+      const data = {
+        name: personaData.etiqueta,
+        email: personaData.correo_electronico,
+      };
 
-                    await persona.actualizar_user_pasarela_pago(nid_persona, cliente.id);
-                    resolve();
-                }
-                else {
-                      console.log('Error: el usuario ya tiene un usuario de pasarela de pago');
-                      reject('Error al crear el usuario');
-                }
-            }
-            catch(error)
-            {
-                console.log(error);
-                reject('Error al crear el usuario');
-            }
-        }
+      const cliente = await servicioStripe.customers.create(data);
+
+      await persona.actualizarUserPasarelaPago(nidPersona, cliente.id);
+      resolve();
+    } else {
+      console.log("Error: el usuario ya tiene un usuario de pasarela de pago");
+      reject("Error al crear el usuario");
+    }
+  } catch (error) {
+    console.log(error);
+    reject("Error al crear el usuario");
+  }
+}
+
+function crearUsuario(nidPersona) {
+  return new Promise((resolve, reject) => {
+    asyncCrearUsuario(nidPersona, resolve, reject);
+  });
+}
+
+async function asyncCrearMetodoPagoCuentaBancaria(
+  nidFormaPago,
+  resolve,
+  reject
+) {
+  try {
+    const formaPago = await persona.obtenerFormaPagoNid(nidFormaPago);
+    const personaData = await persona.obtenerPersona(formaPago.nid_titular);
+    const existePersona = await existeUsuarioPasarelaPago(personaData.nid);
+
+    if (existePersona) {
+      const iban = formaPago.iban;
+      const correoElectronico = personaData.correo_electronico;
+      let data;
+
+      const servicioStripe = stripe(pagos.KEY);
+      if (!correoElectronico || correoElectronico.length === 0) {
+        data = {
+          type: "sepa_debit",
+          sepa_debit: { iban },
+          billing_details: {
+            name: `${personaData.nombre} ${personaData.primer_apellido} ${personaData.segundo_apellido}`,
+            email: pagos.correo_defecto,
+          },
+        };
+      } else {
+        data = {
+          type: "sepa_debit",
+          sepa_debit: { iban },
+          billing_details: {
+            name: `${personaData.nombre} ${personaData.primer_apellido} ${personaData.segundo_apellido}`,
+            email: correoElectronico,
+          },
+        };
+      }
+
+      const metodoPago = await servicioStripe.paymentMethods.create(data);
+
+      const respuestaMetodoPago = await servicioStripe.paymentMethods.attach(
+        metodoPago.id,
+        { customer: personaData.nid_pasarela_pago }
+      );
+
+      await persona.actualizarMetodoPasarelaPago(
+        formaPago.nid,
+        respuestaMetodoPago.id
+      );
+
+      resolve();
+    } else {
+      console.log("No existe el usuario en la pasarela de pago");
+      reject("No existe el usuario en la pasarela de pago");
+    }
+  } catch (error) {
+    console.log(error);
+    reject("Error al crear el método de pago");
+  }
+}
+
+function crearMetodoPagoCuentaBancaria(nidFormaPago) {
+  return new Promise((resolve, reject) => {
+    asyncCrearMetodoPagoCuentaBancaria(nidFormaPago, resolve, reject);
+  });
+}
+
+async function asyncCobrarPago(
+  nidFormaPago,
+  descripcion,
+  cantidad,
+  ipAddress,
+  userAgent,
+  resolve,
+  reject
+) {
+  try {
+    const existeFormaPago = await persona.existeFormaPago(nidFormaPago);
+
+    if (existeFormaPago) {
+      const formaPago = await persona.obtenerFormaPagoNid(nidFormaPago);
+
+      if (
+        formaPago.nid_metodo_pasarela_pago !== null &&
+        formaPago.nid_metodo_pasarela_pago.length > 0
+      ) {
+        const personaData = await persona.obtenerPersona(formaPago.nid_titular);
+
+        const servicioStripe = stripe(pagos.KEY);
+
+        const data = {
+          amount: cantidad,
+          currency: "eur",
+          payment_method: formaPago.nid_metodo_pasarela_pago,
+          payment_method_types: ["sepa_debit"],
+          customer: personaData.nid_pasarela_pago,
+          description: descripcion,
+          confirm: true,
+          mandate_data: {
+            customer_acceptance: {
+              type: "online",
+              online: {
+                ip_address: ipAddress,
+                user_agent: userAgent,
+              },
+            },
+          },
+        };
+
+        const pago = await servicioStripe.paymentIntents.create(data);
+        resolve(pago);
+      } else {
+        console.log(
+          "pasarelaPago.js - cobrarPago -> La forma de pago " +
+            nidFormaPago +
+            " no está registrada en la pasarela de pagos"
+        );
+        reject("No está registrada en la pasarela de pagos");
+      }
+    } else {
+      console.log(
+        "pasarelaPago.js - cobrarPago -> No se ha encontrado la forma de pago"
+      );
+      reject("No se ha encontrado la forma de pago");
+    }
+  } catch (error) {
+    console.log(error);
+    reject("Error al realizar el pago");
+  }
+}
+
+function cobrarPago(nidFormaPago, descripcion, cantidad, ipAddress, userAgent) {
+  return new Promise((resolve, reject) => {
+    asyncCobrarPago(
+      nidFormaPago,
+      descripcion,
+      cantidad,
+      ipAddress,
+      userAgent,
+      resolve,
+      reject
     );
+  });
 }
 
-function crear_metodo_pago_cuenta_bancaria(nid_forma_pago)
-{
-    return new Promise(
-        async(resolve, reject) =>
-        {
-            try
-            {
-                let v_forma_pago = await persona.obtener_forma_pago_nid(nid_forma_pago);
+async function asyncCobrarRemesa(
+  nidRemesa,
+  ipAddress,
+  userAgent,
+  resolve,
+  reject
+) {
+  try {
+    const remesaData = await remesa.obtenerRemesaNid(nidRemesa);
 
-                let v_persona = await persona.obtener_persona(v_forma_pago.nid_titular);
+    if (remesaData.length > 0) {
+      const remesaActual = remesaData[0];
 
-                let bExiste_persona = await existe_usuario_pasarela_pago(v_persona.nid);
-                
-                if(bExiste_persona)
-                {
-                    let v_iban = v_forma_pago.iban;
+      if (remesaActual.estado === constantes.ESTADO_REMESA_PENDIENTE) {
+        const precio = Number(remesaActual.precio) * 100;
+        const nidFormaPago = remesaActual.nid_forma_pago;
 
-                    var correo_electronico = v_persona.correo_electronico;
-                    let data;
+        const concepto = await remesa.obtenerConcepto(nidRemesa);
+        const cobro = await cobrarPago(
+          nidFormaPago,
+          concepto,
+          precio,
+          ipAddress,
+          userAgent
+        );
 
-                    let servicio_stripe = stripe(pagos.KEY);
-                    if(correo_electronico === undefined || correo_electronico === null || correo_electronico.length == 0)
-                    {
-                       data = {
-                        type: 'sepa_debit',
-                        sepa_debit: {iban: v_iban},
-                        billing_details:{
-                            name: v_persona.nombre + ' ' + v_persona.primer_apellido + ' ' + v_persona.segundo_apellido,
-                            email: pagos.correo_defecto
-                        }
-                        }
-                    }
-                    else
-                    {
-                        data = {
-                            type: 'sepa_debit',
-                            sepa_debit: {iban: v_iban},
-                            billing_details:{
-                                name: v_persona.nombre + ' ' + v_persona.primer_apellido + ' ' + v_persona.segundo_apellido,
-                                email: v_persona.correo_electronico
-                            }
-                            }
-                    }
+        await remesa.actualizarIdCobroPasarelaPago(nidRemesa, cobro.id);
+        await remesa.aprobarRemesa(
+          nidRemesa,
+          "Cobro realizado desde la pasarela de pago"
+        );
 
-                    metodo_pago = await servicio_stripe.paymentMethods.create(data)
-
-                    let respuesta_metodo_pago = await servicio_stripe.paymentMethods.attach(
-                        metodo_pago.id,
-                        {customer: v_persona.nid_pasarela_pago}
-                    );
-
-                    await persona.actualizar_metodo_pasarela_pago(v_forma_pago.nid, respuesta_metodo_pago.id);
-
-                    resolve();
-                }
-                else
-                {
-                    console.log('No existe el usuario en la pasarela de pago');
-                    reject('No existe el usuario en la pasarela de pago');
-                }
-            }
-            catch(error)
-            {
-                console.log(error);
-                reject('Error al crear el método de pago');
-            }
-        }
-    );
+        resolve();
+      } else {
+        console.log(
+          "pasarelaPagos.js - cobrarRemesa -> La remesa " +
+            nidRemesa +
+            " no está en estado pendiente"
+        );
+        await remesa.remesaErronea(
+          nidRemesa,
+          "La remesa " + nidRemesa + " no está en estado pendiente"
+        );
+        reject("Error al realizar el cobro");
+      }
+    } else {
+      console.log(
+        "pasarelaPagos.js - cobrarRemesa -> No se ha encontrado la remesa"
+      );
+      await remesa.remesaErronea(nidRemesa, "No se ha encontrado la remesa");
+      reject("Error al realizar el cobro");
+    }
+  } catch (error) {
+    console.log("pasarelaPagos.js - cobrarRemesa -> " + error);
+    try {
+      await remesa.remesaErronea(
+        nidRemesa,
+        "Error al cobrar la remesa " + error
+      );
+    } catch (error) {
+      console.log("pasarelaPagos.js - cobrarRemesa -> " + error);
+    }
+    reject("Error al realizar el cobro");
+  }
 }
 
-function cobrar_pago(nid_forma_pago, descripcion, cantidad, p_ip_address, p_user_agent)
-{
-    return new Promise(
-        async (resolve, reject) =>
-        { 
-            try
-            {
-                let bExisteFormaPago = await persona.existe_forma_pago(nid_forma_pago);
-
-                if(bExisteFormaPago)
-                {
-                    let v_forma_pago = await persona.obtener_forma_pago_nid(nid_forma_pago);
-
-                    
-                    if (v_forma_pago.nid_metodo_pasarela_pago !== null && v_forma_pago.nid_metodo_pasarela_pago.length > 0)
-                    {
-                        let v_persona = await persona.obtener_persona(v_forma_pago.nid_titular);
-
-                        let servicio_stripe = stripe(pagos.KEY);
-
-                        let data =  { amount: cantidad,
-                                      currency: 'eur',
-                                      payment_method: v_forma_pago.nid_metodo_pasarela_pago,
-                                      payment_method_types: ['sepa_debit'],
-                                      customer: v_persona.nid_pasarela_pago,
-                                      description: descripcion,
-                                      confirm: true,
-                                      mandate_data: {
-                                        customer_acceptance:{
-                                            type: 'online',
-                                            online: {
-                                                ip_address: p_ip_address,
-                                                user_agent: p_user_agent
-                                                }
-                                            }
-                                        }
-                                    }
-                        
-                        let pago = await servicio_stripe.paymentIntents.create(data);
-                        resolve(pago);
-                    }
-                    else
-                    {
-                        console.log('pasarela_pago.js - cobrar_pago -> La forma de pago  ' + nid_forma_pago + ' no está registrada en la pasarela de pagos');
-                        reject('No está registrada en la pasarela de pagos');
-                    }
-                }
-                else
-                {
-                    console.log('pasarela_pago.js - cobrar_pago -> No se ha encontrado la forma de pago');
-                    reject('No se ha encontrado la forma de pago');
-                }
-            }
-            catch(error)
-            {
-                console.log(error);
-                reject('Error al realizar el pago');
-            }
-
-        }
-    )
+function cobrarRemesa(nidRemesa, ipAddress, userAgent) {
+  return new Promise((resolve, reject) => {
+    asyncCobrarRemesa(nidRemesa, ipAddress, userAgent, resolve, reject);
+  });
 }
 
+async function asyncRecuperarPago(nidPasarelaPago, resolve, reject) {
+  const servicioStripe = stripe(pagos.KEY);
+  const pagoRecuperado = await servicioStripe.paymentIntents.retrieve(
+    nidPasarelaPago
+  );
 
-function cobrar_remesa(nid_remesa, p_ip_address, p_user_agent)
-{
-    return new Promise(
-        async (resolve, reject) =>
-        {
-            try
-            {
-                let v_remesa = await remesa.obtener_remesa_nid(nid_remesa);
-
-                if (v_remesa.length > 0)
-                {
-                    let v_remesa_actual = v_remesa[0];
-
-                    if (v_remesa_actual.estado == constantes.ESTADO_REMESA_PENDIENTE)
-                    {
-                        // La cantidad es en centimos //
-                        let v_precio = Number(v_remesa_actual.precio) * 100 
-                        let v_nid_forma_pago = v_remesa_actual.nid_forma_pago;
-
-                        let concepto = await remesa.obtener_concepto(nid_remesa);
-                        let cobro = await cobrar_pago(v_nid_forma_pago, concepto,v_precio, p_ip_address, p_user_agent);   
-
-                        await remesa.actualizar_id_cobro_pasarela_pago(nid_remesa, cobro.id);
-                     
-                        await remesa.aprobar_remesa(nid_remesa, 'Cobro realizado desde la pasarela de pago');
-                        
-                        resolve();
-                    }
-                    else
-                    {
-                        console.log('pasarela_pagos.js - cobrar_remesa -> La remesa ' + nid_remesa + ' no está en estado pendiente')
-                        await remesa.remesa_erronea(nid_remesa, 'La remesa ' + nid_remesa + ' no está en estado pendiente')
-                        reject('Error al realizar el cobro');
-                    }
-                }
-                else
-                {
-                    console.log('pasarela_pagos.js - cobrar_remesa -> No se ha encontrado la remesa');
-                    await remesa.remesa_erronea(nid_remesa, 'No se ha encontrado la remesa')
-                    reject('Error al realizar el cobro');
-                }
-            }
-            catch(error)
-            {
-                console.log('pasarela_pagos.js - cobrar_remesa -> ' + error);
-                try
-                {
-                  await remesa.remesa_erronea(nid_remesa, 'Error al cobrar la remesa ' + error)
-                }
-                catch(error) {console.log('pasarela_pagos.js -cobrar_remesa -> ' + error);}
-                reject('Error al realizar el cobro')
-            }
-        }
-    )
+  console.log(pagoRecuperado.status);
 }
 
-function recuperar_pago(nid_pasarela_pago)
-{
-    return new Promise(
-        async (resolve, reject) =>
-        {
-            let servicio_stripe = stripe(pagos.KEY);
-            let pago_recuperado = await servicio_stripe.paymentIntents.retrieve(nid_pasarela_pago);
-
-            console.log(pago_recuperado.status)
-        }
-    )
+function recuperarPago(nidPasarelaPago) {
+  return new Promise((resolve, reject) => {
+    asyncRecuperarPago(nidPasarelaPago, resolve, reject);
+  });
 }
 
-function cobrar_lote(nid_lote, p_ip_address, p_user_agent)
-{
-    return new Promise(
-        async (resolve, reject) =>
-        {
-            try
-            {
-                let lista_remesas = await remesa.obtener_remesa(nid_lote);
+async function asyncCobrarLote(nidLote, ipAddress, userAgent, resolve, reject) {
+  try {
+    const listaRemesas = await remesa.obtenerRemesa(nidLote);
 
-                for(let i=0; i<lista_remesas.length; i++)
-                {
-                    try
-                    {
-                      await cobrar_remesa(lista_remesas[i]['nid_remesa'], p_ip_address, p_user_agent);
-                    }
-                    catch(error)
-                    {
-                        console.log('pasarela_pagos.js - cobrar_lote -> Remesa ' + lista_remesas[i]['nid_remesa'] + ' ' + error)
-                    }
-                }
+    for (let i = 0; i < listaRemesas.length; i++) {
+      try {
+        await cobrarRemesa(listaRemesas[i].nid_remesa, ipAddress, userAgent);
+      } catch (error) {
+        console.log(
+          "pasarelaPagos.js - cobrarLote -> Remesa " +
+            listaRemesas[i].nid_remesa +
+            " " +
+            error
+        );
+      }
+    }
 
-                resolve();
-            }
-            catch(error)
-            {
-                console.log('pasarela_pagos.js - cobrar_lote -> ' + error);
-                reject(error);
-            }
-        }
-    )
+    resolve();
+  } catch (error) {
+    console.log("pasarelaPagos.js - cobrarLote -> " + error);
+    reject(error);
+  }
+}
+function cobrarLote(nidLote, ipAddress, userAgent) {
+  return new Promise((resolve, reject) => {
+    asyncCobrarLote(nidLote, ipAddress, userAgent, resolve, reject);
+  });
 }
 
-module.exports.crear_usuario = crear_usuario;
-module.exports.crear_metodo_pago_cuenta_bancaria = crear_metodo_pago_cuenta_bancaria;
-module.exports.cobrar_pago = cobrar_pago;
-module.exports.cobrar_remesa = cobrar_remesa;
-module.exports.cobrar_lote = cobrar_lote;
+module.exports.crearUsuario = crearUsuario;
+module.exports.crearMetodoPagoCuentaBancaria = crearMetodoPagoCuentaBancaria;
+module.exports.cobrarPago = cobrarPago;
+module.exports.cobrarRemesa = cobrarRemesa;
+module.exports.recuperarPago = recuperarPago;
+module.exports.cobrarLote = cobrarLote;

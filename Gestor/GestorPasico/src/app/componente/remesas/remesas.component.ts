@@ -5,10 +5,9 @@ import { DataTablesOptions } from 'src/app/logica/constantes';
 import { URL } from 'src/app/logica/constantes';
 
 @Component({
-    selector: 'app-remesas',
-    templateUrl: './remesas.component.html',
-    styleUrls: ['./remesas.component.css'],
-    standalone: false
+  selector: 'app-remesas',
+  templateUrl: './remesas.component.html',
+  styleUrls: ['./remesas.component.css']
 })
 export class RemesasComponent implements OnInit{
 
