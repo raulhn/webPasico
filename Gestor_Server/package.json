@@ -8,11 +8,5 @@
     "express-session": "^1.17.3",
     "mysql": "^2.18.1",
     "stripe": "^17.6.0"
-  },
-  "devDependencies": {
-    "standard": "^17.1.2"
-  },
-  "eslintConfig": {
-    "extends": "./node_modules/standard/eslintrc.json"
   }
 }
