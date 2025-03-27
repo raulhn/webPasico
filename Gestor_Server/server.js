@@ -54,6 +54,7 @@ app.get('/',
 }
 );
 
+
 /** Usuarios **/
 app.post('/login', servlet_usuario.login);
 app.get('/logueado', servlet_usuario.logueado);
@@ -159,6 +160,8 @@ app.get('/obtener_forma_pago_nid/:nid_forma_pago', servlet_persona.obtener_forma
 app.post('/actualizar_forma_pago', servlet_persona.actualizar_forma_pago);
 
 /** Preinscripciones **/
+
+/** Preinscripciones **/
 app.get('/obtener_preinscripciones', servlet_preinscripciones.obtener_preinscripciones);
 app.get('/obtener_preinscripciones_detalle/:nid_preinscripcion', servlet_preinscripciones.obtener_preinscripciones_detalle);
 
@@ -189,7 +192,7 @@ app.post('/nuevo_descuento_remesa', servlet_remesa.nuevo_descuento_remesa);
 app.post('/eliminar_linea_remesa', servlet_remesa.eliminar_linea_remesa);
 app.post('/eliminar_descuento_remesa', servlet_remesa.eliminar_descuento_remesa);
 
-/** Par√°metros **/
+/** Par·metros **/
 app.get('/obtener_valor/:nombre', servlet_parametros.obtener_valor);
 app.post('/actualizar_valor', servlet_parametros.actualizar_valor);
 
@@ -214,7 +217,7 @@ app.post('/liberar_horario', servlet_horarios.liberar_horario_clase);
 app.post('/registrar_evento', servlet_asistencia.registrar_evento);
 
 
-/** Evaluaci√≥n **/
+/** EvaluaciÛn **/
 app.post('/registrar_evaluacion', servlet_evaluacion.registrar_evaluacion);
 app.get('/obtener_trimestres', servlet_evaluacion.obtener_trimestres);
 app.get('/obtener_evaluacion/:nid_trimestre/:nid_asignatura/:nid_profesor', servlet_evaluacion.obtener_evaluacion);
@@ -271,7 +274,7 @@ app.get('/obtener_matriculas_activas_rol_profesor/:nid_asignatura', servlet_matr
 app.get('/obtener_alumnos_rol_profesor/:nid_curso/:nid_asignatura/:activo', servlet_matricula.obtener_alumnos_profesor_rol_profesor);
 app.get('/obtener_asignaturas_matriculas_rol_profesor/:nid_matricula', servlet_matricula_asignatura.obtener_matriculas_asignaturas_alumno);
 
-/** Evaluaci√≥n **/
+/** EvaluaciÛn **/
 app.get('/obtener_evaluacion_profesor/:nid_trimestre/:nid_asignatura', servlet_evaluacion.obtener_evaluacion_profesor)
 app.post('/registrar_evaluacion_profesor', servlet_evaluacion.registrar_evaluacion_profesor);
 app.get('/obtener_evaluacion_matricula_asignatura_profesor/:nid_matricula', servlet_evaluacion.obtener_evaluacion_matricula_asignatura_profesor);

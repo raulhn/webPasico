@@ -1246,7 +1246,7 @@
 									<w:ind w:left="0" w:hanging="2"/>
 								</w:pPr>
 								<w:r>
-									<w:t>LENGUAJE MUSICAL</w:t>
+									<w:t>Lenguaje Musical</w:t>
 								</w:r>
 							</w:p>
 						</w:tc>
@@ -1260,7 +1260,7 @@
 									<w:ind w:left="0" w:hanging="2"/>
 								</w:pPr>
 								<w:r>
-									<w:t>||NOTA_LENGUAJE|| ||PROGRESO_LENGUAJE||</w:t>
+									<w:t>||PROGRESO_LENGUAJE|| ||NOTA_LENGUAJE||</w:t>
 								</w:r>
 							</w:p>
 							<w:p wsp:rsidR="00F509B4" wsp:rsidRDefault="0039314E" wsp:rsidP="00F02583">
