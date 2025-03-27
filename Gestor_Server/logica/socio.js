@@ -39,81 +39,109 @@ function obtener_siguiente_num_socio() {
   });
 }
 
-function registrar_socio(nid_persona, num_socio, fecha_alta) {
-  return new Promise(async (resolve, reject) => {
-    bExistePersona = await persona.existe_nid(nid_persona);
-    bExisteSocio = await existe_socio(nid_persona);
+async function async_registrar_socio(
+  nid_persona,
+  num_socio,
+  fecha_alta,
+  resolve,
+  reject
+) {
+  let bExistePersona = await persona.existe_nid(nid_persona);
+  let bExisteSocio = await existe_socio(nid_persona);
 
-    if (!bExistePersona) {
-      reject("No existe la persona");
-    } else if (bExisteSocio) {
-      reject("El socio ya está registrado");
-    } else {
-      if (num_socio == "") {
-        num_socio = await obtener_siguiente_num_socio();
-      }
-
-      conexion.dbConn.beginTransaction(() => {
-        conexion.dbConn.query(
-          "insert into " +
-            constantes.ESQUEMA_BD +
-            ".socios(nid_persona, num_socio, fecha_alta) values(" +
-            conexion.dbConn.escape(nid_persona) +
-            ", " +
-            conexion.dbConn.escape(num_socio) +
-            ", " +
-            "str_to_date(nullif(" +
-            conexion.dbConn.escape(fecha_alta) +
-            ", '') , '%Y-%m-%d'))",
-          (error, results, fields) => {
-            if (error) {
-              console.log(error);
-              conexion.dbConn.rollback();
-              reject(error);
-            } else {
-              conexion.dbConn.commit();
-              resolve();
-            }
-          }
-        );
-      });
+  if (!bExistePersona) {
+    reject("No existe la persona");
+  } else if (bExisteSocio) {
+    reject("El socio ya está registrado");
+  } else {
+    if (num_socio == "") {
+      num_socio = await obtener_siguiente_num_socio();
     }
+
+    conexion.dbConn.beginTransaction(() => {
+      conexion.dbConn.query(
+        "insert into " +
+          constantes.ESQUEMA_BD +
+          ".socios(nid_persona, num_socio, fecha_alta) values(" +
+          conexion.dbConn.escape(nid_persona) +
+          ", " +
+          conexion.dbConn.escape(num_socio) +
+          ", " +
+          "str_to_date(nullif(" +
+          conexion.dbConn.escape(fecha_alta) +
+          ", '') , '%Y-%m-%d'))",
+        (error, results, fields) => {
+          if (error) {
+            console.log(error);
+            conexion.dbConn.rollback();
+            reject(error);
+          } else {
+            conexion.dbConn.commit();
+            resolve();
+          }
+        }
+      );
+    });
+  }
+}
+
+function registrar_socio(nid_persona, num_socio, fecha_alta) {
+  return new Promise((resolve, reject) => {
+    async_registrar_socio(nid_persona, num_socio, fecha_alta, resolve, reject);
   });
 }
 
-function actualizar_socio(nid_persona, num_socio, fecha_alta, fecha_baja) {
-  return new Promise(async (resolve, reject) => {
-    bExisteSocio = await existe_socio(nid_persona);
-    if (bExisteSocio) {
-      conexion.dbConn.beginTransaction(() => {
-        conexion.dbConn.query(
-          "update " +
-            constantes.ESQUEMA_BD +
-            ".socios set fecha_baja = str_to_date(nullif(" +
-            conexion.dbConn.escape(fecha_baja) +
-            ", '') , '%Y-%m-%d')," +
-            " fecha_alta =  str_to_date(nullif(" +
-            conexion.dbConn.escape(fecha_alta) +
-            ", '') , '%Y-%m-%d'), " +
-            " num_socio = " +
-            conexion.dbConn.escape(num_socio) +
-            " where nid_persona = " +
-            conexion.dbConn.escape(nid_persona),
-          (error, results, fields) => {
-            if (error) {
-              console.log(error);
-              conexion.dbConn.rollback();
-              reject(error);
-            } else {
-              conexion.dbConn.commit();
-              resolve();
-            }
+async function async_acutalizar_socio(
+  nid_persona,
+  num_socio,
+  fecha_alta,
+  fecha_baja,
+  resolve,
+  reject
+) {
+  let bExisteSocio = await existe_socio(nid_persona);
+  if (bExisteSocio) {
+    conexion.dbConn.beginTransaction(() => {
+      conexion.dbConn.query(
+        "update " +
+          constantes.ESQUEMA_BD +
+          ".socios set fecha_baja = str_to_date(nullif(" +
+          conexion.dbConn.escape(fecha_baja) +
+          ", '') , '%Y-%m-%d')," +
+          " fecha_alta =  str_to_date(nullif(" +
+          conexion.dbConn.escape(fecha_alta) +
+          ", '') , '%Y-%m-%d'), " +
+          " num_socio = " +
+          conexion.dbConn.escape(num_socio) +
+          " where nid_persona = " +
+          conexion.dbConn.escape(nid_persona),
+        (error, results, fields) => {
+          if (error) {
+            console.log(error);
+            conexion.dbConn.rollback();
+            reject(error);
+          } else {
+            conexion.dbConn.commit();
+            resolve();
           }
-        );
-      });
-    } else {
-      reject("No existe socio");
-    }
+        }
+      );
+    });
+  } else {
+    reject("No existe socio");
+  }
+}
+
+function actualizar_socio(nid_persona, num_socio, fecha_alta, fecha_baja) {
+  return new Promise((resolve, reject) => {
+    async_acutalizar_socio(
+      nid_persona,
+      num_socio,
+      fecha_alta,
+      fecha_baja,
+      resolve,
+      reject
+    );
   });
 }
 

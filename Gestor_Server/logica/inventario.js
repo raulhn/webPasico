@@ -21,6 +21,73 @@ function existe_inventario(nid_inventario) {
   });
 }
 
+async function async_registrar_inventario(
+  nid_inventario,
+  descripcion,
+  modelo,
+  num_serie,
+  comentarios,
+  resolve,
+  reject
+) {
+  let bExiste_inventario = await existe_inventario(nid_inventario);
+
+  if (bExiste_inventario) {
+    conexion.dbConn.beginTransaction(() => {
+      conexion.dbConn.query(
+        "update " +
+          constantes.ESQUEMA_BD +
+          ".inventario set descripcion = " +
+          conexion.dbConn.escape(descripcion) +
+          ", modelo = " +
+          conexion.dbConn.escape(modelo) +
+          ", num_serie = " +
+          conexion.dbConn.escape(num_serie) +
+          ", comentarios = " +
+          conexion.dbConn.escape(comentarios) +
+          " where nid_inventario = " +
+          conexion.dbConn.escape(nid_inventario),
+        (error, results, fields) => {
+          if (error) {
+            console.log(error);
+            conexion.dbConn.rollback();
+            reject(error);
+          } else {
+            conexion.dbConn.commit();
+            resolve();
+          }
+        }
+      );
+    });
+  } else {
+    conexion.dbConn.beginTransaction(() => {
+      conexion.dbConn.query(
+        "insert into " +
+          constantes.ESQUEMA_BD +
+          ".inventario(descripcion, modelo, num_serie, comentarios) values(" +
+          conexion.dbConn.escape(descripcion) +
+          ", " +
+          conexion.dbConn.escape(modelo) +
+          ", " +
+          conexion.dbConn.escape(num_serie) +
+          ", " +
+          conexion.dbConn.escape(comentarios) +
+          ")",
+        (error, results, fields) => {
+          if (error) {
+            console.log(error);
+            conexion.dbConn.rollback();
+            reject(error);
+          } else {
+            conexion.dbConn.commit();
+            resolve(results.insertId);
+          }
+        }
+      );
+    });
+  }
+}
+
 function registrar_inventario(
   nid_inventario,
   descripcion,
@@ -28,63 +95,16 @@ function registrar_inventario(
   num_serie,
   comentarios
 ) {
-  return new Promise(async (resolve, reject) => {
-    bExiste_inventario = await existe_inventario(nid_inventario);
-
-    if (bExiste_inventario) {
-      conexion.dbConn.beginTransaction(() => {
-        conexion.dbConn.query(
-          "update " +
-            constantes.ESQUEMA_BD +
-            ".inventario set descripcion = " +
-            conexion.dbConn.escape(descripcion) +
-            ", modelo = " +
-            conexion.dbConn.escape(modelo) +
-            ", num_serie = " +
-            conexion.dbConn.escape(num_serie) +
-            ", comentarios = " +
-            conexion.dbConn.escape(comentarios) +
-            " where nid_inventario = " +
-            conexion.dbConn.escape(nid_inventario),
-          (error, results, fields) => {
-            if (error) {
-              console.log(error);
-              conexion.dbConn.rollback();
-              reject(error);
-            } else {
-              conexion.dbConn.commit();
-              resolve();
-            }
-          }
-        );
-      });
-    } else {
-      conexion.dbConn.beginTransaction(() => {
-        conexion.dbConn.query(
-          "insert into " +
-            constantes.ESQUEMA_BD +
-            ".inventario(descripcion, modelo, num_serie, comentarios) values(" +
-            conexion.dbConn.escape(descripcion) +
-            ", " +
-            conexion.dbConn.escape(modelo) +
-            ", " +
-            conexion.dbConn.escape(num_serie) +
-            ", " +
-            conexion.dbConn.escape(comentarios) +
-            ")",
-          (error, results, fields) => {
-            if (error) {
-              console.log(error);
-              conexion.dbConn.rollback();
-              reject(error);
-            } else {
-              conexion.dbConn.commit();
-              resolve(results.insertId);
-            }
-          }
-        );
-      });
-    }
+  return new Promise((resolve, reject) => {
+    async_registrar_inventario(
+      nid_inventario,
+      descripcion,
+      modelo,
+      num_serie,
+      comentarios,
+      resolve,
+      reject
+    );
   });
 }
 
@@ -151,14 +171,16 @@ function eliminar_inventario(nid_inventario) {
 }
 
 function actualizar_imagen(fichero, nid_inventario) {
-  return new Promise(async (resolve, reject) => {
+  return new Promise((resolve, reject) => {
     try {
       let imagen = fichero.imagen;
       let nombre = imagen.name;
 
-      let nid_imagen = await gestor_imagenes.actualizar_imagen(fichero, nombre);
-
-      conexion.dbConn.beginTransaction(() => {
+      conexion.dbConn.beginTransaction(async () => {
+        let nid_imagen = await gestor_imagenes.actualizar_imagen(
+          fichero,
+          nombre
+        );
         conexion.dbConn.query(
           "update " +
             constantes.ESQUEMA_BD +
