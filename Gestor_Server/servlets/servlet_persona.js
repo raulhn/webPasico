@@ -16,7 +16,7 @@ async function registrar_persona(req, res) {
     let correo_electronico = req.body.correo_electronico;
     let codigo = req.body.codigo;
 
-    nid_persona = await persona.registrar_persona(
+    let nid_persona = await persona.registrar_persona(
       nombre,
       primer_apellido,
       segundo_apellido,
@@ -27,19 +27,17 @@ async function registrar_persona(req, res) {
       codigo
     );
 
-    res
-      .status(200)
-      .send({
-        error: false,
-        message: "Registro creado",
-        nid_persona: nid_persona,
-      });
+    res.status(200).send({
+      error: false,
+      message: "Registro creado",
+      nid_persona: nid_persona,
+    });
   });
 }
 
 async function obtener_personas(req, res) {
   comun.comprobaciones(req, res, async () => {
-    resultados = await persona.obtener_personas();
+    let resultados = await persona.obtener_personas();
     res.status(200).send({ error: false, personas: resultados });
   });
 }
@@ -72,7 +70,7 @@ async function obtener_personas_tipo(req, res) {
 async function obtener_persona(req, res) {
   comun.comprobaciones(req, res, async () => {
     let nid = req.params.nid;
-    resultados = await persona.obtener_persona(nid);
+    let resultados = await persona.obtener_persona(nid);
     res.status(200).send({ error: false, persona: resultados });
   });
 }
@@ -90,7 +88,7 @@ async function actualizar_persona(req, res) {
     let codigo = req.body.codigo;
     let nid_socio = req.body.nid_socio;
 
-    bResultado = await persona.actualizar_persona(
+    let bResultado = await persona.actualizar_persona(
       nid,
       nif,
       nombre,
@@ -103,19 +101,15 @@ async function actualizar_persona(req, res) {
       nid_socio
     );
     if (bResultado) {
-      res
-        .status(200)
-        .send({
-          error: false,
-          message: "Se ha actualizado la persona de forma correcta",
-        });
+      res.status(200).send({
+        error: false,
+        message: "Se ha actualizado la persona de forma correcta",
+      });
     } else {
-      res
-        .status(400)
-        .send({
-          error: true,
-          message: "Se ha producido un error al actualizar",
-        });
+      res.status(400).send({
+        error: true,
+        message: "Se ha producido un error al actualizar",
+      });
     }
   });
 }
@@ -123,17 +117,15 @@ async function actualizar_persona(req, res) {
 async function obtener_ficha_persona(req, res) {
   comun.comprobaciones(req, res, async () => {
     let nid_persona = req.params.nid_persona;
-    resultado_persona = await persona.obtener_persona(nid_persona);
-    resultado_instrumentos = await musico.obtener_instrumentos_persona(
+    let resultado_persona = await persona.obtener_persona(nid_persona);
+    let resultado_instrumentos = await musico.obtener_instrumentos_persona(
       nid_persona
     );
-    res
-      .status(200)
-      .send({
-        error: false,
-        persona: resultado_persona,
-        instrumentos: resultado_instrumentos,
-      });
+    res.status(200).send({
+      error: false,
+      persona: resultado_persona,
+      instrumentos: resultado_instrumentos,
+    });
   });
 }
 

@@ -72,27 +72,6 @@ function eliminar_horario_clase(nid_horario_clase) {
   });
 }
 
-function obtener_horario(nid_horario) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(
-      "select * " +
-        "from " +
-        constantes.ESQUEMA_BD +
-        ".horario_clases " +
-        "where nid_horario = " +
-        conexion.dbConn.escape(nid_horario),
-      (error, results, fields) => {
-        if (error) {
-          console.log(error);
-          reject();
-        } else {
-          resolve(results);
-        }
-      }
-    );
-  });
-}
-
 function eliminar_horario_clase_no_commit(nid_horario_clase) {
   return new Promise((resolve, reject) => {
     {
@@ -117,9 +96,9 @@ function eliminar_horario_clase_no_commit(nid_horario_clase) {
 function eliminar_horario(nid_horario) {
   return new Promise((resolve, reject) => {
     conexion.dbConn.beginTransaction(async () => {
-      let horario_clase = await obtener_horario(nid_horario);
+      let horario_clase = await obtener_horario_clase(nid_horario);
 
-      for (i = 0; i < horario_clase.length; i++) {
+      for (let i = 0; i < horario_clase.length; i++) {
         try {
           eliminar_horario_clase_no_commit(
             horario_clase[i]["nid_horario_clase"]
@@ -135,7 +114,7 @@ function eliminar_horario(nid_horario) {
           constantes.ESQUEMA_BD +
           "horario where nid_horario = " +
           conexion.dbConn.escape(nid_horario),
-        () => {
+        (error, results, fields) => {
           if (error) {
             console.log(error);
             conexion.dbConn.rollback();
@@ -150,41 +129,50 @@ function eliminar_horario(nid_horario) {
   });
 }
 
-function registrar_horario(nid_profesor, nid_asignatura) {
-  return new Promise(async (resolve, reject) => {
-    let horario = await obtener_horarios(nid_profesor, nid_asignatura);
+async function async_registrar_horario(
+  nid_profesor,
+  nid_asignatura,
+  resolve,
+  reject
+) {
+  let horario = await obtener_horarios(nid_profesor, nid_asignatura);
 
-    if (horario.length > 0) {
-      resolve(horario[0]["nid_horario"]);
-    } else {
-      conexion.dbConn.beginTransaction(async () => {
-        let nid_curso = await curso.obtener_ultimo_curso();
+  if (horario.length > 0) {
+    resolve(horario[0]["nid_horario"]);
+  } else {
+    conexion.dbConn.beginTransaction(async () => {
+      let nid_curso = await curso.obtener_ultimo_curso();
 
-        conexion.dbConn.query(
-          "insert into " +
-            constantes.ESQUEMA_BD +
-            ".horario(nid_asignatura, nid_profesor, nid_curso)" +
-            " values(" +
-            conexion.dbConn.escape(nid_asignatura) +
-            ", " +
-            conexion.dbConn.escape(nid_profesor) +
-            ", " +
-            conexion.dbConn.escape(nid_curso) +
-            ")",
+      conexion.dbConn.query(
+        "insert into " +
+          constantes.ESQUEMA_BD +
+          ".horario(nid_asignatura, nid_profesor, nid_curso)" +
+          " values(" +
+          conexion.dbConn.escape(nid_asignatura) +
+          ", " +
+          conexion.dbConn.escape(nid_profesor) +
+          ", " +
+          conexion.dbConn.escape(nid_curso) +
+          ")",
 
-          (error, results, fields) => {
-            if (error) {
-              conexion.dbConn.rollback();
-              console.log(error);
-              reject();
-            } else {
-              conexion.dbConn.commit();
-              results.insertId;
-            }
+        (error, results, fields) => {
+          if (error) {
+            conexion.dbConn.rollback();
+            console.log(error);
+            reject();
+          } else {
+            conexion.dbConn.commit();
+            results.insertId;
           }
-        );
-      });
-    }
+        }
+      );
+    });
+  }
+}
+
+function registrar_horario(nid_profesor, nid_asignatura) {
+  return new Promise((resolve, reject) => {
+    async_registrar_horario(nid_profesor, nid_asignatura, resolve, reject);
   });
 }
 
@@ -206,9 +194,9 @@ function crear_horario(
         Number(minutos_inicio) + Number(hora_inicio) * 60;
       let total_minutos_fin = Number(minutos_fin) + Number(hora_fin) * 60;
 
-      total = Math.abs(total_minutos_fin - total_minutos_inicio);
+      let total = Math.abs(total_minutos_fin - total_minutos_inicio);
 
-      num_clases = total / Number(duracion_clase);
+      let num_clases = total / Number(duracion_clase);
 
       if (total % Number(duracion_clase) > 0) {
         conexion.dbConn.rollback();
@@ -217,7 +205,7 @@ function crear_horario(
         );
       } else {
         console.log("Número de clases " + num_clases);
-        for (i = 0; i < num_clases; i++) {
+        for (let i = 0; i < num_clases; i++) {
           try {
             console.log(hora_inicio + ":" + minutos_inicio);
             await registrar_horario_clase(
@@ -293,83 +281,114 @@ function liberar_horario_clase(nid_horario_clase, nid_matricula_asignatura) {
   });
 }
 
-function obtener_horarios(nid_profesor, nid_asignatura, nid_curso) {
-  return new Promise(async (resolve, reject) => {
-    let nid_ultimo_curso = await curso.obtener_ultimo_curso();
+async function async_obtener_horarios(
+  nid_profesor,
+  nid_asignatura,
+  nid_curso,
+  resolve,
+  reject
+) {
+  let nid_ultimo_curso = await curso.obtener_ultimo_curso();
 
-    conexion.dbConn.beginTransaction(
-      "select h.* from " +
-        constantes.ESQUEMA_BD +
-        ".horario h " +
-        "where (h.nid_profesor = " +
-        conexion.dbConn.escape(nid_profesor) +
-        " or nullif(" +
-        conexion.dbConn.escape(nid_profesor) +
-        ", '') is null) " +
-        " and (h.nid_asignatura = " +
-        conexion.dbConn.escape(nid_asignatura) +
-        " or nullif(" +
-        conexion.dbConn.escape(nid_asignatura) +
-        ", '') is null) " +
-        " and (h.nid_curso = " +
-        conexion.dbConn.escape(nid_curso) +
-        " or nullif(" +
-        conexion.dbConn.escape(nid_curso) +
-        ", " +
-        conexion.dbConn.escape(nid_ultimo_curso) +
-        ") is null) ",
-      (error, results, fields) => {
-        if (error) {
-          console.log(error);
-          reject();
-        } else {
-          resolve(results);
-        }
+  conexion.dbConn.beginTransaction(
+    "select h.* from " +
+      constantes.ESQUEMA_BD +
+      ".horario h " +
+      "where (h.nid_profesor = " +
+      conexion.dbConn.escape(nid_profesor) +
+      " or nullif(" +
+      conexion.dbConn.escape(nid_profesor) +
+      ", '') is null) " +
+      " and (h.nid_asignatura = " +
+      conexion.dbConn.escape(nid_asignatura) +
+      " or nullif(" +
+      conexion.dbConn.escape(nid_asignatura) +
+      ", '') is null) " +
+      " and (h.nid_curso = " +
+      conexion.dbConn.escape(nid_curso) +
+      " or nullif(" +
+      conexion.dbConn.escape(nid_curso) +
+      ", " +
+      conexion.dbConn.escape(nid_ultimo_curso) +
+      ") is null) ",
+    (error, results, fields) => {
+      if (error) {
+        console.log(error);
+        reject();
+      } else {
+        resolve(results);
       }
+    }
+  );
+}
+function obtener_horarios(nid_profesor, nid_asignatura, nid_curso) {
+  return new Promise((resolve, reject) => {
+    async_obtener_horarios(
+      nid_profesor,
+      nid_asignatura,
+      nid_curso,
+      resolve,
+      reject
     );
   });
 }
 
-function obtener_horarios_clase(nid_profesor, nid_asignatura, nid_curso) {
-  return new Promise(async (resolve, reject) => {
-    let nid_ultimo_curso = await curso.obtener_ultimo_curso();
+async function async_obtener_horarios_clase(
+  nid_profesor,
+  nid_asignatura,
+  nid_curso,
+  resolve,
+  reject
+) {
+  let nid_ultimo_curso = await curso.obtener_ultimo_curso();
 
-    conexion.dbConn.beginTransaction(
-      "select hc.*, " +
-        "(select count(*) from " +
-        constantes.ESQUEMA_BD +
-        ".horario_matricula_asignatura hma where hma.nid_horario_clase = hc.nid_horario_clase) num_alumnos " +
-        " from " +
-        constantes.ESQUEMA_BD +
-        ".horario h, " +
-        constantes.ESQUEMA_BD +
-        ".horario_clase hc " +
-        "where h.nid_horario = hc.nid_horario " +
-        " and (h.nid_profesor = " +
-        conexion.dbConn.escape(nid_profesor) +
-        " or nullif(" +
-        conexion.dbConn.escape(nid_profesor) +
-        ", '') is null) " +
-        " and (h.nid_asignatura = " +
-        conexion.dbConn.escape(nid_asignatura) +
-        " or nullif(" +
-        conexion.dbConn.escape(nid_asignatura) +
-        ", '') is null) " +
-        " and (h.nid_curso = " +
-        conexion.dbConn.escape(nid_curso) +
-        " or nullif(" +
-        conexion.dbConn.escape(nid_curso) +
-        ", " +
-        conexion.dbConn.escape(nid_ultimo_curso) +
-        ") is null) ",
-      (error, results, fields) => {
-        if (error) {
-          console.log(error);
-          reject();
-        } else {
-          resolve(results);
-        }
+  conexion.dbConn.beginTransaction(
+    "select hc.*, " +
+      "(select count(*) from " +
+      constantes.ESQUEMA_BD +
+      ".horario_matricula_asignatura hma where hma.nid_horario_clase = hc.nid_horario_clase) num_alumnos " +
+      " from " +
+      constantes.ESQUEMA_BD +
+      ".horario h, " +
+      constantes.ESQUEMA_BD +
+      ".horario_clase hc " +
+      "where h.nid_horario = hc.nid_horario " +
+      " and (h.nid_profesor = " +
+      conexion.dbConn.escape(nid_profesor) +
+      " or nullif(" +
+      conexion.dbConn.escape(nid_profesor) +
+      ", '') is null) " +
+      " and (h.nid_asignatura = " +
+      conexion.dbConn.escape(nid_asignatura) +
+      " or nullif(" +
+      conexion.dbConn.escape(nid_asignatura) +
+      ", '') is null) " +
+      " and (h.nid_curso = " +
+      conexion.dbConn.escape(nid_curso) +
+      " or nullif(" +
+      conexion.dbConn.escape(nid_curso) +
+      ", " +
+      conexion.dbConn.escape(nid_ultimo_curso) +
+      ") is null) ",
+    (error, results, fields) => {
+      if (error) {
+        console.log(error);
+        reject();
+      } else {
+        resolve(results);
       }
+    }
+  );
+}
+
+function obtener_horarios_clase(nid_profesor, nid_asignatura, nid_curso) {
+  return new Promise((resolve, reject) => {
+    async_obtener_horarios_clase(
+      nid_profesor,
+      nid_asignatura,
+      nid_curso,
+      resolve,
+      reject
     );
   });
 }

@@ -3,7 +3,7 @@
 DELIMITER $$
 
 CREATE
-   FUNCTION pasico_gestor_pru.initcap(input VARCHAR(255))
+   FUNCTION pasico_gestor.initcap(input VARCHAR(255))
    RETURNS VARCHAR(255) 
 BEGIN
 DECLARE len INT;

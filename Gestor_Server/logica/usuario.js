@@ -76,7 +76,7 @@ async function comparar_pass(pass, pass_hash) {
  */
 async function login(user, pass) {
   try {
-    pass_hash = await obtener_pass(user);
+    let pass_hash = await obtener_pass(user);
     return await comparar_pass(pass, pass_hash);
   } catch (err) {
     return false;
@@ -157,6 +157,37 @@ function esProfesor(user) {
   });
 }
 
+async function async_registrar_usuario(user, pass, resolve, reject) {
+  let bExiste = await existe_login(user);
+  if (!bExiste) {
+    const saltRounds = 15;
+    conexion.dbConn.beginTransaction(() => {
+      bcrypt.hash(pass, saltRounds, (err, hash) => {
+        conexion.dbConn.query(
+          "insert into " +
+            constantes.ESQUEMA_BD +
+            ".usuario(usuario, password, nid_rol) values(" +
+            conexion.dbConn.escape(user) +
+            ", " +
+            conexion.dbConn.escape(hash) +
+            ", 2)",
+          (error, results, fields) => {
+            if (error) {
+              conexion.dbConn.rollback();
+              console.log(error);
+              reject();
+            } else {
+              conexion.dbConn.commit();
+              console.log("Usuario registrado");
+              resolve();
+            }
+          }
+        );
+      });
+    });
+  }
+}
+
 /**
  * Función que registra a un usuario nuevo con el rol por defecto de gestor
  * @param {*} user
@@ -164,74 +195,49 @@ function esProfesor(user) {
  * @returns
  */
 async function registrar_usuario(user, pass) {
-  return new Promise(async (resolve, reject) => {
-    bExiste = await existe_login(user);
-    if (!bExiste) {
-      const saltRounds = 15;
-      conexion.dbConn.beginTransaction(() => {
-        bcrypt.hash(pass, saltRounds, (err, hash) => {
-          conexion.dbConn.query(
-            "insert into " +
-              constantes.ESQUEMA_BD +
-              ".usuario(usuario, password, nid_rol) values(" +
-              conexion.dbConn.escape(user) +
-              ", " +
-              conexion.dbConn.escape(hash) +
-              ", 2)",
-            (error, results, fields) => {
-              if (error) {
-                conexion.dbConn.rollback();
-                console.log(error);
-                reject();
-              } else {
-                conexion.dbConn.commit();
-                console.log("Usuario registrado");
-                resolve();
-              }
-            }
-          );
-        });
-      });
-    }
+  return new Promise((resolve, reject) => {
+    async_registrar_usuario(user, pass, resolve, reject);
   });
 }
 
-async function actualizar_password(user, pass) {
-  return new Promise(async (resolve, reject) => {
-    bExiste = await existe_login(user);
-    if (bExiste) {
-      const saltRounds = 9;
-      conexion.dbConn.beginTransaction(() => {
-        bcrypt.hash(pass, saltRounds, (err, hash) => {
-          conexion.dbConn.query(
-            "update " +
-              constantes.ESQUEMA_BD +
-              ".usuario set password = " +
-              conexion.dbConn.escape(hash) +
-              " where usuario = " +
-              conexion.dbConn.escape(user),
-            (error, results, fields) => {
-              if (error) {
-                conexion.dbConn.rollback();
-                console.log(error);
-                reject();
-              } else {
-                conexion.dbConn.commit();
-                console.log("Usuario registrado");
-                resolve();
-              }
+async function async_actualizar_password(user, pass, resolve, reject) {
+  let bExiste = await existe_login(user);
+  if (bExiste) {
+    const saltRounds = 9;
+    conexion.dbConn.beginTransaction(() => {
+      bcrypt.hash(pass, saltRounds, (err, hash) => {
+        conexion.dbConn.query(
+          "update " +
+            constantes.ESQUEMA_BD +
+            ".usuario set password = " +
+            conexion.dbConn.escape(hash) +
+            " where usuario = " +
+            conexion.dbConn.escape(user),
+          (error, results, fields) => {
+            if (error) {
+              conexion.dbConn.rollback();
+              console.log(error);
+              reject();
+            } else {
+              conexion.dbConn.commit();
+              console.log("Usuario registrado");
+              resolve();
             }
-          );
-        });
+          }
+        );
       });
-    } else {
-      reject();
-    }
+    });
+  }
+}
+
+async function actualizar_password(user, pass) {
+  return new Promise((resolve, reject) => {
+    async_actualizar_password(user, pass, resolve, reject);
   });
 }
 
 function obtener_rol(user) {
-  return new Promise(async (resolve, reject) => {
+  return new Promise((resolve, reject) => {
     conexion.dbConn.query(
       "select nid_rol from " +
         constantes.ESQUEMA_BD +
