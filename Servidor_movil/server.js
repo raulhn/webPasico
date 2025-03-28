@@ -5,12 +5,16 @@ const bodyParser = require("body-parser");
 
 const config = require("./config/config.js");
 
+const servletUsuario = require("./servlets/servlet_usuario.js");
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
   res.send("El servidor está funcionando correctamente.");
 });
+
+app.put("/registrar_usuario", servletUsuario.registrarUsuario);
 
 https
   .createServer(
