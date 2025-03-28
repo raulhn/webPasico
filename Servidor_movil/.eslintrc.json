@@ -1,0 +1,18 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
+  },
+  "extends": ["eslint:recommended", "prettier"],
+  "parserOptions": {
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "rules": {
+    "semi": ["off"], // Desactiva la regla de punto y coma
+    "quotes": ["error", "double"], // Usa comillas dobles
+    "no-console": "off", // Permite el uso de console.log
+    "no-unused-vars": ["warn", { "args": "none" }]
+  }
+}
