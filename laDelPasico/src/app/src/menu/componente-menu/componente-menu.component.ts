@@ -60,10 +60,12 @@ export class ComponenteMenuComponent implements OnInit {
   private iniciar_menu(menu: Menu[]):void{
     this.menu_completo[0] = menu;
 
+    console.log(this.menu_completo)
 
     for (let i = 0; i < menu.length; i++)
     {
 
+      console.log(menu[i].nid);
       this.menuService.obtenerMenu(menu[i].nid).subscribe((res: any) => {
         var menu_aux:Menu[];
         menu_aux =res.data;

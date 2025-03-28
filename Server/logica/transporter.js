@@ -3,7 +3,7 @@ const nodemailer = require("nodemailer");
 const container = require("./container.js");
 const OAuth2 = google.auth.OAuth2;
 
-// https://dev.to/drsimplegraffiti/send-email-using-oauth2-nodejs-the-right-way-5h32
+//https://dev.to/drsimplegraffiti/send-email-using-oauth2-nodejs-the-right-way-5h32
 const oauth2Client = new OAuth2(
   container.ID_CLIENTE_EMAIL,
   container.CLIENTE_SECRET_EMAIL, // Client Secret
@@ -16,7 +16,7 @@ oauth2Client.setCredentials({
 
 const accessToken = oauth2Client.getAccessToken();
 
-function obtenerTransporter() {
+function obtener_transporter() {
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -25,7 +25,7 @@ function obtenerTransporter() {
       clientId: container.ID_CLIENTE_EMAIL,
       clientSecret: container.CLIENTE_SECRET_EMAIL,
       refreshToken: container.REFRESH_TOKEN_EMAIL,
-      accessToken,
+      accessToken: accessToken,
     },
     tls: {
       rejectUnauthorized: false,
@@ -34,4 +34,4 @@ function obtenerTransporter() {
   return transporter;
 }
 
-module.exports.obtenerTransporter = obtenerTransporter;
+module.exports.obtener_transporter = obtener_transporter;

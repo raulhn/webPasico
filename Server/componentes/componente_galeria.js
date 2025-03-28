@@ -1,28 +1,29 @@
 const constantes = require("../constantes.js");
 const conexion = require("../conexion.js");
+const componente = require("./componente.js");
 const imagen = require("../imagen.js");
 
-function addImagenGaleria(idComponente, titulo, fichero) {
+function add_imagen_galeria(id_componente, titulo, fichero) {
   return new Promise((resolve, reject) => {
     conexion.dbConn.beginTransaction(() => {
       imagen
-        .subirImagen(titulo, fichero)
-        .then((idImagen) => {
-          console.log("Galeria " + idImagen);
+        .subir_imagen(titulo, fichero)
+        .then((id_imagen) => {
+          console.log("Galeria " + id_imagen);
           conexion.dbConn.query(
             "insert into " +
               constantes.ESQUEMA_BD +
               ".galeria_imagen(nid_componente, nid_imagen) values(" +
-              conexion.dbConn.escape(idComponente) +
+              conexion.dbConn.escape(id_componente) +
               ", " +
-              conexion.dbConn.escape(idImagen) +
+              conexion.dbConn.escape(id_imagen) +
               ")",
 
             (error, results, field) => {
               if (error) {
                 console.log(error);
                 conexion.dbConn.rollback();
-                reject(new Error("Error al añadir una imagen a la galeria"));
+                reject();
               } else {
                 conexion.dbConn.commit();
                 resolve();
@@ -32,28 +33,28 @@ function addImagenGaleria(idComponente, titulo, fichero) {
         })
         .catch(() => {
           conexion.dbConn.rollback();
-          reject(new Error("Error al añadir una imagen a la galeria"));
+          reject();
         });
     });
   });
 }
 
-function eliminarImagenGaleria(idComponente, idImagen) {
+function eliminar_imagen_galeria(id_componente, id_imagen) {
   return new Promise((resolve, reject) => {
     conexion.dbConn.beginTransaction(() => {
       conexion.dbConn.query(
         "delete from " +
           constantes.ESQUEMA_BD +
           ".galeria_imagen where nid_componente = " +
-          conexion.dbConn.escape(idComponente) +
+          conexion.dbConn.escape(id_componente) +
           " and nid_imagen = " +
-          conexion.dbConn.escape(idImagen),
+          conexion.dbConn.escape(id_imagen),
 
         (error, results, field) => {
           if (error) {
             console.log(error);
             conexion.dbConn.rollback();
-            reject(new Error("Error al eliminar la imagen de la galería"));
+            reject();
           } else {
             conexion.dbConn.commit();
             resolve();
@@ -64,17 +65,17 @@ function eliminarImagenGaleria(idComponente, idImagen) {
   });
 }
 
-function obtieneImagenesGaleria(idComponente) {
+function obtiene_imagenes_galeria(id_componente) {
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(
-      "select nid_imagen from " +
+      "select nid_imagen  from " +
         constantes.ESQUEMA_BD +
         ".galeria_imagen where nid_componente = " +
-        conexion.dbConn.escape(idComponente),
+        conexion.dbConn.escape(id_componente),
       (error, results, field) => {
         if (error) {
           console.log(error);
-          reject(new Error("Error la obtener las imagenes de la galeria"));
+          reject();
         } else {
           resolve(results);
         }
@@ -83,6 +84,6 @@ function obtieneImagenesGaleria(idComponente) {
   });
 }
 
-module.exports.addImagenGaleria = addImagenGaleria;
-module.exports.eliminarImagenGaleria = eliminarImagenGaleria;
-module.exports.obtieneImagenesGaleria = obtieneImagenesGaleria;
+module.exports.add_imagen_galeria = add_imagen_galeria;
+module.exports.eliminar_imagen_galeria = eliminar_imagen_galeria;
+module.exports.obtiene_imagenes_galeria = obtiene_imagenes_galeria;

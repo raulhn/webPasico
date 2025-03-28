@@ -2,13 +2,15 @@ const constantes = require("../constantes.js");
 const conexion = require("../conexion.js");
 const componente = require("./componente.js");
 
-function registrarCComponentes(nidComponente, nColumnas) {
+const server = require("../server.js");
+
+function registrar_c_componentes(nid_componente, nColumnas) {
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(
       "insert into " +
         constantes.ESQUEMA_BD +
         ".tabla_componentes(nid, nColumnas) values(" +
-        conexion.dbConn.escape(nidComponente) +
+        conexion.dbConn.escape(nid_componente) +
         ", " +
         conexion.dbConn.escape(nColumnas) +
         ")",
@@ -16,7 +18,7 @@ function registrarCComponentes(nidComponente, nColumnas) {
       (error, results, fields) => {
         if (error) {
           console.log(error);
-          reject(new Error("Error al reegistrar componente de componentes"));
+          reject();
         } else {
           resolve();
         }
@@ -25,10 +27,10 @@ function registrarCComponentes(nidComponente, nColumnas) {
   });
 }
 
-function insertarComponenteComponentesOrden(
+function insertar_componente_componentes_orden(
   id,
   nColumnas,
-  tipoAsociacion,
+  tipo_asociacion,
   nOrden
 ) {
   console.log(
@@ -40,37 +42,37 @@ function insertarComponenteComponentesOrden(
         id
     );
     componente
-      .registrarComponenteComun(
+      .registrar_componente_comun(
         constantes.TIPO_COMPONENTE_COMPONENTES,
         id,
-        tipoAsociacion,
+        tipo_asociacion,
         nOrden
       )
-      .then((nidComponente) => {
+      .then((nid_componente) => {
         console.log(
           "componente_componentes->insertar_componente_componentes-> " +
-            nidComponente
+            nid_componente
         );
-        registrarCComponentes(nidComponente, nColumnas).then(() => {
+        registrar_c_componentes(nid_componente, nColumnas).then(() => {
           conexion.dbConn.commit();
           resolve();
         });
       })
       .catch(() => {
         conexion.dbConn.rollback();
-        reject(new Error("Error al insertar componente de componentes"));
+        reject();
       });
   });
 }
 
-function insertarComponenteComponentes(id, nColumnas, tipoAsociacion) {
+function insertar_componente_componentes(id, nColumnas, tipo_asociacion) {
   return new Promise((resolve, reject) => {
-    componente.obtenerUltimoOrden(id).then((maxOrden) => {
-      insertarComponenteComponentesOrden(
+    componente.obtener_ultimo_orden(id).then((max_orden) => {
+      insertar_componente_componentes_orden(
         id,
         nColumnas,
-        tipoAsociacion,
-        maxOrden
+        tipo_asociacion,
+        max_orden
       )
         .then(() => {
           conexion.dbConn.commit();
@@ -78,67 +80,63 @@ function insertarComponenteComponentes(id, nColumnas, tipoAsociacion) {
         })
         .catch(() => {
           conexion.dbConn.rollback();
-          reject(new Error("Error al insertar Componente de Componentes"));
+          reject();
         });
     });
   });
 }
 
-function obtieneNumComponentes(idComponente) {
+function obtiene_num_componentes(id_componente) {
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(
       "select count(*) num_componentes from " +
         constantes.ESQUEMA_BD +
         ".componente_componentes where nid_componente = " +
-        conexion.dbConn.escape(idComponente),
+        conexion.dbConn.escape(id_componente),
       (error, results, fields) => {
         if (error) {
           console.log(
             "componente_componentes->obtiene_num_componentes " + error
           );
-          reject(new Error("Error al obtener el número de componentes"));
+          reject();
         } else {
-          resolve(results[0].num_componentes);
+          resolve(results[0]["num_componentes"]);
         }
       }
     );
   });
 }
 
-function obtieneNumComponentesDefinidos(idComponente) {
+function obtiene_num_componentes_definidos(id_componente) {
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(
       "select nColumnas from " +
         constantes.ESQUEMA_BD +
         ".tabla_componentes where nid = " +
-        conexion.dbConn.escape(idComponente),
+        conexion.dbConn.escape(id_componente),
       (error, results, fields) => {
         if (error) {
           console.log(
             "componente_componentes->obtiene_num_componentes " + error
           );
-          reject(
-            new Error("Error al obtener el número de componentes definidos")
-          );
+          reject();
         } else if (results.length < 1) {
-          reject(
-            new Error("Error al obtener el número de componentes definidos")
-          );
+          reject();
         } else {
-          resolve(results[0].nColumnas);
+          resolve(results[0]["nColumnas"]);
         }
       }
     );
   });
 }
 
-function existeComponenteComponentes(idComponente, nOrden) {
+function existe_componente_componentes(id_componente, nOrden) {
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(
       "select count(*) nExiste from " +
         constantes.ESQUEMA_BD +
         ".componente_componentes where nid_componente = " +
-        conexion.dbConn.escape(idComponente) +
+        conexion.dbConn.escape(id_componente) +
         " and nOrden = " +
         conexion.dbConn.escape(nOrden),
       (error, results, fields) => {
@@ -146,9 +144,9 @@ function existeComponenteComponentes(idComponente, nOrden) {
           console.log(
             "componente_componentes->existe_componente_componentes " + error
           );
-          reject(new Error("Error al comprobar si existe componente"));
+          reject();
         } else {
-          if (results[0].nExiste === 0) {
+          if (results[0]["nExiste"] == 0) {
             resolve(false);
           } else {
             resolve(true);
@@ -159,13 +157,13 @@ function existeComponenteComponentes(idComponente, nOrden) {
   });
 }
 
-function obtieneComponenteComponentes(idComponente, nOrden) {
+function obtiene_componente_componentes(id_componente, nOrden) {
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(
       "select * from " +
         constantes.ESQUEMA_BD +
         ".componente_componentes where nid_componente = " +
-        conexion.dbConn.escape(idComponente) +
+        conexion.dbConn.escape(id_componente) +
         " and nOrden = " +
         conexion.dbConn.escape(nOrden),
       (error, results, fields) => {
@@ -173,28 +171,28 @@ function obtieneComponenteComponentes(idComponente, nOrden) {
           console.log(
             "componente_componentes->obtiene_componente_componentes " + error
           );
-          reject(new Error("Error al obtener componente de componentes"));
+          reject();
         }
         if (results.length < 1) {
-          reject(new Error("Error al obtener el componente de componentes"));
+          reject();
         } else resolve(results[0]);
       }
     );
   });
 }
 
-function eliminarTablaComponentes(idComponente) {
+function eliminar_tabla_componentes(id_componente) {
   return new Promise((resolve, reject) => {
-    console.log("Eliminar tabla --------" + idComponente);
+    console.log("Eliminar tabla --------" + id_componente);
     conexion.dbConn.query(
       "delete from " +
         constantes.ESQUEMA_BD +
         ".tabla_componentes where nid = " +
-        conexion.dbConn.escape(idComponente),
+        conexion.dbConn.escape(id_componente),
       (error, results, fields) => {
         if (error) {
           console.log(error);
-          reject(new Error("Error al eliminar tabla de componentes"));
+          reject();
         } else {
           console.log("Eliminado de tabla componentes");
           resolve();
@@ -204,17 +202,17 @@ function eliminarTablaComponentes(idComponente) {
   });
 }
 
-function eliminarComponenteComponentes(idPagina, idComponente) {
+function eliminar_componente_componentes(id_pagina, id_componente) {
   return new Promise((resolve, reject) => {
     conexion.dbConn.beginTransaction(() => {
       console.log("eliminar_componente_componentes");
-      obtieneNumComponentes(idComponente).then((numComponentes) => {
-        console.log("Num componentes " + numComponentes);
-        if (numComponentes === 0) {
-          eliminarTablaComponentes(idComponente)
+      obtiene_num_componentes(id_componente).then((num_componentes) => {
+        console.log("Num componentes " + num_componentes);
+        if (num_componentes == 0) {
+          eliminar_tabla_componentes(id_componente)
             .then(() => {
               componente
-                .eliminarPaginaComponente(idPagina, idComponente)
+                .eliminar_pagina_componente(id_pagina, id_componente)
                 .then(() => {
                   console.log("Eliminado ---------------");
                   conexion.dbConn.commit();
@@ -222,29 +220,30 @@ function eliminarComponenteComponentes(idPagina, idComponente) {
                 })
                 .catch(() => {
                   conexion.dbConn.rollback();
-                  reject(
-                    new Error("Error al eliminar componente de componentes")
-                  );
+                  reject();
                 });
             })
             .catch(() => {
               conexion.dbConn.rollback();
-              reject(new Error("Error al eliminar componente de componentes"));
+              reject();
             });
         } else {
           conexion.dbConn.rollback();
-          reject(new Error("Error al eliminar componente de componentes"));
+          reject();
         }
       });
     });
   });
 }
 
-module.exports.insertarComponenteComponentes = insertarComponenteComponentes;
-module.exports.obtieneNumComponentes = obtieneNumComponentes;
-module.exports.obtieneNumComponentesDefinidos = obtieneNumComponentesDefinidos;
+module.exports.insertar_componente_componentes =
+  insertar_componente_componentes;
+module.exports.obtiene_num_componentes = obtiene_num_componentes;
+module.exports.obtiene_num_componentes_definidos =
+  obtiene_num_componentes_definidos;
 
-module.exports.existeComponenteComponentes = existeComponenteComponentes;
-module.exports.obtieneComponenteComponentes = obtieneComponenteComponentes;
+module.exports.existe_componente_componentes = existe_componente_componentes;
+module.exports.obtiene_componente_componentes = obtiene_componente_componentes;
 
-module.exports.eliminarComponenteComponentes = eliminarComponenteComponentes;
+module.exports.eliminar_componente_componentes =
+  eliminar_componente_componentes;

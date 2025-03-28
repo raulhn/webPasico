@@ -4,4 +4,6 @@ export class Menu{
     vEnlace!: String;
     padre!: number;
     nOrden!: number;
+    nTipo_pagina!: number;
+    bExterna!: number
 }

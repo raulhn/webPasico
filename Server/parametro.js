@@ -1,19 +1,25 @@
-const conexion = require('./conexion.js')
-const constantes = require('./constantes.js')
+const conexion = require("./conexion.js");
+const constantes = require("./constantes.js");
 
-function obtieneParametro (identificador) {
-  return new Promise(
-    function (resolve, reject) {
-      conexion.dbConn.query('select valor from ' + constantes.ESQUEMA_BD + '.parametros where identificador = ' + conexion.dbConn.escape(identificador),
-        function (error, results, fields) {
-          if (error) { console.log(error); reject(new Error('Error al recuperar el parámetro')) }
-          if (results.lenfth < 1) {
-            reject(new Error('Error al recuperar el parámetro'))
-          }
-          resolve(results[0])
-        })
-    }
-  )
+function obtiene_parametro(identificador) {
+  return new Promise(function (resolve, reject) {
+    conexion.dbConn.query(
+      "select valor from " +
+        constantes.ESQUEMA_BD +
+        ".parametros where identificador = " +
+        conexion.dbConn.escape(identificador),
+      function (error, results, fields) {
+        if (error) {
+          console.log(error);
+          reject();
+        }
+        if (results.lenfth < 1) {
+          reject();
+        }
+        resolve(results[0]);
+      }
+    );
+  });
 }
 
-module.exports.obtieneParametro = obtieneParametro
+module.exports.obtiene_parametro = obtiene_parametro;

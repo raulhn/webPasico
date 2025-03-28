@@ -1,70 +1,69 @@
 const comun = require("./servlet_comun");
 const preinscripcion = require("../logica/preinscripcion");
-const constantesEmail = require("../config/email_constantes.js");
-const envioEmail = require("../config/envio_email.json");
-const respuestaEmail = require("../config/respuesta_email.json");
+const constantes_email = require("../config/email_constantes.js");
+const envio_email = require("../config/envio_email.json");
+var respuesta_email = require("../config/respuesta_email.json");
 
-const sTransporter = require("../logica/transporter.js");
+const s_transporter = require("../logica/transporter.js");
 
-function registrarPreinscripcion(req, res) {
+function registrar_preinscripcion(req, res) {
   comun.comprobaciones(req, res, async () => {
-    const nombre = req.body.nombre;
-    const primerApellido = req.body.primer_apellido;
-    const segundoApellido = req.body.segundo_apellido;
-    const fechaNacimiento = req.body.fecha_nacimiento;
-    const dni = req.body.dni;
-    const nombrePadre = req.body.nombre_padre;
-    const primerApellidoPadre = req.body.primer_apellido_padre;
-    const segundoApellidoPadre = req.body.segundo_apellido_padre;
-    const dniPadre = req.body.dni_padre;
-    const correoElectronico = req.body.correo_electronico;
-    const telefono = req.body.telefono;
-    const provincia = req.body.provincia;
-    const municipio = req.body.municipio;
-    const direccion = req.body.direccion;
-    const numero = req.body.numero;
-    const puerta = req.body.puerta;
-    const escalera = req.body.escalera;
-    const codigoPostal = req.body.codigo_postal;
-    const instrumento = req.body.instrumento;
-    const familiaInstrumento = req.body.familia_instrumento;
-    const instrumento2 = req.body.instrumento2;
-    const familiaInstrumento2 = req.body.familia_instrumento2;
-    const instrumento3 = req.body.instrumento3;
-    const familiaInstrumento3 = req.body.familia_instrumento3;
+    let nombre = req.body.nombre;
+    let primer_apellido = req.body.primer_apellido;
+    let segundo_apellido = req.body.segundo_apellido;
+    let fecha_nacimiento = req.body.fecha_nacimiento;
+    let dni = req.body.dni;
+    let nombre_padre = req.body.nombre_padre;
+    let primer_apellido_padre = req.body.primer_apellido_padre;
+    let segundo_apellido_padre = req.body.segundo_apellido_padre;
+    let dni_padre = req.body.dni_padre;
+    let correo_electronico = req.body.correo_electronico;
+    let telefono = req.body.telefono;
+    let provincia = req.body.provincia;
+    let municipio = req.body.municipio;
+    let direccion = req.body.direccion;
+    let numero = req.body.numero;
+    let puerta = req.body.puerta;
+    let escalera = req.body.escalera;
+    let codigo_postal = req.body.codigo_postal;
+    let instrumento = req.body.instrumento;
+    let familia_instrumento = req.body.familia_instrumento;
+    let instrumento2 = req.body.instrumento2;
+    let familia_instrumento2 = req.body.familia_instrumento2;
+    let instrumento3 = req.body.instrumento3;
+    let familia_instrumento3 = req.body.familia_instrumento3;
 
-    const sucursal = req.body.sucursal;
-    const curso = req.body.curso;
-    const horario = req.body.horario;
-    const tipoInscripcion = req.body.tipo_inscripcion;
+    let sucursal = req.body.sucursal;
+    let curso = req.body.curso;
+    let horario = req.body.horario;
+    let tipo_inscripcion = req.body.tipo_inscripcion;
 
-    const token = req.body.token;
+    let token = req.body.token;
 
     const url =
       "https://www.google.com/recaptcha/api/siteverify?secret=" +
-      constantesEmail.CLAVE +
+      constantes_email.CLAVE +
       "&response=" +
       token +
       "";
 
-    const respuesta = await fetch(url, { method: "post" });
-    const respuestaJson = await respuesta.json();
+    let respuesta = await fetch(url, { method: "post" });
+    let respuesta_json = await respuesta.json();
 
-    console.log(url);
-    const bSuccess = respuestaJson.success;
+    let bSuccess = respuesta_json.success;
 
     if (bSuccess) {
-      await preinscripcion.registrarPreinscripcion(
+      await preinscripcion.registrar_preinscripcion(
         nombre,
-        primerApellido,
-        segundoApellido,
+        primer_apellido,
+        segundo_apellido,
         dni,
-        fechaNacimiento,
-        nombrePadre,
-        primerApellidoPadre,
-        segundoApellidoPadre,
-        dniPadre,
-        correoElectronico,
+        fecha_nacimiento,
+        nombre_padre,
+        primer_apellido_padre,
+        segundo_apellido_padre,
+        dni_padre,
+        correo_electronico,
         telefono,
         municipio,
         provincia,
@@ -72,57 +71,62 @@ function registrarPreinscripcion(req, res) {
         numero,
         puerta,
         escalera,
-        codigoPostal,
+        codigo_postal,
         instrumento,
-        familiaInstrumento,
+        familia_instrumento,
         sucursal,
         curso,
         horario,
-        tipoInscripcion,
+        tipo_inscripcion,
         instrumento2,
-        familiaInstrumento2,
+        familia_instrumento2,
         instrumento3,
-        familiaInstrumento3
+        familia_instrumento3
       );
 
       res
         .status(200)
         .send({ error: false, message: "Preinscripcion realizada" });
 
-      await enviarEmail(
+      await enviar_email(
         nombre,
-        primerApellido,
-        segundoApellido,
-        fechaNacimiento
+        primer_apellido,
+        segundo_apellido,
+        fecha_nacimiento
       );
-      await enviarEmailRespuesta(correoElectronico);
+      await enviar_email_respuesta(correo_electronico);
     } else {
       res.status(400).send({ error: true, message: "Error Captcha" });
     }
   });
 }
 
-function enviarEmail(nombre, primerApellido, segundoApellido, fechaNacimiento) {
+function enviar_email(
+  nombre,
+  primer_apellido,
+  segundo_apellido,
+  fecha_nacimiento
+) {
   return new Promise((resolve, reject) => {
-    const createTransport = sTransporter.obtenerTransporter();
+    let createTransport = s_transporter.obtener_transporter();
 
-    envioEmail.html =
+    envio_email.html =
       "<div> <p>Nueva preinscripción realizada</p> <p>Se ha recibido una soliciud para el alumno " +
       nombre +
       " " +
-      primerApellido +
+      primer_apellido +
       " " +
-      segundoApellido +
+      segundo_apellido +
       "</p>" +
       "<p> Fecha de nacimiento: " +
-      fechaNacimiento +
+      fecha_nacimiento +
       " </div> ";
 
-    createTransport.sendMail(envioEmail, function (error, info) {
+    createTransport.sendMail(envio_email, function (error, info) {
       if (error) {
         console.log(error);
         console.log("Error al enviar email");
-        reject(new Error("Error al enviar email"));
+        reject();
       } else {
         console.log("Correo enviado correctamente");
         resolve();
@@ -132,17 +136,17 @@ function enviarEmail(nombre, primerApellido, segundoApellido, fechaNacimiento) {
   });
 }
 
-function enviarEmailRespuesta(correo) {
+function enviar_email_respuesta(correo) {
   return new Promise((resolve, reject) => {
-    const createTransport = sTransporter.obtenerTransporter();
+    let createTransport = s_transporter.obtener_transporter();
 
-    respuestaEmail.to = correo;
+    respuesta_email.to = correo;
 
-    createTransport.sendMail(respuestaEmail, function (error, info) {
+    createTransport.sendMail(respuesta_email, function (error, info) {
       if (error) {
         console.log(error);
         console.log("Error al enviar email");
-        reject(new Error("Error al enviar email"));
+        reject();
       } else {
         console.log("Correo enviado correctamente");
         resolve();
@@ -152,34 +156,36 @@ function enviarEmailRespuesta(correo) {
   });
 }
 
-function obtenerPreinscripciones(req, res) {
-  comun.comprobacionesLogin(req, res, async () => {
-    const resultados = await preinscripcion.obtenerPreinscripciones();
+function obtener_preinscripciones(req, res) {
+  comun.comprobaciones_login(req, res, async () => {
+    let resultados = await preinscripcion.obtener_preinscripciones();
 
     res.status(200).send({ error: false, preinscripciones: resultados });
   });
 }
 
-function obtenerPreinscripcionesApi(req, res) {
-  comun.comprobacionesApi(req, res, async () => {
-    const resultados = await preinscripcion.obtenerPreinscripciones();
+function obtener_preinscripciones_api(req, res) {
+  comun.comprobaciones_api(req, res, async () => {
+    let resultados = await preinscripcion.obtener_preinscripciones();
 
     res.status(200).send({ error: false, preinscripciones: resultados });
   });
 }
 
-function obtenerPreinscripcionesDetalle(req, res) {
-  comun.comprobacionesApi(req, res, async () => {
-    const nidPreinscripcion = req.params.nid_preinscripcion;
+function obtener_preinscripciones_detalle(req, res) {
+  comun.comprobaciones_api(req, res, async () => {
+    let nid_preinscripcion = req.params.nid_preinscripcion;
 
-    const resultado =
-      await preinscripcion.obtenerPreincripcionesDetalle(nidPreinscripcion);
+    let resultado = await preinscripcion.obtener_preincripciones_detalle(
+      nid_preinscripcion
+    );
 
     res.status(200).send({ error: false, preinscripciones: resultado });
   });
 }
 
-module.exports.obtenerPreinscripciones = obtenerPreinscripciones;
-module.exports.registrarPreinscripcion = registrarPreinscripcion;
-module.exports.obtenerPreinscripcionesDetalle = obtenerPreinscripcionesDetalle;
-module.exports.obtenerPreinscripcionesApi = obtenerPreinscripcionesApi;
+module.exports.obtener_preinscripciones = obtener_preinscripciones;
+module.exports.registrar_preinscripcion = registrar_preinscripcion;
+module.exports.obtener_preinscripciones_detalle =
+  obtener_preinscripciones_detalle;
+module.exports.obtener_preinscripciones_api = obtener_preinscripciones_api;
