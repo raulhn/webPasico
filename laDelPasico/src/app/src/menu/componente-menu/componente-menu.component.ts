@@ -222,4 +222,9 @@ export class ComponenteMenuComponent implements OnInit {
     {
       this.modoEdicion = false;
     }
+
+    obtener_url_preinscripcion()
+    {
+      return Constantes.General.URL_FRONTED + '/preinscripcion';
+    }
 }

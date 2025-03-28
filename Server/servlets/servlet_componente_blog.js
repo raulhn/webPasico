@@ -1,7 +1,7 @@
 const componente = require("../componentes/componente.js");
 const constantes = require("../constantes.js");
 const componente_blog = require("../componentes/componente_blog.js");
-const usuario = require("../usuario.js");
+const usuario = require("../logica/usuario.js");
 
 async function registrar_componente_blog(req, res) {
   let id = req.body.id;
@@ -74,9 +74,8 @@ async function add_elemento_blog(req, res) {
 async function obtener_componente_blog(req, res) {
   let id_componente = req.params.id_componente;
   try {
-    let resultado = await componente_blog.obtener_componente_blog(
-      id_componente
-    );
+    let resultado =
+      await componente_blog.obtener_componente_blog(id_componente);
     return res.status(200).send({ error: false, componente_blog: resultado });
   } catch (error) {
     console.log(error);

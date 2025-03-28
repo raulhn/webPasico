@@ -1,7 +1,6 @@
 const constantes = require("../constantes.js");
 const conexion = require("../conexion.js");
-const componente = require("./componente.js");
-const imagen = require("../imagen.js");
+const imagen = require("../logica/imagen.js");
 
 function add_imagen_galeria(id_componente, titulo, fichero) {
   return new Promise((resolve, reject) => {
