@@ -1,17 +1,17 @@
 const constantes = require("../constantes.js");
 const conexion = require("../conexion.js");
 
-function registrarPreinscripcion(
+function registrar_preinscripcion(
   nombre,
-  primerApellido,
-  segundoApellido,
+  primer_apellido,
+  segundo_apellido,
   dni,
-  fechaNacimiento,
-  nombrePadre,
-  primerApellidoPadre,
-  segundoApellidoPadre,
-  dniPadre,
-  correoElectronico,
+  fecha_nacimiento,
+  nombre_padre,
+  primer_apellido_padre,
+  segundo_apellido_padre,
+  dni_padre,
+  correo_electronico,
   telefono,
   municipio,
   provincia,
@@ -19,17 +19,17 @@ function registrarPreinscripcion(
   numero,
   puerta,
   escalera,
-  codigoPostal,
+  codigo_postal,
   instrumento,
-  familiaInstrumento,
+  familia_instrumento,
   sucursal,
   curso,
   horario,
-  tipoInscripcion,
+  tipo_inscripcion,
   instrumento2,
-  familiaInstrumento2,
+  familia_instrumento2,
   instrumento3,
-  familiaInstrumento3
+  familia_instrumento3
 ) {
   return new Promise((resolve, reject) => {
     conexion.dbConn.beginTransaction(() => {
@@ -42,23 +42,23 @@ function registrarPreinscripcion(
           ", instrumento2, familia_instrumento2, instrumento3, familia_instrumento3) values(" +
           conexion.dbConn.escape(nombre) +
           ", " +
-          conexion.dbConn.escape(primerApellido) +
+          conexion.dbConn.escape(primer_apellido) +
           ", " +
-          conexion.dbConn.escape(segundoApellido) +
+          conexion.dbConn.escape(segundo_apellido) +
           ", " +
           conexion.dbConn.escape(dni) +
           ", str_to_date(nullif(" +
-          conexion.dbConn.escape(fechaNacimiento) +
+          conexion.dbConn.escape(fecha_nacimiento) +
           ", '') , '%Y-%m-%d'), " +
-          conexion.dbConn.escape(nombrePadre) +
+          conexion.dbConn.escape(nombre_padre) +
           ", " +
-          conexion.dbConn.escape(primerApellidoPadre) +
+          conexion.dbConn.escape(primer_apellido_padre) +
           ", " +
-          conexion.dbConn.escape(segundoApellidoPadre) +
+          conexion.dbConn.escape(segundo_apellido_padre) +
           ", " +
-          conexion.dbConn.escape(dniPadre) +
+          conexion.dbConn.escape(dni_padre) +
           ", " +
-          conexion.dbConn.escape(correoElectronico) +
+          conexion.dbConn.escape(correo_electronico) +
           ", " +
           conexion.dbConn.escape(telefono) +
           ", " +
@@ -74,12 +74,12 @@ function registrarPreinscripcion(
           ", " +
           conexion.dbConn.escape(escalera) +
           ", " +
-          conexion.dbConn.escape(codigoPostal) +
+          conexion.dbConn.escape(codigo_postal) +
           ", " +
           conexion.dbConn.escape(instrumento) +
           ", " +
           "nullif(" +
-          conexion.dbConn.escape(familiaInstrumento) +
+          conexion.dbConn.escape(familia_instrumento) +
           ",''), " +
           conexion.dbConn.escape(sucursal) +
           "," +
@@ -87,24 +87,24 @@ function registrarPreinscripcion(
           ", " +
           conexion.dbConn.escape(horario) +
           "," +
-          conexion.dbConn.escape(tipoInscripcion) +
+          conexion.dbConn.escape(tipo_inscripcion) +
           ", " +
           conexion.dbConn.escape(instrumento2) +
           ", " +
           "nullif(" +
-          conexion.dbConn.escape(familiaInstrumento2) +
+          conexion.dbConn.escape(familia_instrumento2) +
           ",''), " +
           conexion.dbConn.escape(instrumento3) +
           ", " +
           "nullif(" +
-          conexion.dbConn.escape(familiaInstrumento3) +
+          conexion.dbConn.escape(familia_instrumento3) +
           ",'') " +
           ")",
         (error, results, fields) => {
           if (error) {
             console.log(error);
             conexion.dbConn.rollback();
-            reject(new Error("Error al registrar la preinscripción"));
+            reject();
           } else {
             conexion.dbConn.commit();
             resolve();
@@ -115,7 +115,7 @@ function registrarPreinscripcion(
   });
 }
 
-function obtenerPreinscripciones() {
+function obtener_preinscripciones() {
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(
       "select p.*, case p.sucursal " +
@@ -128,7 +128,7 @@ function obtenerPreinscripciones() {
       (error, results, fields) => {
         if (error) {
           console.log(error);
-          reject(new Error("Error al obtener las preinscripicones"));
+          reject();
         } else {
           resolve(results);
         }
@@ -137,7 +137,7 @@ function obtenerPreinscripciones() {
   });
 }
 
-function obtenerPreinscripcionesDetalle(nidPreinscripcion) {
+function obtener_preincripciones_detalle(nid_preinscripcion) {
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(
       "select p.*, case p.sucursal " +
@@ -147,11 +147,11 @@ function obtenerPreinscripcionesDetalle(nidPreinscripcion) {
         "case p.tipo_inscripcion when 1 then 'Nueva Matricula' when 2 then 'Renovación' end as tipo_matricula from " +
         constantes.ESQUEMA_BD +
         ".preinscripcion p where nid_preinscripcion = " +
-        conexion.dbConn.escape(nidPreinscripcion),
+        conexion.dbConn.escape(nid_preinscripcion),
       (error, results, fields) => {
         if (error) {
           console.log(error);
-          reject(new Error("Error al obtener el detalle de la preinscripcion"));
+          reject();
         } else {
           resolve(results);
         }
@@ -160,6 +160,7 @@ function obtenerPreinscripcionesDetalle(nidPreinscripcion) {
   });
 }
 
-module.exports.obtenerPreinscripciones = obtenerPreinscripciones;
-module.exports.registrarPreinscripcion = registrarPreinscripcion;
-module.exports.obtenerPreinscripcionesDetalle = obtenerPreinscripcionesDetalle;
+module.exports.obtener_preinscripciones = obtener_preinscripciones;
+module.exports.registrar_preinscripcion = registrar_preinscripcion;
+module.exports.obtener_preincripciones_detalle =
+  obtener_preincripciones_detalle;

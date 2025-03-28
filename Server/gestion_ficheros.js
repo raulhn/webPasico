@@ -1,15 +1,15 @@
 const constantes = require("./constantes.js");
 
-// https://attacomsian.com/blog/uploading-files-nodejs-express
-function subirFicheros(fichero, nombreImagen) {
+//https://attacomsian.com/blog/uploading-files-nodejs-express
+function subir_ficheros(fichero, nombre_imagen) {
   return new Promise((resolve, reject) => {
     try {
       if (!fichero) {
-        reject(new Error("Error al subir fichero"));
+        reject("Error al subir fichero");
       } else {
-        const archivo = fichero.imagen;
-        console.log(constantes.RUTA_SUBIDAS + nombreImagen);
-        archivo.mv(constantes.RUTA_SUBIDAS + nombreImagen);
+        let archivo = fichero.imagen;
+        console.log(constantes.RUTA_SUBIDAS + nombre_imagen);
+        archivo.mv(constantes.RUTA_SUBIDAS + nombre_imagen);
 
         resolve();
       }
@@ -20,4 +20,4 @@ function subirFicheros(fichero, nombreImagen) {
   });
 }
 
-module.exports.subirFicheros = subirFicheros;
+module.exports.subir_ficheros = subir_ficheros;

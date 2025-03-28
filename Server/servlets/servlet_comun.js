@@ -1,8 +1,8 @@
-const gestionUsuarios = require("../logica/usuario.js");
+const gestion_usuarios = require("../usuario.js");
 
-async function comprobaciones(req, res, funcionEspecifica) {
+async function comprobaciones(req, res, funcion_especifica) {
   try {
-    await funcionEspecifica();
+    await funcion_especifica();
   } catch (error) {
     console.log(error);
     res
@@ -11,11 +11,11 @@ async function comprobaciones(req, res, funcionEspecifica) {
   }
 }
 
-async function comprobacionesLogin(req, res, funcionEspecifica) {
-  if (await gestionUsuarios.esAdministrador(req.session.nombre)) {
+async function comprobaciones_login(req, res, funcion_especifica) {
+  if (await gestion_usuarios.esAdministrador(req.session.nombre)) {
     console.log(req.session.nombre);
     try {
-      await funcionEspecifica();
+      await funcion_especifica();
     } catch (error) {
       console.log(error);
       res
@@ -31,11 +31,11 @@ async function comprobacionesLogin(req, res, funcionEspecifica) {
   }
 }
 
-function comprobacionesApi(req, res, funcionEspecifica) {
+function comprobaciones_api(req, res, funcion_especifica) {
   try {
-    const apiKeySolicitud = req.header("x-api-key");
-    if (apiKeySolicitud === process.env.API_KEY) {
-      funcionEspecifica();
+    let api_key_solicitud = req.header("x-api-key");
+    if (api_key_solicitud == process.env.API_KEY) {
+      funcion_especifica();
     } else {
       res.status(404).send({ error: true, message: "No autorizado" });
     }
@@ -48,5 +48,5 @@ function comprobacionesApi(req, res, funcionEspecifica) {
 }
 
 module.exports.comprobaciones = comprobaciones;
-module.exports.comprobacionesLogin = comprobacionesLogin;
-module.exports.comprobacionesApi = comprobacionesApi;
+module.exports.comprobaciones_login = comprobaciones_login;
+module.exports.comprobaciones_api = comprobaciones_api;

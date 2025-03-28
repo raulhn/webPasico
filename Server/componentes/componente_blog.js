@@ -4,23 +4,31 @@ const componente = require("./componente.js");
 const menu = require("../menu.js");
 const imagen = require("../imagen.js");
 
-function addComponenteBlog(idComponente, titulo, fecha, imagen_, descripcion) {
+function add_componente_blog(
+  id_componente,
+  titulo,
+  fecha,
+  imagen_,
+  descripcion
+) {
   return new Promise((resolve, reject) => {
     conexion.dbConn.beginTransaction(async () => {
-      const idPadre = await componente.obtenerPaginaDeComponente(idComponente);
-      const idPagina = await menu.registrarMenuId(
+      let id_padre = await componente.obtener_pagina_de_componente(
+        id_componente
+      );
+      let id_pagina = await menu.registrar_menu_id(
         titulo,
-        idPadre,
+        id_padre,
         constantes.TIPO_PAGINA_GENERAL,
         ""
       );
-      const idImagen = await imagen.subirImagen(titulo, imagen_);
+      let id_imagen = await imagen.subir_imagen(titulo, imagen_);
 
       conexion.dbConn.query(
         "insert into " +
           constantes.ESQUEMA_BD +
           ".componente_blog(nid_componente, titulo, fecha, nid_imagen, nid_menu, descripcion) values(" +
-          conexion.dbConn.escape(idComponente) +
+          conexion.dbConn.escape(id_componente) +
           ", " +
           conexion.dbConn.escape(titulo) +
           ", " +
@@ -28,9 +36,9 @@ function addComponenteBlog(idComponente, titulo, fecha, imagen_, descripcion) {
           conexion.dbConn.escape(fecha) +
           ", '%Y-%m-%d')" +
           ", " +
-          conexion.dbConn.escape(idImagen) +
+          conexion.dbConn.escape(id_imagen) +
           ", " +
-          conexion.dbConn.escape(idPagina) +
+          conexion.dbConn.escape(id_pagina) +
           ", " +
           conexion.dbConn.escape(descripcion) +
           ")",
@@ -39,7 +47,7 @@ function addComponenteBlog(idComponente, titulo, fecha, imagen_, descripcion) {
           if (error) {
             console.log(error);
             conexion.dbConn.rollback();
-            reject(new Error("Error al añadir componente blog"));
+            reject();
           } else {
             conexion.dbConn.commit();
             resolve();
@@ -50,23 +58,23 @@ function addComponenteBlog(idComponente, titulo, fecha, imagen_, descripcion) {
   });
 }
 
-function obtenerComponenteBlog(idComponente) {
+function obtener_componente_blog(id_componente) {
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(
       "select nid_componente, titulo, fecha, nid_imagen, nid_menu, descripcion from " +
         constantes.ESQUEMA_BD +
         ".componente_blog where nid_componente = " +
-        conexion.dbConn.escape(idComponente) +
+        conexion.dbConn.escape(id_componente) +
         " order by fecha desc",
       (error, results, fields) => {
         if (error) {
           console.log(error);
-          reject(new Error("Error al obtener componente blog"));
+          reject();
         } else {
           if (results.length > 0) {
             resolve(results);
           } else {
-            reject(new Error("Error al obtener componente blog"));
+            reject();
           }
         }
       }
@@ -74,18 +82,18 @@ function obtenerComponenteBlog(idComponente) {
   });
 }
 
-function eliminarElementoBlog(idComponente, idImagen, idMenu) {
+function eliminar_elemento_blog(id_componente, id_imagen, id_menu) {
   return new Promise((resolve, reject) => {
     conexion.dbConn.beginTransaction(async () => {
       conexion.dbConn.query(
         "delete from " +
           constantes.ESQUEMA_BD +
           ".componente_blog where nid_componente = " +
-          conexion.dbConn.escape(idComponente) +
+          conexion.dbConn.escape(id_componente) +
           " and nid_imagen = " +
-          conexion.dbConn.escape(idImagen) +
+          conexion.dbConn.escape(id_imagen) +
           " and nid_menu = " +
-          conexion.dbConn.escape(idMenu),
+          conexion.dbConn.escape(id_menu),
         async (error, result, fields) => {
           try {
             if (error) {
@@ -93,7 +101,7 @@ function eliminarElementoBlog(idComponente, idImagen, idMenu) {
               conexion.dbConn.rollback();
               reject(error);
             } else {
-              await menu.eliminarMenu(idMenu);
+              await menu.eliminar_menu(id_menu);
               conexion.dbConn.commit();
               resolve();
             }
@@ -108,35 +116,35 @@ function eliminarElementoBlog(idComponente, idImagen, idMenu) {
   });
 }
 
-function numeroElementos(idComponente) {
+function numero_elementos(id_componente) {
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(
       "select count(*) num from " +
         constantes.ESQUEMA_BD +
         ".componente_blog where nid_componente = " +
-        conexion.dbConn.escape(idComponente),
+        conexion.dbConn.escape(id_componente),
       (error, results, fields) => {
         if (error) {
           console.log(error);
           resolve(0);
         } else {
-          resolve(results[0].num);
+          resolve(results[0]["num"]);
         }
       }
     );
   });
 }
 
-function eliminarComponenteBlog(idPagina, idComponente, tipoAsociacion) {
+function eliminar_componente_blog(id_pagina, id_componente, tipo_asociacion) {
   return new Promise((resolve, reject) => {
     conexion.dbConn.beginTransaction(async () => {
-      const cantidadElementos = await numeroElementos(idComponente);
-      if (cantidadElementos > 0) {
+      let cantidad_elementos = await numero_elementos(id_componente);
+      if (cantidad_elementos > 0) {
         try {
-          await componente.eliminarComponenteComun(
-            idComponente,
-            idPagina,
-            tipoAsociacion
+          await componente.eliminar_componente_comun(
+            id_componente,
+            id_pagina,
+            tipo_asociacion
           );
           resolve();
         } catch (error) {
@@ -144,13 +152,13 @@ function eliminarComponenteBlog(idPagina, idComponente, tipoAsociacion) {
           reject(error);
         }
       } else {
-        reject(new Error("No se puede eliminar el componente"));
+        reject();
       }
     });
   });
 }
 
-module.exports.addComponenteBlog = addComponenteBlog;
-module.exports.obtenerComponenteBlog = obtenerComponenteBlog;
-module.exports.eliminarElementoBlog = eliminarElementoBlog;
-module.exports.eliminarComponenteBlog = eliminarComponenteBlog;
+module.exports.add_componente_blog = add_componente_blog;
+module.exports.obtener_componente_blog = obtener_componente_blog;
+module.exports.eliminar_elemento_blog = eliminar_elemento_blog;
+module.exports.eliminar_componente_blog = eliminar_componente_blog;

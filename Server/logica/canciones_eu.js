@@ -1,7 +1,7 @@
 const constantes = require("../constantes.js");
 const conexion = require("../conexion.js");
 
-function obtenerCanciones() {
+function obtener_canciones() {
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(
       "select * from " +
@@ -10,7 +10,7 @@ function obtenerCanciones() {
       (error, results, fields) => {
         if (error) {
           console.log(error);
-          reject(new Error("Error al obtener las canciones"));
+          reject();
         } else {
           resolve(results);
         }
@@ -19,7 +19,7 @@ function obtenerCanciones() {
   });
 }
 
-function obtenerVotaciones() {
+function obtener_votaciones() {
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(
       "select ce.nid_cancion_eu, ifnull(vce.votos, 0) votos" +
@@ -30,7 +30,7 @@ function obtenerVotaciones() {
       (error, results, fields) => {
         if (error) {
           console.log(error);
-          reject(new Error("Error al obtener las votaciones"));
+          reject();
         } else {
           resolve(results);
         }
@@ -39,5 +39,5 @@ function obtenerVotaciones() {
   });
 }
 
-module.exports.obtenerCanciones = obtenerCanciones;
-module.exports.obtenerVotaciones = obtenerVotaciones;
+module.exports.obtener_canciones = obtener_canciones;
+module.exports.obtener_votaciones = obtener_votaciones;
