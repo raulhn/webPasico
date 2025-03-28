@@ -1,8 +1,8 @@
 const constantes = require("../constantes.js");
 const conexion = require("../conexion.js");
 const componente = require("./componente.js");
-const menu = require("../menu.js");
-const imagen = require("../imagen.js");
+const menu = require("../logica/menu.js");
+const imagen = require("../logica/imagen.js");
 
 function add_componente_blog(
   id_componente,
@@ -13,9 +13,8 @@ function add_componente_blog(
 ) {
   return new Promise((resolve, reject) => {
     conexion.dbConn.beginTransaction(async () => {
-      let id_padre = await componente.obtener_pagina_de_componente(
-        id_componente
-      );
+      let id_padre =
+        await componente.obtener_pagina_de_componente(id_componente);
       let id_pagina = await menu.registrar_menu_id(
         titulo,
         id_padre,

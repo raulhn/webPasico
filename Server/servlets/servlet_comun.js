@@ -1,4 +1,4 @@
-const gestion_usuarios = require("../usuario.js");
+const gestion_usuarios = require("../logica/usuario.js");
 
 async function comprobaciones(req, res, funcion_especifica) {
   try {
@@ -18,13 +18,11 @@ async function comprobaciones_login(req, res, funcion_especifica) {
       await funcion_especifica();
     } catch (error) {
       console.log(error);
-      res
-        .status(400)
-        .send({
-          error: true,
-          message: "Se ha producido un error",
-          info: error,
-        });
+      res.status(400).send({
+        error: true,
+        message: "Se ha producido un error",
+        info: error,
+      });
     }
   } else {
     res.status(404).send({ error: true, message: "No autorizado" });

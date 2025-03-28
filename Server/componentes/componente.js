@@ -1,7 +1,6 @@
 const constantes = require("../constantes.js");
 const conexion = require("../conexion.js");
-const menu = require("../menu.js");
-const imagen = require("../imagen.js");
+const menu = require("../logica/menu.js");
 
 function existe_componente(nid_componente) {
   return new Promise(function (resolve, reject) {
