@@ -28,7 +28,7 @@ export class ComponenteService {
   actualizar_texto(data: Componente_texto)
   {
     let API_URL = this.url + '/guardar_texto';
-    return this.http.post(API_URL, data,{ withCredentials:true }).pipe(catchError(err => {console.log('Error', err); 
+    return this.http.post(API_URL, data,{ withCredentials:true }).pipe(catchError(err => { 
         return throwError(() => new Error(err.status))}))
   }
 

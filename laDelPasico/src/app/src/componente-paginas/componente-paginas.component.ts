@@ -42,7 +42,7 @@ export class ComponentePaginasComponent implements OnInit {
         for(var i = 0; i < this.pagina_componente.length; i++)
         {
           this.orden_pagina[this.pagina_componente[i].nid_pagina] = this.pagina_componente[i].orden;
-          console.log(this.pagina_componente[i].nid_pagina);
+    
           this.menuService.obtiene_url(this.pagina_componente[i].nid_pagina).subscribe(
             (res_menu: any) =>
             {

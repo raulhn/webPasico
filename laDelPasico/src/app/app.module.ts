@@ -88,7 +88,8 @@ import { NgxCaptchaModule } from 'ngx-captcha';
         ListadoPreinscripcionesCompletoComponent,
         ListaOrdenadaComponent
     ],
-    bootstrap: [AppComponent], imports: [BrowserModule,
+    bootstrap: [AppComponent], 
+    imports: [BrowserModule,
         AppRoutingModule,
         FormsModule,
         FontAwesomeModule,
@@ -98,6 +99,7 @@ import { NgxCaptchaModule } from 'ngx-captcha';
         QuillModule.forRoot(),
         NgxCaptchaModule,
         ReactiveFormsModule,
+        RouterModule,
        // RecaptchaV3Module,
 
         DataTablesModule], 

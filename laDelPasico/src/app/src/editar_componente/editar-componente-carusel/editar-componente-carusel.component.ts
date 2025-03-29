@@ -82,7 +82,7 @@ export class EditarComponenteCaruselComponent implements OnInit {
     ,
     error: () =>
     {
-      console.log('Error');
+
     }
   }
     
@@ -118,7 +118,7 @@ export class EditarComponenteCaruselComponent implements OnInit {
     if (this.bPendienteSubir && this.imagenesArchivos.length > 0)
     {
       var formData = new FormData();
-      console.log(this.imagenesArchivos[0])
+
       formData.append("imagen", this.imagenesArchivos[0]);
       formData.append("id_componente", this.id_componente);
       formData.append("titulo", this.titulo);
@@ -126,7 +126,7 @@ export class EditarComponenteCaruselComponent implements OnInit {
       this.componentService.add_elemento_carrusel(formData).subscribe(
         (res: any) =>
         {
-          console.log(res);
+
           if(!res.error)
           {
             setTimeout(() => {window.location.reload();}, 1000);
@@ -141,7 +141,7 @@ export class EditarComponenteCaruselComponent implements OnInit {
     this.componentService.actualizar_elementos_simultaneos(this.id_componente, this.elementos_simultaneos).subscribe(
       (res: any) =>
       {
-        console.log(res)
+
         if(!res.error)
         {
           this.customOptions = {

@@ -43,7 +43,7 @@ export class EditarComponentePaginasComponent implements OnInit {
         for(var i = 0; i < this.pagina_componente.length; i++)
         {
           this.orden_pagina[this.pagina_componente[i].nid_pagina] = this.pagina_componente[i].orden;
-          console.log(this.pagina_componente[i].nid_pagina);
+
           this.menuService.obtiene_url(this.pagina_componente[i].nid_pagina).subscribe(
             (res_menu: any) =>
             {
@@ -106,11 +106,7 @@ export class EditarComponentePaginasComponent implements OnInit {
 
   obtiene_paginacion(id_pagina: number)
   {
-    console.log(this.orden_pagina[id_pagina] + '/' + this.NUM_PAGINAS);
-    console.log(this.orden_pagina[id_pagina] / this.NUM_PAGINAS);
-    console.log(Math.trunc(this.orden_pagina[id_pagina] / this.NUM_PAGINAS));
-    console.log(id_pagina);
-    console.log(this.orden_pagina[id_pagina]);
+
     return Math.trunc(this.orden_pagina[id_pagina] / this.NUM_PAGINAS);
   }
 

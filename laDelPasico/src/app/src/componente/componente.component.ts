@@ -73,7 +73,7 @@ export class ComponenteComponent implements OnInit {
       {
      
         this.componente_texto = res.componente;  
-        console.log(res);
+
      
        
       }
@@ -83,10 +83,10 @@ export class ComponenteComponent implements OnInit {
   observer_eliminar = {
     next: (res:any) =>
     {
-      console.log(res);
+
       if(!res.error)
       {
-        console.log('Componente eliminado');
+
         window.location.reload();
       }
     }
@@ -101,9 +101,9 @@ export class ComponenteComponent implements OnInit {
   
   observer = {
     complete: ()=>{},
-    error: (err : Error)=>{console.log('Peazo Error: ' + err); },
+    error: (err : Error)=>{ },
     next: (res: any) => {
-                        console.log(res); 
+      
                         if (!res['error'])
                         {
                           this.tipo = res['nTipo'];
@@ -129,7 +129,7 @@ export class ComponenteComponent implements OnInit {
 
   ngOnInit(): void {
     this.componenteService.obtiene_numero_componentes(this.id_pagina).subscribe((res:any) => {this.numero_componentes_pagina = res.numero});
-    this.componenteService.obtiene_orden(this.id_pagina, this.id).subscribe((res:any) => {console.log('Orden ' + res.orden); this.orden = res.orden});
+    this.componenteService.obtiene_orden(this.id_pagina, this.id).subscribe((res:any) => { this.orden = res.orden});
 
     this.componenteService.tipo_componente(this.id).subscribe(this.observer);
 
@@ -138,14 +138,14 @@ export class ComponenteComponent implements OnInit {
       if (respuesta.logueado)
       {
         this.esLogueado = true;
-        console.log(respuesta.usuario);
+
       }
      });
 
     
      this.usuarioService.logueado_administrador().subscribe((res) =>{
 
-      console.log(res);
+
       this.esAdministrador = res.administrador;
     });
 
@@ -154,7 +154,7 @@ export class ComponenteComponent implements OnInit {
 
   guardar()
   {
-    console.log("Tipo " + this.tipo);
+
     if(this.tipo == Constantes.TipoComponente.TEXTO)
     {
       this.instancia_texto.guardar();
@@ -190,7 +190,7 @@ export class ComponenteComponent implements OnInit {
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
-        console.log('Eliminar');
+
 
         this.componenteService.eliminar_componente(this.id_pagina, this.id).subscribe(this.observer_eliminar);
        

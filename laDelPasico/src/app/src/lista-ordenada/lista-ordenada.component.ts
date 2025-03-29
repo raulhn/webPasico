@@ -49,7 +49,6 @@ export class ListaOrdenadaComponent implements OnInit {
         this.canciones[fila_actual][columna_actual] = respuesta.canciones[i];
       }
 
-      console.log(this.canciones);
 
       this.bCargadas_canciones = true;
     }
@@ -155,7 +154,7 @@ export class ListaOrdenadaComponent implements OnInit {
       }
 
       this.ordenar_votos();
-      console.log(this.votos);
+
     }
   }
 
