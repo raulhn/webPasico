@@ -20,10 +20,13 @@ export class ComponenteGaleriaComponent implements OnInit {
   galeriaImagenes: any[] = [];
 
   imagenPrincipal: any = null; 
-  bCargadGaleria: boolean = false;
+  bCargadaGaleria: boolean = false;
   modalAbierto: boolean = false; // Estado del modal
 
   indice: number = 0;
+  primera_imagen: number = 0; 
+  ultima_imagen: number = 3; 
+
 
   constructor(private componenteService: ComponenteService, private _elementRef: ElementRef) { }
 
@@ -32,7 +35,7 @@ export class ComponenteGaleriaComponent implements OnInit {
       (res:any) =>
       {
         this.galeriaImagenes = res['imagenes'];
-        this.bCargadGaleria = true;
+        this.bCargadaGaleria = true;
         this.imagenPrincipal = this.galeriaImagenes[this.indice]; // Establece la primera imagen como principal
 
     }
@@ -40,9 +43,11 @@ export class ComponenteGaleriaComponent implements OnInit {
   }
 
 
+
   seleccionarImagen(imagen: any, i:number): void {
     this.indice = i;
     this.imagenPrincipal = imagen; // Cambia la imagen principal
+
   }
 
 
@@ -55,6 +60,7 @@ export class ComponenteGaleriaComponent implements OnInit {
     if (this.indice < this.galeriaImagenes.length - 1) {
       this.indice++;
       this.imagenPrincipal = this.galeriaImagenes[this.indice]; // Cambia la imagen principal
+      this.trasladar();
     }
   }
 
@@ -62,6 +68,7 @@ export class ComponenteGaleriaComponent implements OnInit {
     if (this.indice > 0) {
       this.indice--;
       this.imagenPrincipal = this.galeriaImagenes[this.indice]; // Cambia la imagen principal
+      this.trasladar();
     }
   }
 
@@ -71,6 +78,40 @@ export class ComponenteGaleriaComponent implements OnInit {
 
   cerrarModal(): void {
     this.modalAbierto = false; // Cierra el modal
+  }
+
+  trasladar()
+  {
+    const imagenes = document.querySelectorAll('.slide');
+
+    console.log("imagenes: " + imagenes.length);
+    console.log("indice: " + this.indice + " ultima_imagen: " + this.ultima_imagen);
+    console.log("primera_imagen: " + this.primera_imagen);
+    imagenes.forEach((imagen: any) =>
+    {
+      if (this.indice < this.primera_imagen && this.indice < this.imagenes.length - 3)
+      {
+        let traslado = (this.indice - 3) * 100;
+        imagen.style.transform = 'translateX(' + traslado + '%)';
+      }
+      else if (this.indice > this.ultima_imagen )
+      {
+        let traslado = (this.indice - 3) * 100;
+        imagen.style.transform = 'translateX(-' + traslado + '%)';
+      }
+
+    });
+
+    if(this.indice < this.primera_imagen)
+    {
+      this.primera_imagen--;
+      this.ultima_imagen--;
+    }
+    else if (this.indice > this.ultima_imagen)
+    {
+      this.primera_imagen++;
+      this.ultima_imagen++;
+    }
   }
 
 }
