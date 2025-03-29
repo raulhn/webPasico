@@ -200,7 +200,7 @@ export class ListadoPreinscripcionesComponent implements OnInit {
             }
         }
         $('#tabla_preinscripciones').DataTable(this.dtOptions);
-        console.log('Obtenido')
+
         this.bCargadoPreinscripciones = true;
         
       }

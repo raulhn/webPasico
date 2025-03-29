@@ -19,13 +19,13 @@ export class UsuariosService {
   {
     let API_URL = this.url + '/login';
  
-    return this.http.post(API_URL, data,  {  withCredentials:true }).pipe(catchError(err => {console.log('Handling error locally and rethrowing it...', err); return throwError(() => new Error(err.status))}));
+    return this.http.post(API_URL, data,  {  withCredentials:true }).pipe(catchError(err => {return throwError(() => new Error(err.status))}));
   }
 
   registrar(data: Usuario) : Observable<any>
   {
     let API_URL = this.url + '/registrar';
-    return this.http.post(API_URL, data).pipe(catchError(err => {console.log('Handling error locally and rethrowing it...', err); return throwError(() => new Error(err.status))}))
+    return this.http.post(API_URL, data).pipe(catchError(err => {return throwError(() => new Error(err.status))}))
      ;
   }
 

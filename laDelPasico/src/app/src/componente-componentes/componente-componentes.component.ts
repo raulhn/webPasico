@@ -40,7 +40,7 @@ export class ComponenteComponentesComponent implements OnInit {
           this.componenteComponentesServicie.obtiene_componente_componentes(this.id_componente, i.toString()).subscribe(
             (res:any) =>
             {
-              console.log('obtiene_',  res);
+
               if (!res.existe)
               {
                 this.componentes[i] = '-1';
@@ -50,7 +50,7 @@ export class ComponenteComponentesComponent implements OnInit {
                 this.componentes[i] = res.data.nid_componente_hijo;
                 this.tipo_componentes[i] = res.tipo_componente;
                 
-                console.log(this.componentes[i]);
+
               }
               this.nContador_cargados++; 
               if (this.nContador_cargados == this.num_componentes_definidos)

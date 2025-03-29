@@ -46,9 +46,9 @@ export class HomeComponent implements OnInit {
 
   observer = {
     next: (res: any) => 
-      {console.log(res)
+      {
           this.pagina_componentes = res.data;
-          console.log(this.pagina_componentes);
+
          
       }
   };

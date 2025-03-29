@@ -82,7 +82,7 @@ export class EditarComponenteBlogComponent implements OnInit {
     if (this.bPendienteSubir && this.imagenesArchivos.length > 0)
     {
       var formData = new FormData();
-      console.log(this.imagenesArchivos[0])
+
       formData.append("imagen", this.imagenesArchivos[0]);
       formData.append("id_componente", this.id_componente);
       formData.append("titulo", this.titulo);
@@ -92,7 +92,7 @@ export class EditarComponenteBlogComponent implements OnInit {
       this.componenteService.add_elemento_blog(formData).subscribe(
         (res: any) =>
         {
-          console.log(res);
+
           if(!res.error)
           {
             setTimeout(() => {window.location.reload();}, 1000);
@@ -108,7 +108,7 @@ export class EditarComponenteBlogComponent implements OnInit {
       {
       next: (res: any) =>
       {
-        console.log(res);
+
         if(!res.error)
         {
           window.location.reload();
@@ -119,7 +119,7 @@ export class EditarComponenteBlogComponent implements OnInit {
         if(res.error)
         {
           this.bError = true;
-          console.log(res.error.info)
+
           this.mensaje_error = 'Error ' + res.error.info;
         }
       }
