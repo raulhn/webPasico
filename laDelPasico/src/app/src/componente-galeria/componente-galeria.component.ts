@@ -89,14 +89,30 @@ export class ComponenteGaleriaComponent implements OnInit {
     console.log("primera_imagen: " + this.primera_imagen);
     imagenes.forEach((imagen: any) =>
     {
-      if (this.indice < this.primera_imagen && this.indice < this.imagenes.length - 3)
+      if (this.indice < this.primera_imagen )
       {
-        let traslado = (this.indice - 3) * 100;
+        let traslado;
+        if(this.indice < 3)
+        {
+           traslado = 0;
+        }
+        else
+        {
+           traslado = (this.indice - 3) * 100;
+        }
         imagen.style.transform = 'translateX(' + traslado + '%)';
       }
       else if (this.indice > this.ultima_imagen )
       {
-        let traslado = (this.indice - 3) * 100;
+        let traslado;
+        if(this.indice > this.galeriaImagenes.length - 4)
+        {
+          traslado = (this.galeriaImagenes.length - 4) * 100
+        }
+        else
+        {
+          traslado = (this.indice - 3) * 100;
+        }
         imagen.style.transform = 'translateX(-' + traslado + '%)';
       }
 
