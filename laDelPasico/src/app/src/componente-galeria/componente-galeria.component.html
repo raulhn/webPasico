@@ -1,16 +1,9 @@
 
+    
+ <div class="contenedor-galeria">
+   <div *ngIf="bCargadaGaleria" class="gallery">
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Galería Ligera</title>
- 
-</head>
-<body>
-    <div *ngIf="bCargadGaleria" class="gallery">
-        <div class="main-image"  (click)="abrirModal()">
+        <div  class="main-image" id="contenedor-imagen" (click)="abrirModal()">
             <img [src]="obtener_url_imagen(imagenPrincipal.nid_imagen)" alt="Imagen principal" class="principal">
         </div>
         <div class="carousel">
@@ -30,7 +23,6 @@
             <button class="exit" aria-label="Cerrar" (click)="cerrarModal()">✖</button>
             <img [src]="obtener_url_imagen(imagenPrincipal.nid_imagen)" alt="Imagen ampliada">
         </div>
+    </div>  
     </div>
 
-</body>
-</html>
