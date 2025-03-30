@@ -8,6 +8,7 @@ export default function Layout() {
     <SafeAreaProvider style={styles.container}>
       <View>
         <Slot />
+        
       </View>
     </SafeAreaProvider>
   );
