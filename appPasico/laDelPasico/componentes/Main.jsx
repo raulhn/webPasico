@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { SafeAreaView } from "react-native-safe-area-context";
+
 import { Noticias } from "./Noticias";
 import { Image } from "react-native";
 import { StyleSheet, View, Text } from "react-native";
@@ -9,19 +9,14 @@ import AppBar from "./appBar.jsx";
 
 const logo = require("../assets/logo.png");
 
-export function Main() {
+export default function Main() {
   return (
-    <SafeAreaView>
-      <View style={styles.logoContainer}>
-        <Image source={logo} style={styles.logo} resizeMode="center"></Image>
+    <View>
+      <View style={styles.principal}>
+        <Noticias style={styles.noticias} />
       </View>
-      <Text key="noticias" style={styles.titulo}>
-        Últimas noticias
-      </Text>
-      <Noticias />
-      <AppBar />
       <StatusBar style="auto" />
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -39,10 +34,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   principal: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "blue",
+    backgroundColor: "white",
   },
   titulo: {
     fontSize: 30,

@@ -21,11 +21,7 @@ export function MenuPasico() {
           onRequestClose={() => {
             toggleMenu();
           }}
-        >
-          <View style={estilos.menuContainer}>
-            <Text> Esto es un modal</Text>
-          </View>
-        </Modal>
+        ></Modal>
       </View>
 
       <View>
@@ -39,19 +35,12 @@ export function MenuPasico() {
 
 const estilos = StyleSheet.create({
   container: {
-    flex: 1,
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 100,
     height: "80%",
   },
-  menuContainer: {
-    backgroundColor: "red",
-    padding: 20,
-    borderRadius: 10,
-    width: "80%",
-    height: "98%",
-  },
+
   menuItem: {
     paddingVertical: 10,
   },

@@ -22,7 +22,7 @@ export function CardBlog({ noticia }) {
   );
 }
 
-export function AnimatedGameCard({ noticia, index }) {
+export function AnimatedCardBlog({ noticia, index }) {
   const opacity = useRef(new Animated.Value(0)).current;
   useEffect(() => {
     Animated.timing(opacity, {
