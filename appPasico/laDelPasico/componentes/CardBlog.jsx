@@ -1,8 +1,8 @@
-import { useEffect, useRef } from 'react';
-import { View, Text, Image, StyleSheet, Animated } from 'react-native';
+import { useEffect, useRef } from "react";
+import { View, Text, Image, StyleSheet, Animated } from "react-native";
 
-const constantes = require('../constantes.js');
-const url_imagen = constantes.URL_SERVICIO + 'imagen_url/';
+const constantes = require("../constantes.js");
+const url_imagen = constantes.URL_SERVICIO + "imagen_url/";
 
 export function CardBlog({ noticia }) {
   return (
@@ -45,7 +45,8 @@ export function AnimatedGameCard({ noticia, index }) {
             }),
           },
         ],
-      }}>
+      }}
+    >
       <CardBlog noticia={noticia} />
     </Animated.View>
   );
@@ -54,32 +55,33 @@ export function AnimatedGameCard({ noticia, index }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderColor: 'black',
+    alignItems: "center",
+    justifyContent: "center",
+    borderColor: "black",
     borderWidth: 1,
     borderRadius: 5,
     margin: 20,
     paddingBottom: 10,
-    backgroundColor: '#f0f0f0',
-    shadowColor: 'black',
+    backgroundColor: "#f0f0f0",
+    shadowColor: "black",
   },
   titulo: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
     fontSize: 30,
+    padding: 10,
   },
   imagen: {
-    width: '100%', // Asegúrate de que la imagen ocupe todo el ancho del contenedor
-    height: '100%', // Asegúrate de que la imagen ocupe toda la altura del contenedor
+    width: "100%", // Asegúrate de que la imagen ocupe todo el ancho del contenedor
+    height: "100%", // Asegúrate de que la imagen ocupe toda la altura del contenedor
     shadowRadius: 10,
   },
   imageContainer: {
     width: 380,
     height: 400,
-    overflow: 'hidden',
+    overflow: "hidden",
     padding: 20,
   },
   textoDescripcion: {
-    marginTop: 10,
+    padding: 10,
   },
 });

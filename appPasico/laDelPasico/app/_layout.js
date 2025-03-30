@@ -20,4 +20,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  menu: {
+    backgroundColor: "#000",
+    padding: 10,
+    width: "100%",
+    position: "absolute",
+    borderRadius: 5,
+  },
 });
