@@ -19,9 +19,6 @@ export function Main() {
         Últimas noticias
       </Text>
       <Noticias />
-      <View className="bg-blue-500">
-        <MenuPasico></MenuPasico>
-      </View>
       <AppBar />
       <StatusBar style="auto" />
     </SafeAreaView>
