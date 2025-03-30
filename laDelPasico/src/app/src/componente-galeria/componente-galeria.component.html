@@ -18,10 +18,12 @@
     </div>
 
     <!-- Modal para mostrar la imagen ampliada -->
-    <div class="modal" *ngIf="modalAbierto" (click)="cerrarModal()">
+    <div class="modal" *ngIf="modalAbierto" >
         <div class="modal-content">
             <button class="exit" aria-label="Cerrar" (click)="cerrarModal()">✖</button>
             <img [src]="obtener_url_imagen(imagenPrincipal.nid_imagen)" alt="Imagen ampliada">
+            <button class="prev" aria-label="Anterior" (click)="anterior_imagen()">❮</button>
+            <button class="next" aria-label="Siguiente" (click)="siguiente_imagen()">❯</button>
         </div>
     </div>  
     </div>
