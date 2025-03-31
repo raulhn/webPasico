@@ -43,7 +43,7 @@ export class ComponenteCaruselComponent implements OnInit {
     {
       let elementos_simultaneos = respuesta["componente_carusel"][0]["elementos_simultaneos"];
       this.imagenes = respuesta["elementos_carusel"];
-      console.log(elementos_simultaneos);
+
       this.customOptions = {
         loop: true,
         mouseDrag: true,

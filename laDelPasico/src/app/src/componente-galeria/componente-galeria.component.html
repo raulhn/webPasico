@@ -1,14 +1,30 @@
-<div *ngIf="bCargadaGaleria | async">
-<ul class="pgwSlideshow">
-    <li  onload="$(document).ready(function() {
-        $('.pgwSlideshow').pgwSlideshow();
-    }); " *ngFor="let imagen of imagenes;">
-        <img [src]="imagen" />
-    </li>
-</ul>
-</div>
-<div *ngIf="bCargadaGaleria | async" class="d-flex justify-content-center align-items-center">
 
-<!--    <ngx-gallery [options]="galleryOptions" [images]="galleryImages" class="ngx-gallery"></ngx-gallery>
--->
-</div>
+    
+ <div class="contenedor-galeria">
+   <div *ngIf="bCargadaGaleria" class="gallery">
+
+        <div  class="main-image" id="contenedor-imagen" (click)="abrirModal()">
+            <img [src]="obtener_url_imagen(imagenPrincipal.nid_imagen)" alt="Imagen principal" class="principal">
+        </div>
+        <div class="carousel">
+            <div class="carousel-slides">
+                <div *ngFor="let imagen of galeriaImagenes; let i = index" class="slide"  (click)="seleccionarImagen(imagen, i)" >
+                    <img [ngClass]="{'imagen-no-seleccionada': i!==indice}" [src]="obtener_url_imagen(imagen.nid_imagen)" alt="Imagen de la galería">
+                    </div>
+            </div>
+            <button class="prev" aria-label="Anterior" (click)="anterior_imagen()">❮</button>
+            <button class="next" aria-label="Siguiente" (click)="siguiente_imagen()">❯</button>
+        </div>
+    </div>
+
+    <!-- Modal para mostrar la imagen ampliada -->
+    <div class="modal" *ngIf="modalAbierto" >
+        <div class="modal-content">
+            <button class="exit" aria-label="Cerrar" (click)="cerrarModal()">✖</button>
+            <img [src]="obtener_url_imagen(imagenPrincipal.nid_imagen)" alt="Imagen ampliada">
+            <button class="prev" aria-label="Anterior" (click)="anterior_imagen()">❮</button>
+            <button class="next" aria-label="Siguiente" (click)="siguiente_imagen()">❯</button>
+        </div>
+    </div>  
+    </div>
+

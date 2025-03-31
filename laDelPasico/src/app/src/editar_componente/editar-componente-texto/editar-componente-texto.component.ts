@@ -33,7 +33,7 @@ export class EditarComponenteTextoComponent implements OnInit {
       if(!res.error)
       {
         this.htmlContent= res.componente.cTexto;  
-        console.log(this.htmlContent);
+ 
       }
     }
   }
@@ -95,18 +95,16 @@ export class EditarComponenteTextoComponent implements OnInit {
     {
       if(!res.error)
       {
-        console.log('Se ha registrado');
+ 
       }
       else{
-        console.log('Error');
+   
       }
     }
   }
   
   guardar()
   {
-    console.log(this.htmlContent);
-    console.log(this.sanitizer.bypassSecurityTrustHtml(this.htmlContent));
     var componente_texto: Componente_texto = new Componente_texto();
     componente_texto.nid = parseInt(this.nid);
 

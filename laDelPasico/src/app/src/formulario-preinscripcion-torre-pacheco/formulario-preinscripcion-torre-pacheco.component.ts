@@ -287,8 +287,7 @@ export class FormularioPreinscripcionTorrePachecoComponent implements OnInit {
         this.recaptchaV3Service.execute(environment.recaptcha.siteKey, 'importantAction',
           (token) => {
             this.token = token;
-            console.log(token);
-            console.log(token);
+
             if (this.familia_instrumento == "3")
             {
               this.instrumento = 'Percusión'

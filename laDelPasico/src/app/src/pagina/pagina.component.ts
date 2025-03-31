@@ -24,9 +24,9 @@ export class PaginaComponent implements OnInit {
   
   observer = {
     next: (res: any) => 
-      {console.log(res)
+      {
           this.pagina_componentes = res.data;
-          console.log(this.pagina_componentes);
+
       }
   };
 
@@ -40,7 +40,7 @@ export class PaginaComponent implements OnInit {
 
   ngOnInit(): void {
     this.componenteServicio.obtener_componentes(this.id_pagina).subscribe(this.observer);
-    this.menuService.obtener_titulo_menu(Number(this.id_pagina)).subscribe((res:any) => {console.log('Titulo'); console.log(res.titulo); this.titulo = res.titulo
+    this.menuService.obtener_titulo_menu(Number(this.id_pagina)).subscribe((res:any) => {  this.titulo = res.titulo
     this.titleService.setTitle("Banda del Pasico | " +this.titulo);});
 
   }

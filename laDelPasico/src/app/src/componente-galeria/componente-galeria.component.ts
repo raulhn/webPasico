@@ -17,75 +17,117 @@ export class ComponenteGaleriaComponent implements OnInit {
   @Input() id_componente:string ="";
 
   imagenes: string [] = [];
+  galeriaImagenes: any[] = [];
 
+  imagenPrincipal: any = null; 
+  bCargadaGaleria: boolean = false;
+  modalAbierto: boolean = false; // Estado del modal
 
-  items: any[] = [];
+  indice: number = 0;
+  primera_imagen: number = 0; 
+  ultima_imagen: number = 3; 
 
-
-  bCargadaGaleria: Promise<boolean>|null = null;
 
   constructor(private componenteService: ComponenteService, private _elementRef: ElementRef) { }
 
   ngOnInit(): void {
     this.componenteService.obtiene_imagenes_galeria(this.id_componente).subscribe(
       (res:any) =>
-      {/*
-        if (!res.error)
-        {
-        
-          for(let i=0; i<res['imagenes'].length; i++)
-          {
-            this.imagenes[i] = Constantes.General.URL_BACKED + "/imagen_url/" + res['imagenes'][i]['nid_imagen'];
-            this.galleryImages.push({small: Constantes.General.URL_BACKED + "/imagen_url/" + res['imagenes'][i]['nid_imagen'], 
-                            medium: Constantes.General.URL_BACKED + "/imagen_url/" + res['imagenes'][i]['nid_imagen'],
-                            big: Constantes.General.URL_BACKED + "/imagen_url/" + res['imagenes'][i]['nid_imagen']});
-          }
-          window.onload = function () 
-          {
+      {
+        this.galeriaImagenes = res['imagenes'];
+        this.bCargadaGaleria = true;
+        this.imagenPrincipal = this.galeriaImagenes[this.indice]; // Establece la primera imagen como principal
 
-          
-              (<any>$('.pgwSlideshow')).pgwSlideshow();
-          }
-        
-
-    
-            this.galleryOptions = [
-              {
-                width: '70%',
-                height: '500px',
-                thumbnailsColumns: 4,
-                imageAnimation: NgxGalleryAnimation.Slide,
-                
-                
-              },
-              // max-width 800
-              {
-                breakpoint: 600,
-                width: '60%',
-                height: '300px',
-                imagePercent: 80,
-                thumbnailsPercent: 20,
-                thumbnailsMargin: 20,
-                thumbnailMargin: 20
-              },
-              // max-width 400
-              {
-                breakpoint: 400,
-                width: '100%',
-                height: '300px',
-                imagePercent: 80,
-                thumbnailsPercent: 20,
-                thumbnailsMargin: 20,
-                thumbnailMargin: 20
-              }
-            ];
-      
-       
-          this.bCargadaGaleria = Promise.resolve(true);
-      }*/
     }
     )
   }
 
+
+
+  seleccionarImagen(imagen: any, i:number): void {
+    this.indice = i;
+    this.imagenPrincipal = imagen; // Cambia la imagen principal
+
+  }
+
+
+  obtener_url_imagen(id_imagen: number): String
+  {
+    return Constantes.General.URL_BACKED + "/imagen_url/" + id_imagen;
+  }
+
+  siguiente_imagen(): void {
+    if (this.indice < this.galeriaImagenes.length - 1) {
+      this.indice++;
+      this.imagenPrincipal = this.galeriaImagenes[this.indice]; // Cambia la imagen principal
+      this.trasladar();
+    }
+  }
+
+  anterior_imagen(): void {
+    if (this.indice > 0) {
+      this.indice--;
+      this.imagenPrincipal = this.galeriaImagenes[this.indice]; // Cambia la imagen principal
+      this.trasladar();
+    }
+  }
+
+  abrirModal(): void {
+    this.modalAbierto = true; // Abre el modal
+  }
+
+  cerrarModal(): void {
+    this.modalAbierto = false; // Cierra el modal
+  }
+
+  trasladar()
+  {
+    const imagenes = document.querySelectorAll('.slide');
+
+    console.log("imagenes: " + imagenes.length);
+    console.log("indice: " + this.indice + " ultima_imagen: " + this.ultima_imagen);
+    console.log("primera_imagen: " + this.primera_imagen);
+    imagenes.forEach((imagen: any) =>
+    {
+      if (this.indice < this.primera_imagen )
+      {
+        let traslado;
+        if(this.indice < 3)
+        {
+           traslado = 0;
+        }
+        else
+        {
+           traslado = (this.indice - 3) * 100;
+        }
+        imagen.style.transform = 'translateX(' + traslado + '%)';
+      }
+      else if (this.indice > this.ultima_imagen )
+      {
+        let traslado;
+        if(this.indice > this.galeriaImagenes.length - 4)
+        {
+          traslado = (this.galeriaImagenes.length - 4) * 100
+        }
+        else
+        {
+          traslado = (this.indice - 3) * 100;
+        }
+        imagen.style.transform = 'translateX(-' + traslado + '%)';
+      }
+
+    });
+
+    if(this.indice < this.primera_imagen)
+    {
+      this.primera_imagen--;
+      this.ultima_imagen--;
+    }
+    else if (this.indice > this.ultima_imagen)
+    {
+      this.primera_imagen++;
+      this.ultima_imagen++;
+    }
+  }
 
 }

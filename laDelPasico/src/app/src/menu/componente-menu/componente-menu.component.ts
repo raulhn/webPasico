@@ -60,12 +60,12 @@ export class ComponenteMenuComponent implements OnInit {
   private iniciar_menu(menu: Menu[]):void{
     this.menu_completo[0] = menu;
 
-    console.log(this.menu_completo)
+
 
     for (let i = 0; i < menu.length; i++)
     {
 
-      console.log(menu[i].nid);
+
       this.menuService.obtenerMenu(menu[i].nid).subscribe((res: any) => {
         var menu_aux:Menu[];
         menu_aux =res.data;
@@ -77,10 +77,10 @@ export class ComponenteMenuComponent implements OnInit {
         }
         for (var menu_item of menu_aux)
         {
-          console.log(menu_item.nid);
+
            this.menuService.obtiene_url(menu_item.nid).subscribe((res:any) => 
           {
-            console.log(res);
+
             if(!res.error)
             {
 
@@ -108,12 +108,11 @@ export class ComponenteMenuComponent implements OnInit {
   ngOnInit(): void {
     let respuesta_: any= [];
     let datos: any[];
-    this.menuService.obtenerMenu(0).subscribe((res: any) => { console.log(res); this.iniciar_menu(res.data); });
+    this.menuService.obtenerMenu(0).subscribe((res: any) => {  this.iniciar_menu(res.data); });
 
     
     this.usuarioService.logueado_administrador().subscribe((res) =>{
-        console.log('Admin');
-        console.log(res);
+
         this.esAdministrador = res.administrador;
     });
 
@@ -122,7 +121,7 @@ export class ComponenteMenuComponent implements OnInit {
         if (respuesta.logueado)
         {
           this.esLogueado = true;
-          console.log(respuesta.usuario);
+
           this.usuario = respuesta.usuario;
         }
 
@@ -154,7 +153,7 @@ export class ComponenteMenuComponent implements OnInit {
       }).then(
         () =>
         {
-          this.menuService.registrarMenu(this.nombre_menu, id_padre, this.tipo_menu, '').subscribe((res) => {console.log(res); window.location.reload();});
+          this.menuService.registrarMenu(this.nombre_menu, id_padre, this.tipo_menu, '').subscribe((res) => {window.location.reload();});
           
         }
       )
@@ -205,7 +204,7 @@ export class ComponenteMenuComponent implements OnInit {
       }).then(
         () =>
         {
-          this.menuService.actualizar_titulo_menu(id_menu, nuevo_titulo).subscribe((res) => {console.log(res); window.location.reload();});
+          this.menuService.actualizar_titulo_menu(id_menu, nuevo_titulo).subscribe((res) => { window.location.reload();});
         }
       )
     }
