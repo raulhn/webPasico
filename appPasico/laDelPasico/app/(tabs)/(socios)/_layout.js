@@ -16,7 +16,7 @@ export default function DrawerLayout() {
       <Drawer.Screen
         name="asociacion"
         options={{
-          drawerLabel: "Socios",
+          drawerLabel: "Asociación",
           title: "overview",
           headerTitle: "Asociación",
         }}
