@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, View, Text } from "react-native";
-import AppBar from "../../componentes/appBar.jsx"; // Adjust the path if necessary
+import AppBar from "../../../componentes/appBar.jsx"; // Adjust the path if necessary
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export default function Asociacion() {
