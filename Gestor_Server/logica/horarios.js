@@ -323,13 +323,7 @@ async function async_obtener_horarios(
 }
 function obtener_horarios(nid_profesor, nid_asignatura, nid_curso) {
   return new Promise((resolve, reject) => {
-    async_obtener_horarios(
-      nid_profesor,
-      nid_asignatura,
-      nid_curso,
-      resolve,
-      reject
-    );
+    obtener_horarios(nid_profesor, nid_asignatura, nid_curso, resolve, reject);
   });
 }
 
