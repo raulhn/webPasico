@@ -1,6 +1,7 @@
 import { FlatList } from "react-native";
 import React, { useState, useEffect } from "react";
-import { CardBlog, AnimatedGameCard } from "./CardBlog.jsx";
+import { CardBlog, AnimatedCardBlog } from "./CardBlog.jsx";
+import { View, Text } from "react-native";
 const serviceNoticias = require("../servicios/serviceNoticias.js");
 
 export function Noticias() {
@@ -14,14 +15,16 @@ export function Noticias() {
   }, []);
 
   return (
-    <FlatList
-      data={listaNoticias}
-      keyExtractor={(noticia) => noticia.nid_imagen}
-      renderItem={({ item }) => (
-        <AnimatedGameCard noticia={item}></AnimatedGameCard>
-      )}
-    >
-      {({ item }) => <CardBlog noticia={item}></CardBlog>}
-    </FlatList>
+    <View>
+      <FlatList
+        data={listaNoticias}
+        keyExtractor={(noticia) => noticia.nid_imagen}
+        renderItem={({ item }) => (
+          <AnimatedCardBlog noticia={item}></AnimatedCardBlog>
+        )}
+      >
+        {({ item }) => <CardBlog noticia={item}></CardBlog>}
+      </FlatList>
+    </View>
   );
 }

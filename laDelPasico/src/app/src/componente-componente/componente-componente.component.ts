@@ -59,10 +59,10 @@ export class ComponenteComponenteComponent implements OnInit {
   observer_eliminar = {
     next: (res:any) =>
     {
-      console.log(res);
+   
       if(!res.error)
       {
-        console.log('Componente eliminado');
+
         window.location.reload();
       }
     }
@@ -75,9 +75,9 @@ export class ComponenteComponenteComponent implements OnInit {
   
   observer = {
     complete: ()=>{},
-    error: (err : Error)=>{console.log('Peazo Error: ' + err); },
+    error: (err : Error)=>{},
     next: (res: any) => {
-                        console.log(res); 
+                   
                         if (!res['error'])
                         {
                           this.tipo = res['nTipo'];
@@ -101,7 +101,7 @@ export class ComponenteComponenteComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('Componente componente ' + this.id_componente);
+
     this.componenteService.tipo_componente(this.id_componente).subscribe(this.observer);
 
   
@@ -110,13 +110,13 @@ export class ComponenteComponenteComponent implements OnInit {
       if (respuesta.logueado)
       {
         this.esLogueado = true;
-        console.log(respuesta.usuario);
+
       }
      });
 
     
      this.usuarioService.logueado_administrador().subscribe((res) =>{
-      console.log(res);
+
       this.esAdministrador = res.administrador;
     });
 
@@ -148,7 +148,7 @@ export class ComponenteComponenteComponent implements OnInit {
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
-        console.log('Eliminar');
+  
          this.componenteService.eliminar_componente_componentes(this.id_componente).subscribe(this.observer_eliminar);
     
       } 

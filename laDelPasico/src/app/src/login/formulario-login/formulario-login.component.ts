@@ -19,25 +19,14 @@ export class FormularioLoginComponent   {
 
   resultado: string[] = [];
 
-  mostrarError()
-  {
-    console.log('Mostrar Error');
-  }
 
   observer = {
-    complete: ()=>{console.log('x'); },
-    error: (err : Error)=>{console.log('Peazo Error: ' + err); this.mostrarError();},
+    complete: ()=>{},
+    error: (err : Error)=>{ },
     next: (res: any) => {
-                        console.log(res); 
-                        console.log(res['message']);
-                        if (res['error'])
-                        {
-                          console.log('Error');
-                        }
-                        else{
-                          console.log('Logueado');
+     
                           this.router.navigate(['']);
-                        }}
+                        }
   };
 
   login ='';
@@ -51,8 +40,7 @@ export class FormularioLoginComponent   {
     
   loguearse() {
 
-    console.log(this.login);
-    console.log(this.password);
+
 
     this.usuario.usuario = this.login;
     this.usuario.pass = this.password;

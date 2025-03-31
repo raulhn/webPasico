@@ -39,9 +39,7 @@ export class NuevoComponenteComponentesComponent implements OnInit {
 
   ngOnInit(): void {
     this.usuarioService.logueado_administrador().subscribe((res) =>{
-      console.log('Admin');
-      console.log("nOrden " + this.nOrden);
-      console.log(res);
+
       this.esAdministrador = res.administrador;
     });
   }

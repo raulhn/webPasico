@@ -61,12 +61,16 @@
     "datatables.net-buttons": "^2.4.3",
     "datatables.net-dt": "^1.13.11",
     "datatables.net-plugins": "^1.13.6",
+    "eslint": "^9.23.0",
+    "eslint-config-prettier": "^10.1.1",
+    "eslint-plugin-prettier": "^5.2.5",
     "jasmine-core": "~3.10.0",
     "karma": "~6.3.0",
     "karma-chrome-launcher": "~3.1.0",
     "karma-coverage": "~2.0.3",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "~1.7.0",
+    "prettier": "^3.5.3",
     "typescript": "~5.8.2"
   }
 }

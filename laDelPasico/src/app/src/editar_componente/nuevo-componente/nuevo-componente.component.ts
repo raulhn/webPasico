@@ -54,8 +54,7 @@ export class NuevoComponenteComponent implements OnInit {
 
   ngOnInit(): void {
     this.usuarioService.logueado_administrador().subscribe((res) =>{
-      console.log('Admin');
-      console.log(res);
+
       this.esAdministrador = res.administrador;
     });
   }
@@ -130,7 +129,7 @@ export class NuevoComponenteComponent implements OnInit {
       this.componenteService.crear_componente_carusel(this.id_pagina, this.desplegable, this.elementos_simultaneos).subscribe(
         (res) =>
         {
-          console.log(res);
+
           window.location.reload();
         }
       )

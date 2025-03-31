@@ -93,11 +93,11 @@ export class EditarComponenteGaleriaComponent implements OnInit {
 
   eliminar(id_imagen: string)
   {
-    console.log('eliminar');
+
     this.componenteService.eliminar_imagen_galeria(this.id_componente, id_imagen).subscribe(
       (res: any) =>
       {
-        console.log(res);
+   
         
         if(!res.error)
         {
