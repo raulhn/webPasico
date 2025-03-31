@@ -176,8 +176,9 @@ function obtener_preinscripciones_detalle(req, res) {
   comun.comprobaciones_api(req, res, async () => {
     let nid_preinscripcion = req.params.nid_preinscripcion;
 
-    let resultado =
-      await preinscripcion.obtener_preincripciones_detalle(nid_preinscripcion);
+    let resultado = await preinscripcion.obtener_preincripciones_detalle(
+      nid_preinscripcion
+    );
 
     res.status(200).send({ error: false, preinscripciones: resultado });
   });
