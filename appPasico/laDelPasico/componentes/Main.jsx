@@ -11,10 +11,11 @@ const logo = require("../assets/logo.png");
 
 export default function Main() {
   return (
-    <View>
+    <View style={{ flex: 1, backgroundColor: "white" }}>
       <View style={styles.principal}>
         <Noticias style={styles.noticias} />
       </View>
+
       <StatusBar style="auto" />
     </View>
   );
@@ -29,12 +30,14 @@ const styles = StyleSheet.create({
     width: "80%",
     height: 70,
   },
-  noticiasContainer: {
+  noticias: {
     flex: 1,
     paddingHorizontal: 10,
   },
   principal: {
     backgroundColor: "white",
+
+    flex: 1,
   },
   titulo: {
     fontSize: 30,

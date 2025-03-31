@@ -3,13 +3,15 @@ import { StyleSheet } from "react-native";
 import { Stack } from "expo-router";
 import { Text, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { Drawer } from "expo-router/drawer"; // Adjust the path if necessary
 
 export default function Layout() {
   const logo = require("../assets/logo.png");
   return (
     <Stack
       screenOptions={{
-        headerShown: true,
+        headerShown: false,
         contentStyle: { backgroundColor: "white" },
 
         header: () => (

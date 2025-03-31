@@ -5,7 +5,7 @@ export default function TabsLayout() {
   return (
     <Tabs>
       <Tabs.Screen
-        name="index"
+        name="(drawer)"
         options={{
           title: "Inicio",
           headerShown: false,
@@ -15,7 +15,7 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="escuela"
+        name="(escuela)"
         options={{
           headerShown: false,
           title: "Escuela",
@@ -25,7 +25,7 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="banda"
+        name="(banda)"
         options={{
           headerShown: false,
           title: "Banda",
@@ -38,7 +38,7 @@ export default function TabsLayout() {
         ScreenOptions={{
           headerShown: false,
         }}
-        name="asociacion"
+        name="(socios)"
         options={{
           headerShown: false,
           title: "Asociación",
