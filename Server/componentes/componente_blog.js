@@ -2,7 +2,7 @@ const constantes = require("../constantes.js");
 const conexion = require("../conexion.js");
 const componente = require("./componente.js");
 const menu = require("../logica/menu.js");
-const imagen = require("../logica/imagen.js");
+const imagen = require("../imagen.js");
 
 function add_componente_blog(
   id_componente,
