@@ -5,9 +5,14 @@ import { Text, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Drawer } from "expo-router/drawer"; // Adjust the path if necessary
+import useNotification from "../hooks/useNotification";
 
 export default function Layout() {
   const logo = require("../assets/logo.png");
+  const expoPushToken = useNotification();
+
+  console.log("Expo Push Token:", expoPushToken);
+
   return (
     <Stack
       screenOptions={{
