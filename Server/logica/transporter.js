@@ -1,6 +1,6 @@
 const { google } = require("googleapis");
 const nodemailer = require("nodemailer");
-const container = require("./container.js");
+const container = require("../config/container.js");
 const OAuth2 = google.auth.OAuth2;
 
 //https://dev.to/drsimplegraffiti/send-email-using-oauth2-nodejs-the-right-way-5h32
