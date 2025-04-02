@@ -1,1 +1,3 @@
-export const ESQUEMA = "pasico_movil";
+const ESQUEMA = "pasico_movil";
+
+module.exports.ESQUEMA = ESQUEMA;
