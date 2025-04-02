@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 const config = require("./config/config.js");
 
 const servletUsuario = require("./servlets/servlet_usuario.js");
+const servletConexion = require("./servlets/servlet_conexiones.js");
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -15,6 +16,9 @@ app.get("/", (req, res) => {
 });
 
 app.put("/registrar_usuario", servletUsuario.registrarUsuario);
+
+/**  Conexiones **/
+app.put("/registrar_conexion", servletConexion.registrarConexion);
 
 https
   .createServer(

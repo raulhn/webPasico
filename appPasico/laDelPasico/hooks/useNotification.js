@@ -4,6 +4,8 @@ import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 import Constants from "expo-constants";
 
+import { registrarConexion } from "../servicios/serviceConexion";
+
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
@@ -61,6 +63,13 @@ const useNotification = () => {
           })
         ).data;
         console.log(pushTokenString);
+        registrarConexion(pushTokenString)
+          .then((response) => {
+            console.log("Token registrado correctamente");
+          })
+          .catch((error) => {
+            console.error("Error al registrar el token:", error);
+          });
         return pushTokenString;
       } catch (e) {
         handleRegistrationError(`${e}`);
