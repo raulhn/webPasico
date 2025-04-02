@@ -23,8 +23,8 @@ app.put("/registrar_conexion", servletConexion.registrarConexion);
 https
   .createServer(
     {
-      key: fs.readFileSync("ssl_cert_movil.key"),
-      cert: fs.readFileSync("ssl-cert-movil.cert"),
+      key: fs.readFileSync("apache.key"),
+      cert: fs.readFileSync("apache-certificate.crt"),
     },
     app
   )

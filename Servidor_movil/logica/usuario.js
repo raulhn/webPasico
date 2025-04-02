@@ -7,25 +7,18 @@ function registrarUsuario(
   correoElectronico
 ) {
   return new Promise((resolve, reject) => {
-    conexion.dbConn.query(
-      "INSERT INTO usuario (nombre, primer_apellido, segundo_apellido, correo_electronico) VALUES (",
-      conexion.dbConn.escape(nombre) +
-        "," +
-        conexion.dbConn.escape(primerApellido) +
-        "," +
-        conexion.dbConn.escape(segundoApellido) +
-        "," +
-        conexion.dbConn.escape(correoElectronico) +
-        ")",
-      (error, results) => {
-        if (error) {
-          console.error("Error al registrar el usuario:", error);
-          reject(error);
-        } else {
-          resolve(results);
-        }
+    const query =
+      "INSERT INTO usuario (nombre, primer_apellido, segundo_apellido, correo_electronico) VALUES (?, ?, ?, ?)";
+    const values = [nombre, primerApellido, segundoApellido, correoElectronico];
+
+    conexion.dbConn.query(query, (error, results) => {
+      if (error) {
+        console.error("Error al registrar el usuario:", error);
+        reject(error);
+      } else {
+        resolve(results);
       }
-    );
+    });
   });
 }
 
