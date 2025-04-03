@@ -22,7 +22,7 @@ export default function DrawerLayout() {
       <Drawer.Screen
         name="galeria"
         options={{
-          title: "Galería de fotos",
+          title: "Galería",
         }}
       />
     </Drawer>
