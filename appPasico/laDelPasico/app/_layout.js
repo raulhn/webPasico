@@ -8,9 +8,6 @@ import useNotification from "../hooks/useNotification";
 
 export default function Layout() {
   const logo = require("../assets/logo.png");
-  const expoPushToken = useNotification();
-
-  console.log("Expo Push Token:", expoPushToken);
 
   return (
     <Stack

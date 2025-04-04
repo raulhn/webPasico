@@ -62,14 +62,7 @@ const useNotification = () => {
             projectId,
           })
         ).data;
-        console.log(pushTokenString);
-        registrarConexion(pushTokenString)
-          .then((response) => {
-            console.log("Token registrado correctamente");
-          })
-          .catch((error) => {
-            console.error("Error al registrar el token:", error);
-          });
+
         return pushTokenString;
       } catch (e) {
         handleRegistrationError(`${e}`);

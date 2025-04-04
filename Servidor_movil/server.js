@@ -11,10 +11,15 @@ const servletConexion = require("./servlets/servlet_conexiones.js");
 
 const limiter = rateLimit({
   windowMs: 10 * 60 * 1000, // 10 minutos
-  max: 200, // Límite de 300 solicitudes por IP
-  message: "Demasiadas solicitudes desde esta IP, por favor intente más tarde.",
+  max: 300, // LÃ­mite de 300 solicitudes por IP
+  message:
+    "Demasiadas solicitudes desde esta IP, por favor intente mÃ¡s tarde.",
+  standardHeaders: true, // Devuelve información de límite en los encabezados `RateLimit-*`
+  legacyHeaders: false, // Desactiva los encabezados `X-RateLimit-*`
+  validate: { trustProxy: false },
 });
 
+app.set("trust proxy", true);
 app.use(limiter);
 
 app.use(bodyParser.json());
