@@ -1,8 +1,8 @@
 const Constantes = require("../constantes.js");
 
-export function recuperarComponentes(nidPagina) {
+function recuperarComponentes(nidPagina) {
   return new Promise((resolve, reject) => {
-    fetch(Constantes.URL_SERVICIO + "obtener_components/" + nidPagina, {
+    fetch(Constantes.URL_SERVICIO + "obtener_componentes/" + nidPagina, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -18,7 +18,7 @@ export function recuperarComponentes(nidPagina) {
   });
 }
 
-export function recuperarComponenteTexto(nidComponente) {
+function recuperarComponenteTexto(nidComponente) {
   return new Promise((resolve, reject) => {
     fetch(Constantes.URL_SERVICIO + "componente_texto/" + nidComponente, {
       method: "GET",
@@ -35,3 +35,6 @@ export function recuperarComponenteTexto(nidComponente) {
       });
   });
 }
+
+module.exports.recuperarComponentes = recuperarComponentes;
+module.exports.recuperarComponenteTexto = recuperarComponenteTexto;

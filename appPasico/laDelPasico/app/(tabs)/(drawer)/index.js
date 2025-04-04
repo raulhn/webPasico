@@ -13,12 +13,8 @@ export default function Index() {
 
   useEffect(() => {
     if (expoPushToken && recaptchaToken) {
-      console.log("Token de reCAPTCHA:", recaptchaToken);
-      console.log("Token de Expo:", expoPushToken);
       registrarConexion(expoPushToken, recaptchaToken)
-        .then((response) => {
-          console.log("Token registrado correctamente");
-        })
+        .then((response) => {})
         .catch((error) => {});
 
       // Limpia el token de reCAPTCHA después de procesarlo
