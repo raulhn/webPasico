@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Text } from "react-native";
 import serviceComponentes from "../../servicios/serviceComponentes.js";
+import { WebView } from "react-native-webview";
 
 export default function ComponenteTexto(nidComponente) {
   const [componenteTexto, setComponenteTexto] = useState({});
@@ -16,5 +16,5 @@ export default function ComponenteTexto(nidComponente) {
       });
   }, [nidComponente]);
 
-  return <Text>{componenteTexto.cTexto}</Text>;
+  return <WebView source={{ html: componenteTexto.cTexto }}></WebView>;
 }

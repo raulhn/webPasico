@@ -1,5 +1,13 @@
 import { useEffect, useRef } from "react";
-import { View, Text, Image, StyleSheet, Animated } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  Animated,
+  Pressable,
+} from "react-native";
+import { Link } from "expo-router";
 
 const constantes = require("../constantes.js");
 const url_imagen = constantes.URL_SERVICIO + "imagen_url/";
@@ -34,21 +42,25 @@ export function AnimatedCardBlog({ noticia, index }) {
   }, [opacity, index]);
 
   return (
-    <Animated.View
-      style={{
-        opacity,
-        transform: [
-          {
-            translateY: opacity.interpolate({
-              inputRange: [0, 1],
-              outputRange: [50, 0],
-            }),
-          },
-        ],
-      }}
-    >
-      <CardBlog noticia={noticia} />
-    </Animated.View>
+    <Link href={`${noticia.nid_menu}`} key={noticia.nid_menu} asChild>
+      <Pressable>
+        <Animated.View
+          style={{
+            opacity,
+            transform: [
+              {
+                translateY: opacity.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [50, 0],
+                }),
+              },
+            ],
+          }}
+        >
+          <CardBlog noticia={noticia} />
+        </Animated.View>
+      </Pressable>
+    </Link>
   );
 }
 
