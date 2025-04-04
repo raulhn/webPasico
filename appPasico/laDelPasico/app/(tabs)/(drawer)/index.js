@@ -1,6 +1,40 @@
-import { SafeAreaProvider } from "react-native-safe-area-context";
+import { useEffect } from "react";
 import Main from "../../../componentes/Main";
+import Recaptcha from "../../../componentes/Recaptcha";
+import constantesGoogle from "../../../config/constantesGoogle.js";
+import useNotification from "../../../hooks/useNotification";
+import { registrarConexion } from "../../../servicios/serviceConexion";
+import { View } from "react-native";
+import { useState } from "react";
 
 export default function Index() {
-  return <Main />;
+  const expoPushToken = useNotification();
+  const [recaptchaToken, setRecaptchaToken] = useState(null);
+
+  useEffect(() => {
+    if (expoPushToken && recaptchaToken) {
+      console.log("Token de reCAPTCHA:", recaptchaToken);
+      console.log("Token de Expo:", expoPushToken);
+      registrarConexion(expoPushToken, recaptchaToken)
+        .then((response) => {
+          console.log("Token registrado correctamente");
+        })
+        .catch((error) => {});
+
+      // Limpia el token de reCAPTCHA después de procesarlo
+      setRecaptchaToken(null);
+    }
+  }, [expoPushToken, recaptchaToken]);
+
+  // Envía el token al servidor backend
+  const handleVerify = (tokenGoogle) => {
+    setRecaptchaToken(tokenGoogle);
+  };
+
+  return (
+    <View style={{ flex: 1 }}>
+      <Main />
+      <Recaptcha siteKey={constantesGoogle.key} onVerify={handleVerify} />
+    </View>
+  );
 }

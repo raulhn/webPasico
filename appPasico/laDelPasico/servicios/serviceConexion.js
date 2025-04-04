@@ -1,6 +1,6 @@
 const Constantes = require("../constantes.js");
 
-export function registrarConexion(token) {
+export function registrarConexion(token, recaptchaToken) {
   return new Promise((resolve, reject) => {
     fetch(Constantes.URL_SERVICIO_MOVIL + "registrar_conexion", {
       method: "PUT",
@@ -9,6 +9,7 @@ export function registrarConexion(token) {
       },
       body: JSON.stringify({
         token: token,
+        recaptchaToken: recaptchaToken,
       }),
     })
       .then((response) => response.json())
@@ -16,7 +17,6 @@ export function registrarConexion(token) {
         resolve(data);
       })
       .catch((error) => {
-        console.log("Aqui " + error);
         reject(error);
       });
   });
