@@ -6,6 +6,7 @@ import useNotification from "../../../hooks/useNotification";
 import { registrarConexion } from "../../../servicios/serviceConexion";
 import { View } from "react-native";
 import { useState } from "react";
+import { Stack } from "expo-router";
 
 export default function Index() {
   const expoPushToken = useNotification();

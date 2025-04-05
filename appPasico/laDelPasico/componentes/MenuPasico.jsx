@@ -7,7 +7,6 @@ export function MenuPasico() {
 
   const toggleMenu = () => {
     setMenuVisible(!menuVisible);
-    console.log("Menu toggled:", !menuVisible);
   };
 
   return (

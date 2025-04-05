@@ -42,7 +42,14 @@ export function AnimatedCardBlog({ noticia, index }) {
   }, [opacity, index]);
 
   return (
-    <Link href={`${noticia.nid_menu}`} key={noticia.nid_menu} asChild>
+    <Link
+      href={{
+        pathname: "/pagina/[nidPagina]",
+        params: { nidPagina: noticia.nid_menu, titulo: noticia.titulo },
+      }}
+      key={noticia.nid_menu}
+      asChild
+    >
       <Pressable>
         <Animated.View
           style={{

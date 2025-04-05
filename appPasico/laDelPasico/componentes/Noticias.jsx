@@ -38,9 +38,7 @@ export function Noticias() {
           <AnimatedCardBlog noticia={item}></AnimatedCardBlog>
         )}
         contentContainerStyle={styles.flatListContent} // Estilo para el contenedor de la lista
-      >
-        {({ item }) => <CardBlog noticia={item}></CardBlog>}
-      </FlatList>
+      ></FlatList>
     </View>
   );
 }
