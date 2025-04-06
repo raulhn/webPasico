@@ -2,6 +2,7 @@ import { View, Image } from "react-native";
 import { StyleSheet } from "react-native";
 import ComponenteTexto from "./componenteTexto";
 import constantes from "../../constantes.js";
+import ComponenteGaleria from "./componenteGaleria.jsx";
 
 export default function Componente(pComponente) {
   const url_imagen = constantes.URL_SERVICIO + "imagen/";
@@ -20,6 +21,12 @@ export default function Componente(pComponente) {
           style={styles.imagen}
           resizeMode="contain"
         />
+      </View>
+    );
+  } else if (componente.nTipo === 5) {
+    return (
+      <View style={styles.imageContainer} key={componente.nid_Componente}>
+        <ComponenteGaleria nidComponente={componente.nid_Componente} />
       </View>
     );
   }

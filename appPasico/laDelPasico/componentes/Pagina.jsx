@@ -3,7 +3,7 @@ import serviceComponentes from "../servicios/serviceComponentes.js";
 import Componente from "./componentesPagina/componente.jsx";
 import { FlatList } from "react-native";
 import { View, Text, ActivityIndicator, StyleSheet } from "react-native";
-import constantes from "../constantes.js";
+
 
 export default function Pagina(pagina) {
   const [componentes, setComponentes] = useState([]);
@@ -24,12 +24,11 @@ export default function Pagina(pagina) {
     return (
       <View>
         <ActivityIndicator size="large" color="#0000ff" />
-        <Text>Cargando noticias...</Text>
       </View>
     );
   }
 
-  console.log(componentes);
+
   return (
     <View style={{ flex: 1 }}>
       <FlatList
