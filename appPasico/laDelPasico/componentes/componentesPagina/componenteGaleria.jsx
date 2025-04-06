@@ -193,27 +193,27 @@ export default function ComponenteGaleria(componente) {
                 resizeMode="contain" // Asegura que la imagen mantenga su proporción
               />
             </Pressable>
-            <View style={styles.botones}>
-              <Pressable
-                onPress={() => {
-                  anterior();
-                }}
-              >
-                <View style={styles.tipoBoton}>
-                  <MaterialIcons name="arrow-back" size={24} color="white" />
-                </View>
-              </Pressable>
+          </View>
+          <View style={styles.botones}>
+            <Pressable
+              onPress={() => {
+                anterior();
+              }}
+            >
+              <View style={styles.tipoBoton}>
+                <MaterialIcons name="arrow-back" size={24} color="white" />
+              </View>
+            </Pressable>
 
-              <Pressable
-                onPress={() => {
-                  siguiente();
-                }}
-              >
-                <View style={styles.tipoBoton}>
-                  <MaterialIcons name="arrow-forward" size={24} color="white" />
-                </View>
-              </Pressable>
-            </View>
+            <Pressable
+              onPress={() => {
+                siguiente();
+              }}
+            >
+              <View style={styles.tipoBoton}>
+                <MaterialIcons name="arrow-forward" size={24} color="white" />
+              </View>
+            </Pressable>
           </View>
         </SafeAreaView>
       </Modal>

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   View,
   Text,
@@ -13,16 +13,26 @@ const constantes = require("../constantes.js");
 const url_imagen = constantes.URL_SERVICIO + "imagen_url/";
 
 export function CardBlog({ noticia }) {
+  const [imageHeight, setImageHeight] = useState(200); // Altura inicial predeterminada
+
+  const handleImageLoad = (event) => {
+    const { width, height } = event.nativeEvent.source;
+    const containerWidth = 350; // Ancho máximo del contenedor (puedes ajustarlo según tu diseño)
+    const calculatedHeight = (height / width) * containerWidth; // Calcula la altura proporcional
+    setImageHeight(calculatedHeight); // Actualiza la altura del contenedor
+  };
+
   return (
     <View key={noticia.nid_imagen} style={styles.container}>
       <Text key={noticia.nid_imagen} style={styles.titulo}>
         {noticia.titulo}
       </Text>
-      <View style={styles.imageContainer}>
+      <View style={[styles.imageContainer, { height: imageHeight }]}>
         <Image
           source={{ uri: url_imagen + noticia.nid_imagen }}
           style={styles.imagen}
           resizeMode="contain"
+          onLoad={handleImageLoad}
         />
       </View>
       <Text style={styles.textoDescripcion}>{noticia.descripcion}</Text>
@@ -91,15 +101,13 @@ const styles = StyleSheet.create({
   },
   imagen: {
     width: "100%",
-    height: 400,
+    height: "100%",
     shadowRadius: 10,
     resizeMode: "contain",
   },
   imageContainer: {
     width: "100%",
-    height: 400,
-    maxWidth: "100%",
-
+    maxWidth: 500,
     overflow: "hidden",
     padding: 10,
   },
