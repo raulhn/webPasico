@@ -6,15 +6,15 @@ import { StyleSheet, ActivityIndicator } from "react-native";
 
 const serviceNoticias = require("../servicios/serviceNoticias.js");
 
-export function Noticias() {
-  const [listaNoticias, obtenerNoticias] = useState([]);
+export default function ComponenteGalerias() {
+  const [listaGalerias, obtenerGalerias] = useState([]);
   const [cargando, setCargando] = useState(true); // Estado para controlar la carga
 
   useEffect(() => {
-    serviceNoticias.obtenerUltimasNoticias().then((v_noticias) => {
-      let array_noticias = v_noticias["componente_blog"].slice(0, 6);
-      obtenerNoticias(array_noticias);
-      setCargando(false); // Finaliza la carga
+    serviceNoticias.obtenerGalerias().then((v_galerias) => {
+      let arrayGaleria = v_galerias["componente_blog"].slice(0, 6);
+      obtenerGalerias(arrayGaleria);
+      setCargando(false);
     });
   }, []);
 
@@ -23,7 +23,7 @@ export function Noticias() {
     return (
       <View style={styles.cargandoContainer}>
         <ActivityIndicator size="large" color="#0000ff" />
-        <Text>Cargando noticias...</Text>
+        <Text>Cargando galerias...</Text>
       </View>
     );
   }
@@ -32,8 +32,8 @@ export function Noticias() {
     <View style={{ display: "flex" }}>
       <FlatList
         style={{ flexGrow: 1, backgroundColor: "white" }}
-        data={listaNoticias}
-        keyExtractor={(noticia) => noticia.nid_imagen}
+        data={listaGalerias}
+        keyExtractor={(galeria) => galeria.nid_imagen}
         renderItem={({ item }) => (
           <AnimatedCardBlog noticia={item}></AnimatedCardBlog>
         )}

@@ -1,4 +1,5 @@
 import { Text } from "react-native";
+import ComponenteGalerias from "../../../componentes/ComponenteGalerias.jsx";
 export default function Galerias() {
-  return <Text>Aquí irán las galerías</Text>;
+  return <ComponenteGalerias />;
 }

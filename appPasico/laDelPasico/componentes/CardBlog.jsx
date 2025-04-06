@@ -87,18 +87,21 @@ const styles = StyleSheet.create({
   titulo: {
     fontWeight: "bold",
     fontSize: 30,
-    padding: 10,
+    padding: 3,
   },
   imagen: {
-    width: "100%", // Asegúrate de que la imagen ocupe todo el ancho del contenedor
-    height: "100%", // Asegúrate de que la imagen ocupe toda la altura del contenedor
+    width: "100%",
+    height: 400,
     shadowRadius: 10,
+    resizeMode: "contain",
   },
   imageContainer: {
-    width: 380,
+    width: "100%",
     height: 400,
+    maxWidth: "100%",
+
     overflow: "hidden",
-    padding: 20,
+    padding: 10,
   },
   textoDescripcion: {
     padding: 10,
