@@ -2,6 +2,9 @@ import serviceComponentes from "../../servicios/serviceComponentes.js";
 import { useEffect, useState } from "react";
 import constantes from "../../constantes.js";
 import { MaterialIcons } from "@expo/vector-icons";
+import { Dimensions, Button } from "react-native";
+import * as ScreenOrientation from "expo-screen-orientation";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import {
   FlatList,
@@ -14,6 +17,7 @@ import {
 } from "react-native";
 import { StyleSheet } from "react-native";
 import ComponenteImagenGaleria from "./componenenteImagenGaleria.jsx";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ComponenteGaleria(componente) {
   const { nidComponente } = componente;
@@ -22,7 +26,44 @@ export default function ComponenteGaleria(componente) {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [indice, setIndice] = useState(0);
+  const [rotado, setRotado] = useState(false);
+  const insets = useSafeAreaInsets();
   const url_imagen = constantes.URL_SERVICIO + "imagen_url/";
+  const [dimensions, setDimensions] = useState(Dimensions.get("window")); // Estado para las dimensiones
+
+  // Detectar la orientación actual al cargar el componente
+  useEffect(() => {
+    const getOrientation = async () => {
+      const orientationInfo = await ScreenOrientation.getOrientationAsync();
+      setOrientation(orientationInfo);
+    };
+
+    // Escuchar cambios en la orientación
+    const subscription = ScreenOrientation.addOrientationChangeListener(
+      (event) => {
+        setOrientation(event.orientationInfo.orientation);
+      }
+    );
+
+    getOrientation();
+
+    return () => {
+      ScreenOrientation.removeOrientationChangeListener(subscription);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleDimensionsChange = () => {
+      setDimensions(Dimensions.get("window")); // Actualiza las dimensiones cuando cambian
+    };
+
+    const subscription = Dimensions.addEventListener(
+      "change",
+      handleDimensionsChange
+    );
+
+    return () => subscription?.remove(); // Limpia el evento al desmontar el componente
+  }, []);
 
   useEffect(() => {
     if (nidComponente) {
@@ -43,6 +84,8 @@ export default function ComponenteGaleria(componente) {
   function closeModal() {
     setModalVisible(false);
     setSelectedImage(null);
+    setRotado(false);
+    lockToPortrait();
   }
 
   function anterior() {
@@ -56,6 +99,28 @@ export default function ComponenteGaleria(componente) {
       setIndice(indice + 1);
       setSelectedImage(imagenes[indice + 1].nid_imagen);
     }
+  }
+
+  // Función para cambiar la orientación
+  const lockToLandscape = async () => {
+    await ScreenOrientation.lockAsync(
+      ScreenOrientation.OrientationLock.LANDSCAPE
+    );
+  };
+
+  const lockToPortrait = async () => {
+    await ScreenOrientation.lockAsync(
+      ScreenOrientation.OrientationLock.PORTRAIT
+    );
+  };
+
+  function rotar() {
+    if (rotado) {
+      lockToPortrait();
+    } else {
+      lockToLandscape();
+    }
+    setRotado(!rotado);
   }
 
   return (
@@ -86,49 +151,71 @@ export default function ComponenteGaleria(componente) {
         animationType="fade"
         onRequestClose={closeModal}
       >
-        <View style={styles.closeButton}>
-          <Pressable
-            onPress={() => {
-              closeModal();
-            }}
-          >
-            <View style={styles.tipoBoton}>
-              <MaterialIcons name="close" size={24} color="white" />
-            </View>
-          </Pressable>
-        </View>
-        <View style={styles.modalContainer}>
-          <Pressable style={styles.modalBackground}>
-            <Image
-              source={{
-                uri: url_imagen + selectedImage,
-              }}
-              style={styles.modalImage}
-              resizeMode="contain"
-            />
-          </Pressable>
-          <View style={styles.botones}>
+        <SafeAreaView
+          style={[styles.modalSafeArea, { paddingTop: insets.top * 2 }]}
+        >
+          <View style={styles.closeButton}>
             <Pressable
               onPress={() => {
-                anterior();
+                closeModal();
               }}
             >
               <View style={styles.tipoBoton}>
-                <MaterialIcons name="arrow-back" size={24} color="white" />
-              </View>
-            </Pressable>
-
-            <Pressable
-              onPress={() => {
-                siguiente();
-              }}
-            >
-              <View style={styles.tipoBoton}>
-                <MaterialIcons name="arrow-forward" size={24} color="white" />
+                <MaterialIcons name="close" size={24} color="white" />
               </View>
             </Pressable>
           </View>
-        </View>
+
+          <View style={styles.rotateButton}>
+            <Pressable
+              onPress={() => {
+                rotar();
+              }}
+            >
+              <View style={styles.tipoBoton}>
+                <MaterialIcons name="rotate-right" size={24} color="white" />
+              </View>
+            </Pressable>
+          </View>
+          <View style={styles.modalContainer}>
+            <Pressable style={styles.modalBackground}>
+              <Image
+                source={{
+                  uri: url_imagen + selectedImage,
+                }}
+                style={[
+                  styles.modalImage,
+                  {
+                    maxWidth: dimensions.width * 0.9, // Ajusta el ancho al 90% de la pantalla
+                    maxHeight: (dimensions.height - insets.top) * 0.9, // Ajusta la altura al 90% de la pantalla
+                  },
+                ]}
+                resizeMode="contain" // Asegura que la imagen mantenga su proporción
+              />
+            </Pressable>
+            <View style={styles.botones}>
+              <Pressable
+                onPress={() => {
+                  anterior();
+                }}
+              >
+                <View style={styles.tipoBoton}>
+                  <MaterialIcons name="arrow-back" size={24} color="white" />
+                </View>
+              </Pressable>
+
+              <Pressable
+                onPress={() => {
+                  siguiente();
+                }}
+              >
+                <View style={styles.tipoBoton}>
+                  <MaterialIcons name="arrow-forward" size={24} color="white" />
+                </View>
+              </Pressable>
+            </View>
+          </View>
+        </SafeAreaView>
       </Modal>
     </View>
   );
@@ -138,11 +225,16 @@ const styles = StyleSheet.create({
   flatListContent: {
     flexGrow: 1,
   },
-  modalContainer: {
+  modalSafeArea: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(0, 0, 0, 0.8)",
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
   modalBackground: {
     flex: 1,
@@ -156,11 +248,18 @@ const styles = StyleSheet.create({
     width: 900,
     height: 900,
     maxWidth: "90%",
+    padding: 10,
   },
   closeButton: {
     position: "absolute",
     top: 10,
     right: 20,
+    zIndex: 1,
+  },
+  rotateButton: {
+    position: "absolute",
+    top: 10,
+    left: 20,
     zIndex: 1,
   },
   tipoBoton: {
