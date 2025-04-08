@@ -4,20 +4,29 @@ function registrarUsuario(
   nombre,
   primerApellido,
   segundoApellido,
-  correoElectronico
+  correoElectronico,
+  password
 ) {
   return new Promise((resolve, reject) => {
-    const query =
-      "INSERT INTO usuario (nombre, primer_apellido, segundo_apellido, correo_electronico) VALUES (?, ?, ?, ?)";
-    const values = [nombre, primerApellido, segundoApellido, correoElectronico];
+    bcrypt.hash(password, saltRounds, (err, hash) => {
+      const query =
+        "INSERT INTO usuario (nombre, primer_apellido, segundo_apellido, correo_electronico, password) VALUES (?, ?, ?, ?)";
+      const values = [
+        nombre,
+        primerApellido,
+        segundoApellido,
+        correoElectronico,
+        password,
+      ];
 
-    conexion.dbConn.query(query, (error, results) => {
-      if (error) {
-        console.error("Error al registrar el usuario:", error);
-        reject(error);
-      } else {
-        resolve(results);
-      }
+      conexion.dbConn.query(query, (error, results) => {
+        if (error) {
+          console.error("Error al registrar el usuario:", error);
+          reject(error);
+        } else {
+          resolve(results);
+        }
+      });
     });
   });
 }
