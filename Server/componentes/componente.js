@@ -1014,40 +1014,49 @@ function eliminar_componente_paginas(
 async function async_eliminar_componente_carusel(
   id_pagina,
   id_componente,
-  tipo_asociacion,
-  resolve,
-  reject
+  tipo_asociacion
 ) {
+  if (tipo_asociacion == constantes.TIPO_ASOCIACION_PAGINA) {
+    console.log("eliminar_componente_carusel -> Eliminar carusel componente");
+    await eliminar_pagina_componente(id_pagina, id_componente);
+    conexion.dbConn.commit();
+  } else if (tipo_asociacion == constantes.TIPO_ASOCIACION_COMPONENTE) {
+    await eliminar_componente_componentes(id_componente);
+    conexion.dbConn.commit();
+  } else {
+    throw new Error("Tipo de asociación no válida");
+  }
   try {
-    if (tipo_asociacion == constantes.TIPO_ASOCIACION_PAGINA) {
-      console.log("eliminar_componente_carusel -> Eliminar carusel componente");
-      await eliminar_pagina_componente(id_pagina, id_componente);
-      conexion.dbConn.commit();
+    return new Promise((resolve, reject) => {
       resolve();
-    } else if (tipo_asociacion == constantes.TIPO_ASOCIACION_COMPONENTE) {
-      await eliminar_componente_componentes(id_componente);
-      conexion.dbConn.commit();
-      resolve();
-    }
+    });
   } catch (e) {
     reject();
   }
 }
 
-function eliminar_componente_carusel(
+async function eliminar_componente_carusel(
   id_pagina,
   id_componente,
   tipo_asociacion
 ) {
-  return new Promise((resolve, reject) => {
-    async_eliminar_componente_carusel(
+  try {
+    await async_eliminar_componente_carusel(
       id_pagina,
       id_componente,
-      tipo_asociacion,
-      resolve,
-      reject
+      tipo_asociacion
     );
-  });
+
+    return new Promise((resolve, reject) => {
+      resolve();
+    });
+  } catch (e) {
+    console.log(e);
+    return new Promise((resolve, reject) => {
+      console.log(e);
+      reject();
+    });
+  }
 }
 
 function obtiene_url_video(id_componente) {
@@ -1384,9 +1393,7 @@ function obtener_paginas_componente(nid_componente) {
 async function async_eliminar_componente_comun(
   id_componente,
   id_pagina,
-  tipo_asociacion,
-  resolve,
-  reject
+  tipo_asociacion
 ) {
   try {
     if (tipo_asociacion == constantes.TIPO_ASOCIACION_PAGINA) {
@@ -1408,15 +1415,21 @@ async function eliminar_componente_comun(
   id_pagina,
   tipo_asociacion
 ) {
-  return new Promise((resolve, reject) => {
-    async_eliminar_componente_comun(
+  try {
+    await async_eliminar_componente_comun(
       id_componente,
       id_pagina,
-      tipo_asociacion,
-      resolve,
-      reject
+      tipo_asociacion
     );
-  });
+    return new Promise((resolve, reject) => {
+      resolve();
+    });
+  } catch (error) {
+    console.log(error);
+    return new Promise((resolve, reject) => {
+      reject();
+    });
+  }
 }
 
 module.exports.tipo_componente = tipo_componente;

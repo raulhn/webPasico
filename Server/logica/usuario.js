@@ -77,7 +77,7 @@ function obtener_usuarios() {
   });
 }
 
-async function async_actualizar_password(user, pass, resolve, reject) {
+async function async_actualizar_password(user, pass) {
   let bExiste = await existe_login(user);
   if (bExiste) {
     const saltRounds = 9;
@@ -110,9 +110,17 @@ async function async_actualizar_password(user, pass, resolve, reject) {
 }
 
 async function actualizar_password(user, pass) {
-  return new Promise((resolve, reject) => {
-    async_actualizar_password(user, pass, resolve, reject);
-  });
+  try {
+    await async_actualizar_password(user, pass);
+    return new Promise((resolve, reject) => {
+      resolve();
+    });
+  } catch (error) {
+    console.log("Error en actualizar_password: " + error);
+    return new Promise((resolve, reject) => {
+      reject();
+    });
+  }
 }
 
 function existe_login(user) {
