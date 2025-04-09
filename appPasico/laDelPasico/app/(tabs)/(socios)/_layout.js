@@ -1,16 +1,22 @@
 import { Drawer } from "expo-router/drawer";
 import { StyleSheet, View, Image } from "react-native";
+import { CustomHeader } from "../../../componentes/cabecera";
+
+const CustomHeaderAsociacion = ({ navigation, route, options }) => {
+  return CustomHeader({
+    navigation,
+    route,
+    options,
+    title: "Asociación",
+  });
+};
+
 export default function DrawerLayout() {
-  const logo = require("../../../assets/logo.png");
   return (
     <Drawer
       screenOptions={{
         headerBackgroundContainerStyle: { backgroundColor: "#fff" },
-        headerBackground: () => (
-          <View style={estilos.headerContainer}>
-            <Image source={logo} style={estilos.logo} resizeMode="contain" />
-          </View>
-        ),
+        header: CustomHeaderAsociacion,
       }}
     >
       <Drawer.Screen
@@ -37,9 +43,19 @@ const estilos = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-end", // Centra el contenido verticalmente
     alignItems: "center", // Centra el contenido horizontalmente
+    position: "absolute",
+    right: "50%",
+    left: "50%",
+    top: "80%",
   },
   logo: {
     height: 65, // Ajusta la altura del logo según sea necesario
     width: 100, // Ajusta el ancho del logo según sea necesario
+  },
+  cabecera: {
+    backgroundColor: "#fff",
+    padding: 5,
+    flexDirection: "row",
+    alignItems: "center",
   },
 });
