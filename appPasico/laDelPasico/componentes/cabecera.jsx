@@ -5,6 +5,8 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Link } from "expo-router";
+import { Pressable } from "react-native";
 
 export const CustomHeader = ({ navigation, route, options, title }) => {
   const logo = require("../assets/logo.png");
@@ -18,11 +20,19 @@ export const CustomHeader = ({ navigation, route, options, title }) => {
           </View>
         </TouchableOpacity>
       </View>
-      <View style={estilos.headerContainer}>
+      <View>
         <Image source={logo} style={estilos.logo} resizeMode="contain" />
       </View>
       <View style={estilos.login}>
-        <MaterialIcons name="person" size={30} color="#000" />
+        <Link href="/PantallaLogin" asChild>
+          <TouchableOpacity onPress={() => console.log("Login")}>
+            <View style={{ padding: 10 }}>
+              <MaterialIcons name="person" size={30} color="#000" />
+
+              <Text style={{ fontSize: 10 }}>Login</Text>
+            </View>
+          </TouchableOpacity>
+        </Link>
       </View>
     </SafeAreaView>
   );
@@ -50,7 +60,7 @@ const estilos = StyleSheet.create({
     justifyContent: "space-between",
   },
   login: {
-    flexDirection: "row",
+    flexDirection: "column",
     padding: 10,
     justifyContent: "flex-end",
     borderColor: "#000",
