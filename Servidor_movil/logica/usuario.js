@@ -10,7 +10,7 @@ function registrarUsuario(
   return new Promise((resolve, reject) => {
     bcrypt.hash(password, saltRounds, (err, hash) => {
       const query =
-        "INSERT INTO usuario (nombre, primer_apellido, segundo_apellido, correo_electronico, password) VALUES (?, ?, ?, ?)";
+        "INSERT INTO usuario (nombre, primer_apellido, segundo_apellido, correo_electronico, password) VALUES (trim(?), trim(?), trim(?), ?)";
       const values = [
         nombre,
         primerApellido,

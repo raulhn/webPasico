@@ -2,9 +2,9 @@ const conexion = require("../conexion.js");
 const constantes = require("../constantes.js");
 
 async function asyncReegistrarConexion(token, resolve, reject) {
-  bExsiste = await existeConexion(token);
-  numConexiones = await numConexiones();
-  if (numConexiones > constantes.MAX_CONEXIONES) {
+  let bExsiste = await existeConexion(token);
+  let numeroConexiones = await numConexiones();
+  if (numeroConexiones > constantes.MAX_CONEXIONES) {
     console.error("Se ha alcanzado el número máximo de conexiones.");
     reject("Se ha alcanzado el número máximo de conexiones.");
   } else {
