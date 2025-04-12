@@ -1,5 +1,5 @@
-import servletConexion from "./servlet_conexiones.js";
-import gestorUsuario from ("../logica/usuario.js");
+const servletConexion = require("./servlet_conexiones.js");
+const gestorUsuario = require("../logica/usuario.js");
 
 async function registrarUsuario(req, res) {
   const {
@@ -11,10 +11,12 @@ async function registrarUsuario(req, res) {
     recaptchaToken,
   } = req.body;
 
+  console.log("Recibiendo datos de registro de usuario: ", recaptchaToken);
+
   let bSuccess = await servletConexion.comprobarRecaptcha(recaptchaToken);
   if (!bSuccess) {
-    console.log("Error de reCAPTCHA: ", error);
-    throw new Error("Error de Validación");
+    console.log("Error de reCAPTCHA");
+    res.status(400).send({ error: true, mensaje: "Error de Validación" });
   } else {
     await gestorUsuario
       .registrarUsuario(
@@ -25,11 +27,15 @@ async function registrarUsuario(req, res) {
         password
       )
       .then((resultado) => {
-        res.status(200).send("Usuario registrado correctamente.");
+        res
+          .status(200)
+          .send({ error: false, mensaje: "Usuario registrado correctamente" });
       })
       .catch((error) => {
-        console.error("Error al registrar el usuario:", error);
-        res.status(500).send("Error al registrar el usuario.");
+        console.error("Error al registrar el usuario:" + error);
+        res
+          .status(500)
+          .send({ error: true, mensaje: "Error al registrar el usuario." });
       });
   }
 }
