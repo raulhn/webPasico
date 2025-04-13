@@ -2,22 +2,23 @@ const gestorConexion = require("../logica/gestorConexiones.js");
 const config = require("../config/config.js");
 
 async function comprobarRecaptcha(recaptchaToken) {
-  const url =
-    "https://www.google.com/recaptcha/api/siteverify?secret=" +
-    config.apikeyGoogle +
-    "&response=" +
-    recaptchaToken +
-    "";
-
+  const url = "https://www.google.com/recaptcha/api/siteverify";
   console.log("Comprobando reCAPTCHA: " + url);
-  let respuesta = await fetch(url, { method: "post" });
+  const params = new URLSearchParams();
+  params.append("secret", config.apikeyGoogle);
+  params.append("response", recaptchaToken);
+
+  let respuesta = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: params.toString(),
+  });
   let respuesta_json = await respuesta.json();
-  console.log(respuesta_json);
   let bSuccess = respuesta_json.success;
   return bSuccess;
 }
 
-function registrarConexion(req, res) {
+async function registrarConexion(req, res) {
   const token = req.body.token;
   const recaptchaToken = req.body.recaptchaToken;
 
@@ -26,8 +27,9 @@ function registrarConexion(req, res) {
     return;
   }
 
-  if (comprobarRecaptcha(recaptchaToken)) {
+  if (await comprobarRecaptcha(recaptchaToken)) {
     try {
+      console.log("Registrando conexión: " + token);
       gestorConexion.registrarConexion(token);
       res
         .status(200)
@@ -39,7 +41,7 @@ function registrarConexion(req, res) {
         .send({ error: true, mensaje: "Error al registrar la conexión." });
     }
   } else {
-    console.log("Error de reCAPTCHA: " + error);
+    console.log("Error de reCAPTCHA ");
     res.status(400).send("Error de Validación");
   }
 }
