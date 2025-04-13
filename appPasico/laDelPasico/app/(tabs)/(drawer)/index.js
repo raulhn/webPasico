@@ -14,6 +14,7 @@ export default function Index() {
 
   useEffect(() => {
     if (expoPushToken && recaptchaToken) {
+      console.log(expoPushToken, recaptchaToken);
       registrarConexion(expoPushToken, recaptchaToken)
         .then((response) => {})
         .catch((error) => {});
