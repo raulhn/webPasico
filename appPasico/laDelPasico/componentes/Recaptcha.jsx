@@ -9,20 +9,20 @@ export default function Recapcha({ siteKey, onVerify }) {
     <!DOCTYPE html>
     <html>
       <head>
-        <script src="https://www.google.com/recaptcha/api.js?render=${siteKey}"></script>
+        <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
         <script>
-          function executeReCaptcha() {
-            grecaptcha.ready(function() {
-              grecaptcha.execute('${siteKey}', { action: 'submit' }).then(function(token) {
-                // Envía el token a la aplicación React Native
-                window.ReactNativeWebView.postMessage(token);
-              });
-            });
+          function onTurnstileSuccess(token) {
+            // Envía el token a la aplicación React Native
+            window.ReactNativeWebView.postMessage(token);
           }
         </script>
       </head>
-      <body onload="executeReCaptcha()">
-        <p>Generando token de reCAPTCHA...</p>
+      <body>
+        <div
+          class="cf-turnstile"
+          data-sitekey="${siteKey}"
+          data-callback="onTurnstileSuccess"
+        ></div>
       </body>
     </html>
   `;
@@ -35,7 +35,9 @@ export default function Recapcha({ siteKey, onVerify }) {
         baseUrl="https://ladelpasico.es"
         source={{ html: htmlContent }}
         onMessage={(event) => {
+          console.log("Evento " + event.nativeEvent);
           const token = event.nativeEvent.data;
+          console.log("Token de reCAPTCHA:", token);
           onVerify(token); // Envía el token al callback
         }}
         javaScriptEnabled={true}
