@@ -6,7 +6,8 @@ import useNotification from "../../../hooks/useNotification";
 import { registrarConexion } from "../../../servicios/serviceConexion";
 import { View } from "react-native";
 import { useState } from "react";
-import { Stack } from "expo-router";
+
+import Tunstile from "../../../componentes/Turnstile";
 
 export default function Index() {
   const expoPushToken = useNotification();
@@ -18,21 +19,21 @@ export default function Index() {
       registrarConexion(expoPushToken, recaptchaToken)
         .then((response) => {})
         .catch((error) => {});
-
-      // Limpia el token de reCAPTCHA después de procesarlo
       setRecaptchaToken(null);
     }
   }, [expoPushToken, recaptchaToken]);
 
   // Envía el token al servidor backend
-  const handleVerify = (tokenGoogle) => {
-    setRecaptchaToken(tokenGoogle);
+  const handleVerify = (event) => {
+    const token = event.nativeEvent.data;
+    console.log("Token de reCAPTCHA:", token);
+    setRecaptchaToken(token); // Guarda el token en el estado
   };
 
   return (
     <View style={{ flex: 1 }}>
       <Main />
-      <Recaptcha siteKey={constantesGoogle.key} onVerify={handleVerify} />
+      <Tunstile siteKey={constantesGoogle.key} onVerify={handleVerify} />
     </View>
   );
 }

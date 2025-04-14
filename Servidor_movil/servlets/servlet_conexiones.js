@@ -2,10 +2,10 @@ const gestorConexion = require("../logica/gestorConexiones.js");
 const config = require("../config/config.js");
 
 async function comprobarRecaptcha(recaptchaToken) {
-  const url = "https://www.google.com/recaptcha/api/siteverify";
-  console.log("Comprobando reCAPTCHA: " + url);
+  const url = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
+
   const params = new URLSearchParams();
-  params.append("secret", config.apikeyGoogle);
+  params.append("secret", config.apikeyCloudflare);
   params.append("response", recaptchaToken);
 
   let respuesta = await fetch(url, {
@@ -14,6 +14,7 @@ async function comprobarRecaptcha(recaptchaToken) {
     body: params.toString(),
   });
   let respuesta_json = await respuesta.json();
+  console.log("Respuesta reCAPTCHA: " + JSON.stringify(respuesta_json));
   let bSuccess = respuesta_json.success;
   return bSuccess;
 }
