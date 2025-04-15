@@ -81,5 +81,6 @@ const styles = StyleSheet.create({
   },
   tarjetaPresionada: {
     transform: [{ scale: 1.05 }],
+    opacity: 0.8, // Cambia la opacidad al presionar
   },
 });
