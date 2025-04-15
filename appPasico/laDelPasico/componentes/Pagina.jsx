@@ -4,7 +4,6 @@ import Componente from "./componentesPagina/componente.jsx";
 import { FlatList } from "react-native";
 import { View, Text, ActivityIndicator, StyleSheet } from "react-native";
 
-
 export default function Pagina(pagina) {
   const [componentes, setComponentes] = useState([]);
   const [cargando, setCargando] = useState(true);
@@ -28,7 +27,6 @@ export default function Pagina(pagina) {
     );
   }
 
-
   return (
     <View style={{ flex: 1 }}>
       <FlatList
@@ -37,6 +35,7 @@ export default function Pagina(pagina) {
         keyExtractor={(item) => item.nid_Componente.toString()}
         renderItem={({ item }) => <Componente componente={item} />}
         contentContainerStyle={styles.flatListContent}
+        keyboardShouldPersistTaps="handled"
       ></FlatList>
     </View>
   );

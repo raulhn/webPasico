@@ -14,7 +14,6 @@ async function comprobarRecaptcha(recaptchaToken) {
     body: params.toString(),
   });
   let respuesta_json = await respuesta.json();
-  console.log("Respuesta reCAPTCHA: " + JSON.stringify(respuesta_json));
   let bSuccess = respuesta_json.success;
   return bSuccess;
 }

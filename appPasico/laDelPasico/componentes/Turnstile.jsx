@@ -4,7 +4,6 @@ import { WebView } from "react-native-webview";
 
 // https://dev.to/ryabinin/protect-your-react-native-application-using-cloudflare-turnstile-4l4l
 const Turnstile = ({ siteKey, onVerify }) => {
-  console.log("keyCloudflare", siteKey);
   return (
     <View style={{ flex: 1 }}>
       <WebView

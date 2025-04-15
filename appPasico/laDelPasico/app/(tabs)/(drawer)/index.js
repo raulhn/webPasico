@@ -33,7 +33,10 @@ export default function Index() {
   return (
     <View style={{ flex: 1 }}>
       <Main />
-      <Tunstile siteKey={constantesGoogle.key} onVerify={handleVerify} />
+
+      <View style={{ display: "none" }}>
+        <Tunstile siteKey={constantesGoogle.key} onVerify={handleVerify} />
+      </View>
     </View>
   );
 }

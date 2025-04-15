@@ -26,7 +26,7 @@ function registrarUsuario(
         nombre: nombre,
         primerApellido: primerApellido,
         segundoApellido: segundoApellido,
-        correo: correo,
+        correoElectronico: correo,
         password: password,
         recaptchaToken: recaptchaToken,
       }),
@@ -35,12 +35,10 @@ function registrarUsuario(
         .json()
         .then((data) => {
           console.log("Datos del servicio registrarUsuario");
-          console.log(data);
           resolve(data);
         })
         .catch((error) => {
           console.log("Error en el servicio registrarUsuario");
-          console.log(error);
           reject(error);
         });
     });

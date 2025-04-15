@@ -13,17 +13,19 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState, useEffect } from "react";
-import Recaptcha from "../../componentes/Recaptcha.jsx";
-import ConstantesGoogle from "../../config/constantesGoogle.js";
 import ServiceUsuario from "../../servicios/serviceUsuario.js";
+import Tunstile from "../../componentes/Turnstile.jsx";
+import constantesGoogle from "../../config/constantesGoogle.js";
 
 export default function registrarUsuario(recaptchaToken) {
   const [inputActivo, setInputActivo] = React.useState(0);
   const logo = require("../../assets/logo.png");
 
   const [errorValidacion, setErrorValidacion] = useState(false);
+  const [exito, setExito] = useState(false);
   const [botonPresionado, setBotonPresionado] = useState(false);
   const [mensajeError, setMensajeError] = useState("");
+  const [mensajeExito, setMensajeExito] = useState("");
 
   // Estados para los campos del formulario
   const [nombre, setNombre] = useState("");
@@ -32,6 +34,8 @@ export default function registrarUsuario(recaptchaToken) {
   const [correo, setCorreo] = useState("");
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
+
+  const [lanzaRegistro, setLanzaRegistro] = useState(false);
 
   function validacionRegistro() {
     if (nombre === "") {
@@ -61,7 +65,24 @@ export default function registrarUsuario(recaptchaToken) {
     return true;
   }
 
-  function peticionRegistrarUsuario() {
+  function handleVerify(event) {
+    const token = event.nativeEvent.data;
+    console.log("Token de reCAPTCHA:", token);
+    peticionRegistrarUsuario(token);
+    setLanzaRegistro(false);
+  }
+
+  function incluyeRecaptcha() {
+    if (lanzaRegistro) {
+      return (
+        <Tunstile siteKey={constantesGoogle.key} onVerify={handleVerify} />
+      );
+    } else {
+      return null;
+    }
+  }
+
+  function peticionRegistrarUsuario(recaptchaToken) {
     try {
       setMensajeError("");
       if (!validacionRegistro()) {
@@ -80,6 +101,9 @@ export default function registrarUsuario(recaptchaToken) {
               if (response.error) {
                 setMensajeError(response.mensaje);
                 setErrorValidacion(true);
+              } else {
+                setMensajeExito("Usuario registrado correctamente");
+                setExito(true);
               }
               // Aquí puedes manejar la respuesta del servidor
             })
@@ -211,6 +235,7 @@ export default function registrarUsuario(recaptchaToken) {
               />
               <Pressable
                 onPress={() => {
+                  setLanzaRegistro(true);
                   peticionRegistrarUsuario();
                 }}
                 onPressOut={() => {
@@ -237,6 +262,7 @@ export default function registrarUsuario(recaptchaToken) {
                 </View>
               </Pressable>
             </View>
+            {incluyeRecaptcha()}
           </View>
         </View>
       </ScrollView>
@@ -283,6 +309,53 @@ export default function registrarUsuario(recaptchaToken) {
                 style={estilos.iconoWarning}
               />
               <Text style={{ textAlign: "center" }}>{mensajeError}</Text>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal visible={exito} transparent={true} animationType="fade">
+        <View
+          style={{
+            width: "100%",
+            height: "100%",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <View style={estilos.modal}>
+            <View
+              style={{
+                borderRadius: 10,
+                position: "absolute",
+                top: 5,
+                right: 5,
+              }}
+            >
+              <Pressable
+                onPress={() => {
+                  setExito(false);
+                }}
+              >
+                <View style={estilos.botonCierre}>
+                  <MaterialIcons name="close" size={24} color="white" />
+                </View>
+              </Pressable>
+            </View>
+            <View
+              style={{
+                justifyContent: "center",
+                alignItems: "center",
+                padding: 10,
+              }}
+            >
+              <MaterialIcons
+                name="check-circle-outline"
+                size={60}
+                color="#4caf50"
+                style={estilos.iconoWarning}
+              />
+              <Text style={{ textAlign: "center" }}>{mensajeExito}</Text>
             </View>
           </View>
         </View>
@@ -351,7 +424,7 @@ const estilos = StyleSheet.create({
     position: "relative",
     backgroundColor: "#f9f7f7",
   },
-  iconoWarning: {},
+  iconoWarning: { paddingBottom: 10 },
   botonCierre: {
     padding: 3,
     margin: 5,
