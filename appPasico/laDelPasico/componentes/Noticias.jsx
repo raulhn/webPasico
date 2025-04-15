@@ -1,4 +1,4 @@
-import { FlatList } from "react-native";
+import { FlatList, Pressable } from "react-native";
 import React, { useState, useEffect } from "react";
 import { CardBlog, AnimatedCardBlog } from "./CardBlog.jsx";
 import { View, Text } from "react-native";
@@ -9,6 +9,8 @@ const serviceNoticias = require("../servicios/serviceNoticias.js");
 export function Noticias() {
   const [listaNoticias, obtenerNoticias] = useState([]);
   const [cargando, setCargando] = useState(true); // Estado para controlar la carga
+
+  const [presionado, setPresionado] = useState(null);
 
   useEffect(() => {
     serviceNoticias.obtenerUltimasNoticias().then((v_noticias) => {
@@ -31,11 +33,26 @@ export function Noticias() {
   return (
     <View style={{ display: "flex" }}>
       <FlatList
+        onScrollEndDrag={() => {
+          setPresionado(null); // Cambia el estado a no presionado al hacer scroll
+        }}
         style={{ flexGrow: 1, backgroundColor: "white" }}
         data={listaNoticias}
         keyExtractor={(noticia) => noticia.nid_imagen}
         renderItem={({ item }) => (
-          <AnimatedCardBlog noticia={item}></AnimatedCardBlog>
+          <Pressable
+            onTouchStart={() => {
+              setPresionado(item.nid_imagen); // Cambia el estado a presionado
+            }}
+            onTouchEnd={() => {
+              setPresionado(null); // Cambia el estado a no presionado
+            }}
+            style={
+              presionado === item.nid_imagen ? styles.tarjetaPresionada : null
+            }
+          >
+            <AnimatedCardBlog noticia={item}></AnimatedCardBlog>
+          </Pressable>
         )}
         contentContainerStyle={styles.flatListContent} // Estilo para el contenedor de la lista
       ></FlatList>
@@ -61,5 +78,8 @@ const styles = StyleSheet.create({
   },
   flatListContent: {
     flexGrow: 1, // Permite que la lista crezca dinámicamente
+  },
+  tarjetaPresionada: {
+    transform: [{ scale: 1.05 }],
   },
 });
