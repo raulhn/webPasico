@@ -12,6 +12,7 @@
   "dependencies": {
     "@expo/vector-icons": "^14.0.4",
     "@react-navigation/drawer": "^7.3.2",
+    "crypto": "^1.0.1",
     "dotenv": "^16.4.7",
     "expo": "~52.0.40",
     "expo-constants": "~17.0.8",
