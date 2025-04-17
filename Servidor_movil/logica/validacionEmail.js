@@ -1,4 +1,5 @@
 const crypto = require("crypto");
+const cron = require("node-cron");
 
 function generarTokenVerificacion() {
   return crypto.randomBytes(32).toString("hex");
@@ -95,6 +96,13 @@ async function validarEmail(token) {
     console.log("Error en la validación del correo:", error);
     return false;
   }
+}
+
+function enviarCorreos() {
+  cron.schedule("*/5 * * * *", () => {
+    console.log("Ejecutando tarea periódica cada 5 minutos:", new Date());
+    //Aqui se enviarán los correos
+  });
 }
 
 module.exports.enviarEmailValidacion = enviarEmailValidacion;
