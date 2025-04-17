@@ -1,6 +1,7 @@
 const conexion = require("../conexion.js");
 const bcrypt = require("bcrypt");
 const constantes = require("../constantes.js");
+const validacionEmail = require("./validacionEmail.js");
 
 function existUsuario(correoElectronico) {
   return new Promise((resolve, reject) => {
@@ -52,11 +53,15 @@ async function registrarUsuario(
           conexion.dbConn.escape(hash) +
           ")";
 
-        conexion.dbConn.query(query, (error, results) => {
+        conexion.dbConn.query(query, async (error, results) => {
           if (error) {
             console.error("Error al registrar el usuario:", error);
             reject("Error al reigistrar el usuario");
           } else {
+            await validacionEmail.enviarEmailValidacion(
+              results.insertId,
+              correoElectronico
+            );
             resolve(results);
           }
         });
