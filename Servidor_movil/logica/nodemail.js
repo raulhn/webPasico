@@ -1,5 +1,4 @@
-import nodemailer from "nodemailer";
-import ejs from "ejs";
+const nodemailer = require("nodemailer");
 const { google } = require("googleapis");
 const { OAuth2 } = google.auth;
 
@@ -12,24 +11,28 @@ const {
   MAILING_SERVICE_REFRESH_TOKEN,
   SENDER_EMAIL_ADDRESS,
 } = process.env;
-const Mailing = {};
+
 const oauth2Client = new OAuth2(
   MAILING_SERVICE_CLIENT_ID,
   MAILING_SERVICE_CLIENT_SECRET,
   OAUTH_PLAYGROUND
 );
-const TEMPLATES = {
-  subscribe: {
-    fileName: "subscribe.ejs",
-    subject: "[ABC Inc.] Welcome to ABC Inc.",
-  },
-};
+
+oauth2Client.setCredentials({
+  refresh_token: MAILING_SERVICE_REFRESH_TOKEN,
+});
+
 /**
  * Send Email
  */
 
-function enviarEmail(from, subject, html) {
+async function enviarEmail(to, subject, html) {
+  console.log(SENDER_EMAIL_ADDRESS);
+  const accessToken = await oauth2Client.getAccessToken();
+
+  console.log("Access token: " + accessToken);
   return new Promise((resolve, reject) => {
+    console.log(MAILING_SERVICE_REFRESH_TOKEN);
     const smtpTransport = nodemailer.createTransport({
       service: "gmail",
       auth: {
@@ -38,14 +41,14 @@ function enviarEmail(from, subject, html) {
         clientId: MAILING_SERVICE_CLIENT_ID,
         clientSecret: MAILING_SERVICE_CLIENT_SECRET,
         refreshToken: MAILING_SERVICE_REFRESH_TOKEN,
-        accessToken,
+        accessToken: accessToken,
       },
     });
 
     smtpTransport.sendMail(
       {
-        from: from,
-        to: SENDER_EMAIL_ADDRESS,
+        from: SENDER_EMAIL_ADDRESS,
+        to: to,
         subject: subject,
         html: html,
       },

@@ -5,9 +5,12 @@ const bodyParser = require("body-parser");
 const rateLimit = require("express-rate-limit");
 
 const config = require("./config/config.js");
+require("dotenv").config();
 
 const servletUsuario = require("./servlets/servlet_usuario.js");
 const servletConexion = require("./servlets/servlet_conexiones.js");
+
+const validacionEmail = require("./logica/validacionEmail.js");
 
 const limiter = rateLimit({
   windowMs: 10 * 60 * 1000, // 10 minutos
@@ -18,6 +21,8 @@ const limiter = rateLimit({
   legacyHeaders: false, // Desactiva los encabezados `X-RateLimit-*`
   validate: { trustProxy: false },
 });
+
+validacionEmail.enviarCorreos();
 
 app.set("trust proxy", true);
 app.use(limiter);

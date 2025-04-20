@@ -13,7 +13,9 @@ async function comprobarRecaptcha(recaptchaToken) {
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: params.toString(),
   });
+  console.log("Respuesta de reCAPTCHA: " + respuesta);
   let respuesta_json = await respuesta.json();
+
   let bSuccess = respuesta_json.success;
   return bSuccess;
 }
