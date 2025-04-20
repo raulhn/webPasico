@@ -1,6 +1,8 @@
 const crypto = require("crypto");
 const cron = require("node-cron");
 const nodeMail = require("./nodemail");
+const constantes = require("../constantes.js");
+const conexion = require("../conexion.js");
 
 function generarTokenVerificacion() {
   return crypto.randomBytes(32).toString("hex");
@@ -12,7 +14,7 @@ function registrarValidacionMail(nid_usuario) {
     const query =
       "INSERT INTO " +
       constantes.ESQUEMA +
-      ".validacion_email (nid_usuario, token, fecha) " +
+      ".validacion_mail (nid_usuario, token, fecha) " +
       "VALUES (" +
       conexion.dbConn.escape(nid_usuario) +
       ", " +
@@ -35,7 +37,7 @@ function registrarCorreoValidacion(correoElectronico, token) {
     const query =
       "INSERT INTO " +
       constantes.ESQUEMA +
-      ".envio_correo (correoElectronico, asunto, cuerpo, estado) " +
+      ".envio_correo (correo_electronico, asunto, cuerpo, estado) " +
       "VALUES (" +
       conexion.dbConn.escape(correoElectronico) +
       ", 'Validación de correo', 'Por favor valide su correo ' " +
@@ -67,7 +69,7 @@ function obtenerUsuario(token) {
     const query =
       "SELECT nid_usuario FROM " +
       constantes.ESQUEMA +
-      ".validacion_email WHERE token = " +
+      ".validacion_mail WHERE token = " +
       conexion.dbConn.escape(token);
 
     conexion.dbConn.query(query, (error, results) => {
@@ -149,9 +151,11 @@ function actualizarEstadoEnvioCorreo(nid_envio_correo, estado, error) {
   });
 }
 
-async function enviarCorreo(nid_envio_correo, from, subject, html) {
+async function enviarCorreo(nid_envio_correo, to, subject, html) {
   try {
-    let resultado = await nodeMail.enviarEmail(from, subject, html);
+    let resultado = await nodeMail.enviarEmail(to, subject, html);
+    console.log("Envinado correo a: " + to);
+    console.log("Asunto: " + subject);
     if (resultado.error) {
       console.error("Error al enviar el correo:", resultado.message);
       await actualizarEstadoEnvioCorreo(
@@ -169,9 +173,13 @@ async function enviarCorreo(nid_envio_correo, from, subject, html) {
 }
 
 function enviarCorreos() {
-  cron.schedule("*/5 * * * *", () => {
+  console.log("Iniciando el envío de correos programado...");
+  cron.schedule("*/1 * * * *", () => {
+    console.log("Ejecutando tarea programada para enviar correos...");
     const query =
-      "select * from " + constantes.ESQUEMA + "envio_correo where estado = '0'";
+      "select * from " +
+      constantes.ESQUEMA +
+      ".envio_correo where estado = '0'";
 
     conexion.dbConn.query(query, (error, results) => {
       if (error) {
@@ -180,7 +188,12 @@ function enviarCorreos() {
       }
 
       results.forEach(async (row) => {
-        await enviarCorreo(row.correoElectronico, row.asunto, row.cuerpo);
+        await enviarCorreo(
+          row.nid_envio_correo,
+          row.correo_electronico,
+          row.asunto,
+          row.cuerpo
+        );
       });
     });
   });

@@ -1,7 +1,8 @@
 create table pasico_movil.validacion_mail(
 	nid_validacion integer primary key auto_increment,
 	nid_usuario integer,
-	token varchar(50),
+	token varchar(70),
+	fecha date,
 	expiracion datetime
 );
 
