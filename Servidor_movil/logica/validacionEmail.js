@@ -14,12 +14,12 @@ function registrarValidacionMail(nid_usuario) {
     const query =
       "INSERT INTO " +
       constantes.ESQUEMA +
-      ".validacion_mail (nid_usuario, token, fecha) " +
+      ".validacion_mail (nid_usuario, token, fecha, expiracion) " +
       "VALUES (" +
       conexion.dbConn.escape(nid_usuario) +
       ", " +
       conexion.dbConn.escape(token) +
-      ", sysdate())";
+      ", sysdate(), sysdate() + interval 12 hour)";
 
     conexion.dbConn.query(query, async (error, results) => {
       if (error) {
@@ -70,7 +70,8 @@ function obtenerUsuario(token) {
       "SELECT nid_usuario FROM " +
       constantes.ESQUEMA +
       ".validacion_mail WHERE token = " +
-      conexion.dbConn.escape(token);
+      conexion.dbConn.escape(token) +
+      " AND expiracion >= sysdate()";
 
     conexion.dbConn.query(query, (error, results) => {
       if (error) {
@@ -154,8 +155,6 @@ function actualizarEstadoEnvioCorreo(nid_envio_correo, estado, error) {
 async function enviarCorreo(nid_envio_correo, to, subject, html) {
   try {
     let resultado = await nodeMail.enviarEmail(to, subject, html);
-    console.log("Envinado correo a: " + to);
-    console.log("Asunto: " + subject);
     if (resultado.error) {
       console.error("Error al enviar el correo:", resultado.message);
       await actualizarEstadoEnvioCorreo(
