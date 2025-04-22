@@ -34,14 +34,32 @@ function registrarValidacionMail(nid_usuario) {
 
 function registrarCorreoValidacion(correoElectronico, token) {
   return new Promise((resolve, reject) => {
+    const html = conexion.dbConn.escape(
+      '<div style="font-family: Arial, sans-serif; background-color: #f9f9f9; padding: 20px; border: 1px solid #ddd; border-radius: 5px; max-width: 600px; margin: 0 auto;">' +
+        '<div style="display: flex; justify-content: center; width: 100%">' +
+        '<img style="width:100pt" src="https://ladelpasico.es/assets/img/logobandagris2.jpg"/>' +
+        "</div>" +
+        '<div style="display: flex; justify-content: center; width: 100%">' +
+        '<p style="font-size: 16px; color: #333; line-height: 1.5;">' +
+        "Verifique su correo desde el siguiente enlace: " +
+        '<a href="https://ladelpasico.es/api_movil/verificar_correo/' +
+        token +
+        '" style="color: #007bff; text-decoration: none; font-weight: bold;">' +
+        "Verifique su correo" +
+        "</a>" +
+        "</p>" +
+        "</div>" +
+        "</div>"
+    );
+
     const query =
       "INSERT INTO " +
       constantes.ESQUEMA +
       ".envio_correo (correo_electronico, asunto, cuerpo, estado) " +
       "VALUES (" +
       conexion.dbConn.escape(correoElectronico) +
-      ", 'Validación de correo', 'Por favor valide su correo ' " +
-      conexion.dbConn.escape("https://ladelpasico.es/valida/" + token) +
+      ", 'Verificación de correo', " +
+      html +
       ", '0')";
 
     conexion.dbConn.query(query, (error, results) => {
@@ -91,7 +109,7 @@ function verificarUsuario(nid_usuario) {
     const query =
       "UPDATE " +
       constantes.ESQUEMA +
-      ".usuario SET verificado = 'S' WHERE nid_usuario = " +
+      ".usuarios SET verificado = 'S' WHERE nid_usuario = " +
       conexion.dbConn.escape(nid_usuario);
 
     conexion.dbConn.query(query, (error, results) => {
@@ -105,7 +123,32 @@ function verificarUsuario(nid_usuario) {
   });
 }
 
-async function validarEmail(token) {
+function actualizarVerficacionMail(nid_usuario) {
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.beginTransaction(() => {
+      const query =
+        "UPDATE " +
+        constantes.ESQUEMA +
+        ".usuarios set verificado = 'S' WHERE nid_usuario = " +
+        conexion.dbConn.escape(nid_usuario);
+      conexion.dbConn.query(query, (error, results) => {
+        if (error) {
+          console.error(
+            "Error al actualizar la verificación de correo:",
+            error
+          );
+          conexion.dbConn.rollback();
+          reject(error);
+        } else {
+          conexion.dbConn.commit();
+          resolve(results.affectedRows > 0); // true si se actualizó, false si no
+        }
+      });
+    });
+  });
+}
+
+async function verificarEmail(token) {
   try {
     const nid_usuario = await obtenerUsuario(token);
     if (!nid_usuario) {
@@ -119,6 +162,7 @@ async function validarEmail(token) {
       return false;
     }
 
+    await actualizarVerficacionMail(nid_usuario);
     return true;
   } catch (error) {
     console.log("Error en la validación del correo:", error);
@@ -199,5 +243,5 @@ function enviarCorreos() {
 }
 
 module.exports.enviarEmailValidacion = enviarEmailValidacion;
-module.exports.validarEmail = validarEmail;
+module.exports.verificarEmail = verificarEmail;
 module.exports.enviarCorreos = enviarCorreos;
