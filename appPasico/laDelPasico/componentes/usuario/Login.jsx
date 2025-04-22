@@ -1,5 +1,7 @@
 import { Link } from "expo-router";
 import React from "react";
+import serviceUsuario from "../../servicios/serviceUsuario";
+import { useContext } from "react";
 import {
   TextInput,
   Pressable,
@@ -8,9 +10,11 @@ import {
   StyleSheet,
   Image,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { AuthContext } from "../../providers/AuthContext"; // Ajusta la ruta según tu estructura de carpetas
 
 export default function Login() {
+  const { iniciarSesion } = useContext(AuthContext);
+
   const [inputActivo, setInputActivo] = React.useState(0);
 
   const [correo, setCorreo] = React.useState("");
@@ -56,7 +60,30 @@ export default function Login() {
             onBlur={() => setInputActivo(0)}
           />
 
-          <Pressable onPress={() => {}} title="Iniciar Sesión">
+          <Pressable
+            onPress={() => {
+              // Aquí puedes agregar la lógica para iniciar sesión
+
+              serviceUsuario
+                .login(correo, contrasena)
+                .then((response) => {
+                  if (response.error) {
+                    console.log(
+                      "Error en el inicio de sesión:",
+                      response.error
+                    );
+                  } else {
+                    console.log("Inicio de sesión exitoso:", response);
+                    iniciarSesion(response.usuario); // Guarda el usuario en el contexto
+                    // Aquí puedes redirigir al usuario a la pantalla principal o hacer lo que necesites
+                  }
+                })
+                .catch((error) => {
+                  console.error("Error al iniciar sesión:", error);
+                });
+            }}
+            title="Iniciar Sesión"
+          >
             <View style={estilos.boton}>
               <Text
                 style={{

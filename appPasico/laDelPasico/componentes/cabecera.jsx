@@ -7,9 +7,15 @@ import { Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Link } from "expo-router";
 import { Pressable } from "react-native";
+import { AuthContext } from "../providers/AuthContext";
+import { useContext } from "react";
 
 export const CustomHeader = ({ navigation, route, options, title }) => {
   const logo = require("../assets/logo.png");
+  const { usuario } = useContext(AuthContext);
+  if (usuario !== null) {
+    console.log("aaa" + usuario.nombre);
+  }
   return (
     <SafeAreaView style={estilos.cabecera}>
       <View style={{ flexDirection: "row", alignItems: "center", padding: 10 }}>
@@ -26,10 +32,28 @@ export const CustomHeader = ({ navigation, route, options, title }) => {
       <View style={estilos.login}>
         <Link href="/PantallaLogin" asChild>
           <TouchableOpacity onPress={() => console.log("Login")}>
-            <View style={{ padding: 10 }}>
-              <MaterialIcons name="person" size={30} color="#000" />
+            <View
+              style={{
+                padding: 10,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <MaterialIcons
+                name="person"
+                size={30}
+                color={usuario ? "#007CFA" : "black"}
+              />
 
-              <Text style={{ fontSize: 10 }}>Login</Text>
+              <Text
+                style={{
+                  fontSize: 10,
+                  textAlign: "center",
+                  color: usuario ? "#007CFA" : "black",
+                }}
+              >
+                {usuario ? "Logueado" : "Login"}
+              </Text>
             </View>
           </TouchableOpacity>
         </Link>
@@ -63,6 +87,7 @@ const estilos = StyleSheet.create({
     flexDirection: "column",
     padding: 10,
     justifyContent: "flex-end",
-    borderColor: "#000",
+
+    alignItems: "center",
   },
 });
