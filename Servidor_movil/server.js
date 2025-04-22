@@ -3,6 +3,7 @@ const https = require("https");
 const fs = require("fs");
 const bodyParser = require("body-parser");
 const rateLimit = require("express-rate-limit");
+const cookieParser = require("cookie-parser");
 
 const config = require("./config/config.js");
 require("dotenv").config();
@@ -29,6 +30,7 @@ app.use(limiter);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 app.get("/", (req, res) => {
   res.send("El servidor está funcionando correctamente.");
@@ -40,6 +42,11 @@ app.put("/registrar_usuario", servletUsuario.registrarUsuario);
 app.put("/registrar_conexion", servletConexion.registrarConexion);
 
 app.get("/verificar_correo/:token", servletUsuario.verificarCorreo);
+
+app.post("/login", servletUsuario.login);
+app.post("/refresh_token", servletUsuario.refreshToken);
+app.post("/logout", servletUsuario.logout);
+app.post("/recuperar_password", servletUsuario.recuperarContraseña);
 
 https
   .createServer(

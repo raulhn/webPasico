@@ -3,31 +3,32 @@ import { StyleSheet } from "react-native";
 import { Stack } from "expo-router";
 import { Text, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import useNotification from "../hooks/useNotification";
+import { AuthProvider } from "../providers/AuthContext"; // Ajusta la ruta según tu estructura de carpetas
 
 export default function Layout() {
   const logo = require("../assets/logo.png");
 
   return (
-    <Stack
-      screenOptions={{
-        headerShown: false,
-        contentStyle: { backgroundColor: "white" },
+    <AuthProvider>
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          contentStyle: { backgroundColor: "white" },
 
-        header: () => (
-          <SafeAreaView edges={["top"]} style={estilos.container}>
-            <View style={estilos.logoContainer}>
-              <Image
-                source={logo}
-                style={estilos.logo}
-                resizeMode="center"
-              ></Image>
-            </View>
-          </SafeAreaView>
-        ),
-      }}
-    ></Stack>
+          header: () => (
+            <SafeAreaView edges={["top"]} style={estilos.container}>
+              <View style={estilos.logoContainer}>
+                <Image
+                  source={logo}
+                  style={estilos.logo}
+                  resizeMode="center"
+                ></Image>
+              </View>
+            </SafeAreaView>
+          ),
+        }}
+      ></Stack>
+    </AuthProvider>
   );
 }
 
