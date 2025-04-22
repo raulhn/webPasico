@@ -73,4 +73,32 @@ async function registrarUsuario(
   }
 }
 
+function login(correoElectronico, password) {
+  return new Promise((resolve, reject) => {
+    const query =
+      "SELECT password FROM " +
+      constantes.ESQUEMA +
+      ".usuarios WHERE correo_electronico = " +
+      conexion.dbConn.escape(correoElectronico);
+    conexion.dbConn.query(query, (error, results) => {
+      if (error) {
+        console.error("Error al comprobar la existencia del usuario:", error);
+        resolve(false);
+      } else if (results.length > 0) {
+        bcrypt.compare(password, results[0].password, (err, result) => {
+          if (err) {
+            console.error("Error al comparar las contraseñas:", err);
+            resolve(false);
+          } else {
+            resolve(result);
+          }
+        });
+      } else {
+        resolve(false);
+      }
+    });
+  });
+}
+
 module.exports.registrarUsuario = registrarUsuario;
+module.exports.login = login;

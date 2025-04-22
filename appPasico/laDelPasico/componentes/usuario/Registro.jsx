@@ -67,7 +67,7 @@ export default function registrarUsuario(recaptchaToken) {
 
   function handleVerify(event) {
     const token = event.nativeEvent.data;
-    console.log("Token de reCAPTCHA:", token);
+
     peticionRegistrarUsuario(token);
     setLanzaRegistro(false);
   }

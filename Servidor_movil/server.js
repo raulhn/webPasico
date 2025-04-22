@@ -39,7 +39,7 @@ app.put("/registrar_usuario", servletUsuario.registrarUsuario);
 /**  Conexiones **/
 app.put("/registrar_conexion", servletConexion.registrarConexion);
 
-
+app.get("/verificar_correo/:token", servletUsuario.verificarCorreo);
 
 https
   .createServer(
