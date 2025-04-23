@@ -132,7 +132,7 @@ async function realizarLogin(correoElectronico, password) {
     console.log("Usuario encontrado:", usuario);
     const sesion = jwt.sign(
       {
-        id_usuario: usuario.id_usuario,
+        nid_usuario: usuario.nid_usuario,
         correoElectronico: usuario.correo_electronico,
         nombre:
           usuario.nombre +
@@ -148,7 +148,7 @@ async function realizarLogin(correoElectronico, password) {
     );
 
     const refreshToken = jwt.sign(
-      { id_usuario: usuario.id_usuario },
+      { nid_usuario: usuario.nid_usuario },
       process.env.SESSION_SECRET,
       {
         expiresIn: 86400 * 7, // 1 semana
@@ -159,7 +159,7 @@ async function realizarLogin(correoElectronico, password) {
       accessToken: sesion,
       refreshToken: refreshToken,
       usuario: {
-        id_usuario: usuario.nid_usuario,
+        nid_usuario: usuario.nid_usuario,
         nombre: usuario.nombre,
         primer_apellido: usuario.primer_apellido,
         segundo_apellido: usuario.segundo_apellido,
@@ -172,7 +172,7 @@ async function realizarLogin(correoElectronico, password) {
   }
 }
 
-async function recuperarContraseña(correoElectronico) {
+async function recuperarPassword(correoElectronico) {
   try {
     let obtenerUsuario = await existUsuario(correoElectronico);
     return new Promise((resolve, reject) => {
@@ -217,4 +217,4 @@ async function recuperarContraseña(correoElectronico) {
 module.exports.registrarUsuario = registrarUsuario;
 module.exports.realizarLogin = realizarLogin;
 module.exports.obtenerUsuario = obtenerUsuario;
-module.exports.recuperarContraseña = recuperarContraseña;
+module.exports.recuperarPassword = recuperarPassword;

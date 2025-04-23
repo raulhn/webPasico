@@ -2,6 +2,7 @@ const servletConexion = require("./servlet_conexiones.js");
 const gestorUsuario = require("../logica/usuario.js");
 const validacionEmail = require("../logica/validacionEmail.js");
 const nodeMail = require("../logica/nodemail.js");
+const jwt = require("jsonwebtoken");
 
 async function registrarUsuario(req, res) {
   try {
@@ -109,7 +110,7 @@ async function login(req, res) {
       error: false,
       mensaje: "Inicio de sesión exitoso",
       usuario: {
-        id_usuario: tokens.usuario.id_usuario,
+        nid_usuario: tokens.usuario.nid_usuario,
         correoElectronico: tokens.usuario.correoElectronico,
         nombre: tokens.usuario.nombre,
       },
@@ -131,12 +132,20 @@ function obtenerUsuario(req, res) {
 
   jwt.verify(token, process.env.SESSION_SECRET, (err, decoded) => {
     if (err) {
+      if (err.name === "TokenExpiredError") {
+        console.error("El token ha expirado:", err);
+        return res
+          .status(401)
+          .send({ error: true, mensaje: "Token expirado", codigo: 1 });
+      }
       console.error("Error al verificar el token:", err);
-      return res.status(401).send({ error: true, mensaje: "No autenticado" });
+      return res
+        .status(401)
+        .send({ error: true, mensaje: "No autenticado", codigo: 2 });
     }
 
     const usuario = {
-      id_usuario: decoded.id_usuario,
+      nid_usuario: decoded.nid_usuario,
       correoElectronico: decoded.correoElectronico,
       nombre: decoded.nombre,
     };
@@ -156,11 +165,11 @@ function refreshToken(req, res) {
       return res.status(401).send({ error: true, mensaje: "No autenticado" });
     }
 
-    const usuario = await gestorUsuario.obtenerUsuario(decoded.id_usuario);
+    const usuario = await gestorUsuario.obtenerUsuario(decoded.nid_usuario);
 
     const nuevoToken = jwt.sign(
       {
-        id_usuario: decoded.id_usuario,
+        nid_usuario: decoded.nid_usuario,
         correoElectronico: usuario.correo_electronico,
         nombre:
           usuario.nombre +
@@ -190,7 +199,7 @@ function logout(req, res) {
   res.status(200).send({ error: false, mensaje: "Sesión cerrada" });
 }
 
-async function recuperarContraseña(req, res) {
+async function recuperarPassword(req, res) {
   try {
     const { correoElectronico } = req.body;
     if (!correoElectronico) {
@@ -199,9 +208,8 @@ async function recuperarContraseña(req, res) {
         .send({ error: true, mensaje: "Correo no proporcionado" });
     }
 
-    const nuevaContraseña =
-      gestorUsuario.recuperarContraseña(correoElectronico);
-    if (!nuevaContraseña) {
+    const nuevaPassword = gestorUsuario.recuperarPassword(correoElectronico);
+    if (!nuevaPassword) {
       return res
         .status(400)
         .send({ error: true, mensaje: "Error al recuperar" });
@@ -211,7 +219,7 @@ async function recuperarContraseña(req, res) {
   <div style="font-family: Arial, sans-serif; background-color: #f9f9f9; padding: 20px; border: 1px solid #ddd; border-radius: 5px; max-width: 600px; margin: 0 auto; text-align: center;">
     <h1 style="color: #4CAF50; font-size: 24px; margin-bottom: 20px;">Recuperación de contraseña</h1>
     <p style="color: #333; font-size: 16px; line-height: 1.5;">
-      Su nueva contraseña es: ${nuevaContraseña}
+      Su nueva contraseña es: ${nuevaPassword}
     </p>
     <p style="color: #333; font-size: 16px; line-height: 1.5;">
       Por favor, cambie su contraseña después de iniciar sesión.
@@ -241,4 +249,4 @@ module.exports.login = login;
 module.exports.obtenerUsuario = obtenerUsuario;
 module.exports.refreshToken = refreshToken;
 module.exports.logout = logout;
-module.exports.recuperarContraseña = recuperarContraseña;
+module.exports.recuperarPassword = recuperarPassword;

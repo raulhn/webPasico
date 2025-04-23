@@ -38,7 +38,7 @@ import { ListadoPreinscripcionesComponent } from './componente/listado-preinscri
 import { FormaPagoComponent } from './componente/forma-pago/forma-pago.component';
 import { FichaAsignaturaComponent } from './componente/ficha-asignatura/ficha-asignatura.component';
 import { DireccionComponent } from './componente/direccion/direccion.component';
-import { RemesasComponent } from './componente/remesas/remesas.component';
+
 import { DetalleRemesaComponent } from './componente/detalle-remesa/detalle-remesa.component';
 import { ParametrosComponent } from './componente/parametros/parametros.component';
 import { HijosPersonaComponent } from './componente/hijos-persona/hijos-persona.component';
@@ -65,7 +65,7 @@ import { ListaPrestamosComponent } from './componente/lista-prestamos/lista-pres
 import { ListaAlumnosComponent } from './componente/lista-alumnos/lista-alumnos.component';
 import { FichaMatriculaProfesorComponent } from './componente/ficha-matricula-profesor/ficha-matricula-profesor.component';
 
-
+import { RemesasComponent } from './componente/remesas/remesas.component';
 
 @NgModule({ declarations: [
         AppComponent,

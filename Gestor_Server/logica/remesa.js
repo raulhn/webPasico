@@ -1393,7 +1393,14 @@ function obtener_remesa_nid(nid_remesa) {
           console.log(error);
           reject();
         } else {
-          resolve(results);
+          console.log("Resultados: " + results);
+          console.log("Resultados: " + results.length);
+          console.log("Resultados: " + results[0].concepto);
+          if (results.length == 0) {
+            reject("No se ha encontrado la remesa");
+          } else {
+            resolve(results[0]);
+          }
         }
       }
     );
@@ -1405,7 +1412,8 @@ async function obtener_concepto(nid_remesa) {
     var v_remesa = await obtener_remesa_nid(nid_remesa);
 
     var concepto = v_remesa.concepto;
-
+    console.log("Concepto de la remesa: " + concepto);
+    console.log("Remesa: " + v_remesa);
     return concepto;
   } catch (error) {
     console.log(error);
