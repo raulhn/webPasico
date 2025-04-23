@@ -61,7 +61,7 @@ export class DetalleRemesaComponent implements OnInit{
   {
     next: (respuesta: any) =>
     {
-      this.remesa = respuesta.remesa[0];
+      this.remesa = respuesta.remesa;
       this.bCargado = true;
     }
   }

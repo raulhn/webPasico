@@ -15,7 +15,6 @@ export default function Index() {
 
   useEffect(() => {
     if (expoPushToken && recaptchaToken) {
-      console.log(expoPushToken, recaptchaToken);
       registrarConexion(expoPushToken, recaptchaToken)
         .then((response) => {})
         .catch((error) => {});
@@ -26,7 +25,7 @@ export default function Index() {
   // Envía el token al servidor backend
   const handleVerify = (event) => {
     const token = event.nativeEvent.data;
-    console.log("Token de reCAPTCHA:", token);
+
     setRecaptchaToken(token); // Guarda el token en el estado
   };
 

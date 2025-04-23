@@ -136,13 +136,16 @@ async function cobrar_pago(
 
         let servicio_stripe = stripe(pagos.KEY);
 
+        let conceptoDescripcion =
+          descripcion + " - Asociación amigo de la Musica de Torre Pacheco";
         let data = {
           amount: cantidad,
           currency: "eur",
           payment_method: v_forma_pago.nid_metodo_pasarela_pago,
           payment_method_types: ["sepa_debit"],
           customer: v_persona.nid_pasarela_pago,
-          description: descripcion,
+          description: conceptoDescripcion,
+          statement_descriptor: conceptoDescripcion.slice(0, 22),
           confirm: true,
           mandate_data: {
             customer_acceptance: {
@@ -181,48 +184,40 @@ async function cobrar_remesa(nid_remesa, p_ip_address, p_user_agent) {
   try {
     let v_remesa = await remesa.obtener_remesa_nid(nid_remesa);
 
-    if (v_remesa.length > 0) {
-      let v_remesa_actual = v_remesa[0];
+    let v_remesa_actual = v_remesa;
 
-      if (v_remesa_actual.estado == constantes.ESTADO_REMESA_PENDIENTE) {
-        // La cantidad es en centimos //
-        let v_precio = Number(v_remesa_actual.precio) * 100;
-        let v_nid_forma_pago = v_remesa_actual.nid_forma_pago;
+    if (v_remesa_actual.estado == constantes.ESTADO_REMESA_PENDIENTE) {
+      // La cantidad es en centimos //
+      let v_precio = Number(v_remesa_actual.precio) * 100;
+      let v_nid_forma_pago = v_remesa_actual.nid_forma_pago;
 
-        let concepto = await remesa.obtener_concepto(nid_remesa);
-        let cobro = await cobrar_pago(
-          v_nid_forma_pago,
-          concepto,
-          v_precio,
-          p_ip_address,
-          p_user_agent
-        );
+      let concepto = await remesa.obtener_concepto(nid_remesa);
+      let cobro = await cobrar_pago(
+        v_nid_forma_pago,
+        concepto,
+        v_precio,
+        p_ip_address,
+        p_user_agent
+      );
 
-        await remesa.actualizar_id_cobro_pasarela_pago(nid_remesa, cobro.id);
+      await remesa.actualizar_id_cobro_pasarela_pago(nid_remesa, cobro.id);
 
-        await remesa.aprobar_remesa(
-          nid_remesa,
-          "Cobro realizado desde la pasarela de pago"
-        );
+      await remesa.aprobar_remesa(
+        nid_remesa,
+        "Cobro realizado desde la pasarela de pago"
+      );
 
-        return;
-      } else {
-        console.log(
-          "pasarela_pagos.js - cobrar_remesa -> La remesa " +
-            nid_remesa +
-            " no está en estado pendiente"
-        );
-        await remesa.remesa_erronea(
-          nid_remesa,
-          "La remesa " + nid_remesa + " no está en estado pendiente"
-        );
-        throw new Error("Error al realizar el cobro");
-      }
+      return;
     } else {
       console.log(
-        "pasarela_pagos.js - cobrar_remesa -> No se ha encontrado la remesa"
+        "pasarela_pagos.js - cobrar_remesa -> La remesa " +
+          nid_remesa +
+          " no está en estado pendiente"
       );
-      await remesa.remesa_erronea(nid_remesa, "No se ha encontrado la remesa");
+      await remesa.remesa_erronea(
+        nid_remesa,
+        "La remesa " + nid_remesa + " no está en estado pendiente"
+      );
       throw new Error("Error al realizar el cobro");
     }
   } catch (error) {

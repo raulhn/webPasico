@@ -35,9 +35,8 @@ export default function Recapcha({ siteKey, onVerify }) {
         baseUrl="https://ladelpasico.es"
         source={{ html: htmlContent }}
         onMessage={(event) => {
-          console.log("Evento " + event.nativeEvent);
           const token = event.nativeEvent.data;
-          console.log("Token de reCAPTCHA:", token);
+
           onVerify(token); // Envía el token al callback
         }}
         javaScriptEnabled={true}

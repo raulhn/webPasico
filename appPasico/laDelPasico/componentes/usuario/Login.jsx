@@ -73,7 +73,6 @@ export default function Login() {
                       response.error
                     );
                   } else {
-                    console.log("Inicio de sesión exitoso:", response);
                     iniciarSesion(response.usuario); // Guarda el usuario en el contexto
                     // Aquí puedes redirigir al usuario a la pantalla principal o hacer lo que necesites
                   }

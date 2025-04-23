@@ -26,7 +26,6 @@ function registrarUsuario(
       response
         .json()
         .then((data) => {
-          console.log("Datos del servicio registrarUsuario");
           resolve(data);
         })
         .catch((error) => {
@@ -52,7 +51,6 @@ function login(correoElectronico, password) {
       response
         .json()
         .then((data) => {
-          console.log("Datos del servicio login");
           resolve(data);
         })
         .catch((error) => {
@@ -63,5 +61,28 @@ function login(correoElectronico, password) {
   });
 }
 
+function obtenerUsuario() {
+  return new Promise((resolve, reject) => {
+    fetch(Constantes.URL_SERVICIO_MOVIL + "usuario", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    }).then((response) => {
+      response
+        .json()
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((error) => {
+          console.log("Error en el servicio obtenerUsuario");
+          reject(error);
+        });
+    });
+  });
+}
+
 module.exports.registrarUsuario = registrarUsuario;
 module.exports.login = login;
+module.exports.obtenerUsuario = obtenerUsuario;

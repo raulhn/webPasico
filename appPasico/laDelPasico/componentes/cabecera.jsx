@@ -1,4 +1,3 @@
-import React from "react";
 import { View, Image } from "react-native";
 import { StyleSheet } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -6,16 +5,31 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Link } from "expo-router";
-import { Pressable } from "react-native";
+
 import { AuthContext } from "../providers/AuthContext";
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
+import serviceUsuario from "../servicios/serviceUsuario"; // Ajusta la ruta según tu estructura de carpetas
 
 export const CustomHeader = ({ navigation, route, options, title }) => {
+  const { usuario, iniciarSesion } = useContext(AuthContext); // Obtiene el contexto de autenticación
+
+  useEffect(() => {
+    serviceUsuario
+      .obtenerUsuario()
+      .then((response) => {
+        if (response) {
+          iniciarSesion(response.usuario); // Actualiza el estado del usuario en el contexto
+        } else {
+          iniciarSesion(null); // Si no hay usuario, establece el estado como nulo
+        }
+      })
+      .catch((error) => {
+        console.log("Error al obtener el usuario", error);
+      });
+  }, []);
+
   const logo = require("../assets/logo.png");
-  const { usuario } = useContext(AuthContext);
-  if (usuario !== null) {
-    console.log("aaa" + usuario.nombre);
-  }
+
   return (
     <SafeAreaView style={estilos.cabecera}>
       <View style={{ flexDirection: "row", alignItems: "center", padding: 10 }}>
@@ -31,7 +45,7 @@ export const CustomHeader = ({ navigation, route, options, title }) => {
       </View>
       <View style={estilos.login}>
         <Link href="/PantallaLogin" asChild>
-          <TouchableOpacity onPress={() => console.log("Login")}>
+          <TouchableOpacity onPress={() => {}}>
             <View
               style={{
                 padding: 10,

@@ -40,13 +40,12 @@ app.put("/registrar_usuario", servletUsuario.registrarUsuario);
 
 /**  Conexiones **/
 app.put("/registrar_conexion", servletConexion.registrarConexion);
-
 app.get("/verificar_correo/:token", servletUsuario.verificarCorreo);
-
 app.post("/login", servletUsuario.login);
 app.post("/refresh_token", servletUsuario.refreshToken);
 app.post("/logout", servletUsuario.logout);
-app.post("/recuperar_password", servletUsuario.recuperarContraseña);
+app.post("/recuperar_password", servletUsuario.recuperarPassword);
+app.get("/usuario", servletUsuario.obtenerUsuario);
 
 https
   .createServer(
