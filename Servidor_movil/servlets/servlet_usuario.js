@@ -3,6 +3,7 @@ const gestorUsuario = require("../logica/usuario.js");
 const validacionEmail = require("../logica/validacionEmail.js");
 const nodeMail = require("../logica/nodemail.js");
 const jwt = require("jsonwebtoken");
+const constantes = require("../constantes.js");
 
 async function registrarUsuario(req, res) {
   try {
@@ -91,19 +92,19 @@ async function login(req, res) {
       password
     );
 
-    res.cookie("access_token", tokens.accessToken, {
+    res.cookie(constantes.ACCESS_TOKEN, tokens.accessToken, {
       httpOnly: true,
       secure: true, // Asegúrate de que tu aplicación esté sirviendo a través de HTTPS
       sameSite: "Strict", // Cambia esto según tus necesidades
-      maxAge: 60 * 60 * 1000 * 24, // 24 horas
+      maxAge: constantes.TIEMPO_ACCESS_TOKEN * 1000, // 24 horas
     });
 
-    res.cookie("refresh_token", tokens.refreshToken, {
+    res.cookie(constantes.REFRESH_TOKEN, tokens.refreshToken, {
       httpOnly: true,
       secure: true, // Asegúrate de que tu aplicación esté sirviendo a través de HTTPS
       sameSite: "Strict", // Cambia esto según tus necesidades
-      path: "/refresh_token", // Asegúrate de que el token de actualización solo esté disponible en la ruta de actualización
-      maxAge: 60 * 60 * 1000 * 24 * 7, // 7 días
+      //  path: "/refresh_token", // Asegúrate de que el token de actualización solo esté disponible en la ruta de actualización
+      maxAge: constantes.TIEMPO_REFRESH_TOKEN * 1000, // 7 días
     });
 
     res.status(200).send({
@@ -127,7 +128,9 @@ async function login(req, res) {
 function obtenerUsuario(req, res) {
   const token = req.cookies.access_token;
   if (!token) {
-    return res.status(401).send({ error: true, mensaje: "No autenticado" });
+    return res
+      .status(401)
+      .send({ error: true, mensaje: "No autenticado", codigo: 1 });
   }
 
   jwt.verify(token, process.env.SESSION_SECRET, (err, decoded) => {
@@ -156,15 +159,17 @@ function obtenerUsuario(req, res) {
 function refreshToken(req, res) {
   const token = req.cookies.refresh_token;
   if (!token) {
+    console.log("No se proporcionó el token de actualización");
     return res.status(401).send({ error: true, mensaje: "No autenticado" });
   }
 
-  jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, async (err, decoded) => {
+  jwt.verify(token, process.env.SESSION_SECRET, async (err, decoded) => {
     if (err) {
       console.error("Error al verificar el token:", err);
       return res.status(401).send({ error: true, mensaje: "No autenticado" });
     }
 
+    console.log("Token de actualización verificado:", decoded);
     const usuario = await gestorUsuario.obtenerUsuario(decoded.nid_usuario);
 
     const nuevoToken = jwt.sign(
@@ -179,14 +184,14 @@ function refreshToken(req, res) {
           usuario.segundo_apellido,
       },
       process.env.SESSION_SECRET,
-      { expiresIn: 86400 } // 24 horas
+      { expiresIn: constantes.TIEMPO_ACCESS_TOKEN }
     );
 
-    res.cookie("access_token", nuevoToken, {
+    res.cookie(constantes.ACCESS_TOKEN, nuevoToken, {
       httpOnly: true,
       secure: true, // Asegúrate de que tu aplicación esté sirviendo a través de HTTPS
       sameSite: "Strict", // Cambia esto según tus necesidades
-      maxAge: 60 * 60 * 1000 * 24, // 24 horas
+      maxAge: constantes.TIEMPO_ACCESS_TOKEN * 1000,
     });
 
     res.status(200).send({ error: false, mensaje: "Token actualizado" });
@@ -194,8 +199,9 @@ function refreshToken(req, res) {
 }
 
 function logout(req, res) {
-  res.clearCookie("access_token", { path: "/" });
-  res.clearCookie("refresh_token", { path: "/refresh_token" });
+  console.log("Cerrando sesión del usuario");
+  res.clearCookie(constantes.ACCESS_TOKEN, { path: "/" });
+  res.clearCookie(constantes.REFRESH_TOKEN, { path: "/" });
   res.status(200).send({ error: false, mensaje: "Sesión cerrada" });
 }
 

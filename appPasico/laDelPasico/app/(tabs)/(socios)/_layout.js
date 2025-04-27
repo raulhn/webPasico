@@ -16,7 +16,7 @@ export default function DrawerLayout() {
     <Drawer
       screenOptions={{
         headerBackgroundContainerStyle: { backgroundColor: "#fff" },
-        header: CustomHeaderAsociacion,
+        header: (props) => <CustomHeaderAsociacion {...props} />,
       }}
     >
       <Drawer.Screen

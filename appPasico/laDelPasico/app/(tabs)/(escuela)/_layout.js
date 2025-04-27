@@ -22,7 +22,7 @@ export default function DrawerLayout() {
       screenOptions={{
         title: "Escuela",
         headerBackgroundContainerStyle: { backgroundColor: "#fff" },
-        header: CustomHeaderEscuela,
+        header: (props) => <CustomHeaderEscuela {...props} />,
       }}
     >
       <Drawer.Screen

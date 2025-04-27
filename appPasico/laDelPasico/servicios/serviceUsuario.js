@@ -1,4 +1,5 @@
 let Constantes = require("../constantes.js");
+let servicioComun = require("./serviceComun.js");
 
 function registrarUsuario(
   nombre,
@@ -63,12 +64,27 @@ function login(correoElectronico, password) {
 
 function obtenerUsuario() {
   return new Promise((resolve, reject) => {
-    fetch(Constantes.URL_SERVICIO_MOVIL + "usuario", {
-      method: "GET",
+    try {
+      let data = servicioComun.peticionSesion(
+        "GET",
+        Constantes.URL_SERVICIO_MOVIL + "usuario",
+        null
+      );
+      resolve(data);
+    } catch (error) {
+      console.log("Error en el servicio obtenerUsuario", error);
+      reject(error);
+    }
+  });
+}
+
+function logout() {
+  return new Promise((resolve, reject) => {
+    fetch(Constantes.URL_SERVICIO_MOVIL + "logout", {
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      credentials: "include",
     }).then((response) => {
       response
         .json()
@@ -76,7 +92,7 @@ function obtenerUsuario() {
           resolve(data);
         })
         .catch((error) => {
-          console.log("Error en el servicio obtenerUsuario");
+          console.log("Error en el servicio logout");
           reject(error);
         });
     });
@@ -86,3 +102,4 @@ function obtenerUsuario() {
 module.exports.registrarUsuario = registrarUsuario;
 module.exports.login = login;
 module.exports.obtenerUsuario = obtenerUsuario;
+module.exports.logout = logout;

@@ -78,7 +78,7 @@ async function registrarUsuario(
 function obtenerUsuario(nid_usuario) {
   return new Promise((resolve, reject) => {
     const query =
-      "SELECT id_usuario, nombre, primer_apellido, segundo_apellido, correo_electronico FROM " +
+      "SELECT nid_usuario, nombre, primer_apellido, segundo_apellido, correo_electronico FROM " +
       constantes.ESQUEMA +
       ".usuarios WHERE nid_usuario = " +
       conexion.dbConn.escape(nid_usuario);
@@ -143,7 +143,7 @@ async function realizarLogin(correoElectronico, password) {
       },
       process.env.SESSION_SECRET,
       {
-        expiresIn: 86400, // 24 horas
+        expiresIn: constantes.TIEMPO_ACCESS_TOKEN,
       }
     );
 
@@ -151,7 +151,7 @@ async function realizarLogin(correoElectronico, password) {
       { nid_usuario: usuario.nid_usuario },
       process.env.SESSION_SECRET,
       {
-        expiresIn: 86400 * 7, // 1 semana
+        expiresIn: constantes.TIEMPO_REFRESH_TOKEN,
       }
     );
 

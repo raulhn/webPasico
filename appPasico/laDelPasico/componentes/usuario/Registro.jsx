@@ -16,6 +16,8 @@ import { useState, useEffect } from "react";
 import ServiceUsuario from "../../servicios/serviceUsuario.js";
 import Tunstile from "../../componentes/Turnstile.jsx";
 import constantesGoogle from "../../config/constantesGoogle.js";
+import Boton from "../componentesUI/Boton"; // Ajusta la ruta según tu estructura de carpetas
+import { ActivityIndicator } from "react-native";
 
 export default function registrarUsuario(recaptchaToken) {
   const [inputActivo, setInputActivo] = React.useState(0);
@@ -23,7 +25,6 @@ export default function registrarUsuario(recaptchaToken) {
 
   const [errorValidacion, setErrorValidacion] = useState(false);
   const [exito, setExito] = useState(false);
-  const [botonPresionado, setBotonPresionado] = useState(false);
   const [mensajeError, setMensajeError] = useState("");
   const [mensajeExito, setMensajeExito] = useState("");
 
@@ -125,6 +126,10 @@ export default function registrarUsuario(recaptchaToken) {
         "Se ha producido un error durante el registro de usuario"
       );
     }
+  }
+
+  function lanzarRegistro() {
+    setLanzaRegistro(true);
   }
 
   return (
@@ -233,34 +238,13 @@ export default function registrarUsuario(recaptchaToken) {
                 }
                 secureTextEntry
               />
-              <Pressable
-                onPress={() => {
-                  setLanzaRegistro(true);
-                  peticionRegistrarUsuario();
-                }}
-                onPressOut={() => {
-                  setBotonPresionado(false);
-                }}
-                onPressIn={() => {
-                  setBotonPresionado(true);
-                }}
-                title="Registrarse"
-              >
-                <View
-                  style={
-                    botonPresionado ? estilos.botonPresionado : estilos.boton
-                  }
-                >
-                  <Text
-                    style={{
-                      color: "#fff",
-                      textAlign: "center",
-                    }}
-                  >
-                    Registrarse
-                  </Text>
-                </View>
-              </Pressable>
+
+              <Boton
+                onPress={lanzarRegistro}
+                nombre="Registrarse"
+                colorTexto="#FFF"
+                color="#007BFF"
+              />
             </View>
             {incluyeRecaptcha()}
           </View>
@@ -360,6 +344,16 @@ export default function registrarUsuario(recaptchaToken) {
           </View>
         </View>
       </Modal>
+
+      {/* Modal de carga */}
+      <Modal visible={lanzaRegistro} transparent={true} animationType="fade">
+        <View style={estilos.modalCargando}>
+          <View style={estilos.modalCargandoInterno}>
+            <ActivityIndicator size="large" color="#007BFF" />
+            <Text style={{ paddingTop: 10 }}>Cargando...</Text>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -388,26 +382,7 @@ const estilos = StyleSheet.create({
     borderColor: "blue",
     borderWidth: 2,
   },
-  boton: {
-    backgroundColor: "#007BFF",
-    padding: 10,
-    borderRadius: 10,
-    marginTop: 10,
-    width: 120,
-    height: 50,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  botonPresionado: {
-    backgroundColor: "#0056b3",
 
-    borderRadius: 10,
-    marginTop: 10,
-    width: 120,
-    height: 50,
-    justifyContent: "center",
-    alignItems: "center",
-  },
   logo: {
     height: 100,
     width: 100,
@@ -430,5 +405,23 @@ const estilos = StyleSheet.create({
     margin: 5,
     borderRadius: 30,
     backgroundColor: "#ea0505",
+  },
+  modalCargando: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalCargandoInterno: {
+    justifyContent: "center",
+    alignItems: "center",
+    width: 150,
+    height: 150,
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 10,
+    borderColor: "black",
+    borderWidth: 1,
+    position: "relative",
+    backgroundColor: "#f9f7f7",
   },
 });

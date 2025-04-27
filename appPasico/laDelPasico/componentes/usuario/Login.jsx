@@ -1,7 +1,8 @@
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import React from "react";
 import serviceUsuario from "../../servicios/serviceUsuario";
 import { useContext } from "react";
+import Boton from "../componentesUI/Boton"; // Ajusta la ruta según tu estructura de carpetas
 import {
   TextInput,
   Pressable,
@@ -21,6 +22,26 @@ export default function Login() {
   const [contrasena, setContrasena] = React.useState("");
 
   const logo = require("../../assets/logo.png");
+  const router = useRouter();
+
+  function realizarLogin() {
+    {
+      serviceUsuario
+        .login(correo, contrasena)
+        .then((response) => {
+          if (response.error) {
+            console.log("Error en el inicio de sesión:", response.error);
+          } else {
+            iniciarSesion(response.usuario); // Guarda el usuario en el contexto
+            router.push("/(tabs)/(drawer)");
+          }
+        })
+        .catch((error) => {
+          console.error("Error al iniciar sesión:", error);
+        });
+    }
+  }
+
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       <View style={estilos.container}>
@@ -60,40 +81,12 @@ export default function Login() {
             onBlur={() => setInputActivo(0)}
           />
 
-          <Pressable
-            onPress={() => {
-              // Aquí puedes agregar la lógica para iniciar sesión
-
-              serviceUsuario
-                .login(correo, contrasena)
-                .then((response) => {
-                  if (response.error) {
-                    console.log(
-                      "Error en el inicio de sesión:",
-                      response.error
-                    );
-                  } else {
-                    iniciarSesion(response.usuario); // Guarda el usuario en el contexto
-                    // Aquí puedes redirigir al usuario a la pantalla principal o hacer lo que necesites
-                  }
-                })
-                .catch((error) => {
-                  console.error("Error al iniciar sesión:", error);
-                });
-            }}
-            title="Iniciar Sesión"
-          >
-            <View style={estilos.boton}>
-              <Text
-                style={{
-                  color: "#fff",
-                  textAlign: "center",
-                }}
-              >
-                Iniciar
-              </Text>
-            </View>
-          </Pressable>
+          <Boton
+            onPress={realizarLogin}
+            nombre="Iniciar Sesión"
+            color="#007BFF"
+            colorTexto="#FFF"
+          />
         </View>
         <View style={{ paddingTop: 20, color: "blue" }}>
           <Link href="/PantallaRegistro" asChild>
