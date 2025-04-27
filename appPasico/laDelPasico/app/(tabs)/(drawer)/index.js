@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import Main from "../../../componentes/Main";
 import Recaptcha from "../../../componentes/Recaptcha";
 import constantesGoogle from "../../../config/constantesGoogle.js";
@@ -8,13 +8,18 @@ import { View } from "react-native";
 import { useState } from "react";
 
 import Tunstile from "../../../componentes/Turnstile";
+import { AuthProvider } from "../../../providers/AuthContext.js";
+import { use } from "react";
 
 export default function Index() {
   const expoPushToken = useNotification();
   const [recaptchaToken, setRecaptchaToken] = useState(null);
 
+  const { guardarTokenNotificacion } = useContext(AuthProvider);
+
   useEffect(() => {
     if (expoPushToken && recaptchaToken) {
+      guardarTokenNotificacion(expoPushToken); // Guarda el token de notificación en el contexto
       registrarConexion(expoPushToken, recaptchaToken)
         .then((response) => {})
         .catch((error) => {});

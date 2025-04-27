@@ -17,6 +17,7 @@ export const CustomHeader = ({ navigation, route, options, title }) => {
     serviceUsuario
       .obtenerUsuario()
       .then((response) => {
+        console.log("Usuario desde el servicio:", response);
         if (response) {
           iniciarSesion(response.usuario); // Actualiza el estado del usuario en el contexto
         } else {
@@ -29,6 +30,14 @@ export const CustomHeader = ({ navigation, route, options, title }) => {
   }, []);
 
   const logo = require("../assets/logo.png");
+
+  function enlaceLogin() {
+    if (usuario) {
+      return "/PantallaPerfil";
+    } else {
+      return "/PantallaLogin";
+    }
+  }
 
   return (
     <SafeAreaView style={estilos.cabecera}>
@@ -44,7 +53,7 @@ export const CustomHeader = ({ navigation, route, options, title }) => {
         <Image source={logo} style={estilos.logo} resizeMode="contain" />
       </View>
       <View style={estilos.login}>
-        <Link href="/PantallaLogin" asChild>
+        <Link href={enlaceLogin()} asChild>
           <TouchableOpacity onPress={() => {}}>
             <View
               style={{
