@@ -8,14 +8,13 @@ import { View } from "react-native";
 import { useState } from "react";
 
 import Tunstile from "../../../componentes/Turnstile";
-import { AuthProvider } from "../../../providers/AuthContext.js";
-import { use } from "react";
+import { AuthContext } from "../../../providers/AuthContext.js";
 
 export default function Index() {
   const expoPushToken = useNotification();
   const [recaptchaToken, setRecaptchaToken] = useState(null);
 
-  const { guardarTokenNotificacion } = useContext(AuthProvider);
+  const { guardarTokenNotificacion } = useContext(AuthContext);
 
   useEffect(() => {
     if (expoPushToken && recaptchaToken) {

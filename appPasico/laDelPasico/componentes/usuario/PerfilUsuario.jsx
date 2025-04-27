@@ -39,6 +39,13 @@ export default function PerfilUsuario() {
         Nombre: {usuario.nombre}
       </Text>
       <Boton
+        nombre="Cambiar Contraseña"
+        onPress={() => {
+          router.push("/PantallaCambioPass");
+        }}
+        color="#007BFF"
+      />
+      <Boton
         nombre="Cerrar Sesión"
         onPress={lanzaCerrarSesion}
         color="#FF0000"

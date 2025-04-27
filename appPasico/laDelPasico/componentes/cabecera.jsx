@@ -11,11 +11,11 @@ import { useContext, useState, useEffect } from "react";
 import serviceUsuario from "../servicios/serviceUsuario"; // Ajusta la ruta según tu estructura de carpetas
 
 export const CustomHeader = ({ navigation, route, options, title }) => {
-  const { usuario, iniciarSesion } = useContext(AuthContext); // Obtiene el contexto de autenticación
+  const { usuario, iniciarSesion, cerrarSesion } = useContext(AuthContext); // Obtiene el contexto de autenticación
 
   useEffect(() => {
     serviceUsuario
-      .obtenerUsuario()
+      .obtenerUsuario(cerrarSesion)
       .then((response) => {
         console.log("Usuario desde el servicio:", response);
         if (response) {
@@ -75,7 +75,7 @@ export const CustomHeader = ({ navigation, route, options, title }) => {
                   color: usuario ? "#007CFA" : "black",
                 }}
               >
-                {usuario ? "Logueado" : "Login"}
+                {usuario ? "Mi perfil" : "Login"}
               </Text>
             </View>
           </TouchableOpacity>

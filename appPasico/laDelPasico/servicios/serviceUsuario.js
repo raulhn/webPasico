@@ -37,7 +37,7 @@ function registrarUsuario(
   });
 }
 
-function login(correoElectronico, password) {
+function login(correoElectronico, password, tokenNotificacion) {
   return new Promise((resolve, reject) => {
     fetch(Constantes.URL_SERVICIO_MOVIL + "login", {
       method: "POST",
@@ -47,6 +47,7 @@ function login(correoElectronico, password) {
       body: JSON.stringify({
         correoElectronico: correoElectronico,
         password: password,
+        tokenNotificacion: tokenNotificacion,
       }),
     }).then((response) => {
       response
@@ -62,13 +63,14 @@ function login(correoElectronico, password) {
   });
 }
 
-function obtenerUsuario() {
+function obtenerUsuario(cerrarSesion) {
   return new Promise((resolve, reject) => {
     try {
       let data = servicioComun.peticionSesion(
         "GET",
         Constantes.URL_SERVICIO_MOVIL + "usuario",
-        null
+        null,
+        cerrarSesion
       );
       resolve(data);
     } catch (error) {

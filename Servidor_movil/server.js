@@ -8,6 +8,7 @@ const cookieParser = require("cookie-parser");
 const config = require("./config/config.js");
 require("dotenv").config();
 
+const servletComun = require("./servlets/servlet_comun.js");
 const servletUsuario = require("./servlets/servlet_usuario.js");
 const servletConexion = require("./servlets/servlet_conexiones.js");
 
@@ -43,8 +44,15 @@ app.put("/registrar_conexion", servletConexion.registrarConexion);
 app.get("/verificar_correo/:token", servletUsuario.verificarCorreo);
 app.post("/login", servletUsuario.login);
 app.get("/refresh_token", servletUsuario.refreshToken);
+
 app.post("/logout", servletUsuario.logout);
 app.post("/recuperar_password", servletUsuario.recuperarPassword);
+
+app.use((req, res, next) => {
+  servletComun.comprobacionLogin;
+  next();
+});
+
 app.get("/usuario", servletUsuario.obtenerUsuario);
 
 https

@@ -14,7 +14,7 @@ import {
 import { AuthContext } from "../../providers/AuthContext"; // Ajusta la ruta según tu estructura de carpetas
 
 export default function Login() {
-  const { iniciarSesion } = useContext(AuthContext);
+  const { iniciarSesion, tokenNotificacion } = useContext(AuthContext);
 
   const [inputActivo, setInputActivo] = React.useState(0);
 
@@ -27,7 +27,7 @@ export default function Login() {
   function realizarLogin() {
     {
       serviceUsuario
-        .login(correo, contrasena)
+        .login(correo, contrasena, tokenNotificacion)
         .then((response) => {
           if (response.error) {
             console.log("Error en el inicio de sesión:", response.error);

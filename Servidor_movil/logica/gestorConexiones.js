@@ -44,6 +44,27 @@ async function asyncReegistrarConexion(token, resolve, reject) {
   }
 }
 
+function actualizarTokenUsuario(token, nidUsuario) {
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(
+      "UPDATE " +
+        constantes.ESQUEMA +
+        ".conexiones set nid_usuario = " +
+        conexion.dbConn.escape(nidUsuario) +
+        " WHERE token = " +
+        conexion.dbConn.escape(token),
+      (error, results) => {
+        if (error) {
+          console.error("Error al actualizar el token del usuario:", error);
+          reject(error);
+        } else {
+          resolve();
+        }
+      }
+    );
+  });
+}
+
 function registrarConexion(token) {
   return new Promise((resolve, reject) => {
     asyncReegistrarConexion(token, resolve, reject);
@@ -88,3 +109,4 @@ function numConexiones() {
 }
 
 module.exports.registrarConexion = registrarConexion;
+module.exports.actualizarTokenUsuario = actualizarTokenUsuario;

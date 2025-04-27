@@ -49,7 +49,6 @@ function refrescarSesion() {
       },
       credentials: "include",
     }).then((response) => {
-      console.log("Respuesta del servicio:", response);
       response
         .json()
         .then((data) => {
@@ -64,9 +63,8 @@ function refrescarSesion() {
   });
 }
 
-async function peticionSesion(metodo, url, body) {
+async function peticionSesion(metodo, url, body, cerrarSesion) {
   try {
-    const { cerrarSesion } = useContext(AuthProvider);
     let data = await peticionServicio(metodo, url, body);
     if (data.error && data.codigo === 1) {
       let response = await refrescarSesion();
