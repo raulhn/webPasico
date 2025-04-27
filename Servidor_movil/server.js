@@ -48,12 +48,15 @@ app.get("/refresh_token", servletUsuario.refreshToken);
 app.post("/logout", servletUsuario.logout);
 app.post("/recuperar_password", servletUsuario.recuperarPassword);
 
+
+// Peticiones que requieren inicio de sesión
 app.use((req, res, next) => {
   servletComun.comprobacionLogin;
   next();
 });
 
 app.get("/usuario", servletUsuario.obtenerUsuario);
+app.post('/cambiar_password', servletUsuario.cambiarPassword)
 
 https
   .createServer(
@@ -66,3 +69,4 @@ https
   .listen(config.puerto, () => {
     console.log("Escuchando en el puerto " + config.puerto);
   });
+ 

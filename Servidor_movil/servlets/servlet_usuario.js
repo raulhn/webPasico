@@ -131,6 +131,34 @@ async function login(req, res) {
   }
 }
 
+async function cambiarPassword(req, res) {
+  const { passwordActual, nuevaPassword } = req.body;
+  const token = req.cookies.access_token;
+  if (!token) {
+    return res.status(401).send({ error: true, mensaje: "No autenticado" });
+  }
+
+  jwt.verify(token, process.env.SESSION_SECRET, async (err, decoded) => {
+    try
+  {
+    if (err) {
+      console.error("Error al verificar el token:", err);
+      return res.status(401).send({ error: true, mensaje: "No autenticado" });
+    }
+
+    await gestorUsuario.realizarCambioPassword(jwt.decode.nid_usuario, passwordActual, nuevaPassword);
+    res.status(200).send({
+      error: false,
+      mensaje: "Contraseña cambiada correctamente",
+    })}
+  catch(error)
+{
+  console.log(error);
+  res.status(400).send({error: true, mensaje: error.message})
+}
+}
+)}
+
 function obtenerUsuario(req, res) {
   const token = req.cookies.access_token;
   if (!token) {
@@ -141,12 +169,7 @@ function obtenerUsuario(req, res) {
 
   jwt.verify(token, process.env.SESSION_SECRET, (err, decoded) => {
     if (err) {
-      if (err.name === "TokenExpiredError") {
-        console.error("El token ha expirado:", err);
-        return res
-          .status(401)
-          .send({ error: true, mensaje: "Token expirado", codigo: 1 });
-      }
+
       console.error("Error al verificar el token:", err);
       return res
         .status(401)
@@ -261,4 +284,5 @@ module.exports.login = login;
 module.exports.obtenerUsuario = obtenerUsuario;
 module.exports.refreshToken = refreshToken;
 module.exports.logout = logout;
-module.exports.recuperarPassword = recuperarPassword;
+module.exports.recuperarPassword = recuperarPassword
+module.exports.cambiarPassword = cambiarPassword
