@@ -1,4 +1,5 @@
 const servletConexion = require("./servlet_conexiones.js");
+const gestorConexion = require("../logica/gestorConexiones.js");
 const gestorUsuario = require("../logica/usuario.js");
 const validacionEmail = require("../logica/validacionEmail.js");
 const nodeMail = require("../logica/nodemail.js");
@@ -84,12 +85,17 @@ async function verificarCorreo(req, res) {
 }
 
 async function login(req, res) {
-  const { correoElectronico, password } = req.body;
+  const { correoElectronico, password, tokenNotificacion } = req.body;
 
   try {
     const tokens = await gestorUsuario.realizarLogin(
       correoElectronico,
       password
+    );
+
+    await gestorConexion.actualizarTokenUsuario(
+      tokenNotificacion,
+      tokens.usuario.nid_usuario
     );
 
     res.cookie(constantes.ACCESS_TOKEN, tokens.accessToken, {
