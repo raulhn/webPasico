@@ -1,6 +1,6 @@
 import { View, Image } from "react-native";
 import { StyleSheet } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { TouchableOpacity } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";

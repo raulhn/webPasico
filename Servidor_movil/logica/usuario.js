@@ -31,7 +31,7 @@ async function registrarUsuario(
   password
 ) {
   try {
-    const saltRounds = 10; // Número de rondas de sal para bcrypt
+    const saltRounds = constantes.SALT_ROUNDS; // Número de rondas de sal para bcrypt
     let bExiste = await existeUsuario(correoElectronico);
     if (bExiste) {
       console.error("El usuario ya está registrado.");
@@ -174,7 +174,7 @@ async function realizarLogin(correoElectronico, password) {
 
 async function recuperarPassword(correoElectronico) {
   try {
-    let obtenerUsuario = await existUsuario(correoElectronico);
+    let obtenerUsuario = await existeUsuario(correoElectronico);
     return new Promise((resolve, reject) => {
       if (!existeUsuario) {
         console.error("El usuario no existe.");
@@ -214,7 +214,65 @@ async function recuperarPassword(correoElectronico) {
   }
 }
 
+function actualizarPassword(nid_usuario, password) {
+  return new Promise((resolve, reject) => {
+    const saltRounds = constantes.SALT_ROUNDS; // Número de rondas de sal para bcrypt
+    bcrypt.hash(password, saltRounds, (err, hash) => {
+      const query =
+        "UPDATE " +
+        constantes.ESQUEMA +
+        ".usuarios SET password = " +
+        conexion.dbConn.escape(hash) +
+        " WHERE nid_usuario = " +
+        conexion.dbConn.escape(nid_usuario);
+      conexion.dbConn.query(query, (error, results) => {
+        if (error) {
+          console.error("Error al actualizar la contraseña:", error);
+          reject(new Error("Error al actualizar la contraseña"));
+        } else {
+          resolve(results);
+        }
+      });
+    });
+  });
+}
+
+function realizarCambioPassword(nid_usuario, passwordActual, passwordNuevo) {
+  return new Promise((resolve, reject) => {
+    const query =
+      "SELECT * FROM " +
+      constantes.ESQUEMA +
+      ".usuarios WHERE nid_usuario = " +
+      conexion.dbConn.escape(nid_usuario);
+    conexion.dbConn.query(query, (error, results) => {
+      if (error) {
+        console.error("Error al comprobar la existencia del usuario:", error);
+        reject(new Error("Error al realizar el cambio de contraseña"));
+      } else if (results.length > 0) {
+        bcrypt.compare(passwordActual, results[0].password, (err, result) => {
+          if (err) {
+            console.error("Error al comparar las contraseñas:", err);
+            reject(new Error("Error al realizar el cambio de contraseña"));
+          } else if (result) {
+            actualizarPassword(nid_usuario, passwordNuevo)
+              .then(() => resolve())
+              .catch((error) => reject(error));
+          } else {
+            console.error("La contraseña actual es incorrecta.");
+            reject(new Error("La contraseña actual es incorrecta."));
+          }
+        });
+      } else {
+        console.error("El usuario no existe.");
+        reject(new Error("Error al realizar el cambio de contraseña"));
+      }
+    });
+
+  });
+}
+
 module.exports.registrarUsuario = registrarUsuario;
 module.exports.realizarLogin = realizarLogin;
 module.exports.obtenerUsuario = obtenerUsuario;
 module.exports.recuperarPassword = recuperarPassword;
+module.exports.realizarCambioPassword = realizarCambioPassword;
