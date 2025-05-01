@@ -93,6 +93,7 @@ function logout() {
       response
         .json()
         .then((data) => {
+secureStorage.eliminarToken("refresh_token");
           resolve(data);
         })
         .catch((error) => {
