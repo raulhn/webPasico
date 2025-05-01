@@ -1,7 +1,12 @@
 import { View, Text, Pressable, StyleSheet } from "react-native";
 import { useState } from "react";
 
-export default function Boton({ nombre, onPress, color, colorTexto = "#fff" }) {
+export default function Boton({
+  nombre,
+  onPress,
+  color = "#007BFF",
+  colorTexto = "#fff",
+}) {
   const [presionado, setPresionado] = useState(false);
 
   return (

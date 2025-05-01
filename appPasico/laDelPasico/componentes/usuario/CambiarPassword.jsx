@@ -1,9 +1,13 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import EntradaTexto from "../componentesUI/EntradaTexto";
 import { View, Text, Image } from "react-native";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { StyleSheet } from "react-native";
 import Boton from "../componentesUI/Boton";
+import { AuthContext } from "../../providers/AuthContext";
+import serviceUsuario from "../../servicios/serviceUsuario";
+import ModalAviso from "../componentesUI/ModalAviso";
+import ModalExito from "../componentesUI/ModalExito";
 
 export default function CambiarPassword() {
   const [nuevaContrasena, setNuevaContrasena] = useState("");
@@ -12,7 +16,31 @@ export default function CambiarPassword() {
 
   const logo = require("../../assets/logo.png");
 
-  const cambiarContrasena = () => {};
+  const { cerrarSesion } = useContext(AuthContext);
+
+  const [error, setError] = useState(null);
+  const [exito, setExito] = useState(null);
+
+  const peticionCambiarContraseña = () => {
+    if (nuevaContrasena !== confirmarContrasena) {
+      setError("Las contraseñas no coinciden");
+      return;
+    }
+
+    serviceUsuario
+      .cambiarPassword(contrasenaActual, nuevaContrasena, cerrarSesion)
+      .then((response) => {
+        if (response.error) {
+          console.log("Error al cambiar la contraseña:", response.mensaje);
+          setError(response.mensaje);
+        } else {
+          setExito("Contraseña cambiada con éxito");
+        }
+      })
+      .catch((error) => {
+        console.error("Error al cambiar la contraseña:", error);
+      });
+  };
 
   return (
     <SafeAreaView
@@ -43,7 +71,23 @@ export default function CambiarPassword() {
           secureTextEntry={true}
         />
       </View>
-      <Boton nombre="Actualizar" onPress={cambiarContrasena} color="#007CFA" />
+      <Boton
+        nombre="Actualizar"
+        onPress={peticionCambiarContraseña}
+        color="#007CFA"
+      />
+      <ModalAviso
+        visible={error !== null}
+        setVisible={() => setError(null)}
+        mensaje={error}
+        textBoton="Aceptar"
+      />
+      <ModalExito
+        visible={exito !== null}
+        setVisible={() => setExito(null)}
+        mensaje={exito}
+        textBoton="Aceptar"
+      />
     </SafeAreaView>
   );
 }

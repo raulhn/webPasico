@@ -114,7 +114,15 @@ function login(correoElectronico, password) {
             console.error("Error al comparar las contraseñas:", err);
             reject(new Error("Error al realizar el login"));
           } else {
-            resolve(results[0]);
+            console.log("Resultado de la comparación:", result);
+            if (!result) {
+              console.error("La contraseña es incorrecta.");
+              reject(new Error("La contraseña es incorrecta."));
+            } else {
+              // La contraseña es correcta, devolver el usuario
+              console.log("Usuario encontrado:", results[0]);
+              resolve(results[0]);
+            }
           }
         });
       } else {
@@ -174,36 +182,41 @@ async function realizarLogin(correoElectronico, password) {
 
 async function recuperarPassword(correoElectronico) {
   try {
+    const saltRounds = constantes.SALT_ROUNDS; // Número de rondas de sal para bcrypt
     let obtenerUsuario = await existeUsuario(correoElectronico);
     return new Promise((resolve, reject) => {
-      if (!existeUsuario) {
+      if (!obtenerUsuario) {
         console.error("El usuario no existe.");
-        reject(new Error("Error al recuperar la contraseña"));
-      } else if (results.length > 0) {
-        const token = crypto.randomBytes(12).toString("hex");
-        const query =
-          "UPDATE " +
-          constantes.ESQUEMA +
-          ".usuarios SET token = " +
-          conexion.dbConn.escape(token) +
-          " WHERE correo_electronico = " +
-          conexion.dbConn.escape(correoElectronico);
-        // Iniciar la transacción
-        conexion.dbConn.beginTransaction((err) => {
-          if (err) {
-            console.error("Error al iniciar la transacción:", err);
-            reject(new Error("Error al recuperar la contraseña"));
-          }
-          // Ejecutar la consulta de actualización
-          conexion.dbConn.query(query, (error, results) => {
-            if (error) {
-              console.error("Error al actualizar el token:", error);
-              conexion.dbConn.rollback();
+        // Si el usuario no existe no se debe mostrar un mensaje de error
+        resolve();
+      } else {
+        const token = crypto.randomBytes(6).toString("hex");
+
+        bcrypt.hash(token, saltRounds, (err, hash) => {
+          const query =
+            "UPDATE " +
+            constantes.ESQUEMA +
+            ".usuarios SET password = " +
+            conexion.dbConn.escape(hash) +
+            " WHERE correo_electronico = " +
+            conexion.dbConn.escape(correoElectronico);
+          // Iniciar la transacción
+          conexion.dbConn.beginTransaction((err) => {
+            if (err) {
+              console.error("Error al iniciar la transacción:", err);
               reject(new Error("Error al recuperar la contraseña"));
-            } else {
-              conexion.dbConn.commit();
-              resolve(token);
             }
+            // Ejecutar la consulta de actualización
+            conexion.dbConn.query(query, (error, results) => {
+              if (error) {
+                console.error("Error al actualizar el token:", error);
+                conexion.dbConn.rollback();
+                reject(new Error("Error al recuperar la contraseña"));
+              } else {
+                conexion.dbConn.commit();
+                resolve(token);
+              }
+            });
           });
         });
       }
@@ -267,7 +280,6 @@ function realizarCambioPassword(nid_usuario, passwordActual, passwordNuevo) {
         reject(new Error("Error al realizar el cambio de contraseña"));
       }
     });
-
   });
 }
 

@@ -8,12 +8,16 @@ import Boton from "../componentesUI/Boton"; // Ajusta la ruta según tu estructu
 
 export default function PerfilUsuario() {
   const { usuario, cerrarSesion } = useContext(AuthContext);
-
   const router = useRouter();
 
   useEffect(() => {
     if (!usuario) {
-      router.push("/(tabs)/(drawer)"); // Redirige a la pantalla de inicio de sesión si no hay usuario}
+      console.log(
+        "No hay usuario, redirigiendo a la pantalla de inicio de sesión"
+      );
+      router.replace("/(tabs)/(drawer)"); // Redirige a la pantalla de inicio de sesión si no hay usuario}
+    } else {
+      console.log("Usuario:", usuario); // Muestra el usuario en la consola
     }
   }, [usuario]);
 
@@ -23,8 +27,14 @@ export default function PerfilUsuario() {
 
   function lanzaCerrarSesion() {
     try {
-      serviceUsuario.logout();
-      cerrarSesion();
+      serviceUsuario.logout().then((response) => {
+        if (response.error) {
+          console.log("Error al cerrar sesión:", response.mensaje);
+        } else {
+          cerrarSesion(); // Llama a la función de cierre de sesión del contexto
+          router.replace("/(tabs)/(drawer)"); // Redirige a la pantalla de inicio de sesión
+        }
+      });
     } catch (error) {
       console.error("Error al cerrar sesión:", error);
     }
@@ -41,7 +51,7 @@ export default function PerfilUsuario() {
       <Boton
         nombre="Cambiar Contraseña"
         onPress={() => {
-          router.push("/PantallaCambioPass");
+          router.replace("/PantallaCambioPass");
         }}
         color="#007BFF"
       />

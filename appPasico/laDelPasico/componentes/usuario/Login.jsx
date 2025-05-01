@@ -2,7 +2,8 @@ import { Link, useRouter } from "expo-router";
 import React from "react";
 import serviceUsuario from "../../servicios/serviceUsuario";
 import { useContext } from "react";
-import Boton from "../componentesUI/Boton"; // Ajusta la ruta según tu estructura de carpetas
+import Boton from "../componentesUI/Boton";
+import EntradaTexto from "../componentesUI/EntradaTexto";
 import {
   TextInput,
   Pressable,
@@ -10,19 +11,20 @@ import {
   Text,
   StyleSheet,
   Image,
+  Modal,
 } from "react-native";
-import { AuthContext } from "../../providers/AuthContext"; // Ajusta la ruta según tu estructura de carpetas
+import { AuthContext } from "../../providers/AuthContext";
+import ModalAviso from "../componentesUI/ModalAviso";
 
 export default function Login() {
   const { iniciarSesion, tokenNotificacion } = useContext(AuthContext);
-
-  const [inputActivo, setInputActivo] = React.useState(0);
 
   const [correo, setCorreo] = React.useState("");
   const [contrasena, setContrasena] = React.useState("");
 
   const logo = require("../../assets/logo.png");
   const router = useRouter();
+  const [error, setError] = React.useState(null);
 
   function realizarLogin() {
     {
@@ -30,10 +32,10 @@ export default function Login() {
         .login(correo, contrasena, tokenNotificacion)
         .then((response) => {
           if (response.error) {
-            console.log("Error en el inicio de sesión:", response.error);
+            setError("Error en el inicio de sesión"); // Muestra el error en el modal
           } else {
             iniciarSesion(response.usuario); // Guarda el usuario en el contexto
-            router.push("/(tabs)/(drawer)");
+            router.replace("/(tabs)/(drawer)");
           }
         })
         .catch((error) => {
@@ -55,30 +57,21 @@ export default function Login() {
           ]}
         >
           <Text>Correo Electrónico</Text>
-          <TextInput
+          <EntradaTexto
+            valor={correo}
+            setValor={setCorreo}
+            secureTextEntry={false}
             placeholder="Correo Electrónico"
-            onChangeText={(text) => setCorreo(text)}
-            style={
-              inputActivo === 1
-                ? [estilos.inputFocus, { width: 300 }]
-                : [estilos.input, { width: 300 }]
-            }
-            onFocus={() => setInputActivo(1)}
-            onBlur={() => setInputActivo(0)}
+            ancho="300"
           />
+
           <Text>Contraseña</Text>
-          <TextInput
-            id="contrasena"
+          <EntradaTexto
+            valor={contrasena}
+            setValor={setContrasena}
+            secureTextEntry={true}
             placeholder="Contraseña"
-            style={
-              inputActivo === 2
-                ? [estilos.inputFocus, { width: 200 }]
-                : [estilos.input, { width: 200 }]
-            }
-            secureTextEntry
-            onChangeText={(text) => setContrasena(text)}
-            onFocus={() => setInputActivo(2)}
-            onBlur={() => setInputActivo(0)}
+            ancho="200"
           />
 
           <Boton
@@ -98,7 +91,24 @@ export default function Login() {
             </Pressable>
           </Link>
         </View>
+
+        <View style={{ paddingTop: 20, color: "blue" }}>
+          <Link href="/PantallaRecuperarPassword" asChild>
+            <Pressable>
+              <View style={{ flexDirection: "column", alignItems: "center" }}>
+                <Text>¿Has olvidado tu contraseña? </Text>
+                <Text style={{ color: "blue" }}>Recuperar Contraseña</Text>
+              </View>
+            </Pressable>
+          </Link>
+        </View>
       </View>
+      <ModalAviso
+        visible={error !== null}
+        setVisible={() => setError(null)}
+        mensaje={error}
+        textBoton="Aceptar"
+      />
     </View>
   );
 }

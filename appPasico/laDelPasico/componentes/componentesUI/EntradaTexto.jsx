@@ -9,6 +9,7 @@ export default function EntradaTexto({
   secureTextEntry = false,
   multiline = false,
   maxLength = null,
+  ancho = 200,
 }) {
   const [isFocused, setIsFocused] = useState(false);
 
@@ -25,14 +26,22 @@ export default function EntradaTexto({
       }}
       onFocus={() => setIsFocused(true)}
       onBlur={() => setIsFocused(false)}
-      style={isFocused ? estilos.inputFocus : estilos.input}
+      style={
+        isFocused
+          ? [
+              estilos.inputFocus,
+              {
+                width: ancho,
+              },
+            ]
+          : [estilos.input, { width: ancho }]
+      }
     />
   );
 }
 
 const estilos = StyleSheet.create({
   input: {
-    width: 200,
     borderWidth: 1,
     padding: 10,
     marginBottom: 10,
@@ -40,7 +49,6 @@ const estilos = StyleSheet.create({
     borderColor: "#ccc",
   },
   inputFocus: {
-    width: 200,
     borderWidth: 1,
     padding: 10,
     marginBottom: 10,
