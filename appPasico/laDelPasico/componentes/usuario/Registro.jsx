@@ -1,15 +1,7 @@
 import React from "react";
 
-import {
-  View,
-  Text,
-  ScrollView,
-  TextInput,
-  Pressable,
-  Image,
-  Modal,
-} from "react-native";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import { View, Text, ScrollView, TextInput, Image, Modal } from "react-native";
+
 import { StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState, useEffect } from "react";
@@ -18,6 +10,9 @@ import Tunstile from "../../componentes/Turnstile.jsx";
 import constantesGoogle from "../../config/constantesGoogle.js";
 import Boton from "../componentesUI/Boton"; // Ajusta la ruta según tu estructura de carpetas
 import { ActivityIndicator } from "react-native";
+import ModalAviso from "../componentesUI/ModalAviso.jsx";
+import ModalExito from "../componentesUI/ModalExito.jsx";
+import EntradaTexto from "../componentesUI/EntradaTexto.jsx";
 
 export default function registrarUsuario(recaptchaToken) {
   const [inputActivo, setInputActivo] = React.useState(0);
@@ -86,39 +81,34 @@ export default function registrarUsuario(recaptchaToken) {
   function peticionRegistrarUsuario(recaptchaToken) {
     try {
       setMensajeError("");
-      if (!validacionRegistro()) {
-        setErrorValidacion(true);
-      } else {
-        if (recaptchaToken) {
-          ServiceUsuario.registrarUsuario(
-            nombre,
-            primerApellido,
-            segundoApellido,
-            correo,
-            password,
-            recaptchaToken
-          )
-            .then((response) => {
-              if (response.error) {
-                setMensajeError(response.mensaje);
-                setErrorValidacion(true);
-              } else {
-                setMensajeExito("Usuario registrado correctamente");
-                setExito(true);
-              }
-              // Aquí puedes manejar la respuesta del servidor
-            })
-            .catch((error) => {
-              console.error("Error al registrar el usuario:", error);
-              // Aquí puedes manejar el error
-            });
-        } else {
-          console.log("El token de reCAPTCHA no está disponible");
 
-          console.log(
-            "Se ha producido un error durante el registro de usuario"
-          );
-        }
+      if (recaptchaToken) {
+        ServiceUsuario.registrarUsuario(
+          nombre,
+          primerApellido,
+          segundoApellido,
+          correo,
+          password,
+          recaptchaToken
+        )
+          .then((response) => {
+            if (response.error) {
+              setMensajeError(response.mensaje);
+              setErrorValidacion(true);
+            } else {
+              setMensajeExito("Usuario registrado correctamente");
+              setExito(true);
+            }
+            // Aquí puedes manejar la respuesta del servidor
+          })
+          .catch((error) => {
+            console.error("Error al registrar el usuario:", error);
+            // Aquí puedes manejar el error
+          });
+      } else {
+        console.log("El token de reCAPTCHA no está disponible");
+
+        console.log("Se ha producido un error durante el registro de usuario");
       }
     } catch (error) {
       console.error("Error en la petición:", error);
@@ -129,7 +119,11 @@ export default function registrarUsuario(recaptchaToken) {
   }
 
   function lanzarRegistro() {
-    setLanzaRegistro(true);
+    if (!validacionRegistro()) {
+      setErrorValidacion(true);
+    } else {
+      setLanzaRegistro(true);
+    }
   }
 
   return (
@@ -153,90 +147,57 @@ export default function registrarUsuario(recaptchaToken) {
               }}
             >
               <Text>Nombre</Text>
-              <TextInput
+              <EntradaTexto
+                valor={nombre}
+                setValor={setNombre}
+                secureTextEntry={false}
                 placeholder="Nombre"
-                onFocus={() => setInputActivo(1)}
-                onBlur={() => setInputActivo(0)}
-                onChangeText={(text) => {
-                  setNombre(text);
-                }}
-                style={
-                  inputActivo === 1
-                    ? [estilos.inputFocus, { width: 300 }]
-                    : [estilos.input, { width: 300 }]
-                }
+                ancho="300"
               />
+
               <Text>Primer Apellido</Text>
-              <TextInput
+              <EntradaTexto
+                valor={primerApellido}
+                setValor={setPrimerApellido}
+                secureTextEntry={false}
                 placeholder="Primer Apellido"
-                onFocus={() => setInputActivo(2)}
-                onBlur={() => setInputActivo(0)}
-                onChangeText={(text) => {
-                  setPrimerApellido(text);
-                }}
-                style={
-                  inputActivo === 2
-                    ? [estilos.inputFocus, { width: 300 }]
-                    : [estilos.input, { width: 300 }]
-                }
+                ancho={"300"}
               />
+
               <Text>Segundo Apellido</Text>
-              <TextInput
-                onFocus={() => setInputActivo(3)}
-                onBlur={() => setInputActivo(0)}
-                placeholder="Segundo Apellido"
-                onChangeText={(text) => {
-                  setSegundoApellido(text);
-                }}
-                style={
-                  inputActivo === 3
-                    ? [estilos.inputFocus, { width: 300 }]
-                    : [estilos.input, { width: 300 }]
-                }
+              <EntradaTexto
+                valor={segundoApellido}
+                setValor={setSegundoApellido}
+                secureTextEntry={false}
+                placeholder={"Segundo Apellido"}
+                ancho={"300"}
               />
+
               <Text>Correo Electrónico</Text>
-              <TextInput
-                onFocus={() => setInputActivo(4)}
-                onBlur={() => setInputActivo(0)}
-                placeholder="Correo Electrónico"
-                onChangeText={(text) => {
-                  setCorreo(text);
-                }}
-                style={
-                  inputActivo === 4
-                    ? [estilos.inputFocus, { width: 300 }]
-                    : [estilos.input, { width: 300 }]
-                }
+              <EntradaTexto
+                valor={correo}
+                setValor={setCorreo}
+                secureTextEntry={false}
+                placeholder={"Correo Electrónico"}
+                ancho={"300"}
               />
+
               <Text>Contraseña</Text>
-              <TextInput
-                onFocus={() => setInputActivo(5)}
-                onBlur={() => setInputActivo(0)}
+              <EntradaTexto
+                valor={password}
+                setValor={setPassword}
+                secureTextEntry={true}
                 placeholder="Contraseña"
-                onChangeText={(text) => {
-                  setPassword(text);
-                }}
-                style={
-                  inputActivo === 5
-                    ? [estilos.inputFocus, { width: 200 }]
-                    : [estilos.input, { width: 200 }]
-                }
-                secureTextEntry
+                ancho="200"
               />
+
               <Text>Repita la contraseña</Text>
-              <TextInput
-                onFocus={() => setInputActivo(6)}
-                onBlur={() => setInputActivo(0)}
+              <EntradaTexto
+                valor={password2}
+                setValor={setPassword2}
+                secureTextEntry={true}
                 placeholder="Contraseña"
-                onChangeText={(text) => {
-                  setPassword2(text);
-                }}
-                style={
-                  inputActivo === 6
-                    ? [estilos.inputFocus, { width: 200 }]
-                    : [estilos.input, { width: 200 }]
-                }
-                secureTextEntry
+                ancho="200"
               />
 
               <Boton
@@ -251,99 +212,22 @@ export default function registrarUsuario(recaptchaToken) {
         </View>
       </ScrollView>
 
-      <Modal visible={errorValidacion} transparent={true} animationType="fade">
-        <View
-          style={{
-            width: "100%",
-            height: "100%",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <View style={estilos.modal}>
-            <View
-              style={{
-                borderRadius: 10,
-                position: "absolute",
-                top: 5,
-                right: 5,
-              }}
-            >
-              <Pressable
-                onPress={() => {
-                  setErrorValidacion(false);
-                }}
-              >
-                <View style={estilos.botonCierre}>
-                  <MaterialIcons name="close" size={24} color="white" />
-                </View>
-              </Pressable>
-            </View>
-            <View
-              style={{
-                justifyContent: "center",
-                alignItems: "center",
-                padding: 10,
-              }}
-            >
-              <MaterialIcons
-                name="warning-amber"
-                size={60}
-                color="#f87c00"
-                style={estilos.iconoWarning}
-              />
-              <Text style={{ textAlign: "center" }}>{mensajeError}</Text>
-            </View>
-          </View>
-        </View>
-      </Modal>
-
-      <Modal visible={exito} transparent={true} animationType="fade">
-        <View
-          style={{
-            width: "100%",
-            height: "100%",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <View style={estilos.modal}>
-            <View
-              style={{
-                borderRadius: 10,
-                position: "absolute",
-                top: 5,
-                right: 5,
-              }}
-            >
-              <Pressable
-                onPress={() => {
-                  setExito(false);
-                }}
-              >
-                <View style={estilos.botonCierre}>
-                  <MaterialIcons name="close" size={24} color="white" />
-                </View>
-              </Pressable>
-            </View>
-            <View
-              style={{
-                justifyContent: "center",
-                alignItems: "center",
-                padding: 10,
-              }}
-            >
-              <MaterialIcons
-                name="check-circle-outline"
-                size={60}
-                color="#4caf50"
-                style={estilos.iconoWarning}
-              />
-              <Text style={{ textAlign: "center" }}>{mensajeExito}</Text>
-            </View>
-          </View>
-        </View>
-      </Modal>
+      <ModalAviso
+        visible={errorValidacion}
+        setVisible={() => {
+          setErrorValidacion(false);
+        }}
+        mensaje={mensajeError}
+        textBoton="Aceptar"
+      />
+      <ModalExito
+        visible={exito}
+        setVisible={() => {
+          setExito(false);
+        }}
+        mensaje={mensajeExito}
+        textBoton="Aceptar"
+      />
 
       {/* Modal de carga */}
       <Modal visible={lanzaRegistro} transparent={true} animationType="fade">

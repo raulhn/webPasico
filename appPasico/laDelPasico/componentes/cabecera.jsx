@@ -18,7 +18,7 @@ export const CustomHeader = ({ navigation, route, options, title }) => {
       .obtenerUsuario(cerrarSesion)
       .then((response) => {
         console.log("Usuario desde el servicio:", response);
-        if (response) {
+        if (response.usuario) {
           iniciarSesion(response.usuario); // Actualiza el estado del usuario en el contexto
         } else {
           iniciarSesion(null); // Si no hay usuario, establece el estado como nulo

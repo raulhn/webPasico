@@ -1,5 +1,6 @@
 import { AuthProvider } from "../providers/AuthContext.js";
 import { useContext } from "react";
+import * as secureStorage from "./secureStorage.js";
 
 let Constantes = require("../constantes.js");
 
@@ -40,14 +41,19 @@ function peticionServicio(metodo, url, body) {
   });
 }
 
-function refrescarSesion() {
+async function refrescarSesion() {
+  console.log("Refrescando sesión...");
+  const refreshToken = await secureStorage.obtenerToken("refresh_token");
   return new Promise((resolve, reject) => {
     fetch(Constantes.URL_SERVICIO_MOVIL + "refresh_token", {
-      method: "GET",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       credentials: "include",
+      body: JSON.stringify({
+        refreshToken: refreshToken,
+      }),
     }).then((response) => {
       response
         .json()
@@ -56,7 +62,7 @@ function refrescarSesion() {
         })
         .catch((error) => {
           console.log("Error en el servicio refrescarSesion");
-          console.log(error);
+
           reject(error);
         });
     });
@@ -67,6 +73,7 @@ async function peticionSesion(metodo, url, body, cerrarSesion) {
   try {
     let data = await peticionServicio(metodo, url, body);
     if (data.error && data.codigo === 1) {
+      console.log("Error de sesión, intentando refrescar...");
       let response = await refrescarSesion();
       if (!response.Error) {
         return await peticionServicio(metodo, url, body);

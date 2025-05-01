@@ -105,14 +105,6 @@ async function login(req, res) {
       maxAge: constantes.TIEMPO_ACCESS_TOKEN * 1000, // 24 horas
     });
 
-    res.cookie(constantes.REFRESH_TOKEN, tokens.refreshToken, {
-      httpOnly: true,
-      secure: true, // Asegúrate de que tu aplicación esté sirviendo a través de HTTPS
-      sameSite: "Strict", // Cambia esto según tus necesidades
-      //  path: "/refresh_token", // Asegúrate de que el token de actualización solo esté disponible en la ruta de actualización
-      maxAge: constantes.TIEMPO_REFRESH_TOKEN * 1000, // 7 días
-    });
-
     res.status(200).send({
       error: false,
       mensaje: "Inicio de sesión exitoso",
@@ -121,6 +113,7 @@ async function login(req, res) {
         correoElectronico: tokens.usuario.correoElectronico,
         nombre: tokens.usuario.nombre,
       },
+      refreshToken: tokens.refreshToken,
     });
   } catch (error) {
     console.error("Error en el inicio de sesión");
@@ -139,25 +132,28 @@ async function cambiarPassword(req, res) {
   }
 
   jwt.verify(token, process.env.SESSION_SECRET, async (err, decoded) => {
-    try
-  {
-    if (err) {
-      console.error("Error al verificar el token:", err);
-      return res.status(401).send({ error: true, mensaje: "No autenticado" });
-    }
+    try {
+      if (err) {
+        console.error("Error al verificar el token:", err);
+        return res.status(401).send({ error: true, mensaje: "No autenticado" });
+      }
+      console.log("nid_usuario", decoded.nid_usuario);
 
-    await gestorUsuario.realizarCambioPassword(jwt.decode.nid_usuario, passwordActual, nuevaPassword);
-    res.status(200).send({
-      error: false,
-      mensaje: "Contraseña cambiada correctamente",
-    })}
-  catch(error)
-{
-  console.log(error);
-  res.status(400).send({error: true, mensaje: error.message})
+      await gestorUsuario.realizarCambioPassword(
+        decoded.nid_usuario,
+        passwordActual,
+        nuevaPassword
+      );
+      res.status(200).send({
+        error: false,
+        mensaje: "Contraseña cambiada correctamente",
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(400).send({ error: true, mensaje: error.message });
+    }
+  });
 }
-}
-)}
 
 function obtenerUsuario(req, res) {
   const token = req.cookies.access_token;
@@ -169,7 +165,6 @@ function obtenerUsuario(req, res) {
 
   jwt.verify(token, process.env.SESSION_SECRET, (err, decoded) => {
     if (err) {
-
       console.error("Error al verificar el token:", err);
       return res
         .status(401)
@@ -186,7 +181,7 @@ function obtenerUsuario(req, res) {
 }
 
 function refreshToken(req, res) {
-  const token = req.cookies.refresh_token;
+  const token = req.body.refreshToken;
   if (!token) {
     console.log("No se proporcionó el token de actualización");
     return res.status(401).send({ error: true, mensaje: "No autenticado" });
@@ -198,7 +193,6 @@ function refreshToken(req, res) {
       return res.status(401).send({ error: true, mensaje: "No autenticado" });
     }
 
-    console.log("Token de actualización verificado:", decoded);
     const usuario = await gestorUsuario.obtenerUsuario(decoded.nid_usuario);
 
     const nuevoToken = jwt.sign(
@@ -228,9 +222,7 @@ function refreshToken(req, res) {
 }
 
 function logout(req, res) {
-  console.log("Cerrando sesión del usuario");
   res.clearCookie(constantes.ACCESS_TOKEN, { path: "/" });
-  res.clearCookie(constantes.REFRESH_TOKEN, { path: "/" });
   res.status(200).send({ error: false, mensaje: "Sesión cerrada" });
 }
 
@@ -243,12 +235,15 @@ async function recuperarPassword(req, res) {
         .send({ error: true, mensaje: "Correo no proporcionado" });
     }
 
-    const nuevaPassword = gestorUsuario.recuperarPassword(correoElectronico);
+    const nuevaPassword =
+      await gestorUsuario.recuperarPassword(correoElectronico);
     if (!nuevaPassword) {
       return res
-        .status(400)
-        .send({ error: true, mensaje: "Error al recuperar" });
+        .status(200)
+        .send({ error: false, mensaje: "Correo de recuperación enviado" });
     }
+
+    console.log("Nueva contraseña generada:", nuevaPassword);
 
     const html = `
   <div style="font-family: Arial, sans-serif; background-color: #f9f9f9; padding: 20px; border: 1px solid #ddd; border-radius: 5px; max-width: 600px; margin: 0 auto; text-align: center;">
@@ -284,5 +279,5 @@ module.exports.login = login;
 module.exports.obtenerUsuario = obtenerUsuario;
 module.exports.refreshToken = refreshToken;
 module.exports.logout = logout;
-module.exports.recuperarPassword = recuperarPassword
-module.exports.cambiarPassword = cambiarPassword
+module.exports.recuperarPassword = recuperarPassword;
+module.exports.cambiarPassword = cambiarPassword;
