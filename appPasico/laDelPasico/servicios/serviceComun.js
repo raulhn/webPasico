@@ -45,6 +45,10 @@ async function refrescarSesion() {
   console.log("Refrescando sesión...");
   const refreshToken = await secureStorage.obtenerToken("refresh_token");
   return new Promise((resolve, reject) => {
+    if (!refreshToken) {
+      reject(new Error("No hay refresh token disponible"));
+    }
+
     fetch(Constantes.URL_SERVICIO_MOVIL + "refresh_token", {
       method: "POST",
       headers: {
