@@ -22,4 +22,28 @@ function comprobacionLogin(req, res) {
   });
 }
 
+function comprobacionAccesoAPIKey(req, res, callback) {
+  try
+
+  {
+    const apiKey = req.headers["x-api-key"];
+    if (!apiKey) {
+      throw new Error("API Key no proporcionada");
+    }
+
+    if (apiKey !== process.env.API_KEY) {
+      throw new Error("API Key no válida");
+    }
+
+    callback();
+  }
+  catch (error) {
+    console.error("Error en APIKEY :" + error);
+    res.status(401).send({ error: true, mensaje: error.message });
+  }
+  
+}
+
 module.exports.comprobacionLogin = comprobacionLogin;
+module.exports.comprobacionAccesoAPIKey = comprobacionAccesoAPIKey;
+

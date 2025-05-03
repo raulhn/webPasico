@@ -11,6 +11,7 @@ require("dotenv").config();
 const servletComun = require("./servlets/servlet_comun.js");
 const servletUsuario = require("./servlets/servlet_usuario.js");
 const servletConexion = require("./servlets/servlet_conexiones.js");
+const servletPersona = require("./servlets/servlet_persona.js");
 
 const validacionEmail = require("./logica/validacionEmail.js");
 
@@ -47,6 +48,11 @@ app.post("/refresh_token", servletUsuario.refreshToken);
 
 app.post("/logout", servletUsuario.logout);
 app.post("/recuperar_password", servletUsuario.recuperarPassword);
+
+
+/** Llamadas por API KEY **/
+app.post("/registrar_persona", servletPersona.registrarPersona);
+app.get("/obtener_persona/:nid_persona", servletPersona.obtenerPersona);
 
 // Peticiones que requieren inicio de sesión
 app.use((req, res, next) => {

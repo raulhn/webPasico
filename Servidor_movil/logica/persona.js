@@ -44,11 +44,11 @@ function actualizarPersona(
   primer_apellido,
   segundo_apellido,
   fecha_nacimiento,
+  nif,
   telefono,
   correo_electronico,
   nid_madre,
-  nid_padre,
-  nid_socio
+  nid_padre
 ) {
   return new Promise((resolve, reject) => {
     const sql =
@@ -60,6 +60,8 @@ function actualizarPersona(
       conexion.dbConn.escape(segundo_apellido) +
       ", fecha_nacimiento = " +
       conexion.dbConn.escape(fecha_nacimiento) +
+      ", nif = " +
+      conexion.dbConn.escape(nif) +
       ", telefono = " +
       conexion.dbConn.escape(telefono) +
       ", correo_electronico = " +
@@ -68,8 +70,6 @@ function actualizarPersona(
       conexion.dbConn.escape(nid_madre) +
       ", nid_padre = " +
       conexion.dbConn.escape(nid_padre) +
-      ", nid_socio = " +
-      conexion.dbConn.escape(nid_socio);
     " WHERE nid_persona = " + conexion.dbConn.escape(nid_persona);
 
     conexion.dbConn.beginTransaction((err) => {
@@ -101,15 +101,15 @@ function insertarPersona(
   primer_apellido,
   segundo_apellido,
   fecha_nacimiento,
+  nif,
   telefono,
   correo_electronico,
   nid_madre,
-  nid_padre,
-  nid_socio
+  nid_padre
 ) {
   return new Promise((resolve, reject) => {
     const sql =
-      "INSERT INTO persona (nid_persona, nombre, primer_apellido, segundo_apellido, fecha_nacimiento, telefono, correo_electronico, nid_madre, nid_padre, nid_socio) VALUES (" +
+      "INSERT INTO persona (nid_persona, nombre, primer_apellido, segundo_apellido, fecha_nacimiento, nif, telefono, correo_electronico, nid_madre, nid_padre) VALUES (" +
       conexion.dbConn.escape(nid_persona) +
       ", " +
       conexion.dbConn.escape(nombre) +
@@ -120,6 +120,8 @@ function insertarPersona(
       ", " +
       conexion.dbConn.escape(fecha_nacimiento) +
       ", " +
+      conexion.dbConn.escape(nif) + 
+      ", " +
       conexion.dbConn.escape(telefono) +
       ", " +
       conexion.dbConn.escape(correo_electronico) +
@@ -127,8 +129,6 @@ function insertarPersona(
       conexion.dbConn.escape(nid_madre) +
       ", " +
       conexion.dbConn.escape(nid_padre) +
-      ", " +
-      conexion.dbConn.escape(nid_socio) +
       ")";
 
     conexion.dbConn.beginTransaction((err) => {
@@ -162,11 +162,11 @@ async function registrarPersona(
   primer_apellido,
   segundo_apellido,
   fecha_nacimiento,
+  nif,
   telefono,
   correo_electronico,
   nid_madre,
   nid_padre,
-  nid_socio,
   fecha_actualizacion
 ) {
   try {
@@ -184,11 +184,12 @@ async function registrarPersona(
           primer_apellido,
           segundo_apellido,
           fecha_nacimiento,
+          nif,
           telefono,
           correo_electronico,
           nid_madre,
           nid_padre,
-          nid_socio
+    
         );
         console.log("Persona actualizada correctamente.");
         return;
@@ -202,11 +203,11 @@ async function registrarPersona(
         primer_apellido,
         segundo_apellido,
         fecha_nacimiento,
+        nif,
         telefono,
         correo_electronico,
         nid_madre,
-        nid_padre,
-        nid_socio
+        nid_padre
       );
       console.log("Persona insertada correctamente.");
     }

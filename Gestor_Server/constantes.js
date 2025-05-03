@@ -21,6 +21,7 @@ const ESTADO_REMESA_RECHAZADO = "RECHAZADO";
 const ESTADO_REMESA_ERRONEO = "ERROR";
 
 const URL_WEB = "https://ladelpasico.es/";
+const URL_SERVICIO_MOVIL = "https://ladelpasico.es/api_movil/";
 
 module.exports.RUTA_SUBIDAS = RUTA_SUBIDAS;
 module.exports.IMAGEN_NO_ENCONTRADA = IMAGEN_NO_ENCONTRADA;
@@ -47,3 +48,4 @@ module.exports.ESTADO_REMESA_RECHAZADO = ESTADO_REMESA_RECHAZADO;
 module.exports.ESTADO_REMESA_ERRONEO = ESTADO_REMESA_ERRONEO;
 
 module.exports.URL_WEB = URL_WEB;
+module.exports.URL_SERVICIO_MOVIL = URL_SERVICIO_MOVIL;
