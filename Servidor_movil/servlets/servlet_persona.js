@@ -66,6 +66,46 @@ function obtenerPersona(req, res) {
     });
 }
 
+function obtenerPersonasSucias(req, res) {
+    servletComun.comprobacionAccesoAPIKey(req, res, async () => {
+        try {
+            let personasSucias = await gestorPersona.obtenerPersonasSucias();
+            res.status(200).send({
+                error: false,
+                mensaje: "Personas sucias obtenidas correctamente",
+                personas: personasSucias,
+            });
+        } catch (error) {
+            console.error("Error al obtener las personas sucias:" + error.message);
+            res.status(400).send({
+                error: true,
+                mensaje: "Error al obtener las personas sucias",
+            });
+        }
+    });
+}
+
+function limpiarPersona(req, res) {
+    servletComun.comprobacionAccesoAPIKey(req, res, async () => {
+        try {
+            let nid_persona = req.params.nid_persona;
+            await gestorPersona.limpiar_persona(nid_persona);
+            res.status(200).send({
+                error: false,
+                mensaje: "Persona limpiada correctamente",
+            });
+        } catch (error) {
+            console.error("Error al limpiar la persona:" + error.message);
+            res.status(400).send({
+                error: true,
+                mensaje: "Error al limpiar la persona",
+            });
+        }
+    });
+}
+
+
 module.exports.obtenerPersona = obtenerPersona;
 module.exports.registrarPersona = registrarPersona;
-
+module.exports.obtenerPersonasSucias = obtenerPersonasSucias;
+module.exports.limpiarPersona = limpiarPersona;

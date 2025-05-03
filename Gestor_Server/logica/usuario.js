@@ -32,9 +32,7 @@ function obtener_pass(user) {
         ".usuario where usuario = " +
         conexion.dbConn.escape(user),
       function (error, results, fields) {
-        console.log(error);
-        console.log("results");
-        console.log(results);
+
         if (error) {
           console.log(error);
           reject();

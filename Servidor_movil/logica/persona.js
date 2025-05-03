@@ -217,4 +217,51 @@ async function registrarPersona(
   }
 }
 
+function obtenerPersonasSucias()
+{
+    const consulta = "select * from " +
+                    constantes.ESQUEMA_BD + ".persona p " +
+                    " where p.sucio = 'S'";
+
+    return new Promise((resolve, reject) => {
+        conexion.dbConn.query(consulta, (error, result) => {
+            if (error) {
+                console.error("Error al obtener las personas sucias:", error);
+                reject(error);
+            } else {
+                resolve(result);
+            }
+        });
+    });
+}
+
+function limpiarPersona(nid_persona)
+{
+    const instruccion = "updatee " + constantes.ESQUEMA_BD + 
+            ".persona set sucio = 'N' " +
+            " where nid_persona = " + conexion.dbConn.escape(nid_persona);
+
+    return new Promise((resolve, reject) => {
+        conexion.dbConnn.beginTransaction((err) => {
+            if (err) {
+                console.error("Error al iniciar la transacción:", err);
+                reject(err);
+            }
+            else{
+        conexion.dbConn.query(instruccion, (error, result) => {
+            if (error) {
+                console.error("Error al limpiar la persona:", error);
+                conexion.dbConn.rollback();
+                reject(error);
+            } else {
+                conexion.dbConn.commit();
+                resolve(result);
+            }})};
+        });
+    }
+)}
+
+
 module.exports.registrarPersona = registrarPersona;
+module.exports.obtenerPersonasSucias = obtenerPersonasSucias;
+module.exports.limpiarPersona = limpiarPersona;
