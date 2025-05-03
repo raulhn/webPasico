@@ -9,7 +9,8 @@ create table pasico_movil.persona(
 	nif varchar(20),
 	nid_madre integer,
     nid_padre integer,
-	fecha_actualizacion datetime default current_timestamp
+	fecha_actualizacion datetime default current_timestamp,
+	sucio varchar(1) default 'N',
 );
 
 

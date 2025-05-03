@@ -76,7 +76,75 @@ function obtener_persona(nid_persona) {
         });
     }
 
+function obtenerPersonasSucias()
+{
+    return new Promise((resolve, reject) => {
+        fetch(constantes.URL_SERVICIO_MOVIL + 'obtener_personas_sucias', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-api-key': process.env.API_KEY_SERVICIO_MOVIL,
+            }})
+        }).then(response => {
+            response.json().then(data => {
+                if(data.error) {
+                    console.error('Error en la respuesta de la API:', data.error);
+                    reject("Error en la respuesta de la API") ;
+                }
+                console.log('Respuesta de la API:', data);
+                resolve(data);
+
+            })
+            .catch(error => {
+                console.error('Error al procesar la respuesta JSON:', error);
+                reject("Error al procesar la respuesta JSON") ;
+            });
+        })
+        .catch(error => {
+            console.error('Error al realizar la solicitud:', error);
+            reject("Error al realizar la solicitud") ;
+        });
+    }
+
+function limpiarPersona(nid_persona)
+{
+    return new Promise((resolve, reject) => {
+        fetch(constantes.URL_SERVICIO_MOVIL + 'limpiar_persona',  {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-api-key': process.env.API_KEY_SERVICIO_MOVIL,
+            },
+            body :
+            {
+                'nid_persona': nid_persona
+            }
+        })
+        }).then(response => {
+            response.json().then(data => {
+                if(data.error) {
+                    console.error('Error en la respuesta de la API:', data.error);
+                    reject("Error en la respuesta de la API") ;
+                }
+                console.log('Respuesta de la API:', data);
+                resolve(data);
+
+            })
+            .catch(error => {
+                console.error('Error al procesar la respuesta JSON:', error);
+                reject("Error al procesar la respuesta JSON") ;
+            });
+        })
+        .catch(error => {
+            console.error('Error al realizar la solicitud:', error);
+            reject("Error al realizar la solicitud") ;
+        });
+    }
+
+
 
 
 module.exports.registrar_persona = registrar_persona;
 module.exports.obtener_persona = obtener_persona;   
+module.exports.obtenerPersonasSucias = obtenerPersonasSucias;
+module.exports.limpiarPersona = limpiarPersona;

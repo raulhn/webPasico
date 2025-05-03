@@ -1,7 +1,110 @@
 const conexion = require("../conexion.js");
 const constantes = require("../constantes.js");
+const servicePersona = require("../services/servicePersona.js")
+
+function requiere_actualizar_usuario(nidPersona, fechaActualizacion)
+{
+  return new Promise(
+    (resolve, reject) =>
+    {
+  const consulta = "select count(*) num " +
+                   "from " + constantes.ESQUEMA_BD + ".persona p " +
+                   "where p.nid " + conexion.dbConn.escape(nidPersona) +
+                   "  and p.fecha_actualizacion > " + conexion.dbConn.escape(fechaActualizacion);
+  conexion.dbConn.query(consulta,
+    (error, results, fields) =>
+    {
+      if(error) {reject("Error al comprobar si require actualización")}
+      else {resolve(results[0]["num"] > 0)}
+    }
+  )
+})
+}
+
+function actualizar_persona_objeto(persona)
+{
+  return new Promise(
+    (resolve, reject) =>
+    {
+      const actualizarSQL =  "update " + constantes.ESQUEMA_BD + 
+         ".persona set " +
+         "nombre = " + conexion.dbConn.escape(persona.nombre) + ", " +
+         "primer_apellido = " + conexion.dbConn.escape(persona.primer_apellido) + ", " +
+         "segundo_apellido = " + conexion.dbConn.escape(persona.segundo_apellido) + ", " +
+         "correo_electronico = " + conexion.dbConn.escape(persona.correo_electronico) + ", " +
+         "fecha_nacimiento = " + conexion.dbConn.escape(persona.fecha_nacimiento) + ", " +
+         "nif = " + conexion.dbConn.escape(persona.nif) + ", " +
+         "nid_padre = " + conexion.dbConn.escape(persona.nid_padre) + ", " +
+         "nid_madre = " + conexion.dbConn.escape(persona.nid_madre) + ", " +
+         "telefono = " + conexion.dbConn.escape(persona.telefono)
+         "where nid = " + conexion.dbConn.escape(persona.nid_persona);
+
+      conexion.dbConn.beginTransaction(
+        () =>
+        {
+          conexion.dbConn.query(actualizarSQL,
+            (error, results, fields) =>
+            {
+              if(error)
+              {
+                console.log(error);
+                conexion.dbConn.rollback();
+                reject("Error al actualizar la persona del servicio movil");
+              }
+              else
+              {
+                conexion.dbConn.commit();
+                resolve();
+              }
+            }
+          )
+        }
+      )
+    }
+  )
+}
+
+async function actualizar_usuario_movil(nidPersona)
+{
+  try
+  {
+  let persona_movil = await servicePersona.obtener_persona(nidPersona);
+  let bActualizar = await requiere_actualizar_usuario(nidPersona, persona_movil.fecha_actualizacion);
+
+  if(bActualizar)
+  {
+    await actualizar_persona_objeto(persona_movil);
+  }
+  }
+  catch(error)
+  {
+    console.log(error);
+    throw new Error("Error al actualizar el usuario")
+  }
+}
+
+async function actualizar_personas_sucias()
+{
+  try
+  {
+    let personas_sucias = await servicePersona.obtenerPersonasSucias();
+
+    for(let i=0; i < personas_sucias.length; i++)
+    {
+      await actualizar_persona_objeto(personas_sucias[i]);
+      await servicePersona.limpiarPersona(personas_sucias[i].nid_persona)
+    }
+    return;
+  }
+  catch(error)
+  {
+    console.log(error);
+  }
+}
+
 
 async function existe_nif(nif) {
+  await actualizar_personas_sucias();
   return new Promise((resolve, reject) => {
     if (nif.length === 0) {
       resolve(false);
@@ -25,6 +128,7 @@ async function existe_nif(nif) {
 
 async function valida_nif(nif) {
   try {
+
     let bExisteNif = await existe_nif(nif);
     if (!bExisteNif) {
       return new Promise((resolve, reject) => {
@@ -57,6 +161,7 @@ async function valida_nif(nif) {
 }
 
 async function existe_nid(nid_persona) {
+  await actualizar_personas_sucias();
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(
       "select count(*) cont from " +
@@ -74,7 +179,8 @@ async function existe_nid(nid_persona) {
   });
 }
 
-function obtener_persona_apellidos(primer_apellido, segundo_apellido) {
+async function obtener_persona_apellidos(primer_apellido, segundo_apellido) {
+  await actualizar_personas_sucias();
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(
       "select concat(nombre, ' ', primer_apellido, ' ', segundo_apellido) etiqueta from " +
@@ -96,12 +202,13 @@ function obtener_persona_apellidos(primer_apellido, segundo_apellido) {
   });
 }
 
-function existe_persona(
+async function existe_persona(
   nombre,
   primer_apellido,
   segundo_apellido,
   fecha_nacimiento
 ) {
+  await actualizar_personas_sucias();
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(
       "select count(*) cont from " +
@@ -420,7 +527,8 @@ async function registrar_madre(nid_persona, nid_madre) {
   }
 }
 
-function obtener_personas() {
+async function obtener_personas() {
+  await actualizar_personas_sucias();
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(
       "select concat(ifnull(p.nif, ''), ' ',  ifnull(p.nombre, ''), ' ', ifnull(p.primer_apellido, ''), ' ' , ifnull(p.segundo_apellido, '')) etiqueta, p.* from " +
@@ -440,7 +548,8 @@ function obtener_personas() {
   });
 }
 
-function obtener_todas_personas() {
+async function obtener_todas_personas() {
+  await actualizar_personas_sucias();
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(
       "select p.* from " + constantes.ESQUEMA_BD + ".persona p",
@@ -458,7 +567,9 @@ function obtener_todas_personas() {
   });
 }
 
-function obtener_persona(nid) {
+
+async function obtener_persona(nid) {
+  await actualizar_personas_sucias();
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(
       "select concat(ifnull(p.nif, ''), ' ',  ifnull(p.nombre, ''), ' ', ifnull(p.primer_apellido, ''), ' ' , ifnull(p.segundo_apellido, '')) etiqueta, p.* from " +
@@ -480,8 +591,9 @@ function obtener_persona(nid) {
   });
 }
 
-function obtener_objeto_persona(nid)
+async function obtener_objeto_persona(nid)
 {
+  await actualizar_personas_sucias();
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(
       "select p.* from " +
@@ -494,7 +606,7 @@ function obtener_objeto_persona(nid)
           console.log(error);
           reject(error);
         } else if (results.length < 1) {
-          reject("No se ha encontrado la persona");
+          reject(new Error("No se ha encontrado la persona"));
         } else {
           resolve(results[0]);
         }
