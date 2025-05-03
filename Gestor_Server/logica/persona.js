@@ -480,6 +480,29 @@ function obtener_persona(nid) {
   });
 }
 
+function obtener_objeto_persona(nid)
+{
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(
+      "select p.* from " +
+        constantes.ESQUEMA_BD +
+        ".persona p where nid = " +
+        conexion.dbConn.escape(nid),
+      (error, results, fields) => {
+        if (error) {
+          console.log("Error");
+          console.log(error);
+          reject(error);
+        } else if (results.length < 1) {
+          reject("No se ha encontrado la persona");
+        } else {
+          resolve(results[0]);
+        }
+      }
+    );
+  })
+}
+
 function actualizar_persona(
   nid,
   nif,
@@ -861,6 +884,7 @@ module.exports.valida_nif = valida_nif;
 module.exports.existe_nid = existe_nid;
 module.exports.obtener_persona_apellidos = obtener_persona_apellidos;
 module.exports.obtener_nid_persona = obtener_nid_persona;
+module.exports.obtener_objeto_persona = obtener_objeto_persona;
 
 module.exports.obtener_padre = obtener_padre;
 module.exports.obtener_madre = obtener_madre;
