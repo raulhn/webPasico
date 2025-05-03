@@ -1,10 +1,11 @@
 const eslintPluginPrettier = require("eslint-plugin-prettier");
 const conexion = require("../conexion.js");
+const constantes = require("../constantes.js")
 
 function existePersona(nid_persona) {
   return new Promise((resolve, reject) => {
     const sql =
-      "SELECT * FROM persona WHERE nid_persona = " +
+      "SELECT * FROM " + constantes.ESQUEMA + ".persona WHERE nid_persona = " +
       conexion.dbConn.escape(nid_persona);
 
     conexion.dbConn.query(sql, (error, results) => {
@@ -20,7 +21,7 @@ function existePersona(nid_persona) {
 function requiereActualizarPersona(nid_persona, fecha_actualizacion) {
   return new Promise((resolve, reject) => {
     const sql =
-      "SELECT * FROM persona WHERE nid_persona = " +
+      "SELECT * FROM " + constantes.ESQUEMA + ".persona WHERE nid_persona = " +
       conexion.dbConn.escape(nid_persona) +
       " AND fecha_actualizacion > " +
       conexion.dbConn.escape(fecha_actualizacion);
@@ -220,7 +221,7 @@ async function registrarPersona(
 function obtenerPersonasSucias()
 {
     const consulta = "select * from " +
-                    constantes.ESQUEMA_BD + ".persona p " +
+                    constantes.ESQUEMA + ".persona p " +
                     " where p.sucio = 'S'";
 
     return new Promise((resolve, reject) => {
@@ -237,7 +238,7 @@ function obtenerPersonasSucias()
 
 function limpiarPersona(nid_persona)
 {
-    const instruccion = "updatee " + constantes.ESQUEMA_BD + 
+    const instruccion = "updatee " + constantes.ESQUEMA + 
             ".persona set sucio = 'N' " +
             " where nid_persona = " + conexion.dbConn.escape(nid_persona);
 

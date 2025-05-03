@@ -99,6 +99,7 @@ async function actualizar_personas_sucias()
   catch(error)
   {
     console.log(error);
+    return;
   }
 }
 
@@ -271,7 +272,7 @@ async function registrar_persona(
     );
     if (!bExiste_nif && !bExiste_persona) {
       return new Promise((resolve, reject) => {
-        conexion.dbConn.beginTransaction(() => {
+        conexion.dbConn.beginTransaction( async() => {
           conexion.dbConn.query(
             "insert into " +
               constantes.ESQUEMA_BD +
@@ -312,6 +313,7 @@ async function registrar_persona(
                 reject(error);
               } else {
                 conexion.dbConn.commit();
+                servicePersona.registrar_persona(results.insertId);
                 console.log("Usuario registrado");
                 resolve(results.insertId);
               }
@@ -529,6 +531,7 @@ async function registrar_madre(nid_persona, nid_madre) {
 
 async function obtener_personas() {
   await actualizar_personas_sucias();
+  
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(
       "select concat(ifnull(p.nif, ''), ' ',  ifnull(p.nombre, ''), ' ', ifnull(p.primer_apellido, ''), ' ' , ifnull(p.segundo_apellido, '')) etiqueta, p.* from " +
@@ -680,6 +683,7 @@ function actualizar_persona(
               resolve(false);
             } else {
               conexion.dbConn.commit();
+              servicePersona.registrar_persona(nid);
               resolve(true);
             }
           }

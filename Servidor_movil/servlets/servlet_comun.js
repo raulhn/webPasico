@@ -31,7 +31,9 @@ function comprobacionAccesoAPIKey(req, res, callback) {
       throw new Error("API Key no proporcionada");
     }
 
-    if (apiKey !== process.env.API_KEY) {
+
+
+    if (apiKey !== process.env.API_KEY_MOVIL) {
       throw new Error("API Key no válida");
     }
 
