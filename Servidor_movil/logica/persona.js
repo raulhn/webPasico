@@ -1,11 +1,13 @@
 const eslintPluginPrettier = require("eslint-plugin-prettier");
 const conexion = require("../conexion.js");
-const constantes = require("../constantes.js")
+const constantes = require("../constantes.js");
 
 function existePersona(nid_persona) {
   return new Promise((resolve, reject) => {
     const sql =
-      "SELECT * FROM " + constantes.ESQUEMA + ".persona WHERE nid_persona = " +
+      "SELECT * FROM " +
+      constantes.ESQUEMA +
+      ".persona WHERE nid_persona = " +
       conexion.dbConn.escape(nid_persona);
 
     conexion.dbConn.query(sql, (error, results) => {
@@ -21,10 +23,13 @@ function existePersona(nid_persona) {
 function requiereActualizarPersona(nid_persona, fecha_actualizacion) {
   return new Promise((resolve, reject) => {
     const sql =
-      "SELECT * FROM " + constantes.ESQUEMA + ".persona WHERE nid_persona = " +
+      "SELECT * FROM " +
+      constantes.ESQUEMA +
+      ".persona WHERE nid_persona = " +
       conexion.dbConn.escape(nid_persona) +
-      " AND fecha_actualizacion > " +
-      conexion.dbConn.escape(fecha_actualizacion);
+      " AND (fecha_actualizacion < " +
+      conexion.dbConn.escape(fecha_actualizacion) +
+      " or fecha_actualizacion is null)";
 
     conexion.dbConn.query(sql, (error, results) => {
       if (error) {
@@ -49,7 +54,8 @@ function actualizarPersona(
   telefono,
   correo_electronico,
   nid_madre,
-  nid_padre
+  nid_padre,
+  fecha_actualizacion
 ) {
   return new Promise((resolve, reject) => {
     const sql =
@@ -71,7 +77,11 @@ function actualizarPersona(
       conexion.dbConn.escape(nid_madre) +
       ", nid_padre = " +
       conexion.dbConn.escape(nid_padre) +
-    " WHERE nid_persona = " + conexion.dbConn.escape(nid_persona);
+      ", fecha_actualizacion = " +
+      conexion.dbConn.escape(fecha_actualizacion) +
+      ", sucio = 'N'" +
+      " WHERE nid_persona = " +
+      conexion.dbConn.escape(nid_persona);
 
     conexion.dbConn.beginTransaction((err) => {
       conexion.dbConn.query(sql, (error) => {
@@ -121,7 +131,7 @@ function insertarPersona(
       ", " +
       conexion.dbConn.escape(fecha_nacimiento) +
       ", " +
-      conexion.dbConn.escape(nif) + 
+      conexion.dbConn.escape(nif) +
       ", " +
       conexion.dbConn.escape(telefono) +
       ", " +
@@ -173,6 +183,16 @@ async function registrarPersona(
   try {
     const existe = await existePersona(nid_persona);
 
+    console.log("Nombre: ", nombre);
+    console.log("Primer apellido: ", primer_apellido);
+    console.log("Segundo apellido: ", segundo_apellido);
+    console.log("Fecha de nacimiento: ", fecha_nacimiento);
+
+    console.log("NIF: ", nif);
+    console.log("Teléfono: ", telefono);
+    console.log("Correo electrónico: ", correo_electronico);
+    console.log("Fecha de actualización: ", fecha_actualizacion);
+
     if (existe) {
       const requiereActualizar = await requiereActualizarPersona(
         nid_persona,
@@ -190,7 +210,7 @@ async function registrarPersona(
           correo_electronico,
           nid_madre,
           nid_padre,
-    
+          fecha_actualizacion
         );
         console.log("Persona actualizada correctamente.");
         return;
@@ -218,50 +238,53 @@ async function registrarPersona(
   }
 }
 
-function obtenerPersonasSucias()
-{
-    const consulta = "select * from " +
-                    constantes.ESQUEMA + ".persona p " +
-                    " where p.sucio = 'S'";
+function obtenerPersonasSucias() {
+  const consulta =
+    "select * from " +
+    constantes.ESQUEMA +
+    ".persona p " +
+    " where p.sucio = 'S'";
 
-    return new Promise((resolve, reject) => {
-        conexion.dbConn.query(consulta, (error, result) => {
-            if (error) {
-                console.error("Error al obtener las personas sucias:", error);
-                reject(error);
-            } else {
-                resolve(result);
-            }
-        });
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(consulta, (error, result) => {
+      if (error) {
+        console.error("Error al obtener las personas sucias:", error);
+        reject(error);
+      } else {
+        resolve(result);
+      }
     });
+  });
 }
 
-function limpiarPersona(nid_persona)
-{
-    const instruccion = "updatee " + constantes.ESQUEMA + 
-            ".persona set sucio = 'N' " +
-            " where nid_persona = " + conexion.dbConn.escape(nid_persona);
+function limpiarPersona(nid_persona) {
+  const instruccion =
+    "update " +
+    constantes.ESQUEMA +
+    ".persona set sucio = 'N' " +
+    " where nid_persona = " +
+    conexion.dbConn.escape(nid_persona);
 
-    return new Promise((resolve, reject) => {
-        conexion.dbConnn.beginTransaction((err) => {
-            if (err) {
-                console.error("Error al iniciar la transacción:", err);
-                reject(err);
-            }
-            else{
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.beginTransaction((err) => {
+      if (err) {
+        console.error("Error al iniciar la transacción:", err);
+        reject(err);
+      } else {
         conexion.dbConn.query(instruccion, (error, result) => {
-            if (error) {
-                console.error("Error al limpiar la persona:", error);
-                conexion.dbConn.rollback();
-                reject(error);
-            } else {
-                conexion.dbConn.commit();
-                resolve(result);
-            }})};
+          if (error) {
+            console.error("Error al limpiar la persona:", error);
+            conexion.dbConn.rollback();
+            reject(error);
+          } else {
+            conexion.dbConn.commit();
+            resolve(result);
+          }
         });
-    }
-)}
-
+      }
+    });
+  });
+}
 
 module.exports.registrarPersona = registrarPersona;
 module.exports.obtenerPersonasSucias = obtenerPersonasSucias;
