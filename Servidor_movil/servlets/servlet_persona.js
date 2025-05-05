@@ -111,6 +111,8 @@ function limpiarPersona(req, res) {
   });
 }
 
+
+
 module.exports.obtenerPersona = obtenerPersona;
 module.exports.registrarPersona = registrarPersona;
 module.exports.obtenerPersonasSucias = obtenerPersonasSucias;

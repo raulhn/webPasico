@@ -49,12 +49,15 @@ app.post("/refresh_token", servletUsuario.refreshToken);
 app.post("/logout", servletUsuario.logout);
 app.post("/recuperar_password", servletUsuario.recuperarPassword);
 
-
 /** Llamadas por API KEY **/
+// Personas //
 app.post("/registrar_persona", servletPersona.registrarPersona);
 app.get("/obtener_persona/:nid_persona", servletPersona.obtenerPersona);
 app.get("/obtener_personas_sucias", servletPersona.obtenerPersonasSucias);
 app.post("/limpiar_persona", servletPersona.limpiarPersona);
+
+// Socios //
+
 
 // Peticiones que requieren inicio de sesión
 app.use((req, res, next) => {
