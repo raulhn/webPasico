@@ -6,6 +6,8 @@ const nodeMail = require("../logica/nodemail.js");
 const jwt = require("jsonwebtoken");
 const constantes = require("../constantes.js");
 
+const gestorPersona = require("../logica/persona.js");
+
 async function registrarUsuario(req, res) {
   try {
     const {
@@ -115,6 +117,8 @@ async function login(req, res) {
       },
       refreshToken: tokens.refreshToken,
     });
+
+    await gestorPersona.asociarUsuarioPersona(tokens.usuario.nid_usuario);
   } catch (error) {
     console.error("Error en el inicio de sesión");
     res.status(400).send({

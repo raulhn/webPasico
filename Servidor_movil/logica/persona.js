@@ -286,6 +286,137 @@ function limpiarPersona(nid_persona) {
   });
 }
 
+function existeUsuarioPersona(nid_usuario) {
+  return new Promise((resolve, reject) => {
+    const sql =
+      "SELECT * FROM " +
+      constantes.ESQUEMA +
+      ".usuarios WHERE nid_persona is not null " +
+      " AND nid_usuario = " +
+      conexion.dbConn.escape(nid_usuario);
+
+    conexion.dbConn.query(sql, (error, results) => {
+      if (error) {
+        console.error(
+          "Error al verificar la existencia de la relación persona-usuario:",
+          error
+        );
+        return reject(error);
+      }
+      resolve(results.length > 0);
+    });
+  });
+}
+
+async function obtenerUsuario(nid_usuario) {
+  try {
+    let existe = await existeUsuarioPersona(nid_usuario);
+
+    return new Promise((resolve, reject) => {
+      if (existe) {
+        const sql =
+          "SELECT * FROM " +
+          constantes.ESQUEMA +
+          ".usuarios WHERE nid_usuario = " +
+          conexion.dbConn.escape(nid_usuario);
+
+        conexion.dbConn.query(sql, (error, results) => {
+          if (error) {
+            console.error("Error al obtener el usuario:", error);
+            return reject(error);
+          }
+          resolve(results[0]);
+        });
+      } else {
+        resolve(null);
+      }
+    });
+  } catch (error) {
+    console.error("Error al obtener el usuario:", error);
+    throw new Error("Error al obtener el usuario"); // Propagar el error para manejarlo en otro lugar si es necesario
+  }
+}
+
+function obtenerPersonaNombre(
+  nombre,
+  primer_apellido,
+  segundo_apellido,
+  correo_electronico
+) {
+  return new Promise((resolve, reject) => {
+    const sql =
+      "SELECT * FROM " +
+      constantes.ESQUEMA +
+      ".persona WHERE nombre = " +
+      conexion.dbConn.escape(nombre) +
+      " AND primer_apellido = " +
+      conexion.dbConn.escape(primer_apellido) +
+      " AND segundo_apellido = " +
+      conexion.dbConn.escape(segundo_apellido) +
+      " AND correo_electronico = " +
+      conexion.dbConn.escape(correo_electronico);
+
+    conexion.dbConn.query(sql, (error, results) => {
+      if (error) {
+        console.error("Error al obtener la persona:", error);
+        return reject(error);
+      }
+      if (results.length === 0) {
+        return resolve(null); // No se encontró la persona
+      } else {
+        resolve(results[0]);
+      }
+    });
+  });
+}
+
+function actualizarPersonaUsuario(nid_persona, nid_usuario) {
+  return new Promise((resolve, reject) => {
+    const sql =
+      "UPDATE " +
+      constantes.ESQUEMA +
+      ".usuarios SET nid_persona = " +
+      conexion.dbConn.escape(nid_persona) +
+      " WHERE nid_usuario = " +
+      conexion.dbConn.escape(nid_usuario) +
+      " and verificado = 'S'";
+
+    conexion.dbConn.query(sql, (error, results) => {
+      if (error) {
+        console.error("Error al actualizar la persona del usuario:", error);
+        return reject(error);
+      }
+      resolve(results);
+    });
+  });
+}
+
+async function asociarUsuarioPersona(nid_usuario) {
+  try {
+    let usuario = await obtenerUsuario(nid_usuario);
+
+    if (usuario && usuario.nid_persona === null) {
+      // Si el usuario no tiene una persona asociada, buscamos la persona por nombre y apellidos
+      let persona = await obtenerPersonaNombre(
+        usuario.nombre,
+        usuario.primer_apellido,
+        usuario.segundo_apellido,
+        usuario.correo_electronico
+      );
+
+      if (persona) {
+        await actualizarPersonaUsuario(persona.nid_persona, nid_usuario);
+      } else {
+        console.log("No se encontró la persona asociada al usuario.");
+      }
+    }
+  } catch (error) {
+    console.error("Error al asociar el usuario con la persona:", error);
+    throw new Error("Error al asociar el usuario con la persona"); // Propagar el error para manejarlo en otro lugar si es necesario
+  }
+}
+
 module.exports.registrarPersona = registrarPersona;
 module.exports.obtenerPersonasSucias = obtenerPersonasSucias;
 module.exports.limpiarPersona = limpiarPersona;
+module.exports.asociarUsuarioPersona = asociarUsuarioPersona;
