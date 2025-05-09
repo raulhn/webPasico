@@ -118,6 +118,7 @@ app.get(
   "/obtener_instrumentos_filtro",
   servlet_musico.obtener_instrumentos_filtro
 );
+app.post("/baja_musico", servlet_musico.baja_musico);
 
 app.get("/obtener_tipo_musico", servlet_musico.obtener_tipo_musicos);
 

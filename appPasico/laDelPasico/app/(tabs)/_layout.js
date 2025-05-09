@@ -34,6 +34,41 @@ export default function TabsLayout() {
     }
   }
 
+  function opcionesRol(icono, tipoIcono, rol, titulo) {
+    let opciones = {
+      headerShown: false,
+      title: titulo,
+      tabBarIcon: ({ color }) => {
+        console.log("TipoIcono", tipoIcono);
+        if (tipoIcono === 1) {
+          return (
+            <MaterialCommunityIcons name="trumpet" size={30} color={color} />
+          );
+        } else {
+          return <MaterialIcons name={icono} size={30} color={color} />;
+        }
+      },
+    };
+
+    if (!roles || roles.length === 0) {
+      return {
+        ...opciones,
+        href: null,
+      }; // Si no hay roles, no se muestra la opción
+    }
+
+    const rolSocio = roles.find((elemento) => elemento.rol === rol);
+
+    if (!rolSocio) {
+      return {
+        ...opciones,
+        href: null,
+      }; // Si no hay rol de socio, no se muestra la opción
+    } else {
+      return opciones;
+    }
+  }
+
   return (
     <Tabs>
       <Tabs.Screen
@@ -58,20 +93,14 @@ export default function TabsLayout() {
       />
       <Tabs.Screen
         name="(banda)"
-        options={{
-          headerShown: false,
-          title: "Banda",
-          tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="trumpet" size={30} color={color} />
-          ),
-        }}
+        options={opcionesRol("trumpet", 1, "MUSICO", "Banda")}
       />
       <Tabs.Screen
         ScreenOptions={{
           headerShown: false,
         }}
         name="(socios)"
-        options={opcionesSocio()}
+        options={opcionesRol("group", 2, "SOCIO", "Asociación")}
       />
     </Tabs>
   );

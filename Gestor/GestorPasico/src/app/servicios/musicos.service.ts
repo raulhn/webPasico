@@ -45,4 +45,11 @@ export class MusicosService {
     let API_URL = this.url + '/obtener_tipo_musico';
     return this.http.get(API_URL, {withCredentials: true})
   }
+
+  baja_musico(nid_persona: string, nid_instrumento: string, nid_tipo_musico: string, fecha_baja: string)
+  {
+    let API_URL = this.url + '/baja_musico';
+    return this.http.post(API_URL, {nid_persona: nid_persona, nid_instrumento: nid_instrumento, nid_tipo_musico: nid_tipo_musico, fecha_baja: fecha_baja}, 
+      {withCredentials: true})
+  }
 }

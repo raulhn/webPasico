@@ -12,6 +12,14 @@ export default function Carnet() {
 
   const logo = require("../../../assets/logo asociacion.jpg");
 
+  function formatearFecha(fechaISO) {
+    const fecha = new Date(fechaISO); // Convierte la fecha ISO a un objeto Date
+    const dia = String(fecha.getDate()).padStart(2, "0"); // Obtiene el día (2 dígitos)
+    const mes = String(fecha.getMonth() + 1).padStart(2, "0"); // Obtiene el mes (2 dígitos, +1 porque los meses empiezan en 0)
+    const anio = fecha.getFullYear(); // Obtiene el año completo
+    return `${dia}/${mes}/${anio}`; // Devuelve la fecha en formato dd/mm/yyyy
+  }
+
   useEffect(() => {
     serviceSocios
       .obtenerSocio()
@@ -48,6 +56,10 @@ export default function Carnet() {
           <Text style={styles.value}>{persona.segundo_apellido}</Text>
         </View>
         <View style={styles.infoContainer}>
+          <Text style={styles.label}>Fecha de Alta:</Text>
+          <Text style={styles.value}>{formatearFecha(socio.fecha_alta)}</Text>
+        </View>
+        <View style={styles.infoContainer}>
           <Text style={styles.label}>Número de Socio:</Text>
           <Text style={styles.value}>{socio.num_socio}</Text>
         </View>
@@ -67,7 +79,7 @@ const styles = StyleSheet.create({
   cardBackground: {
     position: "absolute",
     width: 360,
-    height: 220,
+    height: 230,
     zIndex: 1,
     padding: 20,
     margin: 20,
@@ -84,12 +96,12 @@ const styles = StyleSheet.create({
   },
   card: {
     width: 360,
-    height: 220,
+    height: 230,
     zIndex: 2,
     padding: 20,
     borderRadius: 10, // Bordes redondeados
     backgroundColor: "rgba(255, 255, 255, 0.5)",
-    shadowColor: "#000", // Sombra para dar efecto de elevación
+    shadowColor: "#007CFA", // Sombra para dar efecto de elevación
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
@@ -110,6 +122,7 @@ const styles = StyleSheet.create({
   infoContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
+
     width: "100%",
     marginBottom: 10,
   },

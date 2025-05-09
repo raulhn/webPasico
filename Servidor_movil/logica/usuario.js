@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const gestorSocios = require("./socios.js");
 const gestorPersona = require("./persona.js");
+const gestorMusicos = require("./musicos.js");
 
 function existeUsuario(correoElectronico) {
   return new Promise((resolve, reject) => {
@@ -104,6 +105,13 @@ async function construirRoles(nid_usuario) {
     if (esSocio) {
       console.log("El usuario es socio.");
       roles.push({ rol: "SOCIO" });
+    }
+
+    let esMusico = await gestorMusicos.esMusico(persona.nid_persona);
+
+    if (esMusico) {
+      console.log("El usuario es músico.");
+      roles.push({ rol: "MUSICO" });
     }
 
     return roles;

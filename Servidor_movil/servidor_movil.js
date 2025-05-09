@@ -13,6 +13,8 @@ const servletUsuario = require("./servlets/servlet_usuario.js");
 const servletConexion = require("./servlets/servlet_conexiones.js");
 const servletPersona = require("./servlets/servlet_persona.js");
 const servletSocios = require("./servlets/servlet_socios.js");
+const servletMusicos = require("./servlets/servlet_musicos.js");
+const servletAsignaturas = require("./servlets/servlet_asignatura.js");
 
 const validacionEmail = require("./logica/validacionEmail.js");
 
@@ -59,6 +61,12 @@ app.post("/limpiar_persona", servletPersona.limpiarPersona);
 
 // Socios //
 app.post("/registrar_socio", servletSocios.registrarSocio);
+
+// Musicos //
+app.post("/registrar_musico", servletMusicos.registrarMusico);
+
+// Asignaturas //
+app.post("/registrar_asignatura", servletAsignaturas.registrarAsignatura);
 
 // Peticiones que requieren inicio de sesión
 app.use((req, res, next) => {
