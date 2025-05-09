@@ -15,8 +15,9 @@
 
     <div *ngIf="bCargadosMusicos">
         <table datatable [dtOptions]="dtOptions_musicos" id="tabla_musicos" class="row-border hover"></table>
-        <div *ngIf="musico_seleccionado !== undefined" class="float-end p-3">
+        <div *ngIf="musico_seleccionado !== undefined" class="float-end p-3"  style="display: flex; gap: 10px;">
             <a [href]="obtenerUrlFicha()"> <button class="btn btn-primary"> Ver Ficha</button></a>
+            <button (click)="dar_baja_musico()" class="btn btn-danger">Cambiar fecha baja</button>
         </div>
     </div>
 
@@ -44,5 +45,11 @@
             [compareWith]="compareTipoInstrumento">
             </ng-select>
         </div>
+    </div>
+</div>
+
+<div display="none">
+   <div #instancia_baja_musico>
+        <input type="date" [(ngModel)]="fecha_baja" class="form-control mb-2" placeholder="Fecha de Baja">
     </div>
 </div>

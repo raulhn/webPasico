@@ -13,6 +13,7 @@ import Swal from 'sweetalert2';
 export class RegistroMusicoComponent implements OnInit{
 
   @ViewChild('instancia_registrar_musico') instancia_registrar_musico!: ElementRef;
+  @ViewChild('instancia_baja_musico') instancia_baja_musico!: ElementRef;
 
   enlaceFicha: string = URL.URL_FRONT_END + "/ficha_persona/";
 
@@ -33,6 +34,8 @@ export class RegistroMusicoComponent implements OnInit{
   dtOptions_musicos: any= {}
 
   musico_seleccionado: any;
+
+  fecha_baja: string = "";
 
 
   click_musico(persona_marcada: any)
@@ -201,4 +204,42 @@ export class RegistroMusicoComponent implements OnInit{
       this.musicosService.obtener_personas_instrumento(this.nid_instrumento_filtro).subscribe(this.refrescar_personas);
     }
   }
+
+  dar_baja_musico()
+  {
+    Swal.fire({
+      title: '¿Está seguro de dar de baja al músico?',
+      html: this.instancia_baja_musico.nativeElement,
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, dar de baja'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.musicosService.baja_musico(this.musico_seleccionado.nid, this.musico_seleccionado.nid_instrumento, 
+          this.musico_seleccionado.nid_tipo_musico, this.fecha_baja).subscribe(
+          {
+            next: (respuesta: any) =>
+            {
+              Swal.fire(
+                'Baja correcta',
+                'El músico ha sido dado de baja correctamente',
+                'success'
+              )
+
+            },
+            error: (respuesta: any) =>
+            {
+              Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Se ha producido un error',
+              })
+            }
+          }
+        )
+      }
+    })
+  }
+
 }
