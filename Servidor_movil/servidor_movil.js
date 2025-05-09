@@ -12,6 +12,7 @@ const servletComun = require("./servlets/servlet_comun.js");
 const servletUsuario = require("./servlets/servlet_usuario.js");
 const servletConexion = require("./servlets/servlet_conexiones.js");
 const servletPersona = require("./servlets/servlet_persona.js");
+const servletSocios = require("./servlets/servlet_socios.js");
 
 const validacionEmail = require("./logica/validacionEmail.js");
 
@@ -57,7 +58,7 @@ app.get("/obtener_personas_sucias", servletPersona.obtenerPersonasSucias);
 app.post("/limpiar_persona", servletPersona.limpiarPersona);
 
 // Socios //
-
+app.post("/registrar_socio", servletSocios.registrarSocio);
 
 // Peticiones que requieren inicio de sesión
 app.use((req, res, next) => {
@@ -67,6 +68,7 @@ app.use((req, res, next) => {
 
 app.get("/usuario", servletUsuario.obtenerUsuario);
 app.post("/cambiar_password", servletUsuario.cambiarPassword);
+app.get("/obtener_socio", servletSocios.obtenerSocio);
 
 https
   .createServer(

@@ -147,4 +147,44 @@ async function registrarSocio(
   }
 }
 
+function esSocio(nid_persona) {
+  return new Promise((resolve, reject) => {
+    const sql =
+      "SELECT COUNT(*) AS esSocio FROM " +
+      constantes.ESQUEMA +
+      ".socios WHERE nid_persona = " +
+      conexion.dbConn.escape(nid_persona);
+
+    conexion.dbConn.query(sql, (error, results) => {
+      if (error) {
+        console.error("Error al verificar si es socio:", error);
+        reject(error);
+      } else {
+        resolve(results[0].esSocio > 0);
+      }
+    });
+  });
+}
+
+function obtenerSocio(nid_persona) {
+  return new Promise((resolve, reject) => {
+    const sql =
+      "SELECT * FROM " +
+      constantes.ESQUEMA +
+      ".socios WHERE nid_persona = " +
+      conexion.dbConn.escape(nid_persona);
+
+    conexion.dbConn.query(sql, (error, results) => {
+      if (error) {
+        console.error("Error al obtener el socio:", error);
+        reject(error);
+      } else {
+        resolve(results[0]);
+      }
+    });
+  });
+}
+
 module.exports.registrarSocio = registrarSocio;
+module.exports.esSocio = esSocio;
+module.exports.obtenerSocio = obtenerSocio;

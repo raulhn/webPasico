@@ -1,6 +1,8 @@
 import { Drawer } from "expo-router/drawer";
 import { StyleSheet, View, Image } from "react-native";
 import { CustomHeader } from "../../../componentes/cabecera";
+import { AuthContext } from "../../../providers/AuthContext";
+import { useContext } from "react";
 
 const CustomHeaderAsociacion = ({ navigation, route, options }) => {
   return CustomHeader({
@@ -12,6 +14,8 @@ const CustomHeaderAsociacion = ({ navigation, route, options }) => {
 };
 
 export default function DrawerLayout() {
+  const { roles } = useContext(AuthContext); // Obtiene el contexto de autenticación
+
   return (
     <Drawer
       screenOptions={{

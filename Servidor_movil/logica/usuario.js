@@ -4,6 +4,8 @@ const constantes = require("../constantes.js");
 const validacionEmail = require("./validacionEmail.js");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
+const gestorSocios = require("./socios.js");
+const gestorPersona = require("./persona.js");
 
 function existeUsuario(correoElectronico) {
   return new Promise((resolve, reject) => {
@@ -12,6 +14,24 @@ function existeUsuario(correoElectronico) {
       constantes.ESQUEMA +
       ".usuarios where correo_electronico = " +
       conexion.dbConn.escape(correoElectronico);
+    conexion.dbConn.query(query, (error, results) => {
+      if (error) {
+        console.error("Error al comprobar la existencia del usuario:", error);
+        resolve(false);
+      } else {
+        resolve(results[0].num > 0);
+      }
+    });
+  });
+}
+
+function existeUsuarioNid(nid_usuario) {
+  return new Promise((resolve, reject) => {
+    const query =
+      "select count(*) num from " +
+      constantes.ESQUEMA +
+      ".usuarios where nid_usuario = " +
+      conexion.dbConn.escape(nid_usuario);
     conexion.dbConn.query(query, (error, results) => {
       if (error) {
         console.error("Error al comprobar la existencia del usuario:", error);
@@ -75,6 +95,24 @@ async function registrarUsuario(
   }
 }
 
+async function construirRoles(nid_usuario) {
+  try {
+    let roles = [];
+    const persona = await gestorPersona.obtenerPersonaUsuario(nid_usuario);
+    let esSocio = await gestorSocios.esSocio(persona.nid_persona);
+
+    if (esSocio) {
+      console.log("El usuario es socio.");
+      roles.push({ rol: "SOCIO" });
+    }
+
+    return roles;
+  } catch (error) {
+    console.error("Error al construir los roles:", error.message);
+    throw new Error("Error al construir los roles");
+  }
+}
+
 function obtenerUsuario(nid_usuario) {
   return new Promise((resolve, reject) => {
     const query =
@@ -114,13 +152,10 @@ function login(correoElectronico, password) {
             console.error("Error al comparar las contraseñas:", err);
             reject(new Error("Error al realizar el login"));
           } else {
-            console.log("Resultado de la comparación:", result);
             if (!result) {
               console.error("La contraseña es incorrecta.");
               reject(new Error("La contraseña es incorrecta."));
             } else {
-              // La contraseña es correcta, devolver el usuario
-              console.log("Usuario encontrado:", results[0]);
               resolve(results[0]);
             }
           }
@@ -283,8 +318,11 @@ function realizarCambioPassword(nid_usuario, passwordActual, passwordNuevo) {
   });
 }
 
+module.exports.existeUsuario = existeUsuario;
+module.exports.existeUsuarioNid = existeUsuarioNid;
 module.exports.registrarUsuario = registrarUsuario;
 module.exports.realizarLogin = realizarLogin;
+module.exports.construirRoles = construirRoles;
 module.exports.obtenerUsuario = obtenerUsuario;
 module.exports.recuperarPassword = recuperarPassword;
 module.exports.realizarCambioPassword = realizarCambioPassword;

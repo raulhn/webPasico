@@ -1,6 +1,7 @@
 const conexion = require("../conexion.js");
 const constantes = require("../constantes.js");
 const persona = require("./persona.js");
+const serviceSocios = require("../services/serviceSocios.js");
 
 function existe_socio(nid_persona) {
   return new Promise((resolve, reject) => {
@@ -39,6 +40,35 @@ function obtener_siguiente_num_socio() {
   });
 }
 
+function guardar_socio(nid_persona, num_socio, fecha_alta) {
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.beginTransaction(() => {
+      conexion.dbConn.query(
+        "insert into " +
+          constantes.ESQUEMA_BD +
+          ".socios(nid_persona, num_socio, fecha_alta) values(" +
+          conexion.dbConn.escape(nid_persona) +
+          ", " +
+          conexion.dbConn.escape(num_socio) +
+          ", " +
+          "str_to_date(nullif(" +
+          conexion.dbConn.escape(fecha_alta) +
+          ", '') , '%Y-%m-%d'))",
+        (error, results, fields) => {
+          if (error) {
+            console.log(error);
+            conexion.dbConn.rollback();
+            reject("Error al registrar el socio");
+          } else {
+            conexion.dbConn.commit();
+            resolve();
+          }
+        }
+      );
+    });
+  });
+}
+
 async function registrar_socio(nid_persona, num_socio, fecha_alta) {
   try {
     let bExistePersona = await persona.existe_nid(nid_persona);
@@ -53,37 +83,51 @@ async function registrar_socio(nid_persona, num_socio, fecha_alta) {
         num_socio = await obtener_siguiente_num_socio();
       }
 
-      return new Promise((resolve, reject) => {
-        conexion.dbConn.beginTransaction(() => {
-          conexion.dbConn.query(
-            "insert into " +
-              constantes.ESQUEMA_BD +
-              ".socios(nid_persona, num_socio, fecha_alta) values(" +
-              conexion.dbConn.escape(nid_persona) +
-              ", " +
-              conexion.dbConn.escape(num_socio) +
-              ", " +
-              "str_to_date(nullif(" +
-              conexion.dbConn.escape(fecha_alta) +
-              ", '') , '%Y-%m-%d'))",
-            (error, results, fields) => {
-              if (error) {
-                console.log(error);
-                conexion.dbConn.rollback();
-                reject("Error al registrar el socio");
-              } else {
-                conexion.dbConn.commit();
-                resolve();
-              }
-            }
-          );
-        });
-      });
+      await guardar_socio(nid_persona, num_socio, fecha_alta);
+      await serviceSocios.registrarSocio(nid_persona);
+      return;
     }
   } catch (error) {
     console.log(error);
     throw new Error("Error al registrar el socio");
   }
+}
+
+function realiza_actualizacion_socio(
+  nid_persona,
+  num_socio,
+  fecha_alta,
+  fecha_baja
+) {
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.beginTransaction(() => {
+      conexion.dbConn.query(
+        "update " +
+          constantes.ESQUEMA_BD +
+          ".socios set fecha_baja = str_to_date(nullif(" +
+          conexion.dbConn.escape(fecha_baja) +
+          ", '') , '%Y-%m-%d')," +
+          " fecha_alta =  str_to_date(nullif(" +
+          conexion.dbConn.escape(fecha_alta) +
+          ", '') , '%Y-%m-%d'), " +
+          " num_socio = " +
+          conexion.dbConn.escape(num_socio) +
+          ", fecha_actualizacion = sysdate()" +
+          " where nid_persona = " +
+          conexion.dbConn.escape(nid_persona),
+        (error, results, fields) => {
+          if (error) {
+            console.log(error);
+            conexion.dbConn.rollback();
+            reject(new Error("Error al guardar el socio"));
+          } else {
+            conexion.dbConn.commit();
+            resolve();
+          }
+        }
+      );
+    });
+  });
 }
 
 async function actualizar_socio(
@@ -95,34 +139,14 @@ async function actualizar_socio(
   try {
     let bExisteSocio = await existe_socio(nid_persona);
     if (bExisteSocio) {
-      conexion.dbConn.beginTransaction(() => {
-        return new Promise((resolve, reject) => {
-          conexion.dbConn.query(
-            "update " +
-              constantes.ESQUEMA_BD +
-              ".socios set fecha_baja = str_to_date(nullif(" +
-              conexion.dbConn.escape(fecha_baja) +
-              ", '') , '%Y-%m-%d')," +
-              " fecha_alta =  str_to_date(nullif(" +
-              conexion.dbConn.escape(fecha_alta) +
-              ", '') , '%Y-%m-%d'), " +
-              " num_socio = " +
-              conexion.dbConn.escape(num_socio) +
-              " where nid_persona = " +
-              conexion.dbConn.escape(nid_persona),
-            (error, results, fields) => {
-              if (error) {
-                console.log(error);
-                conexion.dbConn.rollback();
-                reject(error);
-              } else {
-                conexion.dbConn.commit();
-                resolve();
-              }
-            }
-          );
-        });
-      });
+      await realiza_actualizacion_socio(
+        nid_persona,
+        num_socio,
+        fecha_alta,
+        fecha_baja
+      );
+      await serviceSocios.registrarSocio(nid_persona);
+      return;
     } else {
       throw new Error("No existe socio");
     }
@@ -197,7 +221,9 @@ function obtener_socios_baja() {
 function obtener_socio(nid_persona) {
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(
-      "select s.nid_persona, s.num_socio, date_format(s.fecha_alta, '%Y-%m-%d') fecha_alta, date_format(s.fecha_baja, '%Y-%m-%d') fecha_baja from " +
+      "select s.nid_persona, s.num_socio, date_format(s.fecha_alta, '%Y-%m-%d') fecha_alta, date_format(s.fecha_baja, '%Y-%m-%d') fecha_baja, " +
+        " fecha_actualizacion " +
+        " from " +
         constantes.ESQUEMA_BD +
         ".socios s where nid_persona = " +
         conexion.dbConn.escape(nid_persona),
