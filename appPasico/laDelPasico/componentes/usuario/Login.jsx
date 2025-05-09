@@ -17,7 +17,8 @@ import { AuthContext } from "../../providers/AuthContext";
 import ModalAviso from "../componentesUI/ModalAviso";
 
 export default function Login() {
-  const { iniciarSesion, tokenNotificacion } = useContext(AuthContext);
+  const { iniciarSesion, tokenNotificacion, guardarRoles } =
+    useContext(AuthContext);
 
   const [correo, setCorreo] = React.useState("");
   const [contrasena, setContrasena] = React.useState("");
@@ -35,6 +36,7 @@ export default function Login() {
             setError("Error en el inicio de sesión"); // Muestra el error en el modal
           } else {
             iniciarSesion(response.usuario); // Guarda el usuario en el contexto
+            guardarRoles(response.roles); // Guarda los roles en el contexto
             router.replace("/(tabs)/(drawer)");
           }
         })

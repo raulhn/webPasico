@@ -11,7 +11,8 @@ import { useContext, useState, useEffect } from "react";
 import serviceUsuario from "../servicios/serviceUsuario"; // Ajusta la ruta según tu estructura de carpetas
 
 export const CustomHeader = ({ navigation, route, options, title }) => {
-  const { usuario, iniciarSesion, cerrarSesion } = useContext(AuthContext); // Obtiene el contexto de autenticación
+  const { usuario, iniciarSesion, cerrarSesion, guardarRoles } =
+    useContext(AuthContext); // Obtiene el contexto de autenticación
 
   useEffect(() => {
     serviceUsuario
@@ -20,8 +21,10 @@ export const CustomHeader = ({ navigation, route, options, title }) => {
         console.log("Usuario desde el servicio:", response);
         if (response.usuario) {
           iniciarSesion(response.usuario); // Actualiza el estado del usuario en el contexto
+          guardarRoles(response.roles); // Guarda los roles en el contexto
         } else {
           iniciarSesion(null); // Si no hay usuario, establece el estado como nulo
+          guardarRoles([]); // Limpia los roles en el contexto
         }
       })
       .catch((error) => {

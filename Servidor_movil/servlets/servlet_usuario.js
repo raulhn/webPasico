@@ -141,7 +141,6 @@ async function cambiarPassword(req, res) {
         console.error("Error al verificar el token:", err);
         return res.status(401).send({ error: true, mensaje: "No autenticado" });
       }
-      console.log("nid_usuario", decoded.nid_usuario);
 
       await gestorUsuario.realizarCambioPassword(
         decoded.nid_usuario,
@@ -167,20 +166,30 @@ function obtenerUsuario(req, res) {
       .send({ error: true, mensaje: "No autenticado", codigo: 1 });
   }
 
-  jwt.verify(token, process.env.SESSION_SECRET, (err, decoded) => {
-    if (err) {
-      console.error("Error al verificar el token:", err);
-      return res
-        .status(401)
-        .send({ error: true, mensaje: "No autenticado", codigo: 2 });
-    }
+  jwt.verify(token, process.env.SESSION_SECRET, async (err, decoded) => {
+    try {
+      if (err) {
+        console.error("Error al verificar el token:", err);
+        return res
+          .status(401)
+          .send({ error: true, mensaje: "No autenticado", codigo: 2 });
+      }
 
-    const usuario = {
-      nid_usuario: decoded.nid_usuario,
-      correoElectronico: decoded.correoElectronico,
-      nombre: decoded.nombre,
-    };
-    res.status(200).send({ error: false, usuario: usuario });
+      console.log("Construyendo roles para el usuario:", decoded.nid_usuario);
+      let roles = await gestorUsuario.construirRoles(decoded.nid_usuario);
+
+      const usuario = {
+        nid_usuario: decoded.nid_usuario,
+        correoElectronico: decoded.correoElectronico,
+        nombre: decoded.nombre,
+      };
+      res.status(200).send({ error: false, usuario: usuario, roles: roles });
+    } catch (error) {
+      console.error("Error al obtener el usuario:", error);
+      res
+        .status(400)
+        .send({ error: true, mensaje: "Error al obtener el usuario" });
+    }
   });
 }
 
@@ -246,8 +255,6 @@ async function recuperarPassword(req, res) {
         .status(200)
         .send({ error: false, mensaje: "Correo de recuperación enviado" });
     }
-
-    console.log("Nueva contraseña generada:", nuevaPassword);
 
     const html = `
   <div style="font-family: Arial, sans-serif; background-color: #f9f9f9; padding: 20px; border: 1px solid #ddd; border-radius: 5px; max-width: 600px; margin: 0 auto; text-align: center;">

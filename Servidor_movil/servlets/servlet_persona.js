@@ -92,7 +92,6 @@ function obtenerPersonasSucias(req, res) {
 }
 
 function limpiarPersona(req, res) {
-  console.log("Limpiar persona");
   servletComun.comprobacionAccesoAPIKey(req, res, async () => {
     try {
       let nid_persona = req.body.nid_persona;
@@ -110,8 +109,6 @@ function limpiarPersona(req, res) {
     }
   });
 }
-
-
 
 module.exports.obtenerPersona = obtenerPersona;
 module.exports.registrarPersona = registrarPersona;

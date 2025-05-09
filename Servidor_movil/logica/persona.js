@@ -1,6 +1,7 @@
 const eslintPluginPrettier = require("eslint-plugin-prettier");
 const conexion = require("../conexion.js");
 const constantes = require("../constantes.js");
+const gestorUsuario = require("./usuario.js");
 
 function existePersona(nid_persona) {
   return new Promise((resolve, reject) => {
@@ -183,16 +184,6 @@ async function registrarPersona(
   try {
     const existe = await existePersona(nid_persona);
 
-    console.log("Nombre: ", nombre);
-    console.log("Primer apellido: ", primer_apellido);
-    console.log("Segundo apellido: ", segundo_apellido);
-    console.log("Fecha de nacimiento: ", fecha_nacimiento);
-
-    console.log("NIF: ", nif);
-    console.log("Teléfono: ", telefono);
-    console.log("Correo electrónico: ", correo_electronico);
-    console.log("Fecha de actualización: ", fecha_actualizacion);
-
     if (existe) {
       const requiereActualizar = await requiereActualizarPersona(
         nid_persona,
@@ -212,7 +203,7 @@ async function registrarPersona(
           nid_padre,
           fecha_actualizacion
         );
-        console.log("Persona actualizada correctamente.");
+
         return;
       } else {
         console.log("La persona ya existe y no requiere actualización.");
@@ -286,31 +277,9 @@ function limpiarPersona(nid_persona) {
   });
 }
 
-function existeUsuarioPersona(nid_usuario) {
-  return new Promise((resolve, reject) => {
-    const sql =
-      "SELECT * FROM " +
-      constantes.ESQUEMA +
-      ".usuarios WHERE nid_persona is not null " +
-      " AND nid_usuario = " +
-      conexion.dbConn.escape(nid_usuario);
-
-    conexion.dbConn.query(sql, (error, results) => {
-      if (error) {
-        console.error(
-          "Error al verificar la existencia de la relación persona-usuario:",
-          error
-        );
-        return reject(error);
-      }
-      resolve(results.length > 0);
-    });
-  });
-}
-
 async function obtenerUsuario(nid_usuario) {
   try {
-    let existe = await existeUsuarioPersona(nid_usuario);
+    let existe = await gestorUsuario.existeUsuarioNid(nid_usuario);
 
     return new Promise((resolve, reject) => {
       if (existe) {
@@ -416,7 +385,28 @@ async function asociarUsuarioPersona(nid_usuario) {
   }
 }
 
+function obtenerPersonaUsuario(nid_usuario) {
+  return new Promise((resolve, reject) => {
+    const sql =
+      "SELECT p.* FROM " +
+      constantes.ESQUEMA +
+      ".usuarios u, " +
+      constantes.ESQUEMA +
+      ".persona p WHERE u.nid_persona = p.nid_persona and u.nid_usuario = " +
+      conexion.dbConn.escape(nid_usuario);
+
+    conexion.dbConn.query(sql, (error, results) => {
+      if (error) {
+        console.error("Error al obtener la persona del usuario:", error);
+        return reject(error);
+      }
+      resolve(results[0]);
+    });
+  });
+}
+
 module.exports.registrarPersona = registrarPersona;
 module.exports.obtenerPersonasSucias = obtenerPersonasSucias;
 module.exports.limpiarPersona = limpiarPersona;
 module.exports.asociarUsuarioPersona = asociarUsuarioPersona;
+module.exports.obtenerPersonaUsuario = obtenerPersonaUsuario;

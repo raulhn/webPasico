@@ -1,5 +1,3 @@
-import { AuthProvider } from "../providers/AuthContext.js";
-import { useContext } from "react";
 import * as secureStorage from "./secureStorage.js";
 
 let Constantes = require("../constantes.js");
