@@ -212,6 +212,28 @@ function eliminar_profesor(nid_asignatura, nid_persona) {
   });
 }
 
+function obtener_profesor_asignatura(nid_asignatura, nid_persona) {
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(
+      "select p.* from " +
+        constantes.ESQUEMA_BD +
+        ".profesor p " +
+        "  where p.nid_asignatura = " +
+        conexion.dbConn.escape(nid_asignatura) +
+        " and p.nid_persona = " +
+        conexion.dbConn.escape(nid_persona),
+      (error, results, fields) => {
+        if (error) {
+          console.log(error);
+          reject();
+        } else {
+          resolve(results[0]);
+        }
+      }
+    );
+  });
+}
+
 function obtener_profesores() {
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(
@@ -329,3 +351,5 @@ module.exports.obtener_profesores_asignatura = obtener_profesores_asignatura;
 
 module.exports.obtener_profesores_asignatura_curso =
   obtener_profesores_asignatura_curso;
+
+module.exports.obtener_profesor_asignatura = obtener_profesor_asignatura;

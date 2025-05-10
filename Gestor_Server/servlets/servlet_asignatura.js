@@ -2,6 +2,7 @@ const asignatura = require("../logica/asignatura.js");
 const comun = require("./servlet_comun.js");
 const gestion_usuarios = require("../logica/usuario.js");
 const serviceAsignatura = require("../services/serviceAsignatura.js");
+const serviceProfesores = require("../services/serviceProfesores.js");
 
 function registrar_asignatura(req, res) {
   comun.comprobaciones(req, res, async () => {
@@ -71,6 +72,7 @@ function add_profesor(req, res) {
     let nid_asignatura = req.body.nid_asignatura;
 
     await asignatura.add_profesor(nid_asignatura, nid_persona);
+    await serviceProfesores.registrar_profesor(nid_persona, nid_asignatura);
     res
       .status(200)
       .send({ error: false, message: "Se ha registrado el profesor" });
@@ -83,6 +85,7 @@ function eliminar_profesor(req, res) {
     let nid_asignatura = req.body.nid_asignatura;
 
     await asignatura.eliminar_profesor(nid_asignatura, nid_persona);
+    await serviceProfesores.eliminar_profesor(nid_persona, nid_asignatura);
     res
       .status(200)
       .send({ error: false, message: "Se ha eliminado el profesor" });
