@@ -190,7 +190,10 @@ app.get(
   servlet_matricula.obtener_asignaturas_matricula
 );
 app.post("/eliminar_asignatura", servlet_matricula.eliminar_asignatura);
-app.post("/dar_baja_asignatura", servlet_matricula.dar_baja_asignatura);
+app.post(
+  "/dar_baja_asignatura",
+  servlet_matricula_asignatura.dar_baja_asignatura
+);
 
 app.post(
   "/actualizar_precio_manual",
@@ -214,11 +217,11 @@ app.get(
 
 app.post(
   "/actualizar_fecha_alta_matricula_asignatura",
-  servlet_matricula.actualizar_fecha_alta_matricula_asignatura
+  servlet_matricula_asignatura.actualizar_fecha_alta_matricula_asignatura
 );
 app.post(
   "/actualizar_fecha_baja_matricula_asignatura",
-  servlet_matricula.actualizar_fecha_baja_matricula_asignatura
+  servlet_matricula_asignatura.actualizar_fecha_baja_matricula_asignatura
 );
 
 /** Forma de pago **/
@@ -239,8 +242,6 @@ app.get(
   servlet_persona.obtener_forma_pago_nid
 );
 app.post("/actualizar_forma_pago", servlet_persona.actualizar_forma_pago);
-
-/** Preinscripciones **/
 
 /** Preinscripciones **/
 app.get(
