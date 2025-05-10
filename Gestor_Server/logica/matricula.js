@@ -3,6 +3,7 @@ const constantes = require("../constantes.js");
 const logica_asignatura = require("./asignatura.js");
 const curso = require("./curso.js");
 const serviceProfesores = require("../services/serviceProfesores.js");
+const serviceProfesorAlumnoMatricula = require("../services/serviceProfesorAlumnoMatricula.js");
 
 function existe_matricula(nid_persona, nid_curso) {
   return new Promise((resolve, reject) => {
@@ -637,29 +638,6 @@ function obtener_asignaturas_matricula_activas_fecha(
   });
 }
 
-function alta_profesor_matricula(nid_matricula_asignatura, nid_profesor) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(
-      "insert into " +
-        constantes.ESQUEMA_BD +
-        ".profesor_alumno_matricula(nid_profesor, nid_matricula_asignatura, fecha_alta) values(" +
-        conexion.dbConn.escape(nid_profesor) +
-        ", " +
-        conexion.dbConn.escape(nid_matricula_asignatura) +
-        ", sysdate())",
-      (error, results, fields) => {
-        if (error) {
-          console.log(error);
-          conexion.dbConn.rollback();
-          reject();
-        } else {
-          resolve();
-        }
-      }
-    );
-  });
-}
-
 function obtener_cursos_profesor(nid_profesor) {
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(
@@ -979,7 +957,7 @@ function alta_profesor_alumno_matricula_baja(
           console.log(error);
           reject();
         } else {
-          resolve();
+          resolve(results.insertId);
         }
       }
     );
@@ -1022,11 +1000,18 @@ function sustituir_profesor_curso_actual(
         );
 
         for (let i = 0; i < matriculas_a_susituir.length; i++) {
-          await alta_profesor_alumno_matricula_baja(
-            nid_profesor_sustituto,
-            matriculas_a_susituir[i]["nid"]
+          const nid_profesor_alumno_matricula =
+            await alta_profesor_alumno_matricula_baja(
+              nid_profesor_sustituto,
+              matriculas_a_susituir[i]["nid"]
+            );
+          await serviceProfesorAlumnoMatricula.registrar_profesor_alumno_matricula(
+            nid_profesor_alumno_matricula
           );
           await baja_profesor_alumno_matricula(matriculas_a_susituir[i]["nid"]);
+          await serviceProfesorAlumnoMatricula.registrar_profesor_alumno_matricula(
+            matriculas_a_susituir[i]["nid"]
+          );
         }
 
         await logica_asignatura.eliminar_profesor(nid_asignatura, nid_profesor);
@@ -1057,9 +1042,17 @@ function sustituir_profesor_alumno(
           await baja_profesor_alumno_matricula(
             profesor_alumno_matricula["nid"]
           );
-          await alta_profesor_alumno_matricula_baja(
-            nid_profesor,
+          await serviceProfesorAlumnoMatricula.registrar_profesor_alumno_matricula(
             profesor_alumno_matricula["nid"]
+          );
+          const nid_profesor_alumno_matricula =
+            await alta_profesor_alumno_matricula_baja(
+              nid_profesor,
+              profesor_alumno_matricula["nid"]
+            );
+
+          serviceProfesorAlumnoMatricula.registrar_profesor_alumno_matricula(
+            nid_profesor_alumno_matricula
           );
 
           conexion.dbConn.commit();
