@@ -499,6 +499,28 @@ function obtener_matricula(nid_matricula) {
   });
 }
 
+function obtener_objeto_matricula(nid_matricula) {
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(
+      "select * from " +
+        constantes.ESQUEMA_BD +
+        ".matricula where nid = " +
+        conexion.dbConn.escape(nid_matricula),
+      (error, results, fields) => {
+        if (error) {
+          console.log(error);
+          reject();
+        } else if (results.length < 1) {
+          console.log("No se ha encontrado la matricula");
+          reject();
+        } else {
+          resolve(results[0]);
+        }
+      }
+    );
+  });
+}
+
 function obtener_asignaturas_matricula(nid_matricula) {
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(
@@ -635,88 +657,6 @@ function alta_profesor_matricula(nid_matricula_asignatura, nid_profesor) {
         }
       }
     );
-  });
-}
-
-function add_asignatura(nid_matricula, nid_asignatura, nid_profesor) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(
-        "insert into " +
-          constantes.ESQUEMA_BD +
-          ".matricula_asignatura(nid_matricula, nid_asignatura, fecha_alta) values(" +
-          conexion.dbConn.escape(nid_matricula) +
-          ", " +
-          conexion.dbConn.escape(nid_asignatura) +
-          ", sysdate())",
-        async (error, results, fields) => {
-          if (error) {
-            console.log(error);
-            conexion.dbConn.rollback();
-            reject();
-          } else {
-            await alta_profesor_matricula(results.insertId, nid_profesor);
-            conexion.dbConn.commit();
-            resolve();
-          }
-        }
-      );
-    });
-  });
-}
-
-function eliminar_asignatura(nid_matricula, nid_asignatura) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(
-        "delete from " +
-          constantes.ESQUEMA_BD +
-          ".matricula_asignatura where nid_matricula = " +
-          conexion.dbConn.escape(nid_matricula) +
-          ", " +
-          conexion.dbConn.escape(nid_asignatura),
-        (error, results, fields) => {
-          if (error) {
-            console.log(error);
-            conexion.dbConn.rollback();
-            reject();
-          } else {
-            conexion.dbConn.commit();
-            resolve();
-          }
-        }
-      );
-    });
-  });
-}
-
-function dar_baja_asignatura(nid, nid_matricula, nid_asignatura, fecha_baja) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(
-        "update " +
-          constantes.ESQUEMA_BD +
-          ".matricula_asignatura set fecha_baja = " +
-          "str_to_date(nullif(" +
-          conexion.dbConn.escape(fecha_baja) +
-          ", '') , '%Y-%m-%d') where nid_matricula = " +
-          conexion.dbConn.escape(nid_matricula) +
-          " and nid_asignatura = " +
-          conexion.dbConn.escape(nid_asignatura) +
-          " and nid = " +
-          conexion.dbConn.escape(nid),
-        (error, results, fields) => {
-          if (error) {
-            console.log(error);
-            conexion.dbConn.rollback();
-            reject();
-          } else {
-            conexion.dbConn.commit();
-            resolve();
-          }
-        }
-      );
-    });
   });
 }
 
@@ -1137,72 +1077,6 @@ function sustituir_profesor_alumno(
   });
 }
 
-function actualizar_fecha_alta_matricula_asignatura(
-  nid_matricula_asignatura,
-  fecha_alta
-) {
-  return new Promise((resolve, reject) => {
-    try {
-      conexion.dbConn.beginTransaction(
-        "update " +
-          constantes.ESQUEMA_BD +
-          ".matricula_asignatura set fecha_alta = " +
-          "str_to_date(nullif(" +
-          conexion.dbConn.escape(fecha_alta) +
-          ", '') , '%Y-%m-%d') " +
-          " where nid = " +
-          conexion.dbConn.escape(nid_matricula_asignatura),
-        (error, results, fields) => {
-          if (error) {
-            console.log(error);
-            conexion.dbConn.rollback();
-            reject("Error al actualizar la fecha de alta");
-          } else {
-            conexion.dbConn.commit();
-            resolve();
-          }
-        }
-      );
-    } catch (error) {
-      console.log(error);
-      reject();
-    }
-  });
-}
-
-function actualizar_fecha_baja_matricula_asignatura(
-  nid_matricula_asignatura,
-  fecha_baja
-) {
-  return new Promise((resolve, reject) => {
-    try {
-      conexion.dbConn.beginTransaction(
-        "update " +
-          constantes.ESQUEMA_BD +
-          ".matricula_asignatura set fecha_baja = " +
-          "str_to_date(nullif(" +
-          conexion.dbConn.escape(fecha_baja) +
-          ", '') , '%Y-%m-%d') " +
-          " where nid = " +
-          conexion.dbConn.escape(nid_matricula_asignatura),
-        (error, results, fields) => {
-          if (error) {
-            console.log(error);
-            conexion.dbConn.rollback();
-            reject("Error al actualizar la fecha de baja");
-          } else {
-            conexion.dbConn.commit();
-            resolve();
-          }
-        }
-      );
-    } catch (error) {
-      console.log(error);
-      reject();
-    }
-  });
-}
-
 module.exports.existe_matricula = existe_matricula;
 module.exports.obtener_nid_matricula = obtener_nid_matricula;
 
@@ -1219,20 +1093,13 @@ module.exports.obtener_alumnos_asignaturas_baja =
 module.exports.obtener_alumnos_cursos = obtener_alumnos_cursos;
 module.exports.obtener_alumnos_cursos_alta = obtener_alumnos_cursos_alta;
 module.exports.obtener_alumnos_cursos_baja = obtener_alumnos_cursos_baja;
-
 module.exports.obtener_alumnos_curso_actual = obtener_alumnos_curso_actual;
-
 module.exports.obtener_alumnos_profesor = obtener_alumnos_profesor;
 module.exports.obtener_alumnos_profesor_alta = obtener_alumnos_profesor_alta;
 module.exports.obtener_alumnos_profesor_baja = obtener_alumnos_profesor_baja;
-
 module.exports.obtener_matriculas_alumno = obtener_matriculas_alumno;
 module.exports.obtener_matricula = obtener_matricula;
 module.exports.obtener_asignaturas_matricula = obtener_asignaturas_matricula;
-
-module.exports.add_asignatura = add_asignatura;
-module.exports.eliminar_asignatura = eliminar_asignatura;
-module.exports.dar_baja_asignatura = dar_baja_asignatura;
 
 module.exports.obtener_cursos_profesor = obtener_cursos_profesor;
 
@@ -1257,7 +1124,4 @@ module.exports.obtener_asignaturas_matricula_activas_fecha =
 
 module.exports.sustituir_profesor_alumno = sustituir_profesor_alumno;
 
-module.exports.actualizar_fecha_alta_matricula_asignatura =
-  actualizar_fecha_alta_matricula_asignatura;
-module.exports.actualizar_fecha_baja_matricula_asignatura =
-  actualizar_fecha_baja_matricula_asignatura;
+module.exports.obtener_objeto_matricula = obtener_objeto_matricula;
