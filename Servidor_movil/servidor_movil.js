@@ -19,6 +19,7 @@ const servletCurso = require("./servlets/servletCurso.js");
 const servletProfesores = require("./servlets/servlet_profesores.js");
 const servletMatricula = require("./servlets/servlet_matricula.js");
 const servletMatriculaAsignatura = require("./servlets/servlet_matricula_asignatura.js");
+const servletProfesorAlumnoMatricula = require("./servlets/servlet_profesor_alumno_matricula.js");
 
 const validacionEmail = require("./logica/validacionEmail.js");
 
@@ -86,6 +87,12 @@ app.post("/registrar_matricula", servletMatricula.registrarMatricula);
 app.post(
   "/registrar_matricula_asignatura",
   servletMatriculaAsignatura.registrarMatriculaAsignatura
+);
+
+// Profesor Alumno Matricula //
+app.post(
+  "/registrar_profesor_alumno_matricula",
+  servletProfesorAlumnoMatricula.registrarProfesorAlumnoMatricula
 );
 
 // Peticiones que requieren inicio de sesión

@@ -3,9 +3,11 @@ const asignatura = require("../logica/asignatura.js");
 const comun = require("./servlet_comun.js");
 const gestion_usuarios = require("../logica/usuario.js");
 const gestorMatriculaAsignatura = require("../logica/matricula_asignatura.js");
+const gestorProfesorAlumnoMatricula = require("../logica/profesor_alumno_matricula.js");
 
 const serviceMatricula = require("../services/serviceMatricula.js");
 const serviceMatriculaAsignatura = require("../services/serviceMatriculaAsignatura.js");
+const serviceProfesorAlumnoMatricula = require("../services/serviceProfesorAlumnoMatricula.js");
 
 function registrar_matricula(req, res) {
   comun.comprobaciones(req, res, async () => {
@@ -291,12 +293,44 @@ function sustituir_profesor_alumno(req, res) {
     let nid_asignatura = req.body.nid_asignatura;
     let nid_matricula_asignatura = req.body.nid_matricula_asignatura;
 
-    await matricula.sustituir_profesor_alumno(
-      nid_profesor,
-      nid_matricula_asignatura,
-      nid_asignatura
-    );
-    res.status(200).send({ error: false, message: "Sustitución realizada" });
+    try {
+      await matricula.sustituir_profesor_alumno(
+        nid_profesor,
+        nid_matricula_asignatura,
+        nid_asignatura
+      );
+
+      console.log(
+        "Realiza peticion registrar_profesor_alumno_matricula " + "con id: ",
+        nid_matricula_asignatura + " y profesor: ",
+        nid_profesor
+      );
+      const nid_profesor_alumno_matricula =
+        await gestorProfesorAlumnoMatricula.obtener_nid_profesor_alumno_matricula(
+          nid_profesor,
+          nid_matricula_asignatura
+        );
+
+      console.log(
+        "Realiza peticion registrar_profesor_alumno_matricula con id: ",
+        nid_profesor_alumno_matricula
+      );
+      await serviceProfesorAlumnoMatricula.registrar_profesor_alumno_matricula(
+        nid_profesor_alumno_matricula
+      );
+
+      console.log(
+        "Sustitución de profesor realizada correctamente para el alumno con nid_matricula_asignatura:",
+        nid_matricula_asignatura
+      );
+      res.status(200).send({ error: false, message: "Sustitución realizada" });
+    } catch (error) {
+      console.error("Error al sustituir profesor:", error);
+      res.status(500).send({
+        error: true,
+        message: "Error al sustituir profesor",
+      });
+    }
   });
 }
 

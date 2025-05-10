@@ -1,6 +1,7 @@
 const constantes = require("../constantes");
 const conexion = require("../conexion");
 const gestorProfesorMatricula = require("./profesor_matricula.js");
+const serviceProfesorAlumnoMatricula = require("../services/serviceProfesorAlumnoMatricula.js");
 
 function obtener_matriculas_asignaturas_alumno(nid_alumno, nid_curso) {
   return new Promise((resolve, reject) => {
@@ -171,6 +172,7 @@ function actualizar_fecha_baja_matricula_asignatura(
 function add_asignatura(nid_matricula, nid_asignatura, nid_profesor) {
   return new Promise((resolve, reject) => {
     conexion.dbConn.beginTransaction(() => {
+        
       conexion.dbConn.query(
         "insert into " +
           constantes.ESQUEMA_BD +
@@ -185,10 +187,15 @@ function add_asignatura(nid_matricula, nid_asignatura, nid_profesor) {
             conexion.dbConn.rollback();
             reject();
           } else {
-            await gestorProfesorMatricula.alta_profesor_matricula(
-              results.insertId,
-              nid_profesor
+            const nid_profesor_alumno_matricula =
+              await gestorProfesorMatricula.alta_profesor_matricula(
+                results.insertId,
+                nid_profesor
+              );
+            await serviceProfesorAlumnoMatricula.registrar_profesor_alumno_matricula(
+              nid_profesor_alumno_matricula
             );
+
             conexion.dbConn.commit();
             resolve();
           }

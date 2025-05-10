@@ -17,7 +17,7 @@ function alta_profesor_matricula(nid_matricula_asignatura, nid_profesor) {
           conexion.dbConn.rollback();
           reject();
         } else {
-          resolve();
+          resolve(results.insertId);
         }
       }
     );

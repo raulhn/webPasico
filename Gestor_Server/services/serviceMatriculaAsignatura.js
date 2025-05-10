@@ -1,6 +1,7 @@
 const gestorMatriculaAsignatura = require("../logica/matricula_asignatura.js");
 const serviceComun = require("./serviceComun.js");
 const constantes = require("../constantes.js");
+const serviceMatricula = require("./serviceMatricula.js");
 
 async function registrar_matricula_asignatura(nid_matricula_asignatura) {
   try {
@@ -11,7 +12,8 @@ async function registrar_matricula_asignatura(nid_matricula_asignatura) {
       );
     console.log("matricula_asignatura", matricula_asignatura);
 
-    console.log("Actualizar matricula en servicio movil");
+    serviceMatricula.registrar_matricula(matricula_asignatura.nid_matricula);
+    console.log("Actualizar matricula asignatura en servicio movil");
     return new Promise((resolve, reject) => {
       serviceComun
         .fetchWithTimeout(
