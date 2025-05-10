@@ -2,6 +2,7 @@ const conexion = require("../conexion.js");
 const constantes = require("../constantes.js");
 const logica_asignatura = require("./asignatura.js");
 const curso = require("./curso.js");
+const serviceProfesores = require("../services/serviceProfesores.js");
 
 function existe_matricula(nid_persona, nid_curso) {
   return new Promise((resolve, reject) => {
@@ -1089,6 +1090,7 @@ function sustituir_profesor_curso_actual(
         }
 
         await logica_asignatura.eliminar_profesor(nid_asignatura, nid_profesor);
+        await serviceProfesores.eliminar_profesor(nid_profesor, nid_asignatura);
 
         conexion.dbConn.commit();
         resolve();

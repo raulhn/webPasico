@@ -15,6 +15,8 @@ const servletPersona = require("./servlets/servlet_persona.js");
 const servletSocios = require("./servlets/servlet_socios.js");
 const servletMusicos = require("./servlets/servlet_musicos.js");
 const servletAsignaturas = require("./servlets/servlet_asignatura.js");
+const servletCurso = require("./servlets/servletCurso.js");
+const servletProfesores = require("./servlets/servlet_profesores.js");
 
 const validacionEmail = require("./logica/validacionEmail.js");
 
@@ -67,6 +69,13 @@ app.post("/registrar_musico", servletMusicos.registrarMusico);
 
 // Asignaturas //
 app.post("/registrar_asignatura", servletAsignaturas.registrarAsignatura);
+
+// Cursos //
+app.post("/registrar_curso", servletCurso.registrarCurso);
+
+// Profesores //
+app.post("/registrar_profesor", servletProfesores.registrarProfesor);
+app.post("/eliminar_profesor", servletProfesores.eliminarProfesor);
 
 // Peticiones que requieren inicio de sesión
 app.use((req, res, next) => {
