@@ -115,4 +115,24 @@ async function registrarMatricula(
   }
 }
 
+function obtenerMatriculas(nid_persona) {
+  return new Promise((resolve, reject) => {
+    var sql =
+      "SELECT * FROM " +
+      constantes.ESQUEMA +
+      ".matricula WHERE nid_persona = " +
+      conexion.dbConn.escape(nid_persona);
+
+    conexion.dbConn.query(sql, (err, result) => {
+      if (err) {
+        console.log("Error al obtener las matriculas: " + err);
+        reject(new Error("Error al obtener las matriculas"));
+      } else {
+        resolve(result);
+      }
+    });
+  });
+}
+
 module.exports.registrarMatricula = registrarMatricula;
+module.exports.obtenerMatriculas = obtenerMatriculas;
