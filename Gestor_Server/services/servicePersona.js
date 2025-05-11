@@ -2,10 +2,7 @@ const gestorPersona = require("../logica/persona.js");
 const constantes = require("../constantes.js");
 const serviceComun = require("./serviceComun.js");
 
-async function registrar_persona(nid_persona) {
-  console.log("Actualizar persona en servicio movil");
-  const persona = await gestorPersona.obtener_objeto_persona(nid_persona);
-
+function peticion_registrar_persona(persona) {
   return new Promise((resolve, reject) => {
     try {
       serviceComun
@@ -26,6 +23,7 @@ async function registrar_persona(nid_persona) {
             correo_electronico: persona.correo_electronico,
             nid_padre: persona.nid_padre,
             nid_madre: persona.nid_madre,
+            nid_socio: persona.nid_socio,
             fecha_actualizacion: persona.fecha_actualizacion,
           }),
         })
@@ -41,7 +39,10 @@ async function registrar_persona(nid_persona) {
               resolve(data);
             })
             .catch((error) => {
-              console.error("Error al procesar la respuesta JSON:", error);
+              console.error(
+                "servicePersona.js -> registrarPersona - Error al procesar la respuesta JSON:",
+                error
+              );
               reject("Error al procesar la respuesta JSON");
             });
         })
@@ -54,6 +55,31 @@ async function registrar_persona(nid_persona) {
       reject("Error en la función registrar_persona");
     }
   });
+}
+
+async function registrar_persona(nid_persona) {
+  try {
+    let existe = await gestorPersona.existe_nid(nid_persona);
+    if (existe) {
+      console.log("Actualizar persona en servicio movil");
+      const persona = await gestorPersona.obtener_objeto_persona(nid_persona);
+      if (persona.sucio === "S") {
+        await registrar_persona(persona.nid_madre);
+        await registrar_persona(persona.nid_padre);
+        await registrar_persona(persona.nid_socio);
+
+        await peticion_registrar_persona(persona);
+        await gestorPersona.actualizar_sucio(nid_persona, "N");
+      }
+    }
+    return;
+  } catch (error) {
+    console.error(
+      "Error en la función registrar_persona " + nid_persona + ":",
+      error
+    );
+    throw new Error("Error en la función registrar_persona");
+  }
 }
 
 function obtener_persona(nid_persona) {
@@ -82,7 +108,10 @@ function obtener_persona(nid_persona) {
               resolve(data);
             })
             .catch((error) => {
-              console.error("Error al procesar la respuesta JSON:", error);
+              console.error(
+                "servicePersona.js -> obtener_persona - Error al procesar la respuesta JSON:",
+                error
+              );
               reject("Error al procesar la respuesta JSON");
             });
         })
@@ -124,7 +153,10 @@ function obtenerPersonasSucias() {
               resolve(data);
             })
             .catch((error) => {
-              console.error("Error al procesar la respuesta JSON:", error);
+              console.error(
+                "servicePersona.js -> obtenerPersonasSucias - Error al procesar la respuesta JSON:",
+                error
+              );
               reject("Error al procesar la respuesta JSON");
             });
         })
@@ -165,7 +197,10 @@ function limpiarPersona(nid_persona) {
               resolve(data);
             })
             .catch((error) => {
-              console.error("Error al procesar la respuesta JSON:", error);
+              console.error(
+                "servicePersona.js -> limpiarPersona - Error al procesar la respuesta JSON:",
+                error
+              );
               reject("Error al procesar la respuesta JSON");
             });
         })
@@ -180,7 +215,22 @@ function limpiarPersona(nid_persona) {
   });
 }
 
+async function actualizar_sucios() {
+  try {
+    const personasSucias = await gestorPersona.obtener_personas_sucias();
+
+    for (let i = 0; i < personasSucias.length; i++) {
+      const persona = personasSucias[i];
+      await registrar_persona(persona.nid);
+    }
+    return;
+  } catch (error) {
+    console.error("Error en la función actualizar_personas_sucias:", error);
+  }
+}
+
 module.exports.registrar_persona = registrar_persona;
 module.exports.obtener_persona = obtener_persona;
 module.exports.obtenerPersonasSucias = obtenerPersonasSucias;
 module.exports.limpiarPersona = limpiarPersona;
+module.exports.actualizar_sucios = actualizar_sucios;

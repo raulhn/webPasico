@@ -297,36 +297,38 @@ async function obtener_horarios(nid_profesor, nid_asignatura, nid_curso) {
   try {
     let nid_ultimo_curso = await curso.obtener_ultimo_curso();
 
-    conexion.dbConn.beginTransaction(
-      "select h.* from " +
-        constantes.ESQUEMA_BD +
-        ".horario h " +
-        "where (h.nid_profesor = " +
-        conexion.dbConn.escape(nid_profesor) +
-        " or nullif(" +
-        conexion.dbConn.escape(nid_profesor) +
-        ", '') is null) " +
-        " and (h.nid_asignatura = " +
-        conexion.dbConn.escape(nid_asignatura) +
-        " or nullif(" +
-        conexion.dbConn.escape(nid_asignatura) +
-        ", '') is null) " +
-        " and (h.nid_curso = " +
-        conexion.dbConn.escape(nid_curso) +
-        " or nullif(" +
-        conexion.dbConn.escape(nid_curso) +
-        ", " +
-        conexion.dbConn.escape(nid_ultimo_curso) +
-        ") is null) ",
-      (error, results, fields) => {
-        if (error) {
-          console.log(error);
-          reject();
-        } else {
-          resolve(results);
+    return new Promise((resolve, reject) => {
+      conexion.dbConn.query(
+        "select h.* from " +
+          constantes.ESQUEMA_BD +
+          ".horario h " +
+          "where (h.nid_profesor = " +
+          conexion.dbConn.escape(nid_profesor) +
+          " or nullif(" +
+          conexion.dbConn.escape(nid_profesor) +
+          ", '') is null) " +
+          " and (h.nid_asignatura = " +
+          conexion.dbConn.escape(nid_asignatura) +
+          " or nullif(" +
+          conexion.dbConn.escape(nid_asignatura) +
+          ", '') is null) " +
+          " and (h.nid_curso = " +
+          conexion.dbConn.escape(nid_curso) +
+          " or nullif(" +
+          conexion.dbConn.escape(nid_curso) +
+          ", " +
+          conexion.dbConn.escape(nid_ultimo_curso) +
+          ") is null) ",
+        (error, results, fields) => {
+          if (error) {
+            console.log(error);
+            reject();
+          } else {
+            resolve(results);
+          }
         }
-      }
-    );
+      );
+    });
   } catch (error) {
     console.log(error);
     throw new Error("Error al obtener horarios");
@@ -337,43 +339,45 @@ async function obtener_horarios_clase(nid_profesor, nid_asignatura, nid_curso) {
   try {
     let nid_ultimo_curso = await curso.obtener_ultimo_curso();
 
-    conexion.dbConn.beginTransaction(
-      "select hc.*, " +
-        "(select count(*) from " +
-        constantes.ESQUEMA_BD +
-        ".horario_matricula_asignatura hma where hma.nid_horario_clase = hc.nid_horario_clase) num_alumnos " +
-        " from " +
-        constantes.ESQUEMA_BD +
-        ".horario h, " +
-        constantes.ESQUEMA_BD +
-        ".horario_clase hc " +
-        "where h.nid_horario = hc.nid_horario " +
-        " and (h.nid_profesor = " +
-        conexion.dbConn.escape(nid_profesor) +
-        " or nullif(" +
-        conexion.dbConn.escape(nid_profesor) +
-        ", '') is null) " +
-        " and (h.nid_asignatura = " +
-        conexion.dbConn.escape(nid_asignatura) +
-        " or nullif(" +
-        conexion.dbConn.escape(nid_asignatura) +
-        ", '') is null) " +
-        " and (h.nid_curso = " +
-        conexion.dbConn.escape(nid_curso) +
-        " or nullif(" +
-        conexion.dbConn.escape(nid_curso) +
-        ", " +
-        conexion.dbConn.escape(nid_ultimo_curso) +
-        ") is null) ",
-      (error, results, fields) => {
-        if (error) {
-          console.log(error);
-          throw new Error("Error al obtener horarios");
-        } else {
-          return results;
+    return new Promise((resolve, reject) => {
+      conexion.dbConn.query(
+        "select hc.*, " +
+          "(select count(*) from " +
+          constantes.ESQUEMA_BD +
+          ".horario_matricula_asignatura hma where hma.nid_horario_clase = hc.nid_horario_clase) num_alumnos " +
+          " from " +
+          constantes.ESQUEMA_BD +
+          ".horario h, " +
+          constantes.ESQUEMA_BD +
+          ".horario_clase hc " +
+          "where h.nid_horario = hc.nid_horario " +
+          " and (h.nid_profesor = " +
+          conexion.dbConn.escape(nid_profesor) +
+          " or nullif(" +
+          conexion.dbConn.escape(nid_profesor) +
+          ", '') is null) " +
+          " and (h.nid_asignatura = " +
+          conexion.dbConn.escape(nid_asignatura) +
+          " or nullif(" +
+          conexion.dbConn.escape(nid_asignatura) +
+          ", '') is null) " +
+          " and (h.nid_curso = " +
+          conexion.dbConn.escape(nid_curso) +
+          " or nullif(" +
+          conexion.dbConn.escape(nid_curso) +
+          ", " +
+          conexion.dbConn.escape(nid_ultimo_curso) +
+          ") is null) ",
+        (error, results, fields) => {
+          if (error) {
+            console.log(error);
+            reject("Error al obtener horarios");
+          } else {
+            resolve(results);
+          }
         }
-      }
-    );
+      );
+    });
   } catch (error) {
     console.log(error);
     throw new Error("Error al obtener horarios");

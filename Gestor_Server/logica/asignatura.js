@@ -161,39 +161,95 @@ function obtener_asignatura(nid_asignatura) {
   });
 }
 
-function add_profesor(nid_asignatura, nid_persona) {
+function existe_profesor(nid_asignatura, nid_persona) {
   return new Promise((resolve, reject) => {
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(
-        "insert into " +
-          constantes.ESQUEMA_BD +
-          ".profesor(nid_asignatura, nid_persona) values(" +
-          conexion.dbConn.escape(nid_asignatura) +
-          ", " +
-          conexion.dbConn.escape(nid_persona) +
-          ")",
-        (error, results, fields) => {
-          if (error) {
-            console.log(error);
-            conexion.dbConn.rollback();
-            reject();
-          } else {
-            conexion.dbConn.commit();
-            resolve();
-          }
+    conexion.dbConn.query(
+      "select count(*) cont from " +
+        constantes.ESQUEMA_BD +
+        ".profesor where nid_asignatura = " +
+        conexion.dbConn.escape(nid_asignatura) +
+        " and nid_persona = " +
+        conexion.dbConn.escape(nid_persona),
+      (error, results, fields) => {
+        if (error) {
+          console.log(error);
+          reject();
+        } else {
+          resolve(results[0]["cont"] > 0);
         }
-      );
-    });
+      }
+    );
   });
+}
+
+async function add_profesor(nid_asignatura, nid_persona) {
+  try {
+    let existe = await existe_profesor(nid_asignatura, nid_persona);
+    if (existe) {
+      return new Promise((resolve, reject) => {
+        conexion.dbConn.beginTransaction(() => {
+          conexion.dbConn.query(
+            "update " +
+              constantes.ESQUEMA_BD +
+              ".profesor set esBaja = 'N', sucio = 'S', " +
+              " fecha_actualizacion = sysdate() " +
+              "where nid_asignatura = " +
+              conexion.dbConn.escape(nid_asignatura) +
+              " and nid_persona = " +
+              conexion.dbConn.escape(nid_persona),
+            (error, results, fields) => {
+              if (error) {
+                console.log(error);
+                conexion.dbConn.rollback();
+                reject();
+              } else {
+                conexion.dbConn.commit();
+                resolve();
+              }
+            }
+          );
+        });
+      });
+    } else {
+      return new Promise((resolve, reject) => {
+        conexion.dbConn.beginTransaction(() => {
+          conexion.dbConn.query(
+            "insert into " +
+              constantes.ESQUEMA_BD +
+              ".profesor(nid_asignatura, nid_persona) values(" +
+              conexion.dbConn.escape(nid_asignatura) +
+              ", " +
+              conexion.dbConn.escape(nid_persona) +
+              ")",
+            (error, results, fields) => {
+              if (error) {
+                console.log(error);
+                conexion.dbConn.rollback();
+                reject();
+              } else {
+                conexion.dbConn.commit();
+                resolve();
+              }
+            }
+          );
+        });
+      });
+    }
+  } catch (error) {
+    console.error("Error en la función add_profesor:", error);
+    throw new Error("Error en la función add_profesor");
+  }
 }
 
 function eliminar_profesor(nid_asignatura, nid_persona) {
   return new Promise((resolve, reject) => {
     conexion.dbConn.beginTransaction(() => {
       conexion.dbConn.query(
-        "delete from " +
+        "update " +
           constantes.ESQUEMA_BD +
-          ".profesor where nid_asignatura = " +
+          ".profesor  set esBaja = 'S', sucio= 'S', " +
+          " fecha_actualizacion = sysdate() " +
+          " where nid_asignatura = " +
           conexion.dbConn.escape(nid_asignatura) +
           " and nid_persona = " +
           conexion.dbConn.escape(nid_persona),
@@ -243,7 +299,7 @@ function obtener_profesores() {
         constantes.ESQUEMA_BD +
         ".asignatura a, " +
         constantes.ESQUEMA_BD +
-        ".profesor pr where p.nid = pr.nid_persona and pr.nid_asignatura = a.nid",
+        ".profesor pr where p.nid = pr.nid_persona and pr.esBaja = 'N' and pr.nid_asignatura = a.nid",
       (error, results, fields) => {
         if (error) {
           console.log(error);
@@ -265,7 +321,7 @@ function obtener_profesores_distinct() {
         constantes.ESQUEMA_BD +
         ".asignatura a, " +
         constantes.ESQUEMA_BD +
-        ".profesor pr where p.nid = pr.nid_persona and pr.nid_asignatura = a.nid",
+        ".profesor pr where p.nid = pr.nid_persona and pr.esBaja = 'N' and pr.nid_asignatura = a.nid",
       (error, results, fields) => {
         if (error) {
           console.log(error);
@@ -287,7 +343,7 @@ function obtener_profesores_asignatura(nid_asignatura) {
         constantes.ESQUEMA_BD +
         ".asignatura a, " +
         constantes.ESQUEMA_BD +
-        ".profesor pr where p.nid = pr.nid_persona and pr.nid_asignatura = a.nid and " +
+        ".profesor pr where p.nid = pr.nid_persona and pr.nid_asignatura = a.nid  and pr.esBaja = 'N' and " +
         "a.nid = " +
         conexion.dbConn.escape(nid_asignatura),
       (error, results, fields) => {
@@ -333,6 +389,92 @@ function obtener_profesores_asignatura_curso(nid_asignatura, nid_curso) {
   });
 }
 
+function modificar_sucio(nid_asignatura, sucio) {
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.beginTransaction(() => {
+      conexion.dbConn.query(
+        "update " +
+          constantes.ESQUEMA_BD +
+          ".asignatura set sucio = " +
+          conexion.dbConn.escape(sucio) +
+          " where nid = " +
+          conexion.dbConn.escape(nid_asignatura),
+        (error, results, fields) => {
+          if (error) {
+            console.log(error);
+            conexion.dbConn.rollback();
+            reject();
+          } else {
+            conexion.dbConn.commit();
+            resolve();
+          }
+        }
+      );
+    });
+  });
+}
+
+function modificar_sucio_profesor(nid_profesor, nid_asignatura, sucio) {
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(
+      "update " +
+        constantes.ESQUEMA_BD +
+        ".profesor set sucio = " +
+        conexion.dbConn.escape(sucio) +
+        " where nid_persona = " +
+        conexion.dbConn.escape(nid_profesor) +
+        " and nid_asignatura = " +
+        conexion.dbConn.escape(nid_asignatura),
+      (error, results, fields) => {
+        if (error) {
+          console.log(error);
+          reject();
+        } else {
+          resolve();
+        }
+      }
+    );
+  });
+}
+
+function obtener_profesores_sucios() {
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(
+      "select p.* from " +
+        constantes.ESQUEMA_BD +
+        ".profesor p " +
+        " where p.sucio = 'S'",
+      (error, results, fields) => {
+        if (error) {
+          console.log(error);
+          reject();
+        } else {
+          resolve(results);
+        }
+      }
+    );
+  });
+}
+
+function obtener_asignaturas_sucias() {
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(
+      "select a.* from " +
+        constantes.ESQUEMA_BD +
+        ".asignatura a " +
+        " where a.sucio = 'S'",
+      (error, results, fields) => {
+        if (error) {
+          console.log(error);
+          reject();
+        } else {
+          resolve(results);
+        }
+      }
+    );
+  });
+}
+
 module.exports.registrar_asignatura = registrar_asignatura;
 module.exports.actualizar_asignatura = actualizar_asignatura;
 module.exports.eliminar_asignatura = eliminar_asignatura;
@@ -353,3 +495,9 @@ module.exports.obtener_profesores_asignatura_curso =
   obtener_profesores_asignatura_curso;
 
 module.exports.obtener_profesor_asignatura = obtener_profesor_asignatura;
+
+module.exports.modificar_sucio = modificar_sucio;
+module.exports.modificar_sucio_profesor = modificar_sucio_profesor;
+
+module.exports.obtener_profesores_sucios = obtener_profesores_sucios;
+module.exports.obtener_asignaturas_sucias = obtener_asignaturas_sucias;

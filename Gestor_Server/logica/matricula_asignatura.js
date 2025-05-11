@@ -1,7 +1,6 @@
 const constantes = require("../constantes");
 const conexion = require("../conexion");
 const gestorProfesorMatricula = require("./profesor_matricula.js");
-const serviceProfesorAlumnoMatricula = require("../services/serviceProfesorAlumnoMatricula.js");
 
 function obtener_matriculas_asignaturas_alumno(nid_alumno, nid_curso) {
   return new Promise((resolve, reject) => {
@@ -172,7 +171,6 @@ function actualizar_fecha_baja_matricula_asignatura(
 function add_asignatura(nid_matricula, nid_asignatura, nid_profesor) {
   return new Promise((resolve, reject) => {
     conexion.dbConn.beginTransaction(() => {
-        
       conexion.dbConn.query(
         "insert into " +
           constantes.ESQUEMA_BD +
@@ -187,17 +185,20 @@ function add_asignatura(nid_matricula, nid_asignatura, nid_profesor) {
             conexion.dbConn.rollback();
             reject();
           } else {
-            const nid_profesor_alumno_matricula =
-              await gestorProfesorMatricula.alta_profesor_matricula(
-                results.insertId,
-                nid_profesor
-              );
-            await serviceProfesorAlumnoMatricula.registrar_profesor_alumno_matricula(
-              nid_profesor_alumno_matricula
-            );
+            try {
+              const nid_profesor_alumno_matricula =
+                await gestorProfesorMatricula.alta_profesor_matricula(
+                  results.insertId,
+                  nid_profesor
+                );
+            } catch (error) {
+              console.log(error);
+              conexion.dbConn.rollback();
+              reject("Error al registrar el profesor-alumno-matricula");
+            }
 
             conexion.dbConn.commit();
-            resolve();
+            resolve(results.insertId);
           }
         }
       );
@@ -260,6 +261,58 @@ function dar_baja_asignatura(nid, nid_matricula, nid_asignatura, fecha_baja) {
   });
 }
 
+function modificar_sucio(nid_matricula_asignatura, sucio) {
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.beginTransaction(() => {
+      conexion.dbConn.query(
+        "update " +
+          constantes.ESQUEMA_BD +
+          ".matricula_asignatura set sucio = " +
+          conexion.dbConn.escape(sucio) +
+          " where nid = " +
+          conexion.dbConn.escape(nid_matricula_asignatura),
+        (error, results, fields) => {
+          if (error) {
+            console.log(error);
+            conexion.dbConn.rollback();
+            reject();
+          } else {
+            conexion.dbConn.commit();
+            resolve();
+          }
+        }
+      );
+    });
+  });
+}
+
+function obtener_matriculas_asignaturas_sucias() {
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.beginTransaction(() => {
+      conexion.dbConn.query(
+        "select ma.*  " +
+          "from  " +
+          constantes.ESQUEMA_BD +
+          ".matricula_asignatura ma " +
+          "where ma.sucio = 'S'",
+        (error, results, fields) => {
+          if (error) {
+            console.log(
+              "matricula_asignatura.js - obtener_matriculas_asignaturas_sucias - Error en la consulta: " +
+                error
+            );
+            conexion.dbConn.rollback();
+            reject(error);
+          } else {
+            conexion.dbConn.commit();
+            resolve(results);
+          }
+        }
+      );
+    });
+  });
+}
+
 module.exports.obtener_matriculas_asignaturas_alumno =
   obtener_matriculas_asignaturas_alumno;
 
@@ -275,3 +328,8 @@ module.exports.actualizar_fecha_baja_matricula_asignatura =
 module.exports.add_asignatura = add_asignatura;
 module.exports.eliminar_asignatura = eliminar_asignatura;
 module.exports.dar_baja_asignatura = dar_baja_asignatura;
+
+module.exports.modificar_sucio = modificar_sucio;
+
+module.exports.obtener_matriculas_asignaturas_sucias =
+  obtener_matriculas_asignaturas_sucias;

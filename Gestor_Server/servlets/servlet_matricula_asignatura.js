@@ -3,7 +3,6 @@ const comun = require("../servlets/servlet_comun.js");
 const profesor = require("../logica/profesor.js");
 const gestion_usuarios = require("../logica/usuario.js");
 const gestorMatriculaAsignatura = require("../logica/matricula_asignatura.js");
-const serviceMatriculaAsignatura = require("../services/serviceMatriculaAsignatura.js");
 
 function obtener_matriculas_asignaturas_alumno(req, res) {
   comun.comprobaciones_profesor(req, res, async () => {
@@ -52,8 +51,9 @@ function actualizar_fecha_alta_matricula_asignatura(req, res) {
         fecha_alta
       );
 
-      await serviceMatriculaAsignatura.registrar_matricula_asignatura(
-        nid_matricula_asignatura
+      await gestorMatriculaAsignatura.modificar_sucio(
+        nid_matricula_asignatura,
+        "S"
       );
       res.status(200).send({ error: false, message: "Fecha actualizada" });
     } catch (error) {
@@ -80,8 +80,9 @@ function actualizar_fecha_baja_matricula_asignatura(req, res) {
         fecha_baja
       );
 
-      await serviceMatriculaAsignatura.registrar_matricula_asignatura(
-        nid_matricula_asignatura
+      await gestorMatriculaAsignatura.modificar_sucio(
+        nid_matricula_asignatura,
+        "S"
       );
       res.status(200).send({ error: false, message: "Fecha actualizada" });
     } catch (error) {
@@ -117,10 +118,11 @@ function dar_baja_asignatura(req, res) {
           nid_matricula,
           nid_asignatura
         );
-      await serviceMatriculaAsignatura.registrar_matricula_asignatura(
-        nid_matricula_asignatura
-      );
 
+      await gestorMatriculaAsignatura.modificar_sucio(
+        nid_matricula_asignatura,
+        "S"
+      );
       res.status(200).send({ error: false, message: "Alumno dado de baja" });
     } catch (error) {
       console.error("Error al dar de baja la asignatura:", error);

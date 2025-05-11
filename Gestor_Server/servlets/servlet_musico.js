@@ -80,12 +80,8 @@ function baja_musico(req, res) {
         nid_tipo_musico,
         fecha_baja
       );
-      await serviceMusicos.registrar_musico(
-        nid_persona,
-        nid_instrumento,
-        nid_tipo_musico
-      );
 
+      await musico.actualizar_sucio(nid_persona, "S");
       res
         .status(200)
         .send({ error: false, message: "Se ha dado de baja correctamente" });

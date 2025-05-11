@@ -36,6 +36,8 @@ var fs = require("fs");
 var conexion = require("./conexion.js");
 var sesion_config = require("./config/sesion.json");
 
+const serviceComun = require("./services/serviceComun.js");
+
 // Habilitar la subida de documentos
 app.use(
   fileUpload({
@@ -52,6 +54,8 @@ app.use(
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session(sesion_config));
+
+serviceComun.actualizar_sucios();
 
 app.get("/", (req, res) => {
   return res.status(200).send({ error: true, message: "Hola mundo" });

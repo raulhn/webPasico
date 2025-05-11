@@ -3,6 +3,7 @@ const comun = require("./servlet_comun.js");
 const gestion_usuarios = require("../logica/usuario.js");
 const serviceAsignatura = require("../services/serviceAsignatura.js");
 const serviceProfesores = require("../services/serviceProfesores.js");
+const gestion_asignatura = require("../logica/asignatura.js");
 
 function registrar_asignatura(req, res) {
   comun.comprobaciones(req, res, async () => {
@@ -10,7 +11,7 @@ function registrar_asignatura(req, res) {
       let descripcion = req.body.descripcion;
 
       let nid_asignatura = await asignatura.registrar_asignatura(descripcion);
-      await serviceAsignatura.registrar_asignatura(nid_asignatura);
+      await gestion_asignatura.modificar_sucio(nid_asignatura, "S");
       res.status(200).send({ error: false, message: "Asignatura registrada" });
     } catch (error) {
       console.error("Error al registrar la asignatura:", error);
@@ -32,7 +33,8 @@ function actualizar_asignatura(req, res) {
         descripcion,
         tipo_asignatura
       );
-      await serviceAsignatura.registrar_asignatura(nid_asignatura);
+
+      await gestion_asignatura.modificar_sucio(nid_asignatura, "S");
       res.status(200).send({ error: false, message: "Asignatura actualizada" });
     } catch (error) {
       console.error("Error al actualizar la asignatura:", error);
@@ -72,7 +74,7 @@ function add_profesor(req, res) {
     let nid_asignatura = req.body.nid_asignatura;
 
     await asignatura.add_profesor(nid_asignatura, nid_persona);
-    await serviceProfesores.registrar_profesor(nid_persona, nid_asignatura);
+    await asignatura.modificar_sucio_profesor(nid_persona, nid_asignatura, "S");
     res
       .status(200)
       .send({ error: false, message: "Se ha registrado el profesor" });
@@ -85,7 +87,7 @@ function eliminar_profesor(req, res) {
     let nid_asignatura = req.body.nid_asignatura;
 
     await asignatura.eliminar_profesor(nid_asignatura, nid_persona);
-    await serviceProfesores.eliminar_profesor(nid_persona, nid_asignatura);
+    await asignatura.modificar_sucio_profesor(nid_persona, nid_asignatura, "S");
     res
       .status(200)
       .send({ error: false, message: "Se ha eliminado el profesor" });

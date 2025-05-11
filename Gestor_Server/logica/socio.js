@@ -84,7 +84,7 @@ async function registrar_socio(nid_persona, num_socio, fecha_alta) {
       }
 
       await guardar_socio(nid_persona, num_socio, fecha_alta);
-      await serviceSocios.registrarSocio(nid_persona);
+      await actualizar_sucio(nid_persona, "S");
       return;
     }
   } catch (error) {
@@ -145,7 +145,8 @@ async function actualizar_socio(
         fecha_alta,
         fecha_baja
       );
-      await serviceSocios.registrarSocio(nid_persona);
+
+      await actualizar_sucio(nid_persona, "S");
       return;
     } else {
       throw new Error("No existe socio");
@@ -239,6 +240,49 @@ function obtener_socio(nid_persona) {
   });
 }
 
+function actualizar_sucio(nid_persona, sucio) {
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.beginTransaction(() => {
+      conexion.dbConn.query(
+        "update " +
+          constantes.ESQUEMA_BD +
+          ".socios set sucio = " +
+          conexion.dbConn.escape(sucio) +
+          " where nid_persona = " +
+          conexion.dbConn.escape(nid_persona),
+        (error, results, fields) => {
+          if (error) {
+            console.log(error);
+            conexion.dbConn.rollback();
+            reject(error);
+          } else {
+            conexion.dbConn.commit();
+            resolve();
+          }
+        }
+      );
+    });
+  });
+}
+
+function obtener_sucios() {
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(
+      "select s.* from " +
+        constantes.ESQUEMA_BD +
+        ".socios s where s.sucio = 'S'",
+      (error, results, fields) => {
+        if (error) {
+          console.log(error);
+          reject(error);
+        } else {
+          resolve(results);
+        }
+      }
+    );
+  });
+}
+
 module.exports.registrar_socio = registrar_socio;
 module.exports.actualizar_socio = actualizar_socio;
 
@@ -246,3 +290,5 @@ module.exports.obtener_socios = obtener_socios;
 module.exports.obtener_socios_alta = obtener_socios_alta;
 module.exports.obtener_socios_baja = obtener_socios_baja;
 module.exports.obtener_socio = obtener_socio;
+module.exports.actualizar_sucio = actualizar_sucio;
+module.exports.obtener_sucios = obtener_sucios;
