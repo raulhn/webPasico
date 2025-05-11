@@ -1,6 +1,7 @@
 import { Drawer } from "expo-router/drawer";
 
 import { CustomHeader } from "../../../componentes/cabecera.jsx";
+import { useRol } from "../../../hooks/useRol"; // Asegúrate de que la ruta sea correcta
 
 const CustomHeaderBanda = ({ navigation, route, options }) => {
   return CustomHeader({
@@ -12,6 +13,8 @@ const CustomHeaderBanda = ({ navigation, route, options }) => {
 };
 
 export default function DrawerLayout() {
+  const { esRol } = useRol();
+
   const logo = require("../../../assets/logo.png");
   return (
     <Drawer
@@ -30,6 +33,7 @@ export default function DrawerLayout() {
         name="parituras"
         options={{
           title: "Partituras",
+          drawerItemStyle: esRol("MUSICO") ? {} : { display: "none" },
         }}
       />
     </Drawer>

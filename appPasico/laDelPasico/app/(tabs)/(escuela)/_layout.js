@@ -6,6 +6,8 @@ import { Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { CustomHeader } from "../../../componentes/cabecera.jsx";
 
+import { useRol } from "../../../hooks/useRol"; // Asegúrate de que la ruta sea correcta
+
 const CustomHeaderEscuela = ({ navigation, route, options }) => {
   return CustomHeader({
     navigation,
@@ -16,6 +18,8 @@ const CustomHeaderEscuela = ({ navigation, route, options }) => {
 };
 
 export default function DrawerLayout() {
+  const { esRol } = useRol(); // Hook para verificar roles
+
   const logo = require("../../../assets/logo.png");
   return (
     <Drawer
@@ -35,6 +39,7 @@ export default function DrawerLayout() {
         name="boletines"
         options={{
           title: "Boletines",
+          drawerItemStyle: esRol("ALUMNO") ? {} : { display: "none" },
         }}
       />
     </Drawer>

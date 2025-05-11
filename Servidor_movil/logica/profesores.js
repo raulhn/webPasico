@@ -145,5 +145,27 @@ function eliminarProfesor(nid_persona, nid_asignatura) {
   });
 }
 
+function obtenerProfesor(nid_persona) {
+  {
+    return new Promise((resolve, reject) => {
+      const sql =
+        "SELECT * FROM " +
+        constantes.ESQUEMA +
+        ".profesor WHERE nid_persona = " +
+        conexion.dbConn.escape(nid_persona);
+
+      conexion.dbConn.query(sql, (error, result) => {
+        if (error) {
+          console.error("Error al obtener el profesor: " + error.message);
+          reject(new Error("Error al obtener el profesor"));
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+}
+
 module.exports.registrarProfesor = registrarProfesor;
 module.exports.eliminarProfesor = eliminarProfesor;
+module.exports.obtenerProfesor = obtenerProfesor;

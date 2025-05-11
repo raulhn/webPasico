@@ -7,6 +7,7 @@ const crypto = require("crypto");
 const gestorSocios = require("./socios.js");
 const gestorPersona = require("./persona.js");
 const gestorMusicos = require("./musicos.js");
+const gestorMatriculas = require("./matricula.js");
 
 function existeUsuario(correoElectronico) {
   return new Promise((resolve, reject) => {
@@ -100,18 +101,35 @@ async function construirRoles(nid_usuario) {
   try {
     let roles = [];
     const persona = await gestorPersona.obtenerPersonaUsuario(nid_usuario);
-    let esSocio = await gestorSocios.esSocio(persona.nid_persona);
 
+    // Rol Socio //
+    let esSocio = await gestorSocios.esSocio(persona.nid_persona);
     if (esSocio) {
       console.log("El usuario es socio.");
       roles.push({ rol: "SOCIO" });
     }
 
+    // Rol Musico //
     let esMusico = await gestorMusicos.esMusico(persona.nid_persona);
-
     if (esMusico) {
       console.log("El usuario es músico.");
       roles.push({ rol: "MUSICO" });
+    }
+
+    // Rol Alumno //
+    const matriculas = await gestorMatriculas.obtenerMatriculas(
+      persona.nid_persona
+    );
+    if (matriculas.length > 0) {
+      console.log("El usuario tiene matrículas.");
+      roles.push({ rol: "ALUMNO" });
+    }
+
+    // Rol Profesor //
+    const profesores = await gestorSocios.esProfesor(persona.nid_persona);
+    if (profesores.length > 0) {
+      console.log("El usuario es profesor.");
+      roles.push({ rol: "PROFESOR" });
     }
 
     return roles;

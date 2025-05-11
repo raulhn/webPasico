@@ -6,34 +6,6 @@ import { AuthContext } from "../../providers/AuthContext"; // Ajusta la ruta seg
 export default function TabsLayout() {
   const { roles } = useContext(AuthContext); // Obtiene el contexto de autenticación
 
-  function opcionesSocio() {
-    let opciones = {
-      headerShown: false,
-      title: "Asociación",
-      tabBarIcon: ({ color }) => (
-        <MaterialIcons name="group" size={30} color={color} />
-      ),
-    };
-
-    if (!roles || roles.length === 0) {
-      return {
-        ...opciones,
-        href: null,
-      }; // Si no hay roles, no se muestra la opción
-    }
-
-    const rolSocio = roles.find((elemento) => elemento.rol === "SOCIO");
-
-    if (!rolSocio) {
-      return {
-        ...opciones,
-        href: null,
-      }; // Si no hay rol de socio, no se muestra la opción
-    } else {
-      return opciones;
-    }
-  }
-
   function opcionesRol(icono, tipoIcono, rol, titulo) {
     let opciones = {
       headerShown: false,
@@ -50,6 +22,8 @@ export default function TabsLayout() {
       },
     };
 
+    return opciones;
+    /**  Mostrar Tabs dpendiendo del rol
     if (!roles || roles.length === 0) {
       return {
         ...opciones,
@@ -66,30 +40,25 @@ export default function TabsLayout() {
       }; // Si no hay rol de socio, no se muestra la opción
     } else {
       return opciones;
-    }
+    }*/
+  }
+
+  function opcionesInicio() {
+    return {
+      title: "Inicio",
+      headerShown: false,
+      tabBarIcon: ({ color }) => (
+        <MaterialIcons name="home" size={30} color={color} />
+      ),
+    };
   }
 
   return (
     <Tabs>
-      <Tabs.Screen
-        name="(drawer)"
-        options={{
-          title: "Inicio",
-          headerShown: false,
-          tabBarIcon: ({ color }) => (
-            <MaterialIcons name="home" size={30} color={color} />
-          ),
-        }}
-      />
+      <Tabs.Screen name="(drawer)" options={opcionesInicio()} />
       <Tabs.Screen
         name="(escuela)"
-        options={{
-          headerShown: false,
-          title: "Escuela",
-          tabBarIcon: ({ color }) => (
-            <MaterialIcons name="school" size={30} color={color} />
-          ),
-        }}
+        options={opcionesRol("school", 2, "ALUMNO", "Escuela")}
       />
       <Tabs.Screen
         name="(banda)"
