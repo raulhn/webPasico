@@ -5,10 +5,6 @@ const gestion_usuarios = require("../logica/usuario.js");
 const gestorMatriculaAsignatura = require("../logica/matricula_asignatura.js");
 const gestorProfesorAlumnoMatricula = require("../logica/profesor_alumno_matricula.js");
 
-const serviceMatricula = require("../services/serviceMatricula.js");
-const serviceMatriculaAsignatura = require("../services/serviceMatriculaAsignatura.js");
-const serviceProfesorAlumnoMatricula = require("../services/serviceProfesorAlumnoMatricula.js");
-
 function registrar_matricula(req, res) {
   comun.comprobaciones(req, res, async () => {
     try {
@@ -22,32 +18,43 @@ function registrar_matricula(req, res) {
         nid_curso
       );
 
+      let nid_matricula;
       if (!bExisteMatricula) {
-        await matricula.registrar_matricula(nid_persona, nid_curso);
+        nid_matricula = await matricula.registrar_matricula(
+          nid_persona,
+          nid_curso
+        );
+        await matricula.actualizar_sucio(nid_matricula, "S");
       }
 
-      let nid_matricula = await matricula.obtener_nid_matricula(
+      nid_matricula = await matricula.obtener_nid_matricula(
         nid_persona,
         nid_curso
       );
       bExisteAsignatura = await asignatura.existe_asignatura(nid_asignatura);
 
       if (bExisteAsignatura) {
-        await gestorMatriculaAsignatura.add_asignatura(
-          nid_matricula,
-          nid_asignatura,
-          nid_profesor
+        const nid_matricula_asignatura =
+          await gestorMatriculaAsignatura.add_asignatura(
+            nid_matricula,
+            nid_asignatura,
+            nid_profesor
+          );
+
+        await gestorMatriculaAsignatura.modificar_sucio(
+          nid_matricula_asignatura,
+          "S"
         );
 
-        await serviceMatricula.registrar_matricula(nid_matricula);
-
-        let nid_matricula_asignatura =
-          await gestorMatriculaAsignatura.obtener_nid_matricula_asignatura(
-            nid_matricula,
-            nid_asignatura
+        let nid_profesor_alumno_matricula =
+          await gestorProfesorAlumnoMatricula.obtener_nid_profesor_alumno_matricula(
+            nid_profesor,
+            nid_matricula_asignatura
           );
-        await serviceMatriculaAsignatura.registrar_matricula_asignatura(
-          nid_matricula_asignatura
+
+        await gestorProfesorAlumnoMatricula.actualizar_sucio(
+          nid_profesor_alumno_matricula,
+          "S"
         );
         res.status(200).send({ error: false, message: "Matricula registrada" });
       } else {
@@ -85,7 +92,8 @@ function actualizar_matricula(req, res) {
       let nid_curso = req.body.nid_curso;
 
       await matricula.actualizar_matricula(nid_matricula, nid_curso);
-      await serviceMatricula.registrar_matricula(nid_matricula);
+
+      await matricula.actualizar_sucio(nid_matricula, "S");
       res.status(200).send({ error: false, message: "Matricula actualizada" });
     } catch (error) {
       console.error("Error al registrar la matricula:", error);
@@ -315,10 +323,11 @@ function sustituir_profesor_alumno(req, res) {
         "Realiza peticion registrar_profesor_alumno_matricula con id: ",
         nid_profesor_alumno_matricula
       );
-      await serviceProfesorAlumnoMatricula.registrar_profesor_alumno_matricula(
-        nid_profesor_alumno_matricula
-      );
 
+      await gestorProfesorAlumnoMatricula.actualizar_sucio(
+        nid_profesor_alumno_matricula,
+        "S"
+      );
       console.log(
         "Sustitución de profesor realizada correctamente para el alumno con nid_matricula_asignatura:",
         nid_matricula_asignatura

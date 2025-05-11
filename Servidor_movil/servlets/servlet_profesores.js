@@ -6,6 +6,7 @@ function registrarProfesor(req, res) {
     try {
       let nid_persona = req.body.nid_persona;
       let nid_asignatura = req.body.nid_asignatura;
+      let esBaja = req.body.esBaja;
       let fecha_actualizacion = req.body.fecha_actualizacion;
 
       console.log(
@@ -14,8 +15,13 @@ function registrarProfesor(req, res) {
         nid_asignatura,
         fecha_actualizacion
       );
-      gestorProfesores
-        .registrarProfesor(nid_persona, nid_asignatura, fecha_actualizacion)
+      await gestorProfesores
+        .registrarProfesor(
+          nid_persona,
+          nid_asignatura,
+          esBaja,
+          fecha_actualizacion
+        )
         .then(() => {
           res.status(200).send({
             error: false,

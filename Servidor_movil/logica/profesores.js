@@ -1,18 +1,25 @@
 const conexion = require("../conexion");
 const constantes = require("../constantes");
 
-function insertarProfesor(nid_persona, nid_asignatura, fecha_actualizacion) {
+function insertarProfesor(
+  nid_persona,
+  nid_asignatura,
+  esBaja,
+  fecha_actualizacion
+) {
   return new Promise((resolve, reject) => {
     const sql =
       "INSERT INTO " +
       constantes.ESQUEMA +
-      ".profesor (nid_persona, nid_asignatura, fecha_actualizacion)" +
+      ".profesor (nid_persona, nid_asignatura, fecha_actualizacion, esBaja)" +
       "values(" +
       conexion.dbConn.escape(nid_persona) +
       "," +
       conexion.dbConn.escape(nid_asignatura) +
       "," +
       conexion.dbConn.escape(fecha_actualizacion) +
+      "," +
+      conexion.dbConn.escape(esBaja) +
       ")";
 
     conexion.dbConn.beginTransaction(() => {
@@ -29,17 +36,24 @@ function insertarProfesor(nid_persona, nid_asignatura, fecha_actualizacion) {
     });
   });
 }
-function actualizarProfesor(nid_persona, nid_asignatura, fecha_actualizacion) {
+function actualizarProfesor(
+  nid_persona,
+  nid_asignatura,
+  esBaja,
+  fecha_actualizacion
+) {
   return new Promise((resolve, reject) => {
     const sql =
       "UPDATE " +
       constantes.ESQUEMA +
-      ".profesor SET nid_asignatura = " +
-      conexion.dbConn.escape(nid_asignatura) +
-      ", fecha_actualizacion = " +
+      ".profesor SET  fecha_actualizacion = " +
       conexion.dbConn.escape(fecha_actualizacion) +
+      ", esBaja = " +
+      conexion.dbConn.escape(esBaja) +
       " WHERE nid_persona = " +
-      conexion.dbConn.escape(nid_persona);
+      conexion.dbConn.escape(nid_persona) +
+      " AND nid_asignatura = " +
+      conexion.dbConn.escape(nid_asignatura);
 
     conexion.dbConn.beginTransaction(() => {
       conexion.dbConn.query(sql, (error, result) => {
@@ -80,18 +94,25 @@ function existeProfesor(nid_persona, nid_asignatura) {
 async function registrarProfesor(
   nid_persona,
   nid_asignatura,
+  esBaja,
   fecha_actualizacion
 ) {
   try {
     const existe = await existeProfesor(nid_persona, nid_asignatura);
     if (existe) {
-      return actualizarProfesor(
+      return await actualizarProfesor(
         nid_persona,
         nid_asignatura,
+        esBaja,
         fecha_actualizacion
       );
     } else {
-      return insertarProfesor(nid_persona, nid_asignatura, fecha_actualizacion);
+      return await insertarProfesor(
+        nid_persona,
+        nid_asignatura,
+        esBaja,
+        fecha_actualizacion
+      );
     }
   } catch (error) {
     console.error("Error al registrar el profesor: " + error.message);

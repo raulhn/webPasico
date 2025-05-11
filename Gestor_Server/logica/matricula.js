@@ -2,8 +2,7 @@ const conexion = require("../conexion.js");
 const constantes = require("../constantes.js");
 const logica_asignatura = require("./asignatura.js");
 const curso = require("./curso.js");
-const serviceProfesores = require("../services/serviceProfesores.js");
-const serviceProfesorAlumnoMatricula = require("../services/serviceProfesorAlumnoMatricula.js");
+const gestorProfesorAlumnoMatricula = require("./profesor_alumno_matricula.js");
 
 function existe_matricula(nid_persona, nid_curso) {
   return new Promise((resolve, reject) => {
@@ -71,7 +70,7 @@ async function registrar_matricula(nid_persona, nid_curso) {
                 reject("Error al registrar la matricula");
               } else {
                 conexion.dbConn.commit();
-                resolve();
+                resolve(results.insertId);
               }
             }
           );
@@ -1005,24 +1004,36 @@ function sustituir_profesor_curso_actual(
               nid_profesor_sustituto,
               matriculas_a_susituir[i]["nid"]
             );
-          await serviceProfesorAlumnoMatricula.registrar_profesor_alumno_matricula(
-            nid_profesor_alumno_matricula
+
+          await gestorProfesorAlumnoMatricula.actualizar_sucio(
+            nid_profesor_alumno_matricula,
+            "S"
           );
           await baja_profesor_alumno_matricula(matriculas_a_susituir[i]["nid"]);
-          await serviceProfesorAlumnoMatricula.registrar_profesor_alumno_matricula(
-            matriculas_a_susituir[i]["nid"]
+
+          await gestorProfesorAlumnoMatricula.actualizar_sucio(
+            matriculas_a_susituir[i]["nid"],
+            "S"
           );
         }
 
+        console.log(
+          "Se han dado de baja los profesores de la asignatura " +
+            nid_asignatura +
+            " y se han dado de alta los profesores sustitutos"
+        );
         await logica_asignatura.eliminar_profesor(nid_asignatura, nid_profesor);
-        await serviceProfesores.eliminar_profesor(nid_profesor, nid_asignatura);
-
+        await logica_asignatura.modificar_sucio_profesor(
+          nid_profesor,
+          nid_asignatura,
+          "S"
+        );
         conexion.dbConn.commit();
         resolve();
       } catch (e) {
         console.log(e);
         conexion.dbConn.rollback();
-        reject();
+        reject("Error al sustituir profesor");
       }
     });
   });
@@ -1042,8 +1053,10 @@ function sustituir_profesor_alumno(
           await baja_profesor_alumno_matricula(
             profesor_alumno_matricula["nid"]
           );
-          await serviceProfesorAlumnoMatricula.registrar_profesor_alumno_matricula(
-            profesor_alumno_matricula["nid"]
+
+          await gestorProfesorAlumnoMatricula.actualizar_sucio(
+            profesor_alumno_matricula["nid"],
+            "S"
           );
           const nid_profesor_alumno_matricula =
             await alta_profesor_alumno_matricula_baja(
@@ -1051,8 +1064,9 @@ function sustituir_profesor_alumno(
               profesor_alumno_matricula["nid"]
             );
 
-          serviceProfesorAlumnoMatricula.registrar_profesor_alumno_matricula(
-            nid_profesor_alumno_matricula
+          await gestorProfesorAlumnoMatricula.actualizar_sucio(
+            nid_profesor_alumno_matricula,
+            "S"
           );
 
           conexion.dbConn.commit();
@@ -1067,6 +1081,47 @@ function sustituir_profesor_alumno(
       console.log(error);
       reject();
     }
+  });
+}
+
+function actualizar_sucio(nid_matricula, sucio) {
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.beginTransaction(() => {
+      conexion.dbConn.query(
+        "update " +
+          constantes.ESQUEMA_BD +
+          ".matricula set sucio = " +
+          conexion.dbConn.escape(sucio) +
+          " where nid = " +
+          conexion.dbConn.escape(nid_matricula),
+        (error, results, fields) => {
+          if (error) {
+            console.log(error);
+            conexion.dbConn.rollback();
+            reject();
+          } else {
+            conexion.dbConn.commit();
+            resolve();
+          }
+        }
+      );
+    });
+  });
+}
+
+function obtener_matriculas_sucias() {
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(
+      "select * from " + constantes.ESQUEMA_BD + ".matricula where sucio = 'S'",
+      (error, results, fields) => {
+        if (error) {
+          console.log(error);
+          reject();
+        } else {
+          resolve(results);
+        }
+      }
+    );
   });
 }
 
@@ -1118,3 +1173,6 @@ module.exports.obtener_asignaturas_matricula_activas_fecha =
 module.exports.sustituir_profesor_alumno = sustituir_profesor_alumno;
 
 module.exports.obtener_objeto_matricula = obtener_objeto_matricula;
+module.exports.actualizar_sucio = actualizar_sucio;
+
+module.exports.obtener_matriculas_sucias = obtener_matriculas_sucias;

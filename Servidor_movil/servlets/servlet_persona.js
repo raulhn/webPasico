@@ -14,6 +14,7 @@ function registrarPersona(req, res) {
       let email = req.body.correo_electronico;
       let nid_madre = req.body.nid_madre;
       let nid_padre = req.body.nid_padre;
+      let nid_socio = req.body.nid_socio;
 
       let fecha_actualizacion = req.body.fecha_actualizacion;
 
@@ -28,6 +29,7 @@ function registrarPersona(req, res) {
         email,
         nid_madre,
         nid_padre,
+        nid_socio,
         fecha_actualizacion
       );
 

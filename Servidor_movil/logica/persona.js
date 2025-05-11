@@ -56,6 +56,7 @@ function actualizarPersona(
   correo_electronico,
   nid_madre,
   nid_padre,
+  nid_socio,
   fecha_actualizacion
 ) {
   return new Promise((resolve, reject) => {
@@ -78,6 +79,8 @@ function actualizarPersona(
       conexion.dbConn.escape(nid_madre) +
       ", nid_padre = " +
       conexion.dbConn.escape(nid_padre) +
+      ", nid_socio = " +
+      conexion.dbConn.escape(nid_socio) +
       ", fecha_actualizacion = " +
       conexion.dbConn.escape(fecha_actualizacion) +
       ", sucio = 'N'" +
@@ -117,11 +120,13 @@ function insertarPersona(
   telefono,
   correo_electronico,
   nid_madre,
-  nid_padre
+  nid_padre,
+  nid_socio,
+  fecha_actualizacion
 ) {
   return new Promise((resolve, reject) => {
     const sql =
-      "INSERT INTO persona (nid_persona, nombre, primer_apellido, segundo_apellido, fecha_nacimiento, nif, telefono, correo_electronico, nid_madre, nid_padre) VALUES (" +
+      "INSERT INTO persona (nid_persona, nombre, primer_apellido, segundo_apellido, fecha_nacimiento, nif, telefono, correo_electronico, nid_madre, nid_padre, nid_socio, fecha_actualizacion) VALUES (" +
       conexion.dbConn.escape(nid_persona) +
       ", " +
       conexion.dbConn.escape(nombre) +
@@ -141,6 +146,10 @@ function insertarPersona(
       conexion.dbConn.escape(nid_madre) +
       ", " +
       conexion.dbConn.escape(nid_padre) +
+      ", " +
+      conexion.dbConn.escape(nid_socio) +
+      ", " +
+      conexion.dbConn.escape(fecha_actualizacion) +
       ")";
 
     conexion.dbConn.beginTransaction((err) => {
@@ -179,6 +188,7 @@ async function registrarPersona(
   correo_electronico,
   nid_madre,
   nid_padre,
+  nid_socio,
   fecha_actualizacion
 ) {
   try {
@@ -201,6 +211,7 @@ async function registrarPersona(
           correo_electronico,
           nid_madre,
           nid_padre,
+          nid_socio,
           fecha_actualizacion
         );
 
@@ -219,7 +230,9 @@ async function registrarPersona(
         telefono,
         correo_electronico,
         nid_madre,
-        nid_padre
+        nid_padre,
+        nid_socio,
+        fecha_actualizacion
       );
       console.log("Persona insertada correctamente.");
     }

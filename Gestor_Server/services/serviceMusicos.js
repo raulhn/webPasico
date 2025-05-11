@@ -2,10 +2,7 @@ const gestorMusico = require("../logica/musico.js");
 const serviceComun = require("./serviceComun.js");
 const constantes = require("../constantes.js");
 
-async function registrar_musico(nid_persona) {
-  console.log("Actualizar musico en servicio movil");
-  const musico = await gestorMusico.obtener_musico(nid_persona);
-
+function peticion_registrar_musico(musico) {
   return new Promise((resolve, reject) => {
     try {
       for (let i = 0; i < musico.length; i++) {
@@ -41,7 +38,10 @@ async function registrar_musico(nid_persona) {
                 resolve(data);
               })
               .catch((error) => {
-                console.error("Error al procesar la respuesta JSON:", error);
+                console.error(
+                  "serviceMusios.js - Error al procesar la respuesta JSON:",
+                  error
+                );
                 reject("Error al procesar la respuesta JSON");
               });
           })
@@ -57,4 +57,27 @@ async function registrar_musico(nid_persona) {
   });
 }
 
+async function registrar_musico(nid_persona) {
+  console.log("Actualizar musico en servicio movil");
+  const musico = await gestorMusico.obtener_musico(nid_persona);
+
+  await peticion_registrar_musico(musico);
+  await gestorMusico.actualizar_sucio(nid_persona, "N");
+  return;
+}
+
+async function actualizar_sucios() {
+  try {
+    const musico = await gestorMusico.obtener_sucios();
+    for (let i = 0; i < musico.length; i++) {
+      let musicoActual = musico[i];
+      await registrar_musico(musicoActual.nid_persona);
+    }
+  } catch (error) {
+    console.error("Error en la función actualizar_sucios:", error);
+    throw new Error("Error en la función actualizar_sucios");
+  }
+}
+
 module.exports.registrar_musico = registrar_musico;
+module.exports.actualizar_sucios = actualizar_sucios;

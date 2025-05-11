@@ -133,7 +133,7 @@ async function registrar_instrumento_persona(
 
     if (bExistePersona && bExisteInstrumento) {
       await insertar_musico(nid_persona, nid_instrumento, nid_tipo_musico);
-      await serviceMusicos.registrar_musico(nid_persona);
+      await actualizar_sucio(nid_persona, "S");
     } else {
       throw new Error("Error al registrar al músico");
     }
@@ -306,6 +306,49 @@ function baja_musico(
   });
 }
 
+function actualizar_sucio(nid_persona, sucio) {
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.beginTransaction(() => {
+      conexion.dbConn.query(
+        "update " +
+          constantes.ESQUEMA_BD +
+          ".musico set sucio = " +
+          conexion.dbConn.escape(sucio) +
+          " where nid_persona = " +
+          conexion.dbConn.escape(nid_persona),
+        (error, results, fields) => {
+          if (error) {
+            console.log(error);
+            conexion.dbConn.rollback();
+            reject(error);
+          } else {
+            conexion.dbConn.commit();
+            resolve(results);
+          }
+        }
+      );
+    });
+  });
+}
+
+function obtener_sucios() {
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(
+      "select m.* from " +
+        constantes.ESQUEMA_BD +
+        ".musico m where m.sucio = 'S'",
+      (error, results, fields) => {
+        if (error) {
+          console.log(error);
+          reject(error);
+        } else {
+          resolve(results);
+        }
+      }
+    );
+  });
+}
+
 module.exports.obtener_instrumentos_filtro = obtener_instrumentos_filtro;
 module.exports.obtener_instrumentos = obtener_instrumentos;
 module.exports.obtener_musicos = obtener_musicos;
@@ -318,3 +361,6 @@ module.exports.obtener_personas_instrumento = obtener_personas_instrumento;
 module.exports.obtener_tipo_musicos = obtener_tipo_musicos;
 module.exports.obtener_musico = obtener_musico;
 module.exports.baja_musico = baja_musico;
+module.exports.actualizar_sucio = actualizar_sucio;
+
+module.exports.obtener_sucios = obtener_sucios;

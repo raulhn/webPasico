@@ -322,7 +322,7 @@ async function registrar_persona(
                 reject(error);
               } else {
                 conexion.dbConn.commit();
-                servicePersona.registrar_persona(results.insertId);
+                actualizar_sucio(results.insertId, "S");
                 console.log("Usuario registrado");
                 resolve(results.insertId);
               }
@@ -488,7 +488,6 @@ async function registrar_padre(nid_persona, nid_padre) {
                 conexion.dbConn.rollback();
                 reject(error);
               } else {
-                servicePersona.registrar_persona(nid_persona);
                 conexion.dbConn.commit();
                 resolve();
               }
@@ -527,7 +526,6 @@ async function registrar_madre(nid_persona, nid_madre) {
                 conexion.dbConn.rollback();
                 reject(error);
               } else {
-                servicePersona.registrar_persona(nid_persona);
                 conexion.dbConn.commit();
                 resolve();
               }
@@ -697,7 +695,6 @@ function actualizar_persona(
                 resolve(false);
               } else {
                 conexion.dbConn.commit();
-                servicePersona.registrar_persona(nid);
                 resolve(true);
               }
             }
@@ -1010,6 +1007,49 @@ function existe_forma_pago(nid_forma_pago) {
   });
 }
 
+function actualizar_sucio(nid_persona, sucio) {
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.beginTransaction(() => {
+      conexion.dbConn.query(
+        "update " +
+          constantes.ESQUEMA_BD +
+          ".persona set sucio = " +
+          conexion.dbConn.escape(sucio) +
+          " where nid = " +
+          conexion.dbConn.escape(nid_persona),
+        (error, results, fields) => {
+          if (error) {
+            console.log(error);
+            conexion.dbConn.rollback();
+            reject("Error al actualizar el sucio");
+          } else {
+            conexion.dbConn.commit();
+            resolve();
+          }
+        }
+      );
+    });
+  });
+}
+
+function obtener_personas_sucias() {
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(
+      "select p.* from " +
+        constantes.ESQUEMA_BD +
+        ".persona p where p.sucio = 'S'",
+      (error, results, fields) => {
+        if (error) {
+          console.log(error);
+          reject("Error al obtener las personas sucias");
+        } else {
+          resolve(results);
+        }
+      }
+    );
+  });
+}
+
 module.exports.registrar_persona = registrar_persona;
 module.exports.actualizar_persona = actualizar_persona;
 
@@ -1046,3 +1086,6 @@ module.exports.actualizar_metodo_pasarela_pago =
 module.exports.actualizar_forma_pago = actualizar_forma_pago;
 
 module.exports.existe_forma_pago = existe_forma_pago;
+module.exports.actualizar_sucio = actualizar_sucio;
+
+module.exports.obtener_personas_sucias = obtener_personas_sucias;

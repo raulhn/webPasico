@@ -1,6 +1,5 @@
 create table pasico_movil.matricula_asignatura(
     nid_matricula_asignatura integer primary key,
-    nid_persona integer,
     nid_matricula integer,
     nid_asignatura integer,
     fecha_alta date,
@@ -8,9 +7,7 @@ create table pasico_movil.matricula_asignatura(
     fecha_actualizacion datetime default current_timestamp
 );
 
-alter table pasico_movil.matricula_asignatura
-    add constraint fk_matricula_asignatura_personas foreign key (nid_persona) 
-    references pasico_movil.persona(nid_persona);
+
 
 alter table pasico_movil.matricula_asignatura
     add constraint fk_matricula_asignatura_matricula foreign key (nid_matricula) 

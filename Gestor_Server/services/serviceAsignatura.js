@@ -2,10 +2,7 @@ const gestorAsignatura = require("../logica/asignatura.js");
 const constantes = require("../constantes.js");
 const serviceComun = require("./serviceComun.js");
 
-async function registrar_asignatura(nid_asignatura) {
-  console.log("Actualizar asignatura en servicio movil");
-  const asignatura = await gestorAsignatura.obtener_asignatura(nid_asignatura);
-
+function peticion_registrar_asignatura(asignatura) {
   return new Promise((resolve, reject) => {
     try {
       serviceComun
@@ -38,7 +35,10 @@ async function registrar_asignatura(nid_asignatura) {
               resolve(data);
             })
             .catch((error) => {
-              console.error("Error al procesar la respuesta JSON:", error);
+              console.error(
+                "serviceAsignatura.js - Error al procesar la respuesta JSON:",
+                error
+              );
               reject("Error al procesar la respuesta JSON");
             });
         })
@@ -53,4 +53,36 @@ async function registrar_asignatura(nid_asignatura) {
   });
 }
 
+async function registrar_asignatura(nid_asignatura) {
+  try {
+    console.log("Actualizar asignatura en servicio movil");
+    const asignatura = await gestorAsignatura.obtener_asignatura(
+      nid_asignatura
+    );
+
+    await peticion_registrar_asignatura(asignatura);
+    await gestorAsignatura.modificar_sucio(nid_asignatura, "N");
+    return;
+  } catch (error) {
+    console.error("Error en la función registrar_asignatura:", error);
+    throw new Error("Error en la función registrar_asignatura");
+  }
+}
+
+async function actualizar_sucios() {
+  try {
+    const asignaturas = await gestorAsignatura.obtener_asignaturas_sucias();
+
+    for (let i = 0; i < asignaturas.length; i++) {
+      const asignatura = asignaturas[i];
+      await registrar_asignatura(asignatura.nid);
+    }
+    return;
+  } catch (error) {
+    console.error("Error en la función actualizar_sucios:", error);
+    throw new Error("Error en la función actualizar_sucios");
+  }
+}
+
 module.exports.registrar_asignatura = registrar_asignatura;
+module.exports.actualizar_sucios = actualizar_sucios;
