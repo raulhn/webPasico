@@ -30,7 +30,7 @@ export default function DrawerLayout() {
         }}
       />
       <Drawer.Screen
-        name="parituras"
+        name="partituras"
         options={{
           title: "Partituras",
           drawerItemStyle: esRol("MUSICO") ? {} : { display: "none" },
