@@ -5,8 +5,11 @@ import CardEventoPartitura from "../../../componentes/componentesBanda/CardEvent
 import CardPartitura from "../../../componentes/componentesBanda/CardPartitura";
 import BotonFixed from "../../../componentes/componentesUI/BotonFixed";
 import FormularioEvento from "../../../componentes/componentesBanda/FormularioEvento";
+import { useRol } from "../../../hooks/useRol";
 
 export default function Partituras() {
+  const { esRol } = useRol();
+
   const [modalVisible, setModalVisible] = useState(false);
   const partitura = {
     id: 1,
@@ -44,12 +47,22 @@ export default function Partituras() {
         <CardEventoPartitura EventoPartitura={partitura2} />
 
         <CardPartitura partitura={partitura1} />
-        <BotonFixed
-          onPress={() => {
-            console.log("Botón presionado");
-            setModalVisible(true);
-          }}
-        />
+
+        <View
+          style={[
+            esRol("ADMINISTRADOR") || esRol("DIRECTOR")
+              ? { display: "flex" }
+              : { display: "none" },
+            styles.botonAdd,
+          ]}
+        >
+          <BotonFixed
+            onPress={() => {
+              console.log("Botón presionado");
+              setModalVisible(true);
+            }}
+          />
+        </View>
       </View>
 
       <Modal
@@ -71,4 +84,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 10,
   },
+  botonAdd: { position: "absolute", bottom: 20, right: 20 },
 });

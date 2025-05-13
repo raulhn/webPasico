@@ -8,6 +8,8 @@ const gestorSocios = require("./socios.js");
 const gestorPersona = require("./persona.js");
 const gestorMusicos = require("./musicos.js");
 const gestorMatriculas = require("./matricula.js");
+const gestorRoles = require("./roles.js");
+const gestorProfesor = require("./profesores.js");
 
 function existeUsuario(correoElectronico) {
   return new Promise((resolve, reject) => {
@@ -99,7 +101,15 @@ async function registrarUsuario(
 
 async function construirRoles(nid_usuario) {
   try {
+    const rolesExistentes = await gestorRoles.obtenerRoles(nid_usuario);
+
     let roles = [];
+
+    for (let i = 0; i < rolesExistentes.length; i++) {
+      const rolRecuperado = rolesExistentes[i].nombre;
+      roles.push({ rol: rolRecuperado });
+    }
+
     const persona = await gestorPersona.obtenerPersonaUsuario(nid_usuario);
 
     // Rol Socio //
@@ -126,7 +136,9 @@ async function construirRoles(nid_usuario) {
     }
 
     // Rol Profesor //
-    const profesores = await gestorSocios.esProfesor(persona.nid_persona);
+    const profesores = await gestorProfesor.obtenerProfesor(
+      persona.nid_persona
+    );
     if (profesores.length > 0) {
       console.log("El usuario es profesor.");
       roles.push({ rol: "PROFESOR" });

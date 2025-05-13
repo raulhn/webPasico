@@ -6,6 +6,12 @@ create table pasico_movil.usuarios(
 	correo_electronico varchar(200),
 	password varchar(200),
 	nid_persona integer,
-	verificado varchar(1) default 'N'
+	verificado varchar(1) default 'N',
+	nid_rol integer
 );
 
+alter table pasico_movil.usuarios
+	add constraint fk_usuarios_personas foreign key (nid_persona) references pasico_movil.persona(nid_persona);
+
+alter table pasico_movil.usuarios
+	add constraint fk_usuarios_roles foreign key (nid_rol) references pasico_movil.roles(nid_rol); 
