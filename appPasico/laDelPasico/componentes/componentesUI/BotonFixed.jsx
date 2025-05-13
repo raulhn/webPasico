@@ -12,9 +12,6 @@ export default function BotonFixed({ onPress }) {
       onPressOut={() => setIsPressed(false)}
       style={[
         {
-          position: "absolute",
-          bottom: 20,
-          right: 20,
           backgroundColor: "#007CFA",
           width: 50, // Ancho del botón
           height: 50, // Alto del botón (igual al ancho para que sea redondo)

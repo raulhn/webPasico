@@ -11,7 +11,6 @@ export default function TabsLayout() {
       headerShown: false,
       title: titulo,
       tabBarIcon: ({ color }) => {
-        console.log("TipoIcono", tipoIcono);
         if (tipoIcono === 1) {
           return (
             <MaterialCommunityIcons name="trumpet" size={30} color={color} />

@@ -20,6 +20,7 @@ const servletProfesores = require("./servlets/servlet_profesores.js");
 const servletMatricula = require("./servlets/servlet_matricula.js");
 const servletMatriculaAsignatura = require("./servlets/servlet_matricula_asignatura.js");
 const servletProfesorAlumnoMatricula = require("./servlets/servlet_profesor_alumno_matricula.js");
+const servletEventoConcierto = require("./servlets/servletEventoConcierto.js");
 
 const validacionEmail = require("./logica/validacionEmail.js");
 
@@ -95,7 +96,9 @@ app.post(
   servletProfesorAlumnoMatricula.registrarProfesorAlumnoMatricula
 );
 
-// Peticiones que requieren inicio de sesión
+///////////////////////////////////////////////
+// Peticiones que requieren inicio de sesión //
+///////////////////////////////////////////////
 app.use((req, res, next) => {
   servletComun.comprobacionLogin;
   next();
@@ -104,6 +107,17 @@ app.use((req, res, next) => {
 app.get("/usuario", servletUsuario.obtenerUsuario);
 app.post("/cambiar_password", servletUsuario.cambiarPassword);
 app.get("/obtener_socio", servletSocios.obtenerSocio);
+
+// Eventos //
+app.post("/registrar_evento", servletEventoConcierto.insertarEventoConcierto);
+app.post(
+  "/actualizar_evento_concierto",
+  servletEventoConcierto.actualizarEventoConcierto
+);
+app.get(
+  "/obtener_eventos_concierto",
+  servletEventoConcierto.obtenerEventosConcierto
+);
 
 https
   .createServer(
