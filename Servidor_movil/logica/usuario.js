@@ -179,7 +179,8 @@ function login(correoElectronico, password) {
       "SELECT * FROM " +
       constantes.ESQUEMA +
       ".usuarios WHERE correo_electronico = " +
-      conexion.dbConn.escape(correoElectronico);
+      conexion.dbConn.escape(correoElectronico) +
+      " and verificado = 'S'";
     conexion.dbConn.query(query, (error, results) => {
       if (error) {
         console.error("Error al comprobar la existencia del usuario:", error);
