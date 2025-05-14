@@ -109,7 +109,10 @@ app.post("/cambiar_password", servletUsuario.cambiarPassword);
 app.get("/obtener_socio", servletSocios.obtenerSocio);
 
 // Eventos //
-app.post("/registrar_evento", servletEventoConcierto.insertarEventoConcierto);
+app.post(
+  "/registrar_evento_concierto",
+  servletEventoConcierto.insertarEventoConcierto
+);
 app.post(
   "/actualizar_evento_concierto",
   servletEventoConcierto.actualizarEventoConcierto
