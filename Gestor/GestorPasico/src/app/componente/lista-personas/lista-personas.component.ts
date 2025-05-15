@@ -99,7 +99,9 @@ export class ListaPersonasComponent {
           },
           {title: 'Teléfono',
             data: 'telefono'
-          }],
+          },
+        {title: 'Correo electrónico',
+          data: 'correo_electronico'}],
           rowCallback: (row: Node, data: any[] | Object, index: number) => {
             $('td', row).off('click');
             $('td', row).on('click', () => {
@@ -154,7 +156,11 @@ export class ListaPersonasComponent {
           },
           {title: 'Teléfono',
             data: 'telefono'
-          }],
+          },
+        {title: 'Correo electrónico',
+          data: 'correo_electronico'
+        
+        }],
           rowCallback: (row: Node, data: any[] | Object, index: number) => {
             $('td', row).off('click');
             $('td', row).on('click', () => {

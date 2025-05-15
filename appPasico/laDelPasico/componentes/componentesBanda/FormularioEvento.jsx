@@ -9,6 +9,7 @@ import serviceEventoConcierto from "../../servicios/serviceEventoConcierto"; // 
 export default function FormularioEvento({ cancelar, guardar }) {
   const [nombreEvento, setNombreEvento] = useState("");
   const [descripcion, setDescripcion] = useState("");
+  const [fechaEvento, setFechaEvento] = useState("");
 
   const { cerrarSesion } = useContext(AuthContext);
 
@@ -59,7 +60,7 @@ export default function FormularioEvento({ cancelar, guardar }) {
       <Text>Fecha</Text>
       <EntradaTexto
         placeholder="Fecha del Evento"
-        setValor={(text) => setDescripcion(text)}
+        setValor={(text) => setFechaEvento(text)}
       />
 
       <View
@@ -70,7 +71,7 @@ export default function FormularioEvento({ cancelar, guardar }) {
           width: "100%",
         }}
       >
-        <Boton nombre="Guardar" />
+        <Boton nombre="Guardar" onPress={registrarEventoConcierto} />
         <Boton nombre="Cancelar" color="red" onPress={cancelar} />
       </View>
     </View>
