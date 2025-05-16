@@ -24,7 +24,7 @@ export default function FormularioEvento({ cancelar, guardar }) {
       fecha_evento: "2023-10-01", // Cambia esto por la fecha real
       descripcion: descripcion,
       tipo_evento: "Concierto",
-      publicado: true,
+      publicado: "N",
     };
 
     serviceEventoConcierto

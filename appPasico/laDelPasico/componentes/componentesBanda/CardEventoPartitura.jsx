@@ -27,7 +27,8 @@ export default function CardEventoPartitura({ EventoPartitura }) {
 }
 const styles = StyleSheet.create({
   card: {
-    width: "90%",
+    width: "100%",
+
     height: 150,
     backgroundColor: "#fff",
     borderRadius: 10,
