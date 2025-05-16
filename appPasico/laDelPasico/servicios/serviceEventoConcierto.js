@@ -3,7 +3,7 @@ const Constantes = require("../constantes.js");
 
 function obtenerEventosConciertos() {
   return new Promise((resolve, reject) => {
-    fetch(Constantes.URL_SERVICIO + "obtener_componente_blog/208", {
+    fetch(Constantes.URL_SERVICIO_MOVIL + "obtener_eventos_concierto", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -31,7 +31,7 @@ function registrarEventoConcierto(eventoConcierto, cerrarSesion) {
     serviceComun
       .peticionSesion(
         "POST",
-        Constantes.URL_SERVICIO + "registrar_evento_concierto",
+        Constantes.URL_SERVICIO_MOVIL + "registrar_evento_concierto",
         data,
         cerrarSesion
       )

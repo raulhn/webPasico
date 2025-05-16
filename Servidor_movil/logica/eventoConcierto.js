@@ -1,4 +1,4 @@
-const dbConn = require("../conexion.js");
+const conexion = require("../conexion.js");
 const constantes = require("../constantes.js");
 
 function insertarEventoConcierto(
@@ -14,27 +14,27 @@ function insertarEventoConcierto(
       constantes.ESQUEMA +
       ".evento_concierto (nombre, descripcion, fecha_evento, tipo_evento, publicado) " +
       "values(" +
-      dbConn.escape(nombre) +
+      conexion.dbConn.escape(nombre) +
       ", " +
-      dbConn.escape(descripcion) +
+      conexion.dbConn.escape(descripcion) +
       ", " +
-      dbConn.escape(fecha_evento) +
+      conexion.dbConn.escape(fecha_evento) +
       ", " +
-      dbConn.escape(tipo_evento) +
+      conexion.dbConn.escape(tipo_evento) +
       ", " +
-      dbConn.escape(publicado) +
+      conexion.dbConn.escape(publicado) +
       ")";
 
-    dbConn.beginTransaction(() => {
-      dbConn.query(sql, (err, result) => {
+    conexion.dbConn.beginTransaction(() => {
+      conexion.dbConn.query(sql, (err, result) => {
         if (err) {
           console.log(
             "eventoConcienrot.js - insertarEventoConcierot -> Error: " + err
           );
-          dbConn.rollback();
+          conexion.dbConn.rollback();
           reject("Error al insertar el evento de concierto");
         } else {
-          dbConn.commit();
+          conexion.dbConn.commit();
           resolve();
         }
       });
@@ -67,15 +67,15 @@ function actualizarEvento(
       " WHERE nid_evento_concierto = " +
       dbConn.escape(nid_evento_concierto);
 
-    dbConn.beginTransaction(() => {
-      dbConn.query(sql, (err, result) => {
+    conexion.dbConn.beginTransaction(() => {
+      conexion.dbConn.query(sql, (err, result) => {
         if (err) {
           console.log("eventoConcierto.js - actualizarEvento -> Error: " + err);
-          dbConn.rollback();
+          conexion.dbConn.rollback();
           reject("Error al actualizar el evento de concierto");
         } else {
           dbConn.commit();
-          resolve();
+          conexion.resolve();
         }
       });
     });
@@ -89,7 +89,7 @@ function obtenerEventosConcierto() {
       constantes.ESQUEMA +
       ".evento_concierto ORDER BY fecha_evento DESC";
 
-    dbConn.query(sql, (err, result) => {
+    conexion.dbConn.query(sql, (err, result) => {
       if (err) {
         console.log(
           "eventoConcierto.js - obtenerEventosConcierto -> Error: " + err
