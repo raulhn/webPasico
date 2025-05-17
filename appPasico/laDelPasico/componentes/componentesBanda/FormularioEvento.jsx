@@ -12,7 +12,7 @@ import EntradaFecha from "../componentesUI/EntradaFecha";
 export default function FormularioEvento({ cancelar, callback }) {
   const [nombreEvento, setNombreEvento] = useState("");
   const [descripcion, setDescripcion] = useState("");
-  const [fechaEvento, setFechaEvento] = useState("");
+  const [fechaEvento, setFechaEvento] = useState(new Date());
 
   const { cerrarSesion } = useContext(AuthContext);
 
@@ -26,12 +26,13 @@ export default function FormularioEvento({ cancelar, callback }) {
 
     const evento = {
       nombre: nombreEvento,
-      fecha_evento: new Date(fechaEvento),
+      fecha_evento: formatearFecha(fechaEvento),
       descripcion: descripcion,
       tipo_evento: "Concierto",
       publicado: "N",
     };
 
+    console.log("Evento a registrar:", evento); 
     serviceEventoConcierto
       .registrarEventoConcierto(evento, cerrarSesion)
       .then((response) => {
@@ -42,12 +43,19 @@ export default function FormularioEvento({ cancelar, callback }) {
         console.log("Evento registrado:", response);
 
         setExito(true); // Cambia el estado de éxito a verdadero
-        //  callback(); // Llama a la función de callback para refrescar la lista de eventos
+          callback(); // Llama a la función de callback para refrescar la lista de eventos
       })
       .catch((error) => {
         console.error("Error al registrar el evento:", error);
         alert("Error al registrar el evento");
       });
+  }
+
+  function formatearFecha(fecha) {  
+    const formattedDate = `${fecha.getFullYear()}-${String(
+      fecha.getMonth() + 1
+  ).padStart(2, "0")}-${String(fecha.getDate()).padStart(2, "0")}`;
+    return formattedDate;
   }
 
   return (
@@ -69,12 +77,7 @@ export default function FormularioEvento({ cancelar, callback }) {
       ></EntradaTexto>
 
       <Text>Fecha</Text>
-      <EntradaTexto
-        placeholder="Fecha del Evento"
-        setValor={(text) => setFechaEvento(text)}
-      />
-
-      <EntradaFecha></EntradaFecha>
+      <EntradaFecha onChangeFecha={(fecha) =>{setFechaEvento(fecha); console.log("Fecha recuperada " + fecha)}}></EntradaFecha>
       <View
         style={{
           flexDirection: "row",
@@ -83,7 +86,7 @@ export default function FormularioEvento({ cancelar, callback }) {
           width: "100%",
         }}
       >
-        <Boton nombre="Guardar" onPress={registrarEventoConcierto} />
+        <Boton nombre="Guardar" onPress={(registrarEventoConcierto)} />
         <Boton nombre="Cancelar" color="red" onPress={cancelar} />
       </View>
       <ModalExito

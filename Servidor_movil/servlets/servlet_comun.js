@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const gestorUsuarios = require("../logica/usuario.js");
 
 function comprobacionLogin(req, res) {
   const token = req.cookies.access_token;
@@ -63,6 +64,21 @@ function comprobacionAccesoAPIKey(req, res, callback) {
   }
 }
 
+async function comprobarRol(req, res, rolesPermitidos) {
+  const tokenDecode = await obtenerTokenDecoded(req, res);
+  const nid_usuario = tokenDecode.nid_usuario;
+
+  const roles = await gestorUsuarios.construirRoles(nid_usuario);
+
+  const rolesAdministrador = roles.find((rol) =>
+    rolesPermitidos.includes(rol.nombre)
+  );
+
+  return !rolesAdministrador || rolesAdministrador.length === 0;
+}
+
+
 module.exports.comprobacionLogin = comprobacionLogin;
 module.exports.comprobacionAccesoAPIKey = comprobacionAccesoAPIKey;
 module.exports.obtenerTokenDecoded = obtenerTokenDecoded;
+module.exports.comprobarRol = comprobarRol;

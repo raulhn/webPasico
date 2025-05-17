@@ -1,11 +1,11 @@
-import { ActivityIndicator, Modal, Text } from "react-native";
+import { ActivityIndicator, Modal, Pressable, Text } from "react-native";
 import { StyleSheet, View } from "react-native";
 import { useEffect, useState } from "react";
 import CardEventoPartitura from "../../../componentes/componentesBanda/CardEventoPartitura";
-import CardPartitura from "../../../componentes/componentesBanda/CardPartitura";
 import BotonFixed from "../../../componentes/componentesUI/BotonFixed";
 import FormularioEvento from "../../../componentes/componentesBanda/FormularioEvento";
 import { useRol } from "../../../hooks/useRol";
+import { Link } from "expo-router";
 
 import serviceEventoConcierto from "../../../servicios/serviceEventoConcierto"; // Asegúrate de importar tu servicio correctamente
 import { FlatList } from "react-native";
@@ -13,6 +13,7 @@ import { FlatList } from "react-native";
 export default function Partituras() {
   const [eventosConciertos, setEventosConciertos] = useState([]);
   const [cargado, setCargado] = useState(false);
+
 
   const { esRol } = useRol();
 
@@ -100,9 +101,19 @@ export default function Partituras() {
           data={eventosConciertos}
           keyExtractor={(evento) => evento.nid_evento_concierto}
           renderItem={({ item }) => (
+                <Link
+                  href={{
+                    pathname: "/eventoConcierto/[nidEvento]",
+                    params: { nidEvento: item.nid_evento_concierto },
+                  }}
+                  key={item.nid_evento_concierto}
+                  asChild
+                >
+            <Pressable onPress={() => {}}>
             <View style={{ width: "100%", alignItems: "center" }}>
               <CardEventoPartitura EventoPartitura={item} />
             </View>
+            </Pressable></Link>
           )}
         ></FlatList>
       </View>

@@ -3,9 +3,15 @@ import { Text, View, StyleSheet } from "react-native";
 export default function CardEventoPartitura({ EventoPartitura }) {
   let fecha_evento = "";
 
-  console.log("EventoPartitura", EventoPartitura.fecha);
-  if (EventoPartitura.fecha) {
-    fecha_evento = EventoPartitura.fecha;
+  console.log("EventoPartitura", EventoPartitura.fecha_evento);
+  if (EventoPartitura.fecha_evento) {
+    const fecha = new Date(EventoPartitura.fecha_evento);
+    const formattedDate = fecha.toLocaleDateString("es-ES", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+    fecha_evento = formattedDate;
   } else {
     fecha_evento = "Sin Definir";
   }

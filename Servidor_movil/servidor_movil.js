@@ -21,6 +21,7 @@ const servletMatricula = require("./servlets/servlet_matricula.js");
 const servletMatriculaAsignatura = require("./servlets/servlet_matricula_asignatura.js");
 const servletProfesorAlumnoMatricula = require("./servlets/servlet_profesor_alumno_matricula.js");
 const servletEventoConcierto = require("./servlets/servletEventoConcierto.js");
+const servletPartituras = require("./servlets/servlet_partituras.js");
 
 const validacionEmail = require("./logica/validacionEmail.js");
 
@@ -120,6 +121,17 @@ app.post(
 app.get(
   "/obtener_eventos_concierto",
   servletEventoConcierto.obtenerEventosConcierto
+);
+
+
+// Partituras //
+app.post(
+  "/registrar_partitura",
+  servletPartituras.insertarPartitura
+);
+app.post(
+  "/actualizar_partitura",
+  servletPartituras.actualizarPartitura
 );
 
 https
