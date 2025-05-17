@@ -87,7 +87,7 @@ function obtenerEventosConcierto() {
     const sql =
       "SELECT * FROM " +
       constantes.ESQUEMA +
-      ".evento_concierto ORDER BY fecha_evento DESC";
+      ".evento_concierto ORDER BY fecha_evento DESC, nid_evento_concierto DESC";
 
     conexion.dbConn.query(sql, (err, result) => {
       if (err) {

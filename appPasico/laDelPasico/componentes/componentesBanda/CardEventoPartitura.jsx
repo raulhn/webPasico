@@ -1,6 +1,15 @@
 import { Text, View, StyleSheet } from "react-native";
 
 export default function CardEventoPartitura({ EventoPartitura }) {
+  let fecha_evento = "";
+
+  console.log("EventoPartitura", EventoPartitura.fecha);
+  if (EventoPartitura.fecha) {
+    fecha_evento = EventoPartitura.fecha;
+  } else {
+    fecha_evento = "Sin Definir";
+  }
+
   return (
     <View style={styles.card}>
       <Text numberOfLines={1} ellipsizeMode="tail" style={styles.titulo}>
@@ -20,16 +29,16 @@ export default function CardEventoPartitura({ EventoPartitura }) {
         }}
       >
         <Text style={{ color: "#007CFA", fontWeight: "bold" }}>Fecha: </Text>
-        <Text>{EventoPartitura.fecha}</Text>
+        <Text>{fecha_evento}</Text>
       </View>
     </View>
   );
 }
 const styles = StyleSheet.create({
   card: {
-    width: "100%",
-
     height: 150,
+    width: "95%",
+
     backgroundColor: "#fff",
     borderRadius: 10,
     padding: 20,
@@ -42,7 +51,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    position: "relative",
   },
   titulo: {
     fontSize: 20,

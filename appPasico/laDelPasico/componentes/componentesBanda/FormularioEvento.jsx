@@ -6,12 +6,17 @@ import { AuthContext } from "../../providers/AuthContext";
 import { useContext } from "react";
 import serviceEventoConcierto from "../../servicios/serviceEventoConcierto"; // Asegúrate de importar tu servicio correctamente
 
-export default function FormularioEvento({ cancelar, guardar }) {
+import ModalExito from "../componentesUI/ModalExito";
+import EntradaFecha from "../componentesUI/EntradaFecha";
+
+export default function FormularioEvento({ cancelar, callback }) {
   const [nombreEvento, setNombreEvento] = useState("");
   const [descripcion, setDescripcion] = useState("");
   const [fechaEvento, setFechaEvento] = useState("");
 
   const { cerrarSesion } = useContext(AuthContext);
+
+  const [exito, setExito] = useState(false);
 
   function registrarEventoConcierto() {
     if (nombreEvento === "" || descripcion === "") {
@@ -21,7 +26,7 @@ export default function FormularioEvento({ cancelar, guardar }) {
 
     const evento = {
       nombre: nombreEvento,
-      fecha_evento: "2023-10-01", // Cambia esto por la fecha real
+      fecha_evento: new Date(fechaEvento),
       descripcion: descripcion,
       tipo_evento: "Concierto",
       publicado: "N",
@@ -30,8 +35,14 @@ export default function FormularioEvento({ cancelar, guardar }) {
     serviceEventoConcierto
       .registrarEventoConcierto(evento, cerrarSesion)
       .then((response) => {
+        if (response.error) {
+          console.error("Error al obtener eventos:", response.mensaje);
+          return;
+        }
         console.log("Evento registrado:", response);
-        alert("Evento registrado con éxito");
+
+        setExito(true); // Cambia el estado de éxito a verdadero
+        //  callback(); // Llama a la función de callback para refrescar la lista de eventos
       })
       .catch((error) => {
         console.error("Error al registrar el evento:", error);
@@ -63,6 +74,7 @@ export default function FormularioEvento({ cancelar, guardar }) {
         setValor={(text) => setFechaEvento(text)}
       />
 
+      <EntradaFecha></EntradaFecha>
       <View
         style={{
           flexDirection: "row",
@@ -74,6 +86,15 @@ export default function FormularioEvento({ cancelar, guardar }) {
         <Boton nombre="Guardar" onPress={registrarEventoConcierto} />
         <Boton nombre="Cancelar" color="red" onPress={cancelar} />
       </View>
+      <ModalExito
+        visible={exito} // Cambia esto según tu lógica
+        callback={() => {
+          setExito(false);
+          callback(); // Llama a la función de callback para refrescar la lista de eventos
+        }} // Cambia esto según tu lógica
+        mensaje="Evento registrado con éxito"
+        textBoton="Aceptar"
+      />
     </View>
   );
 }

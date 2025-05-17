@@ -23,7 +23,7 @@ function registrarEventoConcierto(eventoConcierto, cerrarSesion) {
   return new Promise((resolve, reject) => {
     const data = {
       nombre: eventoConcierto.nombre,
-      fecha_evento: eventoConcierto.fecha,
+      fecha_evento: eventoConcierto.fecha_evento,
       descripcion: eventoConcierto.descripcion,
       tipo_evento: eventoConcierto.tipo_evento,
       publicado: eventoConcierto.publicado,

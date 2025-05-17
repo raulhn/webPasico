@@ -2,18 +2,13 @@ import { View, Text, Modal } from "react-native";
 import Boton from "./Boton";
 import { MaterialIcons } from "@expo/vector-icons";
 
-export default function ModalExito({
-  visible,
-  setVisible,
-  mensaje,
-  textBoton,
-}) {
+export default function ModalExito({ visible, callback, mensaje, textBoton }) {
   return (
     <Modal
       animationType="fade"
       transparent={true}
       visible={visible}
-      onRequestClose={setVisible}
+      onRequestClose={callback}
     >
       <View style={estilos.modalContainer}>
         <View style={estilos.modalContent}>
@@ -26,7 +21,7 @@ export default function ModalExito({
           <Text style={estilos.mensaje}>{mensaje}</Text>
 
           <Boton
-            onPress={setVisible}
+            onPress={callback}
             nombre={textBoton}
             color="#007BFF"
             colorTexto="#FFF"
