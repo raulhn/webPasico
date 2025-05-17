@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { useState } from "react";
 
-export default function EntradaFecha() {
+export default function EntradaFecha({onChangeFecha}) {
   const [fecha, setFecha] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
   const [presionado, setPresionado] = useState(false);
@@ -27,7 +27,14 @@ export default function EntradaFecha() {
 
       if (Platform.OS === "android") {
         togglePicker();
-        setFechaEvento(currentDate.toDateString());
+        const formattedDate = currentDate.toLocaleDateString("es-ES", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+        });
+        setFechaEvento(formattedDate);
+        console.log("Fecha seleccionada1:", currentDate.toDateString());
+        onChangeFecha(fecha);
       }
     } else {
       togglePicker();
@@ -35,7 +42,13 @@ export default function EntradaFecha() {
   };
 
   const confirmIOSDate = () => {
-    setFechaEvento(fecha.toDateString());
+    const formattedDate = currentDate.toLocaleDateString("es-ES", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+    setFechaEvento(formattedDate);
+    onChangeFecha(fecha);
     togglePicker();
   };
 

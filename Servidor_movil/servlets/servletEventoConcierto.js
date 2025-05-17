@@ -2,23 +2,11 @@ const gestorEventos = require("../logica/eventoConcierto.js");
 const gestorUsuarios = require("../logica/usuario.js");
 const servlet_comun = require("./servlet_comun.js");
 
-async function comprobarRol(req, res, rolesPermitidos) {
-  const tokenDecode = await servlet_comun.obtenerTokenDecoded(req, res);
-  const nid_usuario = tokenDecode.nid_usuario;
-
-  const roles = await gestorUsuarios.construirRoles(nid_usuario);
-
-  const rolesAdministrador = roles.find((rol) =>
-    rolesPermitidos.includes(rol.nombre)
-  );
-
-  return !rolesAdministrador || rolesAdministrador.length === 0;
-}
 
 async function insertarEventoConcierto(req, res) {
   try {
     const rolesPermitidos = ["DIRECTOR", "ADMINISTRADOR"];
-    let rolDirector = await comprobarRol(req, res, rolesPermitidos);
+    let rolDirector = await servlet_comun.comprobarRol(req, res, rolesPermitidos);
     if (!rolDirector) {
       res.status(403).send({
         error: true,
@@ -65,7 +53,7 @@ async function insertarEventoConcierto(req, res) {
 async function actualizarEventoConcierto(req, res) {
   try {
     const rolesPermitidos = ["DIRECTOR", "ADMINISTRADOR"];
-    let rolDirector = await comprobarRol(req, res, rolesPermitidos);
+    let rolDirector = await servlet_comun.comprobarRol(req, res, rolesPermitidos);
     if (!rolDirector) {
       res.status(403).send({
         error: true,
@@ -107,7 +95,7 @@ async function actualizarEventoConcierto(req, res) {
 async function obtenerEventosConcierto(req, res) {
   try {
     const rolesPermitidos = ["DIRECTOR", "ADMINISTRADOR", "MUSICO"];
-    let rolDirector = await comprobarRol(req, res, rolesPermitidos);
+    let rolDirector = await servlet_comun.comprobarRol(req, res, rolesPermitidos);
     if (!rolDirector) {
       res.status(403).send({
         error: true,
