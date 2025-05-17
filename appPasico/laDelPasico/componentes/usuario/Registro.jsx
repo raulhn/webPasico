@@ -222,7 +222,7 @@ export default function registrarUsuario(recaptchaToken) {
       />
       <ModalExito
         visible={exito}
-        setVisible={() => {
+        callback={() => {
           setExito(false);
         }}
         mensaje={mensajeExito}

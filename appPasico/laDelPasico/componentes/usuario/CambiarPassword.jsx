@@ -84,7 +84,7 @@ export default function CambiarPassword() {
       />
       <ModalExito
         visible={exito !== null}
-        setVisible={() => setExito(null)}
+        callback={() => setExito(null)}
         mensaje={exito}
         textBoton="Aceptar"
       />

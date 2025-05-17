@@ -38,6 +38,7 @@ export default function EntradaTexto({
         onChangeText={(text) => {
           setValor(text);
         }}
+   
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
         style={
