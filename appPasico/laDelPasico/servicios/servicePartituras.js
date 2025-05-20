@@ -1,19 +1,20 @@
-const serviceComun = require('./serviceComun');
-const constantes = require('../constantes');
+const serviceComun = require("./serviceComun");
+const constantes = require("../constantes");
 
-
-function registrarPartitura(partitura) {
+function registrarPartitura(partitura, cerrarSesion) {
   return new Promise((resolve, reject) => {
     const data = {
       titulo: partitura.titulo,
       autor: partitura.autor,
       categoria: partitura.categoria,
+      url_partitura: partitura.url_partitura,
     };
     serviceComun
       .peticionSesion(
-        'POST',
-        constantes.URL_SERVICIO_MOVIL + 'registrar_partitura',
-        data
+        "POST",
+        constantes.URL_SERVICIO_MOVIL + "registrar_partitura",
+        data,
+        cerrarSesion
       )
       .then((response) => {
         response.json().then((data) => {
@@ -23,7 +24,6 @@ function registrarPartitura(partitura) {
             resolve(data);
           }
         });
-
       })
       .catch((error) => {
         reject(error);
@@ -31,19 +31,21 @@ function registrarPartitura(partitura) {
   });
 }
 
-function actulizarPartitura(partitura) {
+function actualizarPartitura(partitura, cerrarSesion) {
   return new Promise((resolve, reject) => {
     const data = {
       nid_partitura: partitura.nid_partitura,
       titulo: partitura.titulo,
       autor: partitura.autor,
       categoria: partitura.categoria,
+      url_partitura: partitura.url_partitura,
     };
     serviceComun
       .peticionSesion(
-        'POST',
-        constantes.URL_SERVICIO_MOVIL + 'actualizar_partitura',
-        data
+        "POST",
+        constantes.URL_SERVICIO_MOVIL + "actualizar_partitura",
+        data,
+        cerrarSesion
       )
       .then((response) => {
         response.json().then((data) => {
@@ -61,4 +63,4 @@ function actulizarPartitura(partitura) {
 }
 
 module.exports.registrarPartitura = registrarPartitura;
-module.exports.actulizarPartitura = actulizarPartitura;
+module.exports.actualizarPartitura = actualizarPartitura;
