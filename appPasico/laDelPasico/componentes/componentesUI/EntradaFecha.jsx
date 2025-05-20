@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { useState } from "react";
 
-export default function EntradaFecha({onChangeFecha}) {
+export default function EntradaFecha({ onChangeFecha }) {
   const [fecha, setFecha] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
   const [presionado, setPresionado] = useState(false);
