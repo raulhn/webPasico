@@ -1,18 +1,18 @@
 const conexion = require("../conexion");
 const constantes = require("../constantes");
 
-function insertarPartitura(titulo, autor, categoria, url_partitura) {
+function insertarPartitura(titulo, autor, nid_categoria, url_partitura) {
   return new Promise((resolve, reject) => {
     conexion.dbConn.beginTransaction(() => {
       const sql =
         "INSERT INTO " +
         constantes.ESQUEMA +
-        ".partitura (titulo, autor, categoria, url_partitura) VALUES (" +
+        ".partitura (titulo, autor, nid_categoria, url_partitura) VALUES (" +
         conexion.dbConn.escape(titulo) +
         ", " +
         conexion.dbConn.escape(autor) +
         ", " +
-        conexion.dbConn.escape(categoria) +
+        conexion.dbConn.escape(nid_categoria) +
         ", " +
         conexion.dbConn.escape(url_partitura) +
         ")";
@@ -48,8 +48,8 @@ function actualizarPartitura(
       "autor = " +
       conexion.dbConn.escape(autor) +
       ", " +
-      "categoria = " +
-      conexion.dbConn.escape(categoria) +
+      "nid_categoria = " +
+      conexion.dbConn.escape(nid_categoria) +
       ", " +
       "url_partitura = " +
       conexion.dbConn.escape(url_partitura) +

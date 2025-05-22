@@ -15,11 +15,11 @@ async function insertarPartitura(req, res) {
         mensaje: "No tienes permisos para registrar un evento de concierto",
       });
     } else {
-      const { titulo, autor, categoria, url_partitura } = req.body;
+      const { titulo, autor, nid_categoria, url_partitura } = req.body;
       const result = await gestorPartituras.insertarPartitura(
         titulo,
         autor,
-        categoria,
+        nid_categoria,
         url_partitura
       );
       res
@@ -48,13 +48,13 @@ async function actualizarPartitura(req, res) {
         mensaje: "No tienes permisos para registrar un evento de concierto",
       });
     } else {
-      const { nid_partitura, titulo, autor, categoria, url_partitura } =
+      const { nid_partitura, titulo, autor, nid_categoria, url_partitura } =
         req.body;
       const result = await gestorPartituras.actualizarPartitura(
         nid_partitura,
         titulo,
         autor,
-        categoria,
+        nid_categoria,
         url_partitura
       );
       res
