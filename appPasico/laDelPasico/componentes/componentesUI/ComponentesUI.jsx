@@ -8,8 +8,10 @@ import {
   StyleSheet,
   View,
   TextInput,
+  Text,
+  FlatList,
 } from "react-native";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export function Boton({
   nombre,
@@ -291,6 +293,79 @@ export function ModalExito({ visible, callback, mensaje, textBoton }) {
   );
 }
 
+export function GroupRadioInput({ opciones, valor, setValorSeleccionado }) {
+  return (
+    <FlatList
+      data={opciones}
+      renderItem={({ item }) => (
+        <RadioInput
+          etiqueta={item.etiqueta}
+          valor={item}
+          valorSeleccionado={valor}
+          setValorSeleccionado={setValorSeleccionado}
+        />
+      )}
+      keyExtractor={(item) => item.valor}
+      horizontal={true}
+      showsHorizontalScrollIndicator={false}
+      contentContainerStyle={{
+        flexDirection: "column",
+        gap: 10,
+      }}
+    />
+  );
+}
+
+export function RadioInput({
+  etiqueta,
+  valor,
+  valorSeleccionado,
+  setValorSeleccionado,
+}) {
+  const [seleccionado, setSeleccionado] = useState(false);
+  const [esPresionado, setEsPresionado] = useState(false);
+
+  const accionPresionar = () => {
+    setSeleccionado(true);
+    setValorSeleccionado(valor);
+  };
+
+  useEffect(() => {
+    if (valorSeleccionado === valor) {
+      setSeleccionado(true);
+    } else {
+      setSeleccionado(false);
+    }
+  }, [valorSeleccionado]);
+
+  return (
+    <Pressable
+      onPress={accionPresionar}
+      onPressIn={() => setEsPresionado(true)}
+      onPressOut={() => setEsPresionado(false)}
+    >
+      <View
+        style={[
+          estilos.inputRadioButton,
+          esPresionado ? estilos.presionado : {},
+        ]}
+      >
+        <View style={[estilos.containerBotonVisible]}>
+          <View
+            style={[
+              estilos.containerInteriorBotonVisible,
+              seleccionado
+                ? { backgroundColor: "#000" }
+                : { backgroundColor: "#fff" },
+            ]}
+          ></View>
+        </View>
+        <Text style={{ marginLeft: 10 }}>{etiqueta}</Text>
+      </View>
+    </Pressable>
+  );
+}
+
 const estilos = StyleSheet.create({
   boton: {
     padding: 10,
@@ -356,5 +431,39 @@ const estilos = StyleSheet.create({
     fontSize: 18,
     textAlign: "center",
     marginBottom: 20,
+  },
+  containerBotonVisible: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 8,
+    borderColor: "#ccc",
+    borderWidth: 1,
+    width: 10,
+    height: 10,
+    borderRadius: 20,
+  },
+  containerInteriorBotonVisible: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+
+    width: 10,
+    height: 10,
+    borderRadius: 20,
+  },
+  inputRadioButton: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 20,
+  },
+  presionado: {
+    opacity: 0.5,
+    transform: [{ scale: 0.95 }],
+    backgroundColor: "#e0e0e0",
+    borderRadius: 5,
+    borderColor: "#ccc",
+    borderWidth: 1,
   },
 });

@@ -102,6 +102,105 @@ function obtenerEventosConcierto() {
   });
 }
 
+function obtenerEventoConcierto(nid_evento_concierto) {
+  return new Promise((resolve, reject) => {
+    const sql =
+      "SELECT * FROM " +
+      constantes.ESQUEMA +
+      ".evento_concierto WHERE nid_evento_concierto = " +
+      conexion.dbConn.escape(nid_evento_concierto);
+
+    conexion.dbConn.query(sql, (err, result) => {
+      if (err) {
+        console.log(
+          "eventoConcierto.js - obtenerInforEventoConcierto -> Error: " + err
+        );
+        reject("Error al obtener la información del evento de concierto");
+      } else {
+        resolve(result[0]);
+      }
+    });
+  });
+}
+
+function registrar_partitura_evento(nid_evento_concierto, nid_partitura) {
+  return new Promise((resolve, reject) => {
+    const sql =
+      "INSERT INTO " +
+      constantes.ESQUEMA +
+      ".partituras_evento (nid_evento_concierto, nid_partitura) " +
+      "VALUES (" +
+      conexion.dbConn.escape(nid_evento_concierto) +
+      ", " +
+      conexion.dbConn.escape(nid_partitura) +
+      ")";
+
+    conexion.dbConn.query(sql, (err, result) => {
+      if (err) {
+        console.log(
+          "eventoConcierto.js - registrar_partitura_evento -> Error: " + err
+        );
+        reject("Error al registrar la partitura en el evento de concierto");
+      } else {
+        resolve(result);
+      }
+    });
+  });
+}
+
+function eliminar_partitura_evento(nid_evento_concierto, nid_partitura) {
+  return new Promise((resolve, reject) => {
+    const sql =
+      "DELETE FROM " +
+      constantes.ESQUEMA +
+      ".partituras_evento WHERE nid_evento_concierto = " +
+      conexion.dbConn.escape(nid_evento_concierto) +
+      " AND nid_partitura = " +
+      conexion.dbConn.escape(nid_partitura);
+
+    conexion.dbConn.query(sql, (err, result) => {
+      if (err) {
+        console.log(
+          "eventoConcierto.js - eliminar_partitura_evento -> Error: " + err
+        );
+        reject("Error al eliminar la partitura del evento de concierto");
+      } else {
+        resolve(result);
+      }
+    });
+  });
+}
+
+function obtenerPartiturasEvento(nid_evento_concierto) {
+  return new Promise((resolve, reject) => {
+    const sql =
+      "SELECT p.* FROM " +
+      constantes.ESQUEMA +
+      ".partituras_evento pe " +
+      "JOIN " +
+      constantes.ESQUEMA +
+      ".partituras p ON pe.nid_partitura = p.nid_partitura " +
+      "WHERE pe.nid_evento_concierto = " +
+      conexion.dbConn.escape(nid_evento_concierto);
+
+    conexion.dbConn.query(sql, (err, result) => {
+      if (err) {
+        console.log(
+          "eventoConcierto.js - obtenerPartiturasEvento -> Error: " + err
+        );
+        reject("Error al obtener las partituras del evento de concierto");
+      } else {
+        resolve(result);
+      }
+    });
+  });
+}
+
 module.exports.insertarEventoConcierto = insertarEventoConcierto;
 module.exports.actualizarEvento = actualizarEvento;
 module.exports.obtenerEventosConcierto = obtenerEventosConcierto;
+module.exports.obtenerEventoConcierto = obtenerEventoConcierto;
+
+module.exports.registrar_partitura_evento = registrar_partitura_evento;
+module.exports.eliminar_partitura_evento = eliminar_partitura_evento;
+module.exports.obtenerPartiturasEvento = obtenerPartiturasEvento;

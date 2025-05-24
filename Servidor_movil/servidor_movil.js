@@ -22,6 +22,7 @@ const servletMatriculaAsignatura = require("./servlets/servlet_matricula_asignat
 const servletProfesorAlumnoMatricula = require("./servlets/servlet_profesor_alumno_matricula.js");
 const servletEventoConcierto = require("./servlets/servletEventoConcierto.js");
 const servletPartituras = require("./servlets/servlet_partituras.js");
+const servlet_categoria_partituras = require("./servlets/servlet_categoria_partituras.js");
 
 const validacionEmail = require("./logica/validacionEmail.js");
 
@@ -123,15 +124,36 @@ app.get(
   servletEventoConcierto.obtenerEventosConcierto
 );
 
-
-// Partituras //
 app.post(
-  "/registrar_partitura",
-  servletPartituras.insertarPartitura
+  "/registrar_partitura_evento",
+  servletEventoConcierto.registrar_partitura_evento
 );
 app.post(
-  "/actualizar_partitura",
-  servletPartituras.actualizarPartitura
+  "/eliminar_partitura_evento",
+  servletEventoConcierto.eliminar_partitura_evento
+);
+app.get(
+  "/obtener_evento_concierto/:nid_evento_concierto",
+  servletEventoConcierto.obtenerPartiturasEvento
+);
+
+// Partituras //
+app.post("/registrar_partitura", servletPartituras.insertarPartitura);
+app.post("/actualizar_partitura", servletPartituras.actualizarPartitura);
+
+// Categorias Partituras //
+app.post(
+  "/registrar_categoria_partitura",
+  servlet_categoria_partituras.insertarCategoriaPartitura
+);
+app.post(
+  "/actualizar_categoria_partitura",
+  servlet_categoria_partituras.actualizarCategoriaPartitura
+);
+
+app.get(
+  "/obtener_categorias_partitura",
+  servlet_categoria_partituras.obtenerCategoriasPartitura
 );
 
 https

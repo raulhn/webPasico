@@ -14,7 +14,6 @@ export default function Partituras() {
   const [eventosConciertos, setEventosConciertos] = useState([]);
   const [cargado, setCargado] = useState(false);
 
-
   const { esRol } = useRol();
 
   const [modalVisible, setModalVisible] = useState(false);
@@ -101,19 +100,20 @@ export default function Partituras() {
           data={eventosConciertos}
           keyExtractor={(evento) => evento.nid_evento_concierto}
           renderItem={({ item }) => (
-                <Link
-                  href={{
-                    pathname: "/eventoConcierto/[nidEvento]",
-                    params: { nidEvento: item.nid_evento_concierto },
-                  }}
-                  key={item.nid_evento_concierto}
-                  asChild
-                >
-            <Pressable onPress={() => {}}>
-            <View style={{ width: "100%", alignItems: "center" }}>
-              <CardEventoPartitura EventoPartitura={item} />
-            </View>
-            </Pressable></Link>
+            <Link
+              href={{
+                pathname: "/eventoConcierto/[nidEvento]",
+                params: { nidEvento: item.nid_evento_concierto },
+              }}
+              key={item.nid_evento_concierto}
+              asChild
+            >
+              <Pressable onPress={() => {}}>
+                <View style={{ width: "100%", alignItems: "center" }}>
+                  <CardEventoPartitura EventoPartitura={item} />
+                </View>
+              </Pressable>
+            </Link>
           )}
         ></FlatList>
       </View>
@@ -138,6 +138,7 @@ export default function Partituras() {
         visible={modalVisible}
         onRequestClose={() => {
           console.log("Modal cerrado");
+          setModalVisible(false);
         }}
       >
         <FormularioEvento cancelar={cerrar} callback={refrescarLista} />

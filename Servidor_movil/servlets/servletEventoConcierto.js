@@ -2,11 +2,14 @@ const gestorEventos = require("../logica/eventoConcierto.js");
 const gestorUsuarios = require("../logica/usuario.js");
 const servlet_comun = require("./servlet_comun.js");
 
-
 async function insertarEventoConcierto(req, res) {
   try {
     const rolesPermitidos = ["DIRECTOR", "ADMINISTRADOR"];
-    let rolDirector = await servlet_comun.comprobarRol(req, res, rolesPermitidos);
+    let rolDirector = await servlet_comun.comprobarRol(
+      req,
+      res,
+      rolesPermitidos
+    );
     if (!rolDirector) {
       res.status(403).send({
         error: true,
@@ -53,7 +56,11 @@ async function insertarEventoConcierto(req, res) {
 async function actualizarEventoConcierto(req, res) {
   try {
     const rolesPermitidos = ["DIRECTOR", "ADMINISTRADOR"];
-    let rolDirector = await servlet_comun.comprobarRol(req, res, rolesPermitidos);
+    let rolDirector = await servlet_comun.comprobarRol(
+      req,
+      res,
+      rolesPermitidos
+    );
     if (!rolDirector) {
       res.status(403).send({
         error: true,
@@ -95,8 +102,12 @@ async function actualizarEventoConcierto(req, res) {
 async function obtenerEventosConcierto(req, res) {
   try {
     const rolesPermitidos = ["DIRECTOR", "ADMINISTRADOR", "MUSICO"];
-    let rolDirector = await servlet_comun.comprobarRol(req, res, rolesPermitidos);
-    if (!rolDirector) {
+    let rolPermitido = await servlet_comun.comprobarRol(
+      req,
+      res,
+      rolesPermitidos
+    );
+    if (!rolPermitido) {
       res.status(403).send({
         error: true,
         mensaje: "No tienes permisos para obtener los eventos de concierto",
@@ -125,6 +136,136 @@ async function obtenerEventosConcierto(req, res) {
   }
 }
 
+async function registrar_partitura_evento(req, res) {
+  try {
+    const rolesPermitidos = ["DIRECTOR", "ADMINISTRADOR"];
+    let rolDirector = await servlet_comun.comprobarRol(
+      req,
+      res,
+      rolesPermitidos
+    );
+    if (!rolDirector) {
+      res.status(403).send({
+        error: true,
+        mensaje:
+          "No tienes permisos para registrar una partitura en un evento de concierto",
+      });
+    } else {
+      let nid_evento_concierto = req.body.nid_evento_concierto;
+      let nid_partitura = req.body.nid_partitura;
+
+      console.log(
+        "Registrar Partitura Evento Concierto: ",
+        nid_evento_concierto,
+        nid_partitura
+      );
+
+      await gestorEventos.registrar_partitura_evento(
+        nid_evento_concierto,
+        nid_partitura
+      );
+
+      res.status(200).send({
+        error: false,
+        mensaje: "Partitura registrada correctamente en el evento de concierto",
+      });
+    }
+  } catch (error) {
+    console.error(
+      "Error al registrar la partitura en el evento de concierto:" +
+        error.message
+    );
+    res.status(400).send({
+      error: true,
+      mensaje: "Error al registrar la partitura en el evento de concierto",
+    });
+  }
+}
+
+async function eliminar_partitura_evento(req, res) {
+  try {
+    const rolesPermitidos = ["DIRECTOR", "ADMINISTRADOR"];
+    let rolDirector = servlet_comun.comprobarRol(req, res, rolesPermitidos);
+    if (!rolDirector) {
+      res.status(403).send({
+        error: true,
+        mensaje:
+          "No tienes permisos para eliminar una partitura de un evento de concierto",
+      });
+    } else {
+      let nid_evento_concierto = req.body.nid_evento_concierto;
+      let nid_partitura = req.body.nid_partitura;
+
+      console.log(
+        "Eliminar Partitura Evento Concierto: ",
+        nid_evento_concierto,
+        nid_partitura
+      );
+
+      await gestorEventos.eliminar_partitura_evento(
+        nid_evento_concierto,
+        nid_partitura
+      );
+
+      res.status(200).send({
+        error: false,
+        mensaje: "Partitura eliminada correctamente del evento de concierto",
+      });
+    }
+  } catch (error) {
+    console.error(
+      "Error al eliminar la partitura del evento de concierto:" + error.message
+    );
+    res.status(400).send({
+      error: true,
+      mensaje: "Error al eliminar la partitura del evento de concierto",
+    });
+  }
+}
+
+async function obtenerPartiturasEvento(req, res) {
+  try {
+    const rolesPermitidos = ["DIRECTOR", "ADMINISTRADOR", "MUSICO"];
+    let rolPermitido = servlet_comun.comprobarRol(req, res, rolesPermitidos);
+    if (!rolPermitido) {
+      res.status(403).send({
+        error: true,
+        mensaje: "No tienes permisos para obtener las partituras del evento",
+      });
+    } else {
+      let nid_evento_concierto = req.params.nid_evento_concierto;
+      let evento_concierto =
+        await gestorEventos.obtenerEventoConcierto(nid_evento_concierto);
+      let partituras =
+        await gestorEventos.obtenerPartiturasEvento(nid_evento_concierto);
+      if (partituras) {
+        res.status(200).send({
+          error: false,
+          mensaje: "Partituras obtenidas correctamente",
+          partituras: partituras,
+          evento_concierto: evento_concierto,
+        });
+      } else {
+        res.status(404).send({
+          error: true,
+          mensaje: "No se encontraron partituras para el evento de concierto",
+        });
+      }
+    }
+  } catch (error) {
+    console.error(
+      "Error al obtener las partituras del evento de concierto:" + error.message
+    );
+    res.status(400).send({
+      error: true,
+      mensaje: "Error al obtener las partituras del evento de concierto",
+    });
+  }
+}
+
 module.exports.insertarEventoConcierto = insertarEventoConcierto;
 module.exports.actualizarEventoConcierto = actualizarEventoConcierto;
 module.exports.obtenerEventosConcierto = obtenerEventosConcierto;
+module.exports.registrar_partitura_evento = registrar_partitura_evento;
+module.exports.eliminar_partitura_evento = eliminar_partitura_evento;
+module.exports.obtenerPartiturasEvento = obtenerPartiturasEvento;
