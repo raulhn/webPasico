@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 
 import ServicePartituras from "../../servicios/servicePartituras";
 
@@ -9,9 +9,13 @@ import {
   EntradaTexto,
   ModalAviso,
   ModalExito,
+  RadioInput,
+  GroupRadioInput,
 } from "../componentesUI/ComponentesUI";
 
-export default function FormularioPartitura() {
+import { SelectorCategoria } from "./SelectorCategoria";
+
+export default function FormularioPartitura({ accionCancelar }) {
   const [nombre, setNombre] = useState("");
   const [categoria, setCategoria] = useState("");
   const [autor, setAutor] = useState("");
@@ -45,9 +49,13 @@ export default function FormularioPartitura() {
     }
   }
 
+  const opciones = [
+    { etiqueta: "Categoria 1", valor: "categoria1" },
+    { etiqueta: "Categoria 2", valor: "categoria2" },
+  ];
   return (
-    <View>
-      <Text>Formulario de Partitura</Text>
+    <View style={estilos.container}>
+      <Text style={estilos.titulo}>Formulario de Partitura</Text>
 
       <Text>Titulo</Text>
       <EntradaTexto
@@ -56,6 +64,7 @@ export default function FormularioPartitura() {
       ></EntradaTexto>
 
       <Text>Categoria</Text>
+      <SelectorCategoria opciones={opciones} />
 
       <Text>Autor</Text>
       <EntradaTexto placeholder="Autor" setValor={(text) => setAutor(text)} />
@@ -64,16 +73,48 @@ export default function FormularioPartitura() {
         placeholder="Url Partitura"
         setValor={(text) => setUrlPartitura(text)}
       />
-      <Boton
-        nombre="Registrar Partitura"
-        onPress={() => {
-          if (nombre === "" || categoria === "" || autor === "") {
-            alert("Por favor, completa todos los campos.");
-            return;
-          }
-          registrarPartitura();
-        }}
-      />
+      <View style={estilos.botones}>
+        <Boton
+          nombre="Registrar Partitura"
+          onPress={() => {
+            if (nombre === "" || categoria === "" || autor === "") {
+              alert("Por favor, completa todos los campos.");
+              return;
+            }
+            registrarPartitura();
+          }}
+        />
+        <Boton
+          nombre="Cancelar"
+          color="red"
+          onPress={() => {
+            accionCancelar();
+          }}
+        />
+      </View>
     </View>
   );
 }
+
+const estilos = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  botones: {
+    flexDirection: "row",
+    justifyContent: "center",
+    gap: 10,
+    marginTop: 20,
+  },
+  titulo: {
+    fontSize: 24, // Tamaño de fuente grande
+    fontWeight: "bold", // Negrita para destacar
+    color: "#007CFA", // Color azul para resaltar
+    marginBottom: 20, // Espacio debajo del título
+    textAlign: "center", // Centrado horizontalmente
+  },
+});

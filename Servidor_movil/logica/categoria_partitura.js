@@ -6,9 +6,9 @@ function insertarCategoriaPartitura(nombre_categoria) {
     const sql =
       "INSERT INTO " +
       constantes.ESQUEMA +
-      ".categoria_partitura (n nombre_categoria) VALUES (" +
+      ".categoria_partitura (nombre_categoria) VALUES (trim(" +
       conexion.dbConn.escape(nombre_categoria) +
-      ")";
+      "))";
 
     conexion.dbConn.beginTransaction(() => {
       conexion.dbConn.query(sql, (error, result) => {
@@ -68,6 +68,7 @@ function obtenerCategoriasPartitura() {
         );
         reject("Error al obtener las categorias de partitura");
       } else {
+        console.log("Categorias de partitura obtenidas correctamente");
         resolve(result);
       }
     });

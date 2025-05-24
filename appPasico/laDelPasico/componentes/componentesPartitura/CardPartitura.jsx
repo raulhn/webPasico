@@ -38,7 +38,7 @@ export default function CardPartitura({ partitura }) {
 
 const styles = StyleSheet.create({
   card: {
-    width: "90%",
+    width: "95%",
     height: 120,
     backgroundColor: "#fff",
     borderRadius: 10,
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     position: "relative",
   },
   titulo: {
-    fontSize: 20,
+    fontSize: 15,
     paddingBottom: 5,
     fontWeight: "bold",
     color: "#007CFA",

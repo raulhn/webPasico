@@ -44,5 +44,26 @@ function registrarEventoConcierto(eventoConcierto, cerrarSesion) {
   });
 }
 
+function obtenerEventoConcierto(nidEventoConcierto, cerrarSesion) {
+  return new Promise((resolve, reject) => {
+    serviceComun
+      .peticionSesion(
+        "GET",
+        Constantes.URL_SERVICIO_MOVIL +
+          "obtener_evento_concierto/" +
+          nidEventoConcierto,
+        null,
+        cerrarSesion
+      )
+      .then((response) => {
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+}
+
 module.exports.obtenerEventosConciertos = obtenerEventosConciertos;
 module.exports.registrarEventoConcierto = registrarEventoConcierto;
+module.exports.obtenerEventoConcierto = obtenerEventoConcierto;
