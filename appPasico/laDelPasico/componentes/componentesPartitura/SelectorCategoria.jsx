@@ -10,6 +10,7 @@ import {
   Boton,
   GroupRadioInput,
   EntradaTexto,
+  BotonFixed,
 } from "../componentesUI/ComponentesUI";
 import { useEffect, useState } from "react";
 
@@ -17,12 +18,16 @@ import ServiceCategoriaPartituras from "../../servicios/serviceCategoriaPartitur
 import { AuthContext } from "../../providers/AuthContext";
 import { useContext } from "react";
 
-function CrearCategoria({ modalVisible, setModalVisible }) {
+function CrearCategoria({ modalVisible, setModalVisible, callback }) {
   const [valor, setValor] = useState(null);
   const { cerrarSesion } = useContext(AuthContext);
 
   const crearCategoria = async () => {
     try {
+      if (!valor) {
+        console.error("El valor no puede estar vacío");
+        return;
+      }
       const categoria = { nombre_categoria: valor };
       const respuesta =
         await ServiceCategoriaPartituras.registrarCategoriaPartitura(
@@ -34,6 +39,7 @@ function CrearCategoria({ modalVisible, setModalVisible }) {
       } else {
         console.log("Categoría creada exitosamente:", respuesta);
         setModalVisible(false);
+        callback(); // Llamar al callback para recargar las categorías
       }
     } catch (error) {
       console.error("Error al crear la categoría:", error);
@@ -82,17 +88,19 @@ function CrearCategoria({ modalVisible, setModalVisible }) {
   );
 }
 
-export function SelectorCategoria() {
+export function SelectorCategoria({ setTexto, ancho = 200 }) {
   const [valor, setValor] = useState(null);
 
   const [visible, setVisible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [opciones, setOpciones] = useState(opciones);
+  const [refrescar, setRefrescar] = useState(false);
 
   const { cerrarSesion } = useContext(AuthContext);
 
   const setValorSeleccionado = (valor) => {
     setValor(valor);
+    setTexto(valor);
     console.log("Valor seleccionado:", valor);
   };
 
@@ -102,27 +110,35 @@ export function SelectorCategoria() {
         if (respuesta.error) {
           console.error("Error al obtener las categorías:", respuesta.error);
         } else {
-          console.log("Categorías obtenidas:", respuesta);
           const categorias = respuesta.categorias.map((categoria) => ({
             etiqueta: categoria.nombre_categoria,
             valor: categoria.nid_categoria,
           }));
+
           setOpciones(categorias);
           setCargando(false);
         }
       }
     );
-  }, []);
+  }, [refrescar]);
 
   const cerrarModal = () => {
     setModalVisible(false);
   };
 
+  const lanzarRecarga = () => {
+    setRefrescar(!refrescar);
+  };
+
   return (
     <>
       <Pressable onPress={() => setVisible(true)}>
-        <View style={estilos.entradaTexto}>
-          <Text>{valor ? valor.etiqueta : ""}</Text>
+        <View style={[estilos.entradaTexto, { width: ancho }]}>
+          <Text style={valor ? {} : { color: "gray" }}>
+            {valor && valor.etiqueta !== ""
+              ? valor.etiqueta
+              : "Elige Categoria"}
+          </Text>
         </View>
       </Pressable>
       <Modal
@@ -146,12 +162,13 @@ export function SelectorCategoria() {
           >
             <Boton
               onPress={() => {
-                setModalVisible(true);
+                setValorSeleccionado({ etiqueta: "", valor: "" });
               }}
-              nombre="Crear Categoría"
-              color="#28A745"
+              nombre="Limpiar"
+              color="#007BFF"
               colorTexto="#FFF"
             />
+
             <Boton
               onPress={() => {
                 setVisible(false);
@@ -163,9 +180,18 @@ export function SelectorCategoria() {
           </View>
         </View>
 
+        <View style={{ position: "absolute", bottom: 20, right: 20 }}>
+          <BotonFixed
+            onPress={() => {
+              console.log("Botón presionado");
+              setModalVisible(true);
+            }}
+          />
+        </View>
         <CrearCategoria
           modalVisible={modalVisible}
           setModalVisible={cerrarModal}
+          callback={lanzarRecarga}
         />
       </Modal>
     </>
@@ -174,14 +200,12 @@ export function SelectorCategoria() {
 
 const estilos = StyleSheet.create({
   modalContainer: {
-    flex: 1,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "white",
     padding: 20,
   },
   entradaTexto: {
-    width: 200,
     height: 40,
     borderWidth: 1,
     borderColor: "#ccc",

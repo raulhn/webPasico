@@ -16,21 +16,25 @@ async function insertarPartitura(req, res) {
       });
     } else {
       const { titulo, autor, nid_categoria, url_partitura } = req.body;
-      const result = await gestorPartituras.insertarPartitura(
+
+      const nid_partitura = await gestorPartituras.insertarPartitura(
         titulo,
         autor,
         nid_categoria,
         url_partitura
       );
-      res
-        .status(200)
-        .json({ message: "Partitura insertada correctamente", result });
+
+      res.status(200).send({
+        error: false,
+        mensaje: "Partitura insertada correctamente",
+        nid_partitura: nid_partitura,
+      });
     }
-    console.error("Error al insertar la partitura: ", error);
-    res.status(500).json({ message: "Error al insertar la partitura" });
   } catch (error) {
     console.error("Error al insertar la partitura: ", error);
-    res.status(500).json({ message: "Error al insertar la partitura" });
+    res
+      .status(500)
+      .send({ error: true, mensaje: "Error al insertar la partitura" });
   }
 }
 
@@ -59,13 +63,42 @@ async function actualizarPartitura(req, res) {
       );
       res
         .status(200)
-        .json({ message: "Partitura actualizada correctamente", result });
+        .send({ error: false, mensaje: "Partitura actualizada correctamente" });
     }
   } catch (error) {
     console.error("Error al actualizar la partitura: ", error);
-    res.status(500).json({ message: "Error al actualizar la partitura" });
+    res
+      .status(500)
+      .send({ error: true, mensaje: "Error al actualizar la partitura" });
+  }
+}
+
+async function obtenerPartituras(req, res) {
+  try {
+    const rolesPermitidos = ["DIRECTOR", "ADMINISTRADOR", "MUSICO"];
+    let rolDirector = await servletComun.comprobarRol(
+      req,
+      res,
+      rolesPermitidos
+    );
+    if (!rolDirector) {
+      res.status(403).send({
+        error: true,
+        mensaje: "No tienes permisos para obtener las partituras",
+      });
+    } else {
+      const partituras = await gestorPartituras.obtenerPartituras();
+      res.status(200).send({ error: false, partituras: partituras });
+    }
+  } catch (error) {
+    console.error("Error al obtener las partituras: ", error);
+    res.status(500).send({
+      error: true,
+      mensaje: "Error al obtener las partituras",
+    });
   }
 }
 
 module.exports.actualizarPartitura = actualizarPartitura;
 module.exports.insertarPartitura = insertarPartitura;
+module.exports.obtenerPartituras = obtenerPartituras;

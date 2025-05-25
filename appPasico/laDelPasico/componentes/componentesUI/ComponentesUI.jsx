@@ -10,6 +10,7 @@ import {
   TextInput,
   Text,
   FlatList,
+  Modal,
 } from "react-native";
 import { useState, useEffect } from "react";
 
@@ -42,7 +43,7 @@ export function Boton({
   );
 }
 
-export function BotonFixed({ onPress }) {
+export function BotonFixed({ onPress, icon = "add" }) {
   const [isPressed, setIsPressed] = useState(false);
 
   return (
@@ -67,7 +68,7 @@ export function BotonFixed({ onPress }) {
       ]}
     >
       <View>
-        <MaterialIcons name="add" size={24} color="white" />
+        <MaterialIcons name={icon} size={24} color="white" />
       </View>
     </Pressable>
   );
@@ -263,13 +264,13 @@ export function ModalAviso({ visible, setVisible, mensaje, textBoton }) {
   );
 }
 
-export function ModalExito({ visible, callback, mensaje, textBoton }) {
+export function ModalExito({ visible, setVisible, mensaje, textBoton }) {
   return (
     <Modal
       animationType="fade"
       transparent={true}
       visible={visible}
-      onRequestClose={callback}
+      onRequestClose={setVisible}
     >
       <View style={estilos.modalContainer}>
         <View style={estilos.modalContent}>
@@ -282,7 +283,7 @@ export function ModalExito({ visible, callback, mensaje, textBoton }) {
           <Text style={estilos.mensaje}>{mensaje}</Text>
 
           <Boton
-            onPress={callback}
+            onPress={setVisible}
             nombre={textBoton}
             color="#007BFF"
             colorTexto="#FFF"

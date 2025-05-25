@@ -6,7 +6,7 @@ function registrarPartitura(partitura, cerrarSesion) {
     const data = {
       titulo: partitura.titulo,
       autor: partitura.autor,
-      categoria: partitura.categoria,
+      nid_categoria: partitura.categoria,
       url_partitura: partitura.url_partitura,
     };
     serviceComun
@@ -17,13 +17,7 @@ function registrarPartitura(partitura, cerrarSesion) {
         cerrarSesion
       )
       .then((response) => {
-        response.json().then((data) => {
-          if (data.error) {
-            reject("Error al registrar la partitura: " + data.mensaje);
-          } else {
-            resolve(data);
-          }
-        });
+        resolve(response);
       })
       .catch((error) => {
         reject(error);
@@ -48,13 +42,25 @@ function actualizarPartitura(partitura, cerrarSesion) {
         cerrarSesion
       )
       .then((response) => {
-        response.json().then((data) => {
-          if (data.error) {
-            reject("Error al actualizar la partitura: " + data.mensaje);
-          } else {
-            resolve(data);
-          }
-        });
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+}
+
+function obtenerPartituras(cerrarSesion) {
+  return new Promise((resolve, reject) => {
+    serviceComun
+      .peticionSesion(
+        "GET",
+        constantes.URL_SERVICIO_MOVIL + "obtener_partituras",
+        null,
+        cerrarSesion
+      )
+      .then((response) => {
+        resolve(response);
       })
       .catch((error) => {
         reject(error);
@@ -64,3 +70,4 @@ function actualizarPartitura(partitura, cerrarSesion) {
 
 module.exports.registrarPartitura = registrarPartitura;
 module.exports.actualizarPartitura = actualizarPartitura;
+module.exports.obtenerPartituras = obtenerPartituras;
