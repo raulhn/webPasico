@@ -140,6 +140,7 @@ app.get(
 // Partituras //
 app.post("/registrar_partitura", servletPartituras.insertarPartitura);
 app.post("/actualizar_partitura", servletPartituras.actualizarPartitura);
+app.get("/obtener_partituras", servletPartituras.obtenerPartituras);
 
 // Categorias Partituras //
 app.post(

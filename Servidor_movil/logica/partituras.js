@@ -7,7 +7,7 @@ function insertarPartitura(titulo, autor, nid_categoria, url_partitura) {
       const sql =
         "INSERT INTO " +
         constantes.ESQUEMA +
-        ".partitura (titulo, autor, nid_categoria, url_partitura) VALUES (" +
+        ".partituras (titulo, autor, nid_categoria, url_partitura) VALUES (" +
         conexion.dbConn.escape(titulo) +
         ", " +
         conexion.dbConn.escape(autor) +
@@ -24,7 +24,7 @@ function insertarPartitura(titulo, autor, nid_categoria, url_partitura) {
           reject("Error al insertar la partitura");
         } else {
           conexion.dbConn.commit();
-          resolve(result);
+          resolve(result.insertId);
         }
       });
     });
@@ -42,7 +42,7 @@ function actualizarPartitura(
     const sql =
       "UPDATE " +
       constantes.ESQUEMA +
-      ".partitura SET titulo = " +
+      ".partituras SET titulo = " +
       conexion.dbConn.escape(titulo) +
       ", " +
       "autor = " +
@@ -71,5 +71,30 @@ function actualizarPartitura(
   });
 }
 
+function obtenerPartituras() {
+  return new Promise((resolve, reject) => {
+    const sql =
+      "SELECT p.nid_partitura, p.titulo, p.autor, p.nid_categoria, p.url_partitura, c.nombre_categoria " +
+      "FROM " +
+      constantes.ESQUEMA +
+      ".partituras p " +
+      "JOIN " +
+      constantes.ESQUEMA +
+      ".categoria_partitura c ON p.nid_categoria = c.nid_categoria";
+
+    conexion.dbConn.query(sql, (error, results) => {
+      if (error) {
+        console.error("Error al obtener las partituras: " + error.message);
+        reject("Error al obtener las partituras");
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
+{
+}
+
 module.exports.insertarPartitura = insertarPartitura;
 module.exports.actualizarPartitura = actualizarPartitura;
+module.exports.obtenerPartituras = obtenerPartituras;

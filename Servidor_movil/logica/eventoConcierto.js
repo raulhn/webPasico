@@ -174,13 +174,15 @@ function eliminar_partitura_evento(nid_evento_concierto, nid_partitura) {
 function obtenerPartiturasEvento(nid_evento_concierto) {
   return new Promise((resolve, reject) => {
     const sql =
-      "SELECT p.* FROM " +
+      "SELECT p.*, cp.nid_categoria, nombre_categoria FROM " +
       constantes.ESQUEMA +
-      ".partituras_evento pe " +
-      "JOIN " +
+      ".partituras_evento pe, " +
       constantes.ESQUEMA +
-      ".partituras p ON pe.nid_partitura = p.nid_partitura " +
-      "WHERE pe.nid_evento_concierto = " +
+      ".categoria_partitura cp, " +
+      constantes.ESQUEMA +
+      ".partituras p where pe.nid_partitura = p.nid_partitura " +
+      "and p.nid_categoria = cp.nid_categoria " +
+      "and pe.nid_evento_concierto = " +
       conexion.dbConn.escape(nid_evento_concierto);
 
     conexion.dbConn.query(sql, (err, result) => {

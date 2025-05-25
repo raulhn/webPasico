@@ -15,14 +15,16 @@ import {
 
 import { SelectorCategoria } from "./SelectorCategoria";
 
-export default function FormularioPartitura({ accionCancelar }) {
+export default function FormularioPartitura({ accionCancelar, callback }) {
   const [nombre, setNombre] = useState("");
-  const [categoria, setCategoria] = useState("");
+  const [categoria, setCategoria] = useState(null);
   const [autor, setAutor] = useState("");
   const [urlPartitura, setUrlPartitura] = useState("");
 
   const [aviso, setAviso] = useState(false);
   const [exito, setExito] = useState(false);
+
+  const [mensaje, setMensaje] = useState("");
 
   const { cerrarSesion } = useContext(AuthContext);
 
@@ -30,29 +32,41 @@ export default function FormularioPartitura({ accionCancelar }) {
     const partitura = {
       titulo: nombre,
       autor: autor,
-      categoria: categoria,
+      categoria: categoria.valor,
       url_partitura: urlPartitura,
     };
 
+    console.log("Partitura a registrar:", partitura); // Para depuración
     try {
       const respuesta = await ServicePartituras.registrarPartitura(
         partitura,
         cerrarSesion
       );
-      if (respuesta.error) {
+      console.log("Respuesta del registro:", respuesta); // Para depuración
+      if (!respuesta.error) {
+        callback(respuesta.nid_partitura);
         setExito(true);
       } else {
+        setMensaje("Error al registrar la partitura");
         setAviso(true);
       }
     } catch (error) {
+      setMensaje("Error al registrar la partitura");
       setAviso(true);
     }
   }
 
-  const opciones = [
-    { etiqueta: "Categoria 1", valor: "categoria1" },
-    { etiqueta: "Categoria 2", valor: "categoria2" },
-  ];
+  const actualizarCategoria = (valor) => {
+    setCategoria(valor);
+  };
+
+  const refrescarModal = () => {
+    console.log("Refrescando modal");
+    setAviso(false);
+    setExito(false);
+    setMensaje("");
+  };
+
   return (
     <View style={estilos.container}>
       <Text style={estilos.titulo}>Formulario de Partitura</Text>
@@ -64,7 +78,7 @@ export default function FormularioPartitura({ accionCancelar }) {
       ></EntradaTexto>
 
       <Text>Categoria</Text>
-      <SelectorCategoria opciones={opciones} />
+      <SelectorCategoria setTexto={actualizarCategoria} />
 
       <Text>Autor</Text>
       <EntradaTexto placeholder="Autor" setValor={(text) => setAutor(text)} />
@@ -77,8 +91,9 @@ export default function FormularioPartitura({ accionCancelar }) {
         <Boton
           nombre="Registrar Partitura"
           onPress={() => {
-            if (nombre === "" || categoria === "" || autor === "") {
-              alert("Por favor, completa todos los campos.");
+            if (nombre === "") {
+              setMensaje("El campo Titulo es obligatorio");
+              setAviso(true);
               return;
             }
             registrarPartitura();
@@ -92,6 +107,19 @@ export default function FormularioPartitura({ accionCancelar }) {
           }}
         />
       </View>
+
+      <ModalAviso
+        visible={aviso}
+        setVisible={refrescarModal}
+        mensaje={mensaje}
+        textBoton={"Aceptar"}
+      />
+      <ModalExito
+        visible={exito}
+        setVisible={refrescarModal}
+        mensaje={"Partitura registrada exitosamente"}
+        textBoton={"Aceptar"}
+      />
     </View>
   );
 }

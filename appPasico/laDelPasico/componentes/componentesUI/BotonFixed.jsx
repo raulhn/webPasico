@@ -2,7 +2,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import { useState } from "react";
 
-export default function BotonFixed({ onPress }) {
+export default function BotonFixed({ onPress, icon = "add" }) {
   const [isPressed, setIsPressed] = useState(false);
 
   return (
@@ -27,7 +27,7 @@ export default function BotonFixed({ onPress }) {
       ]}
     >
       <View>
-        <MaterialIcons name="add" size={24} color="white" />
+        <MaterialIcons name={icon} size={24} color="white" />
       </View>
     </Pressable>
   );

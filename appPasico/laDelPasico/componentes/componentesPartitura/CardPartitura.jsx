@@ -16,7 +16,7 @@ export default function CardPartitura({ partitura }) {
         >
           Categoria:
         </Text>
-        <Text> {partitura.categoria}</Text>
+        <Text> {partitura.nombre_categoria}</Text>
       </View>
       <View
         style={{
@@ -38,7 +38,7 @@ export default function CardPartitura({ partitura }) {
 
 const styles = StyleSheet.create({
   card: {
-    width: "95%",
+    width: "90%",
     height: 120,
     backgroundColor: "#fff",
     borderRadius: 10,
