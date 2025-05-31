@@ -30,10 +30,18 @@ export default function DrawerLayout() {
         }}
       />
       <Drawer.Screen
-        name="partituras"
+        name="eventos"
         options={{
-          title: "Partituras",
-          drawerItemStyle: esRol("MUSICO") ? {} : { display: "none" },
+          title: "Eventos",
+          drawerItemStyle: esRol(["MUSICO"]) ? {} : { display: "none" },
+        }}
+      />
+
+      <Drawer.Screen
+        name="archivoDigital"
+        options={{
+          title: "Archivo Digital",
+          drawerItemStyle: esRol(["MUSICO"]) ? {} : { display: "none" },
         }}
       />
     </Drawer>

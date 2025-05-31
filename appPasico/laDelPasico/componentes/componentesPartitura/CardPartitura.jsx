@@ -1,5 +1,26 @@
 import { View, Text, StyleSheet } from "react-native";
-export default function CardPartitura({ partitura }) {
+import { useRol } from "../../hooks/useRol";
+import { Boton, BotonFixed } from "../componentesUI/ComponentesUI";
+export default function CardPartitura({
+  partitura,
+  edicion,
+  rolEdicion = false,
+}) {
+  const rol = useRol();
+
+  function botonEditar() {
+    if (rolEdicion && edicion) {
+      return (
+        <BotonFixed
+          colorBoton={edicion.colorBoton}
+          icon={edicion.icono}
+          size={edicion.size}
+          onPress={() => edicion.accion(partitura.nid_partitura)}
+        />
+      );
+    }
+  }
+
   return (
     <View style={styles.card}>
       <Text style={styles.titulo}>{partitura.titulo}</Text>
@@ -32,13 +53,17 @@ export default function CardPartitura({ partitura }) {
         </Text>
         <Text> {partitura.autor}</Text>
       </View>
+
+      <View style={{ position: "absolute", top: 10, right: 20 }}>
+        {botonEditar()}
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   card: {
-    width: "90%",
+    width: "95%",
     height: 120,
     backgroundColor: "#fff",
     borderRadius: 10,

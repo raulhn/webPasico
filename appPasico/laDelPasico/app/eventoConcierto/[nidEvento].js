@@ -6,11 +6,15 @@ import CardPartitura from "../../componentes/componentesPartitura/CardPartitura"
 import ServiceEventoConcierto from "../../servicios/serviceEventoConcierto";
 import { ActivityIndicator, Modal } from "react-native";
 import { AuthContext } from "../../providers/AuthContext";
-import { BotonFixed } from "../../componentes/componentesUI/ComponentesUI";
-import FormularioPartitura from "../../componentes/componentesPartitura/FormularioPartitura";
+import {
+  BotonFixed,
+  ModalConfirmacion,
+} from "../../componentes/componentesUI/ComponentesUI";
 import SelectorPartituras from "../../componentes/componentesPartitura/SelectorPartituras";
+import { useRol } from "../../hooks/useRol";
 
 export default function EventoConcierto() {
+  const { esRol } = useRol();
   const [evento, setEvento] = useState(null);
   const [partituras, setPartituras] = useState([]);
   const [cargando, setCargando] = useState(true);
@@ -20,7 +24,12 @@ export default function EventoConcierto() {
   const { cerrarSesion } = useContext(AuthContext);
 
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalAvisoVisible, setModalAvisoVisible] = useState(false);
   const [refrescar, setRefrescar] = useState(false);
+
+  const refrescarModal = () => {
+    setModalAvisoVisible(false);
+  };
 
   function registrarPartituraEvento(nidPartitura) {
     try {
@@ -47,9 +56,8 @@ export default function EventoConcierto() {
   useEffect(() => {
     ServiceEventoConcierto.obtenerEventoConcierto(nidEvento, cerrarSesion)
       .then((eventoData) => {
-        console.log("Evento obtenido:", eventoData);
         setEvento(eventoData.evento_concierto);
-        console.log("Partituras del evento:", eventoData.partituras);
+
         setPartituras(eventoData.partituras);
         setCargando(false);
       })
@@ -61,6 +69,21 @@ export default function EventoConcierto() {
   if (cargando) {
     return <ActivityIndicator />;
   }
+
+  const edicion = {
+    colorBoton: "red",
+    icono: "close",
+    size: 30,
+    accion: (nidPartitura) => {
+      console.log(
+        "Edición no implementada aún para la partitura:",
+        nidPartitura
+      );
+      setModalAvisoVisible(true);
+    },
+  };
+
+  const rol_director = esRol(["DIRECTOR", "ADMINISTRADOR"]);
 
   return (
     <>
@@ -84,9 +107,11 @@ export default function EventoConcierto() {
             <View style={{ alignItems: "center" }}>
               <CardPartitura
                 partitura={item}
+                edicion={edicion}
                 onPress={() => {
                   console.log("Partitura seleccionada:", item);
                 }}
+                rolEdicion={rol_director}
               />
             </View>
           )}
@@ -108,8 +133,33 @@ export default function EventoConcierto() {
             setModalVisible(false);
           }}
         >
+          <View
+            style={{
+              paddingTop: 10,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Text
+              style={{ fontSize: 24, fontWeight: "bold", marginBottom: 20 }}
+            >
+              Selecciona una Partitura
+            </Text>
+          </View>
           <SelectorPartituras callback={registrarPartituraEvento} />
         </Modal>
+
+        <ModalConfirmacion
+          visible={modalAvisoVisible}
+          setVisible={refrescarModal}
+          textBoton={"Aceptar"}
+          textBotonCancelar={"Cancelar"}
+          mensaje="¿Estás seguro de que quieres eliminar esta partitura del evento?"
+          accion={() => {
+            console.log("Partitura eliminada del evento");
+            setRefrescar(!refrescar);
+          }}
+        />
       </View>
     </>
   );
@@ -170,5 +220,11 @@ const estilos = StyleSheet.create({
     position: "absolute",
     bottom: 30,
     right: 20,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 20,
+    textAlign: "center",
   },
 });
