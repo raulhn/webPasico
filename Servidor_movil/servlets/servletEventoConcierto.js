@@ -160,24 +160,35 @@ async function registrar_partitura_evento(req, res) {
         nid_partitura
       );
 
-      await gestorEventos.registrar_partitura_evento(
+      let existe = await gestorEventos.existePartituraEvento(
         nid_evento_concierto,
         nid_partitura
       );
 
-      res.status(200).send({
-        error: false,
-        mensaje: "Partitura registrada correctamente en el evento de concierto",
-      });
+      if (existe) {
+        res.status(400).send({
+          error: true,
+          mensaje: "La partitura ya está registrada en el evento",
+        });
+      } else {
+        await gestorEventos.registrar_partitura_evento(
+          nid_evento_concierto,
+          nid_partitura
+        );
+
+        res.status(200).send({
+          error: false,
+          mensaje: "Partitura registrada correctamente en el evento",
+        });
+      }
     }
   } catch (error) {
     console.error(
-      "Error al registrar la partitura en el evento de concierto:" +
-        error.message
+      "Error al registrar la partitura en el evento:" + error.message
     );
     res.status(400).send({
       error: true,
-      mensaje: "Error al registrar la partitura en el evento de concierto",
+      mensaje: "Error al registrar la partitura en el evento",
     });
   }
 }

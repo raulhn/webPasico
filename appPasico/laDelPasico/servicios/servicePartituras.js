@@ -68,6 +68,25 @@ function obtenerPartituras(cerrarSesion) {
   });
 }
 
+function obtenerPartitura(nidPartitura, cerrarSesion) {
+  return new Promise((resolve, reject) => {
+    serviceComun
+      .peticionSesion(
+        "GET",
+        constantes.URL_SERVICIO_MOVIL + "obtener_partitura/" + nidPartitura,
+        null,
+        cerrarSesion
+      )
+      .then((response) => {
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+}
+
 module.exports.registrarPartitura = registrarPartitura;
 module.exports.actualizarPartitura = actualizarPartitura;
 module.exports.obtenerPartituras = obtenerPartituras;
+module.exports.obtenerPartitura = obtenerPartitura;

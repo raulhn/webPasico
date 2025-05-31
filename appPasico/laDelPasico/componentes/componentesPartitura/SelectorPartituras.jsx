@@ -20,7 +20,6 @@ export default function SelectorPartituras({ callback, edicion }) {
   useEffect(() => {
     ServicePartituras.obtenerPartituras()
       .then((response) => {
-        console.log("Partituras obtenidas:", response);
         setPartituras(response.partituras);
         setPartiturasFiltradas(response.partituras);
         setCargando(false);
@@ -83,7 +82,11 @@ export default function SelectorPartituras({ callback, edicion }) {
         keyExtractor={(item) => item.nid_partitura.toString()}
         renderItem={({ item }) => (
           <Pressable
-            onPress={() => callback(item.nid_partitura)}
+            onPress={() => {
+              if (callback !== undefined) {
+                callback(item.nid_partitura);
+              }
+            }}
             onPressIn={() => setPresionado(item.nid_partitura)}
             onPressOut={() => setPresionado("")}
           >
@@ -93,7 +96,7 @@ export default function SelectorPartituras({ callback, edicion }) {
                   alignItems: "center",
                   gap: 10,
                 },
-                presionado === item.nid_partitura
+                presionado === item.nid_partitura && callback !== undefined
                   ? { transform: [{ scale: 1.05 }] }
                   : {},
               ]}

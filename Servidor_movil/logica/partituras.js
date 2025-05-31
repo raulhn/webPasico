@@ -92,9 +92,32 @@ function obtenerPartituras() {
     });
   });
 }
-{
+
+function obtenerPartitura(nid_partitura) {
+  return new Promise((resolve, reject) => {
+    const sql =
+      "SELECT p.nid_partitura, p.titulo, p.autor, p.nid_categoria, p.url_partitura, c.nombre_categoria " +
+      "FROM " +
+      constantes.ESQUEMA +
+      ".partituras p " +
+      "JOIN " +
+      constantes.ESQUEMA +
+      ".categoria_partitura c ON p.nid_categoria = c.nid_categoria " +
+      "WHERE p.nid_partitura = " +
+      conexion.dbConn.escape(nid_partitura);
+
+    conexion.dbConn.query(sql, (error, results) => {
+      if (error) {
+        console.error("Error al obtener la partitura: " + error.message);
+        reject("Error al obtener la partitura");
+      } else {
+        resolve(results[0]);
+      }
+    });
+  });
 }
 
 module.exports.insertarPartitura = insertarPartitura;
 module.exports.actualizarPartitura = actualizarPartitura;
 module.exports.obtenerPartituras = obtenerPartituras;
+module.exports.obtenerPartitura = obtenerPartitura;

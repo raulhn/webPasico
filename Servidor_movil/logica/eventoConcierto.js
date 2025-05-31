@@ -198,6 +198,29 @@ function obtenerPartiturasEvento(nid_evento_concierto) {
   });
 }
 
+function existePartituraEvento(nid_evento_concierto, nid_partitura) {
+  return new Promise((resolve, reject) => {
+    const sql =
+      "SELECT * FROM " +
+      constantes.ESQUEMA +
+      ".partituras_evento WHERE nid_evento_concierto = " +
+      conexion.dbConn.escape(nid_evento_concierto) +
+      " AND nid_partitura = " +
+      conexion.dbConn.escape(nid_partitura);
+
+    conexion.dbConn.query(sql, (err, result) => {
+      if (err) {
+        console.log(
+          "eventoConcierto.js - existePartituraEvento -> Error: " + err
+        );
+        reject("Error al verificar la existencia de la partitura en el evento");
+      } else {
+        resolve(result.length > 0);
+      }
+    });
+  });
+}
+
 module.exports.insertarEventoConcierto = insertarEventoConcierto;
 module.exports.actualizarEvento = actualizarEvento;
 module.exports.obtenerEventosConcierto = obtenerEventosConcierto;
@@ -206,3 +229,4 @@ module.exports.obtenerEventoConcierto = obtenerEventoConcierto;
 module.exports.registrar_partitura_evento = registrar_partitura_evento;
 module.exports.eliminar_partitura_evento = eliminar_partitura_evento;
 module.exports.obtenerPartiturasEvento = obtenerPartiturasEvento;
+module.exports.existePartituraEvento = existePartituraEvento;

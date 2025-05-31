@@ -141,6 +141,10 @@ app.get(
 app.post("/registrar_partitura", servletPartituras.insertarPartitura);
 app.post("/actualizar_partitura", servletPartituras.actualizarPartitura);
 app.get("/obtener_partituras", servletPartituras.obtenerPartituras);
+app.get(
+  "/obtener_partitura/:nid_partitura",
+  servletPartituras.obtenerPartitura
+);
 
 // Categorias Partituras //
 app.post(
