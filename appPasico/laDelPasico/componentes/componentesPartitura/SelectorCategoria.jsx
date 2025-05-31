@@ -17,6 +17,7 @@ import { useEffect, useState } from "react";
 import ServiceCategoriaPartituras from "../../servicios/serviceCategoriaPartitura";
 import { AuthContext } from "../../providers/AuthContext";
 import { useContext } from "react";
+import { use } from "react";
 
 function CrearCategoria({ modalVisible, setModalVisible, callback }) {
   const [valor, setValor] = useState(null);
@@ -88,7 +89,11 @@ function CrearCategoria({ modalVisible, setModalVisible, callback }) {
   );
 }
 
-export function SelectorCategoria({ setTexto, ancho = 200 }) {
+export function SelectorCategoria({
+  setTexto,
+  ancho = 200,
+  valorDefecto = null,
+}) {
   const [valor, setValor] = useState(null);
 
   const [visible, setVisible] = useState(false);
@@ -101,7 +106,6 @@ export function SelectorCategoria({ setTexto, ancho = 200 }) {
   const setValorSeleccionado = (valor) => {
     setValor(valor);
     setTexto(valor);
-    console.log("Valor seleccionado:", valor);
   };
 
   useEffect(() => {
@@ -121,6 +125,13 @@ export function SelectorCategoria({ setTexto, ancho = 200 }) {
       }
     );
   }, [refrescar]);
+
+  //Se establece el valor por defecto si se proporciona
+  useEffect(() => {
+    if (valorDefecto) {
+      setValor(valorDefecto);
+    }
+  }, [valorDefecto]);
 
   const cerrarModal = () => {
     setModalVisible(false);

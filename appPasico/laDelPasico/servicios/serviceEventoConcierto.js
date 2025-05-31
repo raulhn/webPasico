@@ -90,7 +90,34 @@ function registrarPartituraEvento(
   });
 }
 
+function eliminarPartituraEvento(
+  nidPartitura,
+  nidEventoConcierto,
+  cerrarSesion
+) {
+  return new Promise((resolve, reject) => {
+    const data = {
+      nid_partitura: nidPartitura,
+      nid_evento_concierto: nidEventoConcierto,
+    };
+    serviceComun
+      .peticionSesion(
+        "POST",
+        Constantes.URL_SERVICIO_MOVIL + "eliminar_partitura_evento",
+        data,
+        cerrarSesion
+      )
+      .then((response) => {
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+}
+
 module.exports.obtenerEventosConciertos = obtenerEventosConciertos;
 module.exports.registrarEventoConcierto = registrarEventoConcierto;
 module.exports.obtenerEventoConcierto = obtenerEventoConcierto;
 module.exports.registrarPartituraEvento = registrarPartituraEvento;
+module.exports.eliminarPartituraEvento = eliminarPartituraEvento;

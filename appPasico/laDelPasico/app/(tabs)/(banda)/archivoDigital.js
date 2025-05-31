@@ -1,14 +1,24 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Modal } from "react-native";
 import SelectorPartituras from "../../../componentes/componentesPartitura/SelectorPartituras";
+import FormularioPartitura from "../../../componentes/componentesPartitura/FormularioPartitura";
+import { useState } from "react";
 
 export default function ArchivoDigital() {
-  const recuperaPartitura = (nidPartitura) => {
-    console.log("Recuperando partitura con nid:", nidPartitura);
-  };
-
+  const [nidPartituraSeleccionada, setNidPartituraSeleccionada] =
+    useState(null);
   const edicion = {
     icono: "mode-edit",
     size: 30,
+    accion: (nidPartitura) => {
+      console.log("Editar partitura con nid:", nidPartitura);
+      setNidPartituraSeleccionada(nidPartitura);
+      setModalVisible(true);
+    },
+  };
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const cancelar = () => {
+    setModalVisible(false);
   };
 
   return (
@@ -16,7 +26,21 @@ export default function ArchivoDigital() {
       <Text style={estilos.title}>Archivo Digital</Text>
 
       {/* Aquí puedes agregar más contenido o componentes según sea necesario */}
-      <SelectorPartituras callback={recuperaPartitura} edicion={edicion} />
+      <SelectorPartituras edicion={edicion} />
+      <Modal
+        animationType="slide"
+        visible={modalVisible}
+        onRequestClose={() => {
+          console.log("Modal cerrado");
+          setModalVisible(false);
+        }}
+      >
+        <FormularioPartitura
+          accionCancelar={cancelar}
+          callback={() => {}}
+          nidPartitura={nidPartituraSeleccionada}
+        />
+      </Modal>
     </View>
   );
 }

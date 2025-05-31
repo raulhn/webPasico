@@ -8,6 +8,7 @@ import serviceEventoConcierto from "../../servicios/serviceEventoConcierto"; // 
 
 import ModalExito from "../componentesUI/ModalExito";
 import EntradaFecha from "../componentesUI/EntradaFecha";
+import { use } from "react";
 
 export default function FormularioEvento({ cancelar, callback }) {
   const [nombreEvento, setNombreEvento] = useState("");
@@ -32,7 +33,7 @@ export default function FormularioEvento({ cancelar, callback }) {
       publicado: "N",
     };
 
-    console.log("Evento a registrar:", evento); 
+    console.log("Evento a registrar:", evento);
     serviceEventoConcierto
       .registrarEventoConcierto(evento, cerrarSesion)
       .then((response) => {
@@ -43,7 +44,7 @@ export default function FormularioEvento({ cancelar, callback }) {
         console.log("Evento registrado:", response);
 
         setExito(true); // Cambia el estado de éxito a verdadero
-          callback(); // Llama a la función de callback para refrescar la lista de eventos
+        callback(); // Llama a la función de callback para refrescar la lista de eventos
       })
       .catch((error) => {
         console.error("Error al registrar el evento:", error);
@@ -51,10 +52,10 @@ export default function FormularioEvento({ cancelar, callback }) {
       });
   }
 
-  function formatearFecha(fecha) {  
+  function formatearFecha(fecha) {
     const formattedDate = `${fecha.getFullYear()}-${String(
       fecha.getMonth() + 1
-  ).padStart(2, "0")}-${String(fecha.getDate()).padStart(2, "0")}`;
+    ).padStart(2, "0")}-${String(fecha.getDate()).padStart(2, "0")}`;
     return formattedDate;
   }
 
@@ -77,7 +78,12 @@ export default function FormularioEvento({ cancelar, callback }) {
       ></EntradaTexto>
 
       <Text>Fecha</Text>
-      <EntradaFecha onChangeFecha={(fecha) =>{setFechaEvento(fecha); console.log("Fecha recuperada " + fecha)}}></EntradaFecha>
+      <EntradaFecha
+        onChangeFecha={(fecha) => {
+          setFechaEvento(fecha);
+          console.log("Fecha recuperada " + fecha);
+        }}
+      ></EntradaFecha>
       <View
         style={{
           flexDirection: "row",
@@ -86,7 +92,7 @@ export default function FormularioEvento({ cancelar, callback }) {
           width: "100%",
         }}
       >
-        <Boton nombre="Guardar" onPress={(registrarEventoConcierto)} />
+        <Boton nombre="Guardar" onPress={registrarEventoConcierto} />
         <Boton nombre="Cancelar" color="red" onPress={cancelar} />
       </View>
       <ModalExito

@@ -8,6 +8,7 @@ import { ActivityIndicator, Modal } from "react-native";
 import { AuthContext } from "../../providers/AuthContext";
 import {
   BotonFixed,
+  ModalAviso,
   ModalConfirmacion,
 } from "../../componentes/componentesUI/ComponentesUI";
 import SelectorPartituras from "../../componentes/componentesPartitura/SelectorPartituras";
@@ -25,7 +26,12 @@ export default function EventoConcierto() {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [modalAvisoVisible, setModalAvisoVisible] = useState(false);
+  const [modalErrorVisible, setModalErrorVisible] = useState(false);
+  const [mensaje, setMensaje] = useState("");
+
   const [refrescar, setRefrescar] = useState(false);
+  const [nidPartituraSeleccionada, setNidPartituraSeleccionada] =
+    useState(null);
 
   const refrescarModal = () => {
     setModalAvisoVisible(false);
@@ -39,19 +45,47 @@ export default function EventoConcierto() {
         cerrarSesion
       ).then((response) => {
         if (response.error) {
-          console.error("Error al registrar la partitura:", response.mensaje);
-
-          return;
+          setMensaje(response.mensaje);
+          setModalErrorVisible(true);
         } else {
-          console.log("Partitura registrada en el evento:", response);
-          setModalVisible(false); // Cerrar el modal después de registrar la partitura
+          setModalVisible(false);
           setRefrescar(!refrescar);
         }
       });
     } catch (error) {
       console.error("Error al registrar la partitura en el evento:", error);
+      setMensaje("Error al registrar la partitura en el evento");
+      setModalErrorVisible(true);
     }
   }
+
+  function eliminarPartituraEvento(nidPartitura) {
+    ServiceEventoConcierto.eliminarPartituraEvento(
+      nidPartitura,
+      nidEvento,
+      cerrarSesion
+    )
+      .then((response) => {
+        if (response.error) {
+          console.error("Error al eliminar la partitura:", response.mensaje);
+          setNidPartituraSeleccionada(null);
+          return;
+        } else {
+          console.log("Partitura eliminada del evento:", response);
+          setNidPartituraSeleccionada(null);
+          setRefrescar(!refrescar);
+        }
+      })
+      .catch((error) => {
+        console.error("Error al eliminar la partitura del evento:", error);
+        setNidPartituraSeleccionada(null);
+      });
+  }
+
+  const cancelarPartituraEvento = () => {
+    setModalAvisoVisible(false);
+    setNidPartituraSeleccionada(null);
+  };
 
   useEffect(() => {
     ServiceEventoConcierto.obtenerEventoConcierto(nidEvento, cerrarSesion)
@@ -75,10 +109,7 @@ export default function EventoConcierto() {
     icono: "close",
     size: 30,
     accion: (nidPartitura) => {
-      console.log(
-        "Edición no implementada aún para la partitura:",
-        nidPartitura
-      );
+      setNidPartituraSeleccionada(nidPartitura);
       setModalAvisoVisible(true);
     },
   };
@@ -156,9 +187,18 @@ export default function EventoConcierto() {
           textBotonCancelar={"Cancelar"}
           mensaje="¿Estás seguro de que quieres eliminar esta partitura del evento?"
           accion={() => {
-            console.log("Partitura eliminada del evento");
-            setRefrescar(!refrescar);
+            eliminarPartituraEvento(nidPartituraSeleccionada);
           }}
+          accionCancelar={cancelarPartituraEvento}
+        />
+
+        <ModalAviso
+          visible={modalErrorVisible}
+          setVisible={() => {
+            setModalErrorVisible(false);
+          }}
+          mensaje={mensaje}
+          textBoton={"Aceptar"}
         />
       </View>
     </>

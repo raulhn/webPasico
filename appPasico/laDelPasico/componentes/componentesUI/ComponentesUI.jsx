@@ -276,6 +276,7 @@ export function ModalConfirmacion({
   textBoton,
   textBotonCancelar,
   accion,
+  accionCancelar,
 }) {
   return (
     <Modal
@@ -307,7 +308,10 @@ export function ModalConfirmacion({
               colorTexto="#FFF"
             />
             <Boton
-              onPress={setVisible}
+              onPress={() => {
+                accionCancelar();
+                setVisible();
+              }}
               nombre={textBotonCancelar}
               color="red"
               colorTexto="#FFF"

@@ -99,6 +99,34 @@ async function obtenerPartituras(req, res) {
   }
 }
 
+async function obtenerPartitura(req, res) {
+  try {
+    const rolesPermitidos = ["DIRECTOR", "ADMINISTRADOR", "MUSICO"];
+    let rolDirector = await servletComun.comprobarRol(
+      req,
+      res,
+      rolesPermitidos
+    );
+    if (!rolDirector) {
+      res.status(403).send({
+        error: true,
+        mensaje: "No tienes permisos para obtener la partitura",
+      });
+    } else {
+      const nid_partitura = req.params.nid_partitura;
+      const partitura = await gestorPartituras.obtenerPartitura(nid_partitura);
+      res.status(200).send({ error: false, partitura: partitura });
+    }
+  } catch (error) {
+    console.error("Error al obtener la partitura: ", error);
+    res.status(500).send({
+      error: true,
+      mensaje: "Error al obtener la partitura",
+    });
+  }
+}
+
 module.exports.actualizarPartitura = actualizarPartitura;
 module.exports.insertarPartitura = insertarPartitura;
 module.exports.obtenerPartituras = obtenerPartituras;
+module.exports.obtenerPartitura = obtenerPartitura;
