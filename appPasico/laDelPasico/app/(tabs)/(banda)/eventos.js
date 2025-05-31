@@ -64,7 +64,7 @@ export default function Partituras() {
 
         <View
           style={[
-            esRol("ADMINISTRADOR") || esRol("DIRECTOR")
+            esRol(["ADMINISTRADOR", "DIRECTOR"])
               ? { display: "flex" }
               : { display: "none" },
             styles.botonAdd,
@@ -93,6 +93,7 @@ export default function Partituras() {
   return (
     <>
       <View style={styles.container}>
+        <Text style={styles.title}>Eventos y Conciertos</Text>
         <FlatList
           style={{
             backgroundColor: "white",
@@ -120,7 +121,7 @@ export default function Partituras() {
 
       <View
         style={[
-          esRol("ADMINISTRADOR") || esRol("DIRECTOR")
+          esRol(["ADMINISTRADOR", "DIRECTOR"])
             ? { display: "flex" }
             : { display: "none" },
           styles.botonAdd,
@@ -148,6 +149,15 @@ export default function Partituras() {
 }
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    backgroundColor: "white",
+    flex: 1,
+  },
   botonAdd: { position: "absolute", bottom: 30, right: 20 },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 20,
+    textAlign: "center",
+  },
 });

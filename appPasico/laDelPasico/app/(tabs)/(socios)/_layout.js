@@ -36,7 +36,7 @@ export default function DrawerLayout() {
         options={{
           drawerLabel: "Carnet",
           title: "Carnet",
-          drawerItemStyle: esRol("SOCIO") ? {} : { display: "none" },
+          drawerItemStyle: esRol(["SOCIO"]) ? {} : { display: "none" },
         }}
       />
     </Drawer>

@@ -43,7 +43,12 @@ export function Boton({
   );
 }
 
-export function BotonFixed({ onPress, icon = "add" }) {
+export function BotonFixed({
+  onPress,
+  icon = "add",
+  colorBoton = "#007CFA",
+  size = 50,
+}) {
   const [isPressed, setIsPressed] = useState(false);
 
   return (
@@ -53,22 +58,22 @@ export function BotonFixed({ onPress, icon = "add" }) {
       onPressOut={() => setIsPressed(false)}
       style={[
         {
-          backgroundColor: "#007CFA",
-          width: 50, // Ancho del botón
-          height: 50, // Alto del botón (igual al ancho para que sea redondo)
+          backgroundColor: colorBoton,
+          width: size, // Ancho del botón
+          height: size, // Alto del botón (igual al ancho para que sea redondo)
           borderRadius: 30, //
-          padding: 10,
           alignItems: "center",
           justifyContent: "center",
         },
         isPressed && {
-          backgroundColor: "#005BB5", // Color más oscuro al presionar
+          backgroundColor: colorBoton, // Color más oscuro al presionar
+          opacity: 0.5, // Opacidad al presionar
           transform: [{ scale: 0.95 }], // Efecto de escala al presionar
         },
       ]}
     >
-      <View>
-        <MaterialIcons name={icon} size={24} color="white" />
+      <View style={{ alignItems: "center", justifyContent: "center" }}>
+        <MaterialIcons name={icon} size={size / 2} color="white" />
       </View>
     </Pressable>
   );
@@ -258,6 +263,56 @@ export function ModalAviso({ visible, setVisible, mensaje, textBoton }) {
             color="#007BFF"
             colorTexto="#FFF"
           />
+        </View>
+      </View>
+    </Modal>
+  );
+}
+
+export function ModalConfirmacion({
+  visible,
+  setVisible,
+  mensaje,
+  textBoton,
+  textBotonCancelar,
+  accion,
+}) {
+  return (
+    <Modal
+      animationType="fade"
+      transparent={true}
+      visible={visible}
+      onRequestClose={setVisible}
+    >
+      <View style={estilos.modalContainer}>
+        <View style={estilos.modalContent}>
+          <MaterialIcons
+            name="warning-amber"
+            size={60}
+            color="#f87c00"
+            style={estilos.iconoWarning}
+          />
+          <Text style={estilos.mensaje}>{mensaje}</Text>
+
+          <View
+            style={{ flexDirection: "row", justifyContent: "center", gap: 10 }}
+          >
+            <Boton
+              onPress={() => {
+                setVisible();
+                accion();
+              }}
+              nombre={textBoton}
+              color="#007BFF"
+              colorTexto="#FFF"
+            />
+            <Boton
+              onPress={setVisible}
+              nombre={textBotonCancelar}
+              color="red"
+              colorTexto="#FFF"
+            />
+          </View>
         </View>
       </View>
     </Modal>

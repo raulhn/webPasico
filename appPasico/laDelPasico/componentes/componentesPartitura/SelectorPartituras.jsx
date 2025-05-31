@@ -6,14 +6,16 @@ import { FlatList, View, Text, Pressable } from "react-native";
 import { BotonFixed } from "../componentesUI/ComponentesUI";
 import FormularioPartitura from "./FormularioPartitura";
 import { SelectorCategoria } from "./SelectorCategoria";
+import { useRol } from "../../hooks/useRol";
 
-export default function SelectorPartituras({ callback }) {
+export default function SelectorPartituras({ callback, edicion }) {
   const [partituras, setPartituras] = useState([]);
   const [partiturasFiltradas, setPartiturasFiltradas] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [presionado, setPresionado] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisibleCategoria, setModalVisibleCategoria] = useState(false);
+  const { esRol } = useRol();
 
   useEffect(() => {
     ServicePartituras.obtenerPartituras()
@@ -47,12 +49,9 @@ export default function SelectorPartituras({ callback }) {
     setPartiturasFiltradas(resultado);
   };
 
+  const rolDirector = esRol(["DIRECTOR", "ADMINISTRADOR"]);
   return (
     <View style={{ flex: 1, padding: 20 }}>
-      <Text style={{ fontSize: 24, fontWeight: "bold", marginBottom: 20 }}>
-        Selecciona una Partitura
-      </Text>
-
       <View
         style={{
           flexDirection: "row",
@@ -90,13 +89,20 @@ export default function SelectorPartituras({ callback }) {
           >
             <View
               style={[
-                { alignItems: "center", gap: 10 },
+                {
+                  alignItems: "center",
+                  gap: 10,
+                },
                 presionado === item.nid_partitura
                   ? { transform: [{ scale: 1.05 }] }
                   : {},
               ]}
             >
-              <CardPartitura partitura={item} />
+              <CardPartitura
+                partitura={item}
+                edicion={edicion}
+                rolEdicion={rolDirector}
+              />
             </View>
           </Pressable>
         )}

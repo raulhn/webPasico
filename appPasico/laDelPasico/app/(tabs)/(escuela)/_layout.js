@@ -39,7 +39,7 @@ export default function DrawerLayout() {
         name="boletines"
         options={{
           title: "Boletines",
-          drawerItemStyle: esRol("ALUMNO") ? {} : { display: "none" },
+          drawerItemStyle: esRol(["ALUMNO"]) ? {} : { display: "none" },
         }}
       />
     </Drawer>
