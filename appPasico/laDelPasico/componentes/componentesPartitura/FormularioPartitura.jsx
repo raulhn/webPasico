@@ -162,8 +162,10 @@ export default function FormularioPartitura({
               return;
             }
             if (nidPartitura) {
+              console.log("Actualizando partitura con nid:", nidPartitura); // Para depuración
               actualizarPartitura();
             } else {
+              console.log("Registrando nueva partitura"); // Para depuración
               registrarPartitura();
             }
           }}

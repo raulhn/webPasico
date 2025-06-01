@@ -8,11 +8,15 @@ export const useRol = () => {
     if (!roles || roles.length === 0) {
       return false; // Si no hay roles, no se muestra la opción
     }
-    const rolesAdministrador = roles.find((rol) =>
-      rolesPermitidos.includes(roles.rol)
-    );
 
-    return !rolesAdministrador || rolesAdministrador.length === 0;
+    for (let a = 0; a < roles.length; a++) {
+      for (let i = 0; i < rolesPermitidos.length; i++) {
+        if (roles[a].rol === rolesPermitidos[i]) {
+          return true;
+        }
+      }
+    }
+    return false;
   };
 
   return { esRol };

@@ -67,7 +67,8 @@ async function actualizarEventoConcierto(req, res) {
         mensaje: "No tienes permisos para actualizar un evento de concierto",
       });
     } else {
-      let nid_evento = req.body.nid_evento;
+      console.log("Actualizar Evento Concierto: ", req.body);
+      let nid_evento = req.body.nid_evento_concierto;
       let nombre = req.body.nombre;
       let descripcion = req.body.descripcion;
       let fecha_evento = req.body.fecha_evento;

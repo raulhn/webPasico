@@ -13,6 +13,7 @@ import {
 } from "../../componentes/componentesUI/ComponentesUI";
 import SelectorPartituras from "../../componentes/componentesPartitura/SelectorPartituras";
 import { useRol } from "../../hooks/useRol";
+import FormularioEvento from "../../componentes/componentesBanda/FormularioEvento";
 
 export default function EventoConcierto() {
   const { esRol } = useRol();
@@ -28,6 +29,8 @@ export default function EventoConcierto() {
   const [modalAvisoVisible, setModalAvisoVisible] = useState(false);
   const [modalErrorVisible, setModalErrorVisible] = useState(false);
   const [mensaje, setMensaje] = useState("");
+
+  const [modalEdicionVisible, setModalEdicionVisible] = useState(false);
 
   const [refrescar, setRefrescar] = useState(false);
   const [nidPartituraSeleccionada, setNidPartituraSeleccionada] =
@@ -116,15 +119,63 @@ export default function EventoConcierto() {
 
   const rol_director = esRol(["DIRECTOR", "ADMINISTRADOR"]);
 
+  let formattedDate;
+  if (evento.fecha_evento) {
+    const fechaFormateada = new Date(evento.fecha_evento);
+    formattedDate = fechaFormateada.toLocaleDateString("es-ES", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+  }
+
+  function botonNuevo() {
+    let rol_director = esRol(["DIRECTOR", "ADMINISTRADOR"]);
+    if (!rol_director) {
+      return null; // No mostrar el botón si no es director o administrador
+    }
+    return (
+      <View style={estilos.botonFix}>
+        <BotonFixed
+          onPress={() => {
+            console.log("Botón presionado");
+            setModalVisible(true);
+          }}
+        />
+      </View>
+    );
+  }
+
+  function botonEdicion() {
+    let rol_director = esRol(["DIRECTOR", "ADMINISTRADOR"]);
+    if (!rol_director) {
+      return null; // No mostrar el botón si no es director o administrador
+    }
+    return (
+      <View style={estilos.botonFixTop}>
+        <BotonFixed
+          onPress={() => {
+            console.log("Botón presionado");
+            setModalEdicionVisible(true);
+          }}
+          icon="mode-edit"
+          color="#007CFA"
+          size={30}
+        />
+      </View>
+    );
+  }
+
   return (
     <>
       <View style={estilos.container}>
         <View style={estilos.infoEvento}>
+          {botonEdicion()}
           <Text style={estilos.tituloEvento}>
             {evento ? evento.nombre : "Cargando..."}
           </Text>
           <Text> {evento.descripcion}</Text>
-          <Text> {evento.fecha_evento}</Text>
+          <Text> {formattedDate}</Text>
         </View>
         <View style={estilos.contenedorPartituras}>
           <Text style={estilos.legend}>Partituras del Evento</Text>
@@ -147,14 +198,7 @@ export default function EventoConcierto() {
             </View>
           )}
         />
-        <View style={estilos.botonFix}>
-          <BotonFixed
-            onPress={() => {
-              console.log("Botón presionado");
-              setModalVisible(true);
-            }}
-          />
-        </View>
+        {botonNuevo()}
 
         <Modal
           animationType="slide"
@@ -178,6 +222,37 @@ export default function EventoConcierto() {
             </Text>
           </View>
           <SelectorPartituras callback={registrarPartituraEvento} />
+        </Modal>
+
+        <Modal
+          animationType="slide"
+          visible={modalEdicionVisible}
+          onRequestClose={() => {
+            console.log("Modal cerrado");
+            setModalEdicionVisible(false);
+          }}
+        >
+          <View
+            style={{
+              paddingTop: 10,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Text
+              style={{ fontSize: 24, fontWeight: "bold", marginBottom: 20 }}
+            >
+              Selecciona una Partitura
+            </Text>
+          </View>
+          <FormularioEvento
+            cancelar={() => setModalEdicionVisible(false)}
+            nidEvento={nidEvento}
+            callback={() => {
+              setModalEdicionVisible(false);
+              setRefrescar(!refrescar);
+            }}
+          />
         </Modal>
 
         <ModalConfirmacion
@@ -221,10 +296,9 @@ const estilos = StyleSheet.create({
     marginTop: 20,
     marginBottom: 10,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 4,
-    elevation: 2,
+    borderColor: "#ccc",
+    borderWidth: 1,
+    position: "relative",
   },
   tituloEvento: {
     fontSize: 20,
@@ -260,6 +334,12 @@ const estilos = StyleSheet.create({
     position: "absolute",
     bottom: 30,
     right: 20,
+  },
+  botonFixTop: {
+    position: "absolute",
+    top: 20,
+    right: 20,
+    zIndex: 1,
   },
   title: {
     fontSize: 24,

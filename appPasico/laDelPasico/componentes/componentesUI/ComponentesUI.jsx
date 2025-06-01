@@ -79,7 +79,7 @@ export function BotonFixed({
   );
 }
 
-export function EntradaFecha({ onChangeFecha }) {
+export function EntradaFecha({ onChangeFecha, valorFecha }) {
   const [fecha, setFecha] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
   const [presionado, setPresionado] = useState(false);
@@ -120,6 +120,19 @@ export function EntradaFecha({ onChangeFecha }) {
     onChangeFecha(fecha);
     togglePicker();
   };
+
+  useEffect(() => {
+    if (valorFecha) {
+      const fechaFormateada = new Date(valorFecha);
+      setFecha(fechaFormateada);
+      const formattedDate = fechaFormateada.toLocaleDateString("es-ES", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      });
+      setFechaEvento(formattedDate);
+    }
+  }, []);
 
   return (
     <View>

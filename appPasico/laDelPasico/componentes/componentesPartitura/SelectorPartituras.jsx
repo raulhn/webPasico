@@ -8,7 +8,7 @@ import FormularioPartitura from "./FormularioPartitura";
 import { SelectorCategoria } from "./SelectorCategoria";
 import { useRol } from "../../hooks/useRol";
 
-export default function SelectorPartituras({ callback, edicion }) {
+export default function SelectorPartituras({ callback, edicion, refrescar }) {
   const [partituras, setPartituras] = useState([]);
   const [partiturasFiltradas, setPartiturasFiltradas] = useState([]);
   const [cargando, setCargando] = useState(true);
@@ -27,7 +27,7 @@ export default function SelectorPartituras({ callback, edicion }) {
       .catch((error) => {
         console.error("Error al obtener partituras:", error);
       });
-  }, []);
+  }, [refrescar]);
 
   const cancelar = () => {
     setModalVisible(false);
@@ -47,6 +47,23 @@ export default function SelectorPartituras({ callback, edicion }) {
 
     setPartiturasFiltradas(resultado);
   };
+
+  function botonAdd() {
+    let rolDirector = esRol(["DIRECTOR", "ADMINISTRADOR"]);
+    if (rolDirector) {
+      return (
+        <View style={estilos.botonFix}>
+          <BotonFixed
+            onPress={() => {
+              console.log("Botón presionado");
+              setModalVisible(true);
+            }}
+          />
+        </View>
+      );
+    }
+    return null;
+  }
 
   const rolDirector = esRol(["DIRECTOR", "ADMINISTRADOR"]);
   return (
@@ -110,14 +127,7 @@ export default function SelectorPartituras({ callback, edicion }) {
           </Pressable>
         )}
       />
-      <View style={estilos.botonFix}>
-        <BotonFixed
-          onPress={() => {
-            console.log("Botón presionado");
-            setModalVisible(true);
-          }}
-        />
-      </View>
+      {botonAdd()}
 
       <Modal
         animationType="slide"

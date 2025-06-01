@@ -44,6 +44,32 @@ function registrarEventoConcierto(eventoConcierto, cerrarSesion) {
   });
 }
 
+function actualizarEventoConcierto(eventoConcierto, cerrarSesion) {
+  return new Promise((resolve, reject) => {
+    const data = {
+      nid_evento_concierto: eventoConcierto.nid_evento_concierto,
+      nombre: eventoConcierto.nombre,
+      fecha_evento: eventoConcierto.fecha_evento,
+      descripcion: eventoConcierto.descripcion,
+      tipo_evento: eventoConcierto.tipo_evento,
+      publicado: eventoConcierto.publicado,
+    };
+    serviceComun
+      .peticionSesion(
+        "POST",
+        Constantes.URL_SERVICIO_MOVIL + "actualizar_evento_concierto",
+        data,
+        cerrarSesion
+      )
+      .then((response) => {
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+}
+
 function obtenerEventoConcierto(nidEventoConcierto, cerrarSesion) {
   return new Promise((resolve, reject) => {
     serviceComun
@@ -121,3 +147,4 @@ module.exports.registrarEventoConcierto = registrarEventoConcierto;
 module.exports.obtenerEventoConcierto = obtenerEventoConcierto;
 module.exports.registrarPartituraEvento = registrarPartituraEvento;
 module.exports.eliminarPartituraEvento = eliminarPartituraEvento;
+module.exports.actualizarEventoConcierto = actualizarEventoConcierto;
