@@ -6,6 +6,12 @@ import { useState } from "react";
 export default function ArchivoDigital() {
   const [nidPartituraSeleccionada, setNidPartituraSeleccionada] =
     useState(null);
+  const [refrescar, setRefrescar] = useState(false);
+
+  function refrescarPartituras() {
+    setRefrescar(!refrescar);
+  }
+
   const edicion = {
     icono: "mode-edit",
     size: 30,
@@ -25,8 +31,7 @@ export default function ArchivoDigital() {
     <View style={estilos.container}>
       <Text style={estilos.title}>Archivo Digital</Text>
 
-      {/* Aquí puedes agregar más contenido o componentes según sea necesario */}
-      <SelectorPartituras edicion={edicion} />
+      <SelectorPartituras edicion={edicion} refrescar={refrescar} />
       <Modal
         animationType="slide"
         visible={modalVisible}
@@ -37,7 +42,9 @@ export default function ArchivoDigital() {
       >
         <FormularioPartitura
           accionCancelar={cancelar}
-          callback={() => {}}
+          callback={() => {
+            refrescarPartituras();
+          }}
           nidPartitura={nidPartituraSeleccionada}
         />
       </Modal>

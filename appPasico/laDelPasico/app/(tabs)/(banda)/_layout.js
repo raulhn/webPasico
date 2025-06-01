@@ -16,6 +16,8 @@ export default function DrawerLayout() {
   const { esRol } = useRol();
 
   const logo = require("../../../assets/logo.png");
+  console.log("Rol" + esRol(["MUSICO"]));
+  console.log("__________________________________________");
   return (
     <Drawer
       screenOptions={{

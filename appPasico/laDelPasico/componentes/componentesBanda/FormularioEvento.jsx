@@ -1,16 +1,19 @@
 import { View, Text, StyleSheet } from "react-native";
-import { useState } from "react";
-import EntradaTexto from "../componentesUI/EntradaTexto";
-import Boton from "../componentesUI/Boton";
+import { useState, useEffect } from "react";
+
 import { AuthContext } from "../../providers/AuthContext";
 import { useContext } from "react";
 import serviceEventoConcierto from "../../servicios/serviceEventoConcierto"; // Asegúrate de importar tu servicio correctamente
 
 import ModalExito from "../componentesUI/ModalExito";
-import EntradaFecha from "../componentesUI/EntradaFecha";
-import { use } from "react";
 
-export default function FormularioEvento({ cancelar, callback }) {
+import {
+  EntradaTexto,
+  EntradaFecha,
+  Boton,
+} from "../componentesUI/ComponentesUI";
+
+export default function FormularioEvento({ cancelar, callback, nidEvento }) {
   const [nombreEvento, setNombreEvento] = useState("");
   const [descripcion, setDescripcion] = useState("");
   const [fechaEvento, setFechaEvento] = useState(new Date());
@@ -18,6 +21,24 @@ export default function FormularioEvento({ cancelar, callback }) {
   const { cerrarSesion } = useContext(AuthContext);
 
   const [exito, setExito] = useState(false);
+
+  useEffect(() => {
+    if (!nidEvento) return;
+
+    serviceEventoConcierto
+      .obtenerEventoConcierto(nidEvento, cerrarSesion)
+      .then((response) => {
+        if (!response.error) {
+          setNombreEvento(response.evento_concierto.nombre);
+          setDescripcion(response.evento_concierto.descripcion);
+          setFechaEvento(new Date(response.evento_concierto.fecha_evento));
+        }
+      })
+      .catch((error) => {
+        console.error("Error al obtener el evento:", error);
+        cerrarSesion();
+      });
+  }, [nidEvento]);
 
   function registrarEventoConcierto() {
     if (nombreEvento === "" || descripcion === "") {
@@ -44,11 +65,48 @@ export default function FormularioEvento({ cancelar, callback }) {
         console.log("Evento registrado:", response);
 
         setExito(true); // Cambia el estado de éxito a verdadero
-        callback(); // Llama a la función de callback para refrescar la lista de eventos
+        if (callback) {
+          callback();
+        }
       })
       .catch((error) => {
         console.error("Error al registrar el evento:", error);
         alert("Error al registrar el evento");
+      });
+  }
+
+  function actualizarEventoConcierto() {
+    if (nombreEvento === "" || descripcion === "") {
+      alert("Por favor, completa todos los campos.");
+      return;
+    }
+
+    const evento = {
+      nid_evento_concierto: nidEvento,
+      nombre: nombreEvento,
+      fecha_evento: formatearFecha(fechaEvento),
+      descripcion: descripcion,
+      tipo_evento: "Concierto",
+      publicado: "N",
+    };
+
+    console.log("Evento a actualizar:", evento);
+    serviceEventoConcierto
+      .actualizarEventoConcierto(evento, cerrarSesion)
+      .then((response) => {
+        if (response.error) {
+          console.error("Error al actualizar el evento:", response.mensaje);
+          return;
+        }
+        console.log("Evento actualizado:", response);
+        setExito(true); // Cambia el estado de éxito a verdadero
+        if (callback) {
+          callback();
+        }
+      })
+      .catch((error) => {
+        console.error("Error al actualizar el evento:", error);
+        alert("Error al actualizar el evento");
       });
   }
 
@@ -66,6 +124,7 @@ export default function FormularioEvento({ cancelar, callback }) {
       <EntradaTexto
         placeholder="Nombre del Evento"
         setValor={(text) => setNombreEvento(text)}
+        valor={nombreEvento}
       ></EntradaTexto>
 
       <Text>Descripción</Text>
@@ -75,6 +134,7 @@ export default function FormularioEvento({ cancelar, callback }) {
         ancho={300}
         alto={100}
         multiline={true}
+        valor={descripcion}
       ></EntradaTexto>
 
       <Text>Fecha</Text>
@@ -83,6 +143,7 @@ export default function FormularioEvento({ cancelar, callback }) {
           setFechaEvento(fecha);
           console.log("Fecha recuperada " + fecha);
         }}
+        valorFecha={fechaEvento}
       ></EntradaFecha>
       <View
         style={{
@@ -92,7 +153,16 @@ export default function FormularioEvento({ cancelar, callback }) {
           width: "100%",
         }}
       >
-        <Boton nombre="Guardar" onPress={registrarEventoConcierto} />
+        <Boton
+          nombre="Guardar"
+          onPress={() => {
+            if (nidEvento) {
+              actualizarEventoConcierto();
+            } else {
+              registrarEventoConcierto();
+            }
+          }}
+        />
         <Boton nombre="Cancelar" color="red" onPress={cancelar} />
       </View>
       <ModalExito

@@ -35,7 +35,7 @@ function actualizarPartitura(
   nid_partitura,
   titulo,
   autor,
-  categoria,
+  nid_categoria,
   url_partitura
 ) {
   return new Promise((resolve, reject) => {

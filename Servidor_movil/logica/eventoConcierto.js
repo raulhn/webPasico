@@ -42,7 +42,7 @@ function insertarEventoConcierto(
   });
 }
 
-function actualizarEvento(
+function actualizarEventoConcierto(
   nid_evento_concierto,
   nombre,
   descripcion,
@@ -55,17 +55,17 @@ function actualizarEvento(
       "UPDATE " +
       constantes.ESQUEMA +
       ".evento_concierto SET nombre = " +
-      dbConn.escape(nombre) +
+      conexion.dbConn.escape(nombre) +
       ", descripcion = " +
-      dbConn.escape(descripcion) +
+      conexion.dbConn.escape(descripcion) +
       ", fecha_evento = " +
-      dbConn.escape(fecha_evento) +
+      conexion.dbConn.escape(fecha_evento) +
       ", tipo_evento = " +
-      dbConn.escape(tipo_evento) +
+      conexion.dbConn.escape(tipo_evento) +
       ", publicado = " +
-      dbConn.escape(publicado) +
+      conexion.dbConn.escape(publicado) +
       " WHERE nid_evento_concierto = " +
-      dbConn.escape(nid_evento_concierto);
+      conexion.dbConn.escape(nid_evento_concierto);
 
     conexion.dbConn.beginTransaction(() => {
       conexion.dbConn.query(sql, (err, result) => {
@@ -74,8 +74,8 @@ function actualizarEvento(
           conexion.dbConn.rollback();
           reject("Error al actualizar el evento de concierto");
         } else {
-          dbConn.commit();
-          conexion.resolve();
+          conexion.dbConn.commit();
+          resolve();
         }
       });
     });
@@ -222,7 +222,7 @@ function existePartituraEvento(nid_evento_concierto, nid_partitura) {
 }
 
 module.exports.insertarEventoConcierto = insertarEventoConcierto;
-module.exports.actualizarEvento = actualizarEvento;
+module.exports.actualizarEventoConcierto = actualizarEventoConcierto;
 module.exports.obtenerEventosConcierto = obtenerEventosConcierto;
 module.exports.obtenerEventoConcierto = obtenerEventoConcierto;
 
