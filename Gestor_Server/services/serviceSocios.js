@@ -28,7 +28,7 @@ function peticion_registrar_socio(socio) {
               console.error("Error en la respuesta de la API:", data.mensaje);
               reject("Error en la respuesta de la API");
             }
-            console.log("Respuesta de la API:", data);
+
             resolve(data);
           })
           .catch((error) => {

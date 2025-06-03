@@ -91,17 +91,12 @@ function actualizar_persona_objeto(persona) {
 async function actualizar_personas_sucias() {
   try {
     let respuesta = await servicePersona.obtenerPersonasSucias();
-    let personas_sucias = respuesta.personas;
 
+    let personas_sucias = respuesta.personas;
+    if (personas_sucias.length === 0) {
+      return;
+    }
     for (let i = 0; i < personas_sucias.length; i++) {
-      console.log(
-        "Actualizar persona " +
-          personas_sucias[i].nombre +
-          " " +
-          personas_sucias[i].primer_apellido +
-          " " +
-          personas_sucias[i].segundo_apellido
-      );
       console.log("Actualizar persona " + personas_sucias[i].nid_persona);
       await actualizar_persona_objeto(personas_sucias[i]);
       console.log("Limpiar persona " + personas_sucias[i].nid_persona);

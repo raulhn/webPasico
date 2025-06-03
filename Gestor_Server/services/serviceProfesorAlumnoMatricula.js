@@ -37,7 +37,7 @@ function peticion_registrar_profesor_alumno_matricula(
                 console.error("Error en la respuesta de la API:", data.error);
                 reject("Error en la respuesta de la API");
               }
-              console.log("Respuesta de la API:", data);
+
               resolve(data);
             })
             .catch((error) => {

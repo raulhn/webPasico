@@ -1,6 +1,17 @@
 const constantes = require("../constantes");
 const conexion = require("../conexion");
 
+
+function formatDateToMySQL(date) {
+  try {
+  const d = new Date(date);
+  return d.toISOString().slice(0, 19).replace('T', ' ');
+  } catch (error) {
+    return null;
+  }
+}
+
+
 function existeMusico(nid_persona, nid_tipo_musico, nid_instrumento) {
   return new Promise((resolve, reject) => {
     const sql =
@@ -40,15 +51,15 @@ function insertarMusico(
       " values (" +
       conexion.dbConn.escape(nid_persona) +
       ", " +
-      conexion.dbConn.escape(fecha_alta) +
+      conexion.dbConn.escape(formatDateToMySQL(fecha_alta)) +
       ", " +
-      conexion.dbConn.escape(fecha_baja) +
+      conexion.dbConn.escape(formatDateToMySQL(fecha_baja)) +
       ", " +
       conexion.dbConn.escape(nid_tipo_musico) +
       ", " +
       conexion.dbConn.escape(nid_instrumento) +
       ", " +
-      conexion.dbConn.escape(fecha_actualizacion) +
+      conexion.dbConn.escape(formatDateToMySQL(fecha_actualizacion)) +
       ")";
 
     conexion.dbConn.beginTransaction(() => {
@@ -80,15 +91,15 @@ function actualizarMusico(
       "update " +
       constantes.ESQUEMA +
       ".musicos set fecha_alta = " +
-      conexion.dbConn.escape(fecha_alta) +
+      conexion.dbConn.escape(formatDateToMySQL(fecha_alta)) +
       ", fecha_baja = " +
-      conexion.dbConn.escape(fecha_baja) +
+      conexion.dbConn.escape(formatDateToMySQL(fecha_baja)) +
       ", nid_tipo_musico = " +
       conexion.dbConn.escape(nid_tipo_musico) +
       ", nid_instrumento = " +
       conexion.dbConn.escape(nid_instrumento) +
       ", fecha_actualizacion = " +
-      conexion.dbConn.escape(fecha_actualizacion) +
+      conexion.dbConn.escape(formatDateToMySQL(fecha_actualizacion)) +
       " where nid_persona = " +
       conexion.dbConn.escape(nid_persona);
 

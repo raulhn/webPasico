@@ -3,6 +3,15 @@ const conexion = require("../conexion.js");
 const constantes = require("../constantes.js");
 const gestorUsuario = require("./usuario.js");
 
+function formatDateToMySQL(date) {
+  try {
+  const d = new Date(date);
+  return d.toISOString().slice(0, 19).replace('T', ' ');
+  } catch (error) {
+    return null;
+  }
+}
+
 function existePersona(nid_persona) {
   return new Promise((resolve, reject) => {
     const sql =
@@ -29,7 +38,7 @@ function requiereActualizarPersona(nid_persona, fecha_actualizacion) {
       ".persona WHERE nid_persona = " +
       conexion.dbConn.escape(nid_persona) +
       " AND (fecha_actualizacion < " +
-      conexion.dbConn.escape(fecha_actualizacion) +
+      conexion.dbConn.escape(formatDateToMySQL(fecha_actualizacion)) +
       " or fecha_actualizacion is null)";
 
     conexion.dbConn.query(sql, (error, results) => {
@@ -68,7 +77,7 @@ function actualizarPersona(
       ", segundo_apellido = " +
       conexion.dbConn.escape(segundo_apellido) +
       ", fecha_nacimiento = " +
-      conexion.dbConn.escape(fecha_nacimiento) +
+      conexion.dbConn.escape(formatDateToMySQL(fecha_nacimiento)) +
       ", nif = " +
       conexion.dbConn.escape(nif) +
       ", telefono = " +
@@ -82,7 +91,7 @@ function actualizarPersona(
       ", nid_socio = " +
       conexion.dbConn.escape(nid_socio) +
       ", fecha_actualizacion = " +
-      conexion.dbConn.escape(fecha_actualizacion) +
+      conexion.dbConn.escape(formatDateToMySQL(fecha_actualizacion)) +
       ", sucio = 'N'" +
       " WHERE nid_persona = " +
       conexion.dbConn.escape(nid_persona);
@@ -135,7 +144,7 @@ function insertarPersona(
       ", " +
       conexion.dbConn.escape(segundo_apellido) +
       ", " +
-      conexion.dbConn.escape(fecha_nacimiento) +
+      conexion.dbConn.escape(formatDateToMySQL(fecha_nacimiento)) +
       ", " +
       conexion.dbConn.escape(nif) +
       ", " +
@@ -149,7 +158,7 @@ function insertarPersona(
       ", " +
       conexion.dbConn.escape(nid_socio) +
       ", " +
-      conexion.dbConn.escape(fecha_actualizacion) +
+      conexion.dbConn.escape(formatDateToMySQL(fecha_actualizacion)) +
       ")";
 
     conexion.dbConn.beginTransaction((err) => {

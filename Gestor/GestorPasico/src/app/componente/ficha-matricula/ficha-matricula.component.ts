@@ -101,6 +101,9 @@ export class FichaMatriculaComponent implements OnInit{
               title: 'Fecha Alta',
               data: 'fecha_alta_local'
             },
+            { title: 'Fecha Hasta',
+              data: 'fecha_hasta'
+            },
             {
               title: 'Fecha Baja',
               data: 'fecha_baja_local'

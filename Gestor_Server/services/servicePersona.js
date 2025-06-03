@@ -35,7 +35,7 @@ function peticion_registrar_persona(persona) {
                 console.error("Error en la respuesta de la API:", data.error);
                 reject("Error en la respuesta de la API");
               }
-              console.log("Respuesta de la API:", data);
+
               resolve(data);
             })
             .catch((error) => {
@@ -61,9 +61,10 @@ async function registrar_persona(nid_persona) {
   try {
     let existe = await gestorPersona.existe_nid(nid_persona);
     if (existe) {
-      console.log("Actualizar persona en servicio movil");
+      console.log("Llamada actualizar persona en servicio movil");
       const persona = await gestorPersona.obtener_objeto_persona(nid_persona);
       if (persona.sucio === "S") {
+        console.log("Actualizar persona en servicio movil", persona);
         await registrar_persona(persona.nid_madre);
         await registrar_persona(persona.nid_padre);
         await registrar_persona(persona.nid_socio);
@@ -104,7 +105,7 @@ function obtener_persona(nid_persona) {
                 console.error("Error en la respuesta de la API:", data.error);
                 reject("Error en la respuesta de la API");
               }
-              console.log("Respuesta de la API:", data);
+    
               resolve(data);
             })
             .catch((error) => {
@@ -127,7 +128,7 @@ function obtener_persona(nid_persona) {
 }
 
 function obtenerPersonasSucias() {
-  console.log("obtenerPersonasSucias");
+
   return new Promise((resolve, reject) => {
     try {
       serviceComun
@@ -149,7 +150,7 @@ function obtenerPersonasSucias() {
                 console.error("Error en la respuesta de la API:", data.error);
                 reject("Error en la respuesta de la API");
               }
-              console.log("Respuesta de la API:", data);
+
               resolve(data);
             })
             .catch((error) => {
@@ -193,7 +194,7 @@ function limpiarPersona(nid_persona) {
                 console.error("Error en la respuesta de la API:", data.error);
                 reject("Error en la respuesta de la API");
               }
-              console.log("Respuesta de la API:", data);
+
               resolve(data);
             })
             .catch((error) => {
