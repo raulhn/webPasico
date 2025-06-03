@@ -1,6 +1,16 @@
 const constantes = require("../constantes");
 const conexion = require("../conexion");
 
+
+function formatDateToMySQL(date) {
+  try {
+  const d = new Date(date);
+  return d.toISOString().slice(0, 19).replace('T', ' ');
+  } catch (error) {
+    return null;
+  }
+}
+
 function existeMatriculaAsignatura(nid_matricula_asignatura) {
   return new Promise((resolve, reject) => {
     const sql =
@@ -40,11 +50,11 @@ function insertarMatriculaAsignatura(
       ", " +
       conexion.dbConn.escape(nid_asignatura) +
       ", " +
-      conexion.dbConn.escape(fecha_alta) +
+      conexion.dbConn.escape(formatDateToMySQL(fecha_alta)) +
       ", " +
-      conexion.dbConn.escape(fecha_baja) +
+      conexion.dbConn.escape(formatDateToMySQL(fecha_baja)) +
       ", " +
-      conexion.dbConn.escape(fecha_actualizacion) +
+      conexion.dbConn.escape(formatDateToMySQL(fecha_actualizacion)) +
       ")";
 
     conexion.dbConn.beginTransaction(() => {
@@ -79,11 +89,11 @@ function actualizarMatriculaAsignatura(
       ", nid_asignatura = " +
       conexion.dbConn.escape(nid_asignatura) +
       ", fecha_alta = " +
-      conexion.dbConn.escape(fecha_alta) +
+      conexion.dbConn.escape(formatDateToMySQL(fecha_alta)) +
       ", fecha_baja = " +
-      conexion.dbConn.escape(fecha_baja) +
+      conexion.dbConn.escape(formatDateToMySQL(fecha_baja)) +
       ", fecha_actualizacion = " +
-      conexion.dbConn.escape(fecha_actualizacion) +
+      conexion.dbConn.escape(formatDateToMySQL(fecha_actualizacion)) +
       " WHERE nid_matricula_asignatura = " +
       conexion.dbConn.escape(nid_matricula_asignatura);
     conexion.dbConn.beginTransaction(() => {

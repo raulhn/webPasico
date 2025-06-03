@@ -1,6 +1,16 @@
 const conexion = require("../conexion");
 const constantes = require("../constantes");
 
+function formatDateToMySQL(date) {
+  try {
+  const d = new Date(date);
+  return d.toISOString().slice(0, 19).replace('T', ' ');
+  } catch (error) {
+    return null;
+  }
+}
+
+
 function insertarProfesor(
   nid_persona,
   nid_asignatura,
@@ -17,7 +27,7 @@ function insertarProfesor(
       "," +
       conexion.dbConn.escape(nid_asignatura) +
       "," +
-      conexion.dbConn.escape(fecha_actualizacion) +
+      conexion.dbConn.escape(formatDateToMySQL(fecha_actualizacion)) +
       "," +
       conexion.dbConn.escape(esBaja) +
       ")";
@@ -47,7 +57,7 @@ function actualizarProfesor(
       "UPDATE " +
       constantes.ESQUEMA +
       ".profesor SET  fecha_actualizacion = " +
-      conexion.dbConn.escape(fecha_actualizacion) +
+      conexion.dbConn.escape(formatDateToMySQL(fecha_actualizacion)) +
       ", esBaja = " +
       conexion.dbConn.escape(esBaja) +
       " WHERE nid_persona = " +

@@ -527,7 +527,8 @@ function obtener_asignaturas_matricula(nid_matricula) {
       "select a.*, m.nid_persona nid_alumno, date_format(ma.fecha_alta, '%Y-%m-%d') fecha_alta, " +
         " date_format(ma.fecha_alta, '%d-%m-%Y') fecha_alta_local, date_format(ma.fecha_baja, '%d-%m-%Y') fecha_baja_local, " +
         " date_format(ma.fecha_baja, '%Y-%m-%d') fecha_baja, ma.nid nid_matricula_asignatura, a.descripcion nombre_asignatura, p.*, p.nid nid_profesor, " +
-        "concat(p.nombre, ' ', p.primer_apellido, ' ', p.segundo_apellido) nombre_profesor " +
+        "concat(p.nombre, ' ', p.primer_apellido, ' ', p.segundo_apellido) nombre_profesor, " +
+        " ifnull(date_format(ma.fecha_baja, '%d-%m-%Y'), date_format(pam.fecha_baja, '%d-%m-%Y')) fecha_hasta " +
         "from " +
         constantes.ESQUEMA_BD +
         ".matricula_asignatura ma, " +

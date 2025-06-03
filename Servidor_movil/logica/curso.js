@@ -1,6 +1,15 @@
 const conexion = require("../conexion.js");
 const constantes = require("../constantes.js");
 
+function formatDateToMySQL(date) {
+  try {
+  const d = new Date(date);
+  return d.toISOString().slice(0, 19).replace('T', ' ');
+  } catch (error) {
+    return null;
+  }
+}
+
 function insertarCurso(nid_curso, descripcion, ano, fecha_actualizacion) {
   return new Promise((resolve, reject) => {
     const sql =
@@ -14,7 +23,7 @@ function insertarCurso(nid_curso, descripcion, ano, fecha_actualizacion) {
       "," +
       conexion.dbConn.escape(ano) +
       "," +
-      conexion.dbConn.escape(fecha_actualizacion) +
+      conexion.dbConn.escape(formatDateToMySQL(fecha_actualizacion)) +
       ")";
 
     conexion.dbConn.beginTransaction(() => {
@@ -42,7 +51,7 @@ function actualizarCurso(nid_curso, descripcion, ano, fecha_actualizacion) {
       ", ano = " +
       conexion.dbConn.escape(ano) +
       ", fecha_actualizacion = " +
-      conexion.dbConn.escape(fecha_actualizacion) +
+      conexion.dbConn.escape(formatDateToMySQL(fecha_actualizacion)) +
       " WHERE nid_curso = " +
       conexion.dbConn.escape(nid_curso);
 

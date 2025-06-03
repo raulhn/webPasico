@@ -1,6 +1,15 @@
 const conexion = require("../conexion");
 const constantes = require("../constantes");
 
+function formatDateToMySQL(date) {
+  try {
+  const d = new Date(date);
+  return d.toISOString().slice(0, 19).replace('T', ' ');
+  } catch (error) {
+    return null;
+  }
+}
+
 function insertarMaticula(
   nid_matricula,
   nid_persona,
@@ -17,7 +26,7 @@ function insertarMaticula(
       "," +
       conexion.dbConn.escape(nid_curso) +
       "," +
-      conexion.dbConn.escape(fecha_actualizacion) +
+      conexion.dbConn.escape(formatDateToMySQL(fecha_actualizacion)) +
       ")";
 
     conexion.dbConn.beginTransaction(() => {
@@ -49,7 +58,7 @@ function actualizarMatricula(
       ", nid_curso = " +
       conexion.dbConn.escape(nid_curso) +
       ", fecha_actualizacion = " +
-      conexion.dbConn.escape(fecha_actualizacion) +
+      conexion.dbConn.escape(formatDateToMySQL(fecha_actualizacion)) +
       " WHERE nid_matricula = " +
       conexion.dbConn.escape(nid_matricula);
 

@@ -1,6 +1,16 @@
 const constantes = require("../constantes");
 const conexion = require("../conexion");
 
+function formatDateToMySQL(date) {
+  try {
+  const d = new Date(date);
+  return d.toISOString().slice(0, 19).replace('T', ' ');
+  } catch (error) {
+    return null;
+  }
+}
+
+
 function insertarAsignatura(
   nid_asignatura,
   descripcion,
@@ -22,7 +32,7 @@ function insertarAsignatura(
       ", " +
       conexion.dbConn.escape(tipo_asignatura) +
       ", " +
-      conexion.dbConn.escape(fecha_actualizacion) +
+      conexion.dbConn.escape(formatDateToMySQL(fecha_actualizacion)) +
       ")";
 
     conexion.dbConn.beginTransaction(() => {
@@ -59,7 +69,7 @@ function actualizarAsignatura(
       ", tipo_asignatura = " +
       conexion.dbConn.escape(tipo_asignatura) +
       ", fecha_actualizacion = " +
-      conexion.dbConn.escape(fecha_actualizacion) +
+      conexion.dbConn.escape(formatDateToMySQL(fecha_actualizacion)) +
       " where nid_asignatura = " +
       conexion.dbConn.escape(nid_asignatura);
 

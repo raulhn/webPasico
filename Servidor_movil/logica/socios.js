@@ -1,6 +1,15 @@
 const conexion = require("../conexion");
 const constantes = require("../constantes");
 
+function formatDateToMySQL(date) {
+  try {
+  const d = new Date(date);
+  return d.toISOString().slice(0, 19).replace('T', ' ');
+  } catch (error) {
+    return null;
+  }
+}
+
 function insertarSocio(
   nid_persona,
   fecha_alta,
@@ -15,13 +24,13 @@ function insertarSocio(
       ".socios (nid_persona, fecha_alta, fecha_baja, num_socio, fecha_actualizacion) VALUES (" +
       conexion.dbConn.escape(nid_persona) +
       ", " +
-      conexion.dbConn.escape(fecha_alta) +
+      conexion.dbConn.escape(formatDateToMySQL(fecha_alta)) +
       ", " +
-      conexion.dbConn.escape(fecha_baja) +
+      conexion.dbConn.escape(formatDateToMySQL(fecha_baja)) +
       ", " +
       conexion.dbConn.escape(num_socio) +
       ", " +
-      conexion.dbConn.escape(fecha_actualizacion) +
+      conexion.dbConn.escape(formatDateToMySQL(fecha_actualizacion)) +
       ")";
 
     conexion.dbConn.beginTransaction((err) => {
@@ -61,13 +70,13 @@ function actualizarSocio(
       "UPDATE " +
       constantes.ESQUEMA +
       ".socios SET fecha_alta = " +
-      conexion.dbConn.escape(fecha_alta) +
+      conexion.dbConn.escape(formatDateToMySQL(fecha_alta)) +
       ", fecha_baja = " +
-      conexion.dbConn.escape(fecha_baja) +
+      conexion.dbConn.escape(formatDateToMySQL(fecha_baja)) +
       ", num_socio = " +
       conexion.dbConn.escape(num_socio) +
       ", fecha_actualizacion = " +
-      conexion.dbConn.escape(fecha_actualizacion) +
+      conexion.dbConn.escape(formatDateToMySQL(fecha_actualizacion)) +
       " WHERE nid_persona = " +
       conexion.dbConn.escape(nid_persona);
 
