@@ -376,7 +376,8 @@ export class RegistroMatriculaComponent implements OnInit{
       {
         if(results.isConfirmed)
         {
-          this.matriculasServices.sustituir_profesor_alumno(this.profesor, this.alumno_seleccionado.nid_matricula_asignatura, this.nid_asignatura).subscribe(this.registrar_cambio_profesor)
+          console.log(this.profesor, this.alumno_seleccionado.nid_matricula, this.nid_asignatura)
+          this.matriculasServices.sustituir_profesor_alumno(this.profesor, this.alumno_seleccionado.nid_matricula, this.nid_asignatura).subscribe(this.registrar_cambio_profesor)
         }
       }
     )
