@@ -24,10 +24,9 @@ function fetchWithTimeout(url, options, timeout = 5000) {
 }
 
 async function actualizar_sucios() {
-  console.log("Iniciando el proceso de refreesco");
+  console.log("Iniciando el proceso de refresco");
   cron.schedule("*/1 * * * *", async () => {
     try {
-      console.log("Ejecutando tarea programada para refresco sucios");
       await serviceAsignatura.actualizar_sucios();
       await servicePersona.actualizar_sucios();
       await serviceSocios.actualizar_sucios();

@@ -299,13 +299,21 @@ function sustituir_profesor_alumno(req, res) {
   comun.comprobaciones(req, res, async () => {
     let nid_profesor = req.body.nid_profesor;
     let nid_asignatura = req.body.nid_asignatura;
-    let nid_matricula_asignatura = req.body.nid_matricula_asignatura;
-
+    let nid_matricula = req.body.nid_matricula;
     try {
+      let nid_matricula_asignatura =
+        await gestorMatriculaAsignatura.obtener_nid_matricula_asignatura(
+          nid_matricula,
+          nid_asignatura
+        );
+      console.log(
+        "Sustituyendo profesor para alumno con nid_matricula_asignatura:",
+        nid_matricula_asignatura
+      );
+
       await matricula.sustituir_profesor_alumno(
         nid_profesor,
-        nid_matricula_asignatura,
-        nid_asignatura
+        nid_matricula_asignatura
       );
 
       console.log(

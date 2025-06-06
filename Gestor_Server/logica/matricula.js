@@ -341,7 +341,8 @@ function obtener_alumnos_profesor(nid_profesor, nid_curso, nid_asignatura) {
         conexion.dbConn.escape(nid_asignatura) +
         " or " +
         conexion.dbConn.escape(nid_asignatura) +
-        " = 0) ",
+        " = 0) " +
+        "and (pam.fecha_baja is null or pam.fecha_baja >= sysdate()) ",
       (error, results, fields) => {
         if (error) {
           console.log(error);
@@ -388,7 +389,8 @@ function obtener_alumnos_profesor_alta(
         conexion.dbConn.escape(nid_asignatura) +
         " or " +
         conexion.dbConn.escape(nid_asignatura) +
-        " = 0) ",
+        " = 0) " +
+        "and (pam.fecha_baja is null or pam.fecha_baja >= sysdate()) ",
       (error, results, fields) => {
         if (error) {
           console.log(error);
@@ -435,7 +437,8 @@ function obtener_alumnos_profesor_baja(
         conexion.dbConn.escape(nid_asignatura) +
         " or " +
         conexion.dbConn.escape(nid_asignatura) +
-        " = 0) ",
+        " = 0) " +
+        "and (pam.fecha_baja is null or pam.fecha_baja < sysdate()) ",
       (error, results, fields) => {
         if (error) {
           console.log(error);
@@ -528,7 +531,8 @@ function obtener_asignaturas_matricula(nid_matricula) {
         " date_format(ma.fecha_alta, '%d-%m-%Y') fecha_alta_local, date_format(ma.fecha_baja, '%d-%m-%Y') fecha_baja_local, " +
         " date_format(ma.fecha_baja, '%Y-%m-%d') fecha_baja, ma.nid nid_matricula_asignatura, a.descripcion nombre_asignatura, p.*, p.nid nid_profesor, " +
         "concat(p.nombre, ' ', p.primer_apellido, ' ', p.segundo_apellido) nombre_profesor, " +
-        " ifnull(date_format(ma.fecha_baja, '%d-%m-%Y'), date_format(pam.fecha_baja, '%d-%m-%Y')) fecha_hasta " +
+        " ifnull(date_format(ma.fecha_baja, '%d-%m-%Y'), date_format(pam.fecha_baja, '%d-%m-%Y')) fecha_hasta, " +
+        " ifnull(date_format(pam.fecha_alta, '%d-%m-%Y'), date_format(ma.fecha_alta, '%d-%m-%Y')) fecha_desde " +
         "from " +
         constantes.ESQUEMA_BD +
         ".matricula_asignatura ma, " +
@@ -1040,11 +1044,7 @@ function sustituir_profesor_curso_actual(
   });
 }
 
-function sustituir_profesor_alumno(
-  nid_profesor,
-  nid_matricula_asignatura,
-  nid_asignatura
-) {
+function sustituir_profesor_alumno(nid_profesor, nid_matricula_asignatura) {
   return new Promise((resolve, reject) => {
     try {
       conexion.dbConn.beginTransaction(async () => {
