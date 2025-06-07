@@ -5,8 +5,8 @@ const gestorUsuario = require("./usuario.js");
 
 function formatDateToMySQL(date) {
   try {
-  const d = new Date(date);
-  return d.toISOString().slice(0, 19).replace('T', ' ');
+    const d = new Date(date);
+    return d.toISOString().slice(0, 19).replace("T", " ");
   } catch (error) {
     return null;
   }
@@ -427,8 +427,29 @@ function obtenerPersonaUsuario(nid_usuario) {
   });
 }
 
+function obtenerUsuarioPersona(nid_persona) {
+  return new Promise((resolve, reject) => {
+    const sql =
+      "SELECT u.* FROM " +
+      constantes.ESQUEMA +
+      ".usuarios u, " +
+      constantes.ESQUEMA +
+      ".persona p WHERE u.nid_persona = p.nid_persona and p.nid_persona = " +
+      conexion.dbConn.escape(nid_persona);
+
+    conexion.dbConn.query(sql, (error, results) => {
+      if (error) {
+        console.error("Error al obtener el usuario de la persona:", error);
+        return reject(error);
+      }
+      resolve(results[0]);
+    });
+  });
+}
+
 module.exports.registrarPersona = registrarPersona;
 module.exports.obtenerPersonasSucias = obtenerPersonasSucias;
 module.exports.limpiarPersona = limpiarPersona;
 module.exports.asociarUsuarioPersona = asociarUsuarioPersona;
 module.exports.obtenerPersonaUsuario = obtenerPersonaUsuario;
+module.exports.obtenerUsuarioPersona = obtenerUsuarioPersona;
