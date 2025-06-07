@@ -218,7 +218,6 @@ async function enviarCorreo(nid_envio_correo, to, subject, html) {
 function enviarCorreos() {
   console.log("Iniciando el envío de correos programado...");
   cron.schedule("*/1 * * * *", () => {
-    console.log("Ejecutando tarea programada para enviar correos...");
     const query =
       "select * from " +
       constantes.ESQUEMA +
