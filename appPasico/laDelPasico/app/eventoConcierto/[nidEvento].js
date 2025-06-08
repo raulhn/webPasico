@@ -317,6 +317,7 @@ export default function EventoConcierto() {
             }}
             valorMensaje={evento.descripcion}
             valorTitulo={evento.nombre}
+            tipo="MUSICOS"
           />
         </Modal>
       </View>

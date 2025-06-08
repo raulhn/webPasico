@@ -461,6 +461,25 @@ function obtenerPersonas() {
   });
 }
 
+function obtenerPersonasMusicos() {
+  return new Promise((resolve, reject) => {
+    const sql =
+      "SELECT p.*, m.nid_tipo_musico FROM " +
+      constantes.ESQUEMA +
+      ".persona p, " +
+      constantes.ESQUEMA +
+      ".musicos m WHERE p.nid_persona = m.nid_persona";
+
+    conexion.dbConn.query(sql, (error, results) => {
+      if (error) {
+        console.error("Error al obtener las personas músicos:", error);
+        return reject(error);
+      }
+      resolve(results);
+    });
+  });
+}
+
 module.exports.registrarPersona = registrarPersona;
 module.exports.obtenerPersonasSucias = obtenerPersonasSucias;
 module.exports.limpiarPersona = limpiarPersona;
@@ -468,3 +487,4 @@ module.exports.asociarUsuarioPersona = asociarUsuarioPersona;
 module.exports.obtenerPersonaUsuario = obtenerPersonaUsuario;
 module.exports.obtenerUsuarioPersona = obtenerUsuarioPersona;
 module.exports.obtenerPersonas = obtenerPersonas;
+module.exports.obtenerPersonasMusicos = obtenerPersonasMusicos;

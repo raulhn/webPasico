@@ -11,10 +11,11 @@ import { useState, useRef } from "react";
 export default function SelectorPersona({
   callback,
   personasSeleccionadas = new Set(),
+  tipo = "",
 }) {
   const { cerrarSesion } = useContext(AuthContext);
 
-  const { personas, cargando } = usePersonas(cerrarSesion);
+  const { personas, cargando } = usePersonas(tipo, cerrarSesion);
 
   const [personasFiltradas, setPersonasFiltradas] = useState([]);
 

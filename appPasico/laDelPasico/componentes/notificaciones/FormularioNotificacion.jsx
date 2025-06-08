@@ -10,15 +10,20 @@ import { useEffect, useState } from "react";
 
 import { EntradaTexto, Boton } from "../componentesUI/ComponentesUI";
 import ItemSelectorPersona from "../persona/ItemSelectorPersona";
+import ServiceNotificacion from "../../servicios/serviceNotificacion";
+import { AuthContext } from "../../providers/AuthContext";
+import { useContext } from "react";
 
 export default function FormularioNotificacion({
   callback,
   cancelar,
   valorTitulo = "",
   valorMensaje = "",
+  tipo = "",
 }) {
   const [titulo, setTitulo] = useState(valorTitulo);
   const [mensaje, setMensaje] = useState(valorMensaje);
+  const { cerrarSesion } = useContext(AuthContext);
 
   const [personasSeleccionadas, setPersonasSeleccionadas] = useState([]);
 
@@ -31,9 +36,25 @@ export default function FormularioNotificacion({
     }
   }, [valorTitulo, valorMensaje]);
 
+  async function enviarNotificacion() {
+    try {
+      await ServiceNotificacion.registrarNotificacion(
+        titulo,
+        mensaje,
+        personasSeleccionadas,
+        {},
+        cerrarSesion
+      );
+      callback(); // Llama al callback para refrescar la lista de notificaciones
+    } catch (error) {
+      console.error("Error al enviar la notificación:", error);
+    }
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Formulario de Notificación</Text>
+      <Text style={{ fontSize: 16, marginBottom: 10 }}>{tipo}</Text>
       <EntradaTexto
         placeholder={"Título"}
         valor={titulo}
@@ -51,6 +72,7 @@ export default function FormularioNotificacion({
         alto={100}
       />
       <ItemSelectorPersona
+        tipo={tipo}
         callback={(personasSeleccionadas) => {
           setPersonasSeleccionadas(personasSeleccionadas);
         }}
@@ -66,7 +88,7 @@ export default function FormularioNotificacion({
         <Boton
           nombre={"Enviar"}
           onPress={() => {
-            callback();
+            enviarNotificacion();
           }}
         />
         <Boton
