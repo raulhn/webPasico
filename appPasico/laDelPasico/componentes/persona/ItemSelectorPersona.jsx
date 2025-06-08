@@ -2,7 +2,7 @@ import { View, Pressable, Text, Modal } from "react-native";
 import { useState } from "react";
 import SelectorPersona from "./SelectorPersona"; // Asegúrate de que la ruta sea correcta
 
-export default function ItemSelectorPersona({ callback }) {
+export default function ItemSelectorPersona({ tipo = "", callback }) {
   const [esVisible, setVisible] = useState(false);
   const [personasSeleccionadas, setPersonasSeleccionadas] = useState(new Set());
   function seleccionPersona(personasSeleccionadasRecuperadas) {
@@ -53,6 +53,7 @@ export default function ItemSelectorPersona({ callback }) {
         <SelectorPersona
           callback={seleccionPersona}
           personasSeleccionadas={personasSeleccionadas}
+          tipo={tipo}
         />
       </Modal>
     </>

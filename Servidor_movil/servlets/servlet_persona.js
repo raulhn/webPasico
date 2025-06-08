@@ -145,8 +145,45 @@ async function obtenerPersonas(req, res) {
   }
 }
 
+function obtenerPersonasMusicos(req, res) {
+  const rolesPermitidos = ["DIRECTOR", "ADMINISTRADOR"];
+  servletComun
+    .comprobarRol(req, res, rolesPermitidos)
+    .then(async (rolPermitido) => {
+      if (!rolPermitido) {
+        res.status(403).send({
+          error: true,
+          mensaje: "No tienes permisos para obtener los músicos",
+        });
+      } else {
+        try {
+          const personasMusicos = await gestorPersona.obtenerPersonasMusicos();
+          res.status(200).send({
+            error: false,
+            mensaje: "Músicos obtenidos correctamente",
+            personas: personasMusicos,
+          });
+        } catch (error) {
+          console.error("Error al obtener los músicos:", error.message);
+          res.status(400).send({
+            error: true,
+            mensaje: "Error al obtener los músicos",
+          });
+        }
+      }
+    })
+    .catch((error) => {
+      console.error("Error al comprobar el rol:", error.message);
+      res.status(500).send({
+        error: true,
+        mensaje: "Error al comprobar el rol",
+      });
+    });
+}
+
 module.exports.obtenerPersona = obtenerPersona;
 module.exports.registrarPersona = registrarPersona;
 module.exports.obtenerPersonasSucias = obtenerPersonasSucias;
 module.exports.limpiarPersona = limpiarPersona;
 module.exports.obtenerPersonas = obtenerPersonas;
+module.exports.obtenerPersonasMusicos = obtenerPersonasMusicos;

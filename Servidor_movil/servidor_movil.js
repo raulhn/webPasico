@@ -23,6 +23,7 @@ const servletProfesorAlumnoMatricula = require("./servlets/servlet_profesor_alum
 const servletEventoConcierto = require("./servlets/servletEventoConcierto.js");
 const servletPartituras = require("./servlets/servlet_partituras.js");
 const servlet_categoria_partituras = require("./servlets/servlet_categoria_partituras.js");
+const servletNotificaciones = require("./servlets/servlet_notificaciones.js");
 
 const validacionEmail = require("./logica/validacionEmail.js");
 
@@ -163,6 +164,13 @@ app.get(
 
 // Obtener Personas //
 app.get("/obtener_personas", servletPersona.obtenerPersonas);
+app.get("/obtener_personas_musicos", servletPersona.obtenerPersonasMusicos);
+
+// Notificaciones //
+app.post(
+  "/registrar_notificacion",
+  servletNotificaciones.registrarNotificacion
+);
 
 https
   .createServer(
