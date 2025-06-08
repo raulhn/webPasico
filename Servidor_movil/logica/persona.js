@@ -447,9 +447,24 @@ function obtenerUsuarioPersona(nid_persona) {
   });
 }
 
+function obtenerPersonas() {
+  return new Promise((resolve, reject) => {
+    const sql = "SELECT * FROM " + constantes.ESQUEMA + ".persona";
+
+    conexion.dbConn.query(sql, (error, results) => {
+      if (error) {
+        console.error("Error al obtener las personas:", error);
+        return reject(error);
+      }
+      resolve(results);
+    });
+  });
+}
+
 module.exports.registrarPersona = registrarPersona;
 module.exports.obtenerPersonasSucias = obtenerPersonasSucias;
 module.exports.limpiarPersona = limpiarPersona;
 module.exports.asociarUsuarioPersona = asociarUsuarioPersona;
 module.exports.obtenerPersonaUsuario = obtenerPersonaUsuario;
 module.exports.obtenerUsuarioPersona = obtenerUsuarioPersona;
+module.exports.obtenerPersonas = obtenerPersonas;

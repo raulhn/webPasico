@@ -4,7 +4,8 @@ import { Pressable, View, StyleSheet, Text } from "react-native";
 import serviceUsuario from "../../servicios/serviceUsuario"; // Ajusta la ruta según tu estructura de carpetas
 import { useRouter } from "expo-router"; // Asegúrate de tener instalado expo-router
 import { useEffect } from "react";
-import Boton from "../componentesUI/Boton"; // Ajusta la ruta según tu estructura de carpetas
+
+import { Boton } from "../componentesUI/ComponentesUI"; // Asegúrate de que Boton esté correctamente importado
 
 export default function PerfilUsuario() {
   const { usuario, cerrarSesion } = useContext(AuthContext);

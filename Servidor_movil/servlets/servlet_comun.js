@@ -70,13 +70,19 @@ async function comprobarRol(req, res, rolesPermitidos) {
 
   const roles = await gestorUsuarios.construirRoles(nid_usuario);
 
-  const rolesAdministrador = roles.find((rol) =>
-    rolesPermitidos.includes(rol.nombre)
-  );
+  if (!roles || roles.length === 0) {
+    return false; // Si no hay roles, no se muestra la opción
+  }
 
-  return !rolesAdministrador || rolesAdministrador.length === 0;
+  for (let a = 0; a < roles.length; a++) {
+    for (let i = 0; i < rolesPermitidos.length; i++) {
+      if (roles[a].rol === rolesPermitidos[i]) {
+        return true;
+      }
+    }
+  }
+  return false;
 }
-
 
 module.exports.comprobacionLogin = comprobacionLogin;
 module.exports.comprobacionAccesoAPIKey = comprobacionAccesoAPIKey;

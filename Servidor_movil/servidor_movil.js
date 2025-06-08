@@ -161,6 +161,9 @@ app.get(
   servlet_categoria_partituras.obtenerCategoriasPartitura
 );
 
+// Obtener Personas //
+app.get("/obtener_personas", servletPersona.obtenerPersonas);
+
 https
   .createServer(
     {

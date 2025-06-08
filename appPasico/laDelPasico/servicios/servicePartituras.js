@@ -34,7 +34,7 @@ function actualizarPartitura(partitura, cerrarSesion) {
       nid_categoria: partitura.categoria,
       url_partitura: partitura.url_partitura,
     };
-    console.log("Datos a enviar:", data);
+
     serviceComun
       .peticionSesion(
         "POST",

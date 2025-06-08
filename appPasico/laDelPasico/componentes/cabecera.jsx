@@ -18,7 +18,6 @@ export const CustomHeader = ({ navigation, route, options, title }) => {
     serviceUsuario
       .obtenerUsuario(cerrarSesion)
       .then((response) => {
-        console.log("Usuario desde el servicio:", response);
         if (response.usuario) {
           iniciarSesion(response.usuario); // Actualiza el estado del usuario en el contexto
           guardarRoles(response.roles); // Guarda los roles en el contexto

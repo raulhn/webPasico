@@ -6,6 +6,8 @@ import CardPartitura from "../../componentes/componentesPartitura/CardPartitura"
 import ServiceEventoConcierto from "../../servicios/serviceEventoConcierto";
 import { ActivityIndicator, Modal } from "react-native";
 import { AuthContext } from "../../providers/AuthContext";
+import SelectorPersona from "../../componentes/persona/SelectorPersona";
+import FormularioNotificacion from "../../componentes/notificaciones/FormularioNotificacion";
 import {
   BotonFixed,
   ModalAviso,
@@ -29,6 +31,8 @@ export default function EventoConcierto() {
   const [modalAvisoVisible, setModalAvisoVisible] = useState(false);
   const [modalErrorVisible, setModalErrorVisible] = useState(false);
   const [mensaje, setMensaje] = useState("");
+
+  const [modalVisibleSelector, setModalVisibleSelector] = useState(false);
 
   const [modalEdicionVisible, setModalEdicionVisible] = useState(false);
 
@@ -146,6 +150,25 @@ export default function EventoConcierto() {
     );
   }
 
+  function botonNotificar() {
+    let rol_director = esRol(["DIRECTOR", "ADMINISTRADOR"]);
+    if (!rol_director) {
+      return null; // No mostrar el botón si no es director o administrador
+    }
+    return (
+      <View style={estilos.botonFixLeft}>
+        <BotonFixed
+          onPress={() => {
+            console.log("Botón Notificar presionado");
+            setModalVisibleSelector(true);
+          }}
+          icon="notifications"
+          color="#007CFA"
+        />
+      </View>
+    );
+  }
+
   function botonEdicion() {
     let rol_director = esRol(["DIRECTOR", "ADMINISTRADOR"]);
     if (!rol_director) {
@@ -199,6 +222,7 @@ export default function EventoConcierto() {
           )}
         />
         {botonNuevo()}
+        {botonNotificar()}
 
         <Modal
           animationType="slide"
@@ -275,6 +299,26 @@ export default function EventoConcierto() {
           mensaje={mensaje}
           textBoton={"Aceptar"}
         />
+
+        <Modal
+          animationType="slide"
+          visible={modalVisibleSelector}
+          onRequestClose={() => {
+            setModalVisibleSelector(false);
+          }}
+        >
+          <FormularioNotificacion
+            cancelar={() => {
+              setModalVisibleSelector(false);
+            }}
+            callback={() => {
+              setModalVisibleSelector(false);
+              console.log("Notificación enviada");
+            }}
+            valorMensaje={evento.descripcion}
+            valorTitulo={evento.nombre}
+          />
+        </Modal>
       </View>
     </>
   );
@@ -339,6 +383,12 @@ const estilos = StyleSheet.create({
     position: "absolute",
     top: 20,
     right: 20,
+    zIndex: 1,
+  },
+  botonFixLeft: {
+    position: "absolute",
+    bottom: 30,
+    left: 20,
     zIndex: 1,
   },
   title: {

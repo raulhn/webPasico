@@ -1,13 +1,17 @@
 import { SafeAreaView } from "react-native-safe-area-context";
-import EntradaTexto from "../componentesUI/EntradaTexto";
+
 import { View, Text, Image } from "react-native";
 import { useContext, useState } from "react";
 import { StyleSheet } from "react-native";
-import Boton from "../componentesUI/Boton";
 import { AuthContext } from "../../providers/AuthContext";
 import serviceUsuario from "../../servicios/serviceUsuario";
-import ModalAviso from "../componentesUI/ModalAviso";
-import ModalExito from "../componentesUI/ModalExito";
+
+import {
+  ModalAviso,
+  ModalExito,
+  EntradaTexto,
+  Boton,
+} from "../componentesUI/ComponentesUI";
 
 export default function CambiarPassword() {
   const [nuevaContrasena, setNuevaContrasena] = useState("");

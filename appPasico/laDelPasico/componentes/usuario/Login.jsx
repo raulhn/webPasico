@@ -2,8 +2,7 @@ import { Link, useRouter } from "expo-router";
 import React from "react";
 import serviceUsuario from "../../servicios/serviceUsuario";
 import { useContext } from "react";
-import Boton from "../componentesUI/Boton";
-import EntradaTexto from "../componentesUI/EntradaTexto";
+
 import {
   TextInput,
   Pressable,
@@ -11,10 +10,10 @@ import {
   Text,
   StyleSheet,
   Image,
-  Modal,
 } from "react-native";
 import { AuthContext } from "../../providers/AuthContext";
-import ModalAviso from "../componentesUI/ModalAviso";
+
+import { EntradaTexto, Boton, ModaAviso } from "../componentesUI/ComponentesUI";
 
 export default function Login() {
   const { iniciarSesion, tokenNotificacion, guardarRoles } =

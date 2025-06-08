@@ -112,7 +112,41 @@ function limpiarPersona(req, res) {
   });
 }
 
+async function obtenerPersonas(req, res) {
+  try {
+    console.log("Obteniendo personas...");
+    const rolesPermitidos = ["ADMINISTRADOR"];
+    let rolPermitido = await servletComun.comprobarRol(
+      req,
+      res,
+      rolesPermitidos
+    );
+
+    if (!rolPermitido) {
+      res.status(403).send({
+        error: true,
+        mensaje: "No tienes permisos para obtener las personas",
+      });
+    } else {
+      const personas = await gestorPersona.obtenerPersonas();
+
+      res.status(200).send({
+        error: false,
+        mensaje: "Personas obtenidas correctamente",
+        personas: personas,
+      });
+    }
+  } catch (error) {
+    console.error("Error al obtener las personas:", error.message);
+    res.status(400).send({
+      error: true,
+      mensaje: "Error al obtener las personas",
+    });
+  }
+}
+
 module.exports.obtenerPersona = obtenerPersona;
 module.exports.registrarPersona = registrarPersona;
 module.exports.obtenerPersonasSucias = obtenerPersonasSucias;
 module.exports.limpiarPersona = limpiarPersona;
+module.exports.obtenerPersonas = obtenerPersonas;

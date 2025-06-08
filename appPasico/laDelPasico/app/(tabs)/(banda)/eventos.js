@@ -2,13 +2,20 @@ import { ActivityIndicator, Modal, Pressable, Text } from "react-native";
 import { StyleSheet, View } from "react-native";
 import { useEffect, useState } from "react";
 import CardEventoPartitura from "../../../componentes/componentesBanda/CardEventoPartitura";
-import BotonFixed from "../../../componentes/componentesUI/BotonFixed";
+
+import {
+  Boton,
+  BotonFixed,
+  CheckBox,
+} from "../../../componentes/componentesUI/ComponentesUI";
 import FormularioEvento from "../../../componentes/componentesBanda/FormularioEvento";
 import { useRol } from "../../../hooks/useRol";
 import { Link } from "expo-router";
 
 import serviceEventoConcierto from "../../../servicios/serviceEventoConcierto"; // Asegúrate de importar tu servicio correctamente
 import { FlatList } from "react-native";
+
+import SelectorPersona from "../../../componentes/persona/SelectorPersona";
 
 export default function Partituras() {
   const [eventosConciertos, setEventosConciertos] = useState([]);
@@ -17,6 +24,7 @@ export default function Partituras() {
   const { esRol } = useRol();
 
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisibleSelector, setModalVisibleSelector] = useState(false);
 
   const [refrescar, setRefrescar] = useState(false);
 
@@ -24,11 +32,9 @@ export default function Partituras() {
     serviceEventoConcierto
       .obtenerEventosConciertos()
       .then((response) => {
-        console.log("Eventos obtenidos:", response);
         setEventosConciertos(response.eventos);
 
         setCargado(true);
-        console.log("Eventos obtenidos:", response.eventos);
       })
       .catch((error) => {
         console.error("Error al listar eventos:", error);
@@ -36,12 +42,10 @@ export default function Partituras() {
   }, [refrescar]);
 
   const cerrar = () => {
-    console.log("Botón presionado");
     setModalVisible(false);
   };
 
   const refrescarLista = () => {
-    console.log("Botón presionado");
     setRefrescar(!refrescar);
     setModalVisible(false);
   };
@@ -72,7 +76,6 @@ export default function Partituras() {
         >
           <BotonFixed
             onPress={() => {
-              console.log("Botón presionado");
               setModalVisible(true);
             }}
           />
@@ -80,9 +83,7 @@ export default function Partituras() {
         <Modal
           animationType="slide"
           visible={modalVisible}
-          onRequestClose={() => {
-            console.log("Modal cerrado");
-          }}
+          onRequestClose={() => {}}
         >
           <FormularioEvento cancelar={cerrar} callback={refrescarLista} />
         </Modal>
@@ -129,7 +130,6 @@ export default function Partituras() {
       >
         <BotonFixed
           onPress={() => {
-            console.log("Botón presionado");
             setModalVisible(true);
           }}
         />
@@ -138,7 +138,6 @@ export default function Partituras() {
         animationType="slide"
         visible={modalVisible}
         onRequestClose={() => {
-          console.log("Modal cerrado");
           setModalVisible(false);
         }}
       >
