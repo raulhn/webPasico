@@ -1,6 +1,5 @@
 import * as secureStorage from "./secureStorage.js";
-
-let Constantes = require("../constantes.js");
+import Constantes from "../constantes.js";
 
 function peticionServicio(metodo, url, body) {
   return new Promise((resolve, reject) => {

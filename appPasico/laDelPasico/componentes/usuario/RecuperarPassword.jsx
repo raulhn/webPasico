@@ -1,10 +1,14 @@
 import { StyleSheet, View, Image, Text } from "react-native";
 import { useState } from "react";
-import EntradaTexto from "../componentesUI/EntradaTexto";
-import Boton from "../componentesUI/Boton";
+
 import serviceUsuario from "../../servicios/serviceUsuario";
-import ModalAviso from "../componentesUI/ModalAviso";
-import ModalExito from "../componentesUI/ModalExito";
+
+import {
+  ModalAviso,
+  ModalExito,
+  Boton,
+  EntradaTexto,
+} from "../componentesUI/ComponentesUI";
 
 export default function RecuperarPassword() {
   const logo = require("../../assets/logo.png");

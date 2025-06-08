@@ -5,7 +5,7 @@ import { AuthContext } from "../../providers/AuthContext";
 import { useContext } from "react";
 import serviceEventoConcierto from "../../servicios/serviceEventoConcierto"; // Asegúrate de importar tu servicio correctamente
 
-import ModalExito from "../componentesUI/ModalExito";
+import { ModalExito } from "../componentesUI/ComponentesUI";
 
 import {
   EntradaTexto,
@@ -54,7 +54,6 @@ export default function FormularioEvento({ cancelar, callback, nidEvento }) {
       publicado: "N",
     };
 
-    console.log("Evento a registrar:", evento);
     serviceEventoConcierto
       .registrarEventoConcierto(evento, cerrarSesion)
       .then((response) => {
@@ -62,7 +61,6 @@ export default function FormularioEvento({ cancelar, callback, nidEvento }) {
           console.error("Error al obtener eventos:", response.mensaje);
           return;
         }
-        console.log("Evento registrado:", response);
 
         setExito(true); // Cambia el estado de éxito a verdadero
         if (callback) {
@@ -90,7 +88,6 @@ export default function FormularioEvento({ cancelar, callback, nidEvento }) {
       publicado: "N",
     };
 
-    console.log("Evento a actualizar:", evento);
     serviceEventoConcierto
       .actualizarEventoConcierto(evento, cerrarSesion)
       .then((response) => {
@@ -98,7 +95,6 @@ export default function FormularioEvento({ cancelar, callback, nidEvento }) {
           console.error("Error al actualizar el evento:", response.mensaje);
           return;
         }
-        console.log("Evento actualizado:", response);
         setExito(true); // Cambia el estado de éxito a verdadero
         if (callback) {
           callback();

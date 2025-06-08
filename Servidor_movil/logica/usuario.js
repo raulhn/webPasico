@@ -357,6 +357,26 @@ function realizarCambioPassword(nid_usuario, passwordActual, passwordNuevo) {
   });
 }
 
+function obtenerUsuarios() {
+  return new Promise((resolve, reject) => {
+    const query =
+      "SELECT u.nid_usuario, u.nombre, u.primer_apellido, u.segundo_apellido, u.correo_electronico, c.token FROM " +
+      constantes.ESQUEMA +
+      ".usuarios u, " +
+      constantes.ESQUEMA +
+      ".conexiones c " +
+      "WHERE u.nid_usuario = c.nid_usuario";
+    conexion.dbConn.query(query, (error, results) => {
+      if (error) {
+        console.error("Error al obtener los usuarios:", error);
+        reject(new Error("Error al obtener los usuarios"));
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
+
 module.exports.existeUsuario = existeUsuario;
 module.exports.existeUsuarioNid = existeUsuarioNid;
 module.exports.registrarUsuario = registrarUsuario;
@@ -365,3 +385,4 @@ module.exports.construirRoles = construirRoles;
 module.exports.obtenerUsuario = obtenerUsuario;
 module.exports.recuperarPassword = recuperarPassword;
 module.exports.realizarCambioPassword = realizarCambioPassword;
+module.exports.obtenerUsuarios = obtenerUsuarios;

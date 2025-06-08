@@ -439,6 +439,49 @@ export function RadioInput({
   );
 }
 
+export function CheckBox({ item, valorSeleccionado, setValorSeleccionado }) {
+  const [seleccionado, setSeleccionado] = useState(false);
+  const [esPresionado, setEsPresionado] = useState(false);
+
+  const accionPresionar = () => {
+    setValorSeleccionado(item, !seleccionado);
+    setSeleccionado(!seleccionado);
+  };
+
+  useEffect(() => {
+    setSeleccionado(valorSeleccionado);
+  }, [valorSeleccionado]);
+
+  return (
+    <Pressable
+      onPress={accionPresionar}
+      onPressIn={() => setEsPresionado(true)}
+      onPressOut={() => setEsPresionado(false)}
+    >
+      <View
+        style={[
+          esPresionado ? estilos.presionadoCheckBox : {},
+          {
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            padding: 10,
+          },
+        ]}
+      >
+        <View>
+          <MaterialIcons
+            name={seleccionado ? "check-box" : "check-box-outline-blank"}
+            size={20}
+            color={seleccionado ? "#000" : "#ccc"}
+          />
+        </View>
+        <Text style={{ marginLeft: 10 }}>{item.etiqueta}</Text>
+      </View>
+    </Pressable>
+  );
+}
+
 const estilos = StyleSheet.create({
   boton: {
     padding: 10,
@@ -534,6 +577,13 @@ const estilos = StyleSheet.create({
   presionado: {
     opacity: 0.5,
     transform: [{ scale: 0.95 }],
+    backgroundColor: "#e0e0e0",
+    borderRadius: 5,
+    borderColor: "#ccc",
+    borderWidth: 1,
+  },
+  presionadoCheckBox: {
+    opacity: 0.5,
     backgroundColor: "#e0e0e0",
     borderRadius: 5,
     borderColor: "#ccc",

@@ -8,11 +8,15 @@ import { useState, useEffect } from "react";
 import ServiceUsuario from "../../servicios/serviceUsuario.js";
 import Tunstile from "../../componentes/Turnstile.jsx";
 import constantesGoogle from "../../config/constantesGoogle.js";
-import Boton from "../componentesUI/Boton"; // Ajusta la ruta según tu estructura de carpetas
+
 import { ActivityIndicator } from "react-native";
-import ModalAviso from "../componentesUI/ModalAviso.jsx";
-import ModalExito from "../componentesUI/ModalExito.jsx";
-import EntradaTexto from "../componentesUI/EntradaTexto.jsx";
+
+import {
+  ModalAviso,
+  ModalExito,
+  EntradaTexto,
+  Boton,
+} from "../componentesUI/ComponentesUI.jsx";
 
 export default function registrarUsuario(recaptchaToken) {
   const [inputActivo, setInputActivo] = React.useState(0);

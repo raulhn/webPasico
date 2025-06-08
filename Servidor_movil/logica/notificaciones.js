@@ -1,6 +1,7 @@
 const gestorPersonas = require("./persona.js");
 const gestorConexiones = require("./gestorConexiones.js");
 const conexion = require("../conexion.js");
+const gestorUsuario = require("./usuario.js");
 
 function insertarNotificacion(pushToken, titulo, body, data) {
   return new Promise((resolve, reject) => {
@@ -75,3 +76,26 @@ async function enviarNotificaciones(personas, titulo, body, data) {
     throw error;
   }
 }
+
+async function enviarNotificacionesTodos(titulo, body, data) {
+  try {
+    const usuarios = await gestorUsuario.obtenerUsuarios();
+
+    for (const usuario of usuarios) {
+      const nid_notificacion = await insertarNotificacion(
+        pushToken,
+        titulo,
+        body,
+        data
+      );
+    }
+
+    console.log("Notificaciones enviadas a todos los usuarios.");
+  } catch (error) {
+    console.error("No se han podido enviar todas las notificaciones:", error);
+    throw new Error("No se han podido enviar todas las notificaciones ");
+  }
+}
+
+module.exports.enviarNotificaciones = enviarNotificaciones;
+module.exports.enviarNotificacionesTodos = enviarNotificacionesTodos;

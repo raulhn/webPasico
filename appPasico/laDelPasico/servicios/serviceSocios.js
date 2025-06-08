@@ -11,7 +11,6 @@ async function obtenerSocio(cerrarSesion) {
     );
     return data;
   } catch (error) {
-    console.log("Error en el servicio obtenerSocio");
     throw new Error("Error en el servicio obtenerSocio");
   }
 }
