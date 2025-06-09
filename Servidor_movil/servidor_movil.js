@@ -24,6 +24,7 @@ const servletEventoConcierto = require("./servlets/servletEventoConcierto.js");
 const servletPartituras = require("./servlets/servlet_partituras.js");
 const servlet_categoria_partituras = require("./servlets/servlet_categoria_partituras.js");
 const servletNotificaciones = require("./servlets/servlet_notificaciones.js");
+const gestorNotificaciones = require("./logica/notificaciones.js");
 
 const validacionEmail = require("./logica/validacionEmail.js");
 
@@ -38,6 +39,7 @@ const limiter = rateLimit({
 });
 
 validacionEmail.enviarCorreos();
+gestorNotificaciones.procesoEnviarNotificaciones();
 
 app.set("trust proxy", true);
 app.use(limiter);

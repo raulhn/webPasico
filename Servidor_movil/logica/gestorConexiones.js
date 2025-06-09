@@ -44,6 +44,46 @@ async function asyncReegistrarConexion(token, resolve, reject) {
   }
 }
 
+function limpiarToken(token, nidUsuario) {
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(
+      "DELETE FROM " +
+        constantes.ESQUEMA +
+        ".conexiones WHERE token <> " +
+        conexion.dbConn.escape(token) +
+        " AND nid_usuario = " +
+        conexion.dbConn.escape(nidUsuario),
+      (error, results) => {
+        if (error) {
+          console.error("Error al limpiar el token:", error);
+          reject(error);
+        } else {
+          resolve(results);
+        }
+      }
+    );
+  });
+}
+
+function eliminarToken(token) {
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(
+      "DELETE FROM " +
+        constantes.ESQUEMA +
+        ".conexiones WHERE token = " +
+        conexion.dbConn.escape(token),
+      (error, results) => {
+        if (error) {
+          console.error("Error al eliminar el token:", error);
+          reject(error);
+        } else {
+          resolve(results);
+        }
+      }
+    );
+  });
+}
+
 function actualizarTokenUsuario(token, nidUsuario) {
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(
@@ -131,4 +171,6 @@ function numConexiones() {
 
 module.exports.registrarConexion = registrarConexion;
 module.exports.actualizarTokenUsuario = actualizarTokenUsuario;
+module.exports.limpiarToken = limpiarToken;
 module.exports.obtenerTokenUsuario = obtenerTokenUsuario;
+module.exports.eliminarToken = eliminarToken;
