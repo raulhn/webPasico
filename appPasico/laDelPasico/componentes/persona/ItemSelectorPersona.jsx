@@ -11,7 +11,7 @@ export default function ItemSelectorPersona({ tipo = "", callback }) {
     );
     setPersonasSeleccionadas(personasSeleccionadasRecuperadas);
     setVisible(false);
-    callback();
+    callback(Array.from(personasSeleccionadasRecuperadas));
   }
 
   function mensajeSeleccionado() {

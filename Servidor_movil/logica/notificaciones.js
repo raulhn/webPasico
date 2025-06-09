@@ -2,6 +2,7 @@ const gestorPersonas = require("./persona.js");
 const gestorConexiones = require("./gestorConexiones.js");
 const conexion = require("../conexion.js");
 const gestorUsuario = require("./usuario.js");
+const constantes = require("../constantes.js");
 
 function insertarNotificacion(pushToken, titulo, body, data) {
   return new Promise((resolve, reject) => {
@@ -38,6 +39,14 @@ function insertarNotificacion(pushToken, titulo, body, data) {
 async function registrarNotificacion(nid_persona, titulo, body, data) {
   try {
     const usuario = await gestorPersonas.obtenerUsuarioPersona(nid_persona);
+
+    if (!usuario) {
+      console.log(
+        "No se encontró un usuario asociado a la persona con nid_persona:",
+        nid_persona
+      );
+      return null;
+    }
     const pushToken = await gestorConexiones.obtenerTokenUsuario(
       usuario.nid_usuario
     );
@@ -62,8 +71,15 @@ async function registrarNotificacion(nid_persona, titulo, body, data) {
 
 async function enviarNotificaciones(personas, titulo, body, data) {
   try {
-    for (const persona of personas) {
-      const nid_persona = persona.nid_persona;
+    console.log("Perrsonas a notificar:", personas);
+    for (const nid_persona of personas) {
+      console.log(
+        "Registrando notificación para persona:",
+        nid_persona,
+        titulo,
+        body,
+        data
+      );
       const nid_notificacion = await registrarNotificacion(
         nid_persona,
         titulo,

@@ -244,7 +244,7 @@ export function EntradaTexto({
         ]}
         onPress={() => setIsSecure(!isSecure)}
       >
-        <View style={estilos.containerBotonVisible}>
+        <View style={{ padding: 10 }}>
           <MaterialIcons name={nombreIcono} size={20} color="gray" />
         </View>
       </Pressable>
