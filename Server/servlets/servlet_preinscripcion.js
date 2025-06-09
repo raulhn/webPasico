@@ -164,8 +164,21 @@ function obtener_preinscripciones(req, res) {
   });
 }
 
+function obtener_preinscripciones_detalle_login(req, res) {
+  comun.comprobaciones_login(req, res, async () => {
+    let nid_preinscripcion = req.params.nid_preinscripcion;
+
+    let resultado = await preinscripcion.obtener_preincripciones_detalle(
+      nid_preinscripcion
+    );
+
+    res.status(200).send({ error: false, preinscripciones: resultado });
+  });
+}
+
 function obtener_preinscripciones_api(req, res) {
   comun.comprobaciones_api(req, res, async () => {
+    console.log("Obteniendo preinscripciones");
     let resultados = await preinscripcion.obtener_preinscripciones();
 
     res.status(200).send({ error: false, preinscripciones: resultados });
@@ -189,3 +202,5 @@ module.exports.registrar_preinscripcion = registrar_preinscripcion;
 module.exports.obtener_preinscripciones_detalle =
   obtener_preinscripciones_detalle;
 module.exports.obtener_preinscripciones_api = obtener_preinscripciones_api;
+module.exports.obtener_preinscripciones_detalle_login =
+  obtener_preinscripciones_detalle_login;

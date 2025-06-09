@@ -244,6 +244,16 @@ app.get(
   servlet_preinscripcion.obtener_preinscripciones_detalle
 );
 
+app.get(
+  "/obtener_preinscripciones_login",
+  servlet_preinscripcion.obtener_preinscripciones
+);
+
+app.get(
+  "/obtener_preinscripciones_detalle_login/:nid_preinscripcion",
+  servlet_preinscripcion.obtener_preinscripciones_detalle_login
+);
+
 /**
  * Canciones EU
  */
