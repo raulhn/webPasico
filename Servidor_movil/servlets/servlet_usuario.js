@@ -95,6 +95,10 @@ async function login(req, res) {
       password
     );
 
+    await gestorConexion.limpiarToken(
+      tokenNotificacion,
+      tokens.usuario.nid_usuario
+    );
     await gestorConexion.actualizarTokenUsuario(
       tokenNotificacion,
       tokens.usuario.nid_usuario
