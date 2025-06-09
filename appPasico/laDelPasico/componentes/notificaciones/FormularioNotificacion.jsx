@@ -39,10 +39,10 @@ export default function FormularioNotificacion({
   async function enviarNotificacion() {
     try {
       await ServiceNotificacion.registrarNotificacion(
+        personasSeleccionadas,
         titulo,
         mensaje,
-        personasSeleccionadas,
-        {},
+        null,
         cerrarSesion
       );
       callback(); // Llama al callback para refrescar la lista de notificaciones
@@ -73,8 +73,12 @@ export default function FormularioNotificacion({
       />
       <ItemSelectorPersona
         tipo={tipo}
-        callback={(personasSeleccionadas) => {
-          setPersonasSeleccionadas(personasSeleccionadas);
+        callback={(personasSeleccionadasRecuperadas) => {
+          console.log(
+            "Personas seleccionadas:",
+            personasSeleccionadasRecuperadas
+          );
+          setPersonasSeleccionadas(personasSeleccionadasRecuperadas);
         }}
       />
 

@@ -13,7 +13,11 @@ import {
 } from "react-native";
 import { AuthContext } from "../../providers/AuthContext";
 
-import { EntradaTexto, Boton, ModaAviso } from "../componentesUI/ComponentesUI";
+import {
+  EntradaTexto,
+  Boton,
+  ModalAviso,
+} from "../componentesUI/ComponentesUI";
 
 export default function Login() {
   const { iniciarSesion, tokenNotificacion, guardarRoles } =
