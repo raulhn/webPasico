@@ -1,66 +1,57 @@
-const conexion = require('../conexion.js')
-const constantes = require('../constantes.js')
+const conexion = require("../conexion.js");
+const constantes = require("../constantes.js");
 
-
-function obtener_preinscripciones()
-{
-    return new Promise(
-        (resolve, reject) =>
-        {
-            try
-            {
-                let API_URL = constantes.URL_WEB + 'api/obtener_preinscripciones';
-                fetch(API_URL, {
-                    method: 'GET',
-                    headers: {
-                    'Content-Type': 'application/json',
-                    'x-api-key': process.env.API_KEY
-                    }})
-                    .then(async (response) => 
-                        {
-                            let respuesta = await response.json()
-                            resolve(respuesta.preinscripciones)
-                    } )
-            }
-            catch (error)
-            {
-                console.log('preinscripcion.js - obtener_preinscripciones -> ' + error);
-                reject('Error en obtener_preinscripciones');
-            }
-        }
-    )
+function obtener_preinscripciones() {
+  return new Promise((resolve, reject) => {
+    try {
+      let API_URL = constantes.URL_WEB + "api/obtener_preinscripciones";
+      fetch(API_URL, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": process.env.API_KEY,
+        },
+      }).then(async (response) => {
+        console.log("obtener_preinscripciones -> " + API_URL);
+        let respuesta = await response.json();
+        console.log("obtener_preinscripciones -> ", respuesta);
+        console.log("api key", process.env.API_KEY);
+        resolve(respuesta.preinscripciones);
+      });
+    } catch (error) {
+      console.log("preinscripcion.js - obtener_preinscripciones -> " + error);
+      reject("Error en obtener_preinscripciones");
+    }
+  });
 }
 
+function obtener_preinscripciones_detalle(nid_preinscripcion) {
+  return new Promise((resolve, reject) => {
+    try {
+      let API_URL =
+        constantes.URL_WEB +
+        "api/obtener_preinscripciones_detalle/" +
+        nid_preinscripcion;
 
-function obtener_preinscripciones_detalle(nid_preinscripcion)
-{
-    return new Promise(
-        (resolve, reject) =>
-        {
-            try
-            {
-                let API_URL = constantes.URL_WEB + 'api/obtener_preinscripciones_detalle/' + nid_preinscripcion;
-
-                fetch(API_URL, {
-                    method: 'GET',
-                    headers: {
-                    'Content-Type': 'application/json',
-                    'x-api-key': process.env.API_KEY
-                    }})
-                    .then(async (response) => 
-                        {
-                            let respuesta = await response.json()
-                            resolve(respuesta.preinscripciones)
-                    } )
-            }
-            catch (error)
-            {
-                console.log('preinscripcion.js - obtener_preinscripciones_detalle -> ' + error);
-                reject('Error en obtener_preinscripciones_detalle');
-            }
-        }
-    )
+      fetch(API_URL, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": process.env.API_KEY,
+        },
+      }).then(async (response) => {
+        let respuesta = await response.json();
+        resolve(respuesta.preinscripciones);
+      });
+    } catch (error) {
+      console.log(
+        "preinscripcion.js - obtener_preinscripciones_detalle -> " + error
+      );
+      reject("Error en obtener_preinscripciones_detalle");
+    }
+  });
 }
 
 module.exports.obtener_preinscripciones = obtener_preinscripciones;
-module.exports.obtener_preinscripciones_detalle = obtener_preinscripciones_detalle;
+module.exports.obtener_preinscripciones_detalle =
+  obtener_preinscripciones_detalle;

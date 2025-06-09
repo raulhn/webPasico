@@ -5,10 +5,10 @@ export namespace Constantes
     export class General
     {
         /** Producción **/
-  /*
+
        public static readonly URL_BACKED = 'https://ladelpasico.es/api';
        public static readonly URL_FRONTED = 'https://ladelpasico.es';
-*/
+
         /** Prueba **/
 
         /*
@@ -17,10 +17,10 @@ export namespace Constantes
    
 */
         /** Local **/
-      
+      /*
          public static readonly URL_BACKED = 'http://pasicopru.com/api';
             public static readonly URL_FRONTED = 'http://localhost:4200';
-           
+           */
 
        /** Desarrollo **/
 /*
