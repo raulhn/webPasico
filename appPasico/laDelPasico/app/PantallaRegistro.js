@@ -2,7 +2,6 @@ import Registro from "../componentes/usuario/Registro";
 import React from "react";
 import { View } from "react-native";
 import Recaptcha from "../componentes/Recaptcha";
-import ConstantesGoogle from "../config/constantesGoogle.js";
 import { useState } from "react";
 
 export default function PantallaRegistro() {
@@ -15,7 +14,10 @@ export default function PantallaRegistro() {
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       <View style={{ display: "none" }}>
-        <Recaptcha siteKey={ConstantesGoogle.key} onVerify={handleVerify} />
+        <Recaptcha
+          siteKey={process.env.GOOGLE_API_KEY}
+          onVerify={handleVerify}
+        />
       </View>
       <Registro recaptchaToken={recaptchaToken} />
     </View>

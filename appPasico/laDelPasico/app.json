@@ -15,7 +15,7 @@
     },
     "ios": {
       "supportsTablet": true
-    },
+    }, 
     "android": {
       "googleServicesFile": "./google-services.json",
       "package": "com.ladelpasico.app",

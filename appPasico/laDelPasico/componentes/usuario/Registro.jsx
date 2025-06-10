@@ -7,7 +7,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useState, useEffect } from "react";
 import ServiceUsuario from "../../servicios/serviceUsuario.js";
 import Tunstile from "../../componentes/Turnstile.jsx";
-import constantesGoogle from "../../config/constantesGoogle.js";
 
 import { ActivityIndicator } from "react-native";
 
@@ -75,7 +74,10 @@ export default function registrarUsuario(recaptchaToken) {
   function incluyeRecaptcha() {
     if (lanzaRegistro) {
       return (
-        <Tunstile siteKey={constantesGoogle.key} onVerify={handleVerify} />
+        <Tunstile
+          siteKey={process.env.GOOGLE_API_KEY}
+          onVerify={handleVerify}
+        />
       );
     } else {
       return null;
