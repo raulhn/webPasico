@@ -28,7 +28,7 @@ export default {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-router",
+      "expo-router", 
       "expo-secure-store"
     ],
     "extra": {
