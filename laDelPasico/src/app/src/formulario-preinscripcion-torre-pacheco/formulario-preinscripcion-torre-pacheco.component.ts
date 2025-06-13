@@ -218,6 +218,96 @@ export class FormularioPreinscripcionTorrePachecoComponent implements OnInit {
       }
     }
 
+    if (this.nombre_alumno.length > 100)
+    {
+      this.lanza_error("El nombre del alumno no puede tener más de 100 caracteres");
+      return false;
+    }
+    else if (this.primer_apellido_alumno.length > 100)
+    {
+        this.lanza_error("El primer apellido del alumno no puede tener más de 100 caracteres");
+        return false;
+    }
+    else if (this.segundo_apellido_alumno.length > 100)
+    {
+        this.lanza_error("El segundo apellido del alumno no puede tener más de 100 caracteres");
+        return false;
+    }
+    else if (this.nombre_padre.length > 100)
+    { 
+      this.lanza_error("El nombre del Padre / Madre / Tutor no puede tener más de 100 caracteres");
+      return false;
+    }
+    else if (this.primer_apellido_padre.length > 100)
+    {
+      this.lanza_error("El primer apellido del Padre / Madre / Tutor no puede tener más de 100 caracteres");
+      return false;
+    }
+    else if (this.segundo_apellido_padre.length > 100)
+    {
+      this.lanza_error("El segundo apellido del Padre / Madre / Tutor no puede tener más de 100 caracteres");
+      return false;
+    }
+    else if (this.dni_alumno.length > 10)
+    {
+      this.lanza_error("El DNI del alumno supera el maximo de caracteres");
+      return false;
+    }
+    else if (this.dni_padre.length > 10)
+    {
+      this.lanza_error("El DNI del Padre / Madre / Tutor supera el maximo de caracteres");
+      return false;
+    }
+    else if (this.telefono.length > 30)
+    {
+      this.lanza_error("El teléfono supera el máximo de caracteres");
+      return false;
+    }
+    else if (this.correo_electronico.length > 200)
+    {
+      this.lanza_error("El correo electrónico supera el máximo de caracteres");
+      return false;
+    }
+    else if (this.provincia.length > 100)
+    {
+      this.lanza_error("La provincia supera el máximo de caracteres");
+      return false;
+    }
+    else if (this.municipio.length > 100){
+      this.lanza_error("El municipio supera el máximo de caracteres");
+      return false;
+    }
+    else if (this.direccion.length > 700)
+    {
+      this.lanza_error("La dirección supera el máximo de caracteres");
+      return false;
+    }
+
+    else if (this.codigo_postal.length > 20)
+    {
+      this.lanza_error("El código postal supera el máximo de caracteres");
+      return false;
+    }
+
+    else if (this.numero.length > 30)
+    {
+      this.lanza_error("El número de la dirección supera el máximo de caracteres");
+      return false;
+    }
+
+    else if (this.escalera.length > 30)
+    {
+      this.lanza_error("La escalera supera el máximo de caracteres");
+      return false;
+    }
+
+    else if (this.puerta.length > 30)
+    {
+      this.lanza_error("La puerta supera el máximo de caracteres");
+      return false;
+    }
+
+    
     return true;
   }
 

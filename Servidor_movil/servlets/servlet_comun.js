@@ -65,23 +65,32 @@ function comprobacionAccesoAPIKey(req, res, callback) {
 }
 
 async function comprobarRol(req, res, rolesPermitidos) {
-  const tokenDecode = await obtenerTokenDecoded(req, res);
-  const nid_usuario = tokenDecode.nid_usuario;
+  try {
+    const tokenDecode = await obtenerTokenDecoded(req, res);
+    const nid_usuario = tokenDecode.nid_usuario;
 
-  const roles = await gestorUsuarios.construirRoles(nid_usuario);
+    const roles = await gestorUsuarios.construirRoles(nid_usuario);
 
-  if (!roles || roles.length === 0) {
-    return false; // Si no hay roles, no se muestra la opción
-  }
+    if (!roles || roles.length === 0) {
+      return false; // Si no hay roles, no se muestra la opción
+    }
 
-  for (let a = 0; a < roles.length; a++) {
-    for (let i = 0; i < rolesPermitidos.length; i++) {
-      if (roles[a].rol === rolesPermitidos[i]) {
-        return true;
+    for (let a = 0; a < roles.length; a++) {
+      for (let i = 0; i < rolesPermitidos.length; i++) {
+        if (roles[a].rol === rolesPermitidos[i]) {
+          return true;
+        }
       }
     }
+    return false;
+  } catch (error) {
+    console.error("Error al comprobar el rol:", error);
+    res.status(500).send({
+      error: true,
+      mensaje: "Error al comprobar el rol",
+    });
+    return false;
   }
-  return false;
 }
 
 module.exports.comprobacionLogin = comprobacionLogin;
