@@ -18,7 +18,6 @@ const useNotification = () => {
   const [expoPushToken, setExpoPushToken] = useState("");
 
   function handleRegistrationError(errorMessage) {
-    alert(errorMessage);
     throw new Error(errorMessage);
   }
 

@@ -1,7 +1,6 @@
 import { useContext, useEffect } from "react";
 import Main from "../../../componentes/Main";
 import Recaptcha from "../../../componentes/Recaptcha";
-import constantesGoogle from "../../../config/constantesGoogle.js";
 import useNotification from "../../../hooks/useNotification";
 import { registrarConexion } from "../../../servicios/serviceConexion";
 import { View } from "react-native";
@@ -38,7 +37,10 @@ export default function Index() {
       <Main />
 
       <View style={{ display: "none" }}>
-        <Tunstile siteKey={constantesGoogle.key} onVerify={handleVerify} />
+        <Tunstile
+          siteKey={process.env.GOOGLE_API_KEY}
+          onVerify={handleVerify}
+        />
       </View>
     </View>
   );
