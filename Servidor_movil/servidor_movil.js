@@ -14,6 +14,8 @@ const servletConexion = require("./servlets/servlet_conexiones.js");
 const servletPersona = require("./servlets/servlet_persona.js");
 const servletSocios = require("./servlets/servlet_socios.js");
 const servletMusicos = require("./servlets/servlet_musicos.js");
+const servletTipoMusico = require("./servlets/servlet_tipo_musico.js");
+const servletInstrumentos = require("./servlets/servlet_instrumentos.js");
 const servletAsignaturas = require("./servlets/servlet_asignatura.js");
 const servletCurso = require("./servlets/servletCurso.js");
 const servletProfesores = require("./servlets/servlet_profesores.js");
@@ -75,6 +77,12 @@ app.post("/registrar_socio", servletSocios.registrarSocio);
 
 // Musicos //
 app.post("/registrar_musico", servletMusicos.registrarMusico);
+
+// Tipo Musico //
+app.post("/registrar_tipo_musico", servletTipoMusico.registrarTipoMusico);
+
+// Instrumentos //
+app.post("/registrar_instrumento", servletInstrumentos.registrarInstrumento);
 
 // Asignaturas //
 app.post("/registrar_asignatura", servletAsignaturas.registrarAsignatura);
