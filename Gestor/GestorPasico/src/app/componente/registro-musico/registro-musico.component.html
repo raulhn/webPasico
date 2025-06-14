@@ -12,6 +12,14 @@
     (change)="cambia_seleccion_musico()">
     </ng-select>
 
+    <ng-select [items]="lista_tipo_musicos_filtro"
+    bindLabel="descripcion"
+    bindValue="nid_tipo_musico"
+    [(ngModel)]="nid_tipo_musico"
+    [compareWith]="compareTipoInstrumento"
+    (change)="cambia_seleccion_musico()">
+    </ng-select>
+
 
     <div *ngIf="bCargadosMusicos">
         <table datatable [dtOptions]="dtOptions_musicos" id="tabla_musicos" class="row-border hover"></table>
@@ -48,7 +56,7 @@
     </div>
 </div>
 
-<div display="none">
+<div style="display: none;">
    <div #instancia_baja_musico>
         <input type="date" [(ngModel)]="fecha_baja" class="form-control mb-2" placeholder="Fecha de Baja">
     </div>

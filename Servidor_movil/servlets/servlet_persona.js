@@ -181,6 +181,10 @@ function obtenerPersonasMusicos(req, res) {
     });
 }
 
+function obtenerTipoPersonas() {
+  
+}
+
 module.exports.obtenerPersona = obtenerPersona;
 module.exports.registrarPersona = registrarPersona;
 module.exports.obtenerPersonasSucias = obtenerPersonasSucias;

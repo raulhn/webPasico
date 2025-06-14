@@ -21,10 +21,11 @@ export class RegistroMusicoComponent implements OnInit{
   lista_instrumentos: any;
   lista_instrumentos_filtro: any;
   lista_tipo_musicos: any;
+  lista_tipo_musicos_filtro: any;
 
   nid_persona_seleccionada: string = "";
-  nid_instrumento: string = "";
-  nid_tipo_musico: string = "";
+  nid_instrumento: string = "0";
+  nid_tipo_musico: string = "0";
 
   nid_instrumento_filtro: string = "0";
 
@@ -44,19 +45,15 @@ export class RegistroMusicoComponent implements OnInit{
   }
 
 
-  refrescar_personas = 
+  refrescar_tabla(lista_musicos: any[])
   {
-    next: (respuesta: any) =>
-    {
-      
-      var datatable = $('#tabla_musicos').DataTable();
+     var datatable = $('#tabla_musicos').DataTable();
       datatable.destroy();
-      this.lista_personas = respuesta.personas;
 
       this.dtOptions_musicos =
       {
         language: DataTablesOptions.spanish_datatables,
-        data: this.lista_personas,
+        data: lista_musicos,
         dom: 'Bfrtip',
         buttons: [{extend: 'excel', text: 'Generar Excel', className: 'btn btn-dark mb-3'}],
         columns:
@@ -75,7 +72,14 @@ export class RegistroMusicoComponent implements OnInit{
           },
           {title: 'Teléfono',
             data: 'telefono'
-          }],
+          },
+          {title: 'Instrumento',
+            data: 'instrumento'
+          },
+          {title: 'Banda',
+            data: 'tipo_musico'
+          },
+        ],
           rowCallback: (row: Node, data: any[] | Object, index: number) => {
             $('td', row).off('click');
             $('td', row).on('click', () => {
@@ -88,7 +92,15 @@ export class RegistroMusicoComponent implements OnInit{
         }
         $('#tabla_musicos').DataTable(this.dtOptions_musicos);
         this.bCargadosMusicos = true;
-      }
+  }
+
+  refrescar_personas = 
+  {
+    next: (respuesta: any) =>
+    {
+      this.lista_personas = respuesta.personas;
+      this.cambia_seleccion_musico();
+    }
       
   }
 
@@ -125,14 +137,17 @@ export class RegistroMusicoComponent implements OnInit{
     next: (respuesta: any) =>
     {
       this.lista_tipo_musicos = respuesta.tipo_musicos;
+      this.lista_tipo_musicos_filtro = [...respuesta.tipo_musicos];
+      this.lista_tipo_musicos_filtro.push({descripcion: "Todos", nid_tipo_musico: "0"});
     }
   }
 
   ngOnInit(): void {
-    this.cambia_seleccion_musico();
+    this.musicosService.obtener_musicos().subscribe(this.refrescar_personas);
+    this.musicosService.obtener_tipo_musicos().subscribe(this.obtener_tipo_musicos);
     this.musicosService.obtener_instrumentos().subscribe(this.obtener_instrumentos);
     this.musicosService.obtener_instrumentos_filtro().subscribe(this.obtener_instrumentos_filtro);
-    this.musicosService.obtener_tipo_musicos().subscribe(this.obtener_tipo_musicos);
+
   }
 
   comparePersona(item: any, selected: any) {
@@ -156,7 +171,7 @@ export class RegistroMusicoComponent implements OnInit{
           title: 'Registro correcto',
           text: 'Se ha registrado correctamente'
         });
-        this.cambia_seleccion_musico();
+        this.musicosService.obtener_musicos().subscribe(this.refrescar_personas);
       },
       error: (respuesta: any) =>
       {
@@ -195,14 +210,19 @@ export class RegistroMusicoComponent implements OnInit{
 
   cambia_seleccion_musico()
   {
-    if(this.nid_instrumento_filtro == "0")
-    {
-      this.musicosService.obtener_musicos().subscribe(this.refrescar_personas);
-    }
-    else
-    {
-      this.musicosService.obtener_personas_instrumento(this.nid_instrumento_filtro).subscribe(this.refrescar_personas);
-    }
+
+
+    let lista_musicos = this.lista_personas.filter((musico: any) => {
+      if(this.nid_instrumento_filtro == "0") {return true;}
+      else {return musico.nid_instrumento == this.nid_instrumento_filtro;}});
+
+
+    let lista_musicos_tipo = lista_musicos.filter((musico: any) => {
+      if(this.nid_tipo_musico == "0") { return true;}
+      else {return musico.nid_tipo_musico == this.nid_tipo_musico;}});
+
+    this.refrescar_tabla(lista_musicos_tipo);
+    
   }
 
   dar_baja_musico()

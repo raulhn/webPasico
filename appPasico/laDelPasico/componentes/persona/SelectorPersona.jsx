@@ -46,6 +46,12 @@ export default function SelectorPersona({
     }
   }
 
+  function descripcionTipo() {
+    if (tipo === "MUSICOS") {
+      return "Selección Músicos";
+    }
+  }
+
   // Filtra las personas al cargar el componente //
   useEffect(() => {
     const limpiar = (texto) =>
@@ -74,6 +80,9 @@ export default function SelectorPersona({
   }
   return (
     <View style={{ padding: 10, flex: 1 }}>
+      <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 10 }}>
+        {descripcionTipo()}
+      </Text>
       <EntradaTexto
         placeholder="Buscar persona"
         setValor={(text) => setFiltro(text)}

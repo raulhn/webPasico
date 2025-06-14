@@ -67,6 +67,9 @@ import { FichaMatriculaProfesorComponent } from './componente/ficha-matricula-pr
 
 import { RemesasComponent } from './componente/remesas/remesas.component';
 
+import { ListaTipoMusicoComponent } from './componente/lista-tipo-musico/lista-tipo-musico.component';
+import { ListaInstrumentosComponent } from './componente/lista-instrumentos/lista-instrumentos.component';
+
 @NgModule({ declarations: [
         AppComponent,
         LoginComponent,
@@ -119,8 +122,11 @@ import { RemesasComponent } from './componente/remesas/remesas.component';
         FichaPrestamoComponent,
         ListaPrestamosComponent,
         ListaAlumnosComponent,
-        FichaMatriculaProfesorComponent
+        FichaMatriculaProfesorComponent,
+        ListaTipoMusicoComponent,
+        ListaInstrumentosComponent
     ],
+    exports: [MenuComponent],
     bootstrap: [AppComponent], imports: [FormsModule,
         BrowserModule,
         DataTablesModule,
