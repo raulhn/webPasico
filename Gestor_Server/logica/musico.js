@@ -38,23 +38,6 @@ function obtener_instrumentos() {
   });
 }
 
-function obtener_instrumentos() {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(
-      "select i.nid, i.descripcion from " +
-        constantes.ESQUEMA_BD +
-        ".instrumentos i",
-      (error, results, fields) => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(results);
-        }
-      }
-    );
-  });
-}
-
 function obtener_instrumentos_filtro() {
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(
@@ -72,16 +55,74 @@ function obtener_instrumentos_filtro() {
   });
 }
 
+function registrar_instrumento(instrumento) {
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.beginTransaction(() => {
+      conexion.dbConn.query(
+        "insert into " +
+          constantes.ESQUEMA_BD +
+          ".instrumentos(descripcion) values(" +
+          conexion.dbConn.escape(instrumento) +
+          ")",
+        (error, results, fields) => {
+          if (error) {
+            console.log(error);
+            conexion.dbConn.rollback();
+            reject("Error al registrar el instrumento");
+          } else {
+            conexion.dbConn.commit();
+            resolve();
+          }
+        }
+      );
+    });
+  });
+}
+
+function actualizar_instrumento(nid_instrumento, descripcion) {
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.beginTransaction(() => {
+      conexion.dbConn.query(
+        "update " +
+          constantes.ESQUEMA_BD +
+          ".instrumentos set descripcion = " +
+          conexion.dbConn.escape(descripcion) +
+          ", sucio = 'S'" +
+          " where nid = " +
+          conexion.dbConn.escape(nid_instrumento),
+        (error, results, fields) => {
+          if (error) {
+            console.log(error);
+            conexion.dbConn.rollback();
+            reject("Error al actualizar el instrumento");
+          } else {
+            conexion.dbConn.commit();
+            resolve();
+          }
+        }
+      );
+    });
+  });
+}
+
 function obtener_musicos() {
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(
       "select p.nid, p.nif, p.nombre, p.primer_apellido, p.segundo_apellido, p.telefono, p.correo_electronico, " +
-        " m.fecha_alta, m.nid_tipo_musico, m.fecha_baja, m.fecha_alta, m.nid_instrumento, m.fecha_actualizacion" +
+        " m.fecha_alta, m.nid_tipo_musico, m.fecha_baja, m.fecha_alta, m.nid_instrumento, m.fecha_actualizacion, " +
+        " t.descripcion as tipo_musico, i.descripcion as instrumento" +
         " from " +
         constantes.ESQUEMA_BD +
         ".musico m, " +
         constantes.ESQUEMA_BD +
-        ".persona p where p.nid = m.nid_persona " +
+        ".persona p, " +
+        constantes.ESQUEMA_BD +
+        ".instrumentos i, " +
+        constantes.ESQUEMA_BD +
+        ".tipo_musico t " +
+        " where p.nid = m.nid_persona " +
+        " and m.nid_instrumento = i.nid " +
+        " and m.nid_tipo_musico = t.nid_tipo_musico" +
         " group by p.nombre, p.primer_apellido, p.segundo_apellido, p.telefono, p.correo_electronico",
       (error, results, fields) => {
         if (error) {
@@ -239,6 +280,56 @@ function obtener_tipo_musicos() {
   });
 }
 
+function registrar_tipo_musico(descripcion) {
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.beginTransaction(() => {
+      conexion.dbConn.query(
+        "insert into " +
+          constantes.ESQUEMA_BD +
+          ".tipo_musico(descripcion) values(" +
+          conexion.dbConn.escape(descripcion) +
+          ")",
+        (error, results, fields) => {
+          if (error) {
+            console.log(error);
+            conexion.dbConn.rollback();
+            reject("Error al registrar el tipo de músico");
+          } else {
+            conexion.dbConn.commit();
+            resolve();
+          }
+        }
+      );
+    });
+  });
+}
+
+function actualizar_tipo_musico(nid_tipo_musico, descripcion) {
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.beginTransaction(() => {
+      conexion.dbConn.query(
+        "update " +
+          constantes.ESQUEMA_BD +
+          ".tipo_musico set descripcion = " +
+          conexion.dbConn.escape(descripcion) +
+          ", sucio = 'S'" +
+          " where nid_tipo_musico = " +
+          conexion.dbConn.escape(nid_tipo_musico),
+        (error, results, fields) => {
+          if (error) {
+            console.log(error);
+            conexion.dbConn.rollback();
+            reject("Error al actualizar el tipo de músico");
+          } else {
+            conexion.dbConn.commit();
+            resolve();
+          }
+        }
+      );
+    });
+  });
+}
+
 function obtener_musico(nid_persona) {
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(
@@ -351,6 +442,10 @@ function obtener_sucios() {
 
 module.exports.obtener_instrumentos_filtro = obtener_instrumentos_filtro;
 module.exports.obtener_instrumentos = obtener_instrumentos;
+
+module.exports.registrar_instrumento = registrar_instrumento;
+module.exports.actualizar_instrumento = actualizar_instrumento;
+
 module.exports.obtener_musicos = obtener_musicos;
 
 module.exports.registrar_instrumento_persona = registrar_instrumento_persona;
@@ -364,3 +459,6 @@ module.exports.baja_musico = baja_musico;
 module.exports.actualizar_sucio = actualizar_sucio;
 
 module.exports.obtener_sucios = obtener_sucios;
+
+module.exports.registrar_tipo_musico = registrar_tipo_musico;
+module.exports.actualizar_tipo_musico = actualizar_tipo_musico;

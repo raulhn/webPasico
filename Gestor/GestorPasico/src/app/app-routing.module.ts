@@ -37,6 +37,8 @@ import { ListaPrestamosComponent } from './componente/lista-prestamos/lista-pres
 import { FichaPrestamoComponent } from './componente/ficha-prestamo/ficha-prestamo.component';
 import { ListaAlumnosComponent } from './componente/lista-alumnos/lista-alumnos.component';
 import { FichaMatriculaProfesorComponent } from './componente/ficha-matricula-profesor/ficha-matricula-profesor.component';
+import { ListaTipoMusicoComponent } from './componente/lista-tipo-musico/lista-tipo-musico.component';
+import { ListaInstrumentosComponent } from './componente/lista-instrumentos/lista-instrumentos.component';
 
 
 const routes: Routes = [
@@ -183,7 +185,15 @@ const routes: Routes = [
   {
     path: 'ficha_matricula_profesor/:nid_matricula',
     component: FichaMatriculaProfesorComponent
-  }
+  },
+  {
+    path: 'lista_tipo_musico',
+    component: ListaTipoMusicoComponent 
+  },
+  {
+    path: 'lista_instrumentos',
+    component: ListaInstrumentosComponent
+  },
 ];
 
 @NgModule({

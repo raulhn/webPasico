@@ -16,6 +16,18 @@ export class MusicosService {
     return this.http.get(API_URL, { withCredentials:true});
   }
 
+  registrar_instrumento(nombre: string)
+  {
+    let API_URL = this.url + '/registrar_instrumento';
+    return this.http.post(API_URL, {descripcion: nombre}, {withCredentials: true})
+  }
+
+  actualizar_instrumento(nid_instrumento: string, descripcion: string)
+  {
+    let API_URL = this.url + '/actualizar_instrumento';
+    return this.http.post(API_URL, {nid_instrumento: nid_instrumento, descripcion: descripcion}, {withCredentials: true})
+  }
+
   registrar_musico(nid_instrumento: string, nid_persona: string, nid_tipo_musico: string)
   {
     let API_URL = this.url + '/registrar_musico';
@@ -44,6 +56,18 @@ export class MusicosService {
   {
     let API_URL = this.url + '/obtener_tipo_musico';
     return this.http.get(API_URL, {withCredentials: true})
+  }
+
+  registrar_tipo_musico(descripcion: string)
+  {
+    let API_URL = this.url + '/registrar_tipo_musico';
+    return this.http.post(API_URL, {descripcion: descripcion}, {withCredentials: true})
+  }
+
+  actualizar_tipo_musico(nid_tipo_musico: string, descripcion: string)
+  {
+    let API_URL = this.url + '/actualizar_tipo_musico';
+    return this.http.post(API_URL, {nid_tipo_musico: nid_tipo_musico, descripcion: descripcion}, {withCredentials: true})
   }
 
   baja_musico(nid_persona: string, nid_instrumento: string, nid_tipo_musico: string, fecha_baja: string)

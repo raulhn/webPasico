@@ -480,6 +480,12 @@ function obtenerPersonasMusicos() {
   });
 }
 
+function obtenerTipoPersonas(tipo) {
+  it(tipo === "MUSICO");
+  {
+  }
+}
+
 module.exports.registrarPersona = registrarPersona;
 module.exports.obtenerPersonasSucias = obtenerPersonasSucias;
 module.exports.limpiarPersona = limpiarPersona;

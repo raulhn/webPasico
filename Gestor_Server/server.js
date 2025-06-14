@@ -107,6 +107,8 @@ app.post("/registrar_madre", servlet_persona.registrar_madre);
 
 /** Instrumentos **/
 app.get("/obtener_instrumentos", servlet_musico.obtener_instrumentos);
+app.post("/registrar_instrumento", servlet_musico.registrar_instrumento);
+app.post("/actualizar_instrumento", servlet_musico.actualizar_instrumento);
 
 app.post("/registrar_musico", servlet_musico.registrar_musico);
 app.post(
@@ -124,7 +126,10 @@ app.get(
 );
 app.post("/baja_musico", servlet_musico.baja_musico);
 
+// Tipo Musico //
 app.get("/obtener_tipo_musico", servlet_musico.obtener_tipo_musicos);
+app.post("/registrar_tipo_musico", servlet_musico.registrar_tipo_musico);
+app.post("/actualizar_tipo_musico", servlet_musico.actualizar_tipo_musico);
 
 /** Socios **/
 app.post("/registrar_socio", servlet_socio.registrar_socio);
