@@ -21,4 +21,22 @@ function registrarTipoMusico(req, res) {
   });
 }
 
+async function obtenerTipoMusico(req, res) {
+  try {
+    const tiposMusico = await gestorTipoMusico.obtenerTiposMusico();
+    res.status(200).send({
+      error: false,
+      mensaje: "Tipos de músico obtenidos correctamente",
+      tipos_musico: tiposMusico,
+    });
+  } catch (error) {
+    console.error("Error al obtener los tipos de músico:", error);
+    res.status(500).send({
+      error: true,
+      mensaje: "Error al obtener los tipos de músico",
+    });
+  }
+}
+
 module.exports.registrarTipoMusico = registrarTipoMusico;
+module.exports.obtenerTipoMusico = obtenerTipoMusico;

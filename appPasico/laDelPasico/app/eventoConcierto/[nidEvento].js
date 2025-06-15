@@ -74,17 +74,14 @@ export default function EventoConcierto() {
     )
       .then((response) => {
         if (response.error) {
-          console.error("Error al eliminar la partitura:", response.mensaje);
           setNidPartituraSeleccionada(null);
           return;
         } else {
-          console.log("Partitura eliminada del evento:", response);
           setNidPartituraSeleccionada(null);
           setRefrescar(!refrescar);
         }
       })
       .catch((error) => {
-        console.error("Error al eliminar la partitura del evento:", error);
         setNidPartituraSeleccionada(null);
       });
   }
@@ -142,7 +139,6 @@ export default function EventoConcierto() {
       <View style={estilos.botonFix}>
         <BotonFixed
           onPress={() => {
-            console.log("Botón presionado");
             setModalVisible(true);
           }}
         />
@@ -159,7 +155,6 @@ export default function EventoConcierto() {
       <View style={estilos.botonFixLeft}>
         <BotonFixed
           onPress={() => {
-            console.log("Botón Notificar presionado");
             setModalVisibleSelector(true);
           }}
           icon="notifications"
@@ -178,7 +173,6 @@ export default function EventoConcierto() {
       <View style={estilos.botonFixTop}>
         <BotonFixed
           onPress={() => {
-            console.log("Botón presionado");
             setModalEdicionVisible(true);
           }}
           icon="mode-edit"
@@ -228,7 +222,6 @@ export default function EventoConcierto() {
           animationType="slide"
           visible={modalVisible}
           onRequestClose={() => {
-            console.log("Modal cerrado");
             setModalVisible(false);
           }}
         >
@@ -252,7 +245,6 @@ export default function EventoConcierto() {
           animationType="slide"
           visible={modalEdicionVisible}
           onRequestClose={() => {
-            console.log("Modal cerrado");
             setModalEdicionVisible(false);
           }}
         >

@@ -78,4 +78,23 @@ async function registrarTipoMusico(nid_tipo_musico, descripcion) {
   }
 }
 
+function obtenerTiposMusico() {
+  return new Promise((resolve, reject) => {
+    const sql =
+      "SELECT nid_tipo_musico, descripcion FROM " +
+      constantes.ESQUEMA +
+      ".tipo_musico";
+
+    conexion.dbConn.query(sql, (err, results) => {
+      if (err) {
+        console.error("Error al obtener los tipos de músico:", err);
+        reject(err);
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
+
 module.exports.registrarTipoMusico = registrarTipoMusico;
+module.exports.obtenerTiposMusico = obtenerTiposMusico;
