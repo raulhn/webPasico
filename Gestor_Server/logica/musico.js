@@ -123,7 +123,7 @@ function obtener_musicos() {
         " where p.nid = m.nid_persona " +
         " and m.nid_instrumento = i.nid " +
         " and m.nid_tipo_musico = t.nid_tipo_musico" +
-        " group by p.nombre, p.primer_apellido, p.segundo_apellido, p.telefono, p.correo_electronico",
+        " group by p.nombre, p.primer_apellido, p.segundo_apellido, p.telefono, p.correo_electronico, t.nid_tipo_musico, m.nid_instrumento",
       (error, results, fields) => {
         if (error) {
           reject(error);
