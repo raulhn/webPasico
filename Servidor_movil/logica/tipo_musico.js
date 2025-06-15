@@ -1,5 +1,5 @@
-const conexion = require("./conexion");
-const constantes = require("./constantes");
+const conexion = require("../conexion");
+const constantes = require("../constantes");
 
 function insertarTipoMusico(descripcion) {
   return new Promise((resolve, reject) => {

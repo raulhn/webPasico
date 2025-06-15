@@ -1,5 +1,4 @@
 const gestorInstrumentos = require("../logica/instrumentos");
-const constantes = require("../logica/constantes");
 const servletComun = require("./servlet_comun");
 
 function registrarInstrumento(req, res) {

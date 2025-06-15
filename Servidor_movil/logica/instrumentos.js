@@ -1,5 +1,5 @@
-const conexion = require("./conexion");
-const constantes = require("./constantes");
+const conexion = require("../conexion");
+const constantes = require("../constantes");
 
 function existeInstumento(nid_instrumento) {
   return new Promise((resolve, reject) => {
