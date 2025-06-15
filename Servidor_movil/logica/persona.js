@@ -2,15 +2,7 @@ const eslintPluginPrettier = require("eslint-plugin-prettier");
 const conexion = require("../conexion.js");
 const constantes = require("../constantes.js");
 const gestorUsuario = require("./usuario.js");
-
-function formatDateToMySQL(date) {
-  try {
-    const d = new Date(date);
-    return d.toISOString().slice(0, 19).replace("T", " ");
-  } catch (error) {
-    return null;
-  }
-}
+const comun = require("./comun.js");
 
 function existePersona(nid_persona) {
   return new Promise((resolve, reject) => {
@@ -38,7 +30,7 @@ function requiereActualizarPersona(nid_persona, fecha_actualizacion) {
       ".persona WHERE nid_persona = " +
       conexion.dbConn.escape(nid_persona) +
       " AND (fecha_actualizacion < " +
-      conexion.dbConn.escape(formatDateToMySQL(fecha_actualizacion)) +
+      conexion.dbConn.escape(comun.formatDateToMySQL(fecha_actualizacion)) +
       " or fecha_actualizacion is null)";
 
     conexion.dbConn.query(sql, (error, results) => {
@@ -77,7 +69,7 @@ function actualizarPersona(
       ", segundo_apellido = " +
       conexion.dbConn.escape(segundo_apellido) +
       ", fecha_nacimiento = " +
-      conexion.dbConn.escape(formatDateToMySQL(fecha_nacimiento)) +
+      conexion.dbConn.escape(comun.formatDateToMySQL(fecha_nacimiento)) +
       ", nif = " +
       conexion.dbConn.escape(nif) +
       ", telefono = " +
@@ -91,7 +83,7 @@ function actualizarPersona(
       ", nid_socio = " +
       conexion.dbConn.escape(nid_socio) +
       ", fecha_actualizacion = " +
-      conexion.dbConn.escape(formatDateToMySQL(fecha_actualizacion)) +
+      conexion.dbConn.escape(comun.formatDateToMySQL(fecha_actualizacion)) +
       ", sucio = 'N'" +
       " WHERE nid_persona = " +
       conexion.dbConn.escape(nid_persona);
@@ -144,7 +136,7 @@ function insertarPersona(
       ", " +
       conexion.dbConn.escape(segundo_apellido) +
       ", " +
-      conexion.dbConn.escape(formatDateToMySQL(fecha_nacimiento)) +
+      conexion.dbConn.escape(comun.formatDateToMySQL(fecha_nacimiento)) +
       ", " +
       conexion.dbConn.escape(nif) +
       ", " +
@@ -158,7 +150,7 @@ function insertarPersona(
       ", " +
       conexion.dbConn.escape(nid_socio) +
       ", " +
-      conexion.dbConn.escape(formatDateToMySQL(fecha_actualizacion)) +
+      conexion.dbConn.escape(comun.formatDateToMySQL(fecha_actualizacion)) +
       ")";
 
     conexion.dbConn.beginTransaction((err) => {
@@ -464,12 +456,14 @@ function obtenerPersonas() {
 function obtenerPersonasMusicos() {
   return new Promise((resolve, reject) => {
     const sql =
-      "SELECT p.*, m.nid_tipo_musico FROM " +
+      "SELECT p.*, m.nid_tipo_musico, m.nid_instrumento FROM " +
       constantes.ESQUEMA +
       ".persona p, " +
       constantes.ESQUEMA +
-      ".musicos m WHERE p.nid_persona = m.nid_persona";
+      ".musicos m WHERE p.nid_persona = m.nid_persona" +
+      " and (m.fecha_baja is null or m.fecha_baja > NOW())";
 
+    console.log("SQL para obtener personas músicos:", sql);
     conexion.dbConn.query(sql, (error, results) => {
       if (error) {
         console.error("Error al obtener las personas músicos:", error);
@@ -478,12 +472,6 @@ function obtenerPersonasMusicos() {
       resolve(results);
     });
   });
-}
-
-function obtenerTipoPersonas(tipo) {
-  it(tipo === "MUSICO");
-  {
-  }
 }
 
 module.exports.registrarPersona = registrarPersona;

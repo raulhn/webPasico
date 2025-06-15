@@ -6,9 +6,6 @@ export default function ItemSelectorPersona({ tipo = "", callback }) {
   const [esVisible, setVisible] = useState(false);
   const [personasSeleccionadas, setPersonasSeleccionadas] = useState(new Set());
   function seleccionPersona(personasSeleccionadasRecuperadas) {
-    console.log(
-      "Persona seleccionadas " + personasSeleccionadasRecuperadas.length
-    );
     setPersonasSeleccionadas(personasSeleccionadasRecuperadas);
     setVisible(false);
     callback(Array.from(personasSeleccionadasRecuperadas));

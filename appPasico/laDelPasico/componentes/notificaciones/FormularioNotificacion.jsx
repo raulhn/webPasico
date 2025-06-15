@@ -54,7 +54,7 @@ export default function FormularioNotificacion({
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Formulario de Notificación</Text>
-      <Text style={{ fontSize: 16, marginBottom: 10 }}>{tipo}</Text>
+
       <EntradaTexto
         placeholder={"Título"}
         valor={titulo}
@@ -74,10 +74,6 @@ export default function FormularioNotificacion({
       <ItemSelectorPersona
         tipo={tipo}
         callback={(personasSeleccionadasRecuperadas) => {
-          console.log(
-            "Personas seleccionadas:",
-            personasSeleccionadasRecuperadas
-          );
           setPersonasSeleccionadas(personasSeleccionadasRecuperadas);
         }}
       />
@@ -114,5 +110,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     justifyContent: "center",
     alignItems: "center",
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 20,
+    color: "#333",
   },
 });

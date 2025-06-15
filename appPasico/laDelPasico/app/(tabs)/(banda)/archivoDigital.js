@@ -16,7 +16,6 @@ export default function ArchivoDigital() {
     icono: "mode-edit",
     size: 30,
     accion: (nidPartitura) => {
-      console.log("Editar partitura con nid:", nidPartitura);
       setNidPartituraSeleccionada(nidPartitura);
       setModalVisible(true);
     },
@@ -36,7 +35,6 @@ export default function ArchivoDigital() {
         animationType="slide"
         visible={modalVisible}
         onRequestClose={() => {
-          console.log("Modal cerrado");
           setModalVisible(false);
         }}
       >

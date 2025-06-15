@@ -1,4 +1,4 @@
-import { ActivityIndicator } from "react-native";
+import { ActivityIndicator, TextInput } from "react-native";
 import { usePersonas } from "../../hooks/personas/usePersonas";
 import { View, Text, TouchableOpacity } from "react-native";
 
@@ -7,6 +7,7 @@ import { useContext, useEffect } from "react";
 import { FlatList } from "react-native";
 import { CheckBox, EntradaTexto, Boton } from "../componentesUI/ComponentesUI";
 import { useState, useRef } from "react";
+import SelectorTipoPersona from "./SelectorTipoPersona";
 
 export default function SelectorPersona({
   callback,
@@ -24,6 +25,8 @@ export default function SelectorPersona({
   const [seleccionados, setSeleccionados] = useState(personasSeleccionadas);
 
   const [numElementos, setNumElementos] = useState(30);
+
+  const [nidTipoMusico, setNidTipoMusico] = useState(null);
 
   const flatListRef = useRef(null);
 
@@ -52,6 +55,19 @@ export default function SelectorPersona({
     }
   }
 
+  function obtenerIdentificador(item) {
+    if (tipo === "MUSICOS") {
+      return (
+        item.nid_persona +
+        "-" +
+        item.nid_tipo_musico +
+        "-" +
+        item.nid_instrumento
+      );
+    }
+    return item.nid_persona.toString();
+  }
+
   // Filtra las personas al cargar el componente //
   useEffect(() => {
     const limpiar = (texto) =>
@@ -59,21 +75,30 @@ export default function SelectorPersona({
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, "")
         .toLowerCase();
+    let personasFiltradas = personas;
+
+    if (tipo === "MUSICOS" && nidTipoMusico) {
+      personasFiltradas = personas.filter(
+        (persona) => persona.nid_tipo_musico === nidTipoMusico
+      );
+      setPersonasFiltradas(personasFiltradas);
+    }
 
     if (filtro === "") {
-      setPersonasFiltradas(personas);
+      setPersonasFiltradas(personasFiltradas);
     } else {
-      const personasFiltradas = personas.filter((persona) => {
+      personasFiltradas = personasFiltradas.filter((persona) => {
         const nombreCompleto = `${persona.nombre} ${persona.primer_apellido} ${persona.segundo_apellido}`;
         return limpiar(nombreCompleto)
           .toLowerCase()
           .includes(filtro.toLowerCase());
       });
+
       setPersonasFiltradas(personasFiltradas);
     }
     const nuevoSet = new Set(seleccionados);
     setSeleccionados(nuevoSet);
-  }, [filtro, personas]);
+  }, [filtro, personas, nidTipoMusico]);
 
   if (cargando) {
     return <ActivityIndicator size="large" color="#0000ff" />;
@@ -83,11 +108,31 @@ export default function SelectorPersona({
       <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 10 }}>
         {descripcionTipo()}
       </Text>
-      <EntradaTexto
-        placeholder="Buscar persona"
-        setValor={(text) => setFiltro(text)}
-        valor={filtro}
-      ></EntradaTexto>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          marginBottom: 10,
+        }}
+      >
+        <TextInput
+          placeholder="Buscar persona..."
+          style={{ width: "50%" }}
+          onChangeText={(text) => {
+            setFiltro(text);
+          }}
+          value={filtro}
+        />
+        <SelectorTipoPersona
+          setTexto={(tipoSeleccionado) => {
+            if (tipoSeleccionado === null) {
+              setNidTipoMusico(null);
+              return;
+            }
+            setNidTipoMusico(tipoSeleccionado.valor);
+          }}
+        />
+      </View>
       <CheckBox
         setValorSeleccionado={() => {
           seleccionarTodos();
@@ -99,7 +144,7 @@ export default function SelectorPersona({
       <FlatList
         ref={flatListRef}
         data={personasFiltradas.slice(0, numElementos)}
-        keyExtractor={(item) => item.nid_persona.toString()}
+        keyExtractor={obtenerIdentificador}
         renderItem={({ item }) => {
           const etiqueta = `${item.nombre} ${item.primer_apellido} ${item.segundo_apellido}`;
           return (
@@ -141,7 +186,6 @@ export default function SelectorPersona({
           nombre={"Cerrar"}
           color={"red"}
           onPress={() => {
-            console.log("Personas", Array.from(seleccionados));
             callback(seleccionados);
           }}
         />

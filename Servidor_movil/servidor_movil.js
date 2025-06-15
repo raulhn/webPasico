@@ -182,6 +182,9 @@ app.post(
   servletNotificaciones.registrarNotificacion
 );
 
+// Tipo Musico //
+app.get("/obtener_tipos_musico", servletTipoMusico.obtenerTipoMusico);
+
 https
   .createServer(
     {
