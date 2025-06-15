@@ -55,6 +55,48 @@ function obtener_instrumentos_filtro() {
   });
 }
 
+function obtener_instrumentos_sucios() {
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(
+      "select i.nid, i.descripcion from " +
+        constantes.ESQUEMA_BD +
+        ".instrumentos i where i.sucio = 'S'",
+      (error, results, fields) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(results);
+        }
+      }
+    );
+  });
+}
+
+function actualizar_instrumento_sucio(nid_instrumento, sucio) {
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.beginTransaction(() => {
+      conexion.dbConn.query(
+        "update " +
+          constantes.ESQUEMA_BD +
+          ".instrumentos set sucio = " +
+          conexion.dbConn.escape(sucio) +
+          " where nid = " +
+          conexion.dbConn.escape(nid_instrumento),
+        (error, results, fields) => {
+          if (error) {
+            console.log(error);
+            conexion.dbConn.rollback();
+            reject("Error al actualizar el instrumento sucio");
+          } else {
+            conexion.dbConn.commit();
+            resolve();
+          }
+        }
+      );
+    });
+  });
+}
+
 function registrar_instrumento(instrumento) {
   return new Promise((resolve, reject) => {
     conexion.dbConn.beginTransaction(() => {
@@ -330,6 +372,49 @@ function actualizar_tipo_musico(nid_tipo_musico, descripcion) {
   });
 }
 
+function actualizar_tipo_musico_sucio(nid_tipo_musico, sucio) {
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.beginTransaction(() => {
+      conexion.dbConn.query(
+        "update " +
+          constantes.ESQUEMA_BD +
+          ".tipo_musico set sucio = " +
+          conexion.dbConn.escape(sucio) +
+          " where nid_tipo_musico = " +
+          conexion.dbConn.escape(nid_tipo_musico),
+        (error, results, fields) => {
+          if (error) {
+            console.log(error);
+            conexion.dbConn.rollback();
+            reject("Error al actualizar el tipo de músico sucio");
+          } else {
+            conexion.dbConn.commit();
+            resolve();
+          }
+        }
+      );
+    });
+  });
+}
+
+function obtener_tipos_musico_sucios() {
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(
+      "select * from " +
+        constantes.ESQUEMA_BD +
+        ".tipo_musico where sucio = 'S'",
+      (error, results, fields) => {
+        if (error) {
+          console.log(error);
+          reject(error);
+        } else {
+          resolve(results);
+        }
+      }
+    );
+  });
+}
+
 function obtener_musico(nid_persona) {
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(
@@ -452,8 +537,12 @@ module.exports.registrar_instrumento_persona = registrar_instrumento_persona;
 module.exports.obtener_instrumentos_persona = obtener_instrumentos_persona;
 module.exports.eliminar_instrumento_persona = eliminar_instrumento_persona;
 module.exports.obtener_personas_instrumento = obtener_personas_instrumento;
+module.exports.obtener_instrumentos_sucios = obtener_instrumentos_sucios;
+module.exports.actualizar_instrumento_sucio = actualizar_instrumento_sucio;
 
 module.exports.obtener_tipo_musicos = obtener_tipo_musicos;
+module.exports.obtener_tipos_musico_sucios = obtener_tipos_musico_sucios;
+module.exports.actualizar_tipo_musico_sucio = actualizar_tipo_musico_sucio;
 module.exports.obtener_musico = obtener_musico;
 module.exports.baja_musico = baja_musico;
 module.exports.actualizar_sucio = actualizar_sucio;
