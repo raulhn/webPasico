@@ -12,15 +12,35 @@
     (change)="cambia_seleccion_musico()">
     </ng-select>
 
-    <ng-select [items]="lista_tipo_musicos_filtro"
-    bindLabel="descripcion"
-    bindValue="nid_tipo_musico"
-    [(ngModel)]="nid_tipo_musico"
-    [compareWith]="compareTipoInstrumento"
-    (change)="cambia_seleccion_musico()">
-    </ng-select>
 
 
+    @if (bCargadosTiposMusicos){
+        <div style="display: flex; justify-content: space-between;">
+            <div style="display: flex; gap: 10px;">
+    @for( tipo of lista_tipo_musicos; track tipo.nid_tipo_musico) {
+
+            <input type="checkbox" 
+                   [checked]="this.tipos_musicos[tipo.nid_tipo_musico]"
+                   (change)="this.tipos_musicos[tipo.nid_tipo_musico] = !this.tipos_musicos[tipo.nid_tipo_musico]; cambia_seleccion_musico(); "/>
+            {{ tipo.descripcion }}
+        
+    }
+</div>
+    <div style="display: flex; gap: 10px;">
+    <input type="checkbox" style="justify-content: flex-end;"
+  
+           [checked]="this.agrupar_por_tipo_musico"
+           (change)="this.agrupar_por_tipo_musico = !this.agrupar_por_tipo_musico; cambia_seleccion_musico(); "/>
+        Agrupar por músico    
+        
+        <input type="checkbox" style="justify-content: flex-end;"
+               [checked]="this.bMostrarBajas"
+               (change)="this.bMostrarBajas = !this.bMostrarBajas; cambia_seleccion_musico(); "/>
+        Mostrar Bajas
+        </div>
+
+
+</div>
     <div *ngIf="bCargadosMusicos">
         <table datatable [dtOptions]="dtOptions_musicos" id="tabla_musicos" class="row-border hover"></table>
         <div *ngIf="musico_seleccionado !== undefined" class="float-end p-3"  style="display: flex; gap: 10px;">
@@ -28,7 +48,8 @@
             <button (click)="dar_baja_musico()" class="btn btn-danger">Cambiar fecha baja</button>
         </div>
     </div>
-
+    }
+ 
     <div class="mb-1 mt-1" style="display: none;">
         <div  style="min-height: 300px;" #instancia_registrar_musico>
             <div *ngIf="bCargadasPersonas" >
