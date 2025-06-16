@@ -74,6 +74,8 @@ async function actualizarEventoConcierto(req, res) {
       let fecha_evento = req.body.fecha_evento;
       let tipo_evento = req.body.tipo_evento;
       let publicado = req.body.publicado;
+      let url = req.body.url;
+      let vestimenta = req.body.vestimenta;
 
       await gestorEventos.actualizarEventoConcierto(
         nid_evento,
@@ -81,7 +83,9 @@ async function actualizarEventoConcierto(req, res) {
         descripcion,
         fecha_evento,
         tipo_evento,
-        publicado
+        publicado,
+        url,
+        vestimenta
       );
 
       res.status(200).send({

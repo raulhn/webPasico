@@ -1,6 +1,7 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Pressable, Linking } from "react-native";
 import { useRol } from "../../hooks/useRol";
 import { Boton, BotonFixed } from "../componentesUI/ComponentesUI";
+
 export default function CardPartitura({
   partitura,
   edicion,
@@ -20,6 +21,37 @@ export default function CardPartitura({
       );
     }
   }
+
+  function descargarPartitura() {
+    if (partitura.url_partitura) {
+      return (
+        <Pressable
+          onPress={() => {
+            Linking.openURL(partitura.url_partitura);
+          }}
+        >
+          <View
+            style={{
+              borderRadius: 5,
+              borderWidth: 1,
+              width: 140,
+              padding: 3,
+              borderColor: "#007CFA",
+              marginTop: 3,
+            }}
+          >
+            <Text style={{ color: "#007CFA", fontWeight: "bold" }}>
+              Descargar partitura
+            </Text>
+          </View>
+        </Pressable>
+      );
+    } else {
+      return null;
+    }
+  }
+
+  console.log("Partitura en CardPartitura:", partitura);
 
   return (
     <View style={styles.card}>
@@ -53,7 +85,7 @@ export default function CardPartitura({
         </Text>
         <Text> {partitura.autor}</Text>
       </View>
-
+      {descargarPartitura()}
       <View style={{ position: "absolute", top: 10, right: 20 }}>
         {botonEditar()}
       </View>
@@ -64,7 +96,7 @@ export default function CardPartitura({
 const styles = StyleSheet.create({
   card: {
     width: "95%",
-    height: 120,
+    height: 130,
     backgroundColor: "#fff",
     borderRadius: 10,
     padding: 20,
