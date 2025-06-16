@@ -181,8 +181,9 @@ function obtenerPersonasMusicos(req, res) {
     });
 }
 
-function obtenerTipoPersonas() {
+async function obtenerTipoPersonas(req, res) {
   
+  const tiposPersonas = await gestor.obtenerTiposPersonas();
 }
 
 module.exports.obtenerPersona = obtenerPersona;

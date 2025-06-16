@@ -74,7 +74,7 @@ function actualizarPartitura(
 function obtenerPartituras() {
   return new Promise((resolve, reject) => {
     const sql =
-      "SELECT p.nid_partitura, p.titulo, p.autor, p.nid_categoria, p.url_partitura, c.nombre_categoria " +
+      "SELECT p.nid_partitura, p.titulo, p.autor, p.nid_categoria, p.url_partitura, c.nombre_categoria, p.url_partitura " +
       "FROM " +
       constantes.ESQUEMA +
       ".partituras p " +
