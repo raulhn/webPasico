@@ -34,13 +34,16 @@ export default function CardPartitura({
             style={{
               borderRadius: 5,
               borderWidth: 1,
-              width: 140,
+              width: 150,
               padding: 3,
               borderColor: "#007CFA",
               marginTop: 3,
+              alignItems: "center",
             }}
           >
-            <Text style={{ color: "#007CFA", fontWeight: "bold" }}>
+            <Text
+              style={{ color: "#007CFA", fontWeight: "bold", fontSize: 13 }}
+            >
               Descargar partitura
             </Text>
           </View>
@@ -50,8 +53,6 @@ export default function CardPartitura({
       return null;
     }
   }
-
-  console.log("Partitura en CardPartitura:", partitura);
 
   return (
     <View style={styles.card}>
