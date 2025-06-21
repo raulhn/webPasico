@@ -1,6 +1,8 @@
 const constantes = require("../constantes");
 const conexion = require("../conexion");
 const comun = require("./comun");
+const gestorPersonas = require("./persona")
+const gestorSocios = require("./socios")
 
 function existeMusico(nid_persona, nid_tipo_musico, nid_instrumento) {
   return new Promise((resolve, reject) => {
@@ -168,5 +170,32 @@ function esMusico(nid_persona) {
   });
 }
 
+
+// El parametro bSocio indica si se quiere no tener en cuenta los hijos que ya son socios,
+// y por tanto se consideran idependiente, TRUE en caso de que se quieran incluir los hijos socios
+async function esPadreMusico(nid_persona, bSocio = true)
+{
+  try
+  {
+    let hijos = await gestorPersonas.obtenerHijos(nid_persona, bSocio);
+    for(let i=0; i < hijos.length; i++)
+    {
+      const bEsMusico = await gestorPersonas.esMusico(hijos[i].nid_persona);
+
+      if(bEsMusico )
+      {
+        return true;
+      }
+    }
+    return false;
+  }
+  catch(e)
+  {
+    console.log("musicos.js -> esPadreMusico: " || e);
+    throw new Error(e);
+  }
+}
+
 module.exports.registrarMusico = registrarMusico;
 module.exports.esMusico = esMusico;
+module.exports.esPadreMusico = esPadreMusico;

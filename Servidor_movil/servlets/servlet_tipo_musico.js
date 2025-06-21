@@ -38,5 +38,7 @@ async function obtenerTipoMusico(req, res) {
   }
 }
 
+
+
 module.exports.registrarTipoMusico = registrarTipoMusico;
 module.exports.obtenerTipoMusico = obtenerTipoMusico;

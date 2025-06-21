@@ -22,6 +22,42 @@ function existePersona(nid_persona) {
   });
 }
 
+
+//bSocio indica si se tienen que incluir los hijos que son socios, TRUE indica que si
+function obtenerHijos(nid_persona, bSocio)
+{
+  return new Promise((resolve, reject) =>
+  {
+    let condicionSocio;
+    if (!bSocio)
+    {
+      condicionSocio = " and not exists (select 1 from " + constantes.ESQUEMA + ".socios " +
+             "where nid_persona = " + conexion.dbConn.escape(nid_persona) + ")";
+    }
+    const sql = "select nid " +
+                "from " + constantes.ESQUEMA + ".personas p " +
+                "where (nid_padre = " + conexion.dbConn.escape(nid_persona) +
+                "   or nid_madre = " + conexion.dbConn.escape(nid_persona) +
+                "   or nid_socio = " + conexion.dbConn.escape(nid_persona) + ")" +
+                condicionSocio;
+
+    conexion.dbConn.query(sql, 
+      (error, results, fields) =>
+      {
+        if(error)
+        {
+          console.log("persona.js -> obtenerHijos: " + error)
+          reject("Error al obtener los hijos");
+        }
+        else
+        {
+          resolve(results);
+        }
+      }
+    )
+  })
+}
+
 function requiereActualizarPersona(nid_persona, fecha_actualizacion) {
   return new Promise((resolve, reject) => {
     const sql =
@@ -478,6 +514,7 @@ module.exports.registrarPersona = registrarPersona;
 module.exports.obtenerPersonasSucias = obtenerPersonasSucias;
 module.exports.limpiarPersona = limpiarPersona;
 module.exports.asociarUsuarioPersona = asociarUsuarioPersona;
+module.exports.obtenerHijos = obtenerHijos;
 module.exports.obtenerPersonaUsuario = obtenerPersonaUsuario;
 module.exports.obtenerUsuarioPersona = obtenerUsuarioPersona;
 module.exports.obtenerPersonas = obtenerPersonas;

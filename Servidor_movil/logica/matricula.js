@@ -1,6 +1,7 @@
 const conexion = require("../conexion");
 const constantes = require("../constantes");
 const comun = require("./comun");
+const gestorPersonas = require("./persona")
 
 function insertarMaticula(
   nid_matricula,
@@ -35,6 +36,45 @@ function insertarMaticula(
       });
     });
   });
+}
+
+
+
+async function esAlumno(nid_persona)
+{
+  try
+  {
+    let matriculas = await obtenerMatriculas(nid_persona); 
+    return matriculas.length > 0;
+  }
+  catch(error)
+  {
+    console.log("matricula.js -> esAlumno: " + error);
+    throw new Error("Error al comprobar si es alumno")
+  }
+}
+
+async function esPadreAlumno(nid_persona, bSocio = true)
+{
+  try
+  {
+     const hijos = gestorPersonas.obtenerHijos(nid_persona, bSocio);
+
+     for(let i=0; i < hijos.length; i++)
+     {
+      let bEsAlumno = await esAlumno(hijos.nid_persona);
+      if(bEsAlumno)
+      {
+        return true;
+      }
+     }
+     return false;
+  }
+  catch(error)
+  {
+    console.log("matricula.js -> esPadreAlumno: " + error);
+    throw new Error("Error al comprobar si es padre de alumno");
+  }
 }
 
 function actualizarMatricula(
@@ -137,3 +177,5 @@ function obtenerMatriculas(nid_persona) {
 
 module.exports.registrarMatricula = registrarMatricula;
 module.exports.obtenerMatriculas = obtenerMatriculas;
+module.exports.esAlumno = esAlumno;
+module.exports.esPadreAlumno = esPadreAlumno;
