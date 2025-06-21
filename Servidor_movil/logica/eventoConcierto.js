@@ -6,13 +6,15 @@ function insertarEventoConcierto(
   descripcion,
   fecha_evento,
   tipo_evento,
-  publicado
+  publicado,
+  vestimenta,
+  lugar
 ) {
   return new Promise((resolve, reject) => {
     const sql =
       "INSERT INTO " +
       constantes.ESQUEMA +
-      ".evento_concierto (nombre, descripcion, fecha_evento, tipo_evento, publicado) " +
+      ".evento_concierto (nombre, descripcion, fecha_evento, tipo_evento, publicado, vestimenta, lugar) " +
       "values(" +
       conexion.dbConn.escape(nombre) +
       ", " +
@@ -23,10 +25,14 @@ function insertarEventoConcierto(
       conexion.dbConn.escape(tipo_evento) +
       ", " +
       conexion.dbConn.escape(publicado) +
+      ", " +
+      conexion.dbConn.escape(vestimenta) + 
+      ", " 
+      conexion.dbConn.escape(lugar)
       ")";
 
     conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(sql, (err, result) => {
+      conexion.dbConn.query(sql, (err, results) => {
         if (err) {
           console.log(
             "eventoConcienrot.js - insertarEventoConcierot -> Error: " + err
@@ -35,7 +41,7 @@ function insertarEventoConcierto(
           reject("Error al insertar el evento de concierto");
         } else {
           conexion.dbConn.commit();
-          resolve();
+          resolve(results.insertId);
         }
       });
     });
@@ -48,7 +54,9 @@ function actualizarEventoConcierto(
   descripcion,
   fecha_evento,
   tipo_evento,
-  publicado
+  publicado,
+  vestimenta,
+  lugar
 ) {
   return new Promise((resolve, reject) => {
     const sql =
@@ -64,6 +72,10 @@ function actualizarEventoConcierto(
       conexion.dbConn.escape(tipo_evento) +
       ", publicado = " +
       conexion.dbConn.escape(publicado) +
+      ", vestimenta = " +
+      conexion.dbConn.escape(vestimenta) +
+      ", lugar = " +
+      conexion.dbConn.escape(lugar) +
       " WHERE nid_evento_concierto = " +
       conexion.dbConn.escape(nid_evento_concierto);
 

@@ -27,6 +27,7 @@ const servletPartituras = require("./servlets/servlet_partituras.js");
 const servlet_categoria_partituras = require("./servlets/servlet_categoria_partituras.js");
 const servletNotificaciones = require("./servlets/servlet_notificaciones.js");
 const gestorNotificaciones = require("./logica/notificaciones.js");
+const servlet_tipo_evento_musico = require("./servlets/servlet_tipo_evento_musico.js")
 
 const validacionEmail = require("./logica/validacionEmail.js");
 
@@ -64,6 +65,9 @@ app.post("/refresh_token", servletUsuario.refreshToken);
 
 app.post("/logout", servletUsuario.logout);
 app.post("/recuperar_password", servletUsuario.recuperarPassword);
+
+// Tipo evento Musico //
+app.get("/obtener_tipos_evento/:nid_evento_concierto", servlet_tipo_evento_musico.obtener_tipos_evento);
 
 /** Llamadas por API KEY **/
 // Personas //
@@ -147,6 +151,10 @@ app.get(
   "/obtener_evento_concierto/:nid_evento_concierto",
   servletEventoConcierto.obtenerPartiturasEvento
 );
+
+// Tipo evento musico //
+app.post("/registrar_tipo_evento_musico", servlet_tipo_evento_musico.registrar_tipo_evento_musico);
+app.post("/eliminar_tipo_evento_musico", servlet_tipo_evento_musico.eliminar_tipo_evento_musico);
 
 // Partituras //
 app.post("/registrar_partitura", servletPartituras.insertarPartitura);

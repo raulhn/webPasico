@@ -5,7 +5,9 @@ import { AuthContext } from "../../providers/AuthContext";
 import { useContext } from "react";
 import serviceEventoConcierto from "../../servicios/serviceEventoConcierto"; // Asegúrate de importar tu servicio correctamente
 
-import { ModalExito } from "../componentesUI/ComponentesUI";
+import { BotonFixed, ModalExito } from "../componentesUI/ComponentesUI";
+import { SelectorTipoPersona} from "../persona/SelectorTipoPersona"
+
 
 import {
   EntradaTexto,
@@ -17,6 +19,10 @@ export default function FormularioEvento({ cancelar, callback, nidEvento }) {
   const [nombreEvento, setNombreEvento] = useState("");
   const [descripcion, setDescripcion] = useState("");
   const [fechaEvento, setFechaEvento] = useState(new Date());
+  const [vestimenta, setVestimenta] = useState("");
+  const [lugar, setLugar] = useState("");
+  const [tiposEvento, setTiposEvento] = useState([null]);
+  const [numTiposEvento, setNumTiposEvento] = useState(1);
 
   const { cerrarSesion } = useContext(AuthContext);
 
@@ -32,6 +38,15 @@ export default function FormularioEvento({ cancelar, callback, nidEvento }) {
           setNombreEvento(response.evento_concierto.nombre);
           setDescripcion(response.evento_concierto.descripcion);
           setFechaEvento(new Date(response.evento_concierto.fecha_evento));
+
+          let auxTiposEvento = [];
+          let tiposEventoRecuperados = response.evento_concierto.tipos_evento;
+
+          for(let i=0; i < tiposEventoRecuperados.length; i++)
+          {
+            auxTiposEvento.push({etiqueta: tiposEventoRecuperados[i].descripcion , 
+              valor:tiposEventoRecuperados[i].nid_tipo_musico})
+          }
         }
       })
       .catch((error) => {
@@ -40,11 +55,15 @@ export default function FormularioEvento({ cancelar, callback, nidEvento }) {
       });
   }, [nidEvento]);
 
+
+
   function registrarEventoConcierto() {
     if (nombreEvento === "" || descripcion === "") {
       alert("Por favor, completa todos los campos.");
       return;
     }
+
+    const conjuntoTiposEvento = obtenerConjuntoTiposEvento();
 
     const evento = {
       nombre: nombreEvento,
@@ -52,6 +71,9 @@ export default function FormularioEvento({ cancelar, callback, nidEvento }) {
       descripcion: descripcion,
       tipo_evento: "Concierto",
       publicado: "N",
+      vestimenta: vestimenta,
+      lugar: lugar,
+      tiposEvento: conjuntoTiposEvento
     };
 
     serviceEventoConcierto
@@ -73,11 +95,37 @@ export default function FormularioEvento({ cancelar, callback, nidEvento }) {
       });
   }
 
+  function obtenerConjuntoTiposEvento()
+  {
+    let conjuntoTiposEvento = [];
+
+    for(let i=0; i < tiposEvento.length; i++)
+    {
+      let bExiste = false;
+      for(let j=0; j < conjuntoTiposEvento.length; j++)
+      {
+        if(tiposEvento[i].valor == conjuntoTiposEvento[j])
+        {
+          bExiste = true;
+          break;
+        }
+      }
+      if (!bExiste)
+      {
+        conjuntoTiposEvento.push(tiposEvento[i].valor);
+      }
+    }
+
+    return conjuntoTiposEvento;
+  }
+
   function actualizarEventoConcierto() {
     if (nombreEvento === "" || descripcion === "") {
       alert("Por favor, completa todos los campos.");
       return;
     }
+
+    const conjuntoTiposEvento = obtenerConjuntoTiposEvento();
 
     const evento = {
       nid_evento_concierto: nidEvento,
@@ -86,6 +134,9 @@ export default function FormularioEvento({ cancelar, callback, nidEvento }) {
       descripcion: descripcion,
       tipo_evento: "Concierto",
       publicado: "N",
+      vestimenta: vestimenta,
+      lugar: lugar,
+      tiposEvento: conjuntoTiposEvento
     };
 
     serviceEventoConcierto
@@ -113,25 +164,101 @@ export default function FormularioEvento({ cancelar, callback, nidEvento }) {
     return formattedDate;
   }
 
+  function incluyeSelectorTipoPersona()
+  {
+    let retorno = (<SelectorTipoPersona
+                  setTexto={(tipoSeleccionado) =>
+                        {
+                          if(tipoSeleccionado === null)
+                          {
+                            //Se hace una copia del array
+                            let auxTiposEvento = tiposEvento.slice() 
+                            auxTiposEvento[i] = tipoSeleccionado.valor;
+                            setTiposEvento(auxTiposEvento);
+                          }
+                        }}
+              > </SelectorTipoPersona>
+              
+        );
+
+    for (let i=0; i<numTiposEvento; i++)
+    {
+      if (i == numTiposEvento -1)
+      {
+        retorno = retorno + (
+          <BotonFixed
+            onPress={() =>
+            {
+              setNumTiposEvento(numTiposEvento + 1);
+              let auxTiposEventos = tiposEvento.slice();
+              auxTiposEventos.push(null);
+              setTiposEvento(auxTiposEventos)
+            }
+            }></BotonFixed>
+        )
+      }
+      else{
+      const selector = (<SelectorTipoPersona
+                        setTexto={(tipoSeleccionado) =>
+                        {
+                          if(tipoSeleccionado === null)
+                          {
+                            let auxTiposEvento = tiposEvento.slice();
+                            auxTiposEvento[i] = tipoSeleccionado.valor;
+                            setTiposEvento(auxTiposEvento);
+                          }
+                        }}></SelectorTipoPersona>
+      )
+      retorno = retorno + (<BotonFixed
+                           onPress={()=>
+                           {
+                            setNumTiposEvento(numTiposEvento - 1)
+                            let auxTiposEvento = tiposEvento.slice();
+                            const indice = auxTiposEvento.indexOf(i);
+                            auxTiposEvento.splice(indice, 1);
+                            setTiposEvento(auxTiposEvento);
+                           }
+                           }
+                          ></BotonFixed>)
+      }
+    }
+    return retorno;
+
+  }
+
+
   return (
     <View style={estilos.container}>
       <Text style={estilos.titulo}>Crear evento</Text>
       <Text>Nombre de Evento</Text>
       <EntradaTexto
-        placeholder="Nombre del Evento"
+        placeholder={"Nombre del Evento"}
         setValor={(text) => setNombreEvento(text)}
         valor={nombreEvento}
       ></EntradaTexto>
 
       <Text>Descripción</Text>
       <EntradaTexto
-        placeholder="Descripción del Evento"
+        placeholder={"Descripción del Evento"}
         setValor={(text) => setDescripcion(text)}
         ancho={300}
         alto={100}
         multiline={true}
         valor={descripcion}
       ></EntradaTexto>
+
+      <Text>Vestimenta</Text>
+      <EntradaTexto
+        placeholder={"Vestimenta"}
+        setValor={(text) => setVestimenta(text)}
+        valor={vestimenta}
+        ></EntradaTexto>
+
+      <Text>Lugar</Text>
+      <EntradaTexto
+        placeholder={"Lugar"}
+        setValor={(text) => setLugar(text)}
+        valor={lugar}></EntradaTexto>
 
       <Text>Fecha</Text>
       <EntradaFecha
@@ -141,6 +268,9 @@ export default function FormularioEvento({ cancelar, callback, nidEvento }) {
         }}
         valorFecha={fechaEvento}
       ></EntradaFecha>
+
+      {incluyeSelectorTipoPersona}
+        
       <View
         style={{
           flexDirection: "row",
