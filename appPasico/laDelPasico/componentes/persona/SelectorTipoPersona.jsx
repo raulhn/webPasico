@@ -11,9 +11,10 @@ export default function SelectorTipoPersona({
   setTexto,
   ancho = "200",
   placeHolderFiltro = "Elige Tipo",
+  valorInicial = null,
 }) {
   const [visible, setVisible] = useState(false);
-  const [refrescar, setRefrescar] = useState(false);
+
   const [opciones, setOpciones] = useState([]);
   const [valor, setValor] = useState(null);
   const { cerrarSesion } = useContext(AuthContext);
@@ -30,11 +31,12 @@ export default function SelectorTipoPersona({
         setOpciones(tipos);
       }
     });
-  }, [refrescar]);
+    setValor(valorInicial);
+  }, [valorInicial]);
 
-  const setValorSeleccionado = (valor) => {
-    setTexto(valor);
-    setValor(valor);
+  const setValorSeleccionado = (valorSeleccionado) => {
+    setTexto(valorSeleccionado);
+    setValor(valorSeleccionado);
     setVisible(false);
   };
 
@@ -49,6 +51,7 @@ export default function SelectorTipoPersona({
           </Text>
         </View>
       </Pressable>
+
       <Modal
         animationType="slide"
         visible={visible}

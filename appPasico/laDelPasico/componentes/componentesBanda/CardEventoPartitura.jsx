@@ -2,6 +2,14 @@ import { Text, View, StyleSheet } from "react-native";
 
 export default function CardEventoPartitura({ EventoPartitura }) {
   let fecha_evento = "";
+  let arrayColores = [
+    "#FF5733",
+    "#33FF57",
+    "#8A2BE2",
+    "#FF4500",
+    "#1E90FF",
+    "#FFD700",
+  ];
 
   if (EventoPartitura.fecha_evento) {
     const fecha = new Date(EventoPartitura.fecha_evento);
@@ -15,16 +23,56 @@ export default function CardEventoPartitura({ EventoPartitura }) {
     fecha_evento = "Sin Definir";
   }
 
+  function incluirTipos() {
+    let tipos = EventoPartitura.tipos_evento;
+
+    let muestraTipos = [];
+    for (let i = 0; i < tipos.length; i++) {
+      let color = arrayColores[i % arrayColores.length];
+
+      muestraTipos.push(
+        <View style={{ flexDirection: "row" }} key={i}>
+          <Text style={{ fontWeight: "bold", color: color }}>
+            {tipos[i].descripcion}{" "}
+          </Text>
+        </View>
+      );
+    }
+    return muestraTipos;
+  }
+
   return (
     <View style={styles.card}>
       <Text numberOfLines={1} ellipsizeMode="tail" style={styles.titulo}>
         {EventoPartitura.nombre}
       </Text>
 
-      <Text numberOfLines={3} ellipsizeMode="tail">
+      <Text numberOfLines={2} ellipsizeMode="tail">
         {EventoPartitura.descripcion}
       </Text>
-
+      <View
+        style={[
+          { flexDirection: "row", gap: 5 },
+          EventoPartitura.lugar ? {} : { display: "none" },
+        ]}
+      >
+        <Text numberOfLines={1} style={{ fontWeight: "bold" }}>
+          Lugar:{" "}
+        </Text>
+        <Text>{EventoPartitura.lugar}</Text>
+      </View>
+      <View
+        style={[
+          { flexDirection: "row", gap: 5 },
+          EventoPartitura.vestimenta ? {} : { display: "none" },
+        ]}
+      >
+        <Text numberOfLines={1} style={{ fontWeight: "bold" }}>
+          Vestimenta:{" "}
+        </Text>
+        <Text>{EventoPartitura.vestimenta}</Text>
+      </View>
+      <View style={{ flexDirection: "row", gap: 5 }}>{incluirTipos()}</View>
       <View
         style={{
           flexDirection: "row",
@@ -41,7 +89,7 @@ export default function CardEventoPartitura({ EventoPartitura }) {
 }
 const styles = StyleSheet.create({
   card: {
-    height: 150,
+    height: 170,
     width: "95%",
 
     backgroundColor: "#fff",

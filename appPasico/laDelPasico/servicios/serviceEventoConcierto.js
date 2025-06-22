@@ -28,7 +28,8 @@ function registrarEventoConcierto(eventoConcierto, cerrarSesion) {
       tipo_evento: eventoConcierto.tipo_evento,
       publicado: eventoConcierto.publicado,
       vestimenta: eventoConcierto.vestimenta,
-      lugar: eventoConcierto.lugar
+      lugar: eventoConcierto.lugar,
+      tiposEvento: eventoConcierto.tiposEvento,
     };
     serviceComun
       .peticionSesion(
@@ -55,8 +56,9 @@ function actualizarEventoConcierto(eventoConcierto, cerrarSesion) {
       descripcion: eventoConcierto.descripcion,
       tipo_evento: eventoConcierto.tipo_evento,
       publicado: eventoConcierto.publicado,
-      vestimenta: vestimenta,
-      lugar: lugar
+      vestimenta: eventoConcierto.vestimenta,
+      lugar: eventoConcierto.lugar,
+      tiposEvento: eventoConcierto.tiposEvento,
     };
     serviceComun
       .peticionSesion(

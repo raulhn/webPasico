@@ -121,7 +121,7 @@ export default function EventoConcierto() {
   const rol_director = esRol(["DIRECTOR", "ADMINISTRADOR"]);
 
   let formattedDate;
-  if (evento.fecha_evento) {
+  if (evento && evento.fecha_evento) {
     const fechaFormateada = new Date(evento.fecha_evento);
     formattedDate = fechaFormateada.toLocaleDateString("es-ES", {
       day: "2-digit",
@@ -254,13 +254,7 @@ export default function EventoConcierto() {
               justifyContent: "center",
               alignItems: "center",
             }}
-          >
-            <Text
-              style={{ fontSize: 24, fontWeight: "bold", marginBottom: 20 }}
-            >
-              Selecciona una Partitura
-            </Text>
-          </View>
+          ></View>
           <FormularioEvento
             cancelar={() => setModalEdicionVisible(false)}
             nidEvento={nidEvento}

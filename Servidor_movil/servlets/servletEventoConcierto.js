@@ -1,6 +1,6 @@
 const gestorEventos = require("../logica/eventoConcierto.js");
 const servlet_comun = require("./servlet_comun.js");
-const gestor_tipo_evento_musico = require("../logica/tipo_evento_musico.js")
+const gestor_tipo_evento_musico = require("../logica/tipo_evento_musico.js");
 
 async function insertarEventoConcierto(req, res) {
   try {
@@ -47,11 +47,10 @@ async function insertarEventoConcierto(req, res) {
         lugar
       );
 
-      if(tiposEvento !== null && tiposEvento.length > 0)
-      {
-        for(let i=0; i < tiposEvento.length; i++)
-        {
-          await gestor_tipo_evento_musico.registrar_tipo_evento_musico(nidEventoConcierto, 
+      if (tiposEvento !== null && tiposEvento.length > 0) {
+        for (let i = 0; i < tiposEvento.length; i++) {
+          await gestor_tipo_evento_musico.registrar_tipo_evento_musico(
+            nidEventoConcierto,
             tiposEvento[i]
           );
         }
@@ -62,7 +61,10 @@ async function insertarEventoConcierto(req, res) {
       });
     }
   } catch (error) {
-    console.error("servletEventoConcierto.js -> insertarEventoConcierto: Error al registrar el evento de concierto:" + error.message);
+    console.error(
+      "servletEventoConcierto.js -> insertarEventoConcierto: Error al registrar el evento de concierto:" +
+        error.message
+    );
     res.status(400).send({
       error: true,
       mensaje: "Error al registrar el evento de concierto",
@@ -94,6 +96,8 @@ async function actualizarEventoConcierto(req, res) {
       let vestimenta = req.body.vestimenta;
       let lugar = req.body.lugar;
 
+      let tiposEvento = req.body.tiposEvento;
+
       await gestorEventos.actualizarEventoConcierto(
         nid_evento,
         nombre,
@@ -104,6 +108,15 @@ async function actualizarEventoConcierto(req, res) {
         vestimenta,
         lugar
       );
+
+      await gestor_tipo_evento_musico.eliminar_tipos_evento_musico(nid_evento);
+
+      for (let i = 0; i < tiposEvento.length; i++) {
+        await gestor_tipo_evento_musico.registrar_tipo_evento_musico(
+          nid_evento,
+          tiposEvento[i]
+        );
+      }
 
       res.status(200).send({
         error: false,
@@ -136,6 +149,14 @@ async function obtenerEventosConcierto(req, res) {
       });
     } else {
       let eventos = await gestorEventos.obtenerEventosConcierto();
+
+      for (let i = 0; i < eventos.length; i++) {
+        let tiposEvento = await gestor_tipo_evento_musico.obtener_tipos_evento(
+          eventos[i].nid_evento_concierto
+        );
+        eventos[i].tipos_evento = tiposEvento;
+      }
+
       if (eventos) {
         res.status(200).send({
           error: false,
@@ -271,14 +292,17 @@ async function obtenerPartiturasEvento(req, res) {
         await gestorEventos.obtenerEventoConcierto(nid_evento_concierto);
       let partituras =
         await gestorEventos.obtenerPartiturasEvento(nid_evento_concierto);
-      let tipos_evento = await gestor_tipo_evento_musico.obtener_tipos_evento(nid_evento_concierto);
+      let tipos_evento =
+        await gestor_tipo_evento_musico.obtener_tipos_evento(
+          nid_evento_concierto
+        );
       if (evento_concierto) {
         res.status(200).send({
           error: false,
           mensaje: "Partituras obtenidas correctamente",
           partituras: partituras,
           evento_concierto: evento_concierto,
-          tipos_evento: tipos_evento
+          tipos_evento: tipos_evento,
         });
       } else {
         res.status(404).send({
@@ -289,7 +313,8 @@ async function obtenerPartiturasEvento(req, res) {
     }
   } catch (error) {
     console.error(
-      "Error al obtener las partituras del evento de concierto:" + error.message
+      "servletEventoConcierto.js -> obtenerPartiturasEvento: Error al obtener las partituras del evento de concierto:" +
+        error
     );
     res.status(400).send({
       error: true,
