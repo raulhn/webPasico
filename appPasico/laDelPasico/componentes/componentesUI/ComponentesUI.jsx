@@ -482,6 +482,56 @@ export function CheckBox({ item, valorSeleccionado, setValorSeleccionado }) {
   );
 }
 
+export function CustomTabs({ tabs }) {
+  const [pestanaSeleccionada, setPestanaSeleccionada] = useState(0);
+
+  function obtenerBackGroundColor(pressed, index) {
+    if (pressed) {
+      return "#e0e0e0";
+    }
+    return index === pestanaSeleccionada ? "#007CFA" : "#f5f5f5";
+  }
+
+  return (
+    <View>
+      <View style={{ flexDirection: "row" }}>
+        {tabs.map((tab, index) => (
+          <Pressable
+            key={index}
+            onPress={() => {
+              setPestanaSeleccionada(index);
+            }}
+            style={({ pressed }) => [
+              {
+                padding: 10,
+                borderRadius: 5,
+                backgroundColor: obtenerBackGroundColor(pressed, index),
+
+                marginRight: 10,
+              },
+            ]}
+          >
+            <Text
+              style={index == pestanaSeleccionada ? { color: "white" } : {}}
+            >
+              {tab.nombre}
+            </Text>
+          </Pressable>
+        ))}
+      </View>
+
+      {tabs.map((tab, index) => (
+        <View
+          style={index === pestanaSeleccionada ? {} : { display: "none" }}
+          key={index}
+        >
+          {tab.contenido()}
+        </View>
+      ))}
+    </View>
+  );
+}
+
 const estilos = StyleSheet.create({
   boton: {
     padding: 10,

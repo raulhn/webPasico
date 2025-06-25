@@ -7,6 +7,7 @@ import serviceEventoConcierto from "../../servicios/serviceEventoConcierto"; // 
 
 import { BotonFixed, ModalExito } from "../componentesUI/ComponentesUI";
 import SelectorTipoPersona from "../persona/SelectorTipoPersona";
+import SelectorMultipleTipoPersona from "../persona/SelectorMultipleTipoPersona";
 
 import {
   EntradaTexto,
@@ -20,7 +21,6 @@ export default function FormularioEvento({ cancelar, callback, nidEvento }) {
   const [fechaEvento, setFechaEvento] = useState(new Date());
   const [vestimenta, setVestimenta] = useState("");
   const [lugar, setLugar] = useState("");
-  const [numTiposEvento, setNumTiposEvento] = useState(1);
   const [tiposEventoRecuperados, setTiposEventoRecuperados] = useState([]);
 
   const { cerrarSesion } = useContext(AuthContext);
@@ -39,12 +39,6 @@ export default function FormularioEvento({ cancelar, callback, nidEvento }) {
           setFechaEvento(new Date(response.evento_concierto.fecha_evento));
           setVestimenta(response.evento_concierto.vestimenta);
           setLugar(response.evento_concierto.lugar);
-
-          if (response.tipos_evento.length > 0) {
-            setNumTiposEvento(response.tipos_evento.length);
-          } else {
-            setNumTiposEvento(1);
-          }
 
           let auxTiposEvento = [];
 
@@ -177,67 +171,6 @@ export default function FormularioEvento({ cancelar, callback, nidEvento }) {
     return formattedDate;
   }
 
-  function incluyeSelectorTipoPersona() {
-    let retorno = [];
-    for (let i = 0; i < numTiposEvento; i++) {
-      if (i == numTiposEvento - 1) {
-        retorno.push(
-          <View style={estilos.containerSeleccionTipos} key={i}>
-            <SelectorTipoPersona
-              setTexto={(tipoSeleccionado) => {
-                if (tipoSeleccionado !== null) {
-                  let auxTiposEvento = [...tiposEventoRecuperados];
-                  auxTiposEvento[i] = tipoSeleccionado;
-                  setTiposEventoRecuperados(auxTiposEvento);
-                }
-              }}
-              valorInicial={tiposEventoRecuperados[i] || null}
-            ></SelectorTipoPersona>
-
-            <BotonFixed
-              onPress={() => {
-                setNumTiposEvento(numTiposEvento + 1);
-                let auxTiposEventosRecuperados = [...tiposEventoRecuperados];
-                auxTiposEventosRecuperados.push(null);
-                setTiposEventoRecuperados(auxTiposEventosRecuperados);
-              }}
-              size={30}
-            ></BotonFixed>
-          </View>
-        );
-      } else {
-        retorno.push(
-          <View style={estilos.containerSeleccionTipos} key={i}>
-            <SelectorTipoPersona
-              setTexto={(tipoSeleccionado) => {
-                if (tipoSeleccionado !== null) {
-                  let auxTiposEventosRecuperados = [...tiposEventoRecuperados];
-                  auxTiposEventosRecuperados[i] = tipoSeleccionado;
-                  setTiposEventoRecuperados(auxTiposEventosRecuperados);
-                }
-              }}
-              valorInicial={tiposEventoRecuperados[i] || null}
-            ></SelectorTipoPersona>
-
-            <BotonFixed
-              onPress={() => {
-                setNumTiposEvento(numTiposEvento - 1);
-                let auxTiposEventosRecuperados = [...tiposEventoRecuperados];
-                auxTiposEventosRecuperados.splice(i, 1);
-
-                setTiposEventoRecuperados(auxTiposEventosRecuperados);
-              }}
-              size={30}
-              colorBoton={"#FF0000"}
-              icon={"close"}
-            ></BotonFixed>
-          </View>
-        );
-      }
-    }
-    return retorno;
-  }
-
   return (
     <ScrollView>
       <View style={estilos.container}>
@@ -285,7 +218,12 @@ export default function FormularioEvento({ cancelar, callback, nidEvento }) {
         <View
           style={{ justifyContent: "center", gap: 10, alignItems: "center" }}
         >
-          {incluyeSelectorTipoPersona()}
+          <SelectorMultipleTipoPersona
+            tiposEventos={tiposEventoRecuperados}
+            callback={(eventos) => {
+              setTiposEventoRecuperados(eventos);
+            }}
+          />
         </View>
         <View
           style={{

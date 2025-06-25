@@ -1,6 +1,7 @@
 import { View, Pressable, Text, Modal } from "react-native";
 import { useState } from "react";
 import SelectorPersona from "./SelectorPersona"; // Asegúrate de que la ruta sea correcta
+import TabSelector from "./TabSelector";
 
 export default function ItemSelectorPersona({ tipo = "", callback }) {
   const [esVisible, setVisible] = useState(false);
@@ -47,7 +48,7 @@ export default function ItemSelectorPersona({ tipo = "", callback }) {
           setVisible(!esVisible);
         }}
       >
-        <SelectorPersona
+        <TabSelector
           callback={seleccionPersona}
           personasSeleccionadas={personasSeleccionadas}
           tipo={tipo}
@@ -60,6 +61,7 @@ export default function ItemSelectorPersona({ tipo = "", callback }) {
 const estilos = {
   modalContainer: {
     flex: 1,
+
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(0,0,0,0.5)",
@@ -71,11 +73,10 @@ const estilos = {
     color: "#fff",
   },
   container: {
+    borderColor: "#ccc",
+    borderWidth: 1,
     backgroundColor: "#fff",
     borderRadius: 10,
     padding: 20,
-
-    borderColor: "#ccc",
-    borderWidth: 1,
   },
 };
