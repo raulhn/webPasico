@@ -5,7 +5,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { AuthContext } from "../../providers/AuthContext";
 import { useContext, useEffect } from "react";
 import { FlatList } from "react-native";
-import { CheckBox, EntradaTexto, Boton } from "../componentesUI/ComponentesUI";
+import { CheckBox, Boton } from "../componentesUI/ComponentesUI";
 import { useState, useRef } from "react";
 import SelectorTipoPersona from "./SelectorTipoPersona";
 
@@ -103,64 +103,76 @@ export default function SelectorPersona({
   if (cargando) {
     return <ActivityIndicator size="large" color="#0000ff" />;
   }
+
   return (
-    <View style={{ padding: 10, flex: 1 }}>
-      <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 10 }}>
-        {descripcionTipo()}
-      </Text>
+    <View style={{ height: "100%", padding: 10 }}>
       <View
         style={{
           flexDirection: "row",
           justifyContent: "space-between",
           marginBottom: 10,
+          maxHeight: "10%",
         }}
       >
         <TextInput
           placeholder="Buscar persona..."
-          style={{ width: "50%" }}
           onChangeText={(text) => {
             setFiltro(text);
           }}
           value={filtro}
+          ancho={250}
         />
-        <SelectorTipoPersona
-          setTexto={(tipoSeleccionado) => {
-            if (tipoSeleccionado === null) {
-              setNidTipoMusico(null);
-              return;
-            }
-            setNidTipoMusico(tipoSeleccionado.valor);
+        <View>
+          <SelectorTipoPersona
+            setTexto={(tipoSeleccionado) => {
+              if (tipoSeleccionado === null) {
+                setNidTipoMusico(null);
+                return;
+              }
+              setNidTipoMusico(tipoSeleccionado.valor);
+            }}
+            ancho={140}
+          />
+        </View>
+      </View>
+      <View style={{ height: "75%" }}>
+        <CheckBox
+          setValorSeleccionado={() => {
+            seleccionarTodos();
+          }}
+          item={{
+            etiqueta: "Seleccionar todos",
+          }}
+        />
+        <FlatList
+          ref={flatListRef}
+          data={personasFiltradas.slice(0, numElementos)}
+          keyExtractor={obtenerIdentificador}
+          renderItem={({ item }) => {
+            const etiqueta = `${item.nombre} ${item.primer_apellido} ${item.segundo_apellido}`;
+            return (
+              <CheckBox
+                setValorSeleccionado={seleccion}
+                valorSeleccionado={seleccionados.has(item.nid_persona)}
+                item={{
+                  etiqueta: etiqueta,
+                  valor: item.nid_persona,
+                }}
+              />
+            );
           }}
         />
       </View>
-      <CheckBox
-        setValorSeleccionado={() => {
-          seleccionarTodos();
-        }}
-        item={{
-          etiqueta: "Seleccionar todos",
-        }}
-      />
-      <FlatList
-        ref={flatListRef}
-        data={personasFiltradas.slice(0, numElementos)}
-        keyExtractor={obtenerIdentificador}
-        renderItem={({ item }) => {
-          const etiqueta = `${item.nombre} ${item.primer_apellido} ${item.segundo_apellido}`;
-          return (
-            <CheckBox
-              setValorSeleccionado={seleccion}
-              valorSeleccionado={seleccionados.has(item.nid_persona)}
-              item={{
-                etiqueta: etiqueta,
-                valor: item.nid_persona,
-              }}
-            />
-          );
-        }}
-      />
 
-      <View style={[{ flexDirection: "row", justifyContent: "space-around" }]}>
+      <View
+        style={[
+          {
+            flexDirection: "row",
+            justifyContent: "space-around",
+            maxHeight: "15%",
+          },
+        ]}
+      >
         <View
           style={
             personasFiltradas.length <= numElementos ? { display: "none" } : {}

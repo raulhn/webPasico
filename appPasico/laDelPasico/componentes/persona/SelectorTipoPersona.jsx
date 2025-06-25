@@ -70,7 +70,7 @@ export default function SelectorTipoPersona({
           />
         </View>
 
-        <View style={{ flex: 1, alignItems: "center" }}>
+        <View style={{ alignItems: "center" }}>
           <Boton
             nombre="Limpiar"
             onPress={() => {
