@@ -1,41 +1,71 @@
-import { CustomTabs } from "../componentesUI/ComponentesUI";
-import SelectorGrupo from "./SelectorGrupo";
+import { CustomTabs, Boton } from "../componentesUI/ComponentesUI";
+import SelectorGrupoMusicos from "./SelectorGrupoMusicos";
 import SelectorPersona from "./SelectorPersona";
 import { View } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Constantes from "../../config/constantes";
 
 export default function TabSelector({ callback, personasSeleccionadas, tipo }) {
-  const [conjuntoPersonas, setconjuntoPersonas] = useState([]);
-  const [tipoSeleccionado, setTipoSeleccionado] = useState("");
-
+  const [pestanaSeleccionada, setPestanaSeleccionada] = useState(0);
   const recuperaPersonas = (eventosRecuperados) => {
-    setconjuntoPersonas(eventosRecuperados);
+    const seleccion = {};
+    seleccion.tipo = Constantes.INDIVIDUAL;
+    seleccion.conjunto = eventosRecuperados;
+    callback(seleccion);
   };
 
-  const recuperaConjunto = (conjuntoRecuperado) => {
-    setconjuntoPersonas(conjuntoRecuperado);
+  const recuperaConjuntoMusicos = (conjuntoRecuperado) => {
+    console.log("Conjunto recuperado:", conjuntoRecuperado);
+    const seleccion = {};
+
+    seleccion.tipo = Constantes.BANDA;
+    seleccion.conjunto = conjuntoRecuperado;
+    callback(seleccion);
   };
+
+  const [seleccionadasIndvidual, setseleccionadasIndividual] = useState([]);
+  const [seleccionadasBanda, setseleccionadasBanda] = useState([]);
+
+  useEffect(() => {
+    if (personasSeleccionadas) {
+      if (personasSeleccionadas.tipo === Constantes.INDIVIDUAL) {
+        setPestanaSeleccionada(1);
+        console.log("Personas seleccionadas:", personasSeleccionadas.conjunto);
+        setseleccionadasIndividual(personasSeleccionadas.conjunto);
+      } else if (personasSeleccionadas.tipo === Constantes.BANDA) {
+        setPestanaSeleccionada(0);
+        setseleccionadasBanda(personasSeleccionadas.conjunto);
+      }
+    }
+  }, [personasSeleccionadas]);
 
   const tabs = [
     {
-      nombre: "Grupos",
+      nombre: "Bandas",
       contenido: () => {
-        return <SelectorGrupo callback={recuperaConjunto} />;
+        return (
+          <SelectorGrupoMusicos
+            callback={recuperaConjuntoMusicos}
+            valorTiposMusicos={seleccionadasBanda}
+          />
+        );
       },
     },
     {
       nombre: "Individual",
       contenido: () => {
         return (
-          <SelectorPersona
-            callback={recuperaPersonas}
-            personasSeleccionadas={personasSeleccionadas}
-            tipo={tipo}
-          />
+          <>
+            <SelectorPersona
+              callback={recuperaPersonas}
+              personasSeleccionadas={seleccionadasIndvidual}
+              tipo={tipo}
+            />
+          </>
         );
       },
     },
   ];
 
-  return <CustomTabs tabs={tabs} />;
+  return <CustomTabs tabs={tabs} pestana={pestanaSeleccionada} />;
 }

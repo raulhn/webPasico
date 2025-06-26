@@ -2,25 +2,36 @@ import { View, Pressable, Text, Modal } from "react-native";
 import { useState } from "react";
 import SelectorPersona from "./SelectorPersona"; // Asegúrate de que la ruta sea correcta
 import TabSelector from "./TabSelector";
+import Constantes from "../../config/constantes"; // Asegúrate de que la ruta sea correcta
 
 export default function ItemSelectorPersona({ tipo = "", callback }) {
   const [esVisible, setVisible] = useState(false);
-  const [personasSeleccionadas, setPersonasSeleccionadas] = useState(new Set());
+  const [personasSeleccionadas, setPersonasSeleccionadas] = useState(null);
+
   function seleccionPersona(personasSeleccionadasRecuperadas) {
-    setPersonasSeleccionadas(personasSeleccionadasRecuperadas);
     setVisible(false);
-    callback(Array.from(personasSeleccionadasRecuperadas));
+    console.log("Personas seleccionadas 1:", personasSeleccionadasRecuperadas);
+    setPersonasSeleccionadas(personasSeleccionadasRecuperadas);
   }
 
   function mensajeSeleccionado() {
-    if (personasSeleccionadas.size === 0) {
-      return "No hay personas seleccionadas";
-    } else if (personasSeleccionadas.size === 1) {
-      return "1 persona seleccionada";
-    } else {
-      return `${personasSeleccionadas.size} personas seleccionadas`;
+    if (personasSeleccionadas) {
+      if (
+        personasSeleccionadas.tipo === Constantes.INDIVIDUAL &&
+        personasSeleccionadas.conjunto.size > 0
+      ) {
+        return "Personas Seleccionadas: " + personasSeleccionadas.conjunto.size;
+      } else if (personasSeleccionadas.tipo === Constantes.BANDA) {
+        const conjuntoMusicos = personasSeleccionadas.conjunto.filter(
+          (musico) => musico !== null
+        );
+
+        return "Grupos Seleccionados: " + conjuntoMusicos.length;
+      }
     }
+    return "No hay selección";
   }
+
   return (
     <>
       <Pressable

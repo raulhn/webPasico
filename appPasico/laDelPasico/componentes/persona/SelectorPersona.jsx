@@ -30,6 +30,10 @@ export default function SelectorPersona({
 
   const flatListRef = useRef(null);
 
+  useEffect(() => {
+    setSeleccionados(personasSeleccionadas);
+  }, [personasSeleccionadas]);
+
   function seleccion(item, seleccionado) {
     const nuevoSet = new Set(seleccionados);
 
@@ -46,12 +50,6 @@ export default function SelectorPersona({
       setSeleccionados(new Set());
     } else {
       setSeleccionados(new Set(personasFiltradas.map((p) => p.nid_persona)));
-    }
-  }
-
-  function descripcionTipo() {
-    if (tipo === "MUSICOS") {
-      return "Selección Músicos";
     }
   }
 
@@ -195,9 +193,9 @@ export default function SelectorPersona({
         </View>
 
         <Boton
-          nombre={"Cerrar"}
-          color={"red"}
+          nombre={"Aceptar"}
           onPress={() => {
+            console.log("Personas seleccionadas Aceptar:", seleccionados);
             callback(seleccionados);
           }}
         />
