@@ -13,6 +13,7 @@ import {
   Modal,
 } from "react-native";
 import { useState, useEffect } from "react";
+import { use } from "react";
 
 export function Boton({
   nombre,
@@ -482,7 +483,7 @@ export function CheckBox({ item, valorSeleccionado, setValorSeleccionado }) {
   );
 }
 
-export function CustomTabs({ tabs }) {
+export function CustomTabs({ tabs, pestana = 0 }) {
   const [pestanaSeleccionada, setPestanaSeleccionada] = useState(0);
 
   function obtenerBackGroundColor(pressed, index) {
@@ -491,6 +492,10 @@ export function CustomTabs({ tabs }) {
     }
     return index === pestanaSeleccionada ? "#007CFA" : "#f5f5f5";
   }
+
+  useEffect(() => {
+    setPestanaSeleccionada(pestana);
+  }, [pestana]);
 
   return (
     <View>
