@@ -2,16 +2,8 @@ const gestorNotificaciones = require("../logica/notificaciones.js");
 
 async function registrarNotificacion(req, res) {
   try {
-    console.log("Iniciando el registro de notificación...");
     const { personas, titulo, mensaje, data } = req.body;
 
-    console.log(
-      "Datos recibidos para registrar la notificación:",
-      personas,
-      titulo,
-      mensaje,
-      data
-    );
     if (!personas || !titulo || !mensaje) {
       return res.status(400).send({
         error: true,
@@ -19,16 +11,6 @@ async function registrarNotificacion(req, res) {
       });
     }
 
-    console.log(
-      "Registrando notificación para personas:",
-      personas,
-      "Título:",
-      titulo,
-      "Mensaje:",
-      mensaje,
-      "Data:",
-      data
-    );
     await gestorNotificaciones.enviarNotificaciones(
       personas,
       titulo,
@@ -49,4 +31,38 @@ async function registrarNotificacion(req, res) {
   }
 }
 
+async function registrarNotificacionGrupo(req, res) {
+  try {
+    const { nid_grupo, grupos, titulo, mensaje, data } = req.body;
+
+    if (!grupos || !titulo || !mensaje) {
+      return res.status(400).send({
+        error: true,
+        mensaje:
+          "Faltan datos necesarios para registrar la notificación de grupo",
+      });
+    }
+
+    await gestorNotificaciones.registrarNotificacionGrupo(
+      nid_grupo,
+      grupos,
+      titulo,
+      mensaje,
+      data
+    );
+
+    res.status(200).send({
+      error: false,
+      mensaje: "Notificación de grupo registrada correctamente",
+    });
+  } catch (error) {
+    console.error("Error al registrar la notificación de grupo:", error);
+    return res.status(500).send({
+      error: true,
+      mensaje: "Error al registrar la notificación de grupo",
+    });
+  }
+}
+
 module.exports.registrarNotificacion = registrarNotificacion;
+module.exports.registrarNotificacionGrupo = registrarNotificacionGrupo;

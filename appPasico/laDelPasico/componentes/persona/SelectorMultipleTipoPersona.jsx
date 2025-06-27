@@ -33,11 +33,9 @@ export default function SelectorMultipleTipoPersona({
         <View style={estilos.containerSeleccionTipos} key={i}>
           <SelectorTipoPersona
             setTexto={(tipoSeleccionado) => {
-              if (tipoSeleccionado !== null) {
-                let auxTiposEvento = [...tiposEventoRecuperados];
-                auxTiposEvento[i] = tipoSeleccionado;
-                actualizarEventosRecuperados(auxTiposEvento);
-              }
+              let auxTiposEvento = [...tiposEventoRecuperados];
+              auxTiposEvento[i] = tipoSeleccionado;
+              actualizarEventosRecuperados(auxTiposEvento);
             }}
             valorInicial={tiposEventoRecuperados[i] || null}
           ></SelectorTipoPersona>
@@ -58,11 +56,9 @@ export default function SelectorMultipleTipoPersona({
         <View style={estilos.containerSeleccionTipos} key={i}>
           <SelectorTipoPersona
             setTexto={(tipoSeleccionado) => {
-              if (tipoSeleccionado !== null) {
-                let auxTiposEventosRecuperados = [...tiposEventoRecuperados];
-                auxTiposEventosRecuperados[i] = tipoSeleccionado;
-                actualizarEventosRecuperados(auxTiposEventosRecuperados);
-              }
+              let auxTiposEventosRecuperados = [...tiposEventoRecuperados];
+              auxTiposEventosRecuperados[i] = tipoSeleccionado;
+              actualizarEventosRecuperados(auxTiposEventosRecuperados);
             }}
             valorInicial={tiposEventoRecuperados[i] || null}
           ></SelectorTipoPersona>

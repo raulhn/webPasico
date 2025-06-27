@@ -4,6 +4,7 @@ const conexion = require("../conexion.js");
 const gestorUsuario = require("./usuario.js");
 const constantes = require("../constantes.js");
 const cron = require("node-cron");
+const gestorMusicos = require("./musicos.js");
 
 const Expo = require("expo-server-sdk");
 
@@ -74,7 +75,23 @@ async function registrarNotificacion(nid_persona, titulo, body, data) {
 
 async function enviarNotificaciones(personas, titulo, body, data) {
   try {
+    let personasANotificar = [...personas];
     for (const nid_persona of personas) {
+      const esSocio = await gestorPersonas.esSocio(nid_persona);
+      if (!esSocio) {
+        //Si no es socio se comprueba si tiene padres a los que enviar la notificación
+        const nid_padre = await gestorPersonas.obtenerPadre(nid_persona);
+        const nid_madre = await gestorPersonas.obtenerMadre(nid_persona);
+        const nid_socio = await gestorPersonas.obtenerSocio(nid_persona);
+
+        personasANotificar.push(nid_padre);
+        personasANotificar.push(nid_madre);
+        personasANotificar.push(nid_socio);
+      }
+    }
+
+    let personasUnicas = [...new Set(personasANotificar)];
+    for (const nid_persona of personasUnicas) {
       const nid_notificacion = await registrarNotificacion(
         nid_persona,
         titulo,
@@ -348,6 +365,26 @@ async function eliminarErrorRecibos() {
   }
 }
 
+async function registrarNotificacionGrupo(
+  nid_grupo,
+  grupos,
+  titulo,
+  body,
+  data
+) {
+  try {
+    if (nid_grupo === constantes.BANDA) {
+      let personas = await gestorMusicos.obtenerPersonasTipoMusico(grupos);
+      await enviarNotificaciones(personas, titulo, body, data);
+    }
+  } catch (error) {
+    console.error("Error al registrar la notificación del grupo:", error);
+    throw error;
+  }
+}
+
 module.exports.enviarNotificaciones = enviarNotificaciones;
 module.exports.enviarNotificacionesTodos = enviarNotificacionesTodos;
 module.exports.procesoEnviarNotificaciones = procesoEnviarNotificaciones;
+module.exports.registrarNotificacion = registrarNotificacion;
+module.exports.registrarNotificacionGrupo = registrarNotificacionGrupo;

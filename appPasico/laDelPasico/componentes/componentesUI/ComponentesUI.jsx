@@ -368,6 +368,7 @@ export function ModalExito({ visible, setVisible, mensaje, textBoton }) {
 }
 
 export function GroupRadioInput({ opciones, valor, setValorSeleccionado }) {
+  console.log("Varlo ", valor);
   return (
     <FlatList
       data={opciones}
@@ -405,7 +406,7 @@ export function RadioInput({
   };
 
   useEffect(() => {
-    if (valorSeleccionado === valor) {
+    if (valorSeleccionado && valorSeleccionado.valor === valor.valor) {
       setSeleccionado(true);
     } else {
       setSeleccionado(false);

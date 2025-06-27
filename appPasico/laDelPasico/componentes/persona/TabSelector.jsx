@@ -1,7 +1,7 @@
 import { CustomTabs, Boton } from "../componentesUI/ComponentesUI";
 import SelectorGrupoMusicos from "./SelectorGrupoMusicos";
 import SelectorPersona from "./SelectorPersona";
-import { View } from "react-native";
+import { Text } from "react-native";
 import { useEffect, useState } from "react";
 import Constantes from "../../config/constantes";
 
@@ -44,10 +44,13 @@ export default function TabSelector({ callback, personasSeleccionadas, tipo }) {
       nombre: "Bandas",
       contenido: () => {
         return (
-          <SelectorGrupoMusicos
-            callback={recuperaConjuntoMusicos}
-            valorTiposMusicos={seleccionadasBanda}
-          />
+          <>
+            <Text style={estilos.titulo}>Selecciona Banda</Text>
+            <SelectorGrupoMusicos
+              callback={recuperaConjuntoMusicos}
+              valorTiposMusicos={seleccionadasBanda}
+            />
+          </>
         );
       },
     },
@@ -69,3 +72,10 @@ export default function TabSelector({ callback, personasSeleccionadas, tipo }) {
 
   return <CustomTabs tabs={tabs} pestana={pestanaSeleccionada} />;
 }
+
+const estilos = {
+  titulo: {
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+};

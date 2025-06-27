@@ -22,40 +22,108 @@ function existePersona(nid_persona) {
   });
 }
 
-
 //bSocio indica si se tienen que incluir los hijos que son socios, TRUE indica que si
-function obtenerHijos(nid_persona, bSocio)
-{
-  return new Promise((resolve, reject) =>
-  {
+function obtenerHijos(nid_persona, bSocio) {
+  return new Promise((resolve, reject) => {
     let condicionSocio;
-    if (!bSocio)
-    {
-      condicionSocio = " and not exists (select 1 from " + constantes.ESQUEMA + ".socios " +
-             "where nid_persona = " + conexion.dbConn.escape(nid_persona) + ")";
+    if (!bSocio) {
+      condicionSocio =
+        " and not exists (select 1 from " +
+        constantes.ESQUEMA +
+        ".socios " +
+        "where nid_persona = " +
+        conexion.dbConn.escape(nid_persona) +
+        ")";
     }
-    const sql = "select nid " +
-                "from " + constantes.ESQUEMA + ".personas p " +
-                "where (nid_padre = " + conexion.dbConn.escape(nid_persona) +
-                "   or nid_madre = " + conexion.dbConn.escape(nid_persona) +
-                "   or nid_socio = " + conexion.dbConn.escape(nid_persona) + ")" +
-                condicionSocio;
+    const sql =
+      "select nid " +
+      "from " +
+      constantes.ESQUEMA +
+      ".personas p " +
+      "where (nid_padre = " +
+      conexion.dbConn.escape(nid_persona) +
+      "   or nid_madre = " +
+      conexion.dbConn.escape(nid_persona) +
+      "   or nid_socio = " +
+      conexion.dbConn.escape(nid_persona) +
+      ")" +
+      condicionSocio;
 
-    conexion.dbConn.query(sql, 
-      (error, results, fields) =>
-      {
-        if(error)
-        {
-          console.log("persona.js -> obtenerHijos: " + error)
-          reject("Error al obtener los hijos");
-        }
-        else
-        {
-          resolve(results);
-        }
+    conexion.dbConn.query(sql, (error, results, fields) => {
+      if (error) {
+        console.log("persona.js -> obtenerHijos: " + error);
+        reject("Error al obtener los hijos");
+      } else {
+        resolve(results);
       }
-    )
-  })
+    });
+  });
+}
+
+function obtenerPadre(nid_persona) {
+  return new Promise((resolve, reject) => {
+    const sql =
+      "SELECT nid_padre FROM " +
+      constantes.ESQUEMA +
+      ".persona WHERE nid_persona = " +
+      conexion.dbConn.escape(nid_persona);
+
+    conexion.dbConn.query(sql, (error, results) => {
+      if (error) {
+        console.error("Error al obtener el padre de la persona:", error);
+        reject(error);
+      } else if (results.length === 0) {
+        resolve(null);
+      } else {
+        resolve(results[0]);
+      }
+    });
+  });
+}
+
+function obtenerMadre(nid_persona) {
+  return new Promise((resolve, reject) => {
+    const sql =
+      "SELECT nid_madre FROM " +
+      constantes.ESQUEMA +
+      ".persona WHERE nid_persona = " +
+      conexion.dbConn.escape(nid_persona);
+
+    conexion.dbConn.query(sql, (error, results) => {
+      if (error) {
+        console.error("Error al obtener la madre de la persona:", error);
+        reject(error);
+      } else if (results.length === 0) {
+        resolve(null);
+      } else {
+        resolve(results[0]);
+      }
+    });
+  });
+}
+
+function obtenerSocioAsociado(nid_persona) {
+  return new Promise((resolve, reject) => {
+    const sql =
+      "SELECT nid_socio FROM " +
+      constantes.ESQUEMA +
+      ".persona WHERE nid_persona = " +
+      conexion.dbConn.escape(nid_persona);
+
+    conexion.dbConn.query(sql, (error, results) => {
+      if (error) {
+        console.error(
+          "Error al obtener el socio asociado de la persona:",
+          error
+        );
+        reject(error);
+      } else if (results.length === 0) {
+        resolve(null);
+      } else {
+        resolve(results[0]);
+      }
+    });
+  });
 }
 
 function requiereActualizarPersona(nid_persona, fecha_actualizacion) {
@@ -519,3 +587,7 @@ module.exports.obtenerPersonaUsuario = obtenerPersonaUsuario;
 module.exports.obtenerUsuarioPersona = obtenerUsuarioPersona;
 module.exports.obtenerPersonas = obtenerPersonas;
 module.exports.obtenerPersonasMusicos = obtenerPersonasMusicos;
+
+module.exports.obtenerPadre = obtenerPadre;
+module.exports.obtenerMadre = obtenerMadre;
+module.exports.obtenerSocioAsociado = obtenerSocioAsociado;

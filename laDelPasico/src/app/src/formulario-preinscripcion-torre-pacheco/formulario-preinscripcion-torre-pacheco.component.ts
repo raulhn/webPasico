@@ -354,7 +354,9 @@ export class FormularioPreinscripcionTorrePachecoComponent implements OnInit {
       icon: 'success',
       title: 'Registro correcto',
       text: 'Gracias por su solicitud, nos pondremos en contacto con usted lo antes posible'
-    })
+    }).then(
+      () => {window.location.reload();}
+    )
   },
   error: (respuesta: any) =>
   {
