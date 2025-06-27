@@ -1,8 +1,8 @@
 const constantes = require("../constantes");
 const conexion = require("../conexion");
 const comun = require("./comun");
-const gestorPersonas = require("./persona")
-const gestorSocios = require("./socios")
+const gestorPersonas = require("./persona");
+const gestorSocios = require("./socios");
 
 function existeMusico(nid_persona, nid_tipo_musico, nid_instrumento) {
   return new Promise((resolve, reject) => {
@@ -170,32 +170,47 @@ function esMusico(nid_persona) {
   });
 }
 
-
 // El parametro bSocio indica si se quiere no tener en cuenta los hijos que ya son socios,
 // y por tanto se consideran idependiente, TRUE en caso de que se quieran incluir los hijos socios
-async function esPadreMusico(nid_persona, bSocio = true)
-{
-  try
-  {
+async function esPadreMusico(nid_persona, bSocio = true) {
+  try {
     let hijos = await gestorPersonas.obtenerHijos(nid_persona, bSocio);
-    for(let i=0; i < hijos.length; i++)
-    {
+    for (let i = 0; i < hijos.length; i++) {
       const bEsMusico = await gestorPersonas.esMusico(hijos[i].nid_persona);
 
-      if(bEsMusico )
-      {
+      if (bEsMusico) {
         return true;
       }
     }
     return false;
-  }
-  catch(e)
-  {
+  } catch (e) {
     console.log("musicos.js -> esPadreMusico: " || e);
     throw new Error(e);
   }
 }
 
+function obtenerPersonasTipoMusico(tipos_musico) {
+  return new Promise((resolve, reject) => {
+    const sql =
+      "select nid_persona from " +
+      constantes.ESQUEMA +
+      ".musicos where nid_tipo_musico in (" +
+      tipos_musico.map((tipo) => conexion.dbConn.escape(tipo)).join(",") +
+      ")" +
+      " group by nid_persona";
+
+    conexion.dbConn.query(sql, (error, results) => {
+      if (error) {
+        console.log("Error al obtener el tipo de músico: ", error);
+        reject(new Error("Error al obtener el tipo de músico"));
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
+
 module.exports.registrarMusico = registrarMusico;
 module.exports.esMusico = esMusico;
 module.exports.esPadreMusico = esPadreMusico;
+module.exports.obtenerPersonasTipoMusico = obtenerPersonasTipoMusico;

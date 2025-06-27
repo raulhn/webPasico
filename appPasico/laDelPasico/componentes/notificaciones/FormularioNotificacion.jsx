@@ -13,6 +13,7 @@ import ItemSelectorPersona from "../persona/ItemSelectorPersona";
 import ServiceNotificacion from "../../servicios/serviceNotificacion";
 import { AuthContext } from "../../providers/AuthContext";
 import { useContext } from "react";
+import Constantes from "../../config/constantes";
 
 export default function FormularioNotificacion({
   callback,
@@ -25,7 +26,7 @@ export default function FormularioNotificacion({
   const [mensaje, setMensaje] = useState(valorMensaje);
   const { cerrarSesion } = useContext(AuthContext);
 
-  const [personasSeleccionadas, setPersonasSeleccionadas] = useState([]);
+  const [personasSeleccionadas, setPersonasSeleccionadas] = useState(null);
 
   useEffect(() => {
     if (valorTitulo) {
@@ -38,13 +39,31 @@ export default function FormularioNotificacion({
 
   async function enviarNotificacion() {
     try {
-      await ServiceNotificacion.registrarNotificacion(
-        personasSeleccionadas,
-        titulo,
-        mensaje,
-        null,
-        cerrarSesion
-      );
+      if (!personasSeleccionadas) {
+        return;
+      }
+      console.log("Enviando notificación...");
+      console.log(personasSeleccionadas);
+      if (personasSeleccionadas.tipo === Constantes.INDIVIDUAL) {
+        const arrayPersonas = Array.from(personasSeleccionadas.conjunto);
+
+        await ServiceNotificacion.registrarNotificacion(
+          arrayPersonas,
+          titulo,
+          mensaje,
+          null,
+          cerrarSesion
+        );
+      } else if (personasSeleccionadas.tipo === Constantes.BANDA) {
+        await ServiceNotificacion.registrarNotificacionGrupo(
+          personasSeleccionadas.tipo,
+          personasSeleccionadas.conjunto,
+          titulo,
+          mensaje,
+          null,
+          cerrarSesion
+        );
+      }
       callback(); // Llama al callback para refrescar la lista de notificaciones
     } catch (error) {
       console.error("Error al enviar la notificación:", error);
@@ -74,6 +93,10 @@ export default function FormularioNotificacion({
       <ItemSelectorPersona
         tipo={tipo}
         callback={(personasSeleccionadasRecuperadas) => {
+          console.log(
+            "Personas seleccionadas en FormularioNotificacion:",
+            personasSeleccionadasRecuperadas
+          );
           setPersonasSeleccionadas(personasSeleccionadasRecuperadas);
         }}
       />

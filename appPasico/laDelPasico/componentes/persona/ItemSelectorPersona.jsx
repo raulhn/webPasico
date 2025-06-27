@@ -12,24 +12,26 @@ export default function ItemSelectorPersona({ tipo = "", callback }) {
     setVisible(false);
     console.log("Personas seleccionadas 1:", personasSeleccionadasRecuperadas);
     setPersonasSeleccionadas(personasSeleccionadasRecuperadas);
+    callback(personasSeleccionadasRecuperadas);
   }
 
   function mensajeSeleccionado() {
-    if (personasSeleccionadas) {
-      if (
-        personasSeleccionadas.tipo === Constantes.INDIVIDUAL &&
-        personasSeleccionadas.conjunto.size > 0
-      ) {
-        return "Personas Seleccionadas: " + personasSeleccionadas.conjunto.size;
-      } else if (personasSeleccionadas.tipo === Constantes.BANDA) {
-        const conjuntoMusicos = personasSeleccionadas.conjunto.filter(
-          (musico) => musico !== null
-        );
-
-        return "Grupos Seleccionados: " + conjuntoMusicos.length;
-      }
+    if (!personasSeleccionadas) {
+      return "No hay selección";
     }
-    return "No hay selección";
+
+    if (
+      personasSeleccionadas.tipo === Constantes.INDIVIDUAL &&
+      personasSeleccionadas.conjunto.size > 0
+    ) {
+      return "Personas Seleccionadas: " + personasSeleccionadas.conjunto.size;
+    } else if (personasSeleccionadas.tipo === Constantes.BANDA) {
+      const conjuntoMusicos = personasSeleccionadas.conjunto.filter(
+        (musico) => musico !== null
+      );
+
+      return "Grupos Seleccionados: " + conjuntoMusicos.length;
+    }
   }
 
   return (
