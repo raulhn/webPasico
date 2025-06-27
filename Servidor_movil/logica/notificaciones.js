@@ -279,39 +279,44 @@ function procesoEnviarNotificaciones() {
 }
 
 async function obtenerRecibos() {
-  const notificaciones = await obtenerNotificacionesEstado("ENVIADA");
-  return new Promise((resolve, reject) => {
-    let idsEnvio = [];
+  try {
+    const notificaciones = await obtenerNotificacionesEstado("ENVIADA");
+    return new Promise((resolve, reject) => {
+      let idsEnvio = [];
 
-    for (const notificacion of notificaciones) {
-      if (notificacion.id_envio_notificacion) {
-        idsEnvio.push(notificacion.id_envio_notificacion);
+      for (const notificacion of notificaciones) {
+        if (notificacion.id_envio_notificacion) {
+          idsEnvio.push(notificacion.id_envio_notificacion);
+        }
       }
-    }
 
-    const data = {
-      ids: idsEnvio,
-    };
+      const data = {
+        ids: idsEnvio,
+      };
 
-    const urlRecibo = "https://exp.host/--/api/v2/push/getReceipts";
+      const urlRecibo = "https://exp.host/--/api/v2/push/getReceipts";
 
-    fetch(urlRecibo, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        resolve(data);
+      fetch(urlRecibo, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(data),
       })
-      .catch((error) => {
-        console.error("Error al obtener el recibo de envío:", error);
-        reject(new Error("Error al obtener el recibo de envío"));
-      });
-  });
+        .then((response) => response.json())
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((error) => {
+          console.error("Error al obtener el recibo de envío:", error);
+          reject(new Error("Error al obtener el recibo de envío"));
+        });
+    });
+  } catch (error) {
+    console.error("Error al obtener los recibos:", error);
+    throw new Error("Error al obtener los recibos");
+  }
 }
 
 function procesarNotificacion(idEnvioNotificacion, estado) {
@@ -340,28 +345,38 @@ function procesarNotificacion(idEnvioNotificacion, estado) {
 }
 
 async function procesoObtenerRecibos() {
-  let recibos = await obtenerRecibos();
-  for (const [id, recibo] of Object.entries(recibos.data)) {
-    if (recibo.status === "ok") {
-      procesarNotificacion(id, "PROCESADA");
-    } else if (recibo.status === "error") {
-      procesarNotificacion(id, "ERROR_RECIBO");
+  try {
+    let recibos = await obtenerRecibos();
+    for (const [id, recibo] of Object.entries(recibos.data)) {
+      if (recibo.status === "ok") {
+        procesarNotificacion(id, "PROCESADA");
+      } else if (recibo.status === "error") {
+        procesarNotificacion(id, "ERROR_RECIBO");
+      }
     }
+  } catch (error) {
+    console.error("Error al procesar los recibos de notificaciones:", error);
+    throw new Error("Error al procesar los recibos de notificaciones");
   }
 }
 
 async function eliminarErrorRecibos() {
-  let notificacionesError = await obtenerNotificacionesEstado("ERROR_RECIBO");
-  for (const notificacion of notificacionesError) {
-    try {
-      await gestorConexiones.eliminarToken(notificacion.push_token);
-    } catch (error) {
-      console.error(
-        "Error al eliminar la conexión con push token" +
-          notificacion.push_token,
-        error
-      );
+  try {
+    let notificacionesError = await obtenerNotificacionesEstado("ERROR_RECIBO");
+    for (const notificacion of notificacionesError) {
+      try {
+        await gestorConexiones.eliminarToken(notificacion.push_token);
+      } catch (error) {
+        console.error(
+          "Error al eliminar la conexión con push token" +
+            notificacion.push_token,
+          error
+        );
+      }
     }
+  } catch (error) {
+    console.error("Error al eliminar los errores de recibos:", error);
+    throw new Error("Error al eliminar los errores de recibos");
   }
 }
 
