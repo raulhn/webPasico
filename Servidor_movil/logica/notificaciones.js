@@ -5,6 +5,7 @@ const gestorUsuario = require("./usuario.js");
 const constantes = require("../constantes.js");
 const cron = require("node-cron");
 const gestorMusicos = require("./musicos.js");
+const gestorSocios = require("./socios.js");
 
 const Expo = require("expo-server-sdk");
 
@@ -45,10 +46,6 @@ async function registrarNotificacion(nid_persona, titulo, body, data) {
     const usuario = await gestorPersonas.obtenerUsuarioPersona(nid_persona);
 
     if (!usuario) {
-      console.log(
-        "No se encontró un usuario asociado a la persona con nid_persona:",
-        nid_persona
-      );
       return null;
     }
     const pushToken = await gestorConexiones.obtenerTokenUsuario(
@@ -77,12 +74,13 @@ async function enviarNotificaciones(personas, titulo, body, data) {
   try {
     let personasANotificar = [...personas];
     for (const nid_persona of personas) {
-      const esSocio = await gestorPersonas.esSocio(nid_persona);
+      const esSocio = await gestorSocios.esSocio(nid_persona);
       if (!esSocio) {
         //Si no es socio se comprueba si tiene padres a los que enviar la notificación
         const nid_padre = await gestorPersonas.obtenerPadre(nid_persona);
         const nid_madre = await gestorPersonas.obtenerMadre(nid_persona);
-        const nid_socio = await gestorPersonas.obtenerSocio(nid_persona);
+        const nid_socio =
+          await gestorPersonas.obtenerSocioAsociado(nid_persona);
 
         personasANotificar.push(nid_padre);
         personasANotificar.push(nid_madre);
@@ -389,8 +387,10 @@ async function registrarNotificacionGrupo(
 ) {
   try {
     if (nid_grupo === constantes.BANDA) {
-      let personas = await gestorMusicos.obtenerPersonasTipoMusico(grupos);
-      await enviarNotificaciones(personas, titulo, body, data);
+      const personas = await gestorMusicos.obtenerPersonasTipoMusico(grupos);
+      const personasANotificar = personas.map((persona) => persona.nid_persona);
+
+      await enviarNotificaciones(personasANotificar, titulo, body, data);
     }
   } catch (error) {
     console.error("Error al registrar la notificación del grupo:", error);

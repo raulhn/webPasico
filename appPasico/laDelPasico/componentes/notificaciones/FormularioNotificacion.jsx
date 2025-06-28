@@ -42,8 +42,7 @@ export default function FormularioNotificacion({
       if (!personasSeleccionadas) {
         return;
       }
-      console.log("Enviando notificación...");
-      console.log(personasSeleccionadas);
+
       if (personasSeleccionadas.tipo === Constantes.INDIVIDUAL) {
         const arrayPersonas = Array.from(personasSeleccionadas.conjunto);
 
@@ -55,9 +54,12 @@ export default function FormularioNotificacion({
           cerrarSesion
         );
       } else if (personasSeleccionadas.tipo === Constantes.BANDA) {
+        const arrayGrupos = personasSeleccionadas.conjunto.map(
+          (grupo) => grupo.valor
+        );
         await ServiceNotificacion.registrarNotificacionGrupo(
           personasSeleccionadas.tipo,
-          personasSeleccionadas.conjunto,
+          arrayGrupos,
           titulo,
           mensaje,
           null,
@@ -93,10 +95,6 @@ export default function FormularioNotificacion({
       <ItemSelectorPersona
         tipo={tipo}
         callback={(personasSeleccionadasRecuperadas) => {
-          console.log(
-            "Personas seleccionadas en FormularioNotificacion:",
-            personasSeleccionadasRecuperadas
-          );
           setPersonasSeleccionadas(personasSeleccionadasRecuperadas);
         }}
       />

@@ -115,41 +115,36 @@ async function construirRoles(nid_usuario) {
     // Rol Socio //
     let esSocio = await gestorSocios.esSocio(persona.nid_persona);
     if (esSocio) {
-      console.log("El usuario es socio.");
       roles.push({ rol: "SOCIO" });
     }
 
     // Rol Musico //
     let esMusico = await gestorMusicos.esMusico(persona.nid_persona);
     if (esMusico) {
-      console.log("El usuario es músico.");
       roles.push({ rol: "MUSICO" });
-    }
-    else
-    {
+    } else {
       //Compruebo si es padre de musico, no tengo en cuenta los hijos que ya son socios
-      let esPadreMusico = await gestorMusicos.esPadreMusico(persona.nid_persona, false);
-      if (esPadreMusico)
-      {
-        roles.push({rol: "MUSICO"})
+      let esPadreMusico = await gestorMusicos.esPadreMusico(
+        persona.nid_persona,
+        false
+      );
+      if (esPadreMusico) {
+        roles.push({ rol: "MUSICO" });
       }
     }
 
     // Rol Alumno //
-    const bEsAlumno = await gestorMatriculas.esAlumno(
-      persona.nid_persona
-    );
+    const bEsAlumno = await gestorMatriculas.esAlumno(persona.nid_persona);
     if (bEsAlumno) {
-      console.log("El usuario tiene matrículas.");
       roles.push({ rol: "ALUMNO" });
-    }
-    else
-    {
+    } else {
       //Comprueba si la persona es padre de alumno sin tener en cuenta alumnos que sean socios
-      const bEsPadreAlumno = await gestorMatriculas.esPadreAlumno(persona.nid_persona, false);
-      if(bEsPadreAlumno)
-      {
-        roles.push({rol: "ALUMNO"})
+      const bEsPadreAlumno = await gestorMatriculas.esPadreAlumno(
+        persona.nid_persona,
+        false
+      );
+      if (bEsPadreAlumno) {
+        roles.push({ rol: "ALUMNO" });
       }
     }
 
@@ -158,7 +153,6 @@ async function construirRoles(nid_usuario) {
       persona.nid_persona
     );
     if (profesores.length > 0) {
-      console.log("El usuario es profesor.");
       roles.push({ rol: "PROFESOR" });
     }
 
