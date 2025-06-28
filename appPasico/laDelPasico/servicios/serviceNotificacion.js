@@ -40,15 +40,6 @@ function registrarNotificacionGrupo(
   data,
   cerrar_sesion
 ) {
-  console.log(
-    "registrarNotificacionGrupo",
-    nid_grupo,
-    grupos,
-    titulo,
-    mensaje,
-    data
-  );
-
   const body = {
     nid_grupo: nid_grupo,
     grupos: grupos,
@@ -56,6 +47,12 @@ function registrarNotificacionGrupo(
     mensaje: mensaje,
     data: data,
   };
+
+  console.log("enviarNotificacionGrupo", body);
+  console.log(
+    "Constantes.URL_SERVICIO_MOVIL + registrar_notificacion_grupo",
+    Constantes.URL_SERVICIO_MOVIL + "registrar_notificacion_grupo"
+  );
   return new Promise((resolve, reject) => {
     servletComun
       .peticionSesion(
@@ -72,6 +69,7 @@ function registrarNotificacionGrupo(
         }
       })
       .catch((error) => {
+        console.log("Response de registrarNotificacionGrupo:", error);
         console.log("Error en el servicio registrarNotificacionGrupo");
         reject(error);
       });

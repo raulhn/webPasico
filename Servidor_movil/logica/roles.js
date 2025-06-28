@@ -12,7 +12,6 @@ function obtenerRoles(nid_usuario) {
       " and u.nid_usuario = " +
       conexion.dbConn.escape(nid_usuario);
 
-    console.log("SQL: " + sql);
     conexion.dbConn.query(sql, (err, result) => {
       if (err) {
         console.log("roles.js - obtenerRoles -> Error: " + err);

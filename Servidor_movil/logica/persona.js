@@ -494,7 +494,7 @@ async function asociarUsuarioPersona(nid_usuario) {
       if (persona) {
         await actualizarPersonaUsuario(persona.nid_persona, nid_usuario);
       } else {
-        console.log("No se encontró la persona asociada al usuario.");
+        return null;
       }
     }
   } catch (error) {
@@ -530,7 +530,8 @@ function obtenerUsuarioPersona(nid_persona) {
       constantes.ESQUEMA +
       ".usuarios u, " +
       constantes.ESQUEMA +
-      ".persona p WHERE u.nid_persona = p.nid_persona and p.nid_persona = " +
+      ".persona p WHERE u.nid_persona = p.nid_persona " +
+      " and p.nid_persona = " +
       conexion.dbConn.escape(nid_persona);
 
     conexion.dbConn.query(sql, (error, results) => {
@@ -567,7 +568,6 @@ function obtenerPersonasMusicos() {
       ".musicos m WHERE p.nid_persona = m.nid_persona" +
       " and (m.fecha_baja is null or m.fecha_baja > NOW())";
 
-    console.log("SQL para obtener personas músicos:", sql);
     conexion.dbConn.query(sql, (error, results) => {
       if (error) {
         console.error("Error al obtener las personas músicos:", error);
