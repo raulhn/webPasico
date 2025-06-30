@@ -30,6 +30,7 @@ export default function EventoConcierto() {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalAvisoVisible, setModalAvisoVisible] = useState(false);
   const [modalErrorVisible, setModalErrorVisible] = useState(false);
+  const [tiposEvento, setTiposEvento] = useState([]);
   const [mensaje, setMensaje] = useState("");
 
   const [modalVisibleSelector, setModalVisibleSelector] = useState(false);
@@ -43,6 +44,15 @@ export default function EventoConcierto() {
   const refrescarModal = () => {
     setModalAvisoVisible(false);
   };
+
+  const arrayColores = [
+    "#FF5733",
+    "#33FF57",
+    "#8A2BE2",
+    "#FF4500",
+    "#1E90FF",
+    "#FFD700",
+  ];
 
   function registrarPartituraEvento(nidPartitura) {
     try {
@@ -95,7 +105,7 @@ export default function EventoConcierto() {
     ServiceEventoConcierto.obtenerEventoConcierto(nidEvento, cerrarSesion)
       .then((eventoData) => {
         setEvento(eventoData.evento_concierto);
-
+        setTiposEvento(eventoData.tipos_evento);
         setPartituras(eventoData.partituras);
         setCargando(false);
       })
@@ -164,6 +174,29 @@ export default function EventoConcierto() {
     );
   }
 
+  function incluirTipos() {
+    console.log("Eventos:", evento);
+
+    if (!tiposEvento) {
+      return null;
+    }
+
+    let muestraTipos = [];
+    for (let i = 0; i < tiposEvento.length; i++) {
+      let color =
+        arrayColores[tiposEvento[i].nid_tipo_musico % arrayColores.length];
+      console.log(tiposEvento[i]);
+      muestraTipos.push(
+        <View style={{ flexDirection: "row" }} key={i}>
+          <Text style={{ fontWeight: "bold", color: color }}>
+            {tiposEvento[i].descripcion}{" "}
+          </Text>
+        </View>
+      );
+    }
+    return muestraTipos;
+  }
+
   function botonEdicion() {
     let rol_director = esRol(["DIRECTOR", "ADMINISTRADOR"]);
     if (!rol_director) {
@@ -191,8 +224,37 @@ export default function EventoConcierto() {
           <Text style={estilos.tituloEvento}>
             {evento ? evento.nombre : "Cargando..."}
           </Text>
-          <Text> {evento.descripcion}</Text>
-          <Text> {formattedDate}</Text>
+          <Text numberOfLines={2}>{evento.descripcion}</Text>
+          <View
+            style={[
+              { flexDirection: "row" },
+              evento.vestimenta ? {} : { display: "none" },
+            ]}
+          >
+            <Text style={estilos.label}>Vestimenta:</Text>
+            <Text style={estilos.valor}> {evento.vestimenta}</Text>
+          </View>
+          <View
+            style={[
+              { flexDirection: "row" },
+              evento.lugar ? {} : { display: "none" },
+            ]}
+          >
+            <Text style={estilos.label}>Lugar:</Text>
+            <Text style={estilos.valor}> {evento.lugar}</Text>
+          </View>
+          <View style={{ flexDirection: "row", gap: 5 }}>{incluirTipos()}</View>
+          <View style={{ flexDirection: "row", justifyContent: "flex-end" }}>
+            <Text
+              style={{
+                color: "#007CFA",
+                fontWeight: "bold",
+              }}
+            >
+              Fecha:
+            </Text>
+            <Text> {formattedDate}</Text>
+          </View>
         </View>
         <View style={estilos.contenedorPartituras}>
           <Text style={estilos.legend}>Partituras del Evento</Text>
@@ -340,11 +402,9 @@ const estilos = StyleSheet.create({
   label: {
     fontWeight: "bold",
     color: "#333",
-    marginTop: 6,
   },
   valor: {
     color: "#444",
-    marginBottom: 4,
   },
   legend: {
     fontSize: 18,

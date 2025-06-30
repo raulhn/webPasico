@@ -1,5 +1,5 @@
 import { ActivityIndicator, Modal, Pressable, Text } from "react-native";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, RefreshControl } from "react-native";
 import { useEffect, useState } from "react";
 import CardEventoPartitura from "../../../componentes/componentesBanda/CardEventoPartitura";
 
@@ -19,12 +19,14 @@ import SelectorPersona from "../../../componentes/persona/SelectorPersona";
 
 export default function Partituras() {
   const [eventosConciertos, setEventosConciertos] = useState([]);
+  const [presionado, setPresionado] = useState(null);
   const [cargado, setCargado] = useState(false);
 
   const { esRol } = useRol();
 
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisibleSelector, setModalVisibleSelector] = useState(false);
+  const [error, setError] = useState(false);
 
   const [refrescar, setRefrescar] = useState(false);
 
@@ -33,12 +35,14 @@ export default function Partituras() {
       .obtenerEventosConciertos()
       .then((response) => {
         setEventosConciertos(response.eventos);
-
         setCargado(true);
       })
       .catch((error) => {
         console.error("Error al listar eventos:", error);
+        setError(true);
+        setCargado(true);
       });
+    setRefrescar(false);
   }, [refrescar]);
 
   const cerrar = () => {
@@ -46,7 +50,7 @@ export default function Partituras() {
   };
 
   const refrescarLista = () => {
-    setRefrescar(!refrescar);
+    setRefrescar(true);
     setModalVisible(false);
   };
 
@@ -91,11 +95,39 @@ export default function Partituras() {
     );
   }
 
+  if (error) {
+    // Muestra un mensaje de error si no se pueden cargar las galerías
+    return (
+      <View style={styles.cargandoContainer}>
+        <Text>Error al cargar</Text>
+        <Boton
+          nombre={"Reintentar"}
+          onPress={() => {
+            setCargado(false);
+            setRefrescar(true);
+            setError(false);
+          }}
+        />
+      </View>
+    );
+  }
+
   return (
     <>
       <View style={styles.container}>
         <Text style={styles.title}>Eventos y Conciertos</Text>
         <FlatList
+          refreshControl={
+            <RefreshControl
+              refreshing={refrescar}
+              onRefresh={() => {
+                setRefrescar(true); // Cambia el estado de refresco
+              }}
+            />
+          }
+          onScrollEndDrag={() => {
+            setPresionado(null); // Cambia el estado a no presionado al hacer scroll
+          }}
           style={{
             backgroundColor: "white",
           }}
@@ -110,7 +142,20 @@ export default function Partituras() {
               key={item.nid_evento_concierto}
               asChild
             >
-              <Pressable onPress={() => {}}>
+              <Pressable
+                onPress={() => {}}
+                onTouchStart={() => {
+                  setPresionado(item.nid_evento_concierto); // Cambia el estado a presionado
+                }}
+                onTouchEnd={() => {
+                  setPresionado(null); // Cambia el estado a no presionado
+                }}
+                style={
+                  presionado === item.nid_evento_concierto
+                    ? styles.tarjetaPresionada
+                    : null
+                }
+              >
                 <View style={{ width: "100%", alignItems: "center" }}>
                   <CardEventoPartitura EventoPartitura={item} />
                 </View>
@@ -158,5 +203,13 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 20,
     textAlign: "center",
+  },
+  tarjetaPresionada: {
+    transform: [{ scale: 1.05 }],
+  },
+  cargandoContainer: {
+    flex: 1, // Centra el indicador de carga en la pantalla
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

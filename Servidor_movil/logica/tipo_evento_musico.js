@@ -45,9 +45,6 @@ function obtener_tipos_evento(nid_evento_concierto) {
       "and ec.nid_evento_concierto = tem.nid_evento_concierto " +
       "and tem.nid_evento_concierto = " +
       conexion.dbConn.escape(nid_evento_concierto);
-    console.log(
-      "tipo_evento_musico.js -> obtener_tipos_eventro: " + instruccionSql
-    );
 
     conexion.dbConn.query(instruccionSql, (error, results, fields) => {
       if (error) {

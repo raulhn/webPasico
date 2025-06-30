@@ -67,7 +67,7 @@ export default function SelectorPartituras({ callback, edicion, refrescar }) {
 
   const rolDirector = esRol(["DIRECTOR", "ADMINISTRADOR"]);
   return (
-    <View style={{ flex: 1, padding: 20 }}>
+    <View style={{ flex: 1, padding: 10 }}>
       <View
         style={{
           flexDirection: "row",
