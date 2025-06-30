@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Modal } from "react-native";
+import { View, Text, StyleSheet, Modal, RefreshControl } from "react-native";
 import SelectorPartituras from "../../../componentes/componentesPartitura/SelectorPartituras";
 import FormularioPartitura from "../../../componentes/componentesPartitura/FormularioPartitura";
 import { useState } from "react";

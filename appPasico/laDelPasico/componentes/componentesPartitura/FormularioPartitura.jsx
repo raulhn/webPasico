@@ -34,11 +34,9 @@ export default function FormularioPartitura({
   const { cerrarSesion } = useContext(AuthContext);
 
   useEffect(() => {
-    console.log("Cargando partitura con nid:", nidPartitura); // Para depuración
     if (nidPartitura) {
       ServicePartituras.obtenerPartitura(nidPartitura, cerrarSesion).then(
         (respuesta) => {
-          console.log("Respuesta de obtenerPartitura:", respuesta); // Para depuración
           if (!respuesta.error) {
             setNombre(respuesta.partitura.titulo);
             setAutor(respuesta.partitura.autor);
@@ -48,8 +46,6 @@ export default function FormularioPartitura({
             });
 
             setUrlPartitura(respuesta.partitura.url_partitura);
-          } else {
-            console.error("Error al obtener la partitura:", respuesta.mensaje);
           }
         }
       );

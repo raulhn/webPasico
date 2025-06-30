@@ -1,5 +1,6 @@
 import servicePersonas from "../../servicios/servicePersonas.js";
 import { useState, useEffect } from "react";
+import Constantes from "../../config/constantes.js";
 
 export const usePersonas = (tipo = "", cerrar_sesion) => {
   const [personas, setPersonas] = useState([]);
@@ -18,7 +19,7 @@ export const usePersonas = (tipo = "", cerrar_sesion) => {
           setPersonas([]);
           setCargando(false); // Finaliza la carga incluso si hay error
         });
-    } else if (tipo === "MUSICOS") {
+    } else if (tipo === Constantes.BANDA) {
       servicePersonas
         .obtenerPersonasMusicos(cerrar_sesion)
         .then((personasRecuperadas) => {

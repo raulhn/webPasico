@@ -16,6 +16,7 @@ export function Noticias() {
   const [error, setError] = useState(false);
 
   useEffect(() => {
+    setPresionado(null);
     serviceNoticias
       .obtenerUltimasNoticias()
       .then((v_noticias) => {

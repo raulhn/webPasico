@@ -76,9 +76,7 @@ export default function CardEventoPartitura({ EventoPartitura }) {
       <View
         style={{
           flexDirection: "row",
-          position: "absolute",
-          bottom: 10,
-          right: 20,
+          justifyContent: "flex-end",
         }}
       >
         <Text style={{ color: "#007CFA", fontWeight: "bold" }}>Fecha: </Text>
@@ -89,7 +87,6 @@ export default function CardEventoPartitura({ EventoPartitura }) {
 }
 const styles = StyleSheet.create({
   card: {
-    height: 170,
     width: "95%",
 
     backgroundColor: "#fff",

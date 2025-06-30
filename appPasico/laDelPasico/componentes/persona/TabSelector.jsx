@@ -15,7 +15,6 @@ export default function TabSelector({ callback, personasSeleccionadas, tipo }) {
   };
 
   const recuperaConjuntoMusicos = (conjuntoRecuperado) => {
-    console.log("Conjunto recuperado:", conjuntoRecuperado);
     const seleccion = {};
 
     seleccion.tipo = Constantes.BANDA;
@@ -30,7 +29,6 @@ export default function TabSelector({ callback, personasSeleccionadas, tipo }) {
     if (personasSeleccionadas) {
       if (personasSeleccionadas.tipo === Constantes.INDIVIDUAL) {
         setPestanaSeleccionada(1);
-        console.log("Personas seleccionadas:", personasSeleccionadas.conjunto);
         setseleccionadasIndividual(personasSeleccionadas.conjunto);
       } else if (personasSeleccionadas.tipo === Constantes.BANDA) {
         setPestanaSeleccionada(0);
@@ -39,8 +37,10 @@ export default function TabSelector({ callback, personasSeleccionadas, tipo }) {
     }
   }, [personasSeleccionadas]);
 
-  const tabs = [
-    {
+  let tabs = [];
+
+  if (tipo === Constantes.BANDA) {
+    tabs.push({
       nombre: "Bandas",
       contenido: () => {
         return (
@@ -55,22 +55,23 @@ export default function TabSelector({ callback, personasSeleccionadas, tipo }) {
           </>
         );
       },
+    });
+  }
+
+  tabs.push({
+    nombre: "Individual",
+    contenido: () => {
+      return (
+        <>
+          <SelectorPersona
+            callback={recuperaPersonas}
+            personasSeleccionadas={seleccionadasIndvidual}
+            tipo={tipo}
+          />
+        </>
+      );
     },
-    {
-      nombre: "Individual",
-      contenido: () => {
-        return (
-          <>
-            <SelectorPersona
-              callback={recuperaPersonas}
-              personasSeleccionadas={seleccionadasIndvidual}
-              tipo={tipo}
-            />
-          </>
-        );
-      },
-    },
-  ];
+  });
 
   return <CustomTabs tabs={tabs} pestana={pestanaSeleccionada} />;
 }

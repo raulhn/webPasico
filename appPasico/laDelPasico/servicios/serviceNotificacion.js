@@ -48,11 +48,6 @@ function registrarNotificacionGrupo(
     data: data,
   };
 
-  console.log("enviarNotificacionGrupo", body);
-  console.log(
-    "Constantes.URL_SERVICIO_MOVIL + registrar_notificacion_grupo",
-    Constantes.URL_SERVICIO_MOVIL + "registrar_notificacion_grupo"
-  );
   return new Promise((resolve, reject) => {
     servletComun
       .peticionSesion(
