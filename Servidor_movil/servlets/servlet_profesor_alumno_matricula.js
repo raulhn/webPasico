@@ -46,5 +46,6 @@ function registrarProfesorAlumnoMatricula(req, res) {
   });
 }
 
+
 module.exports.registrarProfesorAlumnoMatricula =
   registrarProfesorAlumnoMatricula;

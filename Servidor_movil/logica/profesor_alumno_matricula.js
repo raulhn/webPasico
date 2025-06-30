@@ -146,5 +146,7 @@ async function registrarProfesorAlumnoMatricula(
   }
 }
 
+function obtenerAlumnosProfesor() {}
+
 module.exports.registrarProfesorAlumnoMatricula =
   registrarProfesorAlumnoMatricula;

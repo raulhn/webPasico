@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import ServicePartituras from "../../servicios/servicePartituras";
 import { ActivityIndicator, StyleSheet, Modal, TextInput } from "react-native";
 import CardPartitura from "./CardPartitura";
-import { FlatList, View, Text, Pressable } from "react-native";
-import { BotonFixed } from "../componentesUI/ComponentesUI";
+import { FlatList, View, Text, Pressable, RefreshControl } from "react-native";
+import { BotonFixed, Boton } from "../componentesUI/ComponentesUI";
 import FormularioPartitura from "./FormularioPartitura";
 import { SelectorCategoria } from "./SelectorCategoria";
 import { useRol } from "../../hooks/useRol";
@@ -15,6 +15,9 @@ export default function SelectorPartituras({ callback, edicion, refrescar }) {
   const [presionado, setPresionado] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisibleCategoria, setModalVisibleCategoria] = useState(false);
+  const [refresco, setRefresco] = useState(false);
+  const [error, setError] = useState(false);
+
   const { esRol } = useRol();
 
   useEffect(() => {
@@ -23,11 +26,14 @@ export default function SelectorPartituras({ callback, edicion, refrescar }) {
         setPartituras(response.partituras);
         setPartiturasFiltradas(response.partituras);
         setCargando(false);
+        setRefresco(false);
       })
       .catch((error) => {
-        console.error("Error al obtener partituras:", error);
+        setError(true);
+        setCargando(false);
+        setRefresco(false);
       });
-  }, [refrescar]);
+  }, [refrescar, refresco]);
 
   const cancelar = () => {
     setModalVisible(false);
@@ -65,6 +71,22 @@ export default function SelectorPartituras({ callback, edicion, refrescar }) {
     return null;
   }
 
+  if (error) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Text>Error al cargar las partituras</Text>
+        <Boton
+          nombre={"Reintentar"}
+          onPress={() => {
+            setCargando(true);
+            setRefresco(true);
+            setError(false);
+          }}
+        />
+      </View>
+    );
+  }
+
   const rolDirector = esRol(["DIRECTOR", "ADMINISTRADOR"]);
   return (
     <View style={{ flex: 1, padding: 10 }}>
@@ -97,6 +119,12 @@ export default function SelectorPartituras({ callback, edicion, refrescar }) {
       <FlatList
         data={partiturasFiltradas}
         keyExtractor={(item) => item.nid_partitura.toString()}
+        refreshControl={
+          <RefreshControl
+            refreshing={refresco}
+            onRefresh={() => setRefresco(true)}
+          />
+        }
         renderItem={({ item }) => (
           <Pressable
             onPress={() => {

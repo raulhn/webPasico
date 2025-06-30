@@ -10,7 +10,6 @@ export default function ItemSelectorPersona({ tipo = "", callback }) {
 
   function seleccionPersona(personasSeleccionadasRecuperadas) {
     setVisible(false);
-    console.log("Personas seleccionadas 1:", personasSeleccionadasRecuperadas);
     setPersonasSeleccionadas(personasSeleccionadasRecuperadas);
     callback(personasSeleccionadasRecuperadas);
   }

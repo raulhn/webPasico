@@ -8,6 +8,7 @@ import { FlatList } from "react-native";
 import { CheckBox, Boton } from "../componentesUI/ComponentesUI";
 import { useState, useRef } from "react";
 import SelectorTipoPersona from "./SelectorTipoPersona";
+import Constantes from "../../config/constantes";
 
 export default function SelectorPersona({
   callback,
@@ -54,7 +55,7 @@ export default function SelectorPersona({
   }
 
   function obtenerIdentificador(item) {
-    if (tipo === "MUSICOS") {
+    if (tipo === Constantes.BANDA) {
       return (
         item.nid_persona +
         "-" +
@@ -75,7 +76,7 @@ export default function SelectorPersona({
         .toLowerCase();
     let personasFiltradas = personas;
 
-    if (tipo === "MUSICOS" && nidTipoMusico) {
+    if (tipo === Constantes.BANDA && nidTipoMusico) {
       personasFiltradas = personas.filter(
         (persona) => persona.nid_tipo_musico === nidTipoMusico
       );

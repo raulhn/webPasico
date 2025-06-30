@@ -31,6 +31,7 @@ export default function Partituras() {
   const [refrescar, setRefrescar] = useState(false);
 
   useEffect(() => {
+    setPresionado(null);
     serviceEventoConcierto
       .obtenerEventosConciertos()
       .then((response) => {

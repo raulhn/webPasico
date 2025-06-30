@@ -1,12 +1,13 @@
 import { useLocalSearchParams } from "expo-router";
-import { View, Text, StyleSheet, FlatList } from "react-native";
+import { View, Text, StyleSheet, FlatList, RefreshControl } from "react-native";
 import { useEffect, useState, useContext } from "react";
 
 import CardPartitura from "../../componentes/componentesPartitura/CardPartitura";
 import ServiceEventoConcierto from "../../servicios/serviceEventoConcierto";
 import { ActivityIndicator, Modal } from "react-native";
 import { AuthContext } from "../../providers/AuthContext";
-import SelectorPersona from "../../componentes/persona/SelectorPersona";
+import Constantes from "../../config/constantes";
+
 import FormularioNotificacion from "../../componentes/notificaciones/FormularioNotificacion";
 import {
   BotonFixed,
@@ -32,6 +33,7 @@ export default function EventoConcierto() {
   const [modalErrorVisible, setModalErrorVisible] = useState(false);
   const [tiposEvento, setTiposEvento] = useState([]);
   const [mensaje, setMensaje] = useState("");
+  const [error, setError] = useState(false);
 
   const [modalVisibleSelector, setModalVisibleSelector] = useState(false);
 
@@ -66,7 +68,7 @@ export default function EventoConcierto() {
           setModalErrorVisible(true);
         } else {
           setModalVisible(false);
-          setRefrescar(!refrescar);
+          setRefrescar(true);
         }
       });
     } catch (error) {
@@ -88,7 +90,7 @@ export default function EventoConcierto() {
           return;
         } else {
           setNidPartituraSeleccionada(null);
-          setRefrescar(!refrescar);
+          setRefrescar(true);
         }
       })
       .catch((error) => {
@@ -108,9 +110,12 @@ export default function EventoConcierto() {
         setTiposEvento(eventoData.tipos_evento);
         setPartituras(eventoData.partituras);
         setCargando(false);
+        setRefrescar(false);
       })
       .catch((error) => {
-        console.error("Error al obtener el evento:", error);
+        setCargando(false);
+        setRefrescar(false);
+        setError(true);
       });
   }, [nidEvento, refrescar]);
 
@@ -156,6 +161,10 @@ export default function EventoConcierto() {
     );
   }
 
+  /**
+   * Si el usuario es director o administrador, se muestra el botón de notificación
+   * @returns ç
+   */
   function botonNotificar() {
     let rol_director = esRol(["DIRECTOR", "ADMINISTRADOR"]);
     if (!rol_director) {
@@ -174,9 +183,11 @@ export default function EventoConcierto() {
     );
   }
 
+  /**
+   * Se incluyee las bandas asociadas al evento
+   * @returns
+   */
   function incluirTipos() {
-    console.log("Eventos:", evento);
-
     if (!tiposEvento) {
       return null;
     }
@@ -185,7 +196,7 @@ export default function EventoConcierto() {
     for (let i = 0; i < tiposEvento.length; i++) {
       let color =
         arrayColores[tiposEvento[i].nid_tipo_musico % arrayColores.length];
-      console.log(tiposEvento[i]);
+
       muestraTipos.push(
         <View style={{ flexDirection: "row" }} key={i}>
           <Text style={{ fontWeight: "bold", color: color }}>
@@ -197,6 +208,10 @@ export default function EventoConcierto() {
     return muestraTipos;
   }
 
+  /**
+   * En caso de que el usuario sea director o administrador, se muestra el botón de edición
+   * @returns
+   */
   function botonEdicion() {
     let rol_director = esRol(["DIRECTOR", "ADMINISTRADOR"]);
     if (!rol_director) {
@@ -211,6 +226,23 @@ export default function EventoConcierto() {
           icon="mode-edit"
           color="#007CFA"
           size={30}
+        />
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Text>Error al cargar el evento</Text>
+        <BotonFixed
+          onPress={() => {
+            setCargando(true);
+            setRefrescar(true);
+            setError(false);
+          }}
+          icon="refresh"
+          color="#007CFA"
         />
       </View>
     );
@@ -256,10 +288,19 @@ export default function EventoConcierto() {
             <Text> {formattedDate}</Text>
           </View>
         </View>
+
         <View style={estilos.contenedorPartituras}>
           <Text style={estilos.legend}>Partituras del Evento</Text>
         </View>
         <FlatList
+          refreshControl={
+            <RefreshControl
+              refreshing={refrescar}
+              onRefresh={() => {
+                setRefrescar(true);
+              }}
+            />
+          }
           data={partituras}
           style={{ width: "100%", flexGrow: 1 }}
           keyExtractor={(item) => item.nid_partitura.toString()}
@@ -269,9 +310,7 @@ export default function EventoConcierto() {
               <CardPartitura
                 partitura={item}
                 edicion={edicion}
-                onPress={() => {
-                  console.log("Partitura seleccionada:", item);
-                }}
+                onPress={() => {}}
                 rolEdicion={rol_director}
               />
             </View>
@@ -361,11 +400,10 @@ export default function EventoConcierto() {
             }}
             callback={() => {
               setModalVisibleSelector(false);
-              console.log("Notificación enviada");
             }}
             valorMensaje={evento.descripcion}
             valorTitulo={evento.nombre}
-            tipo="MUSICOS"
+            tipo={Constantes.BANDA}
           />
         </Modal>
       </View>
