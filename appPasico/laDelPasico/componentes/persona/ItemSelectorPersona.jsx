@@ -43,7 +43,6 @@ export default function ItemSelectorPersona({ tipo = "", callback }) {
         style={({ pressed }) => [
           {
             backgroundColor: pressed ? "#ddd" : "#fff",
-            padding: 10,
             borderRadius: 5,
             marginVertical: 5,
           },
@@ -90,6 +89,6 @@ const estilos = {
     borderWidth: 1,
     backgroundColor: "#fff",
     borderRadius: 10,
-    padding: 20,
+    padding: 10,
   },
 };

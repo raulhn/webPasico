@@ -2,7 +2,7 @@ import { Text, View, StyleSheet } from "react-native";
 
 export default function CardEventoPartitura({ EventoPartitura }) {
   let fecha_evento = "";
-  let arrayColores = [
+  const arrayColores = [
     "#FF5733",
     "#33FF57",
     "#8A2BE2",
@@ -28,8 +28,8 @@ export default function CardEventoPartitura({ EventoPartitura }) {
 
     let muestraTipos = [];
     for (let i = 0; i < tipos.length; i++) {
-      let color = arrayColores[i % arrayColores.length];
-
+      let color = arrayColores[tipos[i].nid_tipo_musico % arrayColores.length];
+      console.log(tipos[i]);
       muestraTipos.push(
         <View style={{ flexDirection: "row" }} key={i}>
           <Text style={{ fontWeight: "bold", color: color }}>

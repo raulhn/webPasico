@@ -2,7 +2,7 @@ import { FlatList, Pressable } from "react-native";
 import React, { useState, useEffect } from "react";
 import { CardBlog, AnimatedCardBlog } from "./CardBlog.jsx";
 import { View, Text } from "react-native";
-import { StyleSheet, ActivityIndicator } from "react-native";
+import { StyleSheet, ActivityIndicator, RefreshControl } from "react-native";
 
 const serviceNoticias = require("../servicios/serviceNoticias.js");
 
@@ -12,13 +12,24 @@ export function Noticias() {
 
   const [presionado, setPresionado] = useState(null);
 
+  const [refrescar, setRefresco] = useState(false);
+  const [error, setError] = useState(false);
+
   useEffect(() => {
-    serviceNoticias.obtenerUltimasNoticias().then((v_noticias) => {
-      let array_noticias = v_noticias["componente_blog"].slice(0, 6);
-      obtenerNoticias(array_noticias);
-      setCargando(false); // Finaliza la carga
-    });
-  }, []);
+    serviceNoticias
+      .obtenerUltimasNoticias()
+      .then((v_noticias) => {
+        let array_noticias = v_noticias["componente_blog"].slice(0, 6);
+        obtenerNoticias(array_noticias);
+        setCargando(false); // Finaliza la carga
+      })
+      .catch((error) => {
+        console.error("Error al obtener noticias:", error);
+        setError(true); // Asegúrate de finalizar la carga incluso si hay un error
+        setCargando(false);
+      });
+    setRefresco(false);
+  }, [refrescar]);
 
   if (cargando) {
     // Muestra un indicador de carga mientras se descargan los datos
@@ -30,9 +41,34 @@ export function Noticias() {
     );
   }
 
+  if (error) {
+    // Muestra un mensaje de error si no se pueden cargar las galerías
+    return (
+      <View style={styles.cargandoContainer}>
+        <Text>Error al cargar</Text>
+        <Boton
+          nombre={"Reintentar"}
+          onPress={() => {
+            setCargando(true);
+            setRefresco(true);
+            setError(false);
+          }}
+        />
+      </View>
+    );
+  }
+
   return (
     <View style={{ display: "flex" }}>
       <FlatList
+        refreshControl={
+          <RefreshControl
+            refreshing={refrescar}
+            onRefresh={() => {
+              setRefresco(true); // Cambia el estado de refresco
+            }}
+          />
+        }
         onScrollEndDrag={() => {
           setPresionado(null); // Cambia el estado a no presionado al hacer scroll
         }}

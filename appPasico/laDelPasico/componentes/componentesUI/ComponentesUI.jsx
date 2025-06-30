@@ -500,7 +500,7 @@ export function CustomTabs({ tabs, pestana = 0 }) {
 
   return (
     <View>
-      <View style={{ flexDirection: "row" }}>
+      <View style={{ flexDirection: "row", marginBottom: 10 }}>
         {tabs.map((tab, index) => (
           <Pressable
             key={index}

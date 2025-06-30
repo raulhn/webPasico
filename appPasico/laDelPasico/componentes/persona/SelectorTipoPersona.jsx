@@ -10,7 +10,7 @@ import { Boton } from "../componentesUI/ComponentesUI";
 export default function SelectorTipoPersona({
   setTexto,
   ancho = "200",
-  placeHolderFiltro = "Elige Tipo",
+  placeHolderFiltro = "Elige selección",
   valorInicial = null,
 }) {
   const [visible, setVisible] = useState(false);
@@ -61,7 +61,7 @@ export default function SelectorTipoPersona({
       >
         <View style={estilos.modalContainer}>
           <Text style={{ fontSize: 18, fontWeight: "bold", marginBottom: 10 }}>
-            Selecciona el tipo de persona
+            Selecciona el tipo
           </Text>
           <GroupRadioInput
             opciones={opciones}

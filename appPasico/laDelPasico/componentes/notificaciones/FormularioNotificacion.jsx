@@ -76,6 +76,7 @@ export default function FormularioNotificacion({
     <View style={styles.container}>
       <Text style={styles.title}>Formulario de Notificación</Text>
 
+      <Text style={{ marginBottom: 3 }}>Titulo</Text>
       <EntradaTexto
         placeholder={"Título"}
         valor={titulo}
@@ -83,6 +84,8 @@ export default function FormularioNotificacion({
           setTitulo(texto);
         }}
       />
+
+      <Text style={{ marginBottom: 3 }}>Descripción</Text>
       <EntradaTexto
         placeholder={"Mensaje"}
         setValor={(texto) => {
@@ -91,7 +94,10 @@ export default function FormularioNotificacion({
         valor={mensaje}
         multiline={true}
         alto={100}
+        ancho={300}
       />
+
+      <Text>Destinatarios</Text>
       <ItemSelectorPersona
         tipo={tipo}
         callback={(personasSeleccionadasRecuperadas) => {
