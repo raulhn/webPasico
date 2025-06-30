@@ -25,7 +25,7 @@ function comprobacionLogin(req, res) {
   });
 }
 
-function obtenerTokenDecoded(req, res) {
+function obtenerTokenDecoded(req) {
   return new Promise((resolve, reject) => {
     const token = req.cookies.access_token;
     if (!token) {

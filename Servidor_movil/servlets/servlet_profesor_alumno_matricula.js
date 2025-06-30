@@ -1,6 +1,7 @@
 const gestorProfesorAlumnoMatricula = require("../logica/profesor_alumno_matricula");
 const servletComun = require("./servlet_comun");
 const constantes = require("../constantes");
+const gestorPersona = require("../logica/persona.js");
 
 function registrarProfesorAlumnoMatricula(req, res) {
   servletComun.comprobacionAccesoAPIKey(req, res, async () => {
@@ -46,6 +47,39 @@ function registrarProfesorAlumnoMatricula(req, res) {
   });
 }
 
+async function obtenerAlumnosProfesor(req, res) {
+  try {
+    const rolesPermitidos = ["PROFESOR"];
+    let rolProfesor = await servletComun.comprobarRol(
+      req,
+      res,
+      rolesPermitidos
+    );
+    if (!rolProfesor) {
+      return res.status(403).send({
+        error: true,
+        mensaje: "No tienes permisos para obtener los alumnos del profesor",
+      });
+    }
+
+    const tokenDecoded = await servletComun.obtenerTokenDecoded(req);
+
+    const nid_usuario = tokenDecoded.nid_usuario;
+    const nid_profesor = await gestorPersona.obtenerPersonaUsuario(nid_usuario);
+    let alumnos =
+      await gestorProfesorAlumnoMatricula.obtenerAlumnosProfesor(nid_profesor);
+
+    res.status(200).send({ error: false, alumnos: alumnos });
+  } catch (error) {
+    console.error("Error al obtener los alumnos del profesor:", error);
+    res.status(400).send({
+      error: true,
+      message: error.message,
+    });
+  }
+}
 
 module.exports.registrarProfesorAlumnoMatricula =
   registrarProfesorAlumnoMatricula;
+
+module.exports.obtenerAlumnosProfesor = obtenerAlumnosProfesor;

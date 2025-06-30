@@ -146,7 +146,35 @@ async function registrarProfesorAlumnoMatricula(
   }
 }
 
-function obtenerAlumnosProfesor() {}
+function obtenerAlumnosProfesor(nid_profesor) {
+  return new Promise((resolve, reject) => {
+    const sql =
+      "SELECT p.*, ma.nid_asignatura FROM " +
+      constantes.ESQUEMA +
+      ".profesor_alumno_matricula pam, " +
+      constantes.ESQUEMA +
+      ".matricula_asignatura ma, " +
+      constantes.ESQUEMA +
+      ".matricula m, " +
+      constantes.ESQUEMA +
+      ".persona p " +
+      " WHERE pam.nid_matricula_asignatura = ma.nid_matricula_asignatura " +
+      " AND ma.nid_matricula = m.nid_matricula " +
+      " AND m.nid_persona = p.nid_persona " +
+      " pam.nid_profesor = " +
+      conexion.dbConn.escape(nid_profesor);
+
+    conexion.dbConn.query(sql, (err, result) => {
+      if (err) {
+        console.error("Error al obtener los alumnos del profesor:", err);
+        reject(err);
+      } else {
+        resolve(result);
+      }
+    });
+  });
+}
 
 module.exports.registrarProfesorAlumnoMatricula =
   registrarProfesorAlumnoMatricula;
+module.exports.obtenerAlumnosProfesor = obtenerAlumnosProfesor;

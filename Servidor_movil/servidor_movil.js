@@ -195,6 +195,10 @@ app.get(
 // Obtener Personas //
 app.get("/obtener_personas", servletPersona.obtenerPersonas);
 app.get("/obtener_personas_musicos", servletPersona.obtenerPersonasMusicos);
+app.get(
+  "/obtener_alumnos_profesor",
+  servletProfesorAlumnoMatricula.obtenerAlumnosProfesor
+);
 
 // Notificaciones //
 app.post(
