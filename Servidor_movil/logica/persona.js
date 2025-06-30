@@ -544,6 +544,29 @@ function obtenerUsuarioPersona(nid_persona) {
   });
 }
 
+function obtenerPersonaUsuario(nid_usuario) {
+  return new Promise((resolve, reject) => {
+    const sql =
+      "SELECT p.* FROM " +
+      constantes.ESQUEMA +
+      ".usuarios u, " +
+      constantes.ESQUEMA +
+      ".persona p WHERE u.nid_persona = p.nid_persona and u.nid_usuario = " +
+      conexion.dbConn.escape(nid_usuario);
+    conexion.dbConn.query(sql, (error, results) => {
+      if (error) {
+        console.error("Error al obtener la persona del usuario:", error);
+        return reject(error);
+      }
+      if (results.length === 0) {
+        return resolve(null); // No se encontró la persona asociada al usuario
+      } else {
+        resolve(results[0]);
+      }
+    });
+  });
+}
+
 function obtenerPersonas() {
   return new Promise((resolve, reject) => {
     const sql = "SELECT * FROM " + constantes.ESQUEMA + ".persona";
@@ -554,6 +577,27 @@ function obtenerPersonas() {
         return reject(error);
       }
       resolve(results);
+    });
+  });
+}
+
+function obtenerPersona(nid_persona) {
+  return new Promise((resolve, reject) => {
+    const sql =
+      "SELECT * FROM " +
+      constantes.ESQUEMA +
+      ".persona WHERE nid_persona = " +
+      conexion.dbConn.escape(nid_persona);
+    conexion.dbConn.query(sql, (error, results) => {
+      if (error) {
+        console.error("Error al obtener la persona:", error);
+        return reject(error);
+      }
+      if (results.length === 0) {
+        return resolve(null); // No se encontró la persona
+      } else {
+        resolve(results[0]);
+      }
     });
   });
 }
@@ -585,7 +629,9 @@ module.exports.asociarUsuarioPersona = asociarUsuarioPersona;
 module.exports.obtenerHijos = obtenerHijos;
 module.exports.obtenerPersonaUsuario = obtenerPersonaUsuario;
 module.exports.obtenerUsuarioPersona = obtenerUsuarioPersona;
+module.exports.obtenerPersonaUsuario = obtenerPersonaUsuario;
 module.exports.obtenerPersonas = obtenerPersonas;
+module.exports.obtenerPersona = obtenerPersona;
 module.exports.obtenerPersonasMusicos = obtenerPersonasMusicos;
 
 module.exports.obtenerPadre = obtenerPadre;
