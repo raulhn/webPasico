@@ -49,7 +49,7 @@ function registrarProfesorAlumnoMatricula(req, res) {
 
 async function obtenerAlumnosProfesor(req, res) {
   try {
-    const rolesPermitidos = ["PROFESOR"];
+    const rolesPermitidos = [constantes.PROFESOR];
     let rolProfesor = await servletComun.comprobarRol(
       req,
       res,
@@ -67,7 +67,9 @@ async function obtenerAlumnosProfesor(req, res) {
     const nid_usuario = tokenDecoded.nid_usuario;
     const nid_profesor = await gestorPersona.obtenerPersonaUsuario(nid_usuario);
     let alumnos =
-      await gestorProfesorAlumnoMatricula.obtenerAlumnosProfesor(nid_profesor);
+      await gestorProfesorAlumnoMatricula.obtenerAlumnosProfesorCursoActual(
+        nid_profesor
+      );
 
     res.status(200).send({ error: false, alumnos: alumnos });
   } catch (error) {

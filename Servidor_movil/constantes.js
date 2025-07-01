@@ -13,6 +13,12 @@ const ESCUELA = 2;
 const ASOCIACION = 3;
 const INDIVIDUAL = 4;
 
+const PROFESOR = "PROFESOR";
+const ADMINISTRADOR = "ADMINISTRADOR";
+const ALUMNO = "ALUMNO";
+const MUSICO = "MUSICO";
+const DIRECTOR = "DIRECTOR";
+
 module.exports.ESQUEMA = ESQUEMA;
 module.exports.MAX_CONEXIONES = MAX_CONEXIONES;
 module.exports.TIEMPO_ACCESS_TOKEN = TIEMPO_ACCESS_TOKEN;
@@ -24,3 +30,9 @@ module.exports.BANDA = BANDA;
 module.exports.ESCUELA = ESCUELA;
 module.exports.ASOCIACION = ASOCIACION;
 module.exports.INDIVIDUAL = INDIVIDUAL;
+
+module.exports.PROFESOR = PROFESOR;
+module.exports.ADMINISTRADOR = ADMINISTRADOR;
+module.exports.ALUMNO = ALUMNO;
+module.exports.MUSICO = MUSICO;
+module.exports.DIRECTOR = DIRECTOR;
