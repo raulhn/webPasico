@@ -3,8 +3,8 @@ const constantes = require("../constantes.js");
 
 function formatDateToMySQL(date) {
   try {
-  const d = new Date(date);
-  return d.toISOString().slice(0, 19).replace('T', ' ');
+    const d = new Date(date);
+    return d.toISOString().slice(0, 19).replace("T", " ");
   } catch (error) {
     return null;
   }
@@ -108,4 +108,24 @@ async function registrarCurso(
   }
 }
 
+function obtenerCursoActivo() {
+  return new Promise((resolve, reject) => {
+    const sql =
+      "SELECT * FROM " + constantes.ESQUEMA + ".curso WHERE activo = 'S'";
+
+    conexion.dbConn.query(sql, (error, result) => {
+      if (error) {
+        console.error("Error al obtener el curso activo: " + error.message);
+        reject(new Error("Error al obtener el curso activo"));
+      } else {
+        if (result.length === 0) {
+          return reject(new Error("No hay curso activo registrado"));
+        }
+        resolve(result);
+      }
+    });
+  });
+}
+
 module.exports.registrarCurso = registrarCurso;
+module.exports.obtenerCursoActivo = obtenerCursoActivo;

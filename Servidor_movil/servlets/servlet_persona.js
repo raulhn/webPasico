@@ -1,5 +1,6 @@
 const servletComun = require("./servlet_comun.js");
 const gestorPersona = require("../logica/persona.js");
+const constantes = require("../constantes.js");
 
 function registrarPersona(req, res) {
   servletComun.comprobacionAccesoAPIKey(req, res, async () => {
@@ -146,7 +147,7 @@ async function obtenerPersonas(req, res) {
 }
 
 function obtenerPersonasMusicos(req, res) {
-  const rolesPermitidos = ["DIRECTOR", "ADMINISTRADOR"];
+  const rolesPermitidos = [constantes.DIRECTOR, constantes.ADMINISTRADOR];
   servletComun
     .comprobarRol(req, res, rolesPermitidos)
     .then(async (rolPermitido) => {
@@ -182,7 +183,6 @@ function obtenerPersonasMusicos(req, res) {
 }
 
 async function obtenerTipoPersonas(req, res) {
-  
   const tiposPersonas = await gestor.obtenerTiposPersonas();
 }
 

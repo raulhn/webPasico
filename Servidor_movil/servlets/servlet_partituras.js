@@ -1,9 +1,10 @@
 const gestorPartituras = require("../logica/partituras.js");
 const servletComun = require("./servlet_comun.js");
+const constantes = require("../constantes.js");
 
 async function insertarPartitura(req, res) {
   try {
-    const rolesPermitidos = ["DIRECTOR", "ADMINISTRADOR"];
+    const rolesPermitidos = [constantes.DIRECTOR, constantes.ADMINISTRADOR];
     let rolDirector = await servletComun.comprobarRol(
       req,
       res,
@@ -40,7 +41,7 @@ async function insertarPartitura(req, res) {
 
 async function actualizarPartitura(req, res) {
   try {
-    const rolesPermitidos = ["DIRECTOR", "ADMINISTRADOR"];
+    const rolesPermitidos = [constantes.DIRECTOR, constantes.ADMINISTRADOR];
     let rolDirector = await servletComun.comprobarRol(
       req,
       res,
@@ -75,7 +76,11 @@ async function actualizarPartitura(req, res) {
 
 async function obtenerPartituras(req, res) {
   try {
-    const rolesPermitidos = ["DIRECTOR", "ADMINISTRADOR", "MUSICO"];
+    const rolesPermitidos = [
+      constantes.DIRECTOR,
+      constantes.ADMINISTRADOR,
+      constantes.MUSICO,
+    ];
     let rolDirector = await servletComun.comprobarRol(
       req,
       res,
@@ -101,7 +106,11 @@ async function obtenerPartituras(req, res) {
 
 async function obtenerPartitura(req, res) {
   try {
-    const rolesPermitidos = ["DIRECTOR", "ADMINISTRADOR", "MUSICO"];
+    const rolesPermitidos = [
+      constantes.DIRECTOR,
+      constantes.ADMINISTRADOR,
+      constantes.MUSICO,
+    ];
     let rolDirector = await servletComun.comprobarRol(
       req,
       res,

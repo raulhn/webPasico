@@ -1,9 +1,10 @@
 const gestorCategoriaPartituras = require("../logica/categoria_partitura.js");
 const servletComun = require("./servlet_comun.js");
+const constantes = require("../constantes.js");
 
 async function insertarCategoriaPartitura(req, res) {
   try {
-    const rolesPermitidos = ["DIRECTOR", "ADMINISTRADOR"];
+    const rolesPermitidos = [constantes.DIRECTOR, constantes.ADMINISTRADOR];
     let rolDirector = await servletComun.comprobarRol(
       req,
       res,
@@ -37,7 +38,7 @@ async function insertarCategoriaPartitura(req, res) {
 
 async function actualizarCategoriaPartitura(req, res) {
   try {
-    const rolesPermitidos = ["DIRECTOR", "ADMINISTRADOR"];
+    const rolesPermitidos = [constantes.DIRECTOR, constantes.ADMINISTRADOR];
     let rolDirector = await servletComun.comprobarRol(
       req,
       res,

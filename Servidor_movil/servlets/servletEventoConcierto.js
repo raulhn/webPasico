@@ -1,10 +1,11 @@
 const gestorEventos = require("../logica/eventoConcierto.js");
 const servlet_comun = require("./servlet_comun.js");
 const gestor_tipo_evento_musico = require("../logica/tipo_evento_musico.js");
+const constantes = require("../constantes.js");
 
 async function insertarEventoConcierto(req, res) {
   try {
-    const rolesPermitidos = ["DIRECTOR", "ADMINISTRADOR"];
+    const rolesPermitidos = [constantes.DIRECTOR, constantes.ADMINISTRADOR];
     let rolDirector = await servlet_comun.comprobarRol(
       req,
       res,
@@ -74,7 +75,7 @@ async function insertarEventoConcierto(req, res) {
 
 async function actualizarEventoConcierto(req, res) {
   try {
-    const rolesPermitidos = ["DIRECTOR", "ADMINISTRADOR"];
+    const rolesPermitidos = [constantes.DIRECTOR, constantes.ADMINISTRADOR];
     let rolDirector = await servlet_comun.comprobarRol(
       req,
       res,
@@ -86,7 +87,6 @@ async function actualizarEventoConcierto(req, res) {
         mensaje: "No tienes permisos para actualizar un evento de concierto",
       });
     } else {
-      console.log("Actualizar Evento Concierto: ", req.body);
       let nid_evento = req.body.nid_evento_concierto;
       let nombre = req.body.nombre;
       let descripcion = req.body.descripcion;
@@ -136,7 +136,11 @@ async function actualizarEventoConcierto(req, res) {
 
 async function obtenerEventosConcierto(req, res) {
   try {
-    const rolesPermitidos = ["DIRECTOR", "ADMINISTRADOR", "MUSICO"];
+    const rolesPermitidos = [
+      constantes.DIRECTOR,
+      constantes.ADMINISTRADOR,
+      constantes.MUSICO,
+    ];
     let rolPermitido = await servlet_comun.comprobarRol(
       req,
       res,
@@ -181,7 +185,7 @@ async function obtenerEventosConcierto(req, res) {
 
 async function registrar_partitura_evento(req, res) {
   try {
-    const rolesPermitidos = ["DIRECTOR", "ADMINISTRADOR"];
+    const rolesPermitidos = [constantes.DIRECTOR, constantes.ADMINISTRADOR];
     let rolDirector = await servlet_comun.comprobarRol(
       req,
       res,
@@ -238,7 +242,7 @@ async function registrar_partitura_evento(req, res) {
 
 async function eliminar_partitura_evento(req, res) {
   try {
-    const rolesPermitidos = ["DIRECTOR", "ADMINISTRADOR"];
+    const rolesPermitidos = [constantes.DIRECTOR, constantes.ADMINISTRADOR];
     let rolDirector = servlet_comun.comprobarRol(req, res, rolesPermitidos);
     if (!rolDirector) {
       res.status(403).send({
@@ -279,7 +283,11 @@ async function eliminar_partitura_evento(req, res) {
 
 async function obtenerPartiturasEvento(req, res) {
   try {
-    const rolesPermitidos = ["DIRECTOR", "ADMINISTRADOR", "MUSICO"];
+    const rolesPermitidos = [
+      constantes.DIRECTOR,
+      constantes.ADMINISTRADOR,
+      constantes.MUSICO,
+    ];
     let rolPermitido = servlet_comun.comprobarRol(req, res, rolesPermitidos);
     if (!rolPermitido) {
       res.status(403).send({

@@ -1,6 +1,7 @@
 const conexion = require("../conexion");
 const constantes = require("../constantes");
 const comun = require("./comun");
+const gestorCurso = require("./curso");
 
 function existeProfesorAlumnoMatricula(nid_profesor_alumno_matricula) {
   return new Promise((resolve, reject) => {
@@ -146,7 +147,7 @@ async function registrarProfesorAlumnoMatricula(
   }
 }
 
-function obtenerAlumnosProfesor(nid_profesor) {
+function obtenerAlumnosProfesor(nid_profesor, nid_curso) {
   return new Promise((resolve, reject) => {
     const sql =
       "SELECT p.*, ma.nid_asignatura FROM " +
@@ -161,8 +162,12 @@ function obtenerAlumnosProfesor(nid_profesor) {
       " WHERE pam.nid_matricula_asignatura = ma.nid_matricula_asignatura " +
       " AND ma.nid_matricula = m.nid_matricula " +
       " AND m.nid_persona = p.nid_persona " +
+      " and m.nid_curso = " +
+      conexion.dbConn.escape(nid_curso) +
       " pam.nid_profesor = " +
-      conexion.dbConn.escape(nid_profesor);
+      conexion.dbConn.escape(nid_profesor) +
+      " and (ma.fecha_baja IS NULL OR ma.fecha_baja > NOW()) " +
+      " and (pam.fecha_baja IS NULL OR pam.fecha_baja > NOW())";
 
     conexion.dbConn.query(sql, (err, result) => {
       if (err) {
@@ -175,6 +180,26 @@ function obtenerAlumnosProfesor(nid_profesor) {
   });
 }
 
+async function obtenerAlumnosProfesorCursoActual(nid_profesor) {
+  try {
+    const cursoActivo = await gestorCurso.obtenerCursoActivo();
+    const alumnos = await obtenerAlumnosProfesor(
+      nid_profesor,
+      cursoActivo[0].nid_curso
+    );
+    return alumnos;
+  } catch (error) {
+    console.error(
+      "Error al obtener los alumnos del profesor en el curso actual:",
+      error
+    );
+    throw new Error(
+      "Error al obtener los alumnos del profesor en el curso actual"
+    );
+  }
+}
+
 module.exports.registrarProfesorAlumnoMatricula =
   registrarProfesorAlumnoMatricula;
-module.exports.obtenerAlumnosProfesor = obtenerAlumnosProfesor;
+module.exports.obtenerAlumnosProfesorCursoActual =
+  obtenerAlumnosProfesorCursoActual;

@@ -200,6 +200,15 @@ app.get(
   servletProfesorAlumnoMatricula.obtenerAlumnosProfesor
 );
 
+app.get(
+  "/obtener_alumnos_curso_activo",
+  servletMatriculaAsignatura.obtenerAlumnosCursoActivo
+);
+app.get(
+  "/obtener_alumnos_curso_activo_asignatura/:nid_asignatura",
+  servletMatriculaAsignatura.obtenerAlumnosCursoActivoAsignatura
+);
+
 // Notificaciones //
 app.post(
   "/registrar_notificacion",

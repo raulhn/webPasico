@@ -43,4 +43,64 @@ function registrarMatriculaAsignatura(req, res) {
   });
 }
 
+async function obtenerAlumnosCursoActivo(req, res) {
+  try {
+    const rolesPermitidos = [constantes.ADMINISTRADOR];
+    let rolAdministrador = await servletComun.comprobarRol(
+      req,
+      res,
+      rolesPermitidos
+    );
+    if (!rolAdministrador) {
+      return res.status(403).send({
+        error: true,
+        mensaje: "No tienes permisos para obtener los alumnos del profesor",
+      });
+    } else {
+      const alumnos =
+        await gestorMatriculaAsignatura.obtenerAlumnosCursoActivo();
+      res.status(200).send({ error: false, alumnos: alumnos });
+    }
+  } catch (error) {
+    console.error("Error al obtener los alumnos del curso actual: ", error);
+    res.status(400).send({
+      error: true,
+      mensaje: "Error al obtener los alumnos del curso actual",
+    });
+  }
+}
+
+async function obtenerAlumnosCursoActivoAsignatura(req, res) {
+  try {
+    const rolesPermitidos = [constantes.ADMINISTRADOR];
+    let rolAdministrador = await servletComun.comprobarRol(
+      req,
+      res,
+      rolesPermitidos
+    );
+    if (!rolAdministrador) {
+      return res.status(403).send({
+        error: true,
+        mensaje: "No tienes permisos para obtener los alumnos del curso actual",
+      });
+    } else {
+      const nid_asignatura = req.params.nid_asignatura;
+      const alumnos =
+        await gestorMatriculaAsignatura.obtenerAlumnosCursoActivoAsignatura(
+          nid_asignatura
+        );
+      res.status(200).send({ error: false, alumnos: alumnos });
+    }
+  } catch (error) {
+    console.error("Error al obtener los alumnos del curso actual: ", error);
+    res.status(400).send({
+      error: true,
+      mensaje: "Error al obtener los alumnos del curso actual",
+    });
+  }
+}
+
 module.exports.registrarMatriculaAsignatura = registrarMatriculaAsignatura;
+module.exports.obtenerAlumnosCursoActivo = obtenerAlumnosCursoActivo;
+module.exports.obtenerAlumnosCursoActivoAsignatura =
+  obtenerAlumnosCursoActivoAsignatura;
