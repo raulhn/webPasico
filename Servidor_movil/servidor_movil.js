@@ -209,6 +209,12 @@ app.get(
   servletMatriculaAsignatura.obtenerAlumnosCursoActivoAsignatura
 );
 
+// Matriculas //
+app.get(
+  "/obtener_matriculas_persona",
+  servletMatricula.obtenerMatriculasPersona
+);
+
 // Notificaciones //
 app.post(
   "/registrar_notificacion",
