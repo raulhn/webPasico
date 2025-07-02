@@ -42,6 +42,13 @@ export default function DrawerLayout() {
           drawerItemStyle: esRol(["ALUMNO"]) ? {} : { display: "none" },
         }}
       />
+      <Drawer.Screen
+        name="expediente"
+        options={{
+          title: "Expedientes",
+          drawerItemStyle: esRol(["ALUMNO"]) ? {} : { display: "none" },
+        }}
+      ></Drawer.Screen>
     </Drawer>
   );
 }
