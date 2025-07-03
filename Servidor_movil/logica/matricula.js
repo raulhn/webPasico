@@ -166,22 +166,25 @@ function obtenerMatriculas(nid_persona) {
 function obtenerMatriculasPersona(nid_persona) {
   return new Promise((resolve, reject) => {
     var sql =
-      "SELECT p.nombre, p.primer_apellido, p.segundo_apellido, c.descripcion curso FROM " +
+      "SELECT m.nid_matricula, p.nombre, p.primer_apellido, p.segundo_apellido, c.descripcion curso FROM " +
       constantes.ESQUEMA +
       ".matricula m, " +
       constantes.ESQUEMA +
-      ".curso c" +
+      ".curso c, " +
       constantes.ESQUEMA +
       ".persona p" +
       " WHERE c.nid_curso = m.nid_curso " +
       " and p.nid_persona = m.nid_persona" +
-      " and nid_persona = " +
+      " and p.nid_persona = " +
       conexion.dbConn.escape(nid_persona) +
       " order by c.ano desc";
 
     conexion.dbConn.query(sql, (err, result) => {
       if (err) {
-        console.log("Error al obtener las matriculas de la persona: " + err);
+        console.log(
+          "matricula.js -> obtenerMatriculasPersona: Error al obtener las matriculas de la persona: " +
+            err
+        );
         reject(new Error("Error al obtener las matriculas de la persona"));
       } else {
         resolve(result);

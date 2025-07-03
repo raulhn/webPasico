@@ -215,6 +215,11 @@ app.get(
   servletMatricula.obtenerMatriculasPersona
 );
 
+app.get(
+  "/obtener_matriculas_asignatura_persona/:nid_matricula",
+  servletMatriculaAsignatura.obtenerMatriculasAsignaturaPersona
+);
+
 // Notificaciones //
 app.post(
   "/registrar_notificacion",

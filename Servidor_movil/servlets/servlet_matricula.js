@@ -11,13 +11,6 @@ function registrarMatricula(req, res) {
       const nid_curso = req.body.nid_curso;
       const fecha_actualizacion = req.body.fecha_actualizacion;
 
-      console.log(
-        "Registrar matricula: ",
-        nid_matricula,
-        nid_persona,
-        nid_curso,
-        fecha_actualizacion
-      );
       await gestorMaticulas.registrarMatricula(
         nid_matricula,
         nid_persona,
@@ -41,7 +34,8 @@ function registrarMatricula(req, res) {
 
 async function obtenerMatriculasPersona(req, res) {
   try {
-    const tokenDecoded = servletComun.obtenerTokenDecoded(req);
+    const tokenDecoded = await servletComun.obtenerTokenDecoded(req);
+
     const nid_usuario = tokenDecoded.nid_usuario;
 
     const persona = await gestorPersonas.obtenerPersonaUsuario(nid_usuario);
@@ -49,19 +43,19 @@ async function obtenerMatriculasPersona(req, res) {
     // Se recuperan los hijos que no son socios
     const hijos = await gestorPersonas.obtenerHijos(persona.nid_persona, false);
 
-    const matriculas = [];
+    let matriculas = [];
 
     const matriculasPersona = await gestorMaticulas.obtenerMatriculasPersona(
       persona.nid_persona
     );
 
-    matriculas.concat(matriculasPersona);
+    matriculas = matriculasPersona;
 
     for (let i = 0; i < hijos.length; i++) {
       const matriculasHijo = await gestorMaticulas.obtenerMatriculasPersona(
         hijos[i].nid_persona
       );
-      matriculas.concat(matriculasHijo);
+      matriculas = [...matriculas, ...matriculasHijo];
     }
 
     res.status(200).send({

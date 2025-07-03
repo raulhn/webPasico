@@ -25,7 +25,7 @@ export default function Partituras() {
   const { esRol } = useRol();
 
   const [modalVisible, setModalVisible] = useState(false);
-  const [modalVisibleSelector, setModalVisibleSelector] = useState(false);
+
   const [error, setError] = useState(false);
 
   const [refrescar, setRefrescar] = useState(false);

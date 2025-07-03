@@ -35,17 +35,11 @@ export default function DrawerLayout() {
           title: "Escuela",
         }}
       />
-      <Drawer.Screen
-        name="boletines"
-        options={{
-          title: "Boletines",
-          drawerItemStyle: esRol(["ALUMNO"]) ? {} : { display: "none" },
-        }}
-      />
+
       <Drawer.Screen
         name="expediente"
         options={{
-          title: "Expedientes",
+          title: "Matriculas",
           drawerItemStyle: esRol(["ALUMNO"]) ? {} : { display: "none" },
         }}
       ></Drawer.Screen>

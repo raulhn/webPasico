@@ -36,10 +36,10 @@ function obtenerHijos(nid_persona, bSocio) {
         ")";
     }
     const sql =
-      "select nid " +
+      "select nid_persona " +
       "from " +
       constantes.ESQUEMA +
-      ".personas p " +
+      ".persona p " +
       "where (nid_padre = " +
       conexion.dbConn.escape(nid_persona) +
       "   or nid_madre = " +
@@ -622,6 +622,30 @@ function obtenerPersonasMusicos() {
   });
 }
 
+function esHijo(nid_persona, nid_hijo) {
+  return new Promise((resolve, reject) => {
+    const sql =
+      "SELECT * FROM " +
+      constantes.ESQUEMA +
+      ".persona WHERE (nid_padre = " +
+      conexion.dbConn.escape(nid_persona) +
+      " OR nid_madre = " +
+      conexion.dbConn.escape(nid_persona) +
+      " OR nid_socio = " +
+      conexion.dbConn.escape(nid_persona) +
+      ") AND nid_persona = " +
+      conexion.dbConn.escape(nid_hijo);
+
+    conexion.dbConn.query(sql, (error, results) => {
+      if (error) {
+        console.error("Error al verificar si es hijo:", error);
+        return reject(error);
+      }
+      resolve(results.length > 0);
+    });
+  });
+}
+
 module.exports.registrarPersona = registrarPersona;
 module.exports.obtenerPersonasSucias = obtenerPersonasSucias;
 module.exports.limpiarPersona = limpiarPersona;
@@ -637,3 +661,5 @@ module.exports.obtenerPersonasMusicos = obtenerPersonasMusicos;
 module.exports.obtenerPadre = obtenerPadre;
 module.exports.obtenerMadre = obtenerMadre;
 module.exports.obtenerSocioAsociado = obtenerSocioAsociado;
+
+module.exports.esHijo = esHijo;
