@@ -201,7 +201,36 @@ async function obtenerAlumnosCursoActivoAsignatura(nid_asignatura) {
   }
 }
 
+function obtenerMatriculasAsignatura(nid_matricula) {
+  return new Promise((resolve, reject) => {
+    const sql =
+      "SELECT ma.nid_matricula_asignatura, ma.nid_matricula, ma.nid_asignatura, " +
+      "ma.fecha_alta, ma.fecha_baja, ma.fecha_actualizacion, a.descripcion AS asignatura " +
+      "FROM " +
+      constantes.ESQUEMA +
+      ".matricula_asignatura ma, " +
+      constantes.ESQUEMA +
+      ".asignaturas a, " +
+      constantes.ESQUEMA +
+      ".matricula m " +
+      "WHERE ma.nid_matricula = " +
+      conexion.dbConn.escape(nid_matricula) +
+      " AND ma.nid_asignatura = a.nid_asignatura " +
+      " AND ma.nid_matricula = m.nid_matricula ";
+
+    conexion.dbConn.query(sql, (err, result) => {
+      if (err) {
+        console.error("Error al obtener las matriculas de asignaturas:", err);
+        reject(err);
+      } else {
+        resolve(result);
+      }
+    });
+  });
+}
+
 module.exports.registrarMatriculaAsignatura = registrarMatriculaAsignatura;
 module.exports.obtenerAlumnosCursoActivo = obtenerAlumnosCursoActivo;
 module.exports.obtenerAlumnosCursoActivoAsignatura =
   obtenerAlumnosCursoActivoAsignatura;
+module.exports.obtenerMatriculasAsignatura = obtenerMatriculasAsignatura;

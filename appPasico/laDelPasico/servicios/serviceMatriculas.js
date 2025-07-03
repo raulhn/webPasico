@@ -1,0 +1,27 @@
+import servletComun from "./serviceComun.js";
+import Constantes from "../constantes.js";
+
+function obtenerMatriculasPersona(cerrar_sesion) {
+  return new Promise((resolve, reject) => {
+    servletComun
+      .peticionSesion(
+        "GET",
+        Constantes.URL_SERVICIO_MOVIL + "obtener_matriculas_persona",
+        null,
+        cerrar_sesion
+      )
+      .then((response) => {
+        if (!response.error) {
+          resolve(response);
+        } else {
+          reject(response.error);
+        }
+      })
+      .catch((error) => {
+        console.log("Error en el servicio obtenerMatriculas");
+        reject(error);
+      });
+  });
+}
+
+module.exports.obtenerMatriculasPersona = obtenerMatriculasPersona;
