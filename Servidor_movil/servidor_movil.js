@@ -28,6 +28,8 @@ const servlet_categoria_partituras = require("./servlets/servlet_categoria_parti
 const servletNotificaciones = require("./servlets/servlet_notificaciones.js");
 const gestorNotificaciones = require("./logica/notificaciones.js");
 const servlet_tipo_evento_musico = require("./servlets/servlet_tipo_evento_musico.js");
+const servletTrimestre = require("./servlets/servlet_trimestre.js");
+const servletTipoProgreso = require("./servlets/servlet_tipo_progreso.js");
 
 const validacionEmail = require("./logica/validacionEmail.js");
 
@@ -78,6 +80,17 @@ app.post("/registrar_persona", servletPersona.registrarPersona);
 app.get("/obtener_persona/:nid_persona", servletPersona.obtenerPersona);
 app.get("/obtener_personas_sucias", servletPersona.obtenerPersonasSucias);
 app.post("/limpiar_persona", servletPersona.limpiarPersona);
+
+// Trimestres //
+app.post("/registrar_trimestre", servletTrimestre.registrarTrimestre);
+app.get("/obtener_trimestres_sucios", servletTrimestre.obtenerTrimestresSucios);
+
+// Tipo Progreso //
+app.post("/registrar_tipo_progreso", servletTipoProgreso.registrarTipoProgreso);
+app.get(
+  "/obtener_tipos_progreso_sucios",
+  servletTipoProgreso.obtenerTipoProgresoSucios
+);
 
 // Socios //
 app.post("/registrar_socio", servletSocios.registrarSocio);
