@@ -105,7 +105,7 @@ function obtener_persona(nid_persona) {
                 console.error("Error en la respuesta de la API:", data.error);
                 reject("Error en la respuesta de la API");
               }
-    
+
               resolve(data);
             })
             .catch((error) => {
@@ -128,7 +128,6 @@ function obtener_persona(nid_persona) {
 }
 
 function obtenerPersonasSucias() {
-
   return new Promise((resolve, reject) => {
     try {
       serviceComun

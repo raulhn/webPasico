@@ -219,6 +219,8 @@ function actualizar_evaluacion_matricula(
           conexion.dbConn.escape(nid_tipo_progreso) +
           ", comentario = " +
           conexion.dbConn.escape(comentario) +
+          ", fecha_actualizacion = now()" +
+          ", sucio = 'S'" +
           " where nid_evaluacion_matricula = " +
           conexion.dbConn.escape(nid_evaluacion_matricula),
         (error, results, fields) => {
@@ -671,6 +673,95 @@ async function generar_boletin(nid_matricula, nid_trimestre) {
   }
 }
 
+function obtener_evaluaciones_sucias() {
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(
+      "select * from " +
+        constantes.ESQUEMA_BD +
+        ".evaluacion where sucio = 'S'",
+      (error, results, fields) => {
+        if (error) {
+          console.log(error);
+          reject(error);
+        } else {
+          resolve(results);
+        }
+      }
+    );
+  });
+}
+
+function actualizar_evaluacion_sucio(nid_evaluacion, sucio) {
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.beginTransaction(() => {
+      conexion.dbConn.query(
+        "update " +
+          constantes.ESQUEMA_BD +
+          ".evaluacion set sucio = " +
+          conexion.dbConn.escape(sucio) +
+          " where nid_evaluacion = " +
+          conexion.dbConn.escape(nid_evaluacion),
+        (error, results, fields) => {
+          if (error) {
+            console.log(error);
+            conexion.dbConn.rollback();
+            reject(error);
+          } else {
+            conexion.dbConn.commit();
+            resolve();
+          }
+        }
+      );
+    });
+  });
+}
+
+function obtener_evaluacion_matriculas_sucias() {
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(
+      "select * from " +
+        constantes.ESQUEMA_BD +
+        ".evaluacion_matricula where sucio = 'S'",
+      (error, results, fields) => {
+        if (error) {
+          console.log(error);
+          reject(error);
+        } else {
+          resolve(results);
+        }
+      }
+    );
+  });
+}
+
+function actualizar_evaluacion_matricula_sucio(
+  nid_evaluacion_matricula,
+  sucio
+) {
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.beginTransaction(() => {
+      conexion.dbConn.query(
+        "update " +
+          constantes.ESQUEMA_BD +
+          ".evaluacion_matricula set sucio = " +
+          conexion.dbConn.escape(sucio) +
+          " where nid_evaluacion_matricula = " +
+          conexion.dbConn.escape(nid_evaluacion_matricula),
+        (error, results, fields) => {
+          if (error) {
+            console.log(error);
+            conexion.dbConn.rollback();
+            reject(error);
+          } else {
+            conexion.dbConn.commit();
+            resolve();
+          }
+        }
+      );
+    });
+  });
+}
+
 module.exports.obtener_trimestres = obtener_trimestres;
 module.exports.registrar_evaluacion = registrar_evaluacion;
 module.exports.registrar_evaluacion_matricula = registrar_evaluacion_matricula;
@@ -685,3 +776,11 @@ module.exports.obtener_evaluacion_matricula_asginatura =
   obtener_evaluacion_matricula_asginatura;
 
 module.exports.generar_boletin = generar_boletin;
+
+module.exports.obtener_evaluaciones_sucias = obtener_evaluaciones_sucias;
+module.exports.actualizar_evaluacion_sucio = actualizar_evaluacion_sucio;
+
+module.exports.obtener_evaluacion_matriculas_sucias =
+  obtener_evaluacion_matriculas_sucias;
+module.exports.actualizar_evaluacion_matricula_sucio =
+  actualizar_evaluacion_matricula_sucio;
