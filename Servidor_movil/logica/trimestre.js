@@ -16,13 +16,17 @@ function insertarTrimestre(nid_trimestre, descripcion, fecha_actualizacion) {
       ", 'N' " +
       ")";
 
-    conexion.dbConn.query(sql, (err, result) => {
-      if (err) {
-        console.error("Error al insertar el trimestre:", err);
-        reject(err);
-      } else {
-        resolve(result.insertId);
-      }
+    conexion.dbConn.beginTransaction(() => {
+      conexion.dbConn.query(sql, (err, result) => {
+        if (err) {
+          console.error("Error al insertar el trimestre:", err);
+          conexion.dbConn.rollback();
+          reject(err);
+        } else {
+          conexion.dbConn.commit();
+          resolve(result.insertId);
+        }
+      });
     });
   });
 }
@@ -40,13 +44,17 @@ function actualizarTrimestre(nid_trimestre, descripcion, fecha_actualizacion) {
       " WHERE nid_trimestre = " +
       conexion.dbConn.escape(nid_trimestre);
 
-    conexion.dbConn.query(sql, (err, result) => {
-      if (err) {
-        console.error("Error al actualizar el trimestre:", err);
-        reject(err);
-      } else {
-        resolve(result.affectedRows);
-      }
+    conexion.dbConn.beginTransaction(() => {
+      conexion.dbConn.query(sql, (err, result) => {
+        if (err) {
+          console.error("Error al actualizar el trimestre:", err);
+          conexion.dbConn.rollback();
+          reject(err);
+        } else {
+          conexion.dbConn.commit();
+          resolve(result.affectedRows);
+        }
+      });
     });
   });
 }

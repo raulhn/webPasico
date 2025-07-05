@@ -23,7 +23,7 @@ async function registrarTipoProgreso(req, res) {
         error
       );
       res.status(500).send({
-        error: "Error al registrar el tipo de progreso",
+        error: true,
         message: error.message,
       });
     }
@@ -42,7 +42,7 @@ async function obtenerTipoProgresoSucios(req, res) {
         error
       );
       res.status(500).send({
-        error: "Error al obtener los tipos de progreso sucios",
+        error: true,
         message: error.message,
       });
     }
