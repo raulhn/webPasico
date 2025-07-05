@@ -1,7 +1,9 @@
 const servletComun = require("./servlet_comun");
 const gestorMatriculaAsignatura = require("../logica/matricula_asignatura");
+const gestorMatricula = require("../logica/matricula");
 const constantes = require("../constantes");
 const gestorPersonas = require("../logica/persona");
+const gestorProfesorAlumnoMatricula = require("../logica/profesor_alumno_matricula");
 
 function registrarMatriculaAsignatura(req, res) {
   servletComun.comprobacionAccesoAPIKey(req, res, async () => {
@@ -106,6 +108,9 @@ async function obtenerMatriculasAsignaturaPersona(req, res) {
     const matriculasAsignatura =
       await gestorMatriculaAsignatura.obtenerMatriculasAsignatura(nidMatricula);
 
+    const elementoMatricula =
+      await gestorMatricula.obtenerMatricula(nidMatricula);
+
     let matriculas = matriculasAsignatura.filter(
       async (matricula) =>
         matricula.nid_persona === persona.nid_persona ||
@@ -115,9 +120,22 @@ async function obtenerMatriculasAsignaturaPersona(req, res) {
         ))
     );
 
+    let matriculasProfesor = [];
+
+    for (let i = 0; i < matriculas.length; i++) {
+      let matricula = matriculas[i];
+      const profesores =
+        await gestorProfesorAlumnoMatricula.obtenerProfesorAlumnoMatricula(
+          matricula.nid_matricula_asignatura
+        );
+      matricula.profesores = profesores;
+      matriculasProfesor.push(matricula);
+    }
+
     res.status(200).send({
       error: false,
-      matriculas: matriculas,
+      matriculas: matriculasProfesor,
+      matricula: elementoMatricula,
     });
   } catch (error) {
     console.error(
