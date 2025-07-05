@@ -23,7 +23,7 @@ async function registrarTrimestre(req, res) {
         error
       );
       res.status(400).send({
-        error: "Error al registrar el trimestre",
+        error: true,
         message: error.message,
       });
     }
@@ -41,7 +41,7 @@ function obtenerTrimestresSucios(req, res) {
         error
       );
       res.status(500).send({
-        error: "Error al obtener los trimestres sucios",
+        error: true,
         message: error.message,
       });
     }

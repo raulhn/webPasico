@@ -30,6 +30,8 @@ const gestorNotificaciones = require("./logica/notificaciones.js");
 const servlet_tipo_evento_musico = require("./servlets/servlet_tipo_evento_musico.js");
 const servletTrimestre = require("./servlets/servlet_trimestre.js");
 const servletTipoProgreso = require("./servlets/servlet_tipo_progreso.js");
+const servletEvaluacion = require("./servlets/servlet_evaluacion.js");
+const servletEvaluacionMatricula = require("./servlets/servlet_evaluacion_matricula.js");
 
 const validacionEmail = require("./logica/validacionEmail.js");
 
@@ -90,6 +92,23 @@ app.post("/registrar_tipo_progreso", servletTipoProgreso.registrarTipoProgreso);
 app.get(
   "/obtener_tipos_progreso_sucios",
   servletTipoProgreso.obtenerTipoProgresoSucios
+);
+
+// Evaluaciones //
+app.post("/registrar_evaluacion", servletEvaluacion.registrarEvaluacion);
+app.get(
+  "/obtener_evaluaciones_sucias",
+  servletEvaluacion.obtenerEvaluacionesSucias
+);
+
+// Evaluacion Matricula //
+app.post(
+  "/registrar_evaluacion_matricula",
+  servletEvaluacionMatricula.registrarEvaluacionMatricula
+);
+app.get(
+  "/obtener_evaluaciones_matricula_sucias",
+  servletEvaluacionMatricula.obtenerEvaluacionesMatriculaSucias
 );
 
 // Socios //

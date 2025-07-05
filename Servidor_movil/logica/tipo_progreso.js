@@ -22,9 +22,10 @@ function requiereActualizarTipoProgreso(
           "Error al verificar si se requiere actualizar la persona:",
           error
         );
-        return reject(error);
+        reject(error);
+      } else {
+        resolve(results.length > 0);
       }
-      resolve(results.length > 0);
     });
   });
 }
@@ -47,13 +48,17 @@ function insertarTipoProgreso(
       ", 'N' " +
       ")";
 
-    conexion.dbConn.query(sql, (err, result) => {
-      if (err) {
-        console.error("Error al insertar el tipo de progreso:", err);
-        reject(err);
-      } else {
-        resolve(result.insertId);
-      }
+    conexion.dbConn.beginTransaction(() => {
+      conexion.dbConn.query(sql, (err, result) => {
+        if (err) {
+          console.error("Error al insertar el tipo de progreso:", err);
+          conexion.dbConn.rollback();
+          reject(err);
+        } else {
+          conexion.dbConn.commit();
+          resolve(result.insertId);
+        }
+      });
     });
   });
 }
@@ -75,13 +80,17 @@ function actualizarTipoProgreso(
       " WHERE nid_tipo_progreso = " +
       conexion.dbConn.escape(nid_tipo_progreso);
 
-    conexion.dbConn.query(sql, (err, result) => {
-      if (err) {
-        console.error("Error al actualizar el tipo de progreso:", err);
-        reject(err);
-      } else {
-        resolve(result.affectedRows);
-      }
+    conexion.dbConn.beginTransaction(() => {
+      conexion.dbConn.query(sql, (err, result) => {
+        if (err) {
+          console.error("Error al actualizar el tipo de progreso:", err);
+          conexion.dbConn.rollback();
+          reject(err);
+        } else {
+          conexion.dbConn.commit();
+          resolve(result.affectedRows);
+        }
+      });
     });
   });
 }
