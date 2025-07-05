@@ -10,6 +10,8 @@ import { useLocalSearchParams } from "expo-router";
 import { useMatriculasAsignaturaPersona } from "../../hooks/personas/useMatriculasAsignaturaPersona.js"; // Asegúrate de que la ruta sea correcta
 import { AuthContext } from "../../providers/AuthContext";
 import { useContext } from "react";
+import CardAsignatura from "../../componentes/componentesEscuela/CardAsignatura.jsx"; // Asegúrate de que la ruta sea correcta
+import { Boton } from "../../componentes/componentesUI/ComponentesUI.jsx"; // Asegúrate de que la ruta sea correcta
 
 export default function Matricula() {
   const { nidMatricula } = useLocalSearchParams();
@@ -18,18 +20,28 @@ export default function Matricula() {
     matriculasAsignatura,
     cargando,
     refrescarMatriculas,
+    matricula,
     error,
     refrescar,
   } = useMatriculasAsignaturaPersona(nidMatricula, cerrar_sesion);
-
-  console.log("Matricula cargada con nidMatricula:", matriculasAsignatura);
 
   if (cargando) {
     return <ActivityIndicator size="large" color="#0000ff" />;
   }
 
+  if (error) {
+    return (
+      <View style={estilos.container}>
+        <Text style={estilos.title}>Error al cargar las asignaturas</Text>
+        <Boton onPress={refrescarMatriculas} nombre={"Refrescar"} />
+      </View>
+    );
+  }
+  console.log("Matricula ", matricula);
   return (
     <View style={estilos.container}>
+      <Text style={estilos.title}>Asignaturas</Text>
+      <Text>{matricula.curso}</Text>
       <FlatList
         data={matriculasAsignatura}
         keyExtractor={(item) => item.nid_matricula.toString()}
@@ -42,12 +54,12 @@ export default function Matricula() {
               marginVertical: 10,
             }}
           >
-            <Text style={estilos.title}>{item.asignatura}</Text>
+            <CardAsignatura matriculaAsignatura={item} />
           </View>
         )}
         refreshControl={
           <RefreshControl
-            refreshing={cargando}
+            refreshing={refrescar}
             onRefresh={refrescarMatriculas}
           />
         }
@@ -60,12 +72,13 @@ const estilos = StyleSheet.create({
   container: {
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#f0f0f0",
+    backgroundColor: "#fff",
     flex: 1,
   },
   title: {
-    fontSize: 24,
+    fontSize: 18,
     fontWeight: "bold",
-    marginBottom: 20,
+    marginTop: 8,
+    color: "#007CFA",
   },
 });

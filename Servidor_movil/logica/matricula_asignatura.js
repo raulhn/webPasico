@@ -205,18 +205,24 @@ function obtenerMatriculasAsignatura(nid_matricula) {
   return new Promise((resolve, reject) => {
     const sql =
       "SELECT ma.nid_matricula_asignatura, ma.nid_matricula, ma.nid_asignatura, " +
-      "ma.fecha_alta, ma.fecha_baja, ma.fecha_actualizacion, a.descripcion AS asignatura " +
+      "ma.fecha_alta, ma.fecha_baja, ma.fecha_actualizacion, a.descripcion AS asignatura, " +
+      " p.nombre AS nombre_profesor, " +
+      " p.primer_apellido AS primer_apellido_profesor, " +
+      " p.segundo_apellido AS segundo_apellido_profesor " +
       "FROM " +
       constantes.ESQUEMA +
       ".matricula_asignatura ma, " +
       constantes.ESQUEMA +
       ".asignaturas a, " +
       constantes.ESQUEMA +
+      ".persona p, " +
+      constantes.ESQUEMA +
       ".matricula m " +
       "WHERE ma.nid_matricula = " +
       conexion.dbConn.escape(nid_matricula) +
       " AND ma.nid_asignatura = a.nid_asignatura " +
-      " AND ma.nid_matricula = m.nid_matricula ";
+      " AND ma.nid_matricula = m.nid_matricula " +
+      " AND m.nid_persona = p.nid_persona ";
 
     conexion.dbConn.query(sql, (err, result) => {
       if (err) {

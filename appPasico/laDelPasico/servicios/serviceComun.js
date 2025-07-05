@@ -23,7 +23,6 @@ function peticionServicio(metodo, url, body) {
 
     fetch(url, parametros)
       .then((response) => {
-        console.log(response);
         response
           .json()
           .then((data) => {

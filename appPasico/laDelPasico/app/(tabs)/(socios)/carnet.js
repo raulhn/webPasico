@@ -38,30 +38,30 @@ export default function Carnet() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.cardBackground}>
-        <Image source={logo} imageStyle={styles.logoBackground}></Image>
-      </View>
-      <View style={[styles.card]}>
+      <View style={styles.card}>
+        <View style={styles.logoContainer}>
+          <Image source={logo} style={styles.logo} />
+        </View>
         <Text style={styles.title}>Carnet de Socio</Text>
-        <View style={styles.infoContainer}>
+        <View style={styles.infoRow}>
           <Text style={styles.label}>Nombre:</Text>
-          <Text style={styles.value}>{persona.nombre}</Text>
+          <Text style={styles.value}>
+            {persona.nombre} {persona.primer_apellido}{" "}
+            {persona.segundo_apellido}
+          </Text>
         </View>
-        <View style={styles.infoContainer}>
-          <Text style={styles.label}>Primer Apellido:</Text>
-          <Text style={styles.value}>{persona.primer_apellido}</Text>
-        </View>
-        <View style={styles.infoContainer}>
-          <Text style={styles.label}>Segundo Apellido:</Text>
-          <Text style={styles.value}>{persona.segundo_apellido}</Text>
-        </View>
-        <View style={styles.infoContainer}>
+        <View style={styles.infoRow}>
           <Text style={styles.label}>Fecha de Alta:</Text>
           <Text style={styles.value}>{formatearFecha(socio.fecha_alta)}</Text>
         </View>
-        <View style={styles.infoContainer}>
-          <Text style={styles.label}>Número de Socio:</Text>
-          <Text style={styles.value}>{socio.num_socio}</Text>
+        <View style={styles.infoRow}>
+          <Text style={styles.label}>Nº Socio:</Text>
+          <Text style={styles.valueNum}>{socio.num_socio}</Text>
+        </View>
+        <View style={styles.footer}>
+          <Text style={styles.footerText}>
+            Asociación Amigos de la Musica de Torre Pacheco
+          </Text>
         </View>
       </View>
     </View>
@@ -71,68 +71,88 @@ export default function Carnet() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#eaf2fb",
     justifyContent: "center",
-    position: "relative",
     alignItems: "center",
-    backgroundColor: "#f0f0f0", // Fondo gris claro para simular un entorno limpio
-  },
-  cardBackground: {
-    position: "absolute",
-    width: 360,
-    height: 230,
-    zIndex: 1,
-    padding: 20,
-    margin: 20,
-    opacity: 0.1, // Opacidad para el fondo
-    borderRadius: 10, // Bordes redondeados
-    backgroundColor: "#fff", // Fondo blanco para la tarjeta
-    shadowColor: "#000", // Sombra para dar efecto de elevación
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5, // Sombra en Android
-    alignItems: "center",
-    overflow: "hidden", // Asegura que el logo no se salga de los bordes redondeados
   },
   card: {
-    width: 360,
-    height: 230,
-    zIndex: 2,
+    width: 340,
+    height: 210,
+    backgroundColor: "#fff",
+    borderRadius: 18,
     padding: 20,
-    borderRadius: 10, // Bordes redondeados
-    backgroundColor: "rgba(255, 255, 255, 0.5)",
-    shadowColor: "#007CFA", // Sombra para dar efecto de elevación
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5, // Sombra en Android
+    shadowColor: "#007CFA",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.18,
+    shadowRadius: 8,
+    elevation: 7,
     alignItems: "center",
-    overflow: "hidden", // Asegura que el logo no se salga de los bordes redondeados
+    position: "relative",
   },
-  logoBackground: {
-    resizeMode: "contain", // Ajusta la imagen para cubrir todo el fondo
+  logoContainer: {
     position: "absolute",
+    top: 18,
+    right: 18,
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    padding: 4,
+    elevation: 2,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.08,
+    shadowRadius: 2,
+  },
+  logo: {
+    width: 48,
+    height: 48,
+    resizeMode: "contain",
   },
   title: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: "bold",
-    marginBottom: 20,
-    color: "#333", // Color oscuro para el título
+    color: "#007CFA",
+    marginBottom: 18,
+    marginTop: 8,
+    alignSelf: "flex-start",
   },
-  infoContainer: {
+  infoRow: {
     flexDirection: "row",
-    justifyContent: "space-between",
-
+    justifyContent: "flex-start",
+    alignItems: "center",
     width: "100%",
     marginBottom: 10,
+    gap: 8,
   },
   label: {
-    fontSize: 16,
+    fontSize: 15,
+    color: "#007CFA",
     fontWeight: "bold",
-    color: "#555", // Color gris oscuro para las etiquetas
+    minWidth: 100,
   },
   value: {
-    fontSize: 16,
-    color: "#000", // Color negro para los valores
+    fontSize: 15,
+    color: "#222",
+    fontWeight: "500",
+    flexShrink: 1,
+  },
+  valueNum: {
+    fontSize: 18,
+    color: "#007CFA",
+    fontWeight: "bold",
+    marginLeft: 4,
+  },
+  footer: {
+    bottom: 12,
+    left: 0,
+    width: "100%",
+    alignItems: "center",
+    paddingTop: 8,
+  },
+  footerText: {
+    fontSize: 13,
+    color: "#888",
+    fontStyle: "italic",
+    letterSpacing: 1,
+    textAlign: "center",
   },
 });

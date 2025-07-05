@@ -6,6 +6,7 @@ export const useMatriculasAsignaturaPersona = (
   cerrar_sesion
 ) => {
   const [matriculasAsignatura, setMatriculasAsignatura] = useState([]);
+  const [matricula, setMatricula] = useState(null);
   const [cargando, setCargando] = useState(true);
   const [refrescar, setRefrescar] = useState(false);
   const [error, setError] = useState(false);
@@ -19,6 +20,7 @@ export const useMatriculasAsignaturaPersona = (
       .obtenerMatriculasAsignaturaPersona(nid_matricula, cerrar_sesion)
       .then((matriculasRecuperadas) => {
         setMatriculasAsignatura(matriculasRecuperadas.matriculas);
+        setMatricula(matriculasRecuperadas.matricula);
         setCargando(false); // Finaliza la carga
         setRefrescar(false);
         setError(false);
@@ -38,5 +40,6 @@ export const useMatriculasAsignaturaPersona = (
     refrescarMatriculas,
     error,
     refrescar,
+    matricula,
   };
 };

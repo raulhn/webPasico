@@ -199,7 +199,34 @@ async function obtenerAlumnosProfesorCursoActual(nid_profesor) {
   }
 }
 
+function obtenerProfesorAlumnoMatricula(nid_matricula_asignatura) {
+  return new Promise((resolve, reject) => {
+    const sql =
+      "SELECT pam.nid_profesor_alumno_matricula, pam.nid_profesor, pam.nid_matricula_asignatura, " +
+      "pam.fecha_alta, pam.fecha_baja, pam.fecha_actualizacion, p.nombre AS nombre_profesor, " +
+      "p.primer_apellido AS primer_apellido_profesor, p.segundo_apellido AS segundo_apellido_profesor " +
+      "FROM " +
+      constantes.ESQUEMA +
+      ".profesor_alumno_matricula pam, " +
+      constantes.ESQUEMA +
+      ".persona p " +
+      "WHERE pam.nid_matricula_asignatura = " +
+      conexion.dbConn.escape(nid_matricula_asignatura) +
+      " AND pam.nid_profesor = p.nid_persona";
+
+    conexion.dbConn.query(sql, (err, result) => {
+      if (err) {
+        console.error("Error al obtener el profesor-alumno-matricula:", err);
+        reject(err);
+      } else {
+        resolve(result);
+      }
+    });
+  });
+}
+
 module.exports.registrarProfesorAlumnoMatricula =
   registrarProfesorAlumnoMatricula;
 module.exports.obtenerAlumnosProfesorCursoActual =
   obtenerAlumnosProfesorCursoActual;
+module.exports.obtenerProfesorAlumnoMatricula = obtenerProfesorAlumnoMatricula;
