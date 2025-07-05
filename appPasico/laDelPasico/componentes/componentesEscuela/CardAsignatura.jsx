@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 
-export default function CardAsignatura({ matriculaAsignatura, matricula }) {
+export default function CardAsignatura({ matriculaAsignatura }) {
   function formatDateToMySQL(date) {
     try {
       if (!date) return null;
@@ -12,7 +12,7 @@ export default function CardAsignatura({ matriculaAsignatura, matricula }) {
     }
   }
 
-  console.log("Matricula Asignatura:", matricula);
+
   function incluirProfesores() {
     const profesores = matriculaAsignatura.profesores || [];
     return profesores.map((profesor, index) => {

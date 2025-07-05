@@ -10,6 +10,8 @@ const serviceProfesores = require("./serviceProfesores");
 const serviceSocios = require("./serviceSocios");
 const serviceInstrumentos = require("./serviceInstrumentos");
 const serviceTipoMusico = require("./serviceTipoMusico");
+const serviceTipoProgreso = require("./serviceTipoProgreso");
+const serviceTrimestres = require("./serviceTrimestres");
 
 // Función para manejar el timeout
 function fetchWithTimeout(url, options, timeout = 5000) {
@@ -36,6 +38,8 @@ async function actualizar_sucios() {
       await serviceMatriculaAsignatura.actualizar_sucios();
       await serviceProfesores.actualizar_sucios();
       await serviceProfesorAlumnoMatricula.actualizar_sucios();
+      await serviceTipoProgreso.actualizar_sucios();
+      await serviceTrimestres.actualizar_sucios();
       await serviceInstrumentos.actualizar_sucios();
       await serviceTipoMusico.actualizar_sucios();
       await serviceMusicos.actualizar_sucios();
