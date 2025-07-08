@@ -42,7 +42,7 @@ function obtenerEvaluacionesMatriculaSucias(req, res) {
   servletComun.comprobacionAccesoAPIKey(req, res, async () => {
     try {
       const evaluaciones =
-        await gestor_evaluacion_matricula.obtenerEvaluacionesMatriculaSucias();
+        await gestor_evaluacion_matricula.obtenerEvaluacionMatriculaSucias();
       res.status(200).send({ error: false, evaluaciones: evaluaciones });
     } catch (error) {
       console.error(

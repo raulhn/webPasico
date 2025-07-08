@@ -15,12 +15,10 @@ function peticion_registrar_evaluacion(evaluacion) {
               "x-api-key": process.env.API_KEY_MOVIL,
             },
             body: JSON.stringify({
-              nid_evaluacion_matricula: evaluacion.nid_evaluacion_matricula,
-              nid_persona: evaluacion.nid_persona,
-              nid_asignatura: evaluacion.nid_asignatura,
+              nid_evaluacion: evaluacion.nid_evaluacion,
               nid_trimestre: evaluacion.nid_trimestre,
-              nid_tipo_progreso: evaluacion.nid_tipo_progreso,
-              comentario: evaluacion.comentario,
+              nid_asignatura: evaluacion.nid_asignatura,
+              nid_profesor: evaluacion.nid_profesor,
               fecha_actualizacion: evaluacion.fecha_actualizacion,
             }),
           }
@@ -57,7 +55,7 @@ async function actualizar_sucios() {
     for (const evaluacion of evaluaciones) {
       await peticion_registrar_evaluacion(evaluacion);
       await gestorEvaluacion.actualizar_evaluacion_sucio(
-        evaluacion.nid_evaluacion_matricula,
+        evaluacion.nid_evaluacion,
         "N"
       );
       console.log("Actualizar evaluación en servicio móvil", evaluacion);
@@ -68,7 +66,7 @@ async function actualizar_sucios() {
 }
 
 function obtener_evaluaciones_sucias() {
-  try {
+  return new Promise((resolve, reject) => {
     serviceComun
       .fetchWithTimeout(
         constantes.URL_SERVICIO_MOVIL + "obtener_evaluaciones_sucias",
@@ -86,23 +84,44 @@ function obtener_evaluaciones_sucias() {
           .then((data) => {
             if (data.error) {
               console.error("Error en la respuesta de la API:", data.error);
-              throw new Error("Error en la respuesta de la API");
+              reject("Error en la respuesta de la API");
             }
-            return data;
+            resolve(data);
           })
           .catch((error) => {
             console.error("Error al procesar la respuesta JSON:", error);
-            throw new Error("Error al procesar la respuesta JSON");
+            reject("Error al procesar la respuesta JSON");
           });
       })
       .catch((error) => {
         console.error("Error al realizar la solicitud:", error);
-        throw new Error("Error al realizar la solicitud");
+        reject("Error al realizar la solicitud");
       });
+  });
+}
+
+async function actualizar_evaluaciones_sucias() {
+  try {
+    const evaluaciones = await obtener_evaluaciones_sucias();
+    for (const evaluacion of evaluaciones) {
+      const existe = await gestorEvaluacion.existe_evaluacion_nid(
+        evaluacion.nid_evaluacion
+      );
+      if (!existe) {
+        await gestorEvaluacion.registrar_evaluacion(
+          evaluacion.nid_trimestre,
+          evaluacion.nid_asignatura,
+          evaluacion.nid_profesor
+        );
+      }
+    }
   } catch (error) {
-    console.error("Error en la función obtener_evaluaciones_sucias:", error);
-    throw new Error("Error en la función obtener_evaluaciones_sucias");
+    console.error(
+      "Error al actualizar las evaluaciones matrícula sucias:",
+      error
+    );
   }
 }
 
 module.exports.actualizar_sucios = actualizar_sucios;
+module.exports.actualizar_evaluaciones_sucias = actualizar_evaluaciones_sucias;

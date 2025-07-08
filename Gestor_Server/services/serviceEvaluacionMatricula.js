@@ -77,4 +77,66 @@ async function actualizar_sucios() {
     );
   }
 }
+
+function obtener_evaluaciones_matriculas_sucias() {
+  return new Promise((resolve, reject) => {
+    serviceComun
+      .fetchWithTimeout(
+        constantes.URL_SERVICIO_MOVIL +
+          "obtener_evaluaciones_matriculas_sucias",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "x-api-key": process.env.API_KEY_MOVIL,
+          },
+        }
+      )
+      .then((response) => {
+        response
+          .json()
+          .then((data) => {
+            if (data.error) {
+              console.error("Error en la respuesta de la API:", data.error);
+              reject("Error en la respuesta de la API");
+            }
+            resolve(data);
+          })
+          .catch((error) => {
+            console.error("Error al procesar la respuesta JSON:", error);
+            reject("Error al procesar la respuesta JSON");
+          });
+      })
+      .catch((error) => {
+        console.error("Error al realizar la solicitud:", error);
+        reject("Error al realizar la solicitud");
+      });
+  });
+}
+
+async function actualizar_evaluacion_matriculas_sucio() {
+  try {
+    const evaluacionesMatricula =
+      await obtener_evaluaciones_matriculas_sucias();
+    for (const evaluacionMatricula of evaluacionesMatricula) {
+      await gestorEvaluacion.registrar_evaluacion_matricula(
+        evaluacionMatricula.nid_evaluacion,
+        evaluacionMatricula.nid_evaluacion_matricula,
+        evaluacionMatricula.nota,
+        evaluacionMatricula.nid_tipo_progreso,
+        evaluacionMatricula.cometario
+      );
+      console.log(
+        "Actualizar evaluación matrícula en servicio móvil",
+        evaluacionMatricula
+      );
+    }
+  } catch (error) {
+    console.error(
+      "Error al actualizar las evaluaciones matrícula sucias:",
+      error
+    );
+  }
+}
+
 module.exports.actualizar_sucios = actualizar_sucios;

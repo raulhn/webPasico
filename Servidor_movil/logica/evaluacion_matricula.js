@@ -33,6 +33,7 @@ function insertarEvaluacionMatricula(
       conexion.dbConn.escape(comun.formatDateToMySQL(fecha_actualizacion)) +
       ", 'N' " +
       ")";
+
     conexion.dbConn.beginTransaction(() => {
       conexion.dbConn.query(sql, (err, result) => {
         if (err) {
@@ -78,7 +79,9 @@ function actualizarEvaluacionMatricula(
       conexion.dbConn.escape(comun.formatDateToMySQL(fecha_actualizacion)) +
       ", sucio = 'N'" +
       " WHERE nid_evaluacion_matricula = " +
-      conexion.dbConn.escape(nid_evaluacion_matricula);
+      conexion.dbConn.escape(nid_evaluacion_matricula) +
+      " AND fecha_actualizacion < " +
+      conexion.dbConn.escape(comun.formatDateToMySQL(fecha_actualizacion));
 
     conexion.dbConn.beginTransaction(() => {
       conexion.dbConn.query(sql, (err, result) => {

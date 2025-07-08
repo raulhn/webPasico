@@ -133,13 +133,13 @@ async function registrarTipoProgreso(
         console.log("No se requiere actualizar el tipo de progreso.");
         return null;
       }
-      return await actualizarTipoProgreso(
+      await actualizarTipoProgreso(
         nid_tipo_progreso,
         descripcion,
         fecha_actualizacion
       );
     } else {
-      return await insertarTipoProgreso(
+      await insertarTipoProgreso(
         nid_tipo_progreso,
         descripcion,
         fecha_actualizacion
