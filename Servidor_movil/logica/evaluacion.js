@@ -62,7 +62,9 @@ function actualizarEvaluacion(
       conexion.dbConn.escape(comun.formatDateToMySQL(fecha_actualizacion)) +
       ", sucio = 'N'" +
       " WHERE nid_evaluacion = " +
-      conexion.dbConn.escape(nid_evaluacion);
+      conexion.dbConn.escape(nid_evaluacion) +
+      " and fecha_actualizacion < " +
+      conexion.dbConn.escape(comun.formatDateToMySQL(fecha_actualizacion));
 
     conexion.dbConn.beginTransaction(() => {
       conexion.dbConn.query(sql, (err, result) => {

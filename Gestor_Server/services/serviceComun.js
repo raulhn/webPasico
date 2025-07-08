@@ -12,6 +12,8 @@ const serviceInstrumentos = require("./serviceInstrumentos");
 const serviceTipoMusico = require("./serviceTipoMusico");
 const serviceTipoProgreso = require("./serviceTipoProgreso");
 const serviceTrimestres = require("./serviceTrimestres");
+const serviceEvaluacion = require("./serviceEvaluacion");
+const serviceEvaluacionMatricula = require("./serviceEvaluacionMatricula");
 
 // Función para manejar el timeout
 function fetchWithTimeout(url, options, timeout = 5000) {
@@ -43,6 +45,8 @@ async function actualizar_sucios() {
       await serviceInstrumentos.actualizar_sucios();
       await serviceTipoMusico.actualizar_sucios();
       await serviceMusicos.actualizar_sucios();
+      await serviceEvaluacion.actualizar_sucios();
+      await serviceEvaluacionMatricula.actualizar_sucios();
     } catch (error) {
       console.error("Error en la tarea programada:", error);
     }
