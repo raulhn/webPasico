@@ -243,7 +243,7 @@ async function registrar_partitura_evento(req, res) {
 async function eliminar_partitura_evento(req, res) {
   try {
     const rolesPermitidos = [constantes.DIRECTOR, constantes.ADMINISTRADOR];
-    let rolDirector = servlet_comun.comprobarRol(req, res, rolesPermitidos);
+    let rolDirector = await servlet_comun.comprobarRol(req, res, rolesPermitidos);
     if (!rolDirector) {
       res.status(403).send({
         error: true,
@@ -288,7 +288,7 @@ async function obtenerPartiturasEvento(req, res) {
       constantes.ADMINISTRADOR,
       constantes.MUSICO,
     ];
-    let rolPermitido = servlet_comun.comprobarRol(req, res, rolesPermitidos);
+    let rolPermitido = await servlet_comun.comprobarRol(req, res, rolesPermitidos);
     if (!rolPermitido) {
       res.status(403).send({
         error: true,

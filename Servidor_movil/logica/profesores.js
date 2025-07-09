@@ -167,6 +167,35 @@ function obtenerProfesor(nid_persona) {
   }
 }
 
+function esProfesor(nid_persona, nid_asignatura)
+{
+  return new Promise(
+    (resolve, reject) =>
+    {
+      const sql = "select count(*) num " +
+                  " from " + constantes.ESQUEMA + ".profesor " +
+                  "where nid_persona = " + conexion.dbConn.escape(nid_persona) + 
+                  " and nid_asignatura = " + conexion.dbConn.escape(nid_asignatura);
+
+      conexion.dbConn.query(sql,
+        (error, results, fields) =>
+        {
+          if(error)
+          {
+            console.log("profesores.js -> esProfesor: ", error);
+            reject("Se ha producido un error al comprobar el profesor")
+          }
+          else
+          {
+            resolve(results[0]['num'] > 0)
+          }
+        }
+      )
+    }
+  )
+}
+
 module.exports.registrarProfesor = registrarProfesor;
 module.exports.eliminarProfesor = eliminarProfesor;
 module.exports.obtenerProfesor = obtenerProfesor;
+module.exports.esProfesor =esProfesor

@@ -186,9 +186,27 @@ async function obtenerTipoPersonas(req, res) {
   const tiposPersonas = await gestor.obtenerTiposPersonas();
 }
 
+async function obtenerNidPersona(req)
+{
+  try
+  {
+    const tokenDecode = await obtenerTokenDecoded(req);
+    const nid_usuario = tokenDecode.nid_usuario;
+    const persona = gestorPersona.obtenerPersonaUsuario(nid_usuario);
+    
+    return persona;
+  }
+  catch(error)
+  {
+    console.log("servlet_comun.js -> obtener_nid_persona: ", error);
+    throw new Error("Se ha producido un error al recuperar la persona")
+  }
+}
+
 module.exports.obtenerPersona = obtenerPersona;
 module.exports.registrarPersona = registrarPersona;
 module.exports.obtenerPersonasSucias = obtenerPersonasSucias;
 module.exports.limpiarPersona = limpiarPersona;
 module.exports.obtenerPersonas = obtenerPersonas;
 module.exports.obtenerPersonasMusicos = obtenerPersonasMusicos;
+module.exports.obtenerNidPersona = obtenerNidPersona;

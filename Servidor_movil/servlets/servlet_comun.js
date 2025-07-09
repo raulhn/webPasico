@@ -92,6 +92,8 @@ async function comprobarRol(req, res, rolesPermitidos) {
   }
 }
 
+
+
 module.exports.comprobacionLogin = comprobacionLogin;
 module.exports.comprobacionAccesoAPIKey = comprobacionAccesoAPIKey;
 module.exports.obtenerTokenDecoded = obtenerTokenDecoded;
