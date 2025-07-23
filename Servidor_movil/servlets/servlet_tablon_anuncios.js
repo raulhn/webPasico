@@ -1,82 +1,159 @@
-const gestorTablonAnuncios = require("../logica/tablon_anuncios")
-const gestorTablonAnuncionsAsignatura = require("../logica/tablon_anuncios_asignatura")
-const constantes = require("../constantes")
-const servlet_comun = require("./servlet_comun")
-const gestorProfesores = require("../logica/profesores")
-const servletPersona = require("./servlet_persona")
+const gestorTablonAnuncios = require("../logica/tablon_anuncios");
+const gestorTablonAnuncionsAsignatura = require("../logica/tablon_anuncios_asignatura");
+const constantes = require("../constantes");
+const servlet_comun = require("./servlet_comun");
+const gestorProfesores = require("../logica/profesores");
+const servletPersona = require("./servlet_persona");
 
-async function insertarTablonAnuncioProfesor(req, res)
-{
-    try
-    {
-        const rolAdministrador =[constantes.ADMINISTRADOR];
-        const rolProfesor = [constantes.PROFESOR];
+// Comprueba si el usuario tiene permisos para acceder a la escuela y si es profesor de la asignatura
+async function tienePermisosEscuela(req, res) {
+  try {
+    const rolAdministrador = [constantes.ADMINISTRADOR];
+    const rolProfesor = [constantes.PROFESOR];
 
-        const bAdministrador = await servlet_comun.comprobarRol(req, rolAdministrador)
-        const bProfesor = await servlet_comun.comprobarRol(req, rolProfesor);
-        
-        if (!bAdministrador && !bProfesor)
-        {
-            throw new Error("Acceso no autorizado");
-        }
-        else
-        {
-            const titulo = req.body.titulo;
-            const descripcion = req.body.descripcion;
-            const nidTipoTablon = req.body.nid_tipo_tablon;
-            const nid_asignatura = req.body.nid_asignatura;
+    const bAdministrador = await servlet_comun.comprobarRol(
+      req,
+      rolAdministrador
+    );
+    const bProfesor = await servlet_comun.comprobarRol(req, rolProfesor);
 
+    if (!bAdministrador && !bProfesor) {
+      return false;
+    } else {
+      const nid_asignatura = req.body.nid_asignatura;
 
-            if(!bAdministrador)
-            {
-              const nid_persona = servletPersona.obtenerNidPersona(req);
-              const bEsProfesor = gestorProfesores.esProfesor(nid_persona, nid_asignatura);
-                           
-              if(!bEsProfesor)
-              {
-                // No es profesor de esa asignatura
-                throw new Error("Acceso no autorizado")
-              }
-            }
+      if (!bAdministrador) {
+        const nid_persona = await servletPersona.obtenerNidPersona(req);
+        const bEsProfesor = await gestorProfesores.esProfesor(
+          nid_persona,
+          nid_asignatura
+        );
 
-            const nid_tablon_anuncio = await gestorTablonAnuncios.insertarTablonAnuncio(titulo, descripcion, nidTipoTablon);
-            const nid_tablon_anuncio_asignatura = await gestorTablonAnuncionsAsignatura.actualizarTablonAnuncioAsignatura(nid_tablon_anuncio, nid_asignatura);
-        
-            res.status(200).send(
-                {
-                    error: false,
-                    mensaje: "Anuncio registrado"
-                }
-            )
-        }
+        return bEsProfesor;
+      }
+      return true;
     }
-    catch(error)
-    {
-        console.log("servlet_tablon_anuncios.js -> insertarTablonAnuncioProfesor: ", error);
-        throw new Error("Error al insertar anuncio")
-    }
+  } catch (error) {
+    console.log("servlet_tablon_anuncios.js -> tienePermisosEscuela: ", error);
+    throw new Error("Error al comprobar permisos de acceso a la escuela");
+  }
 }
 
+async function compruebaPermisos(req, res, nidTipoTablon) {
+  const rolBanda = [constantes.ADMINISTRADOR, constantes.DIRECTOR];
+  const rolAdministrador = [constantes.ADMINISTRADOR];
 
-async function insertarTablonAnuncio(req, res)
-{
-    try
-    {
-        const nid_tipo_tablon = req.body.nid_tipo_tablon;
+  const bPermisosEscuela = await tienePermisosEscuela(req, res);
+  const bPermisosBanda = await servlet_comun.comprobarRol(req, rolBanda);
+  const bPermisosAdministrador = await servlet_comun.comprobarRol(
+    req,
+    rolAdministrador
+  );
 
-        if(nid_tipo_tablon == constantes.PROFESOR)
-        {
-            await insertarTablonAnuncioProfesor(req, res);
-        }
-    }
-    catch(error)
-    {
-        console.log("servlet_tablon_anuncios.js -> insertarTablonAnuncio: ", error);
-        res.status(400).send(
-            {
-                error:true,
-                mensaje: "Se ha producido un error al insertar el tablon de anuncios"
-            }
-        )
-    }
+  return (
+    (nidTipoTablon == constantes.ESCUELA && bPermisosEscuela) ||
+    (nidTipoTablon == constantes.BANDA && bPermisosBanda) ||
+    (nidTipoTablon == constantes.ASOCIACION && bPermisosAdministrador) ||
+    (nidTipoTablon == constantes.GENERAL && bPermisosAdministrador)
+  );
 }
+
+async function insertarTablonAnuncio(req, res) {
+  try {
+    const titulo = req.body.titulo;
+    const descripcion = req.body.descripcion;
+    const nidTipoTablon = req.body.nid_tipo_tablon;
+
+    const bPermisos = await compruebaPermisos(req, res, nidTipoTablon);
+
+    if (!bPermisos) {
+      res.status(403).send({
+        error: true,
+        mensaje: "No tienes permisos para insertar un anuncio en este tablón",
+      });
+      return;
+    }
+    const nid_tablon_anuncio = await gestorTablonAnuncios.insertarTablonAnuncio(
+      titulo,
+      descripcion,
+      nidTipoTablon
+    );
+
+    if (nidTipoTablon == constantes.ESCUELA) {
+      const nid_asignatura = req.body.nid_asignatura;
+      // Si es un anuncio de escuela, se asocia a la asignatura
+      const nid_tablon_anuncio_asignatura =
+        await gestorTablonAnuncionsAsignatura.actualizarTablonAnuncioAsignatura(
+          nid_tablon_anuncio,
+          nid_asignatura
+        );
+    }
+
+    res.status(200).send({
+      error: false,
+      mensaje: "Anuncio registrado correctamente",
+    });
+  } catch (error) {
+    console.log("servlet_tablon_anuncios.js -> insertarTablonAnuncio: ", error);
+    res.status(400).send({
+      error: true,
+      mensaje: "Se ha producido un error al insertar el tablon de anuncios",
+    });
+  }
+}
+
+async function actualizarTablonAnuncio(req, res) {
+  try {
+    const titulo = req.body.titulo;
+    const descripcion = req.body.descripcion;
+    const nidTipoTablon = req.body.nid_tipo_tablon;
+    const nid_tablon_anuncio = req.body.nid_tablon_anuncio;
+
+    const bPermisos = await compruebaPermisos(req, res, nidTipoTablon);
+
+    if (!bPermisos) {
+      res.status(403).send({
+        error: true,
+        mensaje: "No tienes permisos para actualizar este anuncio",
+      });
+      return;
+    }
+
+    await gestorTablonAnuncios.actualizarTablonAnuncio(
+      nid_tablon_anuncio_asignatura,
+      titulo,
+      descripcion,
+      nidTipoTablon
+    );
+
+    if (nidTipoTablon == constantes.ESCUELA) {
+      const nid_tablon_anuncio_asignatura =
+        req.body.nid_tablon_anuncio_asignatura;
+      const nid_asignatura = req.body.nid_asignatura;
+
+      // Se actualiza el anuncio de la asignatura
+      await gestorTablonAnuncionsAsignatura.actualizarTablonAnuncioAsignatura(
+        nid_tablon_anuncio_asignatura,
+        nid_tablon_anuncio,
+        nid_asignatura
+      );
+    }
+
+    res.status(200).send({
+      error: false,
+      mensaje: "Anuncio actualizado correctamente",
+    });
+  } catch (error) {
+    console.log(
+      "servlet_tablon_anuncios.js -> actualizarTablonAnuncio: ",
+      error
+    );
+    res.status(400).send({
+      error: true,
+      mensaje: "Se ha producido un error al actualizar el tablon de anuncios",
+    });
+  }
+}
+
+module.exports.insertarTablonAnuncio = insertarTablonAnuncio;
+module.exports.actualizarTablonAnuncio = actualizarTablonAnuncio;

@@ -13,6 +13,7 @@ import {
   Modal,
 } from "react-native";
 import { useState, useEffect } from "react";
+import { Link } from "expo-router";
 import { use } from "react";
 
 export function Boton({
@@ -534,6 +535,99 @@ export function CustomTabs({ tabs, pestana = 0 }) {
           {tab.contenido()}
         </View>
       ))}
+    </View>
+  );
+}
+
+export function MenuDesplegable({ opciones }) {
+  const [isVisible, setIsVisible] = useState(false);
+  const [presionado, setPresionado] = useState(null);
+
+  function opcionesMenu() {
+    return opciones.map((opcion, index) => (
+      <Link
+        href={{
+          pathname: opcion.ruta,
+          params: opcion.parametros,
+        }}
+        key={index}
+        asChild
+      >
+        <Pressable
+          onPress={() => {
+            console.log("Opción seleccionada:", opcion.etiqueta);
+          }}
+          onPressIn={() => setPresionado(index)}
+          onPressOut={() => setPresionado(-1)}
+        >
+          <View
+            style={[
+              { padding: 10, flexDirection: "row", alignItems: "center" },
+              presionado === index && {
+                backgroundColor: "#007CFA",
+                color: "#fff",
+              },
+            ]}
+          >
+            <MaterialIcons
+              name={opcion.icono}
+              size={20}
+              color={presionado === index ? "#fff" : "#000"}
+            />
+            <Text
+              style={[
+                { marginLeft: 10 },
+                presionado === index && {
+                  color: "#fff",
+                },
+              ]}
+            >
+              {opcion.etiqueta}
+            </Text>
+          </View>
+        </Pressable>
+      </Link>
+    ));
+  }
+
+  return (
+    <View style={{ position: "relative" }}>
+      <BotonFixed
+        onPress={() => {
+          console.log("Menu desplegable presionado");
+          setIsVisible(true);
+        }}
+        icon="more-vert"
+        size={30}
+      ></BotonFixed>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={isVisible}
+        onRequestClose={() => setIsVisible(false)}
+        style={{ position: "absolute", top: 0, right: 0 }}
+      >
+        <Pressable style={{ flex: 1 }} onPress={() => setIsVisible(false)}>
+          <View
+            style={{
+              position: "absolute",
+              top: 105,
+              right: 10,
+              zIndex: 1,
+              backgroundColor: "#fff",
+              padding: 10,
+              borderRadius: 5,
+              shadowColor: "#000",
+              borderColor: "#ccc",
+              borderWidth: 1,
+            }}
+            // Evita que el modal se cierre al pulsar dentro del menú
+            onStartShouldSetResponder={() => true}
+          >
+            {opcionesMenu()}
+          </View>
+        </Pressable>
+      </Modal>
     </View>
   );
 }

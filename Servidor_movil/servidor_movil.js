@@ -262,6 +262,12 @@ app.post(
   servletNotificaciones.registrarNotificacionGrupo
 );
 
+//Evaluaciones //
+app.get(
+  "/obtener_evaluacion/:nid_matricula/:nid_trimestre",
+  servletEvaluacion.obtenerEvaluacion
+);
+
 https
   .createServer(
     {

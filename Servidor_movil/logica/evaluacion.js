@@ -177,5 +177,28 @@ function obtenerEvaluacionesSucias() {
   });
 }
 
+function obtenerEvaluacion(nid_matricula, nid_trimestre) {
+  return new Promise((resolve, reject) => {
+    const sql =
+      "select e.nid_evaluacion, e.nid_trimestre, e.nid_asignatura, e.nid_profesor, " +
+      "em.nota, em.nid_tipo_progreso, em.comentario " +
+      "from " +
+      constantes.ESQUEMA +
+      ".evaluacion e, " +
+      constantes.ESQUEMA +
+      ".evaluacion_matricula em, " +
+      constantes.ESQUEMA +
+      ".asignatura a " +
+      "where e.nid_evaluacion = em.nid_evaluacion " +
+      "and e.nid_asignatura = a.nid_asignatura " +
+      "and em.nid_matricula = " +
+      conexion.dbConn.escape(nid_matricula) +
+      " and e.nid_trimestre = " +
+      conexion.dbConn.escape(nid_trimestre) +
+      " order by a.orden, e.nid_evaluacion";
+  });
+}
+
 module.exports.registrarEvaluacion = registrarEvaluacion;
 module.exports.obtenerEvaluacionesSucias = obtenerEvaluacionesSucias;
+module.exports.obtenerEvaluacion = obtenerEvaluacion;

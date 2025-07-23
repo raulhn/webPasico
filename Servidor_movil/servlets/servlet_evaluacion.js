@@ -1,5 +1,8 @@
 const gestor_evaluacion = require("../logica/evaluacion");
 const servletComun = require("./servlet_comun");
+const servletPersona = require("./servlet_persona");
+const gestorMatricula = require("../logica/matricula");
+const gestorPersonas = require("../logica/persona");
 
 async function registrarEvaluacion(req, res) {
   servletComun.comprobacionAccesoAPIKey(req, res, async () => {
@@ -52,5 +55,51 @@ async function obtenerEvaluacionesSucias(req, res) {
   });
 }
 
+async function obtenerEvaluacion(req, res) {
+  try {
+    const nidPersona = await servletPersona.obtenerNidPersona(req, res);
+    const nidMatricula = req.params.nid_matricula;
+    const nidTrimestre = req.params.nid_trimestre;
+
+    const matricula = await gestorMatricula.obtenerMatricula(nidMatricula);
+
+    if (matricula.nid_persona !== nidPersona) {
+      const bEsPadre = gestorPersonas.esPadre(
+        nidPersona,
+        matricula.nid_persona
+      );
+      if (!bEsPadre) {
+        res.status(403).send({
+          error: true,
+          message: "No tienes permiso para acceder a esta evaluación",
+        });
+
+        return;
+      }
+    }
+
+    const evaluacion = await gestor_evaluacion.obtenerEvaluacion(
+      nidMatricula,
+      nidTrimestre
+    );
+
+    res.status(200).send({
+      error: false,
+      mensaje: "Evaluación obtenida correctamente",
+      evaluacion: evaluacion,
+    });
+  } catch (error) {
+    console.error(
+      "servlet_evaluacion.js -> obtenerEvaluacion: Error al obtener la evaluación:",
+      error
+    );
+    res.status(400).send({
+      error: true,
+      message: "Se ha producido un error al obtener la evaluación",
+    });
+  }
+}
+
 module.exports.registrarEvaluacion = registrarEvaluacion;
 module.exports.obtenerEvaluacionesSucias = obtenerEvaluacionesSucias;
+module.exports.obtenerEvaluacion = obtenerEvaluacion;

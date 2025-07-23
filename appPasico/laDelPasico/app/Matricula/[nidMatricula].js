@@ -11,7 +11,10 @@ import { useMatriculasAsignaturaPersona } from "../../hooks/personas/useMatricul
 import { AuthContext } from "../../providers/AuthContext";
 import { useContext } from "react";
 import CardAsignatura from "../../componentes/componentesEscuela/CardAsignatura.jsx"; // Asegúrate de que la ruta sea correcta
-import { Boton } from "../../componentes/componentesUI/ComponentesUI.jsx"; // Asegúrate de que la ruta sea correcta
+import {
+  Boton,
+  MenuDesplegable,
+} from "../../componentes/componentesUI/ComponentesUI.jsx"; // Asegúrate de que la ruta sea correcta
 
 export default function Matricula() {
   const { nidMatricula } = useLocalSearchParams();
@@ -37,11 +40,30 @@ export default function Matricula() {
       </View>
     );
   }
-  console.log("Matricula ", matricula);
+
+  const opcionesDesplegable = [
+    {
+      etiqueta: "Evaluaciones",
+      icono: "menu-book",
+      ruta: "/Evaluaciones/" + nidMatricula,
+      parametros: { nidMatricula: nidMatricula },
+    },
+    {
+      etiqueta: "Expediente",
+      icono: "folder",
+      ruta: "/Expediente/" + nidMatricula,
+      parametros: { nidMatricula: nidMatricula },
+    },
+  ];
+
   return (
     <View style={estilos.container}>
+      <View style={{ position: "absolute", top: 15, right: 15, zIndex: 1 }}>
+        <MenuDesplegable opciones={opcionesDesplegable} />
+      </View>
       <Text style={estilos.title}>Asignaturas</Text>
       <Text>{matricula.curso}</Text>
+
       <FlatList
         data={matriculasAsignatura}
         keyExtractor={(item) => item.nid_matricula.toString()}

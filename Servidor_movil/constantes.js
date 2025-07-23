@@ -12,6 +12,7 @@ const BANDA = 1;
 const ESCUELA = 2;
 const ASOCIACION = 3;
 const INDIVIDUAL = 4;
+const GENERAL = 5;
 
 const PROFESOR = "PROFESOR";
 const ADMINISTRADOR = "ADMINISTRADOR";
@@ -26,10 +27,12 @@ module.exports.TIEMPO_REFRESH_TOKEN = TIEMPO_REFRESH_TOKEN;
 module.exports.ACCESS_TOKEN = ACCESS_TOKEN;
 module.exports.REFRESH_TOKEN = REFRESH_TOKEN;
 module.exports.SALT_ROUNDS = SALT_ROUNDS;
+
 module.exports.BANDA = BANDA;
 module.exports.ESCUELA = ESCUELA;
 module.exports.ASOCIACION = ASOCIACION;
 module.exports.INDIVIDUAL = INDIVIDUAL;
+module.exports.GENERAL = GENERAL;
 
 module.exports.PROFESOR = PROFESOR;
 module.exports.ADMINISTRADOR = ADMINISTRADOR;
