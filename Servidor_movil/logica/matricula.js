@@ -196,7 +196,7 @@ function obtenerMatriculasPersona(nid_persona) {
 function obtenerMatricula(nid_matricula) {
   return new Promise((resolve, reject) => {
     var sql =
-      "SELECT m.nid_matricula, p.nombre, p.primer_apellido, p.segundo_apellido, c.descripcion curso FROM " +
+      "SELECT m.nid_matricula, p.nombre, p.primer_apellido, p.segundo_apellido, c.descripcion curso, p.nid_persona FROM " +
       constantes.ESQUEMA +
       ".matricula m, " +
       constantes.ESQUEMA +
