@@ -177,7 +177,7 @@ function obtenerEvaluacionesSucias() {
   });
 }
 
-function obtenerEvaluacion(nid_matricula, nid_trimestre) {
+function obtenerEvaluacionTrimestre(nid_matricula, nid_trimestre) {
   return new Promise((resolve, reject) => {
     const sql =
       "select e.nid_evaluacion, e.nid_trimestre, e.nid_asignatura, e.nid_profesor, " +
@@ -196,9 +196,55 @@ function obtenerEvaluacion(nid_matricula, nid_trimestre) {
       " and e.nid_trimestre = " +
       conexion.dbConn.escape(nid_trimestre) +
       " order by a.orden, e.nid_evaluacion";
+
+    conexion.dbConn.query(sql, (err, results) => {
+      if (err) {
+        console.error(
+          "evaluacion.js -> obtenerEvaluacionTrimestre: Error al obtener la evaluación del trimestre:",
+          err
+        );
+        return reject(err);
+      }
+      if (results.length === 0) {
+        return resolve(null);
+      }
+      resolve(results[0]);
+    });
+  });
+}
+
+function obtenerEvaluaciones(nid_matricula) {
+  return new Promise((resolve, reject) => {
+    const sql =
+      "select e.nid_evaluacion, e.nid_trimestre, e.nid_asignatura, e.nid_profesor, " +
+      "em.nota, em.nid_tipo_progreso, em.comentario, t.nid_trimestre, t.descripcion nombre_trimestre " +
+      "from " +
+      constantes.ESQUEMA +
+      ".evaluacion e, " +
+      constantes.ESQUEMA +
+      ".evaluacion_matricula em, " +
+      constantes.ESQUEMA +
+      ".trimestre t " +
+      "where e.nid_evaluacion = em.nid_evaluacion " +
+      "and e.nid_trimestre = t.nid_trimestre " +
+      "and em.nid_matricula = " +
+      conexion.dbConn.escape(nid_matricula) +
+      " order by t.nid_trimestre, e.nid_evaluacion";
+
+    conexion.dbConn.query(sql, (err, results) => {
+      if (err) {
+        console.error(
+          "evaluacion.js -> obtenerEvaluaciones: Error al obtener las evaluaciones:",
+          err
+        );
+        return reject(err);
+      }
+      resolve(results);
+    });
   });
 }
 
 module.exports.registrarEvaluacion = registrarEvaluacion;
 module.exports.obtenerEvaluacionesSucias = obtenerEvaluacionesSucias;
-module.exports.obtenerEvaluacion = obtenerEvaluacion;
+module.exports.obtenerEvaluacionTrimestre = obtenerEvaluacionTrimestre;
+module.exports.obtenerEvaluaciones = obtenerEvaluaciones;
