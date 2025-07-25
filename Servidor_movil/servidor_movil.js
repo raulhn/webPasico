@@ -264,8 +264,8 @@ app.post(
 
 //Evaluaciones //
 app.get(
-  "/obtener_evaluacion/:nid_matricula/:nid_trimestre",
-  servletEvaluacion.obtenerEvaluacion
+  "/obtener_evaluaciones/:nid_matricula/",
+  servletEvaluacion.obtenerEvaluaciones
 );
 
 https

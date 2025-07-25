@@ -55,7 +55,7 @@ async function obtenerEvaluacionesSucias(req, res) {
   });
 }
 
-async function obtenerEvaluacion(req, res) {
+async function obtenerEvaluacionTrimestre(req, res) {
   try {
     const nidPersona = await servletPersona.obtenerNidPersona(req, res);
     const nidMatricula = req.params.nid_matricula;
@@ -78,7 +78,7 @@ async function obtenerEvaluacion(req, res) {
       }
     }
 
-    const evaluacion = await gestor_evaluacion.obtenerEvaluacion(
+    const evaluacion = await gestor_evaluacion.obtenerEvaluacionTrimestre(
       nidMatricula,
       nidTrimestre
     );
@@ -100,6 +100,49 @@ async function obtenerEvaluacion(req, res) {
   }
 }
 
+async function obtenerEvaluaciones(req, res) {
+  try {
+    const nidPersona = await servletPersona.obtenerNidPersona(req, res);
+    const nidMatricula = req.params.nid_matricula;
+
+    const matricula = await gestorMatricula.obtenerMatricula(nidMatricula);
+
+    if (matricula.nid_persona !== nidPersona) {
+      const bEsPadre = gestorPersonas.esPadre(
+        nidPersona,
+        matricula.nid_persona
+      );
+      if (!bEsPadre) {
+        res.status(403).send({
+          error: true,
+          message: "No tienes permiso para acceder a esta evaluación",
+        });
+
+        return;
+      }
+    }
+
+    const evaluaciones =
+      await gestor_evaluacion.obtenerEvaluaciones(nidMatricula);
+
+    res.status(200).send({
+      error: false,
+      mensaje: "Evaluación obtenida correctamente",
+      evaluaciones: evaluaciones,
+    });
+  } catch (error) {
+    console.error(
+      "servlet_evaluacion.js -> obtenerEvaluacion: Error al obtener la evaluación:",
+      error
+    );
+    res.status(400).send({
+      error: true,
+      message: "Se ha producido un error al obtener la evaluación",
+    });
+  }
+}
+
 module.exports.registrarEvaluacion = registrarEvaluacion;
 module.exports.obtenerEvaluacionesSucias = obtenerEvaluacionesSucias;
-module.exports.obtenerEvaluacion = obtenerEvaluacion;
+module.exports.obtenerEvaluacionTrimestre = obtenerEvaluacionTrimestre;
+module.exports.obtenerEvaluaciones = obtenerEvaluaciones;
