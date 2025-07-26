@@ -501,7 +501,7 @@ export function CustomTabs({ tabs, pestana = 0 }) {
 
   return (
     <View>
-      <View style={{ flexDirection: "row", marginBottom: 10 }}>
+      <View style={{ flexDirection: "row", marginBottom: 5 }}>
         {tabs.map((tab, index) => (
           <Pressable
             key={index}
@@ -510,11 +510,11 @@ export function CustomTabs({ tabs, pestana = 0 }) {
             }}
             style={({ pressed }) => [
               {
-                padding: 10,
+                padding: 7,
                 borderRadius: 5,
                 backgroundColor: obtenerBackGroundColor(pressed, index),
 
-                marginRight: 10,
+                marginRight: 5,
               },
             ]}
           >
@@ -564,7 +564,7 @@ export function MenuDesplegable({ opciones }) {
         >
           <View
             style={[
-              { padding: 10, flexDirection: "row", alignItems: "center" },
+              { padding: 5, flexDirection: "row", alignItems: "center" },
               presionado === index && {
                 backgroundColor: "#007CFA",
                 color: "#fff",

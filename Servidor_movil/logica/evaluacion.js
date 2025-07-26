@@ -216,8 +216,8 @@ function obtenerEvaluacionTrimestre(nid_matricula, nid_trimestre) {
 function obtenerEvaluaciones(nid_matricula) {
   return new Promise((resolve, reject) => {
     const sql =
-      "select e.nid_evaluacion, e.nid_trimestre, e.nid_asignatura, e.nid_profesor, " +
-      "em.nota, em.nid_tipo_progreso, em.comentario, t.nid_trimestre, t.descripcion nombre_trimestre " +
+      "select e.nid_evaluacion, em.nid_evaluacion_matricula, e.nid_trimestre, e.nid_asignatura, e.nid_profesor, " +
+      "em.nota, em.nid_tipo_progreso, em.comentario, t.nid_trimestre, t.descripcion nombre_trimestre, tp.descripcion tipo_progreso " +
       "from " +
       constantes.ESQUEMA +
       ".evaluacion e, " +
@@ -226,10 +226,13 @@ function obtenerEvaluaciones(nid_matricula) {
       constantes.ESQUEMA +
       ".trimestre t, " +
       constantes.ESQUEMA +
-      ".matricula_asignatura ma " +
+      ".matricula_asignatura ma, " +
+      constantes.ESQUEMA +
+      ".tipo_progreso tp " +
       "where e.nid_evaluacion = em.nid_evaluacion " +
       "and e.nid_trimestre = t.nid_trimestre " +
       "and em.nid_matricula_asignatura = ma.nid_matricula_asignatura " +
+      "and em.nid_tipo_progreso = tp.nid_tipo_progreso " +
       "and ma.nid_matricula = " +
       conexion.dbConn.escape(nid_matricula) +
       " order by t.nid_trimestre, e.nid_evaluacion";

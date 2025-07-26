@@ -105,11 +105,9 @@ export default function registrarUsuario(recaptchaToken) {
               setMensajeExito("Usuario registrado correctamente");
               setExito(true);
             }
-            // Aquí puedes manejar la respuesta del servidor
           })
           .catch((error) => {
             console.error("Error al registrar el usuario:", error);
-            // Aquí puedes manejar el error
           });
       } else {
         console.log("El token de reCAPTCHA no está disponible");

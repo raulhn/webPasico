@@ -1,12 +1,12 @@
 const serviceComun = require("./serviceComun.js");
 const Constantes = require("../constantes.js");
 
-function obtenerEvaluaciones(nidMatricula, cerrarSesion) {
+function obtenerTrimestres(cerrarSesion) {
   return new Promise((resolve, reject) => {
     serviceComun
       .peticionSesion(
         "GET",
-        Constantes.URL_SERVICIO_MOVIL + "obtener_evaluaciones/" + nidMatricula,
+        Constantes.URL_SERVICIO_MOVIL + "obtener_trimestres",
         null,
         cerrarSesion
       )
@@ -17,4 +17,4 @@ function obtenerEvaluaciones(nidMatricula, cerrarSesion) {
   });
 }
 
-module.exports.obtenerEvaluaciones = obtenerEvaluaciones;
+module.exports.obtenerTrimestres = obtenerTrimestres;

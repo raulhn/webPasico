@@ -20,6 +20,22 @@ function obtener_trimestre(nid_trimestre) {
   });
 }
 
+function obtener_trimestres() {
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(
+      "select * from " + constantes.ESQUEMA_BD + ".trimestre",
+      (error, results, fields) => {
+        if (error) {
+          console.log(error);
+          reject(error);
+        } else {
+          resolve(results);
+        }
+      }
+    );
+  });
+}
+
 function obtener_trimestres_sucios() {
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(
@@ -62,5 +78,6 @@ function actualizar_trimestre_sucio(nid_trimestre, sucio) {
 }
 
 module.exports.obtener_trimestre = obtener_trimestre;
+module.exports.obtener_trimestres = obtener_trimestres;
 module.exports.obtener_trimestres_sucios = obtener_trimestres_sucios;
 module.exports.actualizar_trimestre_sucio = actualizar_trimestre_sucio;
