@@ -56,10 +56,11 @@ async function obtenerAlumnosProfesor(req, res) {
       rolesPermitidos
     );
     if (!rolProfesor) {
-      return res.status(403).send({
+      res.status(403).send({
         error: true,
         mensaje: "No tienes permisos para obtener los alumnos del profesor",
       });
+      return;
     }
 
     const tokenDecoded = await servletComun.obtenerTokenDecoded(req);

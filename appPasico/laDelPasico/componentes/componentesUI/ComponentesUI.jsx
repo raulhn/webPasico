@@ -555,6 +555,8 @@ export function MenuDesplegable({ opciones }) {
       >
         <Pressable
           onPress={() => {
+            setIsVisible(false);
+            setPresionado(-1);
             console.log("Opción seleccionada:", opcion.etiqueta);
           }}
           onPressIn={() => setPresionado(index)}

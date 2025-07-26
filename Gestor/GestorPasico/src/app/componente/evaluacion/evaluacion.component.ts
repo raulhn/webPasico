@@ -90,6 +90,7 @@ export class EvaluacionComponent implements OnInit{
         let nid_alumno = evaluacion_matricula['nid_alumno'];
 
         this.lista_progreso[nid_alumno] = evaluacion_matricula['nid_tipo_progreso'];
+        this.lista_matriculas[nid_alumno] = evaluacion_matricula['nid_matricula_asignatura'];
         this.lista_comentarios[nid_alumno]  = evaluacion_matricula['comentario'];
         this.lista_notas[nid_alumno] = evaluacion_matricula['nota'];
       }

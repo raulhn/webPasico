@@ -119,7 +119,7 @@ function obtenerCursoActivo() {
         reject(new Error("Error al obtener el curso activo"));
       } else {
         if (result.length === 0) {
-          return reject(new Error("No hay curso activo registrado"));
+          reject(new Error("No hay curso activo registrado"));
         }
         resolve(result);
       }

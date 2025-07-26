@@ -1,18 +1,18 @@
 const serviceComun = require("./serviceComun.js");
 const Constantes = require("../constantes.js");
-const serviceComun = require("./serviceComun.js");
 
-function obtenerEvaluaciones(nidMatricula) {
+function obtenerEvaluaciones(nidMatricula, cerrarSesion) {
   return new Promise((resolve, reject) => {
+    console.log("Obteniendo evaluaciones para nidMatricula:", nidMatricula);
+    console.log(
+      Constantes.URL_SERVICIO_MOVIL + "obtener_evaluaciones/" + nidMatricula
+    );
     serviceComun
       .peticionSesion(
+        "GET",
         Constantes.URL_SERVICIO_MOVIL + "obtener_evaluaciones/" + nidMatricula,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+        null,
+        cerrarSesion
       )
       .then((response) => response.json())
       .then((data) => {

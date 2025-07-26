@@ -17,9 +17,10 @@ function peticion_registrar_evaluacion_matricula(evaluacionMatricula) {
             body: JSON.stringify({
               nid_evaluacion_matricula:
                 evaluacionMatricula.nid_evaluacion_matricula,
-              nid_persona: evaluacionMatricula.nid_persona,
-              nid_asignatura: evaluacionMatricula.nid_asignatura,
-              nid_trimestre: evaluacionMatricula.nid_trimestre,
+              nid_matricula_asignatura:
+                evaluacionMatricula.nid_matricula_asignatura,
+              nid_evaluacion: evaluacionMatricula.nid_evaluacion,
+              nota: evaluacionMatricula.nota,
               nid_tipo_progreso: evaluacionMatricula.nid_tipo_progreso,
               comentario: evaluacionMatricula.comentario,
               fecha_actualizacion: evaluacionMatricula.fecha_actualizacion,
@@ -112,31 +113,6 @@ function obtener_evaluaciones_matriculas_sucias() {
         reject("Error al realizar la solicitud");
       });
   });
-}
-
-async function actualizar_evaluacion_matriculas_sucio() {
-  try {
-    const evaluacionesMatricula =
-      await obtener_evaluaciones_matriculas_sucias();
-    for (const evaluacionMatricula of evaluacionesMatricula) {
-      await gestorEvaluacion.registrar_evaluacion_matricula(
-        evaluacionMatricula.nid_evaluacion,
-        evaluacionMatricula.nid_evaluacion_matricula,
-        evaluacionMatricula.nota,
-        evaluacionMatricula.nid_tipo_progreso,
-        evaluacionMatricula.cometario
-      );
-      console.log(
-        "Actualizar evaluación matrícula en servicio móvil",
-        evaluacionMatricula
-      );
-    }
-  } catch (error) {
-    console.error(
-      "Error al actualizar las evaluaciones matrícula sucias:",
-      error
-    );
-  }
 }
 
 module.exports.actualizar_sucios = actualizar_sucios;

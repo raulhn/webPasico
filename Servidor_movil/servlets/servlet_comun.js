@@ -4,23 +4,24 @@ const gestorUsuarios = require("../logica/usuario.js");
 function comprobacionLogin(req, res) {
   const token = req.cookies.access_token;
   if (!token) {
-    return res
-      .status(401)
-      .send({ error: true, mensaje: "No autenticado", codigo: 1 });
+    res.status(401).send({ error: true, mensaje: "No autenticado", codigo: 1 });
+    return;
   }
 
   jwt.verify(token, process.env.SESSION_SECRET, (err, decoded) => {
     if (err) {
       if (err.name === "TokenExpiredError") {
         console.error("El token ha expirado:", err);
-        return res
+        res
           .status(401)
           .send({ error: true, mensaje: "Token expirado", codigo: 1 });
+        return;
       }
       console.error("Error al verificar el token:", err);
-      return res
+      res
         .status(401)
         .send({ error: true, mensaje: "No autenticado", codigo: 2 });
+      return;
     }
   });
 }
@@ -91,8 +92,6 @@ async function comprobarRol(req, res, rolesPermitidos) {
     return false;
   }
 }
-
-
 
 module.exports.comprobacionLogin = comprobacionLogin;
 module.exports.comprobacionAccesoAPIKey = comprobacionAccesoAPIKey;

@@ -15,7 +15,7 @@ function existePersona(nid_persona) {
     conexion.dbConn.query(sql, (error, results) => {
       if (error) {
         console.error("Error al verificar la existencia de la persona:", error);
-        return reject(error);
+        reject(error);
       }
       resolve(results.length > 0);
     });
@@ -143,7 +143,7 @@ function requiereActualizarPersona(nid_persona, fecha_actualizacion) {
           "Error al verificar si se requiere actualizar la persona:",
           error
         );
-        return reject(error);
+        reject(error);
       }
       resolve(results.length > 0);
     });
@@ -410,7 +410,7 @@ async function obtenerUsuario(nid_usuario) {
         conexion.dbConn.query(sql, (error, results) => {
           if (error) {
             console.error("Error al obtener el usuario:", error);
-            return reject(error);
+            reject(error);
           }
           resolve(results[0]);
         });
@@ -446,10 +446,10 @@ function obtenerPersonaNombre(
     conexion.dbConn.query(sql, (error, results) => {
       if (error) {
         console.error("Error al obtener la persona:", error);
-        return reject(error);
+        reject(error);
       }
       if (results.length === 0) {
-        return resolve(null); // No se encontró la persona
+        resolve(null); // No se encontró la persona
       } else {
         resolve(results[0]);
       }
@@ -471,7 +471,7 @@ function actualizarPersonaUsuario(nid_persona, nid_usuario) {
     conexion.dbConn.query(sql, (error, results) => {
       if (error) {
         console.error("Error al actualizar la persona del usuario:", error);
-        return reject(error);
+        reject(error);
       }
       resolve(results);
     });
@@ -516,7 +516,7 @@ function obtenerPersonaUsuario(nid_usuario) {
     conexion.dbConn.query(sql, (error, results) => {
       if (error) {
         console.error("Error al obtener la persona del usuario:", error);
-        return reject(error);
+        reject(error);
       }
       resolve(results[0]);
     });
@@ -537,7 +537,7 @@ function obtenerUsuarioPersona(nid_persona) {
     conexion.dbConn.query(sql, (error, results) => {
       if (error) {
         console.error("Error al obtener el usuario de la persona:", error);
-        return reject(error);
+        reject(error);
       }
       resolve(results[0]);
     });
@@ -556,10 +556,10 @@ function obtenerPersonaUsuario(nid_usuario) {
     conexion.dbConn.query(sql, (error, results) => {
       if (error) {
         console.error("Error al obtener la persona del usuario:", error);
-        return reject(error);
+        reject(error);
       }
       if (results.length === 0) {
-        return resolve(null); // No se encontró la persona asociada al usuario
+        resolve(null); // No se encontró la persona asociada al usuario
       } else {
         resolve(results[0]);
       }
@@ -574,7 +574,7 @@ function obtenerPersonas() {
     conexion.dbConn.query(sql, (error, results) => {
       if (error) {
         console.error("Error al obtener las personas:", error);
-        return reject(error);
+        reject(error);
       }
       resolve(results);
     });
@@ -591,10 +591,10 @@ function obtenerPersona(nid_persona) {
     conexion.dbConn.query(sql, (error, results) => {
       if (error) {
         console.error("Error al obtener la persona:", error);
-        return reject(error);
+        reject(error);
       }
       if (results.length === 0) {
-        return resolve(null); // No se encontró la persona
+        resolve(null); // No se encontró la persona
       } else {
         resolve(results[0]);
       }
@@ -615,7 +615,7 @@ function obtenerPersonasMusicos() {
     conexion.dbConn.query(sql, (error, results) => {
       if (error) {
         console.error("Error al obtener las personas músicos:", error);
-        return reject(error);
+        reject(error);
       }
       resolve(results);
     });
@@ -639,9 +639,10 @@ function esHijo(nid_persona, nid_hijo) {
     conexion.dbConn.query(sql, (error, results) => {
       if (error) {
         console.error("Error al verificar si es hijo:", error);
-        return reject(error);
+        reject(error);
+      } else {
+        resolve(results.length > 0);
       }
-      resolve(results.length > 0);
     });
   });
 }

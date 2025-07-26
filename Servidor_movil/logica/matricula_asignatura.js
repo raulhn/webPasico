@@ -4,6 +4,9 @@ const gestorCurso = require("./curso");
 
 function formatDateToMySQL(date) {
   try {
+    if (date === null || date === undefined) {
+      return null;
+    }
     const d = new Date(date);
     return d.toISOString().slice(0, 19).replace("T", " ");
   } catch (error) {
@@ -80,6 +83,11 @@ function actualizarMatriculaAsignatura(
   fecha_baja,
   fecha_actualizacion
 ) {
+  console.log(
+    "Actualizar matricula asignatura: ",
+    fecha_baja,
+    formatDateToMySQL(fecha_baja)
+  );
   return new Promise((resolve, reject) => {
     const sql =
       "UPDATE " +

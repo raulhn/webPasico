@@ -5,10 +5,11 @@ async function registrarNotificacion(req, res) {
     const { personas, titulo, mensaje, data } = req.body;
 
     if (!personas || !titulo || !mensaje) {
-      return res.status(400).send({
+      res.status(400).send({
         error: true,
         mensaje: "Faltan datos necesarios para registrar la notificación",
       });
+      return;
     }
 
     await gestorNotificaciones.enviarNotificaciones(
@@ -24,7 +25,7 @@ async function registrarNotificacion(req, res) {
     });
   } catch (error) {
     console.error("Error al registrar la notificación:", error);
-    return res.status(500).send({
+    res.status(500).send({
       error: true,
       mensaje: "Error al registrar la notificación",
     });
@@ -36,11 +37,12 @@ async function registrarNotificacionGrupo(req, res) {
     const { nid_grupo, grupos, titulo, mensaje, data } = req.body;
 
     if (!grupos || !titulo || !mensaje) {
-      return res.status(400).send({
+      res.status(400).send({
         error: true,
         mensaje:
           "Faltan datos necesarios para registrar la notificación de grupo",
       });
+      return;
     }
 
     await gestorNotificaciones.registrarNotificacionGrupo(
@@ -57,7 +59,7 @@ async function registrarNotificacionGrupo(req, res) {
     });
   } catch (error) {
     console.error("Error al registrar la notificación de grupo:", error);
-    return res.status(500).send({
+    res.status(500).send({
       error: true,
       mensaje: "Error al registrar la notificación de grupo",
     });
