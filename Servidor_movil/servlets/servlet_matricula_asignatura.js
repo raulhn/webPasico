@@ -15,6 +15,12 @@ function registrarMatriculaAsignatura(req, res) {
       const fecha_baja = req.body.fecha_baja;
       const fecha_actualizacion = req.body.fecha_actualizacion;
 
+      console.log(
+        "Registrar matricula asignatura: ",
+        nid_matricula_asignatura,
+        nid_matricula,
+        fecha_baja
+      );
       await gestorMatriculaAsignatura.registrarMatriculaAsignatura(
         nid_matricula_asignatura,
         nid_matricula,
@@ -46,7 +52,7 @@ async function obtenerAlumnosCursoActivo(req, res) {
       rolesPermitidos
     );
     if (!rolAdministrador) {
-      return res.status(403).send({
+      res.status(403).send({
         error: true,
         mensaje: "No tienes permisos para obtener los alumnos del profesor",
       });
@@ -73,7 +79,7 @@ async function obtenerAlumnosCursoActivoAsignatura(req, res) {
       rolesPermitidos
     );
     if (!rolAdministrador) {
-      return res.status(403).send({
+      res.status(403).send({
         error: true,
         mensaje: "No tienes permisos para obtener los alumnos del curso actual",
       });
@@ -111,14 +117,21 @@ async function obtenerMatriculasAsignaturaPersona(req, res) {
     const elementoMatricula =
       await gestorMatricula.obtenerMatricula(nidMatricula);
 
-    let matriculas = matriculasAsignatura.filter(
-      async (matricula) =>
+    let matriculas = matriculasAsignatura.filter(async (matricula) => {
+      try {
         matricula.nid_persona === persona.nid_persona ||
-        (await gestorPersonas.esHijo(
-          persona.nid_persona,
-          matricula.nid_persona
-        ))
-    );
+          (await gestorPersonas.esHijo(
+            persona.nid_persona,
+            matricula.nid_persona
+          ));
+      } catch (error) {
+        console.error(
+          "servlet_matricula_asignatura.js -> obtenerMatriculasAsignaturaPersona: Error al filtrar las matriculas por persona: ",
+          error
+        );
+        return false;
+      }
+    });
 
     let matriculasProfesor = [];
 

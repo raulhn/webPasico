@@ -115,7 +115,7 @@ function existeEvaluacionMatricula(nid_evaluacion_matricula) {
           "evaluacion_matricula.js -> existeEvaluacionMatricula: Error al verificar la existencia de la evaluación de matrícula:",
           error
         );
-        return reject(error);
+        reject(error);
       }
       resolve(results[0].count > 0);
     });
@@ -140,7 +140,7 @@ function requiereActualizarEvaluacionMatricula(
           "evaluacion_matricula.js -> requiereActualizarEvaluacionMatricula: Error al verificar si requiere actualización:",
           error
         );
-        return reject(error);
+        reject(error);
       }
       resolve(results[0].num > 0);
     });
@@ -205,7 +205,7 @@ function obtenerEvaluacionMatriculaSucias() {
           "evaluacion_matricula.js -> obtenerEvaluacionMatriculaSucias: Error al obtener las evaluaciones de matrícula sucias:",
           err
         );
-        return reject(err);
+        reject(err);
       }
       resolve(results);
     });

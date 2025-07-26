@@ -61,7 +61,7 @@ export default function Matricula() {
       <View style={{ position: "absolute", top: 15, right: 15, zIndex: 1 }}>
         <MenuDesplegable opciones={opcionesDesplegable} />
       </View>
-      <Text style={estilos.title}>Asignaturas</Text>
+      <Text style={estilos.title}>Matricula</Text>
       <Text>{matricula.curso}</Text>
 
       <FlatList

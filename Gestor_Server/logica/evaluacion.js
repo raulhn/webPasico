@@ -450,6 +450,18 @@ async function registrar_evaluacion_matricula(
   comentario
 ) {
   try {
+    console.log("evaluacion.js - registrar_evaluacion_matricula");
+    console.log("nid_evaluacion", nid_evaluacion);
+    console.log("nid_matricula_asignatura", nid_matricula_asignatura);
+    console.log("nota", nota);
+    console.log("nid_tipo_progreso", nid_tipo_progreso);
+    console.log("comentario", comentario);
+    if (nid_tipo_progreso == 0) {
+      console.log(
+        "evaluacion.js - registrar_evaluacion_matricula - nid_tipo_progreso es 0, No se registra la evaluación"
+      );
+      return;
+    }
     let bExiste_evaluacion_matricula = await existe_evaluacion_matricula(
       nid_evaluacion,
       nid_matricula_asignatura

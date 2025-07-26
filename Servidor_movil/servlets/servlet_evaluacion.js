@@ -3,6 +3,7 @@ const servletComun = require("./servlet_comun");
 const servletPersona = require("./servlet_persona");
 const gestorMatricula = require("../logica/matricula");
 const gestorPersonas = require("../logica/persona");
+const e = require("express");
 
 async function registrarEvaluacion(req, res) {
   servletComun.comprobacionAccesoAPIKey(req, res, async () => {
@@ -102,14 +103,14 @@ async function obtenerEvaluacionTrimestre(req, res) {
 
 async function obtenerEvaluaciones(req, res) {
   try {
-    const nidPersona = await servletPersona.obtenerNidPersona(req, res);
+    const persona = await servletPersona.obtenerNidPersona(req, res);
     const nidMatricula = req.params.nid_matricula;
 
     const matricula = await gestorMatricula.obtenerMatricula(nidMatricula);
 
-    if (matricula.nid_persona !== nidPersona) {
-      const bEsPadre = gestorPersonas.esPadre(
-        nidPersona,
+    if (matricula.nid_persona !== persona.nid_persona) {
+      const bEsPadre = await gestorPersonas.esHijo(
+        persona.nid_persona,
         matricula.nid_persona
       );
       if (!bEsPadre) {
@@ -125,6 +126,7 @@ async function obtenerEvaluaciones(req, res) {
     const evaluaciones =
       await gestor_evaluacion.obtenerEvaluaciones(nidMatricula);
 
+    console.log("Evaluaciones ", evaluaciones);
     res.status(200).send({
       error: false,
       mensaje: "Evaluación obtenida correctamente",
@@ -132,7 +134,7 @@ async function obtenerEvaluaciones(req, res) {
     });
   } catch (error) {
     console.error(
-      "servlet_evaluacion.js -> obtenerEvaluacion: Error al obtener la evaluación:",
+      "servlet_evaluacion.js -> obtenerEvaluaciones: Error al obtener la evaluación:",
       error
     );
     res.status(400).send({

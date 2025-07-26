@@ -95,7 +95,7 @@ function existeEvaluacion(nid_evaluacion) {
           "Error al verificar la existencia de la evaluación:",
           error
         );
-        return reject(error);
+        reject(error);
       }
       resolve(results[0].count > 0);
     });
@@ -115,7 +115,7 @@ function requiereActualizarEvaluacion(nid_evaluacion, fecha_actualizacion) {
     conexion.dbConn.query(sql, (error, results) => {
       if (error) {
         console.error("Error al verificar si requiere actualización:", error);
-        return reject(error);
+        reject(error);
       }
       resolve(results[0].requiere > 0);
     });
@@ -170,7 +170,7 @@ function obtenerEvaluacionesSucias() {
     conexion.dbConn.query(sql, (err, results) => {
       if (err) {
         console.error("Error al obtener las evaluaciones sucias:", err);
-        return reject(err);
+        reject(err);
       }
       resolve(results);
     });
@@ -203,10 +203,10 @@ function obtenerEvaluacionTrimestre(nid_matricula, nid_trimestre) {
           "evaluacion.js -> obtenerEvaluacionTrimestre: Error al obtener la evaluación del trimestre:",
           err
         );
-        return reject(err);
+        reject(err);
       }
       if (results.length === 0) {
-        return resolve(null);
+        resolve(null);
       }
       resolve(results[0]);
     });
@@ -224,22 +224,27 @@ function obtenerEvaluaciones(nid_matricula) {
       constantes.ESQUEMA +
       ".evaluacion_matricula em, " +
       constantes.ESQUEMA +
-      ".trimestre t " +
+      ".trimestre t, " +
+      constantes.ESQUEMA +
+      ".matricula_asignatura ma " +
       "where e.nid_evaluacion = em.nid_evaluacion " +
       "and e.nid_trimestre = t.nid_trimestre " +
-      "and em.nid_matricula = " +
+      "and em.nid_matricula_asignatura = ma.nid_matricula_asignatura " +
+      "and ma.nid_matricula = " +
       conexion.dbConn.escape(nid_matricula) +
       " order by t.nid_trimestre, e.nid_evaluacion";
 
+    console.log("SQL para obtener evaluaciones: ", sql);
     conexion.dbConn.query(sql, (err, results) => {
       if (err) {
         console.error(
           "evaluacion.js -> obtenerEvaluaciones: Error al obtener las evaluaciones:",
           err
         );
-        return reject(err);
+        reject(err);
+      } else {
+        resolve(results);
       }
-      resolve(results);
     });
   });
 }

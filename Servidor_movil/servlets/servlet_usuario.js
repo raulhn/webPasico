@@ -136,14 +136,16 @@ async function cambiarPassword(req, res) {
   const { passwordActual, nuevaPassword } = req.body;
   const token = req.cookies.access_token;
   if (!token) {
-    return res.status(401).send({ error: true, mensaje: "No autenticado" });
+    res.status(401).send({ error: true, mensaje: "No autenticado" });
+    return;
   }
 
   jwt.verify(token, process.env.SESSION_SECRET, async (err, decoded) => {
     try {
       if (err) {
         console.error("Error al verificar el token:", err);
-        return res.status(401).send({ error: true, mensaje: "No autenticado" });
+        res.status(401).send({ error: true, mensaje: "No autenticado" });
+        return;
       }
 
       await gestorUsuario.realizarCambioPassword(
@@ -165,18 +167,18 @@ async function cambiarPassword(req, res) {
 function obtenerUsuario(req, res) {
   const token = req.cookies.access_token;
   if (!token) {
-    return res
-      .status(401)
-      .send({ error: true, mensaje: "No autenticado", codigo: 1 });
+    res.status(401).send({ error: true, mensaje: "No autenticado", codigo: 1 });
+    return;
   }
 
   jwt.verify(token, process.env.SESSION_SECRET, async (err, decoded) => {
     try {
       if (err) {
         console.error("Error al verificar el token:", err);
-        return res
+        res
           .status(401)
           .send({ error: true, mensaje: "No autenticado", codigo: 2 });
+        return;
       }
 
       console.log("Construyendo roles para el usuario:", decoded.nid_usuario);
@@ -201,13 +203,15 @@ function refreshToken(req, res) {
   const token = req.body.refreshToken;
   if (!token) {
     console.log("No se proporcionó el token de actualización");
-    return res.status(401).send({ error: true, mensaje: "No autenticado" });
+    res.status(401).send({ error: true, mensaje: "No autenticado" });
+    return;
   }
 
   jwt.verify(token, process.env.SESSION_SECRET, async (err, decoded) => {
     if (err) {
       console.error("Error al verificar el token:", err);
-      return res.status(401).send({ error: true, mensaje: "No autenticado" });
+      res.status(401).send({ error: true, mensaje: "No autenticado" });
+      return;
     }
 
     const usuario = await gestorUsuario.obtenerUsuario(decoded.nid_usuario);
@@ -247,17 +251,17 @@ async function recuperarPassword(req, res) {
   try {
     const { correoElectronico } = req.body;
     if (!correoElectronico) {
-      return res
-        .status(400)
-        .send({ error: true, mensaje: "Correo no proporcionado" });
+      res.status(400).send({ error: true, mensaje: "Correo no proporcionado" });
+      return;
     }
 
     const nuevaPassword =
       await gestorUsuario.recuperarPassword(correoElectronico);
     if (!nuevaPassword) {
-      return res
+      res
         .status(200)
         .send({ error: false, mensaje: "Correo de recuperación enviado" });
+      return;
     }
 
     const html = `
