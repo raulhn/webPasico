@@ -163,6 +163,9 @@ app.get("/usuario", servletUsuario.obtenerUsuario);
 app.post("/cambiar_password", servletUsuario.cambiarPassword);
 app.get("/obtener_socio", servletSocios.obtenerSocio);
 
+// Trimestres //
+app.get("/obtener_trimestres", servletTrimestre.obtenerTrimestres);
+
 // Eventos //
 app.post(
   "/registrar_evento_concierto",

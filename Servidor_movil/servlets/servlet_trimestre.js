@@ -47,5 +47,26 @@ function obtenerTrimestresSucios(req, res) {
     }
   });
 }
+
+async function obtenerTrimestres(req, res) {
+  try {
+    const trimestres = await gestor_trimestre.obtenerTrimestres();
+    res.status(200).send({
+      error: false,
+      mensaje: "Trimestres obtenidos correctamente",
+      trimestres: trimestres,
+    });
+  } catch (error) {
+    console.error(
+      "servlet_trimestre.js -> obtenerTrimestres: Error al obtener los trimestres: " +
+        error.message
+    );
+    res.status(500).send({
+      error: true,
+      mensaje: "Error al obtener los trimestres",
+    });
+  }
+}
 module.exports.registrarTrimestre = registrarTrimestre;
 module.exports.obtenerTrimestresSucios = obtenerTrimestresSucios;
+module.exports.obtenerTrimestres = obtenerTrimestres;

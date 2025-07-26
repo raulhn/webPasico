@@ -134,5 +134,25 @@ function obtenerTrimestresSucios() {
   });
 }
 
+function obtenerTrimestres() {
+  return new Promise((resolve, reject) => {
+    const sql = "SELECT * FROM " + constantes.ESQUEMA + ".trimestre";
+
+    conexion.dbConn.query(sql, (error, result) => {
+      if (error) {
+        console.error("Error al obtener los trimestres: " + error.message);
+        reject(new Error("Error al obtener los trimestres"));
+      } else {
+        if (result.length === 0) {
+          reject(new Error("No hay trimestres registrados"));
+        } else {
+          resolve(result);
+        }
+      }
+    });
+  });
+}
+
 module.exports.registrarTrimestre = registrarTrimestre;
 module.exports.obtenerTrimestresSucios = obtenerTrimestresSucios;
+module.exports.obtenerTrimestres = obtenerTrimestres;

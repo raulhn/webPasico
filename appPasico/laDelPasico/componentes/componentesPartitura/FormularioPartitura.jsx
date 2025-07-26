@@ -60,13 +60,12 @@ export default function FormularioPartitura({
       url_partitura: urlPartitura,
     };
 
-    console.log("Partitura a registrar:", partitura); // Para depuración
     try {
       const respuesta = await ServicePartituras.registrarPartitura(
         partitura,
         cerrarSesion
       );
-      console.log("Respuesta del registro:", respuesta); // Para depuración
+
       if (!respuesta.error) {
         callback(respuesta.nid_partitura);
         setExito(true);
@@ -94,7 +93,6 @@ export default function FormularioPartitura({
         partitura,
         cerrarSesion
       );
-      console.log("Respuesta del registro:", respuesta); // Para depuración
       if (!respuesta.error) {
         callback(respuesta.nid_partitura);
         setExito(true);
