@@ -48,12 +48,12 @@ export default function Matricula() {
       ruta: "/Evaluaciones/" + nidMatricula,
       parametros: { nidMatricula: nidMatricula },
     },
-    {
-      etiqueta: "Expediente",
-      icono: "folder",
-      ruta: "/Expediente/" + nidMatricula,
-      parametros: { nidMatricula: nidMatricula },
-    },
+    //  {
+    //    etiqueta: "Expediente",
+    //    icono: "folder",
+    //    ruta: "/Expediente/" + nidMatricula,
+    //    parametros: { nidMatricula: nidMatricula },
+    //  },
   ];
 
   return (

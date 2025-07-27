@@ -144,7 +144,48 @@ async function obtenerEvaluaciones(req, res) {
   }
 }
 
+async function generar_boletin(req, res) {
+  try {
+    const persona = await servletPersona.obtenerNidPersona(req, res);
+    const nidMatricula = req.params.nid_matricula;
+    const nidTrimestre = req.params.nid_trimestre;
+
+    const matricula = await gestorMatricula.obtenerMatricula(nidMatricula);
+
+    if (matricula.nid_persona !== persona.nid_persona) {
+      const bEsPadre = await gestorPersonas.esHijo(
+        persona.nid_persona,
+        matricula.nid_persona
+      );
+      if (!bEsPadre) {
+        res.status(403).send({
+          error: true,
+          message: "No tienes permiso para acceder a esta evaluación",
+        });
+
+        return;
+      }
+    }
+    const evaluacion = await gestor_evaluacion.generar_boletin(
+      nidMatricula,
+      nidTrimestre
+    );
+
+    res.status(200).send({ error: false, fichero: evaluacion });
+  } catch (error) {
+    console.error(
+      "servlet_evaluacion.js -> generar_evaluacion: Error al generar la evaluación:",
+      error
+    );
+    res.status(400).send({
+      error: true,
+      message: "Se ha producido un error al generar la evaluación",
+    });
+  }
+}
+
 module.exports.registrarEvaluacion = registrarEvaluacion;
 module.exports.obtenerEvaluacionesSucias = obtenerEvaluacionesSucias;
 module.exports.obtenerEvaluacionTrimestre = obtenerEvaluacionTrimestre;
 module.exports.obtenerEvaluaciones = obtenerEvaluaciones;
+module.exports.generar_boletin = generar_boletin;

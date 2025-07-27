@@ -501,7 +501,15 @@ export function CustomTabs({ tabs, pestana = 0 }) {
 
   return (
     <View>
-      <View style={{ flexDirection: "row", marginBottom: 5 }}>
+      <View
+        style={{
+          flexDirection: "row",
+
+          gap: 5,
+          paddingLeft: 10,
+          paddingTop: 5,
+        }}
+      >
         {tabs.map((tab, index) => (
           <Pressable
             key={index}
@@ -513,8 +521,6 @@ export function CustomTabs({ tabs, pestana = 0 }) {
                 padding: 7,
                 borderRadius: 5,
                 backgroundColor: obtenerBackGroundColor(pressed, index),
-
-                marginRight: 5,
               },
             ]}
           >

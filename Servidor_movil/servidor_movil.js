@@ -270,6 +270,10 @@ app.get(
   "/obtener_evaluaciones/:nid_matricula",
   servletEvaluacion.obtenerEvaluaciones
 );
+app.get(
+  "/generar_boletin/:nid_matricula/:nid_trimestre",
+  servletEvaluacion.generar_boletin
+);
 
 https
   .createServer(
