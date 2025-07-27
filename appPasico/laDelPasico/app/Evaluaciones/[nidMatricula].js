@@ -21,9 +21,8 @@ import CardEvaluacion from "../../componentes/componentesEscuela/CardEvaluacion"
 import serviceEvaluaciones from "../../servicios/serviceEvaluaciones.js";
 
 import * as FileSystem from "expo-file-system";
-import * as IntentLauncher from "expo-intent-launcher";
 
-import Constantes from "../../constantes.js";
+import * as FileViewer from "react-native-file-viewer";
 
 export default function Evaluacion() {
   const { nidMatricula } = useLocalSearchParams();
@@ -111,23 +110,20 @@ export default function Evaluacion() {
                         trimestres[i].nid_trimestre,
                         cerrar_sesion
                       );
-                      console.log("Boletín generado:", boletin.fichero);
+
                       const fileUri =
                         FileSystem.documentDirectory + "boletin.doc";
+
+                      console.log("File URI:", fileUri);
                       await FileSystem.writeAsStringAsync(
                         fileUri,
                         boletin.fichero,
                         {}
                       );
+
+                      console.log("Boletín guardado en:", fileUri);
+                      await FileViewer.open(fileUri);
                       // Abrir el archivo con una app externa
-                      await IntentLauncher.startActivityAsync(
-                        "android.intent.action.VIEW",
-                        {
-                          data: fileUri,
-                          flags: 1,
-                          type: "application/msword",
-                        }
-                      );
                     } catch (error) {
                       console.error("Error al descargar el boletín:", error);
                     }

@@ -1,4 +1,5 @@
 const fs = require("fs");
+const docxConverter = require("docx-pdf");
 
 const constantes = require("../constantes.js");
 
@@ -24,6 +25,20 @@ function readFile(fileName) {
         reject(err);
       } else {
         resolve(data);
+      }
+    });
+  });
+}
+
+function convertirPdf(uri) {
+  return new Promise((resolve, reject) => {
+    docxConverter("/tmp/temp.docx", "/tmp/archivo.pdf", function (err, result) {
+      if (err) {
+        console.error("fichero.js -> convertirPdf: Error al convertir:", err);
+        reject(err);
+      } else {
+        console.log("Conversión exitosa:", result);
+        resolve(result);
       }
     });
   });
