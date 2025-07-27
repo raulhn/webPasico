@@ -27,10 +27,7 @@ function peticion_registirar_matricula_asignatura(matricula_asignatura) {
         }
       )
       .then((response) => {
-        console.log(
-          "serviceMatriculaAsignatura.js - Respuesta de la API:",
-          response
-        );
+
         response
           .json()
           .then((data) => {

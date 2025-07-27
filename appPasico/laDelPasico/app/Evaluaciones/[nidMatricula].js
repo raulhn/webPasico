@@ -9,7 +9,7 @@ import {
   StyleSheet,
 } from "react-native";
 import { useEvaluaciones } from "../../hooks/escuela/useEvaluaciones";
-import { useLocalSearchParams } from "expo-router";
+import { Link, useLocalSearchParams } from "expo-router";
 import { useContext } from "react";
 import { AuthContext } from "../../providers/AuthContext";
 import { useTrimestre } from "../../hooks/useTrimestre";
@@ -19,10 +19,12 @@ import {
 } from "../../componentes/componentesUI/ComponentesUI";
 import CardEvaluacion from "../../componentes/componentesEscuela/CardEvaluacion";
 import serviceEvaluaciones from "../../servicios/serviceEvaluaciones.js";
+import { useState } from "react";
 
 import * as FileSystem from "expo-file-system";
-
-import * as FileViewer from "react-native-file-viewer";
+import * as Linking from "expo-linking";
+import * as Sharing from "expo-sharing";
+import * as IntentLauncher from "expo-intent-launcher";
 
 export default function Evaluacion() {
   const { nidMatricula } = useLocalSearchParams();
@@ -111,8 +113,7 @@ export default function Evaluacion() {
                         cerrar_sesion
                       );
 
-                      const fileUri =
-                        FileSystem.documentDirectory + "boletin.doc";
+                      const fileUri = FileSystem.cacheDirectory + "boletin.doc";
 
                       console.log("File URI:", fileUri);
                       await FileSystem.writeAsStringAsync(
@@ -122,8 +123,17 @@ export default function Evaluacion() {
                       );
 
                       console.log("Boletín guardado en:", fileUri);
-                      await FileViewer.open(fileUri);
-                      // Abrir el archivo con una app externa
+
+                      FileSystem.getContentUriAsync(fileUri).then((cUri) => {
+                        console.log(cUri);
+                        IntentLauncher.startActivityAsync(
+                          "android.intent.action.VIEW",
+                          {
+                            data: cUri,
+                            flags: 1,
+                          }
+                        );
+                      });
                     } catch (error) {
                       console.error("Error al descargar el boletín:", error);
                     }
