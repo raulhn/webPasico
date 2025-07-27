@@ -3,6 +3,7 @@ const servletComun = require("./servlet_comun");
 const servletPersona = require("./servlet_persona");
 const gestorMatricula = require("../logica/matricula");
 const gestorPersonas = require("../logica/persona");
+const gestorFicheros = require("../logica/ficheros");
 const e = require("express");
 
 async function registrarEvaluacion(req, res) {
