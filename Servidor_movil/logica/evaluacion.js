@@ -183,7 +183,10 @@ function obtenerEvaluacionTrimestre(nid_matricula, nid_trimestre) {
   return new Promise((resolve, reject) => {
     const sql =
       "select e.nid_evaluacion, e.nid_trimestre, e.nid_asignatura, e.nid_profesor, " +
-      "em.nota, em.nid_tipo_progreso, em.comentario " +
+      "em.nota, em.nid_tipo_progreso, em.comentario," +
+      "concat(p.nombre, ' ', p.primer_apellido, ' ', p.segundo_apellido) as profesor, " +
+      "t.descripcion as trimestre, c.descripcion as curso, " +
+      "concat(p_alumno.nombre, ' ', p_alumno.primer_apellido, ' ', p_alumno.segundo_apellido) as alumno " +
       "from " +
       constantes.ESQUEMA +
       ".evaluacion e, " +
@@ -192,9 +195,24 @@ function obtenerEvaluacionTrimestre(nid_matricula, nid_trimestre) {
       constantes.ESQUEMA +
       ".asignaturas a, " +
       constantes.ESQUEMA +
-      ".matricula_asignatura ma " +
+      ".matricula_asignatura ma, " +
+      constantes.ESQUEMA +
+      ".matricula m, " +
+      constantes.ESQUEMA +
+      ".persona p, " +
+      constantes.ESQUEMA +
+      ".persona p_alumno, " +
+      constantes.ESQUEMA +
+      ".trimestre t, " +
+      constantes.ESQUEMA +
+      ".curso c " +
       "where e.nid_evaluacion = em.nid_evaluacion " +
+      "and e.nid_trimestre = t.nid_trimestre " +
       "and e.nid_asignatura = a.nid_asignatura " +
+      "and p.nid_persona = e.nid_profesor " +
+      "and ma.nid_matricula = m.nid_matricula " +
+      "and p_alumno.nid_persona = m.nid_persona " +
+      "and m.nid_curso = c.nid_curso " +
       "and em.nid_matricula_asignatura = ma.nid_matricula_asignatura " +
       "and ma.nid_matricula = " +
       conexion.dbConn.escape(nid_matricula) +

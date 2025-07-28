@@ -151,6 +151,9 @@ app.post(
 // Tipo Musico //
 app.get("/obtener_tipos_musico", servletTipoMusico.obtenerTipoMusico);
 
+// Generar boletin //
+app.get("/generar_boletin/:token", servletEvaluacion.generar_boletin);
+
 ///////////////////////////////////////////////
 // Peticiones que requieren inicio de sesión //
 ///////////////////////////////////////////////
@@ -270,9 +273,10 @@ app.get(
   "/obtener_evaluaciones/:nid_matricula",
   servletEvaluacion.obtenerEvaluaciones
 );
+
 app.get(
-  "/generar_boletin/:nid_matricula/:nid_trimestre",
-  servletEvaluacion.generar_boletin
+  "/solicitar_generar_boletin/:nid_matricula/:nid_trimestre",
+  servletEvaluacion.solicitar_generar_boletin
 );
 
 https

@@ -21,10 +21,9 @@ import CardEvaluacion from "../../componentes/componentesEscuela/CardEvaluacion"
 import serviceEvaluaciones from "../../servicios/serviceEvaluaciones.js";
 import { useState } from "react";
 
-import * as FileSystem from "expo-file-system";
 import * as Linking from "expo-linking";
-import * as Sharing from "expo-sharing";
-import * as IntentLauncher from "expo-intent-launcher";
+
+const Constantes = require("../../constantes.js");
 
 export default function Evaluacion() {
   const { nidMatricula } = useLocalSearchParams();
@@ -112,28 +111,16 @@ export default function Evaluacion() {
                         trimestres[i].nid_trimestre,
                         cerrar_sesion
                       );
+                      console.log("Boletín generado:", boletin);
 
-                      const fileUri = FileSystem.cacheDirectory + "boletin.doc";
+                      const token = boletin.tokenGeneracion;
+                      const url =
+                        Constantes.URL_SERVICIO_MOVIL +
+                        "generar_boletin/" +
+                        token;
 
-                      console.log("File URI:", fileUri);
-                      await FileSystem.writeAsStringAsync(
-                        fileUri,
-                        boletin.fichero,
-                        {}
-                      );
-
-                      console.log("Boletín guardado en:", fileUri);
-
-                      FileSystem.getContentUriAsync(fileUri).then((cUri) => {
-                        console.log(cUri);
-                        IntentLauncher.startActivityAsync(
-                          "android.intent.action.VIEW",
-                          {
-                            data: cUri,
-                            flags: 1,
-                          }
-                        );
-                      });
+                      await Linking.openURL(url);
+                      console.log("Boletín descargado desde:", url);
                     } catch (error) {
                       console.error("Error al descargar el boletín:", error);
                     }
