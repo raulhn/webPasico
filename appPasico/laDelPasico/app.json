@@ -23,17 +23,6 @@
         "foregroundImage": "./assets/logo.png",
         "backgroundColor": "#ffffff"
       }
-      ,
-      "intentFilters": [
-        {
-          "action": "VIEW",
-          "data": {
-            "scheme": "laDelPasico",
-            "host": "laDelPasico"
-          },
-          "category": ["BROWSABLE", "DEFAULT"]
-        }
-      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
