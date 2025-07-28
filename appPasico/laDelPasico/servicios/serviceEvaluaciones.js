@@ -23,14 +23,18 @@ function generarBoletin(nidMatricula, nidTrimestre, cerrarSesion) {
       .peticionSesion(
         "GET",
         Constantes.URL_SERVICIO_MOVIL +
-          "generar_boletin/" +
+          "solicitar_generar_boletin/" +
           nidMatricula +
           "/" +
           nidTrimestre,
         null,
         cerrarSesion
       )
-      .then((response) => resolve(response))
+      .then((response) => {
+        console.log("Generar boletín response:");
+        console.log(response);
+        resolve(response);
+      })
       .catch((error) => {
         reject(error);
       });
