@@ -267,7 +267,6 @@ function obtenerEvaluaciones(nid_matricula) {
       conexion.dbConn.escape(nid_matricula) +
       " order by t.nid_trimestre, e.nid_evaluacion";
 
-    console.log("SQL para obtener evaluaciones: ", sql);
     conexion.dbConn.query(sql, (err, results) => {
       if (err) {
         console.error(
