@@ -359,6 +359,26 @@ function obtener_evaluacion_matricula_asginatura_tipo(
   });
 }
 
+function textoAcentosARtf(texto) {
+  const mapa = {
+    á: "\\'e1",
+    é: "\\'e9",
+    í: "\\'ed",
+    ó: "\\'f3",
+    ú: "\\'fa",
+    Á: "\\'c1",
+    É: "\\'c9",
+    Í: "\\'cd",
+    Ó: "\\'d3",
+    Ú: "\\'da",
+    ñ: "\\'f1",
+    Ñ: "\\'d1",
+    ü: "\\'fc",
+    Ü: "\\'dc",
+  };
+  return texto.replace(/[áéíóúÁÉÍÓÚñÑüÜ]/g, (c) => mapa[c] || c);
+}
+
 async function generar_boletin(nid_matricula, nid_trimestre) {
   try {
     // Se recupera la plantilla //
@@ -570,7 +590,7 @@ async function generar_boletin(nid_matricula, nid_trimestre) {
       texto = texto
         .toString()
         .replace("||PLANTILLA_INSTRUMENTO||", texto_instrumento);
-      return texto;
+      return textoAcentosARtf(texto);
     } else {
       throw new Error("No se han encontrado evaluaciones");
     }
