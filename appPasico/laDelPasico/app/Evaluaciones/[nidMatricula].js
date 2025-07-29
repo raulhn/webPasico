@@ -16,6 +16,7 @@ import { useTrimestre } from "../../hooks/useTrimestre";
 import {
   Boton,
   CustomTabs,
+  BotonFixed,
 } from "../../componentes/componentesUI/ComponentesUI";
 import CardEvaluacion from "../../componentes/componentesEscuela/CardEvaluacion";
 import serviceEvaluaciones from "../../servicios/serviceEvaluaciones.js";
@@ -83,51 +84,84 @@ export default function Evaluacion() {
           tabsEvaluaciones.push({
             nombre: trimestres[i].nombre,
             contenido: () => (
-              <View
-                style={{
-                  backgroundColor: "#fff",
-                }}
-              >
-                <FlatList
-                  data={evaluacionesTrimestre}
-                  keyExtractor={(item) =>
-                    item.nid_evaluacion_matricula.toString()
-                  }
-                  renderItem={({ item }) => (
-                    <CardEvaluacion evaluacion={item} />
-                  )}
-                  refreshControl={
-                    <RefreshControl
-                      refreshing={cargando}
-                      onRefresh={() => setRefrescar(!refrescar)}
-                    />
-                  }
-                />
-                <Boton
-                  onPress={async () => {
-                    try {
-                      const boletin = await serviceEvaluaciones.generarBoletin(
-                        nidMatricula,
-                        trimestres[i].nid_trimestre,
-                        cerrar_sesion
-                      );
-                      console.log("Boletín generado:", boletin);
-
-                      const token = boletin.tokenGeneracion;
-                      const url =
-                        Constantes.URL_SERVICIO_MOVIL +
-                        "generar_boletin/" +
-                        token;
-
-                      await Linking.openURL(url);
-                      console.log("Boletín descargado desde:", url);
-                    } catch (error) {
-                      console.error("Error al descargar el boletín:", error);
-                    }
+              <>
+                <View
+                  style={{
+                    backgroundColor: "#fff",
                   }}
-                  nombre={"Descargar"}
-                />
-              </View>
+                >
+                  <View style={[estilos.botonDescarga]}>
+                    <BotonFixed
+                      onPress={() => async () => {
+                        try {
+                          const boletin =
+                            await serviceEvaluaciones.generarBoletin(
+                              nidMatricula,
+                              trimestres[i].nid_trimestre,
+                              cerrar_sesion
+                            );
+                          console.log("Boletín generado:", boletin);
+
+                          const token = boletin.tokenGeneracion;
+                          const url =
+                            Constantes.URL_SERVICIO_MOVIL +
+                            "generar_boletin/" +
+                            token;
+
+                          await Linking.openURL(url);
+                          console.log("Boletín descargado desde:", url);
+                        } catch (error) {
+                          console.error(
+                            "Error al descargar el boletín:",
+                            error
+                          );
+                        }
+                      }}
+                    />
+                  </View>
+
+                  <FlatList
+                    data={evaluacionesTrimestre}
+                    keyExtractor={(item) =>
+                      item.nid_evaluacion_matricula.toString()
+                    }
+                    renderItem={({ item }) => (
+                      <CardEvaluacion evaluacion={item} />
+                    )}
+                    refreshControl={
+                      <RefreshControl
+                        refreshing={cargando}
+                        onRefresh={() => setRefrescar(!refrescar)}
+                      />
+                    }
+                  />
+                  <Boton
+                    onPress={async () => {
+                      try {
+                        const boletin =
+                          await serviceEvaluaciones.generarBoletin(
+                            nidMatricula,
+                            trimestres[i].nid_trimestre,
+                            cerrar_sesion
+                          );
+                        console.log("Boletín generado:", boletin);
+
+                        const token = boletin.tokenGeneracion;
+                        const url =
+                          Constantes.URL_SERVICIO_MOVIL +
+                          "generar_boletin/" +
+                          token;
+
+                        await Linking.openURL(url);
+                        console.log("Boletín descargado desde:", url);
+                      } catch (error) {
+                        console.error("Error al descargar el boletín:", error);
+                      }
+                    }}
+                    nombre={"Descargar"}
+                  />
+                </View>
+              </>
             ),
           });
         }
@@ -158,4 +192,5 @@ const estilos = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
   },
+  botonDescarga: { position: "absolute", bottom: 20, right: 20, zIndex: 10 },
 });

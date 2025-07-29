@@ -380,6 +380,9 @@ function textoAcentosARtf(texto) {
 }
 
 async function generar_boletin(nid_matricula, nid_trimestre) {
+  const TEXTO_INSTRUMENTO_PLANTILLA =
+    "\\cell\\row\\trowd\\trql\\trleft0\\ltrrow\\trpaddft3\\trpaddt0\\trpaddfl3\\trpaddl0\\trpaddfb3\\trpaddb0\\trpaddfr3\\trpaddr0\\clbrdrl\\brdrs\\brdrw1\\brdrcf1\\clbrdrb\\brdrs\\brdrw1\\brdrcf1\\clbrdrr\\brdrs\\brdrw1\\brdrcf1\\cellx1901\\clbrdrl\\brdrs\\brdrw1\\brdrcf1\\clbrdrb\\brdrs\\brdrw1\\brdrcf1\\clbrdrr\\brdrs\\brdrw1\\brdrcf1\\cellx8502\\pard\\plain \\s86\\sl1\\slmult0{\\*\\hyphen2\\hyphlead2\\hyphtrail2\\hyphmax0}\\fahang\\li0\\ri0\\lin0\\rin0\\fi-2\\cf0\\hich\\af0\\langfe2052\\dbch\\af0\\loch\\f0\\fs24\\lang3082\\intbl\\li0\\ri0\\lin0\\rin0\\fi-2{\\rtlch \\ltrch\\loch\n\r||ASIGNATURA_INSTRUMENTO||}\\cell\\pard\\plain \\s86\\sl1\\slmult0{\\*\\hyphen2\\hyphlead2\\hyphtrail2\\hyphmax0}\\fahang\\li0\\ri0\\lin0\\rin0\\fi-2\\cf0\\hich\\af0\\langfe2052\\dbch\\af0\\loch\\f0\\fs24\\lang3082\\intbl\\li0\\ri0\\lin0\\rin0\\fi-2{\\rtlch \\ltrch\\loch\n\r||PROGRESO_INSTRUMENTO|| ||NOTA_INSTRUMENTO|| }\n\r\\par \\pard\\plain \\s0{\\*\\hyphen2\\hyphlead2\\hyphtrail2\\hyphmax0}\\nowidctlpar\\cf0\\hich\\af9\\langfe2052\\dbch\\af2\\afs24\\lang1081\\loch\\f0\\fs24\\lang3082\\intbl{\\rtlch \\ltrch\\loch\n\r||COMENTARIO_INSTRUMENTO||}\\cell\\row\\pard\\plain \\s86\\sl1\\slmult0{\\*\\hyphen2\\hyphlead2\\hyphtrail2\\hyphmax0}\\fahang\\li0\\ri0\\lin0\\rin0\\fi-2\\cf0\\hich\\af0\\langfe2052\\dbch\\af0\\loch\\f0\\fs24\\lang3082\\li0\\ri0\\lin0\\rin0\\fi-2{\\rtlch \\ltrch\\loch\n\r";
+
   try {
     // Se recupera la plantilla //
     let ruta_plantilla = await parametros.obtener_valor("PLANTILLA_NOTAS");
@@ -452,10 +455,8 @@ async function generar_boletin(nid_matricula, nid_trimestre) {
 
       for (let i = 0; i < array_evaluacion_instrumento_banda.length; i++) {
         let evaluacion_instrumento = array_evaluacion_instrumento_banda[i];
-        let texto_instrumento_parametro = await parametros.obtener_valor(
-          "PLANTILLA_NOTAS_INSTRUMENTO"
-        );
-        let texto_instrumento_aux = texto_instrumento_parametro["valor"];
+
+        let texto_instrumento_aux = TEXTO_INSTRUMENTO_PLANTILLA;
 
         if (evaluacion_instrumento["nota"] == 0) {
           texto_instrumento_aux = texto_instrumento_aux
@@ -590,6 +591,8 @@ async function generar_boletin(nid_matricula, nid_trimestre) {
       texto = texto
         .toString()
         .replace("||PLANTILLA_INSTRUMENTO||", texto_instrumento);
+
+      console.log("Texto final: ", textoAcentosARtf(texto));
       return textoAcentosARtf(texto);
     } else {
       throw new Error("No se han encontrado evaluaciones");
