@@ -253,6 +253,7 @@ async function generar_boletin(req, res) {
       tokenDecoded.nid_trimestre
     );
 
+    //console.log(evaluacion);
     console.log("---------------------------------");
     //console.log(evaluacion);
     const extensionPdf = ".pdf";

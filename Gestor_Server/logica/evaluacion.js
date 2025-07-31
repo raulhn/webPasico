@@ -632,6 +632,7 @@ async function generar_boletin(nid_matricula, nid_trimestre) {
   try {
     // Se recupera la plantilla //
     let ruta_plantilla = await parametros.obtener_valor("PLANTILLA_NOTAS");
+    console.log("ruta_plantilla", ruta_plantilla);
     let texto = await ficheros.readFile(ruta_plantilla["valor"]);
 
     // Se obtiene la evaluación de tutor //
