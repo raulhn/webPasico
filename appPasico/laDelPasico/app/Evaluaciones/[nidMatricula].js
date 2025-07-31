@@ -85,14 +85,27 @@ export default function Evaluacion() {
             nombre: trimestres[i].nombre,
             contenido: () => (
               <>
-                <View
-                  style={{
-                    backgroundColor: "#fff",
-                  }}
-                >
+                <View style={estilos.container}>
+                  <FlatList
+                    data={evaluacionesTrimestre}
+                    keyExtractor={(item) =>
+                      item.nid_evaluacion_matricula.toString()
+                    }
+                    renderItem={({ item }) => (
+                      <CardEvaluacion evaluacion={item} />
+                    )}
+                    refreshControl={
+                      <RefreshControl
+                        refreshing={cargando}
+                        onRefresh={() => setRefrescar(!refrescar)}
+                      />
+                    }
+                  />
+
                   <View style={[estilos.botonDescarga]}>
                     <BotonFixed
-                      onPress={() => async () => {
+                      icon="download"
+                      onPress={async () => {
                         try {
                           const boletin =
                             await serviceEvaluaciones.generarBoletin(
@@ -100,7 +113,6 @@ export default function Evaluacion() {
                               trimestres[i].nid_trimestre,
                               cerrar_sesion
                             );
-                          console.log("Boletín generado:", boletin);
 
                           const token = boletin.tokenGeneracion;
                           const url =
@@ -119,47 +131,6 @@ export default function Evaluacion() {
                       }}
                     />
                   </View>
-
-                  <FlatList
-                    data={evaluacionesTrimestre}
-                    keyExtractor={(item) =>
-                      item.nid_evaluacion_matricula.toString()
-                    }
-                    renderItem={({ item }) => (
-                      <CardEvaluacion evaluacion={item} />
-                    )}
-                    refreshControl={
-                      <RefreshControl
-                        refreshing={cargando}
-                        onRefresh={() => setRefrescar(!refrescar)}
-                      />
-                    }
-                  />
-                  <Boton
-                    onPress={async () => {
-                      try {
-                        const boletin =
-                          await serviceEvaluaciones.generarBoletin(
-                            nidMatricula,
-                            trimestres[i].nid_trimestre,
-                            cerrar_sesion
-                          );
-                        console.log("Boletín generado:", boletin);
-
-                        const token = boletin.tokenGeneracion;
-                        const url =
-                          Constantes.URL_SERVICIO_MOVIL +
-                          "generar_boletin/" +
-                          token;
-
-                        await Linking.openURL(url);
-                        console.log("Boletín descargado desde:", url);
-                      } catch (error) {
-                        console.error("Error al descargar el boletín:", error);
-                      }
-                    }}
-                    nombre={"Descargar"}
-                  />
                 </View>
               </>
             ),
@@ -191,6 +162,10 @@ const estilos = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+  },
+  container: {
+    backgroundColor: "white",
+    flex: 1,
   },
   botonDescarga: { position: "absolute", bottom: 20, right: 20, zIndex: 10 },
 });

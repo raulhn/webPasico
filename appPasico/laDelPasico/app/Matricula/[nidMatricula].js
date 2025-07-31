@@ -56,6 +56,7 @@ export default function Matricula() {
     //  },
   ];
 
+  console.log(matriculasAsignatura);
   return (
     <View style={estilos.container}>
       <View style={{ position: "absolute", top: 15, right: 15, zIndex: 1 }}>
@@ -66,7 +67,7 @@ export default function Matricula() {
 
       <FlatList
         data={matriculasAsignatura}
-        keyExtractor={(item) => item.nid_matricula.toString()}
+        keyExtractor={(item) => item.nid_matricula_asignatura.toString()}
         style={{ width: "100%", flex: 1 }}
         renderItem={({ item }) => (
           <View

@@ -500,7 +500,7 @@ export function CustomTabs({ tabs, pestana = 0 }) {
   }, [pestana]);
 
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       <View
         style={{
           flexDirection: "row",
@@ -535,7 +535,11 @@ export function CustomTabs({ tabs, pestana = 0 }) {
 
       {tabs.map((tab, index) => (
         <View
-          style={index === pestanaSeleccionada ? {} : { display: "none" }}
+          style={
+            index === pestanaSeleccionada
+              ? { flexGrow: 1 }
+              : { display: "none" }
+          }
           key={index}
         >
           {tab.contenido()}

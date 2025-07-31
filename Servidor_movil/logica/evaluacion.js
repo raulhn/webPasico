@@ -302,7 +302,8 @@ function obtener_evaluacion_matricula_asginatura_tipo(
 
     conexion.dbConn.query(
       "select a.descripcion asignatura, t.descripcion trimestre, concat(p.nombre, ' ' , p.primer_apellido, ' ', p.segundo_apellido) profesor, " +
-        " em.*, tp.descripcion progreso,  c.descripcion curso,  concat(p2.nombre, ' ' , p2.primer_apellido, ' ', p2.segundo_apellido) alumno " +
+        "em.nota, em.nid_tipo_progreso, em.comentario, t.nid_trimestre, t.descripcion nombre_trimestre, tp.descripcion tipo_progreso, " +
+        "  tp.descripcion progreso,  c.descripcion curso,  concat(p2.nombre, ' ' , p2.primer_apellido, ' ', p2.segundo_apellido) alumno " +
         "from " +
         constantes.ESQUEMA +
         ".evaluacion e, " +
@@ -375,14 +376,14 @@ function textoAcentosARtf(texto) {
     Ñ: "\\'d1",
     ü: "\\'fc",
     Ü: "\\'dc",
+    º: "\\'ba",
+    ª: "\\'aa",
   };
-  return texto.replace(/[áéíóúÁÉÍÓÚñÑüÜ]/g, (c) => mapa[c] || c);
+  // Incluye º y ª en la expresión regular:
+  return texto.replace(/[áéíóúÁÉÍÓÚñÑüÜºª]/g, (c) => mapa[c] || c);
 }
 
 async function generar_boletin(nid_matricula, nid_trimestre) {
-  const TEXTO_INSTRUMENTO_PLANTILLA =
-    "\\cell\\row\\trowd\\trql\\trleft0\\ltrrow\\trpaddft3\\trpaddt0\\trpaddfl3\\trpaddl0\\trpaddfb3\\trpaddb0\\trpaddfr3\\trpaddr0\\clbrdrl\\brdrs\\brdrw1\\brdrcf1\\clbrdrb\\brdrs\\brdrw1\\brdrcf1\\clbrdrr\\brdrs\\brdrw1\\brdrcf1\\cellx1901\\clbrdrl\\brdrs\\brdrw1\\brdrcf1\\clbrdrb\\brdrs\\brdrw1\\brdrcf1\\clbrdrr\\brdrs\\brdrw1\\brdrcf1\\cellx8502\\pard\\plain \\s86\\sl1\\slmult0{\\*\\hyphen2\\hyphlead2\\hyphtrail2\\hyphmax0}\\fahang\\li0\\ri0\\lin0\\rin0\\fi-2\\cf0\\hich\\af0\\langfe2052\\dbch\\af0\\loch\\f0\\fs24\\lang3082\\intbl\\li0\\ri0\\lin0\\rin0\\fi-2{\\rtlch \\ltrch\\loch\n\r||ASIGNATURA_INSTRUMENTO||}\\cell\\pard\\plain \\s86\\sl1\\slmult0{\\*\\hyphen2\\hyphlead2\\hyphtrail2\\hyphmax0}\\fahang\\li0\\ri0\\lin0\\rin0\\fi-2\\cf0\\hich\\af0\\langfe2052\\dbch\\af0\\loch\\f0\\fs24\\lang3082\\intbl\\li0\\ri0\\lin0\\rin0\\fi-2{\\rtlch \\ltrch\\loch\n\r||PROGRESO_INSTRUMENTO|| ||NOTA_INSTRUMENTO|| }\n\r\\par \\pard\\plain \\s0{\\*\\hyphen2\\hyphlead2\\hyphtrail2\\hyphmax0}\\nowidctlpar\\cf0\\hich\\af9\\langfe2052\\dbch\\af2\\afs24\\lang1081\\loch\\f0\\fs24\\lang3082\\intbl{\\rtlch \\ltrch\\loch\n\r||COMENTARIO_INSTRUMENTO||}\\cell\\row\\pard\\plain \\s86\\sl1\\slmult0{\\*\\hyphen2\\hyphlead2\\hyphtrail2\\hyphmax0}\\fahang\\li0\\ri0\\lin0\\rin0\\fi-2\\cf0\\hich\\af0\\langfe2052\\dbch\\af0\\loch\\f0\\fs24\\lang3082\\li0\\ri0\\lin0\\rin0\\fi-2{\\rtlch \\ltrch\\loch\n\r";
-
   try {
     // Se recupera la plantilla //
     let ruta_plantilla = await parametros.obtener_valor("PLANTILLA_NOTAS");
@@ -434,15 +435,14 @@ async function generar_boletin(nid_matricula, nid_trimestre) {
       }
 
       texto = texto.toString().replace("||NOTA_LENGUAJE||", nota_lenguaje);
-      texto = texto
-        .toString()
-        .replace("||ASIGNATURA_LENGUAJE||", asignatura_lenguaje);
-      texto = texto
-        .toString()
-        .replace("||PROGRESO_LENGUAJE||", progreso_lenguaje);
-      texto = texto
-        .toString()
-        .replace("||COMENTARIO_LENGUAJE||", comentario_lenguaje);
+
+      texto = texto.replace("||PROGRESO_LENGUAJE||", progreso_lenguaje);
+      texto = texto.replace("||COMENTARIO_LENGUAJE||", comentario_lenguaje);
+      texto = texto.replace(
+        "||NIVEL_SOLFEO||",
+        textoAcentosARtf(asignatura_lenguaje)
+      );
+      texto = texto.replace("||ASIGNATURA_SOLFEO||", "Lenguaje Musical");
 
       let texto_instrumento = "";
 
@@ -455,9 +455,10 @@ async function generar_boletin(nid_matricula, nid_trimestre) {
 
       for (let i = 0; i < array_evaluacion_instrumento_banda.length; i++) {
         let evaluacion_instrumento = array_evaluacion_instrumento_banda[i];
-
-        let texto_instrumento_aux = TEXTO_INSTRUMENTO_PLANTILLA;
-
+        let texto_instrumento_parametro = await parametros.obtener_valor(
+          "PLANTILLA_NOTAS_INSTRUMENTO"
+        );
+        let texto_instrumento_aux = texto_instrumento_parametro["valor"];
         if (evaluacion_instrumento["nota"] == 0) {
           texto_instrumento_aux = texto_instrumento_aux
             .toString()
@@ -588,11 +589,14 @@ async function generar_boletin(nid_matricula, nid_trimestre) {
         texto_instrumento = texto_instrumento + texto_instrumento_aux;
       }
 
+      texto_instrumento =
+        texto_instrumento +
+        "\\cell\\row\\pard\\plain \\s86\\sl1\\slmult0{\\*\\hyphen2\\hyphlead2\\hyphtrail2\\hyphmax0}\\fahang\\li0\\ri0\\lin0\\rin0\\fi-2\\cf0\\hich\\af0\\langfe2052\\dbch\\af0\\loch\\f0\\fs24\\lang3082\\li0\\ri0\\lin0\\rin0\\fi-2{\\rtlch \\ltrch\\loch\n\r";
+
       texto = texto
         .toString()
         .replace("||PLANTILLA_INSTRUMENTO||", texto_instrumento);
 
-      console.log("Texto final: ", textoAcentosARtf(texto));
       return textoAcentosARtf(texto);
     } else {
       throw new Error("No se han encontrado evaluaciones");
