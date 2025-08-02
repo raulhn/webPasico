@@ -155,5 +155,65 @@ async function actualizarTablonAnuncio(req, res) {
   }
 }
 
+async function obtenerAnuncios(req, res) {
+  try {
+    const tablonesAnuncios =
+      await gestorTablonAnuncios.obtenerTablonesAnuncioGeneral();
+
+    res.status(200).send({
+      error: false,
+      tablones_anuncios: tablonesAnuncios,
+    });
+  } catch (error) {
+    console.log(
+      "servlet_tablon_anuncios.js -> obtenerTablonesAnuncios: ",
+      error
+    );
+    res.status(500).send({
+      error: true,
+      mensaje: "Se ha producido un error al obtener los tablones de anuncios",
+    });
+  }
+}
+
+async function obtenerTablonAnuncio(req, res) {
+  try {
+    const nid_tablon_anuncio = req.params.nid_tablon_anuncio;
+
+    const tabloneAnuncio =
+      await gestorTablonAnuncios.obtenerTablonAnuncio(nid_tablon_anuncio);
+
+    const bTienePermisos = await compruebaPermisos(
+      req,
+      res,
+      tabloneAnuncio.nid_tipo_tablon
+    );
+
+    if (
+      !bTienePermisos ||
+      tabloneAnuncio.nid_tipo_tablon == constantes.GENERAL
+    ) {
+      res.status(403).send({
+        error: true,
+        mensaje: "No tienes permisos para acceder a este tablón de anuncios",
+      });
+      return;
+    }
+
+    res.status(200).send({
+      error: false,
+      tablones_anuncios: tabloneAnuncio,
+    });
+  } catch (error) {
+    console.log("servlet_tablon_anuncios.js -> obtenerTablonAnuncio: ", error);
+    res.status(500).send({
+      error: true,
+      mensaje: "Se ha producido un error al obtener el tablón de anuncios",
+    });
+  }
+}
+
 module.exports.insertarTablonAnuncio = insertarTablonAnuncio;
 module.exports.actualizarTablonAnuncio = actualizarTablonAnuncio;
+module.exports.obtenerAnuncios = obtenerAnuncios;
+module.exports.obtenerTablonAnuncio = obtenerTablonAnuncio;

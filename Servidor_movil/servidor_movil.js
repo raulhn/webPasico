@@ -33,6 +33,10 @@ const servletTipoProgreso = require("./servlets/servlet_tipo_progreso.js");
 const servletEvaluacion = require("./servlets/servlet_evaluacion.js");
 const servletEvaluacionMatricula = require("./servlets/servlet_evaluacion_matricula.js");
 
+// Tablon Anuncios //
+const servletTablonAnuncios = require("./servlets/servlet_tablon_anuncios.js");
+const servletTipoTablon = require("./servlets/servlet_tipo_tablon.js");
+
 const validacionEmail = require("./logica/validacionEmail.js");
 
 const limiter = rateLimit({
@@ -153,6 +157,18 @@ app.get("/obtener_tipos_musico", servletTipoMusico.obtenerTipoMusico);
 
 // Generar boletin //
 app.get("/generar_boletin/:token", servletEvaluacion.generar_boletin);
+
+// Tablon Anuncios //
+app.get("/obtener_tipos_tablon", servletTipoTablon.obtenerTiposTablon);
+app.get(
+  "/obtener_tipo_tablon/:nid_tipo_tablon",
+  servletTipoTablon.obtenerTipoTablon
+);
+
+app.get(
+  "/obtener_tablon_anuncios",
+  servletTablonAnuncios.obtenerTablonesAnuncios
+);
 
 ///////////////////////////////////////////////
 // Peticiones que requieren inicio de sesión //
@@ -277,6 +293,12 @@ app.get(
 app.get(
   "/solicitar_generar_boletin/:nid_matricula/:nid_trimestre",
   servletEvaluacion.solicitar_generar_boletin
+);
+
+//Tablon Anuncios //
+app.post(
+  "/registrar_tablon_anuncio",
+  servletTablonAnuncios.insertarTablonAnuncio
 );
 
 https

@@ -133,7 +133,6 @@ async function construirRoles(nid_usuario) {
       }
     }
 
-    console.log("persona.nid_persona: ", persona.nid_persona);
     // Rol Alumno //
     const bEsAlumno = await gestorMatriculas.esAlumno(persona.nid_persona);
 

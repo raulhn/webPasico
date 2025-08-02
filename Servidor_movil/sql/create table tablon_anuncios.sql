@@ -9,8 +9,8 @@ create table pasico_movil.tablon_anuncios(
     descripcion varchar(1000),
     nid_tipo_tablon integer,
     fecha_creacion datetime default current_timestamp,
-    fecha_modificacion datetime default current_timestamp on update current_timestamp,
+    fecha_modificacion datetime default current_timestamp on update current_timestamp
 );
 
-alter table pasico_movil.tablon_anuncios add constraint fk_tablon_anuncios foreign key references pasico_movil.tipo_tablon(nid_tipo_tablon);
+alter table pasico_movil.tablon_anuncios add constraint fk_tablon_anuncios foreign key (nid_tipo_tablon) references pasico_movil.tipo_tablon(nid_tipo_tablon);
 

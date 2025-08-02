@@ -15,6 +15,8 @@ import {
 import { useState, useEffect } from "react";
 import { Link } from "expo-router";
 import { use } from "react";
+import { BounceOutDown } from "react-native-reanimated";
+import { ScrollView } from "react-native-gesture-handler";
 
 export function Boton({
   nombre,
@@ -192,7 +194,7 @@ export function EntradaTexto({
   multiline = false,
   maxLength = null,
   ancho = 200,
-  alto = 50,
+  alto = 40,
 }) {
   const esPassword = secureTextEntry;
   const [isFocused, setIsFocused] = useState(false);
@@ -365,6 +367,100 @@ export function ModalExito({ visible, setVisible, mensaje, textBoton }) {
         </View>
       </View>
     </Modal>
+  );
+}
+
+export function EntradaGroupRadioButton({
+  titulo,
+  opciones,
+  valor,
+  setValorSeleccionado,
+}) {
+  const [isVisible, setIsVisible] = useState(false);
+  const [presionado, setPresionado] = useState(null);
+  const [valorSeleccionado, setValorSeleccionadoInterno] = useState(valor);
+
+  useEffect(() => {
+    setValorSeleccionadoInterno(valor);
+  }, [valor]);
+
+  return (
+    <Pressable
+      style={{ flexDirection: "row", gap: 10, alignItems: "center" }}
+      onPress={() => {
+        setIsVisible(true);
+        setPresionado(true);
+      }}
+    >
+      <View
+        style={[
+          {
+            flexDirection: "row",
+            gap: 10,
+            padding: 10,
+            borderWidth: 1,
+            borderColor: "#ccc",
+            borderRadius: 5,
+          },
+          presionado && { opacity: 0.5 },
+        ]}
+      >
+        <Text style={{ fontSize: 16, fontWeight: "bold" }}>
+          {valorSeleccionado ? valorSeleccionado.etiqueta : "Seleccionar"}
+        </Text>
+      </View>
+      <Modal
+        animationType="fade"
+        visible={isVisible}
+        transparent={true}
+        onRequestClose={() => setIsVisible(false)}
+      >
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <View
+            style={{
+              backgroundColor: "white",
+              width: "90%",
+              height: "auto",
+              borderRadius: 10,
+              elevation: 5,
+              borderColor: "#ccc",
+              borderWidth: 1,
+              justifyContent: "center",
+              alignItems: "center",
+              padding: 20,
+            }}
+          >
+            <Text style={{ fontSize: 20, fontWeight: "bold", margin: 20 }}>
+              {titulo}
+            </Text>
+            <ScrollView>
+              <GroupRadioInput
+                opciones={opciones}
+                valor={valorSeleccionado}
+                setValorSeleccionado={(valor) => {
+                  setValorSeleccionadoInterno(valor);
+                  setValorSeleccionado(valor);
+                }}
+              />
+            </ScrollView>
+            <Boton
+              onPress={() => {
+                setIsVisible(false);
+              }}
+              nombre="Aceptar"
+              color="#007BFF"
+              colorTexto="#FFF"
+            />
+          </View>
+        </View>
+      </Modal>
+    </Pressable>
   );
 }
 
