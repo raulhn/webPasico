@@ -58,7 +58,7 @@ export default function Matricula() {
 
   return (
     <View style={estilos.container}>
-      <View style={{ position: "absolute", top: 5, right: 15, zIndex: 1 }}>
+      <View style={{ position: "absolute", top: 10, right: 15, zIndex: 1 }}>
         <MenuDesplegable opciones={opcionesDesplegable} />
       </View>
 
@@ -73,7 +73,6 @@ export default function Matricula() {
             style={{
               justifyContent: "center",
               alignItems: "center",
-              marginVertical: 10,
             }}
           >
             <CardAsignatura matriculaAsignatura={item} />
@@ -96,11 +95,12 @@ const estilos = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#fff",
     flex: 1,
+    paddingTop: 10,
   },
   title: {
     fontSize: 18,
     fontWeight: "bold",
-    marginTop: 8,
+    margin: 8,
     color: "#007CFA",
   },
 });

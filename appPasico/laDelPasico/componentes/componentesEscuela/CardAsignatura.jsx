@@ -12,7 +12,6 @@ export default function CardAsignatura({ matriculaAsignatura }) {
     }
   }
 
-
   function incluirProfesores() {
     const profesores = matriculaAsignatura.profesores || [];
     return profesores.map((profesor, index) => {
@@ -70,14 +69,14 @@ export default function CardAsignatura({ matriculaAsignatura }) {
 const estilos = StyleSheet.create({
   card: {
     backgroundColor: "#f8faff",
-    padding: 16,
+    padding: 13,
     borderRadius: 14,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.08,
     shadowRadius: 4,
     elevation: 2,
-    marginBottom: 18,
+    marginBottom: 10,
     borderWidth: 1,
     borderColor: "#e3eaf2",
     width: "95%",
