@@ -35,6 +35,12 @@ export default function DrawerLayout() {
           title: "Galería",
         }}
       />
+      <Drawer.Screen
+        name="tablon"
+        options={{
+          title: "Tablón de anuncios",
+        }}
+      />
     </Drawer>
   );
 }
