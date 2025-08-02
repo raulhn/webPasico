@@ -33,6 +33,7 @@ export default function Evaluacion() {
   const { evaluaciones, cargando, error, refrescar, setRefrescar } =
     useEvaluaciones(nidMatricula, cerrar_sesion);
 
+  console.log("Evaluaciones:", evaluaciones);
   const {
     trimestres,
     cargando: cargandoTrimestres,

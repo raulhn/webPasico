@@ -623,7 +623,7 @@ export function MenuDesplegable({ opciones }) {
           <View
             style={{
               position: "absolute",
-              top: 105,
+              top: 95,
               right: 10,
               zIndex: 1,
               backgroundColor: "#fff",

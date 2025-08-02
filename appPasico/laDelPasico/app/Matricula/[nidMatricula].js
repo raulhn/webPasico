@@ -56,14 +56,13 @@ export default function Matricula() {
     //  },
   ];
 
-  console.log(matriculasAsignatura);
   return (
     <View style={estilos.container}>
-      <View style={{ position: "absolute", top: 15, right: 15, zIndex: 1 }}>
+      <View style={{ position: "absolute", top: 5, right: 15, zIndex: 1 }}>
         <MenuDesplegable opciones={opcionesDesplegable} />
       </View>
-      <Text style={estilos.title}>Matricula</Text>
-      <Text>{matricula.curso}</Text>
+
+      <Text style={estilos.title}>{matricula.curso}</Text>
 
       <FlatList
         data={matriculasAsignatura}
