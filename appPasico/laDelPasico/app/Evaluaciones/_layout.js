@@ -14,8 +14,17 @@ export default function PaginaLayout() {
       <Stack.Screen
         name="[nidMatricula]" // Nombre de la pantalla principal
         options={({ route }) => ({
-          title: `${route.params?.titulo || ""}`,
+          title: "Evaluaciones",
+          headerTitleAlign: "center", // Centra el título del encabezado
+          headerStyle: {
+            backgroundColor: "#007CFA", // Color de fondo del encabezado
+          },
+          headerTintColor: "#fff", // Color del texto del encabezado
+          headerTitleStyle: {
+            fontWeight: "bold", // Estilo del título
+          },
         })} // Oculta el encabezado para esta pantalla
+        title=""
       />
     </Stack>
   );

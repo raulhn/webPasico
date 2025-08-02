@@ -17,6 +17,8 @@ export default function Expediente() {
     return <ActivityIndicator size="large" color="#007CFA" />;
   }
 
+  console.log("Matriculas:", matriculas);
+
   return (
     <View style={estilos.container}>
       <View style={{ alignItems: "center" }}>

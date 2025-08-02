@@ -133,12 +133,15 @@ async function construirRoles(nid_usuario) {
       }
     }
 
+    console.log("persona.nid_persona: ", persona.nid_persona);
     // Rol Alumno //
     const bEsAlumno = await gestorMatriculas.esAlumno(persona.nid_persona);
+
     if (bEsAlumno) {
       roles.push({ rol: "ALUMNO" });
     } else {
       //Comprueba si la persona es padre de alumno sin tener en cuenta alumnos que sean socios
+
       const bEsPadreAlumno = await gestorMatriculas.esPadreAlumno(
         persona.nid_persona,
         false

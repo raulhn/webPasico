@@ -50,10 +50,11 @@ async function esAlumno(nid_persona) {
 
 async function esPadreAlumno(nid_persona, bSocio = true) {
   try {
-    const hijos = gestorPersonas.obtenerHijos(nid_persona, bSocio);
+    const hijos = await gestorPersonas.obtenerHijos(nid_persona, bSocio);
 
     for (let i = 0; i < hijos.length; i++) {
-      let bEsAlumno = await esAlumno(hijos.nid_persona);
+      let bEsAlumno = await esAlumno(hijos[i].nid_persona);
+
       if (bEsAlumno) {
         return true;
       }
@@ -166,7 +167,7 @@ function obtenerMatriculas(nid_persona) {
 function obtenerMatriculasPersona(nid_persona) {
   return new Promise((resolve, reject) => {
     var sql =
-      "SELECT m.nid_matricula, p.nombre, p.primer_apellido, p.segundo_apellido, c.descripcion curso FROM " +
+      "SELECT m.nid_matricula, p.nombre, p.primer_apellido, p.segundo_apellido, c.descripcion curso, c.nid_curso FROM " +
       constantes.ESQUEMA +
       ".matricula m, " +
       constantes.ESQUEMA +

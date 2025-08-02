@@ -30,9 +30,8 @@ function obtenerHijos(nid_persona, bSocio) {
       condicionSocio =
         " and not exists (select 1 from " +
         constantes.ESQUEMA +
-        ".socios " +
-        "where nid_persona = " +
-        conexion.dbConn.escape(nid_persona) +
+        ".socios s " +
+        "where s.nid_persona = p.nid_persona" +
         ")";
     }
     const sql =

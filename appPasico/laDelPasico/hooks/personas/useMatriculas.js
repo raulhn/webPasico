@@ -14,7 +14,10 @@ export const useMatriculas = (cerrar_sesion) => {
   useEffect(() => {
     ServiceMatriculas.obtenerMatriculasPersona(cerrar_sesion)
       .then((matriculasRecuperadas) => {
-        setMatriculas(matriculasRecuperadas.matriculas);
+        const matriculasOrdenadas = matriculasRecuperadas.matriculas.sort(
+          (a, b) => (a.nid_curso > b.nid_curso ? -1 : 1)
+        );
+        setMatriculas(matriculasOrdenadas);
         setCargando(false); // Finaliza la carga
         setRefrescar(false);
         setError(false);
