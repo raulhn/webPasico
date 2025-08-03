@@ -1,5 +1,4 @@
-const Constantes = require("../constantes.js");
-
+import Constantes from "../config/constantes.js";
 export function registrarConexion(token, recaptchaToken) {
   return new Promise((resolve, reject) => {
     fetch(Constantes.URL_SERVICIO_MOVIL + "registrar_conexion", {

@@ -85,10 +85,6 @@ async function comprobarRol(req, res, rolesPermitidos) {
     }
     return false;
   } catch (error) {
-    res.status(500).send({
-      error: true,
-      mensaje: "Error al comprobar el rol",
-    });
     return false;
   }
 }

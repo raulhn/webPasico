@@ -15,14 +15,14 @@ export const useTipoTablon = (cerrar_sesion) => {
     ServiceTiposTablon.obtenerTiposTablon(cerrar_sesion)
       .then((tiposTablonRecuperados) => {
         setTiposTablon(tiposTablonRecuperados.tipo_tablones);
-        setCargando(false); // Finaliza la carga
+        setCargando(false);
         setRefrescar(false);
         setError(false);
       })
       .catch((error) => {
         console.error("Error al obtener los tipos de tablón:", error);
         setTiposTablon([]);
-        setCargando(false); // Finaliza la carga incluso si hay error
+        setCargando(false);
         setRefrescar(false);
         setError(true);
       });

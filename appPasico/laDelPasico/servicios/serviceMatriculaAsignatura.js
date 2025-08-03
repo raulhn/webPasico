@@ -1,5 +1,5 @@
 import servletComun from "./serviceComun.js";
-import Constantes from "../constantes.js";
+import Constantes from "../config/constantes.js";
 
 function obtenerMatriculasAsignaturaPersona(nid_matricula, cerrar_sesion) {
   return new Promise((resolve, reject) => {

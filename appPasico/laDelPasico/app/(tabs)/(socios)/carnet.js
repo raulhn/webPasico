@@ -3,6 +3,7 @@ import serviceSocios from "../../../servicios/serviceSocios";
 import { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../../../providers/AuthContext.js";
 import { View, StyleSheet, Image } from "react-native";
+import Constantes from "../../../config/constantes.js";
 
 export default function Carnet() {
   const [socio, setSocio] = useState(null);
@@ -81,7 +82,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderRadius: 18,
     padding: 20,
-    shadowColor: "#007CFA",
+    shadowColor: Constantes.COLOR_AZUL,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.18,
     shadowRadius: 8,
@@ -110,7 +111,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "#007CFA",
+    color: Constantes.COLOR_AZUL,
     marginBottom: 18,
     marginTop: 8,
     alignSelf: "flex-start",
@@ -125,7 +126,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 15,
-    color: "#007CFA",
+    color: Constantes.COLOR_AZUL,
     fontWeight: "bold",
     minWidth: 100,
   },
@@ -137,7 +138,7 @@ const styles = StyleSheet.create({
   },
   valueNum: {
     fontSize: 18,
-    color: "#007CFA",
+    color: Constantes.COLOR_AZUL,
     fontWeight: "bold",
     marginLeft: 4,
   },

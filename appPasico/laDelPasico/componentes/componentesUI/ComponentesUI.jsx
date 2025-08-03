@@ -14,9 +14,9 @@ import {
 } from "react-native";
 import { useState, useEffect } from "react";
 import { Link } from "expo-router";
-import { use } from "react";
-import { BounceOutDown } from "react-native-reanimated";
+
 import { ScrollView } from "react-native-gesture-handler";
+import Constantes from "../../config/constantes.js";
 
 export function Boton({
   nombre,
@@ -50,7 +50,7 @@ export function Boton({
 export function BotonFixed({
   onPress,
   icon = "add",
-  colorBoton = "#007CFA",
+  colorBoton = Constantes.COLOR_AZUL,
   size = 50,
 }) {
   const [isPressed, setIsPressed] = useState(false);
@@ -465,7 +465,6 @@ export function EntradaGroupRadioButton({
 }
 
 export function GroupRadioInput({ opciones, valor, setValorSeleccionado }) {
-  console.log("Varlo ", valor);
   return (
     <FlatList
       data={opciones}
@@ -588,7 +587,7 @@ export function CustomTabs({ tabs, pestana = 0 }) {
     if (pressed) {
       return "#e0e0e0";
     }
-    return index === pestanaSeleccionada ? "#007CFA" : "#f5f5f5";
+    return index === pestanaSeleccionada ? Constantes.COLOR_AZUL : "#f5f5f5";
   }
 
   useEffect(() => {
@@ -672,7 +671,7 @@ export function MenuDesplegable({ opciones }) {
             style={[
               { padding: 5, flexDirection: "row", alignItems: "center" },
               presionado === index && {
-                backgroundColor: "#007CFA",
+                backgroundColor: Constantes.COLOR_AZUL,
                 color: "#fff",
               },
             ]}

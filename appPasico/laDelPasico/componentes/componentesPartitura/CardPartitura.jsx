@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet, Pressable, Linking } from "react-native";
 import { useRol } from "../../hooks/useRol";
 import { Boton, BotonFixed } from "../componentesUI/ComponentesUI";
+import Constantes from "../../config/constantes.js";
 
 export default function CardPartitura({
   partitura,
@@ -36,13 +37,17 @@ export default function CardPartitura({
               borderWidth: 1,
               width: 150,
               padding: 3,
-              borderColor: "#007CFA",
+              borderColor: Constantes.COLOR_AZUL,
               marginTop: 3,
               alignItems: "center",
             }}
           >
             <Text
-              style={{ color: "#007CFA", fontWeight: "bold", fontSize: 13 }}
+              style={{
+                color: Constantes.COLOR_AZUL,
+                fontWeight: "bold",
+                fontSize: 13,
+              }}
             >
               Descargar partitura
             </Text>
@@ -116,7 +121,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     paddingBottom: 5,
     fontWeight: "bold",
-    color: "#007CFA",
+    color: Constantes.COLOR_AZUL,
     textOverflow: "ellipsis",
   },
 });

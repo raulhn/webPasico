@@ -1,6 +1,5 @@
 const serviceComun = require("./serviceComun");
-const constantes = require("../constantes");
-
+import constantes from "../config/constantes";
 function registrarCategoriaPartitura(categoriaPartitura, cerrarSesion) {
   return new Promise((resolve, reject) => {
     serviceComun

@@ -2,7 +2,7 @@ import { View } from "react-native";
 import { StyleSheet } from "react-native";
 import { Stack } from "expo-router";
 import { Image } from "react-native";
-import Constantes from "../../config/constantes.js"; // Importa las constantes desde el nuevo archivo
+import Constantes from "../../config/constantes";
 
 export default function PaginaLayout() {
   return (
@@ -13,9 +13,9 @@ export default function PaginaLayout() {
       }}
     >
       <Stack.Screen
-        name="[nidEvento]" // Nombre de la pantalla principal
+        name="[nidAnuncio]" // Nombre de la pantalla principal
         options={({ route }) => ({
-          title: "Evento",
+          title: "Anuncio",
           headerTitleAlign: "center", // Centra el título del encabezado
           headerStyle: {
             backgroundColor: Constantes.COLOR_AZUL, // Color de fondo del encabezado
@@ -24,7 +24,7 @@ export default function PaginaLayout() {
           headerTitleStyle: {
             fontWeight: "bold", // Estilo del título
           },
-        })} // Oculta el encabezado para esta pantalla
+        })}
       />
     </Stack>
   );

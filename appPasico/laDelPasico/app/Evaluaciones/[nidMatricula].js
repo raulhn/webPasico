@@ -24,7 +24,7 @@ import { useState } from "react";
 
 import * as Linking from "expo-linking";
 
-const Constantes = require("../../constantes.js");
+import Constantes from "../../config/constantes"; // Asegúrate de que la ruta sea correcta
 
 export default function Evaluacion() {
   const { nidMatricula } = useLocalSearchParams();
@@ -32,7 +32,6 @@ export default function Evaluacion() {
 
   const { evaluaciones, cargando, error, refrescar, setRefrescar } =
     useEvaluaciones(nidMatricula, cerrar_sesion);
-
 
   const {
     trimestres,
@@ -43,7 +42,7 @@ export default function Evaluacion() {
   if (cargando || cargandoTrimestres) {
     return (
       <View>
-        <ActivityIndicator size="large" color="#007CFA" />
+        <ActivityIndicator size="large" color={Constantes.COLOR_AZUL} />
       </View>
     );
   }
@@ -122,7 +121,6 @@ export default function Evaluacion() {
                             token;
 
                           await Linking.openURL(url);
-                          console.log("Boletín descargado desde:", url);
                         } catch (error) {
                           console.error(
                             "Error al descargar el boletín:",

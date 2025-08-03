@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
+import Constantes from "../../config/constantes.js";
 
 export default function CardAsignatura({ matriculaAsignatura }) {
   function formatDateToMySQL(date) {
@@ -27,7 +28,7 @@ export default function CardAsignatura({ matriculaAsignatura }) {
           <MaterialIcons
             name="person"
             size={18}
-            color="#007CFA"
+            color={Constantes.COLOR_AZUL}
             style={{ marginRight: 6 }}
           />
           <View style={{ flexDirection: "column" }}>
@@ -53,7 +54,7 @@ export default function CardAsignatura({ matriculaAsignatura }) {
         <MaterialIcons
           name="book"
           size={24}
-          color="#007CFA"
+          color={Constantes.COLOR_AZUL}
           style={{ marginRight: 8 }}
         />
         <Text style={estilos.asignatura}>{matriculaAsignatura.asignatura}</Text>
@@ -95,7 +96,7 @@ const estilos = StyleSheet.create({
   },
   label: {
     fontSize: 14,
-    color: "#007CFA",
+    color: Constantes.COLOR_AZUL,
     fontWeight: "bold",
     marginBottom: 6,
     marginLeft: 2,

@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet } from "react-native";
 
 import ServicePartituras from "../../servicios/servicePartituras";
+import Constantes from "../../config/constantes.js";
 
 import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../../providers/AuthContext";
@@ -206,7 +207,7 @@ const estilos = StyleSheet.create({
   titulo: {
     fontSize: 24, // Tamaño de fuente grande
     fontWeight: "bold", // Negrita para destacar
-    color: "#007CFA", // Color azul para resaltar
+    color: Constantes.COLOR_AZUL, // Color azul para resaltar
     marginBottom: 20, // Espacio debajo del título
     textAlign: "center", // Centrado horizontalmente
   },

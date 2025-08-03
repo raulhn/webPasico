@@ -5,6 +5,7 @@ import { useContext, useState } from "react";
 import { AuthContext } from "../../../providers/AuthContext";
 import { FlatList, RefreshControl, Pressable } from "react-native";
 import { Link } from "expo-router";
+import Constantes from "../../../config/constantes.js";
 
 export default function Expediente() {
   const { cerrarSesion } = useContext(AuthContext);
@@ -14,7 +15,7 @@ export default function Expediente() {
     useMatriculas(cerrarSesion);
 
   if (cargando) {
-    return <ActivityIndicator size="large" color="#007CFA" />;
+    return <ActivityIndicator size="large" color={Constantes.COLOR_AZUL} />;
   }
 
   return (
@@ -90,7 +91,7 @@ const estilos = {
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 8,
-    color: "#007CFA",
+    color: Constantes.COLOR_AZUL,
   },
   tarjetaPresionada: {
     transform: [{ scale: 1.05 }],

@@ -5,10 +5,10 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Link } from "expo-router";
-
+import Constantes from "../config/constantes.js";
 import { AuthContext } from "../providers/AuthContext";
 import { useContext, useState, useEffect } from "react";
-import serviceUsuario from "../servicios/serviceUsuario"; // Ajusta la ruta según tu estructura de carpetas
+import serviceUsuario from "../servicios/serviceUsuario";
 
 export const CustomHeader = ({ navigation, route, options, title }) => {
   const { usuario, iniciarSesion, cerrarSesion, guardarRoles } =
@@ -67,14 +67,14 @@ export const CustomHeader = ({ navigation, route, options, title }) => {
               <MaterialIcons
                 name="person"
                 size={30}
-                color={usuario ? "#007CFA" : "black"}
+                color={usuario ? Constantes.COLOR_AZUL : "black"}
               />
 
               <Text
                 style={{
                   fontSize: 10,
                   textAlign: "center",
-                  color: usuario ? "#007CFA" : "black",
+                  color: usuario ? Constantes.COLOR_AZUL : "black",
                 }}
               >
                 {usuario ? "Mi perfil" : "Login"}

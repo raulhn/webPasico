@@ -1,4 +1,4 @@
-let Constantes = require("../constantes.js");
+let Constantes = require("../config/constantes.js");
 
 function obtenerUltimasNoticias() {
   return new Promise((resolve, reject) => {
