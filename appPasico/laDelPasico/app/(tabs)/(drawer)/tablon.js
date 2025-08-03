@@ -4,12 +4,17 @@ import { useTipoTablon } from "../../../hooks/useTipoTablon";
 import { useContext, useState } from "react";
 import { AuthContext } from "../../../providers/AuthContext";
 import { useRol } from "../../../hooks/useRol";
+import { useTablonAnuncios } from "../../../hooks/useTablonAnuncios";
 import FormularioTablon from "../../../componentes/componentesTablon/formularioTablon.jsx";
 import {
   BotonFixed,
   Boton,
 } from "../../../componentes/componentesUI/ComponentesUI";
-import { StyleSheet } from "react-native";
+import { StyleSheet, RefreshControl, Pressable } from "react-native";
+import { FlatList } from "react-native-gesture-handler";
+import CardAnuncio from "../../../componentes/componentesTablon/cardAnuncio.jsx";
+
+import { Link } from "expo-router";
 
 export default function Tablon() {
   const { cerrarSesion } = useContext(AuthContext);
@@ -17,10 +22,15 @@ export default function Tablon() {
     useTipoTablon(cerrarSesion);
 
   const [modalVisible, setModalVisible] = useState(false);
+  const [presionado, setPresionado] = useState(null);
 
   const { esRol } = useRol();
-
-  console.log("Tipos de tablón:", tiposTablon);
+  const {
+    anuncios: tablonAnuncios,
+    lanzarRefresco: lanzarRefrescoAnuncios,
+    refrescar: refrescarAnuncios,
+    error: errorAnuncios,
+  } = useTablonAnuncios();
 
   if (cargando) {
     return (
@@ -39,10 +49,55 @@ export default function Tablon() {
     );
   }
 
-  console.log("Tipos de tablón:", esRol(["ADMINISTRADOR", "DIRECTOR"]));
   return (
     <View style={styles.container}>
-      <Text>Tablón de anuncios</Text>
+      <FlatList
+        data={tablonAnuncios}
+        keyExtractor={(item) => item.nid_tablon_anuncio.toString()}
+        renderItem={({ item }) => (
+          <Link
+            href={{
+              pathname: "/Anuncio/[nidAnuncio]",
+              params: { nidAnuncio: item.nid_tablon_anuncio },
+            }}
+            key={item.nid_tablon_anuncio}
+            asChild
+          >
+            <Pressable
+              onTouchStart={() => {
+                setPresionado(item.nid_tablon_anuncio); // Cambia el estado a presionado
+              }}
+              onTouchEnd={() => {
+                setPresionado(null); // Cambia el estado a no presionado
+              }}
+              style={
+                presionado === item.nid_tablon_anuncio
+                  ? styles.tarjetaPresionada
+                  : null
+              }
+            >
+              <CardAnuncio anuncio={item} />
+            </Pressable>
+          </Link>
+        )}
+        ListEmptyComponent={
+          <View style={styles.cargandoContainer}>
+            <Text>No hay anuncios disponibles</Text>
+          </View>
+        }
+        refreshControl={
+          <RefreshControl
+            refreshing={refrescarAnuncios}
+            onRefresh={() => {
+              setPresionado(null); // Cambia el estado a no presionado al hacer scroll
+              lanzarRefrescoAnuncios(); // Cambia el estado de refresco
+            }}
+          />
+        }
+        onScrollEndDrag={() => {
+          setPresionado(null); // Cambia el estado a no presionado al hacer scroll
+        }}
+      />
       <View
         style={[
           esRol(["ADMINISTRADOR", "DIRECTOR"])
@@ -80,8 +135,26 @@ export default function Tablon() {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1, // Asegura que el contenedor ocupe todo el espacio disponible
     backgroundColor: "white",
-    flex: 1,
+    justifyContent: "center",
+  },
+  cargandoContainer: {
+    flex: 1, // Centra el indicador de carga en la pantalla
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  header: {
+    fontSize: 20,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginVertical: 10,
+  },
+  flatListContent: {
+    flexGrow: 1, // Permite que la lista crezca dinámicamente
+  },
+  tarjetaPresionada: {
+    transform: [{ scale: 1.05 }],
   },
   botonAdd: { position: "absolute", bottom: 30, right: 20 },
   title: {

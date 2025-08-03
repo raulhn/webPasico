@@ -5,6 +5,7 @@ import { useContext, useState } from "react";
 import { StyleSheet } from "react-native";
 import { AuthContext } from "../../providers/AuthContext";
 import serviceUsuario from "../../servicios/serviceUsuario";
+import Constantes from "../../config/constantes.js";
 
 import {
   ModalAviso,
@@ -78,7 +79,7 @@ export default function CambiarPassword() {
       <Boton
         nombre="Actualizar"
         onPress={peticionCambiarContraseña}
-        color="#007CFA"
+        color={Constantes.COLOR_AZUL}
       />
       <ModalAviso
         visible={error !== null}

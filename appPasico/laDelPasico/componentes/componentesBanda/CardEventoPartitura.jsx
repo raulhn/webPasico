@@ -1,4 +1,5 @@
 import { Text, View, StyleSheet } from "react-native";
+import Constantes from "../../config/constantes.js";
 
 export default function CardEventoPartitura({ EventoPartitura }) {
   let fecha_evento = "";
@@ -29,7 +30,7 @@ export default function CardEventoPartitura({ EventoPartitura }) {
     let muestraTipos = [];
     for (let i = 0; i < tipos.length; i++) {
       let color = arrayColores[tipos[i].nid_tipo_musico % arrayColores.length];
-      console.log(tipos[i]);
+
       muestraTipos.push(
         <View style={{ flexDirection: "row" }} key={i}>
           <Text style={{ fontWeight: "bold", color: color }}>
@@ -79,7 +80,9 @@ export default function CardEventoPartitura({ EventoPartitura }) {
           justifyContent: "flex-end",
         }}
       >
-        <Text style={{ color: "#007CFA", fontWeight: "bold" }}>Fecha: </Text>
+        <Text style={{ color: Constantes.COLOR_AZUL, fontWeight: "bold" }}>
+          Fecha:{" "}
+        </Text>
         <Text>{fecha_evento}</Text>
       </View>
     </View>
@@ -105,6 +108,6 @@ const styles = StyleSheet.create({
   titulo: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "#007CFA",
+    color: Constantes.COLOR_AZUL,
   },
 });

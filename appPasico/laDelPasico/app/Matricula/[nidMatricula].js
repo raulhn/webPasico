@@ -7,14 +7,15 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { useLocalSearchParams } from "expo-router";
-import { useMatriculasAsignaturaPersona } from "../../hooks/personas/useMatriculasAsignaturaPersona.js"; // Asegúrate de que la ruta sea correcta
+import { useMatriculasAsignaturaPersona } from "../../hooks/personas/useMatriculasAsignaturaPersona.js";
 import { AuthContext } from "../../providers/AuthContext";
 import { useContext } from "react";
-import CardAsignatura from "../../componentes/componentesEscuela/CardAsignatura.jsx"; // Asegúrate de que la ruta sea correcta
+import CardAsignatura from "../../componentes/componentesEscuela/CardAsignatura.jsx";
 import {
   Boton,
   MenuDesplegable,
-} from "../../componentes/componentesUI/ComponentesUI.jsx"; // Asegúrate de que la ruta sea correcta
+} from "../../componentes/componentesUI/ComponentesUI.jsx";
+import Constantes from "../../config/constantes.js";
 
 export default function Matricula() {
   const { nidMatricula } = useLocalSearchParams();
@@ -101,6 +102,6 @@ const estilos = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     margin: 8,
-    color: "#007CFA",
+    color: Constantes.COLOR_AZUL,
   },
 });

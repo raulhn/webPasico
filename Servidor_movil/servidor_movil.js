@@ -165,9 +165,10 @@ app.get(
   servletTipoTablon.obtenerTipoTablon
 );
 
+app.get("/obtener_tablon_anuncios", servletTablonAnuncios.obtenerAnuncios);
 app.get(
-  "/obtener_tablon_anuncios",
-  servletTablonAnuncios.obtenerTablonesAnuncios
+  "/obtener_anuncio/:nid_tablon_anuncio",
+  servletTablonAnuncios.obtenerAnuncio
 );
 
 ///////////////////////////////////////////////

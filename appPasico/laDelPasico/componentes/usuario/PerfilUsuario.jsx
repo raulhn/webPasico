@@ -17,8 +17,6 @@ export default function PerfilUsuario() {
         "No hay usuario, redirigiendo a la pantalla de inicio de sesión"
       );
       router.replace("/(tabs)/(drawer)"); // Redirige a la pantalla de inicio de sesión si no hay usuario}
-    } else {
-      console.log("Usuario:", usuario); // Muestra el usuario en la consola
     }
   }, [usuario]);
 

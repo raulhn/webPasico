@@ -2,6 +2,7 @@ import { View } from "react-native";
 import { StyleSheet } from "react-native";
 import { Stack } from "expo-router";
 import { Image } from "react-native";
+import Constantes from "../../config/constantes.js";
 
 export default function PaginaLayout() {
   return (
@@ -17,14 +18,13 @@ export default function PaginaLayout() {
           title: "Evaluaciones",
           headerTitleAlign: "center", // Centra el título del encabezado
           headerStyle: {
-            backgroundColor: "#007CFA", // Color de fondo del encabezado
+            backgroundColor: Constantes.COLOR_AZUL, // Color de fondo del encabezado
           },
           headerTintColor: "#fff", // Color del texto del encabezado
           headerTitleStyle: {
             fontWeight: "bold", // Estilo del título
           },
         })} // Oculta el encabezado para esta pantalla
-        title=""
       />
     </Stack>
   );

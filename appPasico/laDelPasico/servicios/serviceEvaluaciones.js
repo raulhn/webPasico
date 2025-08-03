@@ -1,5 +1,5 @@
 const serviceComun = require("./serviceComun.js");
-const Constantes = require("../constantes.js");
+import Constantes from "../config/constantes.js";
 
 function obtenerEvaluaciones(nidMatricula, cerrarSesion) {
   return new Promise((resolve, reject) => {
@@ -32,7 +32,7 @@ function generarBoletin(nidMatricula, nidTrimestre, cerrarSesion) {
       )
       .then((response) => {
         console.log("Generar boletín response:");
-        console.log(response);
+
         resolve(response);
       })
       .catch((error) => {

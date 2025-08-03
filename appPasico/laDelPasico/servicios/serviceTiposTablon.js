@@ -1,5 +1,5 @@
 const serviceComun = require("./serviceComun.js");
-const Constantes = require("../constantes.js");
+const Constantes = require("../config/constantes.js");
 
 async function obtenerTiposTablon(cerrarSesion) {
   try {

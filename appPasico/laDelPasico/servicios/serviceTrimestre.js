@@ -1,5 +1,5 @@
 const serviceComun = require("./serviceComun.js");
-const Constantes = require("../constantes.js");
+const Constantes = require("../config/constantes.js");
 
 function obtenerTrimestres(cerrarSesion) {
   return new Promise((resolve, reject) => {

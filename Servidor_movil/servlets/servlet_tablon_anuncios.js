@@ -13,9 +13,10 @@ async function tienePermisosEscuela(req, res) {
 
     const bAdministrador = await servlet_comun.comprobarRol(
       req,
+      res,
       rolAdministrador
     );
-    const bProfesor = await servlet_comun.comprobarRol(req, rolProfesor);
+    const bProfesor = await servlet_comun.comprobarRol(req, res, rolProfesor);
 
     if (!bAdministrador && !bProfesor) {
       return false;
@@ -44,10 +45,19 @@ async function compruebaPermisos(req, res, nidTipoTablon) {
   const rolAdministrador = [constantes.ADMINISTRADOR];
 
   const bPermisosEscuela = await tienePermisosEscuela(req, res);
-  const bPermisosBanda = await servlet_comun.comprobarRol(req, rolBanda);
+  const bPermisosBanda = await servlet_comun.comprobarRol(req, res, rolBanda);
   const bPermisosAdministrador = await servlet_comun.comprobarRol(
     req,
+    res,
     rolAdministrador
+  );
+
+  console.log(
+    "servlet_tablon_anuncios.js -> compruebaPermisos: ",
+    nidTipoTablon,
+    bPermisosEscuela,
+    bPermisosBanda,
+    bPermisosAdministrador
   );
 
   return (
@@ -60,12 +70,17 @@ async function compruebaPermisos(req, res, nidTipoTablon) {
 
 async function insertarTablonAnuncio(req, res) {
   try {
+    console.log(
+      "servlet_tablon_anuncios.js -> insertarTablonAnuncio: ",
+      req.body
+    );
     const titulo = req.body.titulo;
     const descripcion = req.body.descripcion;
     const nidTipoTablon = req.body.nid_tipo_tablon;
 
     const bPermisos = await compruebaPermisos(req, res, nidTipoTablon);
 
+    console.log("bPermisos: ", bPermisos);
     if (!bPermisos) {
       res.status(403).send({
         error: true,
@@ -176,7 +191,7 @@ async function obtenerAnuncios(req, res) {
   }
 }
 
-async function obtenerTablonAnuncio(req, res) {
+async function obtenerAnuncio(req, res) {
   try {
     const nid_tablon_anuncio = req.params.nid_tablon_anuncio;
 
@@ -189,9 +204,15 @@ async function obtenerTablonAnuncio(req, res) {
       tabloneAnuncio.nid_tipo_tablon
     );
 
+    console.log(
+      "servlet_tablon_anuncios.js -> obtenerTablonAnuncio: ",
+      bTienePermisos,
+      tabloneAnuncio.nid_tipo_tablon
+    );
+
     if (
-      !bTienePermisos ||
-      tabloneAnuncio.nid_tipo_tablon == constantes.GENERAL
+      !bTienePermisos &&
+      tabloneAnuncio.nid_tipo_tablon != constantes.GENERAL
     ) {
       res.status(403).send({
         error: true,
@@ -216,4 +237,4 @@ async function obtenerTablonAnuncio(req, res) {
 module.exports.insertarTablonAnuncio = insertarTablonAnuncio;
 module.exports.actualizarTablonAnuncio = actualizarTablonAnuncio;
 module.exports.obtenerAnuncios = obtenerAnuncios;
-module.exports.obtenerTablonAnuncio = obtenerTablonAnuncio;
+module.exports.obtenerAnuncio = obtenerAnuncio;

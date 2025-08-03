@@ -1,5 +1,6 @@
 import { View, StyleSheet, Text } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
+import Constantes from "../../config/constantes.js";
 export default function CardMatricula({ Matricula }) {
   return (
     <View style={[estilos.card, { flex: 1 }]}>
@@ -7,7 +8,7 @@ export default function CardMatricula({ Matricula }) {
         <MaterialIcons
           name="person"
           size={22}
-          color="#007CFA"
+          color={Constantes.COLOR_AZUL}
           style={{ marginRight: 8 }}
         />
 
@@ -21,7 +22,7 @@ export default function CardMatricula({ Matricula }) {
         <MaterialIcons
           name="school"
           size={22}
-          color="#007CFA"
+          color={Constantes.COLOR_AZUL}
           style={{ marginRight: 8 }}
         />
 
@@ -55,7 +56,7 @@ const estilos = StyleSheet.create({
   },
   label: {
     fontSize: 16,
-    color: "#007CFA",
+    color: Constantes.COLOR_AZUL,
     fontWeight: "bold",
     marginBottom: 2,
   },

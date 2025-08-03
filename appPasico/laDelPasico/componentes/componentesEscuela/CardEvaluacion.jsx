@@ -1,4 +1,5 @@
 import { View, Text, StyleSheet } from "react-native";
+import Constantes from "../../config/constantes.js";
 
 export default function CardEvaluacion({ evaluacion }) {
   return (
@@ -34,7 +35,7 @@ const estilos = StyleSheet.create({
     padding: 18,
     marginVertical: 10,
     marginHorizontal: 16,
-    shadowColor: "#007CFA",
+    shadowColor: Constantes.COLOR_AZUL,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 6,
@@ -45,7 +46,7 @@ const estilos = StyleSheet.create({
   titulo: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#007CFA",
+    color: Constantes.COLOR_AZUL,
 
     letterSpacing: 0.5,
   },
@@ -62,7 +63,7 @@ const estilos = StyleSheet.create({
   },
   notaValor: {
     fontSize: 17,
-    color: "#007CFA",
+    color: Constantes.COLOR_AZUL,
     fontWeight: "bold",
     backgroundColor: "#eaf2fb",
     paddingHorizontal: 8,
@@ -78,7 +79,7 @@ const estilos = StyleSheet.create({
   },
   comentarioLabel: {
     fontSize: 13,
-    color: "#007CFA",
+    color: Constantes.COLOR_AZUL,
     fontWeight: "bold",
     marginBottom: 2,
   },
@@ -94,7 +95,7 @@ const estilos = StyleSheet.create({
   },
   infoLabel: {
     fontSize: 14,
-    color: "#007CFA",
+    color: Constantes.COLOR_AZUL,
     fontWeight: "bold",
   },
   infoValue: {

@@ -1,4 +1,4 @@
-const Constantes = require("../constantes.js");
+import Constantes from "../config/constantes.js";
 
 function recuperarComponentes(nidPagina) {
   return new Promise((resolve, reject) => {

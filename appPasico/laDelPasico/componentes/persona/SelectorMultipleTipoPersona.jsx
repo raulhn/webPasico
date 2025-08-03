@@ -2,6 +2,7 @@ import { View, StyleSheet } from "react-native";
 import { BotonFixed } from "../componentesUI/ComponentesUI";
 import { useEffect, useState } from "react";
 import SelectorTipoPersona from "./SelectorTipoPersona";
+import Constantes from "../../config/constantes.js";
 
 export default function SelectorMultipleTipoPersona({
   tiposEventos,
@@ -91,7 +92,7 @@ const estilos = StyleSheet.create({
   titulo: {
     fontSize: 24, // Tamaño de fuente grande
     fontWeight: "bold", // Negrita para destacar
-    color: "#007CFA", // Color azul para resaltar
+    color: Constantes.COLOR_AZUL, // Color azul para resaltar
     marginBottom: 20, // Espacio debajo del título
     textAlign: "center", // Centrado horizontalmente
   },

@@ -1,5 +1,5 @@
 const serviceComun = require("./serviceComun");
-const constantes = require("../constantes");
+const constantes = require("../config/constantes");
 
 function registrarPartitura(partitura, cerrarSesion) {
   return new Promise((resolve, reject) => {

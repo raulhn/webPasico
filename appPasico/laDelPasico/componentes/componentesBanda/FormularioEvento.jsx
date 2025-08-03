@@ -5,9 +5,8 @@ import { AuthContext } from "../../providers/AuthContext";
 import { useContext } from "react";
 import serviceEventoConcierto from "../../servicios/serviceEventoConcierto"; // Asegúrate de importar tu servicio correctamente
 
-import { BotonFixed, ModalExito } from "../componentesUI/ComponentesUI";
-import SelectorTipoPersona from "../persona/SelectorTipoPersona";
 import SelectorMultipleTipoPersona from "../persona/SelectorMultipleTipoPersona";
+import Constantes from "../../config/constantes.js";
 
 import {
   EntradaTexto,
@@ -268,7 +267,7 @@ const estilos = StyleSheet.create({
   titulo: {
     fontSize: 24, // Tamaño de fuente grande
     fontWeight: "bold", // Negrita para destacar
-    color: "#007CFA", // Color azul para resaltar
+    color: Constantes.COLOR_AZUL, // Color azul para resaltar
     marginBottom: 20, // Espacio debajo del título
     textAlign: "center", // Centrado horizontalmente
   },

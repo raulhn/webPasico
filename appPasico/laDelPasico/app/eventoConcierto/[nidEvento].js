@@ -177,7 +177,7 @@ export default function EventoConcierto() {
             setModalVisibleSelector(true);
           }}
           icon="notifications"
-          color="#007CFA"
+          color={Constantes.COLOR_AZUL}
         />
       </View>
     );
@@ -224,7 +224,7 @@ export default function EventoConcierto() {
             setModalEdicionVisible(true);
           }}
           icon="mode-edit"
-          color="#007CFA"
+          color={Constantes.COLOR_AZUL}
           size={30}
         />
       </View>
@@ -242,7 +242,7 @@ export default function EventoConcierto() {
             setError(false);
           }}
           icon="refresh"
-          color="#007CFA"
+          color={Constantes.COLOR_AZUL}
         />
       </View>
     );
@@ -279,7 +279,7 @@ export default function EventoConcierto() {
           <View style={{ flexDirection: "row", justifyContent: "flex-end" }}>
             <Text
               style={{
-                color: "#007CFA",
+                color: Constantes.COLOR_AZUL,
                 fontWeight: "bold",
               }}
             >
@@ -434,7 +434,7 @@ const estilos = StyleSheet.create({
   tituloEvento: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "#007CFA",
+    color: Constantes.COLOR_AZUL,
     marginBottom: 8,
   },
   label: {

@@ -1,6 +1,6 @@
 import serviceComponentes from "../../servicios/serviceComponentes.js";
 import { useEffect, useState } from "react";
-import constantes from "../../constantes.js";
+import constantes from "../../config/constantes.js";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Dimensions, Button } from "react-native";
 import * as ScreenOrientation from "expo-screen-orientation";

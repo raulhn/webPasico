@@ -1,5 +1,5 @@
 import React from "react";
-import constantes from "../../constantes.js";
+import constantes from "../../config/constantes.js";
 import { StyleSheet, Image, View } from "react-native";
 
 export default function ComponenteImagenGaleria(imagen) {

@@ -1,4 +1,4 @@
-import Constantes from "../constantes.js";
+import Constantes from "../config/constantes.js";
 import servicioComun from "./serviceComun.js";
 
 function obtenerPersonas(cerrar_sesion) {

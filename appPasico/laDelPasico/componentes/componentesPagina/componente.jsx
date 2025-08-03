@@ -1,7 +1,7 @@
 import { View, Image } from "react-native";
 import { StyleSheet } from "react-native";
 import ComponenteTexto from "./componenteTexto";
-import constantes from "../../constantes.js";
+import constantes from "../../config/constantes.js";
 import ComponenteGaleria from "./componenteGaleria.jsx";
 
 export default function Componente(pComponente) {

@@ -1,6 +1,6 @@
-let Constantes = require("../constantes.js");
 let servicioComun = require("./serviceComun.js");
 import * as secureStorage from "./secureStorage.js";
+import Constantes from "../config/constantes.js";
 
 function registrarUsuario(
   nombre,
@@ -93,7 +93,7 @@ function logout() {
       response
         .json()
         .then((data) => {
-secureStorage.eliminarToken("refresh_token");
+          secureStorage.eliminarToken("refresh_token");
           resolve(data);
         })
         .catch((error) => {

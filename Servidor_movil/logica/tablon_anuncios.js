@@ -90,14 +90,14 @@ function obtenerTablonAnuncio(nidTablonAnuncio) {
 function obtenerTablonesAnuncioGeneral() {
   return new Promise((resolve, reject) => {
     const sql =
-      "select * from " +
+      "select ta.*, tt.descripcion as tipo_tablon from " +
       constantes.ESQUEMA +
       ".tablon_anuncios ta, " +
       constantes.ESQUEMA +
       ".tipo_tablon tt " +
       "where ta.nid_tipo_tablon = tt.nid_tipo_tablon and " +
       "tt.nid_tipo_tablon = " +
-      constantes.GENERAL;
+      conexion.dbConn.escape(constantes.GENERAL);
 
     conexion.dbConn.query(sql, (error, results, fields) => {
       if (error) {
@@ -113,10 +113,13 @@ function obtenerTablonesAnuncioGeneral() {
 function obtenerTablonAnuncio(nidTablonAnuncio) {
   return new Promise((resolve, reject) => {
     const sql =
-      "select * from " +
+      "select ta.*, tt.descripcion as tipo_tablon from " +
       constantes.ESQUEMA +
-      ".tablon_anuncios " +
-      "where nid_tablon_anuncio = " +
+      ".tablon_anuncios ta, " +
+      constantes.ESQUEMA +
+      ".tipo_tablon tt " +
+      "where ta.nid_tipo_tablon = tt.nid_tipo_tablon and " +
+      " ta.nid_tablon_anuncio = " +
       conexion.dbConn.escape(nidTablonAnuncio);
 
     conexion.dbConn.query(sql, (error, results, fields) => {

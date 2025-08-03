@@ -9,8 +9,8 @@ import {
 } from "react-native";
 import { Link } from "expo-router";
 
-const constantes = require("../constantes.js");
-const url_imagen = constantes.URL_SERVICIO + "imagen_url/";
+import Constantes from "../config/constantes";
+const url_imagen = Constantes.URL_SERVICIO + "imagen_url/";
 
 export function CardBlog({ noticia }) {
   const [imageHeight, setImageHeight] = useState(200); // Altura inicial predeterminada
