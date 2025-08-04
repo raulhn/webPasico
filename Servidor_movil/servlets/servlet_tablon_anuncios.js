@@ -123,6 +123,8 @@ async function actualizarTablonAnuncio(req, res) {
     const descripcion = req.body.descripcion;
     const nidTipoTablon = req.body.nid_tipo_tablon;
     const nid_tablon_anuncio = req.body.nid_tablon_anuncio;
+    const nid_tablon_anuncio_asignatura =
+      req.body.nid_tablon_anuncio_asignatura;
 
     const bPermisos = await compruebaPermisos(req, res, nidTipoTablon);
 
@@ -135,7 +137,7 @@ async function actualizarTablonAnuncio(req, res) {
     }
 
     await gestorTablonAnuncios.actualizarTablonAnuncio(
-      nid_tablon_anuncio_asignatura,
+      nid_tablon_anuncio,
       titulo,
       descripcion,
       nidTipoTablon
@@ -146,7 +148,6 @@ async function actualizarTablonAnuncio(req, res) {
         req.body.nid_tablon_anuncio_asignatura;
       const nid_asignatura = req.body.nid_asignatura;
 
-      // Se actualiza el anuncio de la asignatura
       await gestorTablonAnuncionsAsignatura.actualizarTablonAnuncioAsignatura(
         nid_tablon_anuncio_asignatura,
         nid_tablon_anuncio,

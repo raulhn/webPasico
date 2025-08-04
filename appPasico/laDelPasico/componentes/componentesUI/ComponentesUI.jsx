@@ -15,7 +15,7 @@ import {
 import { useState, useEffect } from "react";
 import { Link } from "expo-router";
 
-import { ScrollView } from "react-native-gesture-handler";
+import { ScrollView } from "react-native";
 import Constantes from "../../config/constantes.js";
 
 export function Boton({

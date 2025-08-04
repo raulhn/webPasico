@@ -57,8 +57,12 @@ export const useTablonAnuncio = (nidAnuncio) => {
           setCargando(false);
           setRefrescar(false);
         });
+    } else {
+      setAnuncio(null);
+      setCargando(false);
+      setError(null);
     }
-  }, [nidAnuncio]);
+  }, [nidAnuncio, refrescar]);
 
   return { anuncio, cargando, error, refrescar, lanzarRefresco };
 };
