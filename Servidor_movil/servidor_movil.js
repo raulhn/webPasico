@@ -302,6 +302,11 @@ app.post(
   servletTablonAnuncios.insertarTablonAnuncio
 );
 
+app.post(
+  "/actualizar_tablon_anuncio",
+  servletTablonAnuncios.actualizarTablonAnuncio
+);
+
 https
   .createServer(
     {

@@ -5,16 +5,30 @@ import {
   ScrollView,
   RefreshControl,
   StyleSheet,
+  Modal,
 } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import { useTablonAnuncio } from "../../hooks/useTablonAnuncios";
 import Constantes from "../../config/constantes.js";
-
+import { BotonFixed } from "../../componentes/componentesUI/ComponentesUI.jsx";
+import { useRol } from "../../hooks/useRol.js";
+import FormularioTablon from "../../componentes/componentesTablon/formularioTablon.jsx";
+import { useState } from "react";
 export default function Anuncio() {
   const { nidAnuncio } = useLocalSearchParams();
-
+  const { esRol } = useRol();
   const { anuncio, cargando, error, refrescar, lanzarRefresco } =
     useTablonAnuncio(nidAnuncio);
+  const [modalVisible, setModalVisible] = useState(false);
+  function formatearFecha(fechaISO) {
+    if (!fechaISO) return "";
+    const fecha = new Date(fechaISO);
+    return fecha.toLocaleDateString("es-ES", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+  }
 
   if (cargando) {
     return (
@@ -28,15 +42,48 @@ export default function Anuncio() {
     <ScrollView
       contentContainerStyle={styles.container}
       refreshControl={
-        <RefreshControl refreshing={cargando} onRefresh={lanzarRefresco} />
+        <RefreshControl refreshing={refrescar} onRefresh={lanzarRefresco} />
       }
     >
       <Text style={styles.titulo}>{anuncio.titulo}</Text>
-      <Text style={styles.fecha}>{anuncio.fecha_creacion}</Text>
+      <Text style={styles.fecha}>{formatearFecha(anuncio.fecha_creacion)}</Text>
       <Text style={styles.tipo}>{anuncio.tipo_tablon}</Text>
       <View style={styles.descripcionBox}>
         <Text style={styles.descripcion}>{anuncio.descripcion}</Text>
       </View>
+
+      <View
+        style={[
+          esRol(["ADMINISTRADOR", "DIRECTOR"])
+            ? { display: "flex" }
+            : { display: "none" },
+          styles.botonEditar,
+        ]}
+      >
+        <BotonFixed
+          onPress={() => {
+            setModalVisible(true);
+          }}
+          icon="mode-edit"
+        />
+      </View>
+
+      <Modal
+        animationType="slide"
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(false);
+        }}
+      >
+        <FormularioTablon
+          accionCancelar={() => setModalVisible(false)}
+          callback={() => {
+            setModalVisible(false);
+            lanzarRefresco();
+          }}
+          nidTablonAnuncionDefecto={anuncio.nid_tablon_anuncio}
+        />
+      </Modal>
     </ScrollView>
   );
 }
@@ -86,4 +133,5 @@ const styles = StyleSheet.create({
     color: "#333",
     lineHeight: 22,
   },
+  botonEditar: { position: "absolute", bottom: 30, right: 20 },
 });

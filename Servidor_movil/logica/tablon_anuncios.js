@@ -46,7 +46,7 @@ function actualizarTablonAnuncio(
       conexion.dbConn.escape(titulo) +
       ", descripcion = " +
       conexion.dbConn.escape(descripcion) +
-      ", nidTipoTablon = " +
+      ", nid_tipo_tablon = " +
       conexion.dbConn.escape(nidTipoTablon) +
       " where nid_tablon_anuncio = " +
       conexion.dbConn.escape(nidTablonAnuncio);

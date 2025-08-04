@@ -62,6 +62,22 @@ async function registrarTablonAnuncio(anuncio, cerrarSesion) {
   }
 }
 
+async function actualizarTablonAnuncio(anuncio, cerrarSesion) {
+  try {
+    const data = await serviceComun.peticionSesion(
+      "POST",
+      Constantes.URL_SERVICIO_MOVIL + "actualizar_tablon_anuncio",
+      anuncio,
+      cerrarSesion
+    );
+
+    return data;
+  } catch (error) {
+    throw new Error("Error en el servicio actualizarTablonAnuncio");
+  }
+}
+
 module.exports.obtenerAnuncios = obtenerAnuncios;
 module.exports.obtenerAnuncio = obtenerAnuncio;
 module.exports.registrarTablonAnuncio = registrarTablonAnuncio;
+module.exports.actualizarTablonAnuncio = actualizarTablonAnuncio;
