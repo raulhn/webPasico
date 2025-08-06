@@ -99,6 +99,55 @@ async function registrarUsuario(
   }
 }
 
+async function permisosMusico(nid_persona) {
+  try {
+    let esMusico = await gestorMusicos.esMusico(nid_persona);
+    if (esMusico) {
+      return true;
+    } else {
+      //Compruebo si es padre de musico, no tengo en cuenta los hijos que ya son socios
+      let esPadreMusico = await gestorMusicos.esPadreMusico(nid_persona, false);
+      if (esPadreMusico) {
+        return true;
+      }
+    }
+    return false;
+  } catch (error) {
+    console.error(
+      "usuario.js -> permisosMusico: Error al comprobar permisos de músico:",
+      error.message
+    );
+    throw new Error("Error al comprobar permisos de músico");
+  }
+}
+
+async function permisosEscuela(nid_persona) {
+  try {
+    const bEsAlumno = await gestorMatriculas.esAlumno(nid_persona);
+
+    if (bEsAlumno) {
+      return true;
+    } else {
+      //Comprueba si la persona es padre de alumno sin tener en cuenta alumnos que sean socios
+
+      const bEsPadreAlumno = await gestorMatriculas.esPadreAlumno(
+        nid_persona,
+        false
+      );
+      if (bEsPadreAlumno) {
+        return true;
+      }
+    }
+    return false;
+  } catch (error) {
+    console.error(
+      "usuario.js -> permisosEscuela: Error al comprobar permisos de escuela:",
+      error
+    );
+    throw new Error("Error al comprobar permisos de escuela");
+  }
+}
+
 async function construirRoles(nid_usuario) {
   try {
     const rolesExistentes = await gestorRoles.obtenerRoles(nid_usuario);
@@ -119,35 +168,17 @@ async function construirRoles(nid_usuario) {
     }
 
     // Rol Musico //
-    let esMusico = await gestorMusicos.esMusico(persona.nid_persona);
+    let esMusico = await permisosMusico(persona.nid_persona);
+
     if (esMusico) {
       roles.push({ rol: "MUSICO" });
-    } else {
-      //Compruebo si es padre de musico, no tengo en cuenta los hijos que ya son socios
-      let esPadreMusico = await gestorMusicos.esPadreMusico(
-        persona.nid_persona,
-        false
-      );
-      if (esPadreMusico) {
-        roles.push({ rol: "MUSICO" });
-      }
     }
 
     // Rol Alumno //
-    const bEsAlumno = await gestorMatriculas.esAlumno(persona.nid_persona);
+    const bEsAlumno = await permisosEscuela(persona.nid_persona);
 
     if (bEsAlumno) {
       roles.push({ rol: "ALUMNO" });
-    } else {
-      //Comprueba si la persona es padre de alumno sin tener en cuenta alumnos que sean socios
-
-      const bEsPadreAlumno = await gestorMatriculas.esPadreAlumno(
-        persona.nid_persona,
-        false
-      );
-      if (bEsPadreAlumno) {
-        roles.push({ rol: "ALUMNO" });
-      }
     }
 
     // Rol Profesor //
@@ -400,3 +431,6 @@ module.exports.obtenerUsuario = obtenerUsuario;
 module.exports.recuperarPassword = recuperarPassword;
 module.exports.realizarCambioPassword = realizarCambioPassword;
 module.exports.obtenerUsuarios = obtenerUsuarios;
+
+module.exports.permisosMusico = permisosMusico;
+module.exports.permisosEscuela = permisosEscuela;
