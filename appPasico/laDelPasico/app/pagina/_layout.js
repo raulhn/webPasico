@@ -3,6 +3,7 @@ import { StyleSheet } from "react-native";
 import { Stack } from "expo-router";
 import { Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Constantes from "../../config/constantes.js";
 
 export default function PaginaLayout() {
   return (
@@ -16,6 +17,14 @@ export default function PaginaLayout() {
         name="[nidPagina]" // Nombre de la pantalla principal
         options={({ route }) => ({
           title: `${route.params?.titulo || ""}`,
+          headerTitleAlign: "center", // Centra el título del encabezado
+          headerStyle: {
+            backgroundColor: Constantes.COLOR_AZUL, // Color de fondo del encabezado
+          },
+          headerTintColor: "#fff", // Color del texto del encabezado
+          headerTitleStyle: {
+            fontWeight: "bold", // Estilo del título
+          },
         })} // Oculta el encabezado para esta pantalla
       />
     </Stack>

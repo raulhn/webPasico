@@ -87,7 +87,7 @@ function obtenerTablonAnuncio(nidTablonAnuncio) {
   });
 }
 
-function obtenerTablonesAnuncioGeneral() {
+function obtenerTablonesAnuncio(tipo) {
   return new Promise((resolve, reject) => {
     const sql =
       "select ta.*, tt.descripcion as tipo_tablon from " +
@@ -97,11 +97,100 @@ function obtenerTablonesAnuncioGeneral() {
       ".tipo_tablon tt " +
       "where ta.nid_tipo_tablon = tt.nid_tipo_tablon and " +
       "tt.nid_tipo_tablon = " +
-      conexion.dbConn.escape(constantes.GENERAL);
+      conexion.dbConn.escape(tipo);
 
     conexion.dbConn.query(sql, (error, results, fields) => {
       if (error) {
         console.log("tablon_anuncios.js -> obtenerTablonesAnuncion: ", error);
+        reject("Se ha producido un error al recuperar los tablones");
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
+
+function obtenerTablonesAnuncio() {
+  return new Promise((resolve, reject) => {
+    const sql =
+      "select ta.*, tt.descripcion as tipo_tablon from " +
+      constantes.ESQUEMA +
+      ".tablon_anuncios ta, " +
+      constantes.ESQUEMA +
+      ".tipo_tablon tt " +
+      "where ta.nid_tipo_tablon = tt.nid_tipo_tablon";
+
+    conexion.dbConn.query(sql, (error, results, fields) => {
+      if (error) {
+        console.log("tablon_anuncios.js -> obtenerTablonesAnuncio: ", error);
+        reject("Se ha producido un error al recuperar los tablones");
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
+
+async function obtenerTablonesAnuncioGeneral() {
+  try {
+    const anuncios = await obtenerTablonesAnuncio(constantes.GENERAL);
+    return anuncios;
+  } catch (error) {
+    console.log("tablon_anuncios.js -> obtenerTablonesAnuncioGeneral: ", error);
+    throw new Error(
+      "Se ha producido un error al recuperar los tablones generales"
+    );
+  }
+}
+
+async function obtenerTablonesAnuncioBanda() {
+  try {
+    const anuncios = await obtenerTablonesAnuncio(constantes.BANDA);
+    return anuncios;
+  } catch (error) {
+    console.log("tablon_anuncios.js -> obtenerTablonesAnuncioBanda: ", error);
+    throw new Error(
+      "Se ha producido un error al recuperar los tablones de banda"
+    );
+  }
+}
+
+async function obtenerTablonesAnuncioAsociacion() {
+  try {
+    const anuncios = await obtenerTablonesAnuncio(constantes.ASOCIACION);
+    return anuncios;
+  } catch (error) {
+    console.log(
+      "tablon_anuncios.js -> obtenerTablonesAnuncioAsociacion: ",
+      error
+    );
+    throw new Error(
+      "Se ha producido un error al recuperar los tablones de asociación"
+    );
+  }
+}
+
+function obtenerTablonesAnuncioEscuela() {
+  return new Promise((resolve, reject) => {
+    const sql =
+      "select ta.*, tt.descripcion as tipo_tablon, taa.nid_asignatura, taa.nid_curso from " +
+      constantes.ESQUEMA +
+      ".tablon_anuncios ta, " +
+      constantes.ESQUEMA +
+      ".tipo_tablon tt, " +
+      constantes.ESQUEMA +
+      ".tablon_anuncios_asignatura taa " +
+      "where ta.nid_tipo_tablon = tt.nid_tipo_tablon and " +
+      "taa.nid_tablon_anuncio = ta.nid_tablon_anuncio and " +
+      "tt.nid_tipo_tablon = " +
+      conexion.dbConn.escape(constantes.ESCUELA);
+
+    conexion.dbConn.query(sql, (error, results, fields) => {
+      if (error) {
+        console.log(
+          "tablon_anuncios.js -> obtenerTablonesAnuncioEscuela: ",
+          error
+        );
         reject("Se ha producido un error al recuperar los tablones");
       } else {
         resolve(results);
@@ -161,6 +250,11 @@ function obtenerTablonesAnuncioTipo(nidTipoTablon) {
 module.exports.insertarTablonAnuncio = insertarTablonAnuncio;
 module.exports.actualizarTablonAnuncio = actualizarTablonAnuncio;
 module.exports.obtenerTablonAnuncio = obtenerTablonAnuncio;
+module.exports.obtenerTablonesAnuncio = obtenerTablonesAnuncio;
 module.exports.obtenerTablonesAnuncioGeneral = obtenerTablonesAnuncioGeneral;
+module.exports.obtenerTablonesAnuncioBanda = obtenerTablonesAnuncioBanda;
+module.exports.obtenerTablonesAnuncioAsociacion =
+  obtenerTablonesAnuncioAsociacion;
+module.exports.obtenerTablonesAnuncioEscuela = obtenerTablonesAnuncioEscuela;
 module.exports.obtenerTablonesAnuncioTipo = obtenerTablonesAnuncioTipo;
 module.exports.obtenerTablonAnuncio = obtenerTablonAnuncio;
