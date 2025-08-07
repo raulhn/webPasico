@@ -60,14 +60,6 @@ async function compruebaPermisos(req, res, nidTipoTablon) {
     rolAdministrador
   );
 
-  console.log(
-    "servlet_tablon_anuncios.js -> compruebaPermisos: ",
-    nidTipoTablon,
-    bPermisosEscuela,
-    bPermisosBanda,
-    bPermisosAdministrador
-  );
-
   return (
     (nidTipoTablon == constantes.ESCUELA && bPermisosEscuela) ||
     (nidTipoTablon == constantes.BANDA && bPermisosBanda) ||
@@ -78,10 +70,6 @@ async function compruebaPermisos(req, res, nidTipoTablon) {
 
 async function insertarTablonAnuncio(req, res) {
   try {
-    console.log(
-      "servlet_tablon_anuncios.js -> insertarTablonAnuncio: ",
-      req.body
-    );
     const titulo = req.body.titulo;
     const descripcion = req.body.descripcion;
     const nidTipoTablon = req.body.nid_tipo_tablon;
@@ -101,10 +89,6 @@ async function insertarTablonAnuncio(req, res) {
       nidTipoTablon
     );
 
-    console.log(
-      "servlet_tablon_anuncios.js -> insertarTablonAnuncio: nidTipoTablon: ",
-      nidTipoTablon
-    );
     if (nidTipoTablon == constantes.ESCUELA) {
       const nid_asignatura = req.body.nid_asignatura;
 
@@ -197,16 +181,7 @@ async function permisosAnuncioAsignatura(nid_persona, anuncio_asignatura) {
       anuncio_asignatura.nid_curso
     );
 
-    console.log(
-      "servlet_tablon_anuncios.js -> permisosAnuncioAsignatura: ",
-      bEsAlumno
-    );
     if (bEsAlumno) {
-      console.log(
-        "servlet_tablon_anuncios.js -> permisosAnuncioAsignatura: Es alumno",
-        nid_persona,
-        anuncio_asignatura
-      );
       return true;
     } else {
       const hijos = await gestorPersonas.obtenerHijos(nid_persona);
@@ -219,11 +194,6 @@ async function permisosAnuncioAsignatura(nid_persona, anuncio_asignatura) {
             anuncio_asignatura.nid_curso
           );
         if (bEsAlumnoHijo) {
-          console.log(
-            "servlet_tablon_anuncios.js -> permisosAnuncioAsignatura: Es alumno",
-            hijo.nid_persona,
-            anuncio_asignatura
-          );
           return true;
         }
       }
@@ -311,12 +281,6 @@ async function obtenerAnuncio(req, res) {
     const bTienePermisos = await compruebaPermisos(
       req,
       res,
-      tabloneAnuncio.nid_tipo_tablon
-    );
-
-    console.log(
-      "servlet_tablon_anuncios.js -> obtenerTablonAnuncio: ",
-      bTienePermisos,
       tabloneAnuncio.nid_tipo_tablon
     );
 
