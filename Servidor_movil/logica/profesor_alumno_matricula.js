@@ -185,7 +185,7 @@ async function obtenerAlumnosProfesorCursoActual(nid_profesor) {
     const cursoActivo = await gestorCurso.obtenerCursoActivo();
     const alumnos = await obtenerAlumnosProfesor(
       nid_profesor,
-      cursoActivo[0].nid_curso
+      cursoActivo.nid_curso
     );
     return alumnos;
   } catch (error) {

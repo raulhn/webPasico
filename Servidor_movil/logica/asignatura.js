@@ -3,13 +3,12 @@ const conexion = require("../conexion");
 
 function formatDateToMySQL(date) {
   try {
-  const d = new Date(date);
-  return d.toISOString().slice(0, 19).replace('T', ' ');
+    const d = new Date(date);
+    return d.toISOString().slice(0, 19).replace("T", " ");
   } catch (error) {
     return null;
   }
 }
-
 
 function insertarAsignatura(
   nid_asignatura,
@@ -162,4 +161,23 @@ async function registrarAsignatura(
   }
 }
 
+function obtenerAsignaturas() {
+  return new Promise((resolve, reject) => {
+    const sql =
+      "select * from " +
+      constantes.ESQUEMA +
+      ".asignaturas order by descripcion";
+
+    conexion.dbConn.query(sql, (error, results) => {
+      if (error) {
+        console.log("Error al obtener las asignaturas: ", error);
+        reject(new Error("Error al obtener las asignaturas"));
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
+
 module.exports.registrarAsignatura = registrarAsignatura;
+module.exports.obtenerAsignaturas = obtenerAsignaturas;

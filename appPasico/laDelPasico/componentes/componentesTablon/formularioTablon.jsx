@@ -10,6 +10,8 @@ import {
   ModalAviso,
 } from "../componentesUI/ComponentesUI.jsx";
 const ServiceTablon = require("../../servicios/serviceTablon.js");
+import { useAsignaturas } from "../../hooks/escuela/useAsignaturas.js";
+import Constantes from "../../config/constantes.js";
 
 export default function FormularioTablon({
   accionCancelar,
@@ -21,7 +23,6 @@ export default function FormularioTablon({
   const [titulo, setTitulo] = useState("");
 
   const [aviso, setAviso] = useState(false);
-  const [exito, setExito] = useState(false);
 
   const [mensaje, setMensaje] = useState("");
 
@@ -37,7 +38,18 @@ export default function FormularioTablon({
     descripcion: "",
   });
 
+  const [asignaturaSeleccionada, setAsignaturaSeleccionada] = useState({
+    valor: null,
+    etiqueta: "",
+  });
+
   const { tiposTablon, cargando, error } = useTipoTablon(cerrarSesion);
+  const {
+    asignaturas,
+    cargando: cargandoAsignaturas,
+    error: errorAsignaturas,
+    lanzarRefresco,
+  } = useAsignaturas();
 
   function CapitalCase(val) {
     return (
@@ -63,11 +75,17 @@ export default function FormularioTablon({
     etiqueta: CapitalCase(tipo.descripcion),
   }));
 
+  const listaAsignaturas = asignaturas.map((asignatura) => ({
+    valor: asignatura.nid_asignatura,
+    etiqueta: CapitalCase(asignatura.descripcion),
+  }));
+
   async function registrarTablonAnuncio() {
     const anuncioEnvio = {
       titulo: titulo,
       descripcion: descripcion,
       nid_tipo_tablon: tipoTablon.valor,
+      nid_asignatura: asignaturaSeleccionada.valor,
     };
 
     try {
@@ -88,6 +106,7 @@ export default function FormularioTablon({
       if (!respuesta.error) {
         callback(respuesta.nid_tipo_tablon);
         setExito(true);
+        callbackRefresco();
       } else {
         setMensaje("Error al registrar el tipo de tablón");
         setAviso(true);
@@ -122,6 +141,7 @@ export default function FormularioTablon({
 
       if (!respuesta.error) {
         callback(respuesta.nid_tipo_tablon);
+        callbackRefresco();
         setExito(true);
       } else {
         setMensaje("Error al actualizar el tipo de tablón");
@@ -137,6 +157,21 @@ export default function FormularioTablon({
     return <ActivityIndicator size="large" color="#0000ff" />;
   }
 
+  function muestraAsignaturas() {
+    if (tipoTablon.valor === Constantes.ESCUELA) {
+      return (
+        <>
+          <Text>Asignatura</Text>
+          <EntradaGroupRadioButton
+            titulo="Asignatura"
+            opciones={listaAsignaturas}
+            valor={asignaturaSeleccionada}
+            setValorSeleccionado={(valor) => setAsignaturaSeleccionada(valor)}
+          />
+        </>
+      );
+    }
+  }
   return (
     <View style={estilos.container}>
       <Text style={estilos.titulo}>Registrar Anuncio</Text>
@@ -150,6 +185,9 @@ export default function FormularioTablon({
         valor={tipoTablon}
         setValorSeleccionado={(valor) => setTipoTablon(valor)}
       />
+
+      {muestraAsignaturas()}
+
       <Text style={{ paddingTop: 10 }}>Descripción</Text>
       <EntradaTexto
         label="Descripción"
@@ -160,6 +198,7 @@ export default function FormularioTablon({
         ancho={300}
         alto={100}
       />
+
       <View style={estilos.botonContainer}>
         <Boton
           nombre="Guardar"
