@@ -12,6 +12,7 @@ import {
   EntradaTexto,
   EntradaFecha,
   Boton,
+  ModalExito,
 } from "../componentesUI/ComponentesUI";
 
 export default function FormularioEvento({ cancelar, callback, nidEvento }) {

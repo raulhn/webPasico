@@ -1,4 +1,4 @@
-import { View, Text, Modal } from "react-native";
+import { View, Text, Modal, FlatList } from "react-native";
 
 import { useTipoTablon } from "../../../hooks/useTipoTablon";
 import { useContext, useState } from "react";
@@ -11,7 +11,7 @@ import {
   Boton,
 } from "../../../componentes/componentesUI/ComponentesUI";
 import { StyleSheet, RefreshControl, Pressable } from "react-native";
-import { FlatList } from "react-native-gesture-handler";
+
 import CardAnuncio from "../../../componentes/componentesTablon/cardAnuncio.jsx";
 
 import { Link } from "expo-router";
@@ -52,6 +52,7 @@ export default function Tablon() {
   return (
     <View style={styles.container}>
       <FlatList
+        style={{ flex: 1 }}
         data={tablonAnuncios}
         keyExtractor={(item) => item.nid_tablon_anuncio.toString()}
         renderItem={({ item }) => (
@@ -89,8 +90,8 @@ export default function Tablon() {
           <RefreshControl
             refreshing={refrescarAnuncios}
             onRefresh={() => {
-              setPresionado(null); // Cambia el estado a no presionado al hacer scroll
-              lanzarRefrescoAnuncios(); // Cambia el estado de refresco
+              setPresionado(null);
+              lanzarRefrescoAnuncios();
             }}
           />
         }
@@ -124,7 +125,7 @@ export default function Tablon() {
           accionCancelar={() => setModalVisible(false)}
           callback={() => {
             setModalVisible(false);
-            lanzarRefresco();
+            lanzarRefrescoAnuncios();
           }}
           nidTipoTablon={null}
         />
@@ -135,12 +136,11 @@ export default function Tablon() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1, // Asegura que el contenedor ocupe todo el espacio disponible
     backgroundColor: "white",
     justifyContent: "center",
+    flex: 1,
   },
   cargandoContainer: {
-    flex: 1, // Centra el indicador de carga en la pantalla
     justifyContent: "center",
     alignItems: "center",
   },
@@ -150,9 +150,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginVertical: 10,
   },
-  flatListContent: {
-    flexGrow: 1, // Permite que la lista crezca dinámicamente
-  },
+
   tarjetaPresionada: {
     transform: [{ scale: 1.05 }],
   },
@@ -167,7 +165,6 @@ const styles = StyleSheet.create({
     transform: [{ scale: 1.05 }],
   },
   cargandoContainer: {
-    flex: 1, // Centra el indicador de carga en la pantalla
     justifyContent: "center",
     alignItems: "center",
   },

@@ -24,6 +24,10 @@ export const useTablonAnuncios = () => {
         setError(error);
         setRefrescar(false);
         setCargando(false);
+      })
+      .finally(() => {
+        setCargando(false);
+        setRefrescar(false);
       });
   }, [refrescar]);
 

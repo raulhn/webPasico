@@ -121,7 +121,7 @@ function obtenerCursoActivo() {
         if (result.length === 0) {
           reject(new Error("No hay curso activo registrado"));
         }
-        resolve(result);
+        resolve(result[0]);
       }
     });
   });

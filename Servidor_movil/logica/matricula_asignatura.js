@@ -185,7 +185,7 @@ function obtenerAlumnosActivos(nid_curso) {
 async function obtenerAlumnosCursoActivo() {
   try {
     const cursoActivo = await gestorCurso.obtenerCursoActivo();
-    const alumnos = await obtenerAlumnosActivos(cursoActivo[0].nid_curso);
+    const alumnos = await obtenerAlumnosActivos(cursoActivo.nid_curso);
     return alumnos;
   } catch (error) {
     console.error("Error al obtener los alumnos del curso activo:", error);
@@ -196,7 +196,7 @@ async function obtenerAlumnosCursoActivo() {
 async function obtenerAlumnosCursoActivoAsignatura(nid_asignatura) {
   try {
     const cursoActivo = await gestorCurso.obtenerCursoActivo();
-    const alumnos = await obtenerAlumnosActivos(cursoActivo[0].nid_curso);
+    const alumnos = await obtenerAlumnosActivos(cursoActivo.nid_curso);
     return alumnos.filter((alumno) => alumno.nid_asignatura === nid_asignatura);
   } catch (error) {
     console.error(
@@ -257,6 +257,7 @@ function esAlumnoAsignatura(nid_persona, nid_asignatura, nid_curso) {
       conexion.dbConn.escape(nid_asignatura) +
       " AND m.nid_curso = " +
       conexion.dbConn.escape(nid_curso) +
+      " AND m.nid_matricula = ma.nid_matricula " +
       " AND (ma.fecha_baja IS NULL OR ma.fecha_baja > NOW())";
 
     conexion.dbConn.query(sql, (err, result) => {

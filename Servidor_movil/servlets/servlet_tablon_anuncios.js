@@ -8,9 +8,10 @@ const constantes = require("../constantes");
 const servlet_comun = require("./servlet_comun");
 const gestorProfesores = require("../logica/profesores");
 const servletPersona = require("./servlet_persona");
+const gestorCursos = require("../logica/curso");
 
 // Comprueba si el usuario tiene permisos para acceder a la escuela y si es profesor de la asignatura
-async function tienePermisosEscuela(req, res) {
+async function tienePermisosRegistroEscuela(req, res) {
   try {
     const rolAdministrador = [constantes.ADMINISTRADOR];
     const rolProfesor = [constantes.PROFESOR];
@@ -39,7 +40,10 @@ async function tienePermisosEscuela(req, res) {
       return true;
     }
   } catch (error) {
-    console.log("servlet_tablon_anuncios.js -> tienePermisosEscuela: ", error);
+    console.log(
+      "servlet_tablon_anuncios.js -> tienePermisosRegistroEscuela: ",
+      error
+    );
     throw new Error("Error al comprobar permisos de acceso a la escuela");
   }
 }
@@ -48,7 +52,7 @@ async function compruebaPermisos(req, res, nidTipoTablon) {
   const rolBanda = [constantes.ADMINISTRADOR, constantes.DIRECTOR];
   const rolAdministrador = [constantes.ADMINISTRADOR];
 
-  const bPermisosEscuela = await tienePermisosEscuela(req, res);
+  const bPermisosEscuela = await tienePermisosRegistroEscuela(req, res);
   const bPermisosBanda = await servlet_comun.comprobarRol(req, res, rolBanda);
   const bPermisosAdministrador = await servlet_comun.comprobarRol(
     req,
@@ -97,13 +101,20 @@ async function insertarTablonAnuncio(req, res) {
       nidTipoTablon
     );
 
+    console.log(
+      "servlet_tablon_anuncios.js -> insertarTablonAnuncio: nidTipoTablon: ",
+      nidTipoTablon
+    );
     if (nidTipoTablon == constantes.ESCUELA) {
       const nid_asignatura = req.body.nid_asignatura;
-      // Si es un anuncio de escuela, se asocia a la asignatura
+
+      const cursoActivo = await gestorCursos.obtenerCursoActivo();
+
       const nid_tablon_anuncio_asignatura =
-        await gestorTablonAnuncionsAsignatura.actualizarTablonAnuncioAsignatura(
+        await gestorTablonAnuncionsAsignatura.insertarTablonAnuncioAsignatura(
           nid_tablon_anuncio,
-          nid_asignatura
+          nid_asignatura,
+          cursoActivo.nid_curso
         );
     }
 
@@ -176,22 +187,43 @@ async function actualizarTablonAnuncio(req, res) {
 
 async function permisosAnuncioAsignatura(nid_persona, anuncio_asignatura) {
   try {
+    if (!anuncio_asignatura || !anuncio_asignatura.nid_asignatura) {
+      return await gestorUsuario.permisosEscuela(nid_persona);
+    }
+
     const bEsAlumno = await gestorMatriculaAsignatura.esAlumnoAsignatura(
       nid_persona,
-      anuncio_asignatura.nid_asignatura
+      anuncio_asignatura.nid_asignatura,
+      anuncio_asignatura.nid_curso
     );
 
+    console.log(
+      "servlet_tablon_anuncios.js -> permisosAnuncioAsignatura: ",
+      bEsAlumno
+    );
     if (bEsAlumno) {
+      console.log(
+        "servlet_tablon_anuncios.js -> permisosAnuncioAsignatura: Es alumno",
+        nid_persona,
+        anuncio_asignatura
+      );
       return true;
     } else {
       const hijos = await gestorPersonas.obtenerHijos(nid_persona);
+
       for (const hijo of hijos) {
         const bEsAlumnoHijo =
           await gestorMatriculaAsignatura.esAlumnoAsignatura(
             hijo.nid_persona,
-            anuncio_asignatura.nid_asignatura
+            anuncio_asignatura.nid_asignatura,
+            anuncio_asignatura.nid_curso
           );
         if (bEsAlumnoHijo) {
+          console.log(
+            "servlet_tablon_anuncios.js -> permisosAnuncioAsignatura: Es alumno",
+            hijo.nid_persona,
+            anuncio_asignatura
+          );
           return true;
         }
       }
@@ -228,23 +260,30 @@ async function obtenerAnuncios(req, res) {
 
       let esSocio = await gestorSocios.esSocio(nidPersona);
       if (esSocio) {
-        let tablonesAnunciosAsociacionAux =
+        tablonesAnunciosAsociacion =
           await gestorTablonAnuncios.obtenerTablonesAnuncioAsociacion();
-
-        tablonesAnunciosAsociacion = tablonesAnunciosAsociacionAux.filter(
-          async (anuncio) =>
-            await permisosAnuncioAsignatura(nidPersona, anuncio)
-        );
       }
 
-      let bPermisosEscuela = await gestorUsuario.permisosEscuela(nidPersona);
-      if (bPermisosEscuela) {
-        tablonesAnunciosEscuela =
-          await gestorTablonAnuncios.obtenerTablonesAnuncioEscuela();
+      const tablonesAnunciosEscuelaAux =
+        await gestorTablonAnuncios.obtenerTablonesAnuncioEscuela();
+
+      for (const anuncio of tablonesAnunciosEscuelaAux) {
+        let bPermisosAsignatura = await permisosAnuncioAsignatura(
+          nidPersona,
+          anuncio
+        );
+        if (bPermisosAsignatura) {
+          tablonesAnunciosEscuela.push(anuncio);
+        }
       }
     }
 
-    const tablonesAnuncios = [...tablonesAnunciosGeneral];
+    const tablonesAnuncios = [
+      ...tablonesAnunciosGeneral,
+      ...tablonesAnunciosBanda,
+      ...tablonesAnunciosAsociacion,
+      ...tablonesAnunciosEscuela,
+    ];
 
     res.status(200).send({
       error: false,

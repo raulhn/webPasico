@@ -406,7 +406,9 @@ export function EntradaGroupRadioButton({
         ]}
       >
         <Text style={{ fontSize: 16, fontWeight: "bold" }}>
-          {valorSeleccionado ? valorSeleccionado.etiqueta : "Seleccionar"}
+          {valorSeleccionado && valorSeleccionado.valor
+            ? valorSeleccionado.etiqueta
+            : "Seleccionar"}
         </Text>
       </View>
       <Modal
@@ -426,6 +428,7 @@ export function EntradaGroupRadioButton({
             style={{
               backgroundColor: "white",
               width: "90%",
+              maxHeight: "85%",
               height: "auto",
               borderRadius: 10,
               elevation: 5,
@@ -449,14 +452,25 @@ export function EntradaGroupRadioButton({
                 }}
               />
             </ScrollView>
-            <Boton
-              onPress={() => {
-                setIsVisible(false);
-              }}
-              nombre="Aceptar"
-              color="#007BFF"
-              colorTexto="#FFF"
-            />
+            <View style={{ flexDirection: "row", gap: 10, marginTop: 20 }}>
+              <Boton
+                onPress={() => {
+                  setIsVisible(false);
+                }}
+                nombre="Aceptar"
+                color={Constantes.COLOR_AZUL}
+                colorTexto="#FFF"
+              />
+              <Boton
+                onPress={() => {
+                  setValorSeleccionado({ etiqueta: "", valor: null });
+                  setValorSeleccionadoInterno({ etiqueta: "", valor: null });
+                }}
+                nombre="Limpiar"
+                color={Constantes.COLOR_AZUL}
+                colorTexto="#FFF"
+              />
+            </View>
           </View>
         </View>
       </Modal>

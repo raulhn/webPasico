@@ -50,4 +50,21 @@ function registrarAsignatura(req, res) {
   });
 }
 
+async function obtenerAsignaturas(req, res) {
+  try {
+    const asignaturas = await gestorAsignatura.obtenerAsignaturas();
+    res.status(200).send({
+      error: false,
+      asignaturas: asignaturas,
+    });
+  } catch (error) {
+    console.error("Error al obtener las asignaturas:", error.message);
+    res.status(400).send({
+      error: true,
+      mensaje: "Error al obtener las asignaturas",
+    });
+  }
+}
+
 module.exports.registrarAsignatura = registrarAsignatura;
+module.exports.obtenerAsignaturas = obtenerAsignaturas;

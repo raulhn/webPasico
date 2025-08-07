@@ -44,7 +44,6 @@ export default function SelectorPartituras({ callback, edicion, refrescar }) {
   }
 
   const actualizarCategoria = (texto) => {
-    console.log("Actualizando categoría con texto:", texto);
     const resultado = partituras.filter((partitura) =>
       partitura.nombre_categoria
         .toLowerCase()

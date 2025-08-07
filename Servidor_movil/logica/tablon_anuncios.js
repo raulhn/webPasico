@@ -110,27 +110,6 @@ function obtenerTablonesAnuncio(tipo) {
   });
 }
 
-function obtenerTablonesAnuncio() {
-  return new Promise((resolve, reject) => {
-    const sql =
-      "select ta.*, tt.descripcion as tipo_tablon from " +
-      constantes.ESQUEMA +
-      ".tablon_anuncios ta, " +
-      constantes.ESQUEMA +
-      ".tipo_tablon tt " +
-      "where ta.nid_tipo_tablon = tt.nid_tipo_tablon";
-
-    conexion.dbConn.query(sql, (error, results, fields) => {
-      if (error) {
-        console.log("tablon_anuncios.js -> obtenerTablonesAnuncio: ", error);
-        reject("Se ha producido un error al recuperar los tablones");
-      } else {
-        resolve(results);
-      }
-    });
-  });
-}
-
 async function obtenerTablonesAnuncioGeneral() {
   try {
     const anuncios = await obtenerTablonesAnuncio(constantes.GENERAL);
@@ -175,14 +154,14 @@ function obtenerTablonesAnuncioEscuela() {
     const sql =
       "select ta.*, tt.descripcion as tipo_tablon, taa.nid_asignatura, taa.nid_curso from " +
       constantes.ESQUEMA +
-      ".tablon_anuncios ta, " +
+      ".tablon_anuncios ta " +
+      "join " +
       constantes.ESQUEMA +
-      ".tipo_tablon tt, " +
+      ".tipo_tablon tt on ta.nid_tipo_tablon = tt.nid_tipo_tablon " +
+      "left join " +
       constantes.ESQUEMA +
-      ".tablon_anuncios_asignatura taa " +
-      "where ta.nid_tipo_tablon = tt.nid_tipo_tablon and " +
-      "taa.nid_tablon_anuncio = ta.nid_tablon_anuncio and " +
-      "tt.nid_tipo_tablon = " +
+      ".tablon_anuncios_asignatura taa on ta.nid_tablon_anuncio = taa.nid_tablon_anuncio " +
+      "where tt.nid_tipo_tablon = " +
       conexion.dbConn.escape(constantes.ESCUELA);
 
     conexion.dbConn.query(sql, (error, results, fields) => {
@@ -257,4 +236,3 @@ module.exports.obtenerTablonesAnuncioAsociacion =
   obtenerTablonesAnuncioAsociacion;
 module.exports.obtenerTablonesAnuncioEscuela = obtenerTablonesAnuncioEscuela;
 module.exports.obtenerTablonesAnuncioTipo = obtenerTablonesAnuncioTipo;
-module.exports.obtenerTablonAnuncio = obtenerTablonAnuncio;

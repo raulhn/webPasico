@@ -171,6 +171,8 @@ app.get(
   servletTablonAnuncios.obtenerAnuncio
 );
 
+app.get("/obtener_asignaturas", servletAsignaturas.obtenerAsignaturas);
+
 ///////////////////////////////////////////////
 // Peticiones que requieren inicio de sesión //
 ///////////////////////////////////////////////
