@@ -1,4 +1,4 @@
-import { View, Text, Modal, FlatList } from "react-native";
+import { View, Text, Modal, FlatList, ActivityIndicator } from "react-native";
 
 import { useTipoTablon } from "../../../hooks/useTipoTablon";
 import { useContext, useState } from "react";
@@ -34,8 +34,9 @@ export default function Tablon() {
 
   if (cargando) {
     return (
-      <View>
-        <Text>Cargando...</Text>
+      <View style={styles.cargandoContainer}>
+        <ActivityIndicator size="large" color="#0000ff" />
+        <Text>Cargando anuncios...</Text>
       </View>
     );
   }

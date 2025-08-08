@@ -1,9 +1,12 @@
 const servletComun = require("./servlet_comun");
+const servletPersona = require("./servlet_persona");
 const gestorMatriculaAsignatura = require("../logica/matricula_asignatura");
 const gestorMatricula = require("../logica/matricula");
 const constantes = require("../constantes");
 const gestorPersonas = require("../logica/persona");
 const gestorProfesorAlumnoMatricula = require("../logica/profesor_alumno_matricula");
+const gestorCurso = require("../logica/curso");
+const gestorProfesores = require("../logica/profesores");
 
 function registrarMatriculaAsignatura(req, res) {
   servletComun.comprobacionAccesoAPIKey(req, res, async () => {
@@ -162,9 +165,72 @@ async function obtenerMatriculasAsignaturaPersona(req, res) {
   }
 }
 
+async function obtenerAlumnosAsignatura(req, res) {
+  try {
+    const nid_asignatura = req.params.nid_asignatura;
+    const rolePermitidoAdministrador = [constantes.ADMINISTRADOR];
+    let rolAdministrador = await servletComun.comprobarRol(
+      req,
+      res,
+      rolesPermitidos
+    );
+
+    if (!rolAdministrador) {
+      const rolPermitidoProfesor = [constantes.PROFESOR];
+
+      const rolProfesor = await servletComun.comprobarRol(
+        req,
+        res,
+        rolPermitidoProfesor
+      );
+
+      const nid_profesor = await servletPersona.obtenerNidPersona(req);
+      const esProfesor = await gestorProfesores.esProfesor(
+        nid_profesor,
+        nid_asignatura
+      );
+
+      if (!rolProfesor && !esProfesor) {
+        res.status(403).send({
+          error: true,
+          mensaje:
+            "No tienes permisos para obtener los alumnos de la asignatura",
+        });
+        return;
+      }
+    }
+
+    if (!rolAdministrador && !rolProfesor) {
+      res.status(403).send({
+        error: true,
+        mensaje: "No tienes permisos para obtener los alumnos de la asignatura",
+      });
+      return;
+    }
+
+    const curso = gestorCurso.obtenerCursoActivo();
+
+    const alumnos = await gestorMatriculaAsignatura.obtenerAlumnosAsignatura(
+      nid_asignatura,
+      curso.nid_curso
+    );
+    res.status(200).send({ error: false, alumnos: alumnos });
+  } catch (error) {
+    console.error(
+      "servlet_matricula_asignatura.js -> obtenerAlumnosAsignatura: Error al obtener los alumnos de la asignatura:",
+      error
+    );
+    res.status(400).send({
+      error: true,
+      mensaje: "Error al obtener los alumnos de la asignatura",
+    });
+  }
+}
+
 module.exports.registrarMatriculaAsignatura = registrarMatriculaAsignatura;
 module.exports.obtenerAlumnosCursoActivo = obtenerAlumnosCursoActivo;
 module.exports.obtenerAlumnosCursoActivoAsignatura =
   obtenerAlumnosCursoActivoAsignatura;
 module.exports.obtenerMatriculasAsignaturaPersona =
   obtenerMatriculasAsignaturaPersona;
+module.exports.obtenerAlumnosAsignatura = obtenerAlumnosAsignatura;

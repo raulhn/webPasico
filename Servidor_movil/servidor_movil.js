@@ -252,9 +252,14 @@ app.get(
 // Obtener Personas //
 app.get("/obtener_personas", servletPersona.obtenerPersonas);
 app.get("/obtener_personas_musicos", servletPersona.obtenerPersonasMusicos);
+app.get("/obtener_personas_alumnos", servletPersona.obtenerPersonasAlumnos);
 app.get(
   "/obtener_alumnos_profesor",
   servletProfesorAlumnoMatricula.obtenerAlumnosProfesor
+);
+app.get(
+  "/obtener_alumnos_asignatura/:nid_asignatura",
+  servletMatriculaAsignatura.obtenerAlumnosAsignatura
 );
 
 app.get(
@@ -264,6 +269,12 @@ app.get(
 app.get(
   "/obtener_alumnos_curso_activo_asignatura/:nid_asignatura",
   servletMatriculaAsignatura.obtenerAlumnosCursoActivoAsignatura
+);
+
+// Asignaturas //
+app.get(
+  "/obtener_asignaturas_profesor",
+  servletAsignaturas.obtenerAsignaturasProfesor
 );
 
 // Matriculas //

@@ -14,7 +14,10 @@ import { BotonFixed } from "../../componentes/componentesUI/ComponentesUI.jsx";
 import { useRol } from "../../hooks/useRol.js";
 import FormularioTablon from "../../componentes/componentesTablon/formularioTablon.jsx";
 import { useState } from "react";
+import FormularioNotificacion from "../../componentes/notificaciones/FormularioNotificacion.jsx";
+
 export default function Anuncio() {
+  const [modalVisibleSelector, setModalVisibleSelector] = useState(false);
   const { nidAnuncio } = useLocalSearchParams();
   const { esRol } = useRol();
   const { anuncio, cargando, error, refrescar, lanzarRefresco } =
@@ -38,6 +41,25 @@ export default function Anuncio() {
     );
   }
 
+  function botonNotificar() {
+    let rol_director = esRol(["ADMINISTRADOR"]);
+    console.log(anuncio.nid_tipo_tablon);
+    if (!rol_director) {
+      return null; // No mostrar el botón si no es director o administrador
+    }
+    return (
+      <View style={styles.botonFixLeft}>
+        <BotonFixed
+          onPress={() => {
+            setModalVisibleSelector(true);
+          }}
+          icon="notifications"
+          color={Constantes.COLOR_AZUL}
+        />
+      </View>
+    );
+  }
+
   return (
     <ScrollView
       contentContainerStyle={styles.container}
@@ -54,9 +76,7 @@ export default function Anuncio() {
 
       <View
         style={[
-          esRol(["ADMINISTRADOR", "DIRECTOR"])
-            ? { display: "flex" }
-            : { display: "none" },
+          esRol(["ADMINISTRADOR"]) ? { display: "flex" } : { display: "none" },
           styles.botonEditar,
         ]}
       >
@@ -67,6 +87,7 @@ export default function Anuncio() {
           icon="mode-edit"
         />
       </View>
+      {botonNotificar()}
 
       <Modal
         animationType="slide"
@@ -82,6 +103,30 @@ export default function Anuncio() {
             lanzarRefresco();
           }}
           nidTablonAnuncionDefecto={anuncio.nid_tablon_anuncio}
+        />
+      </Modal>
+
+      <Modal
+        animationType="slide"
+        visible={modalVisibleSelector}
+        onRequestClose={() => {
+          setModalVisibleSelector(false);
+        }}
+      >
+        <FormularioNotificacion
+          cancelar={() => {
+            setModalVisibleSelector(false);
+          }}
+          callback={() => {
+            setModalVisibleSelector(false);
+          }}
+          valorMensaje={anuncio.descripcion}
+          valorTitulo={anuncio.titulo}
+          tipo={
+            anuncio.nid_tipo_tablon == Constantes.GENERAL
+              ? ""
+              : anuncio.nid_tipo_tablon
+          }
         />
       </Modal>
     </ScrollView>
@@ -134,4 +179,10 @@ const styles = StyleSheet.create({
     lineHeight: 22,
   },
   botonEditar: { position: "absolute", bottom: 30, right: 20 },
+  botonFixLeft: {
+    position: "absolute",
+    bottom: 30,
+    left: 20,
+    zIndex: 1,
+  },
 });

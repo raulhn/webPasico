@@ -224,9 +224,37 @@ function obtenerMatricula(nid_matricula) {
   });
 }
 
+function obtenerPersonasAlumnos() {
+  return new Promise((resolve, reject) => {
+    const sql =
+      "SELECT p.nid_persona, p.nombre, p.primer_apellido, p.segundo_apellido " +
+      "FROM " +
+      constantes.ESQUEMA +
+      ".persona p, " +
+      constantes.ESQUEMA +
+      ".matricula m, " +
+      constantes.ESQUEMA +
+      ".matricula_asignatura ma " +
+      "WHERE p.nid_persona = m.nid_persona " +
+      "AND m.nid_matricula = ma.nid_matricula " +
+      "AND (ma.fecha_baja IS NULL OR ma.fecha_baja > NOW()) " +
+      "GROUP BY p.nid_persona, p.nombre, p.primer_apellido, p.segundo_apellido";
+
+    conexion.dbConn.query(sql, (err, result) => {
+      if (err) {
+        console.error("Error al obtener las personas alumnos:", err);
+        reject(err);
+      } else {
+        resolve(result);
+      }
+    });
+  });
+}
+
 module.exports.registrarMatricula = registrarMatricula;
 module.exports.obtenerMatriculas = obtenerMatriculas;
 module.exports.esAlumno = esAlumno;
 module.exports.esPadreAlumno = esPadreAlumno;
 module.exports.obtenerMatriculasPersona = obtenerMatriculasPersona;
 module.exports.obtenerMatricula = obtenerMatricula;
+module.exports.obtenerPersonasAlumnos = obtenerPersonasAlumnos;

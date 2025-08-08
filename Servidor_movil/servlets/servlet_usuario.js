@@ -181,7 +181,6 @@ function obtenerUsuario(req, res) {
         return;
       }
 
-      console.log("Construyendo roles para el usuario:", decoded.nid_usuario);
       let roles = await gestorUsuario.construirRoles(decoded.nid_usuario);
 
       const usuario = {

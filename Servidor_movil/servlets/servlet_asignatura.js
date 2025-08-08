@@ -66,5 +66,27 @@ async function obtenerAsignaturas(req, res) {
   }
 }
 
+async function obtenerAsignaturasProfesor(req, res) {
+  try {
+    const nid_profesor = await servletPersona.obtenerNidPersona(req);
+    const asignaturas =
+      await gestorAsignatura.obtenerAsignaturasProfesor(nid_profesor);
+    res.status(200).send({
+      error: false,
+      asignaturas: asignaturas,
+    });
+  } catch (error) {
+    console.error(
+      "Error al obtener las asignaturas del profesor:",
+      error.message
+    );
+    res.status(400).send({
+      error: true,
+      mensaje: "Error al obtener las asignaturas del profesor",
+    });
+  }
+}
+
 module.exports.registrarAsignatura = registrarAsignatura;
 module.exports.obtenerAsignaturas = obtenerAsignaturas;
+module.exports.obtenerAsignaturasProfesor = obtenerAsignaturasProfesor;
