@@ -179,5 +179,29 @@ function obtenerAsignaturas() {
   });
 }
 
+function obtenerAsignaturasProfesor(nid_profesor) {
+  return new Promise((resolve, reject) => {
+    const sql =
+      "select a.* from " +
+      constantes.ESQUEMA +
+      ".asignaturas a " +
+      "inner join " +
+      constantes.ESQUEMA +
+      ".profesores p on a.nid_profesor = p.nid_profesor " +
+      "where p.nid_profesor = " +
+      conexion.dbConn.escape(nid_profesor);
+
+    conexion.dbConn.query(sql, (error, results) => {
+      if (error) {
+        console.log("Error al obtener las asignaturas del profesor: ", error);
+        reject(new Error("Error al obtener las asignaturas del profesor"));
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
+
 module.exports.registrarAsignatura = registrarAsignatura;
 module.exports.obtenerAsignaturas = obtenerAsignaturas;
+module.exports.obtenerAsignaturasProfesor = obtenerAsignaturasProfesor;

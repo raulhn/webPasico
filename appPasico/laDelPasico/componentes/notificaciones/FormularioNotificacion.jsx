@@ -66,6 +66,7 @@ export default function FormularioNotificacion({
           cerrarSesion
         );
       }
+
       callback(); // Llama al callback para refrescar la lista de notificaciones
     } catch (error) {
       console.error("Error al enviar la notificación:", error);

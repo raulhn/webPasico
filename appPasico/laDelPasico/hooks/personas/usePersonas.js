@@ -45,6 +45,22 @@ export const usePersonas = (tipo = "", cerrar_sesion) => {
           setError(true);
           setRefrescar(false);
         });
+    } else if (tipo === Constantes.ESCUELA) {
+      servicePersonas
+        .obtenerPersonasAlumnos(cerrar_sesion)
+        .then((personasRecuperadas) => {
+          setPersonas(personasRecuperadas);
+          setCargando(false); // Finaliza la carga
+          setRefrescar(false);
+          setError(false);
+        })
+        .catch((error) => {
+          console.error("Error al obtener las personas alumnos:", error);
+          setPersonas([]);
+          setCargando(false); // Finaliza la carga incluso si hay error
+          setError(true);
+          setRefrescar(false);
+        });
     }
   }, [refrescar]);
 
