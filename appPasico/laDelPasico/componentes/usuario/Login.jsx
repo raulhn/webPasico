@@ -44,7 +44,7 @@ export default function Login() {
           }
         })
         .catch((error) => {
-          console.error("Error al iniciar sesión:", error);
+          console.log("Error al iniciar sesión:", error);
         });
     }
   }

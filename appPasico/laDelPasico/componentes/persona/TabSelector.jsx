@@ -1,9 +1,11 @@
 import { CustomTabs, Boton } from "../componentesUI/ComponentesUI";
-import SelectorGrupoMusicos from "./SelectorGrupoMusicos";
+import SelectorGrupo from "./SelectorGrupo";
 import SelectorPersona from "./SelectorPersona";
 import { Text, View } from "react-native";
 import { useEffect, useState } from "react";
 import Constantes from "../../config/constantes";
+import { useAsignaturas } from "../../hooks/escuela/useAsignaturas";
+import { useTiposMusicos } from "../../hooks/personas/useTipoMusicos";
 
 export default function TabSelector({ callback, personasSeleccionadas, tipo }) {
   const [pestanaSeleccionada, setPestanaSeleccionada] = useState(0);
@@ -14,6 +16,12 @@ export default function TabSelector({ callback, personasSeleccionadas, tipo }) {
     callback(seleccion);
   };
 
+  const { tiposMusicos } = useTiposMusicos();
+  const listaTiposMusicos = tiposMusicos.map((tipo) => ({
+    etiqueta: tipo.descripcion,
+    valor: tipo.nid_tipo_musico,
+  }));
+
   const recuperaConjuntoMusicos = (conjuntoRecuperado) => {
     const seleccion = {};
 
@@ -22,8 +30,24 @@ export default function TabSelector({ callback, personasSeleccionadas, tipo }) {
     callback(seleccion);
   };
 
+  const recuperaConjuntoAlumnos = (conjuntoRecuperado) => {
+    const seleccion = {};
+    seleccion.tipo = Constantes.ESCUELA;
+    seleccion.conjunto = conjuntoRecuperado;
+
+    callback(seleccion);
+  };
+
   const [seleccionadasIndvidual, setseleccionadasIndividual] = useState([]);
   const [seleccionadasBanda, setseleccionadasBanda] = useState([]);
+  const [seleccionadasEscuela, setseleccionadasEscuela] = useState([]);
+
+  const { asignaturas, error, cargando } = useAsignaturas();
+
+  const listaAsignaturas = asignaturas.map((asignatura) => ({
+    etiqueta: asignatura.descripcion,
+    valor: asignatura.nid_asignatura,
+  }));
 
   useEffect(() => {
     if (personasSeleccionadas) {
@@ -33,6 +57,9 @@ export default function TabSelector({ callback, personasSeleccionadas, tipo }) {
       } else if (personasSeleccionadas.tipo === Constantes.BANDA) {
         setPestanaSeleccionada(0);
         setseleccionadasBanda(personasSeleccionadas.conjunto);
+      } else if (personasSeleccionadas.tipo === Constantes.ESCUELA) {
+        setPestanaSeleccionada(0);
+        setseleccionadasEscuela(personasSeleccionadas.conjunto);
       }
     }
   }, [personasSeleccionadas]);
@@ -48,9 +75,33 @@ export default function TabSelector({ callback, personasSeleccionadas, tipo }) {
             <View style={{ justifyContent: "center", alignItems: "center" }}>
               <Text style={estilos.titulo}>Selecciona Banda</Text>
             </View>
-            <SelectorGrupoMusicos
+            <SelectorGrupo
+              titulo={"Selecciona Banda"}
               callback={recuperaConjuntoMusicos}
-              valorTiposMusicos={seleccionadasBanda}
+              valorTipos={seleccionadasBanda}
+              opciones={listaTiposMusicos}
+            />
+          </>
+        );
+      },
+    });
+  }
+
+  if (tipo == Constantes.ESCUELA) {
+    tabs.push({
+      nombre: "Asignaturas",
+      contenido: () => {
+        return (
+          <>
+            <View style={{ justifyContent: "center", alignItems: "center" }}>
+              <Text style={estilos.titulo}>Selecciona Asignatura</Text>
+            </View>
+
+            <SelectorGrupo
+              titulo={"Selecciona Asignatura"}
+              callback={recuperaConjuntoAlumnos}
+              valorTipos={seleccionadasEscuela}
+              opciones={listaAsignaturas}
             />
           </>
         );

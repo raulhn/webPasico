@@ -28,8 +28,12 @@ export default function ItemSelectorPersona({ tipo = "", callback }) {
       const conjuntoMusicos = personasSeleccionadas.conjunto.filter(
         (musico) => musico !== null
       );
-
       return "Grupos Seleccionados: " + conjuntoMusicos.length;
+    } else if (personasSeleccionadas.tipo === Constantes.ESCUELA) {
+      const conjuntoAlumnos = personasSeleccionadas.conjunto.filter(
+        (alumno) => alumno !== null
+      );
+      return "Asignaturas Seleccionadas: " + conjuntoAlumnos.length;
     }
   }
 

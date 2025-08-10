@@ -19,7 +19,7 @@ export const useEvaluaciones = (nidMatricula, cerrar_sesion) => {
         setCargando(false);
         setError(false);
       } catch (error) {
-        console.error("Error al obtener las evaluaciones:", error);
+        console.log("Error al obtener las evaluaciones:", error);
         setEvaluaciones([]);
         setCargando(false);
         setError(true);

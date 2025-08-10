@@ -20,7 +20,7 @@ export const useTipoTablon = (cerrar_sesion) => {
         setError(false);
       })
       .catch((error) => {
-        console.error("Error al obtener los tipos de tablón:", error);
+        console.log("Error al obtener los tipos de tablón:", error);
         setTiposTablon([]);
         setCargando(false);
         setRefrescar(false);

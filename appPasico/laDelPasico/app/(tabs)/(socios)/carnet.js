@@ -29,7 +29,7 @@ export default function Carnet() {
         setPersona(response.persona);
       })
       .catch((error) => {
-        console.error("Error fetching socio data:", error);
+        console.log("Error fetching socio data:", error);
       });
   }, []);
 

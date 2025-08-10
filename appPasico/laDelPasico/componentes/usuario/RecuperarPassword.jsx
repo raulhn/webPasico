@@ -32,7 +32,7 @@ export default function RecuperarPassword() {
         }
       })
       .catch((error) => {
-        console.error("Error al recuperar la contraseña:", error);
+        console.log("Error al recuperar la contraseña:", error);
       });
   }
 

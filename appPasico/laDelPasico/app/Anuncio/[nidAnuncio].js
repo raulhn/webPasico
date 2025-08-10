@@ -43,7 +43,7 @@ export default function Anuncio() {
 
   function botonNotificar() {
     let rol_director = esRol(["ADMINISTRADOR"]);
-    console.log(anuncio.nid_tipo_tablon);
+
     if (!rol_director) {
       return null; // No mostrar el botón si no es director o administrador
     }
