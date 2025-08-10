@@ -23,7 +23,7 @@ export const usePersonas = (tipo = "", cerrar_sesion) => {
           setError(false);
         })
         .catch((error) => {
-          console.error("Error al obtener las personas:", error);
+          console.log("Error al obtener las personas:", error);
           setPersonas([]);
           setCargando(false); // Finaliza la carga incluso si hay error
           setRefrescar(false);
@@ -39,7 +39,7 @@ export const usePersonas = (tipo = "", cerrar_sesion) => {
           setError(false);
         })
         .catch((error) => {
-          console.error("Error al obtener las personas músicos:", error);
+          console.log("Error al obtener las personas músicos:", error);
           setPersonas([]);
           setCargando(false); // Finaliza la carga incluso si hay error
           setError(true);
@@ -55,7 +55,7 @@ export const usePersonas = (tipo = "", cerrar_sesion) => {
           setError(false);
         })
         .catch((error) => {
-          console.error("Error al obtener las personas alumnos:", error);
+          console.log("Error al obtener las personas alumnos:", error);
           setPersonas([]);
           setCargando(false); // Finaliza la carga incluso si hay error
           setError(true);

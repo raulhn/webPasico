@@ -26,7 +26,7 @@ export const useMatriculasAsignaturaPersona = (
         setError(false);
       })
       .catch((error) => {
-        console.error("Error al obtener las matrículas:", error);
+        console.log("Error al obtener las matrículas:", error);
         setMatriculasAsignatura([]);
         setCargando(false); // Finaliza la carga incluso si hay error
         setRefrescar(false);

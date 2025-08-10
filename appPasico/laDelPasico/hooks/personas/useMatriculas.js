@@ -23,7 +23,7 @@ export const useMatriculas = (cerrar_sesion) => {
         setError(false);
       })
       .catch((error) => {
-        console.error("Error al obtener las matrículas:", error);
+        console.log("Error al obtener las matrículas:", error);
         setMatriculas([]);
         setCargando(false); // Finaliza la carga incluso si hay error
         setRefrescar(false);

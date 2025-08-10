@@ -25,7 +25,7 @@ export default function ComponenteGalerias() {
         setCargando(false);
       })
       .catch((error) => {
-        console.error("Error al obtener galerias:", error);
+        console.log("Error al obtener galerias:", error);
         setError(true); // Asegúrate de finalizar la carga incluso si hay un error
         setCargando(false);
       });

@@ -39,7 +39,7 @@ export default function Partituras() {
         setCargado(true);
       })
       .catch((error) => {
-        console.error("Error al listar eventos:", error);
+        console.log("Error al listar eventos:", error);
         setError(true);
         setCargado(true);
       });

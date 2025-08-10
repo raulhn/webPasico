@@ -107,7 +107,7 @@ export default function registrarUsuario(recaptchaToken) {
             }
           })
           .catch((error) => {
-            console.error("Error al registrar el usuario:", error);
+            console.log("Error al registrar el usuario:", error);
           });
       } else {
         console.log("El token de reCAPTCHA no está disponible");
@@ -115,7 +115,7 @@ export default function registrarUsuario(recaptchaToken) {
         console.log("Se ha producido un error durante el registro de usuario");
       }
     } catch (error) {
-      console.error("Error en la petición:", error);
+      console.log("Error en la petición:", error);
       setMensajeError(
         "Se ha producido un error durante el registro de usuario"
       );

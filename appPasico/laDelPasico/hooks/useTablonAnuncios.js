@@ -20,7 +20,7 @@ export const useTablonAnuncios = () => {
         setCargando(false);
       })
       .catch((error) => {
-        console.error("Error al obtener anuncios:", error);
+        console.log("Error al obtener anuncios:", error);
         setError(error);
         setRefrescar(false);
         setCargando(false);
@@ -56,7 +56,7 @@ export const useTablonAnuncio = (nidAnuncio) => {
           setRefrescar(false);
         })
         .catch((error) => {
-          console.error("Error al obtener el anuncio:", error);
+          console.log("Error al obtener el anuncio:", error);
           setError(error);
           setCargando(false);
           setRefrescar(false);

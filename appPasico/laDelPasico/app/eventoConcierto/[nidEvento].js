@@ -72,7 +72,7 @@ export default function EventoConcierto() {
         }
       });
     } catch (error) {
-      console.error("Error al registrar la partitura en el evento:", error);
+      console.log("Error al registrar la partitura en el evento:", error);
       setMensaje("Error al registrar la partitura en el evento");
       setModalErrorVisible(true);
     }

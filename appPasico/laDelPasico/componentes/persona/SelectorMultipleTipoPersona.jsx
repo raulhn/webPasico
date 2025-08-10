@@ -1,12 +1,17 @@
 import { View, StyleSheet } from "react-native";
-import { BotonFixed } from "../componentesUI/ComponentesUI";
+import {
+  BotonFixed,
+  EntradaGroupRadioButton,
+} from "../componentesUI/ComponentesUI";
 import { useEffect, useState } from "react";
 import SelectorTipoPersona from "./SelectorTipoPersona";
 import Constantes from "../../config/constantes.js";
 
 export default function SelectorMultipleTipoPersona({
+  titulo,
   tiposEventos,
   callback,
+  opciones = [],
 }) {
   const [numTiposEvento, setNumTiposEvento] = useState(1);
   const [tiposEventoRecuperados, setTiposEventoRecuperados] =
@@ -32,14 +37,16 @@ export default function SelectorMultipleTipoPersona({
     if (i == numTiposEvento - 1) {
       retorno.push(
         <View style={estilos.containerSeleccionTipos} key={i}>
-          <SelectorTipoPersona
-            setTexto={(tipoSeleccionado) => {
+          <EntradaGroupRadioButton
+            titulo={titulo}
+            opciones={opciones}
+            setValorSeleccionado={(valorSeleccionado) => {
               let auxTiposEvento = [...tiposEventoRecuperados];
-              auxTiposEvento[i] = tipoSeleccionado;
+              auxTiposEvento[i] = valorSeleccionado;
               actualizarEventosRecuperados(auxTiposEvento);
             }}
-            valorInicial={tiposEventoRecuperados[i] || null}
-          ></SelectorTipoPersona>
+            valor={tiposEventoRecuperados[i] || null}
+          />
 
           <BotonFixed
             onPress={() => {
@@ -55,14 +62,16 @@ export default function SelectorMultipleTipoPersona({
     } else {
       retorno.push(
         <View style={estilos.containerSeleccionTipos} key={i}>
-          <SelectorTipoPersona
-            setTexto={(tipoSeleccionado) => {
-              let auxTiposEventosRecuperados = [...tiposEventoRecuperados];
-              auxTiposEventosRecuperados[i] = tipoSeleccionado;
-              actualizarEventosRecuperados(auxTiposEventosRecuperados);
+          <EntradaGroupRadioButton
+            titulo={titulo}
+            opciones={opciones}
+            setValorSeleccionado={(valorSeleccionado) => {
+              let auxTiposEvento = [...tiposEventoRecuperados];
+              auxTiposEvento[i] = valorSeleccionado;
+              actualizarEventosRecuperados(auxTiposEvento);
             }}
-            valorInicial={tiposEventoRecuperados[i] || null}
-          ></SelectorTipoPersona>
+            valor={tiposEventoRecuperados[i] || null}
+          />
 
           <BotonFixed
             onPress={() => {

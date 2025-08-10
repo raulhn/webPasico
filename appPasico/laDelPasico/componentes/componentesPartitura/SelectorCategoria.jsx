@@ -26,7 +26,7 @@ function CrearCategoria({ modalVisible, setModalVisible, callback }) {
   const crearCategoria = async () => {
     try {
       if (!valor) {
-        console.error("El valor no puede estar vacío");
+        console.log("El valor no puede estar vacío");
         return;
       }
       const categoria = { nombre_categoria: valor };
@@ -36,14 +36,14 @@ function CrearCategoria({ modalVisible, setModalVisible, callback }) {
           cerrarSesion
         );
       if (respuesta.error) {
-        console.error("Error al crear la categoría:", respuesta.error);
+        console.log("Error al crear la categoría:", respuesta.error);
       } else {
         console.log("Categoría creada exitosamente:", respuesta);
         setModalVisible(false);
         callback(); // Llamar al callback para recargar las categorías
       }
     } catch (error) {
-      console.error("Error al crear la categoría:", error);
+      console.log("Error al crear la categoría:", error);
     }
   };
 
@@ -112,7 +112,7 @@ export function SelectorCategoria({
     ServiceCategoriaPartituras.obtenerCategoriasPartitura(cerrarSesion).then(
       (respuesta) => {
         if (respuesta.error) {
-          console.error("Error al obtener las categorías:", respuesta.error);
+          console.log("Error al obtener las categorías:", respuesta.error);
         } else {
           const categorias = respuesta.categorias.map((categoria) => ({
             etiqueta: categoria.nombre_categoria,

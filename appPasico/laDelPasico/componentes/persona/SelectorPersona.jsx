@@ -9,6 +9,7 @@ import { CheckBox, Boton } from "../componentesUI/ComponentesUI";
 import { useState, useRef } from "react";
 import SelectorTipoPersona from "./SelectorTipoPersona";
 import Constantes from "../../config/constantes";
+import { useTiposMusicos } from "../../hooks/personas/useTipoMusicos";
 
 export default function SelectorPersona({
   callback,
@@ -34,6 +35,16 @@ export default function SelectorPersona({
   useEffect(() => {
     setSeleccionados(personasSeleccionadas);
   }, [personasSeleccionadas]);
+
+  const { tiposMusicos, cargando: cargandoTipos } = useTiposMusicos();
+  let listaTiposMusicos = [];
+
+  if (!cargandoTipos) {
+    listaTiposMusicos = tiposMusicos.map((tipo) => ({
+      etiqueta: tipo.descripcion,
+      valor: tipo.nid_tipo_musico,
+    }));
+  }
 
   function seleccion(item, seleccionado) {
     const nuevoSet = new Set(seleccionados);
@@ -131,6 +142,7 @@ export default function SelectorPersona({
               setNidTipoMusico(tipoSeleccionado.valor);
             }}
             ancho={140}
+            opciones={listaTiposMusicos}
           />
         </View>
       </View>
@@ -196,7 +208,6 @@ export default function SelectorPersona({
         <Boton
           nombre={"Aceptar"}
           onPress={() => {
-            console.log("Personas seleccionadas Aceptar:", seleccionados);
             callback(seleccionados);
           }}
         />

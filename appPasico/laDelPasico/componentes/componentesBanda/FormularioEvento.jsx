@@ -7,6 +7,7 @@ import serviceEventoConcierto from "../../servicios/serviceEventoConcierto"; // 
 
 import SelectorMultipleTipoPersona from "../persona/SelectorMultipleTipoPersona";
 import Constantes from "../../config/constantes.js";
+import { useTiposMusicos } from "../../hooks/personas/useTipoMusicos.js";
 
 import {
   EntradaTexto,
@@ -26,6 +27,12 @@ export default function FormularioEvento({ cancelar, callback, nidEvento }) {
   const { cerrarSesion } = useContext(AuthContext);
 
   const [exito, setExito] = useState(false);
+
+  const { tiposMusicos } = useTiposMusicos();
+  const listaTiposMusicos = tiposMusicos.map((tipo) => ({
+    etiqueta: tipo.descripcion,
+    valor: tipo.nid_tipo_musico,
+  }));
 
   useEffect(() => {
     if (!nidEvento) return;
@@ -59,7 +66,7 @@ export default function FormularioEvento({ cancelar, callback, nidEvento }) {
         }
       })
       .catch((error) => {
-        console.error("Error al obtener el evento:", error);
+        console.log("Error al obtener el evento:", error);
         cerrarSesion();
       });
   }, [nidEvento]);
@@ -87,7 +94,7 @@ export default function FormularioEvento({ cancelar, callback, nidEvento }) {
       .registrarEventoConcierto(evento, cerrarSesion)
       .then((response) => {
         if (response.error) {
-          console.error("Error al obtener eventos:", response.mensaje);
+          console.log("Error al obtener eventos:", response.mensaje);
           return;
         }
 
@@ -97,7 +104,7 @@ export default function FormularioEvento({ cancelar, callback, nidEvento }) {
         }
       })
       .catch((error) => {
-        console.error("Error al registrar el evento:", error);
+        console.log("Error al registrar el evento:", error);
         alert("Error al registrar el evento");
       });
   }
@@ -150,7 +157,7 @@ export default function FormularioEvento({ cancelar, callback, nidEvento }) {
       .actualizarEventoConcierto(evento, cerrarSesion)
       .then((response) => {
         if (response.error) {
-          console.error("Error al actualizar el evento:", response.mensaje);
+          console.log("Error al actualizar el evento:", response.mensaje);
           return;
         }
         setExito(true); // Cambia el estado de éxito a verdadero
@@ -159,7 +166,7 @@ export default function FormularioEvento({ cancelar, callback, nidEvento }) {
         }
       })
       .catch((error) => {
-        console.error("Error al actualizar el evento:", error);
+        console.log("Error al actualizar el evento:", error);
         alert("Error al actualizar el evento");
       });
   }
@@ -223,6 +230,7 @@ export default function FormularioEvento({ cancelar, callback, nidEvento }) {
             callback={(eventos) => {
               setTiposEventoRecuperados(eventos);
             }}
+            opciones={listaTiposMusicos}
           />
         </View>
         <View

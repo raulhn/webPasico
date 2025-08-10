@@ -25,7 +25,7 @@ export function Noticias() {
         setCargando(false); // Finaliza la carga
       })
       .catch((error) => {
-        console.error("Error al obtener noticias:", error);
+        console.log("Error al obtener noticias:", error);
         setError(true); // Asegúrate de finalizar la carga incluso si hay un error
         setCargando(false);
       });

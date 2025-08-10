@@ -12,27 +12,12 @@ export default function SelectorTipoPersona({
   ancho = "200",
   placeHolderFiltro = "Elige selección",
   valorInicial = null,
+  opciones = [],
 }) {
   const [visible, setVisible] = useState(false);
 
-  const [opciones, setOpciones] = useState([]);
   const [valor, setValor] = useState(null);
   const { cerrarSesion } = useContext(AuthContext);
-
-  useEffect(() => {
-    ServiceTipoMusico.obtenerTiposMusico(cerrarSesion).then((respuesta) => {
-      if (respuesta.error) {
-        console.error("Error al obtener los tipos de músico:", respuesta.error);
-      } else {
-        const tipos = respuesta.tipos_musico.map((tipo) => ({
-          etiqueta: tipo.descripcion,
-          valor: tipo.nid_tipo_musico,
-        }));
-        setOpciones(tipos);
-      }
-    });
-    setValor(valorInicial);
-  }, [valorInicial]);
 
   const setValorSeleccionado = (valorSeleccionado) => {
     setTexto(valorSeleccionado);

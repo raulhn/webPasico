@@ -35,7 +35,7 @@ export default function PerfilUsuario() {
         }
       });
     } catch (error) {
-      console.error("Error al cerrar sesión:", error);
+      console.log("Error al cerrar sesión:", error);
     }
   }
 

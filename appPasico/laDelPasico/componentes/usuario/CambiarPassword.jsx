@@ -43,7 +43,7 @@ export default function CambiarPassword() {
         }
       })
       .catch((error) => {
-        console.error("Error al cambiar la contraseña:", error);
+        console.log("Error al cambiar la contraseña:", error);
       });
   };
 

@@ -122,10 +122,7 @@ export default function Evaluacion() {
 
                           await Linking.openURL(url);
                         } catch (error) {
-                          console.error(
-                            "Error al descargar el boletín:",
-                            error
-                          );
+                          console.log("Error al descargar el boletín:", error);
                         }
                       }}
                     />
