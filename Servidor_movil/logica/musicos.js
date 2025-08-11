@@ -176,9 +176,7 @@ async function esPadreMusico(nid_persona, bSocio = true) {
   try {
     let hijos = await gestorPersonas.obtenerHijos(nid_persona, bSocio);
     for (let i = 0; i < hijos.length; i++) {
-      console.log("Hijo: ", hijos[i]);
       const bEsMusico = await esMusico(hijos[i].nid_persona);
-      console.log("Es músico: ", bEsMusico);
 
       if (bEsMusico) {
         return true;
@@ -186,7 +184,7 @@ async function esPadreMusico(nid_persona, bSocio = true) {
     }
     return false;
   } catch (e) {
-    console.log("musicos.js -> esPadreMusico: " || e);
+    console.log("musicos.js -> esPadreMusico: ", e);
     throw new Error(e);
   }
 }
