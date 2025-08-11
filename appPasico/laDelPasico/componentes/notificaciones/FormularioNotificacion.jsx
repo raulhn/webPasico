@@ -21,6 +21,7 @@ export default function FormularioNotificacion({
   valorTitulo = "",
   valorMensaje = "",
   tipo = "",
+  nid_asignatura = null,
 }) {
   const [titulo, setTitulo] = useState(valorTitulo);
   const [mensaje, setMensaje] = useState(valorMensaje);
@@ -53,7 +54,7 @@ export default function FormularioNotificacion({
           null,
           cerrarSesion
         );
-      } else if (personasSeleccionadas.tipo === Constantes.BANDA) {
+      } else {
         const arrayGrupos = personasSeleccionadas.conjunto.map(
           (grupo) => grupo.valor
         );
@@ -104,6 +105,7 @@ export default function FormularioNotificacion({
         callback={(personasSeleccionadasRecuperadas) => {
           setPersonasSeleccionadas(personasSeleccionadasRecuperadas);
         }}
+        nid_asignatura={nid_asignatura}
       />
 
       <View

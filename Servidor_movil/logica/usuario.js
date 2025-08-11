@@ -256,7 +256,6 @@ async function realizarLogin(correoElectronico, password) {
   try {
     const usuario = await login(correoElectronico, password);
 
-    console.log("Usuario encontrado:", usuario);
     const sesion = jwt.sign(
       {
         nid_usuario: usuario.nid_usuario,

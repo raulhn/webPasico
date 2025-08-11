@@ -4,7 +4,11 @@ import SelectorPersona from "./SelectorPersona"; // Asegúrate de que la ruta se
 import TabSelector from "./TabSelector";
 import Constantes from "../../config/constantes"; // Asegúrate de que la ruta sea correcta
 
-export default function ItemSelectorPersona({ tipo = "", callback }) {
+export default function ItemSelectorPersona({
+  tipo = "",
+  callback,
+  nid_asignatura = null,
+}) {
   const [esVisible, setVisible] = useState(false);
   const [personasSeleccionadas, setPersonasSeleccionadas] = useState(null);
 
@@ -67,6 +71,7 @@ export default function ItemSelectorPersona({ tipo = "", callback }) {
           callback={seleccionPersona}
           personasSeleccionadas={personasSeleccionadas}
           tipo={tipo}
+          nid_asignatura={nid_asignatura}
         />
       </Modal>
     </>

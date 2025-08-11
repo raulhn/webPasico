@@ -65,28 +65,6 @@ function actualizarTablonAnuncio(
   });
 }
 
-function obtenerTablonAnuncio(nidTablonAnuncio) {
-  return new Promise((resolve, reject) => {
-    const sql =
-      "select * from " +
-      constantes.ESQUEMA +
-      ".tablon_anuncios " +
-      "where nid_tablon_anuncio = " +
-      conexion.dbConn.escape(nidTablonAnuncio);
-
-    conexion.dbConn.query(sql, (error, results, fields) => {
-      if (error) {
-        console.log("tablon_anuncios.js -> obtenerTabonAnuncio: ", error);
-        reject("Se ha producido un error al recuperar el tablón");
-      } else if (results.length == 0) {
-        reject("No se ha encontrado el tablón");
-      } else {
-        resolve(results[0]);
-      }
-    });
-  });
-}
-
 function obtenerTablonesAnuncio(tipo) {
   return new Promise((resolve, reject) => {
     const sql =
@@ -181,13 +159,16 @@ function obtenerTablonesAnuncioEscuela() {
 function obtenerTablonAnuncio(nidTablonAnuncio) {
   return new Promise((resolve, reject) => {
     const sql =
-      "select ta.*, tt.descripcion as tipo_tablon from " +
+      "select ta.*, tt.descripcion as tipo_tablon, taa.nid_asignatura from " +
       constantes.ESQUEMA +
-      ".tablon_anuncios ta, " +
+      ".tablon_anuncios ta " +
+      "left join " +
       constantes.ESQUEMA +
-      ".tipo_tablon tt " +
-      "where ta.nid_tipo_tablon = tt.nid_tipo_tablon and " +
-      " ta.nid_tablon_anuncio = " +
+      ".tablon_anuncios_asignatura taa on ta.nid_tablon_anuncio = taa.nid_tablon_anuncio " +
+      "join " +
+      constantes.ESQUEMA +
+      ".tipo_tablon tt on ta.nid_tipo_tablon = tt.nid_tipo_tablon " +
+      "where ta.nid_tablon_anuncio = " +
       conexion.dbConn.escape(nidTablonAnuncio);
 
     conexion.dbConn.query(sql, (error, results, fields) => {

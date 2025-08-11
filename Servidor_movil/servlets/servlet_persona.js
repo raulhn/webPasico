@@ -227,6 +227,37 @@ async function obtenerPersonasAlumnos(req, res) {
   }
 }
 
+async function obtenerPersonasSocios(req, res) {
+  try {
+    const rolesPermitidos = [constantes.ADMINISTRADOR];
+    let rolAdministrador = await servletComun.comprobarRol(
+      req,
+      res,
+      rolesPermitidos
+    );
+    if (!rolAdministrador) {
+      res.status(403).send({
+        error: true,
+        mensaje: "No tienes permisos para obtener los socios",
+      });
+      return;
+    }
+
+    const personasSocios = await gestorPersona.obtenerPersonasSocios();
+    res.status(200).send({
+      error: false,
+      mensaje: "Socios obtenidos correctamente",
+      personas: personasSocios,
+    });
+  } catch (error) {
+    console.error("Error al obtener los socios:", error.message);
+    res.status(400).send({
+      error: true,
+      mensaje: "Error al obtener los socios",
+    });
+  }
+}
+
 module.exports.obtenerPersona = obtenerPersona;
 module.exports.registrarPersona = registrarPersona;
 module.exports.obtenerPersonasSucias = obtenerPersonasSucias;
@@ -235,3 +266,4 @@ module.exports.obtenerPersonas = obtenerPersonas;
 module.exports.obtenerPersonasMusicos = obtenerPersonasMusicos;
 module.exports.obtenerNidPersona = obtenerNidPersona;
 module.exports.obtenerPersonasAlumnos = obtenerPersonasAlumnos;
+module.exports.obtenerPersonasSocios = obtenerPersonasSocios;

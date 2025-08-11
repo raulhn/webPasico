@@ -163,13 +163,12 @@ function obtenerAlumnosActivos(nid_curso) {
       constantes.ESQUEMA +
       ".matricula m, " +
       constantes.ESQUEMA +
-      ".matricula_asignatura ma, " +
-      constantes.ESQUEMA +
+      ".matricula_asignatura ma " +
       "WHERE p.nid_persona = m.nid_persona " +
       "AND m.nid_matricula = ma.nid_matricula " +
       "AND m.nid_curso = " +
       conexion.dbConn.escape(nid_curso) +
-      "AND (ma.fecha_baja IS NULL OR ma.fecha_baja > NOW()) ";
+      " AND (ma.fecha_baja IS NULL OR ma.fecha_baja > NOW()) ";
 
     conexion.dbConn.query(sql, (err, result) => {
       if (err) {

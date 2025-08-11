@@ -227,7 +227,7 @@ function obtenerMatricula(nid_matricula) {
 function obtenerPersonasAlumnos() {
   return new Promise((resolve, reject) => {
     const sql =
-      "SELECT p.nid_persona, p.nombre, p.primer_apellido, p.segundo_apellido " +
+      "SELECT p.nid_persona, p.nombre, p.primer_apellido, p.segundo_apellido, ma.nid_asignatura " +
       "FROM " +
       constantes.ESQUEMA +
       ".persona p, " +
@@ -238,7 +238,7 @@ function obtenerPersonasAlumnos() {
       "WHERE p.nid_persona = m.nid_persona " +
       "AND m.nid_matricula = ma.nid_matricula " +
       "AND (ma.fecha_baja IS NULL OR ma.fecha_baja > NOW()) " +
-      "GROUP BY p.nid_persona, p.nombre, p.primer_apellido, p.segundo_apellido";
+      "GROUP BY p.nid_persona, p.nombre, p.primer_apellido, p.segundo_apellido, ma.nid_asignatura";
 
     conexion.dbConn.query(sql, (err, result) => {
       if (err) {
