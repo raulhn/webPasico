@@ -275,29 +275,52 @@ async function obtenerAnuncio(req, res) {
   try {
     const nid_tablon_anuncio = req.params.nid_tablon_anuncio;
 
-    const tabloneAnuncio =
+    const tablonAnuncio =
       await gestorTablonAnuncios.obtenerTablonAnuncio(nid_tablon_anuncio);
 
-    const bTienePermisos = await compruebaPermisos(
-      req,
-      res,
-      tabloneAnuncio.nid_tipo_tablon
-    );
+    if (tablonAnuncio.nid_tipo_tablon == constantes.BANDA) {
+      const persona = await servletPersona.obtenerNidPersona(req);
+      const bPermisosBanda = await gestorUsuario.permisosMusico(
+        persona.nid_persona
+      );
 
-    if (
-      !bTienePermisos &&
-      tabloneAnuncio.nid_tipo_tablon != constantes.GENERAL
-    ) {
-      res.status(403).send({
-        error: true,
-        mensaje: "No tienes permisos para acceder a este tablón de anuncios",
-      });
-      return;
+      if (!bPermisosBanda) {
+        res.status(403).send({
+          error: true,
+          mensaje: "No tienes permisos para acceder a este tablón de anuncios",
+        });
+        return;
+      }
+    } else if (tablonAnuncio.nid_tipo_tablon == constantes.ASOCIACION) {
+      const persona = await servletPersona.obtenerNidPersona(req);
+      const bEsSocio = await gestorSocios.esSocio(persona.nid_persona);
+
+      if (!bEsSocio) {
+        res.status(403).send({
+          error: true,
+          mensaje: "No tienes permisos para acceder a este tablón de anuncios",
+        });
+        return;
+      }
+    } else if (tablonAnuncio.nid_tipo_tablon == constantes.ESCUELA) {
+      const persona = await servletPersona.obtenerNidPersona(req);
+      const bPermisosEscuela = await permisosAnuncioAsignatura(
+        persona.nid_persona,
+        tablonAnuncio
+      );
+
+      if (!bPermisosEscuela) {
+        res.status(403).send({
+          error: true,
+          mensaje: "No tienes permisos para acceder a este tablón de anuncios",
+        });
+        return;
+      }
     }
 
     res.status(200).send({
       error: false,
-      tablones_anuncios: tabloneAnuncio,
+      tablones_anuncios: tablonAnuncio,
     });
   } catch (error) {
     console.log("servlet_tablon_anuncios.js -> obtenerTablonAnuncio: ", error);

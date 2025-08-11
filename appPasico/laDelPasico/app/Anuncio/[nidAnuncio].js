@@ -60,6 +60,7 @@ export default function Anuncio() {
     );
   }
 
+  console.log("anuncio ", anuncio);
   return (
     <ScrollView
       contentContainerStyle={styles.container}

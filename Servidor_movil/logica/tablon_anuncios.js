@@ -159,7 +159,7 @@ function obtenerTablonesAnuncioEscuela() {
 function obtenerTablonAnuncio(nidTablonAnuncio) {
   return new Promise((resolve, reject) => {
     const sql =
-      "select ta.*, tt.descripcion as tipo_tablon, taa.nid_asignatura from " +
+      "select ta.*, tt.descripcion as tipo_tablon, taa.nid_asignatura, taa.nid_curso from " +
       constantes.ESQUEMA +
       ".tablon_anuncios ta " +
       "left join " +
