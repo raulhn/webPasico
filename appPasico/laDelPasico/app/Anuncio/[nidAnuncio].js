@@ -122,6 +122,7 @@ export default function Anuncio() {
           }}
           valorMensaje={anuncio.descripcion}
           valorTitulo={anuncio.titulo}
+          nid_asignatura={anuncio.nid_asignatura}
           tipo={
             anuncio.nid_tipo_tablon == Constantes.GENERAL
               ? ""

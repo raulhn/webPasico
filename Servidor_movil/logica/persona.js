@@ -621,6 +621,26 @@ function obtenerPersonasMusicos() {
   });
 }
 
+function obtenerPersonasSocios() {
+  return new Promise((resolve, reject) => {
+    const sql =
+      "SELECT p.* FROM " +
+      constantes.ESQUEMA +
+      ".persona p, " +
+      constantes.ESQUEMA +
+      ".socios s WHERE p.nid_persona = s.nid_persona" +
+      " and (s.fecha_baja is null or s.fecha_baja > NOW())";
+
+    conexion.dbConn.query(sql, (error, results) => {
+      if (error) {
+        console.error("Error al obtener las personas socios:", error);
+        reject(error);
+      }
+      resolve(results);
+    });
+  });
+}
+
 function esHijo(nid_persona, nid_hijo) {
   return new Promise((resolve, reject) => {
     const sql =
@@ -654,9 +674,11 @@ module.exports.obtenerHijos = obtenerHijos;
 module.exports.obtenerPersonaUsuario = obtenerPersonaUsuario;
 module.exports.obtenerUsuarioPersona = obtenerUsuarioPersona;
 module.exports.obtenerPersonaUsuario = obtenerPersonaUsuario;
+
 module.exports.obtenerPersonas = obtenerPersonas;
 module.exports.obtenerPersona = obtenerPersona;
 module.exports.obtenerPersonasMusicos = obtenerPersonasMusicos;
+module.exports.obtenerPersonasSocios = obtenerPersonasSocios;
 
 module.exports.obtenerPadre = obtenerPadre;
 module.exports.obtenerMadre = obtenerMadre;

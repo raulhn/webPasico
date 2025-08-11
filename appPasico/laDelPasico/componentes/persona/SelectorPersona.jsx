@@ -5,16 +5,21 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { AuthContext } from "../../providers/AuthContext";
 import { useContext, useEffect } from "react";
 import { FlatList } from "react-native";
-import { CheckBox, Boton } from "../componentesUI/ComponentesUI";
+import {
+  CheckBox,
+  Boton,
+  EntradaGroupRadioButton,
+} from "../componentesUI/ComponentesUI";
 import { useState, useRef } from "react";
 import SelectorTipoPersona from "./SelectorTipoPersona";
 import Constantes from "../../config/constantes";
-import { useTiposMusicos } from "../../hooks/personas/useTipoMusicos";
 
 export default function SelectorPersona({
   callback,
   personasSeleccionadas = new Set(),
   tipo = "",
+  categorias = [],
+  nid_asignatura = null,
 }) {
   const { cerrarSesion } = useContext(AuthContext);
 
@@ -28,23 +33,13 @@ export default function SelectorPersona({
 
   const [numElementos, setNumElementos] = useState(30);
 
-  const [nidTipoMusico, setNidTipoMusico] = useState(null);
+  const [nidTipo, setNidTipo] = useState(null);
 
   const flatListRef = useRef(null);
 
   useEffect(() => {
     setSeleccionados(personasSeleccionadas);
   }, [personasSeleccionadas]);
-
-  const { tiposMusicos, cargando: cargandoTipos } = useTiposMusicos();
-  let listaTiposMusicos = [];
-
-  if (!cargandoTipos) {
-    listaTiposMusicos = tiposMusicos.map((tipo) => ({
-      etiqueta: tipo.descripcion,
-      valor: tipo.nid_tipo_musico,
-    }));
-  }
 
   function seleccion(item, seleccionado) {
     const nuevoSet = new Set(seleccionados);
@@ -74,6 +69,8 @@ export default function SelectorPersona({
         "-" +
         item.nid_instrumento
       );
+    } else if (tipo == Constantes.ESCUELA) {
+      return item.nid_persona + "-" + item.nid_asignatura;
     }
     return item.nid_persona.toString();
   }
@@ -87,10 +84,21 @@ export default function SelectorPersona({
         .toLowerCase();
     let personasFiltradas = personas;
 
-    if (tipo === Constantes.BANDA && nidTipoMusico) {
+    if (tipo === Constantes.BANDA && nidTipo) {
       personasFiltradas = personas.filter(
-        (persona) => persona.nid_tipo_musico === nidTipoMusico
+        (persona) => persona.nid_tipo_musico === nidTipo
       );
+      setPersonasFiltradas(personasFiltradas);
+    } else if (tipo === Constantes.ESCUELA) {
+      personasFiltradas = personas.filter(
+        (persona) =>
+          persona.nid_asignatura === nid_asignatura || !nid_asignatura
+      );
+      if (nidTipo) {
+        personasFiltradas = personasFiltradas.filter(
+          (persona) => persona.nid_asignatura === nidTipo
+        );
+      }
       setPersonasFiltradas(personasFiltradas);
     }
 
@@ -108,7 +116,7 @@ export default function SelectorPersona({
     }
     const nuevoSet = new Set(seleccionados);
     setSeleccionados(nuevoSet);
-  }, [filtro, personas, nidTipoMusico]);
+  }, [filtro, personas, nidTipo]);
 
   if (cargando) {
     return <ActivityIndicator size="large" color="#0000ff" />;
@@ -132,17 +140,23 @@ export default function SelectorPersona({
           value={filtro}
           ancho={250}
         />
-        <View>
-          <SelectorTipoPersona
-            setTexto={(tipoSeleccionado) => {
+        <View style={categorias.length > 0 ? {} : { display: "none" }}>
+          <EntradaGroupRadioButton
+            setValorSeleccionado={(tipoSeleccionado) => {
               if (tipoSeleccionado === null) {
-                setNidTipoMusico(null);
+                setNidTipo(null);
                 return;
               }
-              setNidTipoMusico(tipoSeleccionado.valor);
+              setNidTipo(tipoSeleccionado.valor);
             }}
+            titulo={"Categoría"}
             ancho={140}
-            opciones={listaTiposMusicos}
+            opciones={categorias.filter((categoria) => {
+              if (tipo === Constantes.ESCUELA && nid_asignatura) {
+                return categoria.valor === nid_asignatura;
+              }
+              return true;
+            })}
           />
         </View>
       </View>

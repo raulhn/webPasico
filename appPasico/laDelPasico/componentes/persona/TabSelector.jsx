@@ -7,7 +7,12 @@ import Constantes from "../../config/constantes";
 import { useAsignaturas } from "../../hooks/escuela/useAsignaturas";
 import { useTiposMusicos } from "../../hooks/personas/useTipoMusicos";
 
-export default function TabSelector({ callback, personasSeleccionadas, tipo }) {
+export default function TabSelector({
+  callback,
+  personasSeleccionadas,
+  tipo,
+  nid_asignatura = null,
+}) {
   const [pestanaSeleccionada, setPestanaSeleccionada] = useState(0);
   const recuperaPersonas = (eventosRecuperados) => {
     const seleccion = {};
@@ -15,8 +20,24 @@ export default function TabSelector({ callback, personasSeleccionadas, tipo }) {
     seleccion.conjunto = eventosRecuperados;
     callback(seleccion);
   };
-
+  let categorias = [];
   const { tiposMusicos } = useTiposMusicos();
+  const { asignaturas } = useAsignaturas();
+
+  if (tipo === Constantes.BANDA) {
+    const categoriaBanda = tiposMusicos.map((tipo) => ({
+      etiqueta: tipo.descripcion,
+      valor: tipo.nid_tipo_musico,
+    }));
+    categorias = categoriaBanda;
+  } else if (tipo === Constantes.ESCUELA) {
+    const categoriaEscuela = asignaturas.map((asignatura) => ({
+      etiqueta: asignatura.descripcion,
+      valor: asignatura.nid_asignatura,
+    }));
+    categorias = categoriaEscuela;
+  }
+
   const listaTiposMusicos = tiposMusicos.map((tipo) => ({
     etiqueta: tipo.descripcion,
     valor: tipo.nid_tipo_musico,
@@ -41,8 +62,6 @@ export default function TabSelector({ callback, personasSeleccionadas, tipo }) {
   const [seleccionadasIndvidual, setseleccionadasIndividual] = useState([]);
   const [seleccionadasBanda, setseleccionadasBanda] = useState([]);
   const [seleccionadasEscuela, setseleccionadasEscuela] = useState([]);
-
-  const { asignaturas, error, cargando } = useAsignaturas();
 
   const listaAsignaturas = asignaturas.map((asignatura) => ({
     etiqueta: asignatura.descripcion,
@@ -118,6 +137,8 @@ export default function TabSelector({ callback, personasSeleccionadas, tipo }) {
             callback={recuperaPersonas}
             personasSeleccionadas={seleccionadasIndvidual}
             tipo={tipo}
+            categorias={categorias}
+            nid_asignatura={nid_asignatura}
           />
         </>
       );

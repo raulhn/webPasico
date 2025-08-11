@@ -6,6 +6,7 @@ const constantes = require("../constantes.js");
 const cron = require("node-cron");
 const gestorMusicos = require("./musicos.js");
 const gestorSocios = require("./socios.js");
+const gestorMatriculaAsignatura = require("./matricula_asignatura.js");
 
 const Expo = require("expo-server-sdk");
 
@@ -391,6 +392,32 @@ async function registrarNotificacionGrupo(
       const personasANotificar = personas.map((persona) => persona.nid_persona);
 
       await enviarNotificaciones(personasANotificar, titulo, body, data);
+    }
+    if (nid_grupo === constantes.ESCUELA) {
+      let listaPersonasANotificar = [];
+
+      for (const grupo of grupos) {
+        const personas =
+          await gestorMatriculaAsignatura.obtenerAlumnosCursoActivoAsignatura(
+            grupo
+          );
+
+        const personasANotificar = personas.map(
+          (persona) => persona.nid_persona
+        );
+
+        listaPersonasANotificar =
+          listaPersonasANotificar.concat(personasANotificar);
+      }
+
+      // Eliminar duplicados
+      const conjuntoPersonas = new Set(listaPersonasANotificar);
+      await enviarNotificaciones(
+        Array.from(conjuntoPersonas),
+        titulo,
+        body,
+        data
+      );
     }
   } catch (error) {
     console.error("Error al registrar la notificación del grupo:", error);

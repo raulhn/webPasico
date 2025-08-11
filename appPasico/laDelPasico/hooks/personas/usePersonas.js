@@ -13,23 +13,7 @@ export const usePersonas = (tipo = "", cerrar_sesion) => {
   }
 
   useEffect(() => {
-    if (tipo === "") {
-      servicePersonas
-        .obtenerPersonas(cerrar_sesion)
-        .then((personasRecuperadas) => {
-          setPersonas(personasRecuperadas);
-          setCargando(false); // Finaliza la carga
-          setRefrescar(false);
-          setError(false);
-        })
-        .catch((error) => {
-          console.log("Error al obtener las personas:", error);
-          setPersonas([]);
-          setCargando(false); // Finaliza la carga incluso si hay error
-          setRefrescar(false);
-          setError(true);
-        });
-    } else if (tipo === Constantes.BANDA) {
+    if (tipo === Constantes.BANDA) {
       servicePersonas
         .obtenerPersonasMusicos(cerrar_sesion)
         .then((personasRecuperadas) => {
@@ -60,6 +44,39 @@ export const usePersonas = (tipo = "", cerrar_sesion) => {
           setCargando(false); // Finaliza la carga incluso si hay error
           setError(true);
           setRefrescar(false);
+        });
+    } else if (tipo === Constantes.ASOCIACION) {
+      servicePersonas
+        .obtenerPersonasAsociacion(cerrar_sesion)
+        .then((personasRecuperadas) => {
+          setPersonas(personasRecuperadas);
+          setCargando(false); // Finaliza la carga
+          setRefrescar(false);
+          setError(false);
+        })
+        .catch((error) => {
+          console.log("Error al obtener las personas de la asociación:", error);
+          setPersonas([]);
+          setCargando(false); // Finaliza la carga incluso si hay error
+          setError(true);
+          setRefrescar(false);
+        });
+    } else {
+      servicePersonas
+        .obtenerPersonas(cerrar_sesion)
+        .then((personasRecuperadas) => {
+          setPersonas(personasRecuperadas);
+          console.log("Personas recuperadas Asociacion:", personasRecuperadas);
+          setCargando(false); // Finaliza la carga
+          setRefrescar(false);
+          setError(false);
+        })
+        .catch((error) => {
+          console.log("Error al obtener las personas:", error);
+          setPersonas([]);
+          setCargando(false); // Finaliza la carga incluso si hay error
+          setRefrescar(false);
+          setError(true);
         });
     }
   }, [refrescar]);
