@@ -120,7 +120,10 @@ export default function TabSelector({
               titulo={"Selecciona Asignatura"}
               callback={recuperaConjuntoAlumnos}
               valorTipos={seleccionadasEscuela}
-              opciones={listaAsignaturas}
+              opciones={listaAsignaturas.filter(
+                (asignatura) =>
+                  asignatura.valor === nid_asignatura || !nid_asignatura
+              )}
             />
           </>
         );

@@ -51,7 +51,7 @@ export const useTablonAnuncio = (nidAnuncio) => {
       ServiceTablonAnuncios.obtenerAnuncio(nidAnuncio)
         .then((data) => {
           setAnuncio(data.tablones_anuncios);
-          console.log("Tablones anuncions:", data.tablones_anuncios);
+      
           setError(null);
           setCargando(false);
           setRefrescar(false);
