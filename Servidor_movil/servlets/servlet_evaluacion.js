@@ -108,14 +108,23 @@ async function obtenerEvaluacionTrimestre(req, res) {
 
 async function obtenerEvaluaciones(req, res) {
   try {
-    const persona = await servletPersona.obtenerNidPersona(req, res);
+    const nid_persona = await servletPersona.obtenerNidPersona(req);
     const nidMatricula = req.params.nid_matricula;
+
+    console.log(
+      "servlet_evaluacion.js -> obtenerEvaluaciones: nid_persona:",
+      nid_persona
+    );
+    console.log(
+      "servlet_evaluacion.js -> obtenerEvaluaciones: nidMatricula:",
+      nidMatricula
+    );
 
     const matricula = await gestorMatricula.obtenerMatricula(nidMatricula);
 
-    if (matricula.nid_persona !== persona.nid_persona) {
+    if (matricula.nid_persona !== nid_persona) {
       const bEsPadre = await gestorPersonas.esHijo(
-        persona.nid_persona,
+        nid_persona,
         matricula.nid_persona
       );
       if (!bEsPadre) {
@@ -150,15 +159,15 @@ async function obtenerEvaluaciones(req, res) {
 
 async function solicitar_generar_boletin(req, res) {
   try {
-    const persona = await servletPersona.obtenerNidPersona(req, res);
+    const nid_persona = await servletPersona.obtenerNidPersona(req, res);
     const nidMatricula = req.params.nid_matricula;
     const nidTrimestre = req.params.nid_trimestre;
 
     const matricula = await gestorMatricula.obtenerMatricula(nidMatricula);
 
-    if (matricula.nid_persona !== persona.nid_persona) {
+    if (matricula.nid_persona !== nid_persona) {
       const bEsPadre = await gestorPersonas.esHijo(
-        persona.nid_persona,
+        nid_persona,
         matricula.nid_persona
       );
       if (!bEsPadre) {
@@ -173,7 +182,7 @@ async function solicitar_generar_boletin(req, res) {
 
     const tokenGeneracion = jwt.sign(
       {
-        nid_persona: persona.nid_persona,
+        nid_persona: nid_persona,
         nid_matricula: nidMatricula,
         nid_trimestre: nidTrimestre,
       },

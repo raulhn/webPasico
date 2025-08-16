@@ -187,12 +187,10 @@ async function obtenerNidPersona(req) {
   try {
     const tokenDecode = await servletComun.obtenerTokenDecoded(req);
     const nid_usuario = tokenDecode.nid_usuario;
-    const persona = gestorPersona.obtenerPersonaUsuario(nid_usuario);
-
-    return persona;
+    const persona = await gestorPersona.obtenerPersonaUsuario(nid_usuario);
+    return persona.nid_persona;
   } catch (error) {
-    console.log("servlet_persona.js -> obtenerNidPersona: ", error);
-    throw new Error("Se ha producido un error al recuperar la persona");
+    return null;
   }
 }
 
