@@ -4,7 +4,6 @@ const Constantes = require("../config/constantes.js");
 async function obtenerAnuncios(cerrarSesion, usuario) {
   try {
     if (usuario) {
-      console.log("Usuario autenticado, obteniendo anuncios...", usuario);
       const data = await serviceComun.peticionSesion(
         "GET",
         Constantes.URL_SERVICIO_MOVIL + "obtener_tablon_anuncios",
@@ -26,13 +25,22 @@ async function obtenerAnuncios(cerrarSesion, usuario) {
   }
 }
 
-async function obtenerAnuncio(nidAnuncio, cerrarSesion) {
+async function obtenerAnuncio(nidAnuncio, cerrarSesion, usuario) {
   try {
-    const data = serviceComun.peticionSesion(
-      "GET",
-      Constantes.URL_SERVICIO_MOVIL + "obtener_anuncio/" + nidAnuncio,
-      cerrarSesion
-    );
+    if (usuario) {
+      const data = serviceComun.peticionSesion(
+        "GET",
+        Constantes.URL_SERVICIO_MOVIL + "obtener_anuncio/" + nidAnuncio,
+        cerrarSesion
+      );
+      return data;
+    } else {
+      const data = serviceComun.peticionServicio(
+        "GET",
+        Constantes.URL_SERVICIO_MOVIL + "obtener_anuncio/" + nidAnuncio
+      );
+      return data;
+    }
   } catch (error) {
     throw new Error("Error en el servicio obtenerAnuncio");
   }
