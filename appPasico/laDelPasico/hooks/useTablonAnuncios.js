@@ -36,7 +36,7 @@ export const useTablonAnuncios = (cerrarSesion, usuario) => {
   return { anuncios, cargando, refrescar, error, lanzarRefresco };
 };
 
-export const useTablonAnuncio = (nidAnuncio, cerrarSesion) => {
+export const useTablonAnuncio = (nidAnuncio, cerrarSesion, usuario) => {
   const [anuncio, setAnuncio] = useState(null);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);

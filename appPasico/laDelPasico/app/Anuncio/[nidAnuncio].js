@@ -15,13 +15,16 @@ import { useRol } from "../../hooks/useRol.js";
 import FormularioTablon from "../../componentes/componentesTablon/formularioTablon.jsx";
 import { useState } from "react";
 import FormularioNotificacion from "../../componentes/notificaciones/FormularioNotificacion.jsx";
+import { useContext } from "react";
+import { AuthContext } from "../../providers/AuthContext.js";
 
 export default function Anuncio() {
+  const { cerrarSesion, usuario } = useContext(AuthContext);
   const [modalVisibleSelector, setModalVisibleSelector] = useState(false);
   const { nidAnuncio } = useLocalSearchParams();
   const { esRol } = useRol();
   const { anuncio, cargando, error, refrescar, lanzarRefresco } =
-    useTablonAnuncio(nidAnuncio);
+    useTablonAnuncio(nidAnuncio, cerrarSesion, usuario);
   const [modalVisible, setModalVisible] = useState(false);
   function formatearFecha(fechaISO) {
     if (!fechaISO) return "";
