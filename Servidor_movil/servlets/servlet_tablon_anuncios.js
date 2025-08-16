@@ -218,18 +218,29 @@ async function obtenerAnuncios(req, res) {
     let tablonesAnunciosAsociacion = [];
     let tablonesAnunciosEscuela = [];
 
-    let persona = await servletPersona.obtenerNidPersona(req);
-    const nidPersona = persona.nid_persona;
+    const nidPersona = await servletPersona.obtenerNidPersona(req);
+    console.log(
+      "servlet_tablon_anuncios.js -> obtenerAnuncios: nidPersona:",
+      nidPersona
+    );
 
     if (nidPersona) {
       let bPermisosBanda = await gestorUsuario.permisosMusico(nidPersona);
       if (bPermisosBanda) {
+        console.log(
+          "servlet_tablon_anuncios.js -> obtenerAnuncios: bPermisosBanda:",
+          bPermisosBanda
+        );
         tablonesAnunciosBanda =
           await gestorTablonAnuncios.obtenerTablonesAnuncioBanda();
       }
 
       let esSocio = await gestorSocios.esSocio(nidPersona);
       if (esSocio) {
+        console.log(
+          "servlet_tablon_anuncios.js -> obtenerAnuncios: esSocio:",
+          esSocio
+        );
         tablonesAnunciosAsociacion =
           await gestorTablonAnuncios.obtenerTablonesAnuncioAsociacion();
       }
@@ -247,6 +258,14 @@ async function obtenerAnuncios(req, res) {
         }
       }
     }
+
+    console.log(
+      "servlet_tablon_anuncios.js -> obtenerAnuncios: tablonesAnuncios:",
+      tablonesAnunciosGeneral.length,
+      tablonesAnunciosBanda.length,
+      tablonesAnunciosAsociacion.length,
+      tablonesAnunciosEscuela.length
+    );
 
     const tablonesAnuncios = [
       ...tablonesAnunciosGeneral,
@@ -279,10 +298,8 @@ async function obtenerAnuncio(req, res) {
       await gestorTablonAnuncios.obtenerTablonAnuncio(nid_tablon_anuncio);
 
     if (tablonAnuncio.nid_tipo_tablon == constantes.BANDA) {
-      const persona = await servletPersona.obtenerNidPersona(req);
-      const bPermisosBanda = await gestorUsuario.permisosMusico(
-        persona.nid_persona
-      );
+      const nidPersona = await servletPersona.obtenerNidPersona(req);
+      const bPermisosBanda = await gestorUsuario.permisosMusico(nidPersona);
 
       if (!bPermisosBanda) {
         res.status(403).send({
@@ -292,8 +309,8 @@ async function obtenerAnuncio(req, res) {
         return;
       }
     } else if (tablonAnuncio.nid_tipo_tablon == constantes.ASOCIACION) {
-      const persona = await servletPersona.obtenerNidPersona(req);
-      const bEsSocio = await gestorSocios.esSocio(persona.nid_persona);
+      const nidPersona = await servletPersona.obtenerNidPersona(req);
+      const bEsSocio = await gestorSocios.esSocio(nidPersona);
 
       if (!bEsSocio) {
         res.status(403).send({
@@ -303,9 +320,9 @@ async function obtenerAnuncio(req, res) {
         return;
       }
     } else if (tablonAnuncio.nid_tipo_tablon == constantes.ESCUELA) {
-      const persona = await servletPersona.obtenerNidPersona(req);
+      const nidPersona = await servletPersona.obtenerNidPersona(req);
       const bPermisosEscuela = await permisosAnuncioAsignatura(
-        persona.nid_persona,
+        nidPersona,
         tablonAnuncio
       );
 

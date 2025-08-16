@@ -1,50 +1,41 @@
 const serviceComun = require("./serviceComun.js");
 const Constantes = require("../config/constantes.js");
 
-async function obtenerAnuncios() {
-  return new Promise((resolve, reject) => {
-    try {
-      fetch(Constantes.URL_SERVICIO_MOVIL + "obtener_tablon_anuncios", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }).then((response) => {
-        response
-          .json()
-          .then((data) => {
-            resolve(data);
-          })
-          .catch((error) => {
-            reject(error);
-          });
-      });
-    } catch (error) {
-      throw new Error("Error en el servicio obtenerAnuncios");
+async function obtenerAnuncios(cerrarSesion, usuario) {
+  try {
+    if (usuario) {
+      console.log("Usuario autenticado, obteniendo anuncios...", usuario);
+      const data = await serviceComun.peticionSesion(
+        "GET",
+        Constantes.URL_SERVICIO_MOVIL + "obtener_tablon_anuncios",
+        null,
+        cerrarSesion
+      );
+      return data;
+    } else {
+      const data = await serviceComun.peticionServicio(
+        "GET",
+        Constantes.URL_SERVICIO_MOVIL + "obtener_tablon_anuncios",
+        null
+      );
+
+      return data;
     }
-  });
+  } catch (error) {
+    throw new Error("Error en el servicio obtenerAnuncios");
+  }
 }
 
-async function obtenerAnuncio(nidAnuncio) {
-  return new Promise((resolve, reject) => {
-    try {
-      fetch(Constantes.URL_SERVICIO_MOVIL + "obtener_anuncio/" + nidAnuncio, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          resolve(data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    } catch (error) {
-      throw new Error("Error en el servicio obtenerAnuncio");
-    }
-  });
+async function obtenerAnuncio(nidAnuncio, cerrarSesion) {
+  try {
+    const data = serviceComun.peticionSesion(
+      "GET",
+      Constantes.URL_SERVICIO_MOVIL + "obtener_anuncio/" + nidAnuncio,
+      cerrarSesion
+    );
+  } catch (error) {
+    throw new Error("Error en el servicio obtenerAnuncio");
+  }
 }
 
 async function registrarTablonAnuncio(anuncio, cerrarSesion) {

@@ -17,7 +17,7 @@ import CardAnuncio from "../../../componentes/componentesTablon/cardAnuncio.jsx"
 import { Link } from "expo-router";
 
 export default function Tablon() {
-  const { cerrarSesion } = useContext(AuthContext);
+  const { cerrarSesion, usuario } = useContext(AuthContext);
   const { tiposTablon, cargando, error, lanzarRefresco } =
     useTipoTablon(cerrarSesion);
 
@@ -30,8 +30,9 @@ export default function Tablon() {
     lanzarRefresco: lanzarRefrescoAnuncios,
     refrescar: refrescarAnuncios,
     error: errorAnuncios,
-  } = useTablonAnuncios();
+  } = useTablonAnuncios(cerrarSesion, usuario);
 
+  console.log("Cargando anuncios...", refrescarAnuncios);
   if (cargando) {
     return (
       <View style={styles.cargandoContainer}>

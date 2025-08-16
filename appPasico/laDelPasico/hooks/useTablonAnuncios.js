@@ -1,7 +1,7 @@
 import ServiceTablonAnuncios from "../servicios/serviceTablon";
 import { useState, useEffect } from "react";
 
-export const useTablonAnuncios = () => {
+export const useTablonAnuncios = (cerrarSesion, usuario) => {
   const [anuncios, setAnuncios] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
@@ -9,10 +9,11 @@ export const useTablonAnuncios = () => {
 
   function lanzarRefresco() {
     setRefrescar(true);
+    setCargando(true);
   }
 
   useEffect(() => {
-    ServiceTablonAnuncios.obtenerAnuncios()
+    ServiceTablonAnuncios.obtenerAnuncios(cerrarSesion, usuario)
       .then((data) => {
         setAnuncios(data.tablones_anuncios);
         setError(null);
@@ -26,6 +27,7 @@ export const useTablonAnuncios = () => {
         setCargando(false);
       })
       .finally(() => {
+        console.log("Finalizando carga de anuncios");
         setCargando(false);
         setRefrescar(false);
       });
@@ -34,7 +36,7 @@ export const useTablonAnuncios = () => {
   return { anuncios, cargando, refrescar, error, lanzarRefresco };
 };
 
-export const useTablonAnuncio = (nidAnuncio) => {
+export const useTablonAnuncio = (nidAnuncio, cerrarSesion) => {
   const [anuncio, setAnuncio] = useState(null);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
@@ -48,10 +50,10 @@ export const useTablonAnuncio = (nidAnuncio) => {
 
   useEffect(() => {
     if (nidAnuncio) {
-      ServiceTablonAnuncios.obtenerAnuncio(nidAnuncio)
+      ServiceTablonAnuncios.obtenerAnuncio(nidAnuncio, cerrarSesion)
         .then((data) => {
           setAnuncio(data.tablones_anuncios);
-      
+
           setError(null);
           setCargando(false);
           setRefrescar(false);
@@ -59,6 +61,11 @@ export const useTablonAnuncio = (nidAnuncio) => {
         .catch((error) => {
           console.log("Error al obtener el anuncio:", error);
           setError(error);
+          setCargando(false);
+          setRefrescar(false);
+        })
+        .finally(() => {
+          console.log("Finalizando carga del anuncio");
           setCargando(false);
           setRefrescar(false);
         });

@@ -23,6 +23,7 @@ function peticionServicio(metodo, url, body) {
 
     fetch(url, parametros)
       .then((response) => {
+        console.log("Respuesta del servidor:", response);
         response
           .json()
           .then((data) => {
@@ -74,13 +75,13 @@ async function peticionSesion(metodo, url, body, cerrarSesion) {
   try {
     let data = await peticionServicio(metodo, url, body);
     if (data.error && data.codigo === 1) {
-      console.log("Error de sesión, intentando refrescar...");
       let response = await refrescarSesion();
-      if (!response.Error) {
+
+      if (!response.error) {
         return await peticionServicio(metodo, url, body);
       } else {
-        console.log("Error al refrescar la sesión", response.Error);
         cerrarSesion(); // Llama a la función cerrarSesion del contexto
+
         throw new Error("Error al refrescar la sesión");
       }
     }
@@ -92,3 +93,4 @@ async function peticionSesion(metodo, url, body, cerrarSesion) {
 }
 
 module.exports.peticionSesion = peticionSesion;
+module.exports.peticionServicio = peticionServicio;

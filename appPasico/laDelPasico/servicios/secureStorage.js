@@ -4,7 +4,6 @@ async function obtenerToken(key) {
   try {
     const value = await SecureStore.getItemAsync(key);
     if (value) {
-      console.log(`Token recuperado: ${value}`);
       return value;
     } else {
       console.log("No se encontró ningún token con esa clave.");

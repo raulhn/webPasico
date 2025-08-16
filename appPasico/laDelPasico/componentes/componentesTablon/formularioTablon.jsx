@@ -31,7 +31,7 @@ export default function FormularioTablon({
     anuncio,
     cargando: cargandoAnuncio,
     error: errorAnuncio,
-  } = useTablonAnuncio(nidTablonAnuncionDefecto);
+  } = useTablonAnuncio(nidTablonAnuncionDefecto, cerrarSesion);
 
   const [tipoTablon, setTipoTablon] = useState({
     valor: null,
