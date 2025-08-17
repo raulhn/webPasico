@@ -21,13 +21,11 @@ export const useTablonAnuncios = (cerrarSesion, usuario) => {
         setCargando(false);
       })
       .catch((error) => {
-        console.log("Error al obtener anuncios:", error);
         setError(error);
         setRefrescar(false);
         setCargando(false);
       })
       .finally(() => {
-        console.log("Finalizando carga de anuncios");
         setCargando(false);
         setRefrescar(false);
       });
@@ -65,7 +63,6 @@ export const useTablonAnuncio = (nidAnuncio, cerrarSesion, usuario) => {
           setRefrescar(false);
         })
         .finally(() => {
-          console.log("Finalizando carga del anuncio");
           setCargando(false);
           setRefrescar(false);
         });

@@ -2,8 +2,6 @@ import servletComun from "./serviceComun.js";
 import Constantes from "../config/constantes.js";
 
 function registrarNotificacion(personas, titulo, mensaje, data, cerrar_sesion) {
-  console.log("registrarNotificacion", personas, titulo, mensaje, data);
-
   const body = {
     personas: personas,
     titulo: titulo,

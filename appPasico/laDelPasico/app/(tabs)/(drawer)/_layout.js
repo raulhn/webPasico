@@ -1,9 +1,4 @@
 import { Drawer } from "expo-router/drawer";
-import { StyleSheet, View, Image, Touchable } from "react-native";
-import { TouchableOpacity } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Text } from "react-native";
 import { CustomHeader } from "../../../componentes/cabecera.jsx";
 
 const CustomHeaderInicio = ({ navigation, route, options }) => {

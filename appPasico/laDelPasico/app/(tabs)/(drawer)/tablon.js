@@ -32,7 +32,6 @@ export default function Tablon() {
     error: errorAnuncios,
   } = useTablonAnuncios(cerrarSesion, usuario);
 
-  console.log("Cargando anuncios...", refrescarAnuncios);
   if (cargando) {
     return (
       <View style={styles.cargandoContainer}>
