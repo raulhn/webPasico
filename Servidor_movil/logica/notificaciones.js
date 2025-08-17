@@ -53,9 +53,8 @@ async function registrarNotificacion(nid_persona, titulo, body, data) {
       usuario.nid_usuario
     );
     if (!pushToken) {
-      throw new Error(
-        "No se encontró un token de notificación para el usuario."
-      );
+      console.log("No se encontró un token de notificación para el usuario.");
+      return;
     } else {
       const nid_notificacion = await insertarNotificacion(
         pushToken,
