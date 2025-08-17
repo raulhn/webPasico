@@ -39,7 +39,7 @@ export default function Index() {
       }
     });
 
-    // 2. Usar el listener para cuando la app está abierta o en background
+    // 2. Usar el listener para cuando la app está abierta o background
     const responseNotification =
       Notifications.addNotificationResponseReceivedListener((notificacion) => {
         if (notificacion.notification.request.content.data) {
