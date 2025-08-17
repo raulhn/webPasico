@@ -76,7 +76,25 @@ async function actualizarTablonAnuncio(anuncio, cerrarSesion) {
   }
 }
 
+async function eliminarTablonAnuncio(nidAnuncio, cerrarSesion) {
+  try {
+    console.log("Eliminando anuncio con nid:", nidAnuncio);
+    const data = await serviceComun.peticionSesion(
+      "POST",
+      Constantes.URL_SERVICIO_MOVIL + "eliminar_tablon_anuncio",
+      { nid_tablon_anuncio: nidAnuncio },
+      cerrarSesion
+    );
+
+    console.log("Respuesta del servidor al eliminar anuncio:", data);
+    return data;
+  } catch (error) {
+    throw new Error("Error en el servicio eliminarTablonAnuncio");
+  }
+}
+
 module.exports.obtenerAnuncios = obtenerAnuncios;
 module.exports.obtenerAnuncio = obtenerAnuncio;
 module.exports.registrarTablonAnuncio = registrarTablonAnuncio;
 module.exports.actualizarTablonAnuncio = actualizarTablonAnuncio;
+module.exports.eliminarTablonAnuncio = eliminarTablonAnuncio;

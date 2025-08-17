@@ -7,18 +7,24 @@ import {
   StyleSheet,
   Modal,
 } from "react-native";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { useTablonAnuncio } from "../../hooks/useTablonAnuncios";
 import Constantes from "../../config/constantes.js";
-import { BotonFixed } from "../../componentes/componentesUI/ComponentesUI.jsx";
+import {
+  BotonFixed,
+  ModalConfirmacion,
+} from "../../componentes/componentesUI/ComponentesUI.jsx";
 import { useRol } from "../../hooks/useRol.js";
 import FormularioTablon from "../../componentes/componentesTablon/formularioTablon.jsx";
 import { useState } from "react";
 import FormularioNotificacion from "../../componentes/notificaciones/FormularioNotificacion.jsx";
 import { useContext } from "react";
 import { AuthContext } from "../../providers/AuthContext.js";
+import ServiceTablon from "../../servicios/serviceTablon.js";
+import { useRouter } from "expo-router";
 
 export default function Anuncio() {
+  const [modalAvisoVisible, setModalAvisoVisible] = useState(false);
   const { cerrarSesion, usuario } = useContext(AuthContext);
   const [modalVisibleSelector, setModalVisibleSelector] = useState(false);
   const { nidAnuncio } = useLocalSearchParams();
@@ -26,6 +32,8 @@ export default function Anuncio() {
   const { anuncio, cargando, error, refrescar, lanzarRefresco } =
     useTablonAnuncio(nidAnuncio, cerrarSesion, usuario);
   const [modalVisible, setModalVisible] = useState(false);
+  const router = useRouter();
+
   function formatearFecha(fechaISO) {
     if (!fechaISO) return "";
     const fecha = new Date(fechaISO);
@@ -42,6 +50,24 @@ export default function Anuncio() {
         <ActivityIndicator size="large" color={Constantes.COLOR_AZUL} />
       </View>
     );
+  }
+
+  async function refrescarModal() {
+    try {
+      setModalAvisoVisible(false);
+      lanzarRefresco();
+    } catch (error) {}
+  }
+
+  async function eliminarTablonAnuncio(nidAnuncio) {
+    try {
+      await ServiceTablon.eliminarTablonAnuncio(nidAnuncio, cerrarSesion);
+      console.log("Anuncio eliminado correctamente");
+      setModalAvisoVisible(false);
+      router.replace("/(tabs)/(drawer)/tablon");
+    } catch (error) {
+      console.error("Error al eliminar el anuncio:", error);
+    }
   }
 
   function botonNotificar() {
@@ -83,12 +109,21 @@ export default function Anuncio() {
           styles.botonEditar,
         ]}
       >
-        <BotonFixed
-          onPress={() => {
-            setModalVisible(true);
-          }}
-          icon="mode-edit"
-        />
+        <View style={{ gap: 10 }}>
+          <BotonFixed
+            onPress={() => {
+              setModalAvisoVisible(true);
+            }}
+            icon="close"
+            colorBoton={Constantes.COLOR_ROJO}
+          />
+          <BotonFixed
+            onPress={() => {
+              setModalVisible(true);
+            }}
+            icon="mode-edit"
+          />
+        </View>
       </View>
       {botonNotificar()}
 
@@ -108,6 +143,20 @@ export default function Anuncio() {
           nidTablonAnuncionDefecto={anuncio.nid_tablon_anuncio}
         />
       </Modal>
+
+      <ModalConfirmacion
+        visible={modalAvisoVisible}
+        setVisible={refrescarModal}
+        textBoton={"Aceptar"}
+        textBotonCancelar={"Cancelar"}
+        mensaje="¿Estás seguro de que quieres eliminar el anuncio"
+        accion={() => {
+          eliminarTablonAnuncio(anuncio.nid_tablon_anuncio);
+        }}
+        accionCancelar={() => {
+          setModalAvisoVisible(false);
+        }}
+      />
 
       <Modal
         animationType="slide"

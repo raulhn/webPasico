@@ -65,6 +65,53 @@ function actualizarTablonAnuncio(
   });
 }
 
+function eliminarTablonAnuncio(nidTablonAnuncio) {
+  return new Promise((resolve, reject) => {
+    const sql =
+      "update " +
+      constantes.ESQUEMA +
+      ".tablon_anuncios " +
+      "set borrado = 'S' " +
+      "where nid_tablon_anuncio = " +
+      conexion.dbConn.escape(nidTablonAnuncio);
+
+    conexion.dbConn.beginTransaction(() => {
+      conexion.dbConn.query(sql, (error, results, fields) => {
+        if (error) {
+          console.log("tablon_anuncios.js -> eliminarTablonAnuncio: ", error);
+          conexion.dbConn.rollback();
+          reject("Se ha producido un error al eliminar el tabón");
+        } else {
+          conexion.dbConn.commit();
+          resolve();
+        }
+      });
+    });
+  });
+}
+
+function obtenerTodosTablonesAnuncio() {
+  return new Promise((resolve, reject) => {
+    const sql =
+      "select ta.*, tt.descripcion as tipo_tablon from " +
+      constantes.ESQUEMA +
+      ".tablon_anuncios ta, " +
+      constantes.ESQUEMA +
+      ".tipo_tablon tt " +
+      "where ta.nid_tipo_tablon = tt.nid_tipo_tablon and " +
+      "  ta.borrado = 'N'";
+
+    conexion.dbConn.query(sql, (error, results, fields) => {
+      if (error) {
+        console.log("tablon_anuncios.js -> obtenerTablonesAnuncio: ", error);
+        reject("Se ha producido un error al recuperar los tablones");
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
+
 function obtenerTablonesAnuncio(tipo) {
   return new Promise((resolve, reject) => {
     const sql =
@@ -75,7 +122,8 @@ function obtenerTablonesAnuncio(tipo) {
       ".tipo_tablon tt " +
       "where ta.nid_tipo_tablon = tt.nid_tipo_tablon and " +
       "tt.nid_tipo_tablon = " +
-      conexion.dbConn.escape(tipo);
+      conexion.dbConn.escape(tipo) +
+      " and ta.borrado = 'N'";
 
     conexion.dbConn.query(sql, (error, results, fields) => {
       if (error) {
@@ -140,7 +188,8 @@ function obtenerTablonesAnuncioEscuela() {
       constantes.ESQUEMA +
       ".tablon_anuncios_asignatura taa on ta.nid_tablon_anuncio = taa.nid_tablon_anuncio " +
       "where tt.nid_tipo_tablon = " +
-      conexion.dbConn.escape(constantes.ESCUELA);
+      conexion.dbConn.escape(constantes.ESCUELA) +
+      " and ta.borrado = 'N'";
 
     conexion.dbConn.query(sql, (error, results, fields) => {
       if (error) {
@@ -170,6 +219,7 @@ function obtenerTablonAnuncio(nidTablonAnuncio) {
       ".tipo_tablon tt on ta.nid_tipo_tablon = tt.nid_tipo_tablon " +
       "where ta.nid_tablon_anuncio = " +
       conexion.dbConn.escape(nidTablonAnuncio);
+    (" and ta.borrado = 'N'");
 
     conexion.dbConn.query(sql, (error, results, fields) => {
       if (error) {
@@ -191,7 +241,8 @@ function obtenerTablonesAnuncioTipo(nidTipoTablon) {
       constantes.ESQUEMA +
       ".tablon_anuncios " +
       "where nid_tipo_tablon = " +
-      conexion.dbConn.escape(nidTipoTablon);
+      conexion.dbConn.escape(nidTipoTablon) +
+      " and borrado = 'N'";
 
     conexion.dbConn.query(sql, (error, results, fields) => {
       if (error) {
@@ -209,6 +260,7 @@ function obtenerTablonesAnuncioTipo(nidTipoTablon) {
 
 module.exports.insertarTablonAnuncio = insertarTablonAnuncio;
 module.exports.actualizarTablonAnuncio = actualizarTablonAnuncio;
+module.exports.eliminarTablonAnuncio = eliminarTablonAnuncio;
 module.exports.obtenerTablonAnuncio = obtenerTablonAnuncio;
 module.exports.obtenerTablonesAnuncio = obtenerTablonesAnuncio;
 module.exports.obtenerTablonesAnuncioGeneral = obtenerTablonesAnuncioGeneral;
@@ -216,4 +268,5 @@ module.exports.obtenerTablonesAnuncioBanda = obtenerTablonesAnuncioBanda;
 module.exports.obtenerTablonesAnuncioAsociacion =
   obtenerTablonesAnuncioAsociacion;
 module.exports.obtenerTablonesAnuncioEscuela = obtenerTablonesAnuncioEscuela;
+module.exports.obtenerTodosTablonesAnuncio = obtenerTodosTablonesAnuncio;
 module.exports.obtenerTablonesAnuncioTipo = obtenerTablonesAnuncioTipo;
