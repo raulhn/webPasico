@@ -6,5 +6,6 @@ create table pasico_movil.evento_concierto(
     descripcion varchar(255),
     publicado varchar(1) default 'N',
     vestimenta varchar(100),
-    lugar varchar(100)
+    lugar varchar(100),
+    borrado varchar(1) default 'N'
 );
