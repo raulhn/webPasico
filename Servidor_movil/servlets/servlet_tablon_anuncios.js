@@ -63,8 +63,7 @@ async function compruebaPermisos(req, res, nidTipoTablon) {
   return (
     (nidTipoTablon == constantes.ESCUELA && bPermisosEscuela) ||
     (nidTipoTablon == constantes.BANDA && bPermisosBanda) ||
-    (nidTipoTablon == constantes.ASOCIACION && bPermisosAdministrador) ||
-    (nidTipoTablon == constantes.GENERAL && bPermisosAdministrador)
+    bPermisosAdministrador
   );
 }
 
@@ -169,6 +168,35 @@ async function actualizarTablonAnuncio(req, res) {
   }
 }
 
+async function eliminarTablonAnuncio(req, res) {
+  try {
+    const nid_tablon_anuncio = req.body.nid_tablon_anuncio;
+
+    const bPermisos = await compruebaPermisos(req, res, nid_tablon_anuncio);
+
+    if (!bPermisos) {
+      res.status(403).send({
+        error: true,
+        mensaje: "No tienes permisos para eliminar este anuncio",
+      });
+      return;
+    }
+
+    await gestorTablonAnuncios.eliminarTablonAnuncio(nid_tablon_anuncio);
+
+    res.status(200).send({
+      error: false,
+      mensaje: "Anuncio eliminado correctamente",
+    });
+  } catch (error) {
+    console.log("servlet_tablon_anuncios.js -> eliminarTablonAnuncio: ", error);
+    res.status(400).send({
+      error: true,
+      mensaje: "Se ha producido un error al eliminar el tablon de anuncios",
+    });
+  }
+}
+
 async function permisosAnuncioAsignatura(nid_persona, anuncio_asignatura) {
   try {
     if (!anuncio_asignatura || !anuncio_asignatura.nid_asignatura) {
@@ -211,6 +239,25 @@ async function permisosAnuncioAsignatura(nid_persona, anuncio_asignatura) {
 
 async function obtenerAnuncios(req, res) {
   try {
+    const rolesPermitidos = [constantes.ADMINISTRADOR];
+
+    const rolAdministrador = await servlet_comun.comprobarRol(
+      req,
+      res,
+      rolesPermitidos
+    );
+
+    if (rolAdministrador) {
+      const tablonesAnuncios =
+        await gestorTablonAnuncios.obtenerTodosTablonesAnuncio();
+
+      res.status(200).send({
+        error: false,
+        tablones_anuncios: tablonesAnuncios,
+      });
+      return;
+    }
+
     const tablonesAnunciosGeneral =
       await gestorTablonAnuncios.obtenerTablonesAnuncioGeneral();
 
@@ -259,14 +306,6 @@ async function obtenerAnuncios(req, res) {
       }
     }
 
-    console.log(
-      "servlet_tablon_anuncios.js -> obtenerAnuncios: tablonesAnuncios:",
-      tablonesAnunciosGeneral.length,
-      tablonesAnunciosBanda.length,
-      tablonesAnunciosAsociacion.length,
-      tablonesAnunciosEscuela.length
-    );
-
     const tablonesAnuncios = [
       ...tablonesAnunciosGeneral,
       ...tablonesAnunciosBanda,
@@ -296,6 +335,23 @@ async function obtenerAnuncio(req, res) {
 
     const tablonAnuncio =
       await gestorTablonAnuncios.obtenerTablonAnuncio(nid_tablon_anuncio);
+
+    const rolesPermitidos = [constantes.ADMINISTRADOR];
+
+    const rolAdministrador = await servlet_comun.comprobarRol(
+      req,
+      res,
+      rolesPermitidos
+    );
+
+    // Si es administrador, se permite el acceso
+    if (rolAdministrador) {
+      res.status(200).send({
+        error: false,
+        tablones_anuncios: tablonAnuncio,
+      });
+      return;
+    }
 
     if (tablonAnuncio.nid_tipo_tablon == constantes.BANDA) {
       const nidPersona = await servletPersona.obtenerNidPersona(req);
@@ -350,5 +406,6 @@ async function obtenerAnuncio(req, res) {
 
 module.exports.insertarTablonAnuncio = insertarTablonAnuncio;
 module.exports.actualizarTablonAnuncio = actualizarTablonAnuncio;
+module.exports.eliminarTablonAnuncio = eliminarTablonAnuncio;
 module.exports.obtenerAnuncios = obtenerAnuncios;
 module.exports.obtenerAnuncio = obtenerAnuncio;

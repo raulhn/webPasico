@@ -321,6 +321,11 @@ app.post(
   servletTablonAnuncios.actualizarTablonAnuncio
 );
 
+app.post(
+  "/eliminar_tablon_anuncio",
+  servletTablonAnuncios.eliminarTablonAnuncio
+);
+
 https
   .createServer(
     {

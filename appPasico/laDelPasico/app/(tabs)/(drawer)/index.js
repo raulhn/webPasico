@@ -32,7 +32,6 @@ export default function Index() {
     // 1. Solo usar getLastNotificationResponseAsync al montar, y solo si la app NO está en foreground
     Notifications.getLastNotificationResponseAsync().then((notificacion) => {
       if (notificacion) {
-        // Puedes guardar en un estado que ya se procesó, o navegar aquí solo si es necesario
         if (notificacion.notification.request.content.data) {
           router.push(notificacion.notification.request.content.data);
         }
