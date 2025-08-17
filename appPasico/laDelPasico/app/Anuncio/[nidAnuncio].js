@@ -131,6 +131,10 @@ export default function Anuncio() {
               ? ""
               : anuncio.nid_tipo_tablon
           }
+          data={{
+            pathname: "/Anuncio/[nidAnuncio]",
+            params: { nidAnuncio: anuncio.nid_tablon_anuncio },
+          }}
         />
       </Modal>
     </ScrollView>

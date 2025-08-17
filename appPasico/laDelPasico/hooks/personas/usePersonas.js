@@ -66,7 +66,6 @@ export const usePersonas = (tipo = "", cerrar_sesion) => {
         .obtenerPersonas(cerrar_sesion)
         .then((personasRecuperadas) => {
           setPersonas(personasRecuperadas);
-          console.log("Personas recuperadas Asociacion:", personasRecuperadas);
           setCargando(false); // Finaliza la carga
           setRefrescar(false);
           setError(false);

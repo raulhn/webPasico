@@ -404,6 +404,10 @@ export default function EventoConcierto() {
             valorMensaje={evento.descripcion}
             valorTitulo={evento.nombre}
             tipo={Constantes.BANDA}
+            data={{
+              pathname: "/eventoConcierto/[nidEvento]",
+              params: { nidEvento: nidEvento },
+            }}
           />
         </Modal>
       </View>

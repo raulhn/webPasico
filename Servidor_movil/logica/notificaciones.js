@@ -244,7 +244,7 @@ async function enviarNotificacionesPendientes() {
         to: notificacion.push_token,
         sound: "default",
         body: notificacion.body,
-        data: {},
+        data: notificacion.data,
         nid_notificacion: notificacion.nid_notificacion,
       });
     }

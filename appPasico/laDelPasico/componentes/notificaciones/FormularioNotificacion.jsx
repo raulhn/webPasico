@@ -22,6 +22,7 @@ export default function FormularioNotificacion({
   valorMensaje = "",
   tipo = "",
   nid_asignatura = null,
+  data = null,
 }) {
   const [titulo, setTitulo] = useState(valorTitulo);
   const [mensaje, setMensaje] = useState(valorMensaje);
@@ -51,7 +52,7 @@ export default function FormularioNotificacion({
           arrayPersonas,
           titulo,
           mensaje,
-          null,
+          data,
           cerrarSesion
         );
       } else {
@@ -63,7 +64,7 @@ export default function FormularioNotificacion({
           arrayGrupos,
           titulo,
           mensaje,
-          null,
+          data,
           cerrarSesion
         );
       }
