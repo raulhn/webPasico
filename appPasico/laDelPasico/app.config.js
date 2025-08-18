@@ -1,6 +1,6 @@
 export default {
 	  "expo": {
-    "name": "laDelPasico",
+    "name": "Banda del Pasico",
     "slug": "laDelPasico",
     "version": "1.0.0",
     "scheme": "laDelPasico",
@@ -29,7 +29,14 @@ export default {
     },
     "plugins": [
       "expo-router", 
-      "expo-secure-store"
+      "expo-secure-store",
+      "expo-notifications",
+      [
+        {
+          "icon": "./assets/logo_notifica.png",
+           "color": "#ffffff"
+        }
+      ],
     ],
     "extra": {
       "router": {
