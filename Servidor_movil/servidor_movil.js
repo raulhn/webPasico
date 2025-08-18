@@ -215,6 +215,8 @@ app.get(
   servletEventoConcierto.obtenerPartiturasEvento
 );
 
+app.post("/eliminar_evento_concierto", servletEventoConcierto.eliminar_evento);
+
 // Tipo evento musico //
 app.post(
   "/registrar_tipo_evento_musico",

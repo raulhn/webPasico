@@ -76,6 +76,26 @@ function actualizarEventoConcierto(eventoConcierto, cerrarSesion) {
   });
 }
 
+function eliminarEventoConcierto(nidEventoConcierto, cerrarSesion) {
+  return new Promise((resolve, reject) => {
+    const data = { nid_evento_concierto: nidEventoConcierto };
+
+    serviceComun
+      .peticionSesion(
+        "POST",
+        Constantes.URL_SERVICIO_MOVIL + "eliminar_evento_concierto",
+        data,
+        cerrarSesion
+      )
+      .then((response) => {
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+}
+
 function obtenerEventoConcierto(nidEventoConcierto, cerrarSesion) {
   return new Promise((resolve, reject) => {
     serviceComun
@@ -150,6 +170,7 @@ function eliminarPartituraEvento(
 
 module.exports.obtenerEventosConciertos = obtenerEventosConciertos;
 module.exports.registrarEventoConcierto = registrarEventoConcierto;
+module.exports.eliminarEventoConcierto = eliminarEventoConcierto;
 module.exports.obtenerEventoConcierto = obtenerEventoConcierto;
 module.exports.registrarPartituraEvento = registrarPartituraEvento;
 module.exports.eliminarPartituraEvento = eliminarPartituraEvento;

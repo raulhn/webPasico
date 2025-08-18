@@ -340,9 +340,44 @@ async function obtenerPartiturasEvento(req, res) {
   }
 }
 
+async function eliminar_evento(req, res) {
+  try {
+    const rolesPermitidos = [constantes.DIRECTOR, constantes.ADMINISTRADOR];
+    let rolDirector = await servlet_comun.comprobarRol(
+      req,
+      res,
+      rolesPermitidos
+    );
+    if (!rolDirector) {
+      res.status(403).send({
+        error: true,
+        mensaje: "No tienes permisos para eliminar un evento de concierto",
+      });
+    } else {
+      let nid_evento_concierto = req.body.nid_evento_concierto;
+
+      console.log("Eliminar Evento Concierto: ", nid_evento_concierto);
+
+      await gestorEventos.eliminarEvento(nid_evento_concierto);
+
+      res.status(200).send({
+        error: false,
+        mensaje: "Evento de concierto eliminado correctamente",
+      });
+    }
+  } catch (error) {
+    console.error("Error al eliminar el evento de concierto:" + error.message);
+    res.status(400).send({
+      error: true,
+      mensaje: "Error al eliminar el evento de concierto",
+    });
+  }
+}
+
 module.exports.insertarEventoConcierto = insertarEventoConcierto;
 module.exports.actualizarEventoConcierto = actualizarEventoConcierto;
 module.exports.obtenerEventosConcierto = obtenerEventosConcierto;
 module.exports.registrar_partitura_evento = registrar_partitura_evento;
 module.exports.eliminar_partitura_evento = eliminar_partitura_evento;
 module.exports.obtenerPartiturasEvento = obtenerPartiturasEvento;
+module.exports.eliminar_evento = eliminar_evento;

@@ -17,8 +17,10 @@ import {
 import SelectorPartituras from "../../componentes/componentesPartitura/SelectorPartituras";
 import { useRol } from "../../hooks/useRol";
 import FormularioEvento from "../../componentes/componentesBanda/FormularioEvento";
+import { useRouter } from "expo-router";
 
 export default function EventoConcierto() {
+  const router = useRouter();
   const { esRol } = useRol();
   const [evento, setEvento] = useState(null);
   const [partituras, setPartituras] = useState([]);
@@ -30,6 +32,8 @@ export default function EventoConcierto() {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [modalAvisoVisible, setModalAvisoVisible] = useState(false);
+  const [modalAvisoEliminarVisible, setModalAvisoEliminarVisible] =
+    useState(false);
   const [modalErrorVisible, setModalErrorVisible] = useState(false);
   const [tiposEvento, setTiposEvento] = useState([]);
   const [mensaje, setMensaje] = useState("");
@@ -227,6 +231,14 @@ export default function EventoConcierto() {
           color={Constantes.COLOR_AZUL}
           size={30}
         />
+        <BotonFixed
+          onPress={() => {
+            setModalAvisoEliminarVisible(true);
+          }}
+          icon="close"
+          colorBoton={Constantes.COLOR_ROJO}
+          size={30}
+        />
       </View>
     );
   }
@@ -246,6 +258,20 @@ export default function EventoConcierto() {
         />
       </View>
     );
+  }
+
+  async function eliminarEventoConcierto(nidEvento) {
+    try {
+      await ServiceEventoConcierto.eliminarEventoConcierto(
+        nidEvento,
+        cerrarSesion
+      );
+      console.log("Evento eliminado correctamente");
+      setModalAvisoEliminarVisible(false);
+      router.replace("/(tabs)/(banda)/eventos");
+    } catch (error) {
+      console.error("Error al eliminar el evento:", error);
+    }
   }
 
   return (
@@ -341,6 +367,20 @@ export default function EventoConcierto() {
           </View>
           <SelectorPartituras callback={registrarPartituraEvento} />
         </Modal>
+
+        <ModalConfirmacion
+          visible={modalAvisoEliminarVisible}
+          setVisible={() => setModalAvisoEliminarVisible(false)}
+          textBoton={"Aceptar"}
+          textBotonCancelar={"Cancelar"}
+          mensaje="¿Estás seguro de que quieres eliminar el evento"
+          accion={() => {
+            eliminarEventoConcierto(evento.nid_evento_concierto);
+          }}
+          accionCancelar={() => {
+            setModalAvisoEliminarVisible(false);
+          }}
+        />
 
         <Modal
           animationType="slide"
@@ -473,6 +513,8 @@ const estilos = StyleSheet.create({
     top: 20,
     right: 20,
     zIndex: 1,
+    flexDirection: "row",
+    gap: 10,
   },
   botonFixLeft: {
     position: "absolute",
