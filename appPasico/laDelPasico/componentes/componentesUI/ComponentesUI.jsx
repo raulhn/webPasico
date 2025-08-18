@@ -194,7 +194,7 @@ export function EntradaTexto({
   multiline = false,
   maxLength = null,
   ancho = 200,
-  alto = 40,
+  alto = 45,
 }) {
   const esPassword = secureTextEntry;
   const [isFocused, setIsFocused] = useState(false);
