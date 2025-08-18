@@ -31,12 +31,10 @@ export default {
       "expo-router", 
       "expo-secure-store",
       "expo-notifications",
-      [
         {
           "icon": "./assets/logo_notifica.png",
            "color": "#ffffff"
         }
-      ],
     ],
     "extra": {
       "router": {
