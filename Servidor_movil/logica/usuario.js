@@ -218,6 +218,27 @@ function obtenerUsuario(nid_usuario) {
   });
 }
 
+function obtenerUsuarioNoVerificado(correoElectronico) {
+  return new Promise((resolve, reject) => {
+    const query =
+      "SELECT * FROM " +
+      constantes.ESQUEMA +
+      ".usuarios WHERE correo_electronico = " +
+      conexion.dbConn.escape(correoElectronico) +
+      " and verificado = 'N'";
+    conexion.dbConn.query(query, (error, results) => {
+      if (error) {
+        console.error("Error al comprobar la existencia del usuario:", error);
+        reject(new Error("Error al comprobar la existencia del usuario"));
+      } else if (results.length > 0) {
+        resolve(results[0]);
+      } else {
+        resolve(null);
+      }
+    });
+  });
+}
+
 function login(correoElectronico, password) {
   return new Promise((resolve, reject) => {
     const query =
@@ -238,15 +259,30 @@ function login(correoElectronico, password) {
           } else {
             if (!result) {
               console.error("La contraseña es incorrecta.");
-              reject(new Error("La contraseña es incorrecta."));
+              reject(new Error("Error al realizar el login"));
             } else {
               resolve(results[0]);
             }
           }
         });
       } else {
-        console.error("El usuario no existe.");
-        reject(new Error("Error al realizar el login"));
+        resolve(null);
+      }
+    });
+  });
+}
+
+function comparaPasswords(password, password2) {
+  return new Promise((resolve, reject) => {
+    bcrypt.compare(password, password2, (err, result) => {
+      if (err) {
+        resolve(false);
+      } else {
+        if (!result) {
+          resolve(false);
+        } else {
+          resolve(true);
+        }
       }
     });
   });
@@ -256,6 +292,31 @@ async function realizarLogin(correoElectronico, password) {
   try {
     const usuario = await login(correoElectronico, password);
 
+    if (usuario == null) {
+      const usuarioNoVerificado =
+        await obtenerUsuarioNoVerificado(correoElectronico);
+
+      if (usuarioNoVerificado) {
+        let compara = await comparaPasswords(
+          password,
+          usuarioNoVerificado.password
+        );
+        if (compara) {
+          await validacionEmail.enviarEmailValidacion(
+            usuarioNoVerificado.nid_usuario,
+            correoElectronico
+          );
+          console.error("El usuario no está verificado.");
+          throw new Error(
+            "El usuario no está verificado. Se ha enviado un correo de verificación."
+          );
+        }
+        throw new Error("Error al realizar login");
+      } else {
+        console.error("Error al realizar login");
+        throw new Error("Error al realizar login");
+      }
+    }
     const sesion = jwt.sign(
       {
         nid_usuario: usuario.nid_usuario,

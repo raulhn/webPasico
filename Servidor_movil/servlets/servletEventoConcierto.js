@@ -356,8 +356,6 @@ async function eliminar_evento(req, res) {
     } else {
       let nid_evento_concierto = req.body.nid_evento_concierto;
 
-      console.log("Eliminar Evento Concierto: ", nid_evento_concierto);
-
       await gestorEventos.eliminarEvento(nid_evento_concierto);
 
       res.status(200).send({
