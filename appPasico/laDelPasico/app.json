@@ -20,7 +20,7 @@
       "googleServicesFile": "./google-services.json",
       "package": "com.ladelpasico.app",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/logo_notifica.png",
+        "foregroundImage": "./assets/logo.png",
         "backgroundColor": "#ffffff"
       }
     },
