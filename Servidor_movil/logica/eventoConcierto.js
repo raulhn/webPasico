@@ -26,10 +26,10 @@ function insertarEventoConcierto(
       ", " +
       conexion.dbConn.escape(publicado) +
       ", " +
-      conexion.dbConn.escape(vestimenta) + 
-      ", " 
-      conexion.dbConn.escape(lugar)
-      ")";
+      conexion.dbConn.escape(vestimenta) +
+      ", ";
+    conexion.dbConn.escape(lugar);
+    (")");
 
     conexion.dbConn.beginTransaction(() => {
       conexion.dbConn.query(sql, (err, results) => {
@@ -94,12 +94,36 @@ function actualizarEventoConcierto(
   });
 }
 
+function eliminarEvento(nid_evento_concierto) {
+  return new Promise((resolve, reject) => {
+    const sql =
+      "UPDATE " +
+      constantes.ESQUEMA +
+      ".evento_concierto SET borrado = 'S' WHERE nid_evento_concierto = " +
+      conexion.dbConn.escape(nid_evento_concierto);
+
+    conexion.dbConn.beginTransaction(() => {
+      conexion.dbConn.query(sql, (err, result) => {
+        if (err) {
+          console.log("eventoConcierto.js - eliminarEvento -> Error: " + err);
+          conexion.dbConn.rollback();
+          reject("Error al eliminar el evento de concierto");
+        } else {
+          conexion.dbConn.commit();
+          resolve();
+        }
+      });
+    });
+  });
+}
+
 function obtenerEventosConcierto() {
   return new Promise((resolve, reject) => {
     const sql =
       "SELECT * FROM " +
       constantes.ESQUEMA +
-      ".evento_concierto ORDER BY fecha_evento DESC, nid_evento_concierto DESC";
+      ".evento_concierto where borrado = 'N' " +
+      " ORDER BY fecha_evento DESC, nid_evento_concierto DESC";
 
     conexion.dbConn.query(sql, (err, result) => {
       if (err) {
@@ -120,7 +144,8 @@ function obtenerEventoConcierto(nid_evento_concierto) {
       "SELECT * FROM " +
       constantes.ESQUEMA +
       ".evento_concierto WHERE nid_evento_concierto = " +
-      conexion.dbConn.escape(nid_evento_concierto);
+      conexion.dbConn.escape(nid_evento_concierto) +
+      " and borrado = 'N'";
 
     conexion.dbConn.query(sql, (err, result) => {
       if (err) {
@@ -235,6 +260,7 @@ function existePartituraEvento(nid_evento_concierto, nid_partitura) {
 
 module.exports.insertarEventoConcierto = insertarEventoConcierto;
 module.exports.actualizarEventoConcierto = actualizarEventoConcierto;
+module.exports.eliminarEvento = eliminarEvento;
 module.exports.obtenerEventosConcierto = obtenerEventosConcierto;
 module.exports.obtenerEventoConcierto = obtenerEventoConcierto;
 
