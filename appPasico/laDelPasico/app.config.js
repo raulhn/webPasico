@@ -30,11 +30,13 @@ export default {
     "plugins": [
       "expo-router", 
       "expo-secure-store",
-      "expo-notifications",
+      [
+        "expo-notifications",
         {
           "icon": "./assets/logo_notifica.png",
-           "color": "#ffffff"
+          "color": "#ffffff"
         }
+      ]
     ],
     "extra": {
       "router": {
