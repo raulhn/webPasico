@@ -36,7 +36,8 @@ export default function Login() {
         .login(correo, contrasena, tokenNotificacion)
         .then((response) => {
           if (response.error) {
-            setError("Error en el inicio de sesión"); // Muestra el error en el modal
+            console.log("Error al iniciar sesión:", response);
+            setError(response.mensaje); // Muestra el error en el modal
           } else {
             iniciarSesion(response.usuario); // Guarda el usuario en el contexto
             guardarRoles(response.roles); // Guarda los roles en el contexto

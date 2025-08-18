@@ -1,6 +1,6 @@
 import { useContext, useEffect } from "react";
 import Main from "../../../componentes/Main";
-import Recaptcha from "../../../componentes/Recaptcha";
+
 import useNotification from "../../../hooks/useNotification";
 import { registrarConexion } from "../../../servicios/serviceConexion";
 import { View } from "react-native";
@@ -8,7 +8,6 @@ import { useState } from "react";
 
 import Tunstile from "../../../componentes/Turnstile";
 import { AuthContext } from "../../../providers/AuthContext.js";
-import ConstantesGoogle from "../../../config/constantesGoogle.js";
 
 import { router } from "expo-router";
 
@@ -21,7 +20,6 @@ export default function Index() {
   const { guardarTokenNotificacion } = useContext(AuthContext);
 
   useEffect(() => {
-    console.log("Iniciando listener de notificaciones");
     const subscription = Notifications.addNotificationReceivedListener(
       (notification) => {
         console.log("Notification received:", notification);
@@ -67,29 +65,18 @@ export default function Index() {
 
   // Envía el token al servidor backend
   const handleVerify = (event) => {
-    console.log("Recaptcha token recibido:", event.nativeEvent.data);
     const token = event.nativeEvent.data;
 
     setRecaptchaToken(token); // Guarda el token en el estado
   };
 
-  console.log(
-    "Google API Key:",
-    !process.env.GOOGLE_API_KEY
-      ? ConstantesGoogle.key
-      : process.env.GOOGLE_API_KEY
-  );
   return (
     <View style={{ flex: 1 }}>
       <Main />
 
       <View style={{ display: "none" }}>
         <Tunstile
-          siteKey={
-            !process.env.GOOGLE_API_KEY
-              ? ConstantesGoogle.key
-              : process.env.GOOGLE_API_KEY
-          }
+          siteKey={process.env.GOOGLE_API_KEY}
           onVerify={handleVerify}
         />
       </View>

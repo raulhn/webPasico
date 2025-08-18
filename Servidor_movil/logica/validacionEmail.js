@@ -8,6 +8,24 @@ function generarTokenVerificacion() {
   return crypto.randomBytes(32).toString("hex");
 }
 
+function eliminarValidacionMail(nid_usuario) {
+  return new Promise((resolve, reject) => {
+    const query =
+      "DELETE FROM " +
+      constantes.ESQUEMA +
+      ".validacion_mail WHERE nid_usuario = " +
+      conexion.dbConn.escape(nid_usuario);
+    conexion.dbConn.query(query, (error, results) => {
+      if (error) {
+        console.error("Error al eliminar la validación de correo:", error);
+        reject(error);
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
+
 function registrarValidacionMail(nid_usuario) {
   return new Promise((resolve, reject) => {
     const token = generarTokenVerificacion();
@@ -75,6 +93,8 @@ function registrarCorreoValidacion(correoElectronico, token) {
 
 async function enviarEmailValidacion(nid_usuario, correoElectronico) {
   try {
+    //Se elimina cualquier validación de correo anterior
+    await eliminarValidacionMail(nid_usuario);
     const token = await registrarValidacionMail(nid_usuario);
     await registrarCorreoValidacion(correoElectronico, token);
   } catch (error) {
