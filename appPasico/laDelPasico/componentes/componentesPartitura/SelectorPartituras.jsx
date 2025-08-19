@@ -1,12 +1,18 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import ServicePartituras from "../../servicios/servicePartituras";
 import { ActivityIndicator, StyleSheet, Modal, TextInput } from "react-native";
 import CardPartitura from "./CardPartitura";
 import { FlatList, View, Text, Pressable, RefreshControl } from "react-native";
-import { BotonFixed, Boton } from "../componentesUI/ComponentesUI";
+import {
+  BotonFixed,
+  Boton,
+  EntradaGroupRadioButton,
+} from "../componentesUI/ComponentesUI";
 import FormularioPartitura from "./FormularioPartitura";
-import { SelectorCategoria } from "./SelectorCategoria";
+
 import { useRol } from "../../hooks/useRol";
+import { AuthContext } from "../../providers/AuthContext";
+import { useCategoriasPartitura } from "../../hooks/banda/useCategoriasPartitura";
 
 export default function SelectorPartituras({ callback, edicion, refrescar }) {
   const [partituras, setPartituras] = useState([]);
@@ -17,6 +23,8 @@ export default function SelectorPartituras({ callback, edicion, refrescar }) {
   const [modalVisibleCategoria, setModalVisibleCategoria] = useState(false);
   const [refresco, setRefresco] = useState(false);
   const [error, setError] = useState(false);
+  const { cerrarSesion } = useContext(AuthContext);
+  const { categorias, lanzarRefresco } = useCategoriasPartitura(cerrarSesion);
 
   const { esRol } = useRol();
 
@@ -112,7 +120,11 @@ export default function SelectorPartituras({ callback, edicion, refrescar }) {
           }}
         />
 
-        <SelectorCategoria setTexto={actualizarCategoria} ancho={150} />
+        <EntradaGroupRadioButton
+          opciones={categorias}
+          titulo={"Categorias"}
+          setValorSeleccionado={actualizarCategoria}
+        />
       </View>
 
       <FlatList

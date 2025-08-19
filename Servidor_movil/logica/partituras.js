@@ -11,9 +11,9 @@ function insertarPartitura(titulo, autor, nid_categoria, url_partitura) {
         conexion.dbConn.escape(titulo) +
         ", " +
         conexion.dbConn.escape(autor) +
-        ", " +
+        ", nullif(" +
         conexion.dbConn.escape(nid_categoria) +
-        ", " +
+        ", '')," +
         conexion.dbConn.escape(url_partitura) +
         ")";
 
@@ -48,8 +48,9 @@ function actualizarPartitura(
       "autor = " +
       conexion.dbConn.escape(autor) +
       ", " +
-      "nid_categoria = " +
+      "nid_categoria = nullif(" +
       conexion.dbConn.escape(nid_categoria) +
+      ", '')" +
       ", " +
       "url_partitura = " +
       conexion.dbConn.escape(url_partitura) +
@@ -74,11 +75,11 @@ function actualizarPartitura(
 function obtenerPartituras() {
   return new Promise((resolve, reject) => {
     const sql =
-      "SELECT p.nid_partitura, p.titulo, p.autor, p.nid_categoria, p.url_partitura, c.nombre_categoria, p.url_partitura " +
+      "SELECT p.nid_partitura, p.titulo, p.autor, p.nid_categoria, p.url_partitura, ifnull(c.nombre_categoria, '') nombre_categoria, p.url_partitura " +
       "FROM " +
       constantes.ESQUEMA +
       ".partituras p " +
-      "JOIN " +
+      "LEFT JOIN " +
       constantes.ESQUEMA +
       ".categoria_partitura c ON p.nid_categoria = c.nid_categoria";
 
@@ -96,11 +97,11 @@ function obtenerPartituras() {
 function obtenerPartitura(nid_partitura) {
   return new Promise((resolve, reject) => {
     const sql =
-      "SELECT p.nid_partitura, p.titulo, p.autor, p.nid_categoria, p.url_partitura, c.nombre_categoria " +
+      "SELECT p.nid_partitura, p.titulo, p.autor, p.nid_categoria, p.url_partitura, ifnull(c.nombre_categoria, '') nombre_categoria " +
       "FROM " +
       constantes.ESQUEMA +
       ".partituras p " +
-      "JOIN " +
+      "LEFT JOIN " +
       constantes.ESQUEMA +
       ".categoria_partitura c ON p.nid_categoria = c.nid_categoria " +
       "WHERE p.nid_partitura = " +
