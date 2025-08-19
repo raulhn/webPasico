@@ -10,12 +10,12 @@ import {
   EntradaTexto,
   ModalAviso,
   ModalExito,
-  RadioInput,
-  GroupRadioInput,
+  EntradaGroupRadioButton,
+  BotonFixed,
 } from "../componentesUI/ComponentesUI";
+import CrearCategoria from "./CrearCategoria.jsx";
 
-import { SelectorCategoria } from "./SelectorCategoria";
-import { use } from "react";
+import { useCategoriasPartitura } from "../../hooks/banda/useCategoriasPartitura.js";
 
 export default function FormularioPartitura({
   accionCancelar,
@@ -29,10 +29,14 @@ export default function FormularioPartitura({
 
   const [aviso, setAviso] = useState(false);
   const [exito, setExito] = useState(false);
+  const [modalCreaCategoriaVisible, setModalCreaCategoriaVisible] =
+    useState(false);
 
   const [mensaje, setMensaje] = useState("");
 
   const { cerrarSesion } = useContext(AuthContext);
+
+  const { categorias, lanzarRefresco } = useCategoriasPartitura(cerrarSesion);
 
   useEffect(() => {
     if (nidPartitura) {
@@ -130,9 +134,26 @@ export default function FormularioPartitura({
       ></EntradaTexto>
 
       <Text>Categoria</Text>
-      <SelectorCategoria
-        setTexto={actualizarCategoria}
-        valorDefecto={categoria}
+
+      <View style={{ flexDirection: "row", gap: 10, alignItems: "center" }}>
+        <EntradaGroupRadioButton
+          titulo="Categorias"
+          opciones={categorias}
+          valor={categoria}
+          setValorSeleccionado={actualizarCategoria}
+        />
+        <BotonFixed
+          onPress={() => {
+            setModalCreaCategoriaVisible(true);
+          }}
+          size={30}
+        />
+      </View>
+
+      <CrearCategoria
+        modalVisible={modalCreaCategoriaVisible}
+        setModalVisible={setModalCreaCategoriaVisible}
+        callback={lanzarRefresco}
       />
 
       <Text>Autor</Text>
@@ -181,7 +202,7 @@ export default function FormularioPartitura({
       <ModalExito
         visible={exito}
         setVisible={refrescarModal}
-        mensaje={"Partitura registrada exitosamente"}
+        mensaje={"Partitura registrada"}
         textBoton={"Aceptar"}
       />
     </View>
