@@ -78,5 +78,8 @@ function eliminarProfesor(req, res) {
 }
 
 
+
+
+
 module.exports.registrarProfesor = registrarProfesor;
 module.exports.eliminarProfesor = eliminarProfesor;

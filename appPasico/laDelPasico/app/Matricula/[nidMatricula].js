@@ -19,7 +19,7 @@ import Constantes from "../../config/constantes.js";
 
 export default function Matricula() {
   const { nidMatricula } = useLocalSearchParams();
-  const { cerrar_sesion } = useContext(AuthContext);
+  const { cerrarSesion } = useContext(AuthContext);
   const {
     matriculasAsignatura,
     cargando,
@@ -27,7 +27,7 @@ export default function Matricula() {
     matricula,
     error,
     refrescar,
-  } = useMatriculasAsignaturaPersona(nidMatricula, cerrar_sesion);
+  } = useMatriculasAsignaturaPersona(nidMatricula, cerrarSesion);
 
   if (cargando) {
     return <ActivityIndicator size="large" color="#0000ff" />;

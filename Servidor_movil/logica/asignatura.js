@@ -184,11 +184,10 @@ function obtenerAsignaturasProfesor(nid_profesor) {
     const sql =
       "select a.* from " +
       constantes.ESQUEMA +
-      ".asignaturas a " +
-      "inner join " +
+      ".asignaturas a, " +
       constantes.ESQUEMA +
-      ".profesores p on a.nid_profesor = p.nid_profesor " +
-      "where p.nid_profesor = " +
+      ".profesor p where a.nid_asignatura = p.nid_asignatura " +
+      "and p.nid_persona = " +
       conexion.dbConn.escape(nid_profesor);
 
     conexion.dbConn.query(sql, (error, results) => {

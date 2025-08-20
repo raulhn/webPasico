@@ -20,7 +20,10 @@ const CustomHeaderEscuela = ({ navigation, route, options }) => {
 export default function DrawerLayout() {
   const { esRol } = useRol(); // Hook para verificar roles
 
+
   const logo = require("../../../assets/logo.png");
+
+
   return (
     <Drawer
       screenOptions={{
@@ -43,6 +46,14 @@ export default function DrawerLayout() {
           drawerItemStyle: esRol(["ALUMNO"]) ? {} : { display: "none" },
         }}
       ></Drawer.Screen>
+
+      <Drawer.Screen
+        name="alumnos"
+        options={{
+          title: "Alumnos",
+          drawerItemStyle: esRol(["PROFESOR"]) ? {} : { display: "none" },
+        }}
+      />
     </Drawer>
   );
 }

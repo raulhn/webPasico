@@ -1,5 +1,6 @@
 const gestorAsignatura = require("../logica/asignatura.js");
 const servletComun = require("./servlet_comun.js");
+const servletPersona = require("./servlet_persona.js");
 
 function registrarAsignatura(req, res) {
   servletComun.comprobacionAccesoAPIKey(req, res, async () => {

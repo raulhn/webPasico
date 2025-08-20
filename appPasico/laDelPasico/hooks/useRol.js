@@ -4,6 +4,7 @@ import { AuthContext } from "../providers/AuthContext.js";
 export const useRol = () => {
   const { roles } = useContext(AuthContext);
 
+  
   const esRol = (rolesPermitidos) => {
     if (!roles || roles.length === 0) {
       return false; // Si no hay roles, no se muestra la opción
