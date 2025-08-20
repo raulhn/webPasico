@@ -127,5 +127,25 @@ function obtenerCursoActivo() {
   });
 }
 
+
+function obtenerCursos()
+{
+  return new Promise((resolve, reject) => {
+    const sql =
+      "SELECT * FROM " + constantes.ESQUEMA + ".curso order by nid_curso desc";
+
+    conexion.dbConn.query(sql, (error, result) => {
+      if (error) {
+        console.error("Error al obtener los cursos: " + error.message);
+        reject(new Error("Error al obtener los cursos"));
+      } else {
+        resolve(result);
+      }
+    });
+  });
+}
+
+
 module.exports.registrarCurso = registrarCurso;
 module.exports.obtenerCursoActivo = obtenerCursoActivo;
+module.exports.obtenerCursos = obtenerCursos;

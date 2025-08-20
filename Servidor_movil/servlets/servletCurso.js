@@ -42,4 +42,24 @@ function registrarCurso(req, res) {
   });
 }
 
+
+async function obtenerCursos(req, res) {
+try{
+  const cursos = await gestorCursos.obtenerCursos();
+  res.status(200).send({
+    error: false,
+    cursos: cursos
+  });
+}
+catch (error) {
+  console.error("Error al obtener los cursos:" + error.message);
+  res.status(400).send({
+    error: true,
+    mensaje: "Error al obtener los cursos",
+  });
+}
+}
+
+
 module.exports.registrarCurso = registrarCurso;
+module.exports.obtenerCursos = obtenerCursos;

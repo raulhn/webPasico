@@ -188,6 +188,9 @@ app.get("/obtener_socio", servletSocios.obtenerSocio);
 // Trimestres //
 app.get("/obtener_trimestres", servletTrimestre.obtenerTrimestres);
 
+// Cursos //
+app.get("/obtener_cursos", servletCurso.obtenerCursos);
+
 // Eventos //
 app.post(
   "/registrar_evento_concierto",
@@ -260,6 +263,12 @@ app.get(
   "/obtener_alumnos_profesor",
   servletProfesorAlumnoMatricula.obtenerAlumnosProfesor
 );
+
+app.get(
+  "/obtener_alumnos_asignatura_profesor/:nid_asignatura/:nid_curso",
+  servletMatriculaAsignatura.obtenerAlumnosAsignaturaProfesor
+);
+
 app.get(
   "/obtener_alumnos_asignatura/:nid_asignatura",
   servletMatriculaAsignatura.obtenerAlumnosAsignatura

@@ -195,7 +195,8 @@ function esProfesor(nid_persona, nid_asignatura)
   )
 }
 
+
 module.exports.registrarProfesor = registrarProfesor;
 module.exports.eliminarProfesor = eliminarProfesor;
 module.exports.obtenerProfesor = obtenerProfesor;
-module.exports.esProfesor =esProfesor
+module.exports.esProfesor = esProfesor;

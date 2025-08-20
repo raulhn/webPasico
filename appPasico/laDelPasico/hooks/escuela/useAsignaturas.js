@@ -32,3 +32,42 @@ export const useAsignaturas = () => {
 
   return { asignaturas, cargando, error, lanzarRefresco };
 };
+
+
+export const useAsignaturasProfesor = (cerrarSesion) =>
+{
+  const [asignaturas, setAsignaturas] = useState([]);
+  const [cargando, setCargando] = useState(true);
+  const [error, setError] = useState(null);
+  const [refrescar, setRefrescar] = useState(false);
+
+  async function fetchAsignaturasProfesor() {
+    try {
+      const data = await serviceAsignaturas.obtenerAsignaturasProfesor(cerrarSesion);
+      setAsignaturas(data);
+      setRefrescar(false);
+      setCargando(false);
+    } catch (error) {
+      setError(error);
+      setRefrescar(false);
+      setCargando(false);
+    } finally {
+      setCargando(false);
+    }
+  }
+
+  useEffect(() => {
+    fetchAsignaturasProfesor();
+  }, [refrescar]);
+
+  function lanzarRefresco() {
+    setCargando(true);
+    setRefrescar(true);
+  }
+
+  return { asignaturas, cargando, error, lanzarRefresco };
+};
+
+
+
+  

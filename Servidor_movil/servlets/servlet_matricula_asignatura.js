@@ -227,6 +227,30 @@ async function obtenerAlumnosAsignatura(req, res) {
   }
 }
 
+async function obtenerAlumnosAsignaturaProfesor(req, res) {
+  try {
+    const nid_asignatura = req.params.nid_asignatura;
+    const nid_curso = req.params.nid_curso;
+    const nid_profesor = await servletPersona.obtenerNidPersona(req);
+
+    const alumnos = await gestorMatriculaAsignatura.obtenerAlumnosAsignaturaProfesor(
+      nid_asignatura,
+      nid_curso,
+      nid_profesor
+    );
+    res.status(200).send({ error: false, alumnos: alumnos });
+  } catch (error) {
+    console.error(
+      "servlet_matricula_asignatura.js -> obtenerAlumnosAsignaturaProfesor: Error al obtener los alumnos de la asignatura:",
+      error
+    );
+    res.status(400).send({
+      error: true,
+      mensaje: "Error al obtener los alumnos de la asignatura",
+    });
+  }
+}
+
 module.exports.registrarMatriculaAsignatura = registrarMatriculaAsignatura;
 module.exports.obtenerAlumnosCursoActivo = obtenerAlumnosCursoActivo;
 module.exports.obtenerAlumnosCursoActivoAsignatura =
@@ -234,3 +258,4 @@ module.exports.obtenerAlumnosCursoActivoAsignatura =
 module.exports.obtenerMatriculasAsignaturaPersona =
   obtenerMatriculasAsignaturaPersona;
 module.exports.obtenerAlumnosAsignatura = obtenerAlumnosAsignatura;
+module.exports.obtenerAlumnosAsignaturaProfesor = obtenerAlumnosAsignaturaProfesor
