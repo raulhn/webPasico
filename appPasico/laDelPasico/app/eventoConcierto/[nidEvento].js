@@ -110,6 +110,7 @@ export default function EventoConcierto() {
   useEffect(() => {
     ServiceEventoConcierto.obtenerEventoConcierto(nidEvento, cerrarSesion)
       .then((eventoData) => {
+        console.log("EventoConcierto -> Evento obtenido:", eventoData);
         setEvento(eventoData.evento_concierto);
         setTiposEvento(eventoData.tipos_evento);
         setPartituras(eventoData.partituras);
