@@ -20,7 +20,7 @@ import { useCategoriasPartitura } from "../../hooks/banda/useCategoriasPartitura
 export default function FormularioPartitura({
   accionCancelar,
   callback,
-  nidPartitura,
+  nidPartitura = null
 }) {
   const [nombre, setNombre] = useState("");
   const [categoria, setCategoria] = useState(null);
@@ -61,25 +61,30 @@ export default function FormularioPartitura({
     const partitura = {
       titulo: nombre,
       autor: autor,
-      categoria: categoria.valor,
+      categoria: categoria ? categoria.valor : null,
       url_partitura: urlPartitura,
     };
 
     try {
+      console.log("Lanza registro de partitura", partitura)
       const respuesta = await ServicePartituras.registrarPartitura(
         partitura,
         cerrarSesion
       );
 
+      console.log("Respuesta del registro de partitura:", respuesta);
+      console.log(callback)
       if (!respuesta.error) {
+        console.log("Partitura registrada:", respuesta.nid_partitura);
         callback(respuesta.nid_partitura);
         setExito(true);
       } else {
-        setMensaje("Error al registrar la partitura");
+        setMensaje("Error al registrar la partitura 2");
         setAviso(true);
       }
     } catch (error) {
-      setMensaje("Error al registrar la partitura");
+      console.log("Error al registrar la partitura:", error);
+      setMensaje("Error al registrar la partitura er");
       setAviso(true);
     }
   }
@@ -94,6 +99,7 @@ export default function FormularioPartitura({
     };
 
     try {
+      console.log("Lanza actualizacion de partitura")
       const respuesta = await ServicePartituras.actualizarPartitura(
         partitura,
         cerrarSesion
