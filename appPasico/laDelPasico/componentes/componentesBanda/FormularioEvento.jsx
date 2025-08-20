@@ -226,6 +226,7 @@ export default function FormularioEvento({ cancelar, callback, nidEvento }) {
           style={{ justifyContent: "center", gap: 10, alignItems: "center" }}
         >
           <SelectorMultipleTipoPersona
+          titulo={"Tipo de Evento"}
             tiposEventos={tiposEventoRecuperados}
             callback={(eventos) => {
               setTiposEventoRecuperados(eventos);

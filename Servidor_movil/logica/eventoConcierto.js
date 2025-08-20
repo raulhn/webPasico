@@ -217,10 +217,9 @@ function obtenerPartiturasEvento(nid_evento_concierto) {
       constantes.ESQUEMA +
       ".partituras_evento pe, " +
       constantes.ESQUEMA +
-      ".categoria_partitura cp, " +
-      constantes.ESQUEMA +
-      ".partituras p where pe.nid_partitura = p.nid_partitura " +
-      "and p.nid_categoria = cp.nid_categoria " +
+      ".partituras p  " +
+      " left join " + constantes.ESQUEMA + ".categoria_partitura cp on p.nid_categoria = cp.nid_categoria " +
+      " where pe.nid_partitura = p.nid_partitura " +
       "and pe.nid_evento_concierto = " +
       conexion.dbConn.escape(nid_evento_concierto);
 

@@ -38,7 +38,7 @@ export default function ArchivoDigital() {
     <View style={estilos.container}>
       <Text style={estilos.title}>Archivo Digital</Text>
 
-      <SelectorPartituras edicion={edicion} refrescar={refrescar} />
+      <SelectorPartituras edicion={edicion}  refrescar={refrescar} />
       <Modal
         animationType="slide"
         visible={modalVisible}
