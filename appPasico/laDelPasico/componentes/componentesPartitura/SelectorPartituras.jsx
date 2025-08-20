@@ -176,7 +176,7 @@ export default function SelectorPartituras({ callback, edicion, refrescar }) {
           setModalVisible(false);
         }}
       >
-        <FormularioPartitura accionCancelar={cancelar} callback={callback} />
+        <FormularioPartitura accionCancelar={cancelar} callback={() => {setRefresco(true); setModalVisible(false);}} />
       </Modal>
 
       <Modal

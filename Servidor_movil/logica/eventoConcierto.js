@@ -27,9 +27,11 @@ function insertarEventoConcierto(
       conexion.dbConn.escape(publicado) +
       ", " +
       conexion.dbConn.escape(vestimenta) +
-      ", ";
-    conexion.dbConn.escape(lugar);
-    (")");
+      ", " +
+      conexion.dbConn.escape(lugar) +
+      ")";
+
+    console.log("eventoConcierto.js - insertarEventoConcierto -> SQL: " + sql);
 
     conexion.dbConn.beginTransaction(() => {
       conexion.dbConn.query(sql, (err, results) => {

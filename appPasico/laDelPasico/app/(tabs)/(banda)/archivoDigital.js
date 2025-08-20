@@ -9,7 +9,9 @@ export default function ArchivoDigital() {
   const [refrescar, setRefrescar] = useState(false);
 
   function refrescarPartituras() {
+    console.log("archivoDigital.js -> " + "Se lanza callback")
     setRefrescar(!refrescar);
+    setModalVisible(false)
   }
 
   const edicion = {
@@ -26,6 +28,12 @@ export default function ArchivoDigital() {
     setModalVisible(false);
   };
 
+  function callbackRegistroPartitura(nid_partitura)
+  {
+    console.log("callbackRegistroPartitura -> Se lanza callback", nid_partitura);
+    refrescarPartituras()
+  }
+
   return (
     <View style={estilos.container}>
       <Text style={estilos.title}>Archivo Digital</Text>
@@ -40,9 +48,7 @@ export default function ArchivoDigital() {
       >
         <FormularioPartitura
           accionCancelar={cancelar}
-          callback={() => {
-            refrescarPartituras();
-          }}
+          callback={callbackRegistroPartitura}   
           nidPartitura={nidPartituraSeleccionada}
         />
       </Modal>
