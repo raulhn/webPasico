@@ -1,6 +1,7 @@
 import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../../providers/AuthContext.js";
 import serviceMatriculaAsignatura from "../../servicios/serviceMatriculaAsignatura.js";
+import servicePersonas from "../../servicios/servicePersonas.js";
 
 export const useAlumnos = () =>
 {
@@ -40,7 +41,6 @@ export const useAlumnosAsignaturaProfesor = (nidCurso_, nidAsignatura_, cerrarSe
     useEffect(() => {
  
         if(nidAsignatura && nidCurso)      {
-            console.log("Obteniendo alumnos de la asignatura del profesor:", nidAsignatura, nidCurso);
         serviceMatriculaAsignatura.obtenerAlumnosAsignaturaProfesor(nidCurso, nidAsignatura, cerrarSesion)
             .then((data) => {
                 setAlumnos(data);
@@ -61,4 +61,35 @@ export const useAlumnosAsignaturaProfesor = (nidCurso_, nidAsignatura_, cerrarSe
     }, [refrescar, nidCurso, nidAsignatura]);
 
     return { alumnos, cargando, error, lanzarRefresco, setNidAsignatura, setNidCurso};
+}
+
+export const useAlumnoProfesor = (nidAlumno, cerrarSesion) => {
+
+    const [alumno, setAlumno] = useState(null);
+    const [cargando, setCargando] = useState(true);
+    const [error, setError] = useState(null);
+    const [refrescar, setRefrescar] = useState(false);
+
+    function lanzarRefresco() {
+        setRefrescar(true);
+    }
+
+    useEffect(() => {
+        if (nidAlumno) {
+            servicePersonas.obtenerAlumnoProfesor(nidAlumno, cerrarSesion)
+                .then((data) => {
+                    setAlumno(data);
+                    setCargando(false);
+                    setRefrescar(false);
+                })
+                .catch((error) => {
+                    console.error("Error al obtener el alumno del profesor:", error);
+                    setError(error);
+                    setCargando(false);
+                    setRefrescar(false);
+                });
+        }
+    }, [nidAlumno, refrescar]);
+
+    return { alumno, cargando, error, refrescar, lanzarRefresco};
 }

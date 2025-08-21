@@ -225,8 +225,38 @@ function obtenerProfesorAlumnoMatricula(nid_matricula_asignatura) {
   });
 }
 
+function esAlumnoProfesor(nid_alumno, nid_profesor, nid_curso)
+{
+  return new Promise((resolve, reject) => {
+    const sql =
+      "SELECT COUNT(*) AS existe FROM " +
+      constantes.ESQUEMA +
+      ".profesor_alumno_matricula pam, " +
+      constantes.ESQUEMA +
+      ".matricula_asignatura ma, " +
+      constantes.ESQUEMA +
+      ".matricula m " +
+      "WHERE pam.nid_matricula_asignatura = ma.nid_matricula_asignatura " +
+      " and ma.nid_matricula = m.nid_matricula " +
+      " and m.nid_persona = " + conexion.dbConn.escape(nid_alumno) +
+      " and pam.nid_profesor = " + conexion.dbConn.escape(nid_profesor) +
+      " and m.nid_curso = " + conexion.dbConn.escape(nid_curso);
+
+    conexion.dbConn.query(sql, (err, result) => {
+      if (err) {
+        console.error("Error al comprobar si el alumno es profesor:", err);
+        reject(err);
+      } else {
+        resolve(result[0].existe > 0);
+      }
+    });
+  });
+}
+
 module.exports.registrarProfesorAlumnoMatricula =
   registrarProfesorAlumnoMatricula;
 module.exports.obtenerAlumnosProfesorCursoActual =
   obtenerAlumnosProfesorCursoActual;
 module.exports.obtenerProfesorAlumnoMatricula = obtenerProfesorAlumnoMatricula;
+module.exports.esAlumnoProfesor = esAlumnoProfesor;
+  

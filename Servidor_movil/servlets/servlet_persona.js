@@ -2,6 +2,8 @@ const servletComun = require("./servlet_comun.js");
 const gestorPersona = require("../logica/persona.js");
 const constantes = require("../constantes.js");
 const gestorMatricula = require("../logica/matricula.js");
+const gestorProfesorAlumnoMatricula = require("../logica/profesor_alumno_matricula.js");
+const gestorCurso = require("../logica/curso.js");
 
 function registrarPersona(req, res) {
   servletComun.comprobacionAccesoAPIKey(req, res, async () => {
@@ -256,6 +258,77 @@ async function obtenerPersonasSocios(req, res) {
   }
 }
 
+async function obtenerAlumnoProfesor(req, res)
+{
+  try
+  {
+    const nid_alumno = req.params.nid_alumno;
+    const rolesPermitidos = [constantes.PROFESOR];
+    let rolProfesor = await servletComun.comprobarRol(
+      req, res, rolesPermitidos
+    );
+
+    if (!rolProfesor) {
+      res.status(403).send({
+        error: true,
+        mensaje: "No tienes permisos para obtener el alumno profesor",
+      });
+      return;
+    }
+
+    const nid_profesor = await obtenerNidPersona(req);
+    if (!nid_profesor) {
+      res.status(404).send({
+        error: true,
+        mensaje: "No se encontró la persona",
+      });
+      return;
+    }
+
+
+    const curso = await gestorCurso.obtenerCursoActivo();
+    const nid_curso = curso.nid_curso;
+
+    const esProfesor = await gestorProfesorAlumnoMatricula.esAlumnoProfesor(nid_alumno, nid_profesor, nid_curso);
+
+    if (!esProfesor) {
+      res.status(403).send({
+        error: true,
+        mensaje: "No tienes permisos para obtener el alumno",
+      });
+      return;
+    }
+
+    const alumno = await gestorPersona.obtenerPersona(nid_alumno);
+    if (!alumno) {
+      res.status(404).send({
+        error: true,
+        mensaje: "No se encontró la información del alumno profesor",
+      });
+      return;
+    }
+
+    const padre = await gestorPersona.obtenerPersona(alumno.nid_padre);
+    const madre = await gestorPersona.obtenerPersona(alumno.nid_madre);
+
+    res.status(200).send({
+      error: false,
+      mensaje: "Información del alumno profesor obtenida correctamente",
+      persona: alumno,
+      padre: padre,
+      madre: madre,
+    });
+  }
+  catch(error)
+  {
+    console.error("Error al obtener el alumno profesor:", error.message);
+    res.status(400).send({
+      error: true,
+      mensaje: "Error al obtener el alumno profesor",
+    });
+  }
+}
+
 module.exports.obtenerPersona = obtenerPersona;
 module.exports.registrarPersona = registrarPersona;
 module.exports.obtenerPersonasSucias = obtenerPersonasSucias;
@@ -265,3 +338,4 @@ module.exports.obtenerPersonasMusicos = obtenerPersonasMusicos;
 module.exports.obtenerNidPersona = obtenerNidPersona;
 module.exports.obtenerPersonasAlumnos = obtenerPersonasAlumnos;
 module.exports.obtenerPersonasSocios = obtenerPersonasSocios;
+module.exports.obtenerAlumnoProfesor = obtenerAlumnoProfesor;
