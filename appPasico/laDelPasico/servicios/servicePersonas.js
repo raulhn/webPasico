@@ -69,6 +69,26 @@ function obtenerPersonasAlumnos(cerrar_sesion) {
   });
 }
 
+async function obtenerAlumnoProfesor(nid_alumno,cerrar_sesion)
+{
+   try {
+       const response = await servicioComun.peticionSesion(
+           "GET",
+           Constantes.URL_SERVICIO_MOVIL + "obtener_alumno_profesor/" + nid_alumno,
+           null,
+           cerrar_sesion
+       );
+       if (!response.error) {
+           return response;
+       } else {
+           throw new Error(response.error);
+       }
+   } catch (error) {
+       console.log("Error en el servicio obtener_alumno_profesor");
+       throw error;
+   }
+}
+
 function obtenerPersonasAsociacion(cerrar_sesion) {
   return new Promise((resolve, reject) => {
     servicioComun
@@ -95,4 +115,5 @@ function obtenerPersonasAsociacion(cerrar_sesion) {
 module.exports.obtenerPersonas = obtenerPersonas;
 module.exports.obtenerPersonasMusicos = obtenerPersonasMusicos;
 module.exports.obtenerPersonasAlumnos = obtenerPersonasAlumnos;
+module.exports.obtenerAlumnoProfesor = obtenerAlumnoProfesor;
 module.exports.obtenerPersonasAsociacion = obtenerPersonasAsociacion;

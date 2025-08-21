@@ -666,6 +666,9 @@ function esHijo(nid_persona, nid_hijo) {
   });
 }
 
+
+
+
 module.exports.registrarPersona = registrarPersona;
 module.exports.obtenerPersonasSucias = obtenerPersonasSucias;
 module.exports.limpiarPersona = limpiarPersona;

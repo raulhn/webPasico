@@ -6,6 +6,7 @@ import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../../providers/AuthContext';
 import { useAlumnosAsignaturaProfesor } from '../../../hooks/escuela/useAlumnos';
 import CardAlumno from '../../../componentes/componentesEscuela/CardAlumno';
+import { Link } from 'expo-router';
 
 
 
@@ -74,9 +75,19 @@ export default function Alumnos()
           <View >
           <FlatList
             data={alumnos}
+               onScrollEndDrag={() => {
+          setPresionado(null); // Cambia el estado a no presionado al hacer scroll
+        }}
             refreshControl={<RefreshControl refreshing={cargandoAlumnos} onRefresh={() => {lanzarRefrescoAlumnos(); setPresionado(null);}} />}
             renderItem={({ item }) => { return <View >
-             
+                       <Link
+                         href={{
+                           pathname: "/FichaAlumno/" + item.nid_persona,
+                           params: { nidAlumno: item.nid_persona },
+                         }}
+                         key={item.nid_persona}
+                         asChild
+                       >
                        <Pressable
                                 onTouchStart={() => {
                                   setPresionado(item.nid_persona); // Cambia el estado a presionado
@@ -85,11 +96,15 @@ export default function Alumnos()
                                   setPresionado(null); // Cambia el estado a no presionado
                                 }}
                                 style={[
-                                  presionado === item.nid_persona ? estilos.tarjetaPresionada : null
-                                , { width: "100%", alignItems: "center" }]}
+                                 { width: "100%", alignItems: "center" }]}
                                  >
+                <View  style={[
+                                  presionado === item.nid_persona ? estilos.tarjetaPresionada : null
+                              ]}>
                     <CardAlumno alumno={item} />
+                </View>
                 </Pressable>
+                </Link>
             </View> }}
             keyExtractor={item => item.nid_persona}
             contentContainerStyle={{ gap: 10, flexGrow: 1 }}
