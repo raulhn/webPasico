@@ -1,4 +1,4 @@
-import {View, Text, ActivityIndicator, StyleSheet} from 'react-native';
+import {View, Text, ActivityIndicator, StyleSheet, RefreshControl, Pressable, FlatList} from 'react-native';
 import { useAsignaturasProfesor } from '../../../hooks/escuela/useAsignaturas';
 import { EntradaGroupRadioButton } from '../../../componentes/componentesUI/ComponentesUI';
 import { useCursos } from '../../../hooks/escuela/useCurso'; 
@@ -6,7 +6,7 @@ import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../../providers/AuthContext';
 import { useAlumnosAsignaturaProfesor } from '../../../hooks/escuela/useAlumnos';
 import CardAlumno from '../../../componentes/componentesEscuela/CardAlumno';
-import { FlatList } from 'react-native-gesture-handler';
+
 
 
 export default function Alumnos()
@@ -14,19 +14,15 @@ export default function Alumnos()
     const {cerrarSesion} = useContext(AuthContext);
     const { asignaturas, cargando, error, lanzarRefresco } = useAsignaturasProfesor(cerrarSesion);
     const { cursos, cargando: cargandoCursos, error: errorCursos } = useCursos(cerrarSesion);
-    const { alumnos, cargando: cargandoAlumnos, error: errorAlumnos, lanzarRefresco: lanzarRefrescoAlumnos } = 
-    useAlumnosAsignaturaProfesor(valorCursoSeleccionado, valorAsignaturaSeleccionada, cerrarSesion);
+    const { setNidAsignatura, setNidCurso, alumnos, cargando: cargandoAlumnos, error: errorAlumnos, lanzarRefresco: lanzarRefrescoAlumnos } = 
+    useAlumnosAsignaturaProfesor(null, null, cerrarSesion);
 
-    console.log("Cursos:", cursos);
-    console.log("Alumnos:", alumnos);
-
-
+    const [presionado, setPresionado] = useState(null);
 
     const [ asignaturaSeleccionada, setAsignaturaSeleccionada ] = useState(null);
     const [ cursoSeleccionado, setCursoSeleccionado ] = useState(null);
 
-    const [ valorAsignaturaSeleccionada, setValorAsignaturaSeleccionada ] = useState(null);
-    const [ valorCursoSeleccionado, setValorCursoSeleccionado ] = useState(null);
+ 
 
     if (cargando || cargandoCursos) {
         return (
@@ -59,7 +55,7 @@ export default function Alumnos()
                 opciones={opcionesCursos}
                 titulo = {"Cursos"}
                 valor = {cursoSeleccionado}
-                setValorSeleccionado={(valor) => {setCursoSeleccionado(valor); setValorCursoSeleccionado(valor.valor);
+                setValorSeleccionado={(valor) => {setCursoSeleccionado(valor); setNidCurso(valor.valor); lanzarRefresco();
                  }}
             />
             </View>
@@ -69,17 +65,36 @@ export default function Alumnos()
                 valor = {asignaturaSeleccionada}
                 opciones={opcionesAsignaturas}
                 titulo = {"Asignaturas"}
-                setValorSeleccionado={(valor) => {setAsignaturaSeleccionada(valor); setValorAsignaturaSeleccionada(valor.valor); 
+                setValorSeleccionado={(valor) => {setAsignaturaSeleccionada(valor); setNidAsignatura(valor.valor);
                  }}
             />
           </View>
           </View>
         <View style={estilos.contenedor}>
+          <View >
           <FlatList
             data={alumnos}
-            renderItem={({ item }) => <CardAlumno alumno={item} />}
+            refreshControl={<RefreshControl refreshing={cargandoAlumnos} onRefresh={() => {lanzarRefrescoAlumnos(); setPresionado(null);}} />}
+            renderItem={({ item }) => { return <View >
+             
+                       <Pressable
+                                onTouchStart={() => {
+                                  setPresionado(item.nid_persona); // Cambia el estado a presionado
+                                }}
+                                onTouchEnd={() => {
+                                  setPresionado(null); // Cambia el estado a no presionado
+                                }}
+                                style={[
+                                  presionado === item.nid_persona ? estilos.tarjetaPresionada : null
+                                , { width: "100%", alignItems: "center" }]}
+                                 >
+                    <CardAlumno alumno={item} />
+                </Pressable>
+            </View> }}
             keyExtractor={item => item.nid_persona}
+            contentContainerStyle={{ gap: 10, flexGrow: 1 }}
           />
+        </View>
         </View>
         </>
     );
@@ -87,9 +102,12 @@ export default function Alumnos()
 
 const estilos = StyleSheet.create({
     contenedor: {
+       
+        backgroundColor: "#ffffff",
         flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "#ffffff"
-    }
+        width: "100%"
+    },
+  tarjetaPresionada: {
+    transform: [{ scale: 1.05 }],
+  },
 });

@@ -73,7 +73,7 @@ export function Noticias() {
         onScrollEndDrag={() => {
           setPresionado(null); // Cambia el estado a no presionado al hacer scroll
         }}
-        style={{ flexGrow: 1, backgroundColor: "white" }}
+        style={{ flexGrow: 1, backgroundColor: "white"}}
         data={listaNoticias}
         keyExtractor={(noticia) => noticia.nid_imagen}
         renderItem={({ item }) => (
