@@ -288,9 +288,61 @@ async function generar_boletin(req, res) {
   }
 }
 
+
+async function obtenerEvaluacionesAsignaturas(req, res) {
+  try {
+    const nidAsignatura = req.params.nid_asignatura;
+    const nidCurso = req.params.nid_curso;
+    const nidTrimestre = req.params.nid_trimestre;
+  
+
+    const rolesPermitidos = ["PROFESOR"];
+        let rolPermitido = await servletComun.comprobarRol(
+          req,
+          res,
+          rolesPermitidos
+        );
+
+    if (!rolPermitido) {
+      res.status(403).send({
+        error: true,
+        message: "No tienes permisos para obtener las evaluaciones de asignaturas",
+      });
+      return;
+    }
+
+    const nidProfesor = await servletPersona.obtenerNidPersona(req);
+
+    const evaluaciones =
+      await gestor_evaluacion.obtenerEvaluacionesAsignaturas(
+        nidAsignatura,
+        nidCurso,
+        nidTrimestre,
+        nidProfesor
+      );
+
+    res.status(200).send({
+      error: false,
+      mensaje: "Evaluaciones obtenidas correctamente",
+      evaluaciones: evaluaciones,
+    });
+  } catch (error) {
+    console.error(
+      "servlet_evaluacion.js -> obtenerEvaluacionesAsignaturas: Error al obtener las evaluaciones de asignaturas:",
+      error
+    );
+    res.status(400).send({
+      error: true,
+      message: "Se ha producido un error al obtener las evaluaciones de asignaturas",
+    });
+  }
+}
+
+
 module.exports.registrarEvaluacion = registrarEvaluacion;
 module.exports.obtenerEvaluacionesSucias = obtenerEvaluacionesSucias;
 module.exports.obtenerEvaluacionTrimestre = obtenerEvaluacionTrimestre;
 module.exports.obtenerEvaluaciones = obtenerEvaluaciones;
 module.exports.generar_boletin = generar_boletin;
 module.exports.solicitar_generar_boletin = solicitar_generar_boletin;
+module.exports.obtenerEvaluacionesAsignaturas = obtenerEvaluacionesAsignaturas;

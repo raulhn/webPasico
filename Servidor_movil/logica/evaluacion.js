@@ -607,8 +607,36 @@ async function generar_boletin(nid_matricula, nid_trimestre) {
   }
 }
 
+function obtenerEvaluacionesAsignaturas(nidAsignatura, nidCurso, nidTrimestre, nidProfesor)
+{
+  return new Promise((resolve, reject) => {
+    const sql =
+      "SELECT e.nid_evaluacion, e.nid_trimestre, e.nid_asignatura, e.nid_profesor, " +
+      "em.nota, em.nid_tipo_progreso, em.comentario, " +
+      "concat(p.nombre, ' ', p.primer_apellido, ' ', p.segundo_apellido) as profesor " +
+      "FROM " + constantes.ESQUEMA + ".evaluacion e " +
+      "JOIN " + constantes.ESQUEMA + ".evaluacion_matricula em ON e.nid_evaluacion = em.nid_evaluacion " +
+      "JOIN " + constantes.ESQUEMA + ".persona p ON p.nid_persona = e.nid_profesor " +
+      "JOIN " + constantes.ESQUEMA + ".profesor_alumno_matricula pam on pam.nid_matricula_asignatura = em.nid_matricula_asignatura " +
+      "WHERE e.nid_asignatura = " + conexion.dbConn.escape(nidAsignatura) + " AND e.nid_trimestre = " +
+      conexion.dbConn.escape(nidTrimestre) + " AND e.nid_curso = " + conexion.dbConn.escape(nidCurso) +
+       " AND e.nid_profesor = " + conexion.dbConn.escape(nidProfesor);
+
+    conexion.dbConn.query(sql, (err, results) => {
+      if (err) {
+        console.error("Error al obtener las evaluaciones de asignaturas:", err);
+        reject(err);
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
+
+
 module.exports.registrarEvaluacion = registrarEvaluacion;
 module.exports.obtenerEvaluacionesSucias = obtenerEvaluacionesSucias;
 module.exports.obtenerEvaluacionTrimestre = obtenerEvaluacionTrimestre;
 module.exports.obtenerEvaluaciones = obtenerEvaluaciones;
 module.exports.generar_boletin = generar_boletin;
+module.exports.obtenerEvaluacionesAsignaturas = obtenerEvaluacionesAsignaturas;

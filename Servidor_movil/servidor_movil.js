@@ -239,6 +239,12 @@ app.get(
   servletPartituras.obtenerPartitura
 );
 
+// Evaluaciones //
+app.get(
+  "/obtener_evaluaciones_asignaturas/:nid_asignatura/:nid_curso/:nid_trimestre",
+  servletEvaluacion.obtenerEvaluacionesAsignaturas
+);
+
 // Categorias Partituras //
 app.post(
   "/registrar_categoria_partitura",
