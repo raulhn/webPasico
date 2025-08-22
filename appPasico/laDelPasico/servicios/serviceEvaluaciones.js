@@ -44,5 +44,30 @@ function generarBoletin(nidMatricula, nidTrimestre, cerrarSesion) {
   });
 }
 
+function obtenerEvaluacionesAsignatura(nidCurso, nidAsignatura, nidTrimestre, cerrarSesion) {
+  return new Promise((resolve, reject) => {
+    serviceComun
+      .peticionSesion(
+        "GET",
+        Constantes.URL_SERVICIO_MOVIL +
+          "obtener_evaluaciones_asignatura/" +
+          nidCurso +
+          "/" +
+          nidAsignatura +
+          "/" +
+          nidTrimestre,
+        null, cerrarSesion
+      )
+      .then((response) => {
+        console.log("Evaluaciones asignatura response:", response);
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+}
+
 module.exports.obtenerEvaluaciones = obtenerEvaluaciones;
 module.exports.generarBoletin = generarBoletin;
+module.exports.obtenerEvaluacionesAsignatura = obtenerEvaluacionesAsignatura;
