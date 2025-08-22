@@ -305,7 +305,7 @@ function obtenerAlumnosAsignaturaProfesor(nid_asignatura, nid_curso, nid_profeso
 {
   return new Promise((resolve, reject) => {
     const sql =
-      "SELECT p.nid_persona, p.nombre, p.primer_apellido, p.segundo_apellido " +
+      "SELECT p.nid_persona, p.nombre, p.primer_apellido, p.segundo_apellido , ma.nid_matricula_asignatura " +
       "FROM " +
       constantes.ESQUEMA +
       ".persona p, " +
@@ -336,10 +336,11 @@ function obtenerAlumnosAsignaturaProfesor(nid_asignatura, nid_curso, nid_profeso
   });
 }
 
+
+
 module.exports.registrarMatriculaAsignatura = registrarMatriculaAsignatura;
 module.exports.obtenerAlumnosCursoActivo = obtenerAlumnosCursoActivo;
-module.exports.obtenerAlumnosCursoActivoAsignatura =
-  obtenerAlumnosCursoActivoAsignatura;
+module.exports.obtenerAlumnosCursoActivoAsignatura = obtenerAlumnosCursoActivoAsignatura;
 module.exports.esAlumnoAsignatura = esAlumnoAsignatura;
 module.exports.obtenerMatriculasAsignatura = obtenerMatriculasAsignatura;
 module.exports.obtenerAlumnosAsignatura = obtenerAlumnosAsignatura;

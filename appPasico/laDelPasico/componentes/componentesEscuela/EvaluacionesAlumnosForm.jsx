@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, FlatList, StyleSheet, Button, ScrollView } from 'react-native';
-import { EntradaGroupRadioButton, EntradaTexto } from '../componentesUI/ComponentesUI';
+import { EntradaGroupRadioButton, EntradaTexto, Boton } from '../componentesUI/ComponentesUI';
 
 const opcionesProgreso = [
-  { etiqueta: 'Progresa Adecuadamente', valor: 'adecuado' },
-  { etiqueta: 'Necesita Mejorar', valor: 'mejorar' },
+  { etiqueta: 'Progresa Adecuadamente', valor: 2 },
+  { etiqueta: 'Necesita Mejorar', valor: 1 },
   { etiqueta: 'Sin evaluar', valor: 0}
 ];
 
-export default function EvaluacionesAlumnosForm({ alumnos, evaluacionesRecuperadas=[], onGuardar }) {
+export default function EvaluacionesAlumnosForm({ alumnos, evaluacionesRecuperadas=[], nid_curso, nid_asignatura, nid_trimestre }) {
   // Estado para las evaluaciones de cada alumno
 
 function recuperarEvaluacion(alumno)
 {
+  const progresos = ["Sin evaluar", "Necesita Mejorar", "Progresa Adecuadamente"]
   let evaluacionRecuperada = null;
   for (const evaluacionActual of evaluacionesRecuperadas) {
     
@@ -20,17 +21,27 @@ function recuperarEvaluacion(alumno)
       evaluacionRecuperada = evaluacionActual;
 
       console.log("Evaluacion recuperada:", evaluacionActual);
-      return {
+      const evaluacionProcesada = {
       id: evaluacionRecuperada.nid_alumno,
-      nota: evaluacionRecuperada.nota,
-      progreso: evaluacionRecuperada.progreso,
+      nid_evaluacion: evaluacionRecuperada.nid_evaluacion,
+      nid_matricula_asignatura: evaluacionRecuperada.nid_matricula_asignatura,
+      nota: evaluacionRecuperada.nota ? evaluacionRecuperada.nota.toString() : '',
+      progreso: { valor: evaluacionRecuperada.nid_tipo_progreso, etiqueta: progresos[evaluacionRecuperada.nid_tipo_progreso] },
       comentario: evaluacionRecuperada.comentario,
       nombre: evaluacionRecuperada.alumno
-    };
+      };
+      console.log("Evaluacion procesada:", evaluacionProcesada);
+      return evaluacionProcesada
     }
   }
-  
-  return { id: alumno.nid_persona, nota: '', progreso: 0, comentario: '', nombre: alumno.nombre + " " + alumno.primer_apellido + " " + alumno.segundo_apellido };
+
+  return { id: alumno.nid_persona,
+           nid_evaluacion: null,
+           nid_matricula_asignatura: alumno.nid_matricula_asignatura,
+           nota: '',
+           progreso: { valor: "0", etiqueta: progresos[0] },
+           comentario: '',
+           nombre: alumno.nombre + " " + alumno.primer_apellido + " " + alumno.segundo_apellido };
 }
 
   const [evaluaciones, setEvaluaciones] = useState(
@@ -44,40 +55,38 @@ function recuperarEvaluacion(alumno)
   }, [alumnos, evaluacionesRecuperadas]);
 
 
-
-  const handleChange = (index, campo, valor) => {
-    const nuevas = [...evaluaciones];
-    nuevas[index][campo] = valor;
-    setEvaluaciones(nuevas);
-  };
+  let evaluacionesEdicion = [...evaluaciones]
 
   const handleGuardar = () => {
-    if (onGuardar) onGuardar(evaluaciones);
+    console.log("Guardando evaluaciones:", evaluaciones);
+    
   };
 
+  console.log("Evaluaciones estado:", evaluaciones);
   return (
     <ScrollView contentContainerStyle={estilos.scrollContainer}>
       {evaluaciones.map((evaluacion, idx) => (
         <View key={ evaluacion.id} style={estilos.card}>
           <Text style={estilos.nombre}>{evaluacion.nombre}</Text>
-          <Text style={estilos.label}>Nota (0-10):</Text>
+          <Text style={estilos.label}>Nota (0-10): {evaluacionesEdicion[idx].nota}</Text>
 
 
-          <EntradaTexto placeholder={"0-10"} valor={evaluacion.nota} setValor={(v) => handleChange(idx, 'nota', v)} />
+          <EntradaTexto placeholder={"0-10"} valor={evaluacionesEdicion[idx].nota} 
+          setValor={(v) => {evaluacionesEdicion[idx].nota = v; setEvaluaciones([...evaluacionesEdicion])}} />
           <Text style={estilos.label}>Progreso:</Text>
     
 
           <EntradaGroupRadioButton
             titulo={"Progreso"}
             opciones={opcionesProgreso}
-            valor={evaluaciones.progreso}
-            setValorSeleccionado={v => handleChange(idx, 'progreso', v)}
+            valor={evaluacionesEdicion[idx].progreso}
+            setValorSeleccionado={v => {evaluacionesEdicion[idx].progreso = v; setEvaluaciones([...evaluacionesEdicion])}}
           />
           <Text style={estilos.label}>Comentario:</Text>
           <EntradaTexto 
             placeholder={"Comentario"}
-            valor={evaluacion.comentario}
-            setValor={(v) => handleChange(idx, 'comentario', v)}
+            valor={evaluacionesEdicion[idx].comentario}
+            setValor={(v) => {evaluacionesEdicion[idx].comentario = v; setEvaluaciones([...evaluacionesEdicion])}}
             multiline= {true}
             ancho={"100%"}
             alto={"100"}

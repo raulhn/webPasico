@@ -1,7 +1,7 @@
 const gestor_evaluacion = require("../logica/evaluacion");
-const servletComun = require("./servlet_comun");
 const servletPersona = require("./servlet_persona");
 const gestorMatricula = require("../logica/matricula");
+const gestorProfesores = require("../logica/profesores");
 const gestorPersonas = require("../logica/persona");
 const jwt = require("jsonwebtoken");
 const constantes = require("../constantes.js");
@@ -339,6 +339,60 @@ async function obtenerEvaluacionesAsignaturas(req, res) {
 }
 
 
+async function registrarEvaluaciones(req, res) {
+  try {
+    const evaluaciones = req.body.evaluaciones;
+    const nid_asignatura = req.body.nid_asignatura;
+    const nid_curso = req.body.nid_curso;
+    const nid_trimestre = req.body.nid_trimestre;
+
+    const nidPersona = await servletPersona.obtenerNidPersona(req);
+    const esProfesor = await gestorProfesores.esProfesor(nidPersona, nid_asignatura);
+
+    if(!esProfesor) {
+      res.status(403).send({
+        error: true,
+        message: "No tienes permisos para registrar evaluaciones",
+      });
+      return;
+    }
+
+    const evaluacion = await gestor_evaluacion.obtenerEvaluacion(nid_asignatura, nid_curso, nid_trimestre);
+
+    if(!evaluacion) {
+      await gestor_evaluacion.insertarEvaluacion(nid_asignatura, nid_curso, nid_trimestre);
+    }
+
+    for(const evaluacion of evaluaciones)
+    {
+      const evaluacionMatricula = await gestor_evaluacion.obtenerEvaluacionMatricula(evaluacion.nid_evaluacion, evaluacion.nid_matricula_asignatura);
+      if(!evaluacionMatricula) {
+        await gestor_evaluacion.insertarEvaluacionMatricula(evaluacion.nid_evaluacion, evaluacion.nota,
+          evaluacion.progreso.valor, evaluacion.nid_matricula_asignatura, evaluacion.comentario);
+      } else {
+        await gestor_evaluacion.actualizarEvaluacionMatricula(evaluacionMatricula.nid_evaluacion_matricula,
+          evaluacion.nid_evaluacion, evaluacion.nota,
+          evaluacion.progreso.valor, evaluacion.nid_matricula_asignatura, evaluacion.comentario);
+      }
+    }
+
+    res.status(200).send({
+      error: false,
+      mensaje: "Evaluaciones registradas correctamente",
+      resultados: resultados,
+    });
+  } catch (error) {
+    console.error(
+      "servlet_evaluacion.js -> registrarEvaluaciones: Error al registrar las evaluaciones:",
+      error
+    );
+    res.status(400).send({
+      error: true,
+      message: "Se ha producido un error al registrar las evaluaciones",
+    });
+  }
+}
+
 module.exports.registrarEvaluacion = registrarEvaluacion;
 module.exports.obtenerEvaluacionesSucias = obtenerEvaluacionesSucias;
 module.exports.obtenerEvaluacionTrimestre = obtenerEvaluacionTrimestre;
@@ -346,3 +400,4 @@ module.exports.obtenerEvaluaciones = obtenerEvaluaciones;
 module.exports.generar_boletin = generar_boletin;
 module.exports.solicitar_generar_boletin = solicitar_generar_boletin;
 module.exports.obtenerEvaluacionesAsignaturas = obtenerEvaluacionesAsignaturas;
+module.exports.registrarEvaluaciones = registrarEvaluaciones;

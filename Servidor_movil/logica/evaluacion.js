@@ -613,6 +613,7 @@ function obtenerEvaluacionesAsignaturas(nidAsignatura, nidCurso, nidTrimestre, n
     const sql =
       "SELECT e.nid_evaluacion, e.nid_trimestre, e.nid_asignatura, e.nid_profesor, " +
       "em.nota, em.nid_tipo_progreso, em.comentario, m.nid_persona as nid_alumno, " +
+      "ma.nid_matricula_asignatura, " +
       "concat(p.nombre, ' ', p.primer_apellido, ' ', p.segundo_apellido) as profesor, " +
       "concat(pa.nombre, ' ', pa.primer_apellido, ' ', pa.segundo_apellido) as alumno " +
       "FROM " + constantes.ESQUEMA + ".evaluacion e " +
@@ -638,9 +639,167 @@ function obtenerEvaluacionesAsignaturas(nidAsignatura, nidCurso, nidTrimestre, n
 }
 
 
-module.exports.registrarEvaluacion = registrarEvaluacion;
+function obtenerEvaluacion(nidCurso, nidAsignatura, nidTrimestre)
+{
+  return new Promise((resolve, reject) => {
+    const sql =
+      "SELECT e.* FROM " +
+      constantes.ESQUEMA +
+      ".evaluacion e, " +
+      constantes.ESQUEMA +
+      ".asignaturas a " +
+      "WHERE e.nid_asignatura = a.nid_asignatura " +
+      " AND a.nid_curso = " +
+      conexion.dbConn.escape(nidCurso) +
+      " AND e.nid_asignatura = " +
+      conexion.dbConn.escape(nidAsignatura) +
+      " AND e.nid_trimestre = " +
+      conexion.dbConn.escape(nidTrimestre);
+
+    conexion.dbConn.query(sql, (err, result) => {
+      if (err) {
+        console.error("Error al obtener la evaluacion:", err);
+        reject(err);
+      } else {
+        resolve(result.length > 0 ? result[0] : null);
+      }
+    });
+  });
+}
+
+function insertarEvaluacion(nidTrimestre, nidAsignatura, nidProfesor, nidCurso)
+{
+  return new Promise((resolve, reject) => {
+    const sql =
+      "INSERT INTO " +
+      constantes.ESQUEMA +
+      ".evaluacion (nid_trimestre, nid_asignatura, nid_profesor, nidCurso,) VALUES (" +
+      conexion.dbConn.escape(nidTrimestre) +
+      ", " +
+      conexion.dbConn.escape(nidAsignatura) +
+      ", " +
+      conexion.dbConn.escape(nidProfesor) +
+      ", " +
+      conexion.dbConn.escape(nidCurso) +
+      ")";
+
+    conexion.dbConn.query(sql, (err, result) => {
+      if (err) {
+        console.error("Error al registrar la evaluacion:", err);
+        reject(err);
+      } else {
+        resolve(result);
+      }
+    });
+  });
+}
+
+function insertarEvaluacionMatricula(nidEvaluacion, nota, nid_tipo_progreso, nid_matricula_asignatura, comentario)
+{
+  return new Promise((resolve, reject) => {
+    const sql =
+      "INSERT INTO " +
+      constantes.ESQUEMA +
+      ".evaluacion_matricula (nid_evaluacion, nota, nid_tipo_progreso, nid_matricula_asignatura, comentario) VALUES (" +
+      conexion.dbConn.escape(nidEvaluacion) +
+      ", " +
+      conexion.dbConn.escape(nota) +
+      ", " +
+      conexion.dbConn.escape(nid_tipo_progreso) +
+      ", " +
+      conexion.dbConn.escape(nid_matricula_asignatura) +
+      ", " +
+      conexion.dbConn.escape(comentario) +
+      ")";
+
+    conexion.dbConn.query(sql, (err, result) => {
+      if (err) {
+        console.error("Error al registrar la evaluacion matricula:", err);
+        reject(err);
+      } else {
+        resolve(result);
+      }
+    });
+  });
+}
+
+function actualizarEvaluacionMatricula(nidEvaluacionMatricula, nidEvaluacion, nota, nid_tipo_progreso, nid_matricula_asignatura, comentario)
+{
+  return new Promise((resolve, reject) => {
+    const sql =
+      "UPDATE " +
+      constantes.ESQUEMA +
+      ".evaluacion_matricula SET nota = " + conexion.dbConn.escape(nota) +
+      ", nid_tipo_progreso = " + conexion.dbConn.escape(nid_tipo_progreso) +
+      ", comentario = " + conexion.dbConn.escape(comentario) +
+      ", nid_evaluacion = " + conexion.dbConn.escape(nidEvaluacion) +
+      ", nid_matricula_asignatura = " + conexion.dbConn.escape(nid_matricula_asignatura) +
+      " WHERE nid_evaluacion_matricula = " + conexion.dbConn.escape(nidEvaluacionMatricula);
+
+    conexion.dbConn.query(sql, (err, result) => {
+      if (err) {
+        console.error("Error al actualizar la evaluacion matricula:", err);
+        reject(err);
+      } else {
+        resolve(result);
+      }
+    });
+  });
+}
+
+function existeEvaluacionMatricula(nidEvaluacion, nidMatriculaAsignatura)
+{
+  return new Promise((resolve, reject) => {
+    const sql =
+      "SELECT COUNT(*) AS existe FROM " +
+      constantes.ESQUEMA +
+      ".evaluacion_matricula WHERE nid_evaluacion = " +
+      conexion.dbConn.escape(nidEvaluacion) +
+      " AND nid_matricula_asignatura = " +
+      conexion.dbConn.escape(nidMatriculaAsignatura);
+
+    conexion.dbConn.query(sql, (err, result) => {
+      if (err) {
+        console.error("Error al verificar la existencia de la matricula:", err);
+        reject(err);
+      } else {
+        resolve(result[0].existe > 0);
+      }
+    });
+  });
+}
+
+function obtenerEvaluacionMatricula(nidEvaluacion, nidMatriculaAsignatura)
+{
+  return new Promise((resolve, reject) => {
+    const sql =
+      "SELECT * FROM " +
+      constantes.ESQUEMA +
+      ".evaluacion_matricula WHERE nid_evaluacion = " +
+      conexion.dbConn.escape(nidEvaluacion) +
+      " AND nid_matricula_asignatura = " +
+      conexion.dbConn.escape(nidMatriculaAsignatura);
+
+    conexion.dbConn.query(sql, (err, result) => {
+      if (err) {
+        console.error("Error al obtener la evaluacion matricula:", err);
+        reject(err);
+      } else {
+        resolve(result[0]);
+      }
+    });
+  });
+}
+
+module.exports.insertarEvaluacion = insertarEvaluacion;
 module.exports.obtenerEvaluacionesSucias = obtenerEvaluacionesSucias;
 module.exports.obtenerEvaluacionTrimestre = obtenerEvaluacionTrimestre;
 module.exports.obtenerEvaluaciones = obtenerEvaluaciones;
 module.exports.generar_boletin = generar_boletin;
 module.exports.obtenerEvaluacionesAsignaturas = obtenerEvaluacionesAsignaturas;
+module.exports.obtenerEvaluacion = obtenerEvaluacion;
+module.exports.insertarEvaluacionMatricula = insertarEvaluacionMatricula;
+module.exports.insertarEvaluacion = insertarEvaluacion;
+module.exports.actualizarEvaluacionMatricula = actualizarEvaluacionMatricula;
+module.exports.existeEvaluacionMatricula = existeEvaluacionMatricula;
+module.exports.obtenerEvaluacionMatricula = obtenerEvaluacionMatricula;
