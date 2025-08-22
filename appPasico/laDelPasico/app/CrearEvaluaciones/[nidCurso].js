@@ -14,12 +14,12 @@ export default function CrearEvaluacion() {
 
   const { evaluaciones, cargando: cargandoEvaluaciones, error: errorEvaluaciones, lanzarRefresco: lanzarRefrescoEvaluaciones } = useEvaluacionesAsignatura(nidCurso, nidAsignatura, nidTrimestre, cerrarSesion);
 
-  console.log("Evaluaciones recuperadas__________________: ", evaluaciones);
+
   if (cargandoAlumnos) {
     return (<><ActivityIndicator /><Text>Cargando alumnos...</Text></>);
   }
   return (
-    <ScrollView refreshControl={<RefreshControl refreshing={cargandoAlumnos} onRefresh={lanzarRefresco} />}>
+    <ScrollView refreshControl={<RefreshControl refreshing={cargandoAlumnos} onRefresh={()=> {lanzarRefresco(); lanzarRefrescoEvaluaciones() }} />}>
 
       <EvaluacionesAlumnosForm alumnos={alumnos} nid_curso={nidCurso} nid_asignatura={nidAsignatura} nid_trimestre={nidTrimestre} evaluacionesRecuperadas={evaluaciones} />
     </ScrollView>

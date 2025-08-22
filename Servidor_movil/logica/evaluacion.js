@@ -649,13 +649,14 @@ function obtenerEvaluacion(nidCurso, nidAsignatura, nidTrimestre)
       constantes.ESQUEMA +
       ".asignaturas a " +
       "WHERE e.nid_asignatura = a.nid_asignatura " +
-      " AND a.nid_curso = " +
+      " AND e.nid_curso = " +
       conexion.dbConn.escape(nidCurso) +
       " AND e.nid_asignatura = " +
       conexion.dbConn.escape(nidAsignatura) +
       " AND e.nid_trimestre = " +
       conexion.dbConn.escape(nidTrimestre);
 
+    
     conexion.dbConn.query(sql, (err, result) => {
       if (err) {
         console.error("Error al obtener la evaluacion:", err);
@@ -673,7 +674,7 @@ function insertarEvaluacion(nidTrimestre, nidAsignatura, nidProfesor, nidCurso)
     const sql =
       "INSERT INTO " +
       constantes.ESQUEMA +
-      ".evaluacion (nid_trimestre, nid_asignatura, nid_profesor, nidCurso,) VALUES (" +
+      ".evaluacion (nid_trimestre, nid_asignatura, nid_profesor, nid_curso) VALUES (" +
       conexion.dbConn.escape(nidTrimestre) +
       ", " +
       conexion.dbConn.escape(nidAsignatura) +
@@ -702,15 +703,15 @@ function insertarEvaluacionMatricula(nidEvaluacion, nota, nid_tipo_progreso, nid
       constantes.ESQUEMA +
       ".evaluacion_matricula (nid_evaluacion, nota, nid_tipo_progreso, nid_matricula_asignatura, comentario) VALUES (" +
       conexion.dbConn.escape(nidEvaluacion) +
-      ", " +
-      conexion.dbConn.escape(nota) +
+      ", nullif(" +
+      conexion.dbConn.escape(nota) + ", '')" +
       ", " +
       conexion.dbConn.escape(nid_tipo_progreso) +
       ", " +
       conexion.dbConn.escape(nid_matricula_asignatura) +
-      ", " +
+      ", trim(" +
       conexion.dbConn.escape(comentario) +
-      ")";
+      "))";
 
     conexion.dbConn.query(sql, (err, result) => {
       if (err) {
@@ -729,11 +730,13 @@ function actualizarEvaluacionMatricula(nidEvaluacionMatricula, nidEvaluacion, no
     const sql =
       "UPDATE " +
       constantes.ESQUEMA +
-      ".evaluacion_matricula SET nota = " + conexion.dbConn.escape(nota) +
-      ", nid_tipo_progreso = " + conexion.dbConn.escape(nid_tipo_progreso) +
-      ", comentario = " + conexion.dbConn.escape(comentario) +
+      ".evaluacion_matricula SET nota = nullif(" + conexion.dbConn.escape(nota) + ", ''" +
+      "), nid_tipo_progreso = " + conexion.dbConn.escape(nid_tipo_progreso) +
+      ", comentario = trim(" + conexion.dbConn.escape(comentario) + ")" +
       ", nid_evaluacion = " + conexion.dbConn.escape(nidEvaluacion) +
       ", nid_matricula_asignatura = " + conexion.dbConn.escape(nid_matricula_asignatura) +
+      ", sucio =  'S'" +
+      ", fecha_actualizacion = NOW()" +
       " WHERE nid_evaluacion_matricula = " + conexion.dbConn.escape(nidEvaluacionMatricula);
 
     conexion.dbConn.query(sql, (err, result) => {
@@ -803,3 +806,4 @@ module.exports.insertarEvaluacion = insertarEvaluacion;
 module.exports.actualizarEvaluacionMatricula = actualizarEvaluacionMatricula;
 module.exports.existeEvaluacionMatricula = existeEvaluacionMatricula;
 module.exports.obtenerEvaluacionMatricula = obtenerEvaluacionMatricula;
+module.exports.registrarEvaluacion = registrarEvaluacion;

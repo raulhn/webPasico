@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, FlatList, StyleSheet, Button, ScrollView } from 'react-native';
-import { EntradaGroupRadioButton, EntradaTexto, Boton } from '../componentesUI/ComponentesUI';
+import { EntradaGroupRadioButton, EntradaTexto, Boton, ModalExito, ModalAviso } from '../componentesUI/ComponentesUI';
+import ServiceEvaluaciones from '../../servicios/serviceEvaluaciones';
 
 const opcionesProgreso = [
   { etiqueta: 'Progresa Adecuadamente', valor: 2 },
@@ -11,7 +12,10 @@ const opcionesProgreso = [
 export default function EvaluacionesAlumnosForm({ alumnos, evaluacionesRecuperadas=[], nid_curso, nid_asignatura, nid_trimestre }) {
   // Estado para las evaluaciones de cada alumno
 
-function recuperarEvaluacion(alumno)
+  const [modalVisibleExito, setModalVisibleExito] = useState(false);
+  const [modalVisibleAviso, setModalVisibleAviso] = useState(false);
+
+  function recuperarEvaluacion(alumno)
 {
   const progresos = ["Sin evaluar", "Necesita Mejorar", "Progresa Adecuadamente"]
   let evaluacionRecuperada = null;
@@ -59,16 +63,25 @@ function recuperarEvaluacion(alumno)
 
   const handleGuardar = () => {
     console.log("Guardando evaluaciones:", evaluaciones);
-    
+    ServiceEvaluaciones.registrarEvaluaciones(evaluaciones, nid_curso, nid_asignatura, nid_trimestre)
+      .then(response => {
+        console.log("Evaluaciones guardadas:", response);
+        setModalVisibleExito(true);
+      })
+      .catch(error => {
+        console.error("Error al guardar evaluaciones:", error);
+        setModalVisibleAviso(true);
+      });
   };
 
   console.log("Evaluaciones estado:", evaluaciones);
   return (
+    <>
     <ScrollView contentContainerStyle={estilos.scrollContainer}>
       {evaluaciones.map((evaluacion, idx) => (
         <View key={ evaluacion.id} style={estilos.card}>
           <Text style={estilos.nombre}>{evaluacion.nombre}</Text>
-          <Text style={estilos.label}>Nota (0-10): {evaluacionesEdicion[idx].nota}</Text>
+          <Text style={estilos.label}>Nota (0-10)</Text>
 
 
           <EntradaTexto placeholder={"0-10"} valor={evaluacionesEdicion[idx].nota} 
@@ -94,8 +107,22 @@ function recuperarEvaluacion(alumno)
         
         </View>
       ))}
-      <Button title="Guardar Evaluaciones" onPress={handleGuardar} />
+
+      <Boton nombre="Guardar Evaluaciones" onPress={handleGuardar} />
     </ScrollView>
+    <ModalExito
+      visible={modalVisibleExito}
+      setVisible={() => setModalVisibleExito(false)}
+      mensaje="Evaluaciones guardadas con éxito"
+      textBoton={"Aceptar"}
+    />
+    <ModalAviso
+      visible={modalVisibleAviso}
+      setVisible={() => setModalVisibleAviso(false)}
+      mensaje="Error al guardar evaluaciones"
+      textBoton={"Aceptar"}
+    />
+    </>
   );
 }
 

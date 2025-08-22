@@ -330,8 +330,8 @@ app.get(
 );
 
 app.post(
-  "/registrar_evaluacion",
-  servletEvaluacion.registrarEvaluacion
+  "/registrar_evaluaciones",
+  servletEvaluacion.registrarEvaluaciones
 );
 
 //Tablon Anuncios //

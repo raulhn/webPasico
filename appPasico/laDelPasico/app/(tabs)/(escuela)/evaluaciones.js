@@ -37,9 +37,7 @@ export default function Evaluaciones() {
         valor: trimestre.nid_trimestre
   }));
 
-  const handleGuardar = (evaluaciones) => {
-    console.log("Evaluaciones guardadas:", evaluaciones);
-  };
+
 
   
   console.log(cursoSeleccionado.valor, asignaturaSeleccionada.valor, trimestreSeleccionado.valor);
