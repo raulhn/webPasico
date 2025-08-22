@@ -54,6 +54,14 @@ export default function DrawerLayout() {
           drawerItemStyle: esRol(["PROFESOR"]) ? {} : { display: "none" },
         }}
       />
+
+      <Drawer.Screen
+        name="evaluaciones"
+        options={{
+          title: "Evaluaciones",
+          drawerItemStyle: esRol(["PROFESOR"]) ? {} : { display: "none" },
+        }}
+      />
     </Drawer>
   );
 }
