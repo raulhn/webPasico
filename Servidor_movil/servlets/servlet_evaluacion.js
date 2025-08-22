@@ -3,6 +3,7 @@ const servletPersona = require("./servlet_persona");
 const gestorMatricula = require("../logica/matricula");
 const gestorProfesores = require("../logica/profesores");
 const gestorPersonas = require("../logica/persona");
+const servletComun = require("./servlet_comun");
 const jwt = require("jsonwebtoken");
 const constantes = require("../constantes.js");
 const e = require("express");
@@ -349,6 +350,10 @@ async function registrarEvaluaciones(req, res) {
     const nidPersona = await servletPersona.obtenerNidPersona(req);
     const esProfesor = await gestorProfesores.esProfesor(nidPersona, nid_asignatura);
 
+    console.log("Profesor: ", nidPersona)
+    console.log("Asignatura: ", nid_asignatura)
+    console.log("Curso: ", nid_curso)
+    console.log("Trimestre: ", nid_trimestre)
     if(!esProfesor) {
       res.status(403).send({
         error: true,
@@ -357,29 +362,32 @@ async function registrarEvaluaciones(req, res) {
       return;
     }
 
-    const evaluacion = await gestor_evaluacion.obtenerEvaluacion(nid_asignatura, nid_curso, nid_trimestre);
+    let evaluacionRecuperada = await gestor_evaluacion.obtenerEvaluacion(nid_curso, nid_asignatura, nid_trimestre);
 
-    if(!evaluacion) {
-      await gestor_evaluacion.insertarEvaluacion(nid_asignatura, nid_curso, nid_trimestre);
+    if(!evaluacionRecuperada) {
+      await gestor_evaluacion.insertarEvaluacion(nid_trimestre, nid_asignatura, nidPersona, nid_curso);
+      evaluacionRecuperada = await gestor_evaluacion.obtenerEvaluacion(nid_curso, nid_asignatura, nid_trimestre);
     }
+
 
     for(const evaluacion of evaluaciones)
     {
-      const evaluacionMatricula = await gestor_evaluacion.obtenerEvaluacionMatricula(evaluacion.nid_evaluacion, evaluacion.nid_matricula_asignatura);
+      if (evaluacion.progreso.valor !=0){
+      const evaluacionMatricula = await gestor_evaluacion.obtenerEvaluacionMatricula(evaluacionRecuperada.nid_evaluacion, evaluacion.nid_matricula_asignatura);
       if(!evaluacionMatricula) {
-        await gestor_evaluacion.insertarEvaluacionMatricula(evaluacion.nid_evaluacion, evaluacion.nota,
+        await gestor_evaluacion.insertarEvaluacionMatricula(evaluacionRecuperada.nid_evaluacion, evaluacion.nota,
           evaluacion.progreso.valor, evaluacion.nid_matricula_asignatura, evaluacion.comentario);
       } else {
         await gestor_evaluacion.actualizarEvaluacionMatricula(evaluacionMatricula.nid_evaluacion_matricula,
-          evaluacion.nid_evaluacion, evaluacion.nota,
+          evaluacionRecuperada.nid_evaluacion, evaluacion.nota,
           evaluacion.progreso.valor, evaluacion.nid_matricula_asignatura, evaluacion.comentario);
       }
+    }
     }
 
     res.status(200).send({
       error: false,
-      mensaje: "Evaluaciones registradas correctamente",
-      resultados: resultados,
+      mensaje: "Evaluaciones registradas correctamente"
     });
   } catch (error) {
     console.error(

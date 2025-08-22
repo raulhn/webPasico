@@ -68,6 +68,36 @@ function obtenerEvaluacionesAsignatura(nidCurso, nidAsignatura, nidTrimestre, ce
   });
 }
 
+
+function registrarEvaluaciones(evaluaciones, nidCurso, nidAsignatura, nidTrimestre, cerrarSesion)
+{
+  return new Promise((resolve, reject) => {
+
+    console.log("Registrar evaluaciones:", evaluaciones);
+    serviceComun
+      .peticionSesion(
+        "POST",
+        Constantes.URL_SERVICIO_MOVIL + "registrar_evaluaciones",
+        {
+          evaluaciones: evaluaciones,
+          nid_curso: nidCurso,
+          nid_asignatura: nidAsignatura,
+          nid_trimestre: nidTrimestre
+        },
+        cerrarSesion
+      )
+      .then((response) => {
+        console.log("Registrar evaluaciones response:", response);
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+}
+
+
 module.exports.obtenerEvaluaciones = obtenerEvaluaciones;
 module.exports.generarBoletin = generarBoletin;
 module.exports.obtenerEvaluacionesAsignatura = obtenerEvaluacionesAsignatura;
+module.exports.registrarEvaluaciones = registrarEvaluaciones;
