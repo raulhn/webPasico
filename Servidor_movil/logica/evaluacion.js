@@ -612,14 +612,18 @@ function obtenerEvaluacionesAsignaturas(nidAsignatura, nidCurso, nidTrimestre, n
   return new Promise((resolve, reject) => {
     const sql =
       "SELECT e.nid_evaluacion, e.nid_trimestre, e.nid_asignatura, e.nid_profesor, " +
-      "em.nota, em.nid_tipo_progreso, em.comentario, " +
-      "concat(p.nombre, ' ', p.primer_apellido, ' ', p.segundo_apellido) as profesor " +
+      "em.nota, em.nid_tipo_progreso, em.comentario, m.nid_persona as nid_alumno, " +
+      "concat(p.nombre, ' ', p.primer_apellido, ' ', p.segundo_apellido) as profesor, " +
+      "concat(pa.nombre, ' ', pa.primer_apellido, ' ', pa.segundo_apellido) as alumno " +
       "FROM " + constantes.ESQUEMA + ".evaluacion e " +
       "JOIN " + constantes.ESQUEMA + ".evaluacion_matricula em ON e.nid_evaluacion = em.nid_evaluacion " +
+      "JOIN " + constantes.ESQUEMA + ".matricula_asignatura ma ON ma.nid_matricula_asignatura = em.nid_matricula_asignatura " +
+      "JOIN " + constantes.ESQUEMA + ".matricula m ON m.nid_matricula = ma.nid_matricula " +
       "JOIN " + constantes.ESQUEMA + ".persona p ON p.nid_persona = e.nid_profesor " +
+      "JOIN " + constantes.ESQUEMA + ".persona pa ON pa.nid_persona = m.nid_persona " +
       "JOIN " + constantes.ESQUEMA + ".profesor_alumno_matricula pam on pam.nid_matricula_asignatura = em.nid_matricula_asignatura " +
       "WHERE e.nid_asignatura = " + conexion.dbConn.escape(nidAsignatura) + " AND e.nid_trimestre = " +
-      conexion.dbConn.escape(nidTrimestre) + " AND e.nid_curso = " + conexion.dbConn.escape(nidCurso) +
+      conexion.dbConn.escape(nidTrimestre) + " AND m.nid_curso = " + conexion.dbConn.escape(nidCurso) +
        " AND e.nid_profesor = " + conexion.dbConn.escape(nidProfesor);
 
     conexion.dbConn.query(sql, (err, results) => {

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, FlatList, StyleSheet, Button, ScrollView } from 'react-native';
-import { EntradaGroupRadioButton } from './componentesUI/ComponentesUI';
+import { EntradaGroupRadioButton, EntradaTexto } from '../componentesUI/ComponentesUI';
 
 const opcionesProgreso = [
   { etiqueta: 'Progresa Adecuadamente', valor: 'adecuado' },
@@ -8,16 +8,42 @@ const opcionesProgreso = [
   { etiqueta: 'Sin evaluar', valor: 0}
 ];
 
-export default function EvaluacionesAlumnosForm({ alumnos, onGuardar }) {
+export default function EvaluacionesAlumnosForm({ alumnos, evaluacionesRecuperadas=[], onGuardar }) {
   // Estado para las evaluaciones de cada alumno
+
+function recuperarEvaluacion(alumno)
+{
+  let evaluacionRecuperada = null;
+  for (const evaluacionActual of evaluacionesRecuperadas) {
+    
+    if (evaluacionActual.nid_alumno === alumno.nid_persona) {
+      evaluacionRecuperada = evaluacionActual;
+
+      console.log("Evaluacion recuperada:", evaluacionActual);
+      return {
+      id: evaluacionRecuperada.nid_alumno,
+      nota: evaluacionRecuperada.nota,
+      progreso: evaluacionRecuperada.progreso,
+      comentario: evaluacionRecuperada.comentario,
+      nombre: evaluacionRecuperada.alumno
+    };
+    }
+  }
+  
+  return { id: alumno.nid_persona, nota: '', progreso: 0, comentario: '', nombre: alumno.nombre + " " + alumno.primer_apellido + " " + alumno.segundo_apellido };
+}
+
   const [evaluaciones, setEvaluaciones] = useState(
-    alumnos.map(alumno => ({
-      id: alumno.nid_persona,
-      nota: '',
-      progreso: 'adecuado',
-      comentario: '',
-    }))
+    alumnos.map(alumno => (recuperarEvaluacion(alumno)))
   );
+
+  useEffect(() => {
+    const evaluacionesProcesadas = alumnos.map(alumno => (recuperarEvaluacion(alumno)));
+    console.log("Evaluaciones procesadas:", evaluacionesProcesadas);
+   setEvaluaciones(evaluacionesProcesadas);
+  }, [alumnos, evaluacionesRecuperadas]);
+
+
 
   const handleChange = (index, campo, valor) => {
     const nuevas = [...evaluaciones];
@@ -31,36 +57,32 @@ export default function EvaluacionesAlumnosForm({ alumnos, onGuardar }) {
 
   return (
     <ScrollView contentContainerStyle={estilos.scrollContainer}>
-      {alumnos.map((alumno, idx) => (
-        <View key={ alumno.nid_persona} style={estilos.card}>
-          <Text style={estilos.nombre}>{alumno.nombre} {alumno.primer_apellido} {alumno.segundo_apellido}</Text>
+      {evaluaciones.map((evaluacion, idx) => (
+        <View key={ evaluacion.id} style={estilos.card}>
+          <Text style={estilos.nombre}>{evaluacion.nombre}</Text>
           <Text style={estilos.label}>Nota (0-10):</Text>
-          <TextInput
-            style={estilos.input}
-            keyboardType="numeric"
-            maxLength={2}
-            value={evaluaciones[idx].nota}
-            onChangeText={v => handleChange(idx, 'nota', v.replace(/[^0-9]/g, '').slice(0,2))}
-            placeholder="0-10"
-          />
+
+
+          <EntradaTexto placeholder={"0-10"} valor={evaluacion.nota} setValor={(v) => handleChange(idx, 'nota', v)} />
           <Text style={estilos.label}>Progreso:</Text>
     
 
           <EntradaGroupRadioButton
             titulo={"Progreso"}
             opciones={opcionesProgreso}
-            valor={evaluaciones[idx].progreso}
+            valor={evaluaciones.progreso}
             setValorSeleccionado={v => handleChange(idx, 'progreso', v)}
           />
           <Text style={estilos.label}>Comentario:</Text>
-          <TextInput
-            style={estilos.textarea}
-            multiline
-            numberOfLines={3}
-            value={evaluaciones[idx].comentario}
-            onChangeText={v => handleChange(idx, 'comentario', v)}
-            placeholder="Comentario..."
+          <EntradaTexto 
+            placeholder={"Comentario"}
+            valor={evaluacion.comentario}
+            setValor={(v) => handleChange(idx, 'comentario', v)}
+            multiline= {true}
+            ancho={"100%"}
+            alto={"100"}
           />
+        
         </View>
       ))}
       <Button title="Guardar Evaluaciones" onPress={handleGuardar} />

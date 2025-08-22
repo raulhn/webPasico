@@ -322,6 +322,7 @@ app.get(
   "/obtener_evaluaciones/:nid_matricula",
   servletEvaluacion.obtenerEvaluaciones
 );
+app.get("/obtener_evaluaciones_asignatura/:nid_curso/:nid_asignatura/:nid_trimestre", servletEvaluacion.obtenerEvaluacionesAsignaturas);
 
 app.get(
   "/solicitar_generar_boletin/:nid_matricula/:nid_trimestre",
