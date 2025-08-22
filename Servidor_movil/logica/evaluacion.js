@@ -674,7 +674,7 @@ function insertarEvaluacion(nidTrimestre, nidAsignatura, nidProfesor, nidCurso)
     const sql =
       "INSERT INTO " +
       constantes.ESQUEMA +
-      ".evaluacion (nid_trimestre, nid_asignatura, nid_profesor, nid_curso) VALUES (" +
+      ".evaluacion (nid_trimestre, nid_asignatura, nid_profesor, nid_curso, sucio) VALUES (" +
       conexion.dbConn.escape(nidTrimestre) +
       ", " +
       conexion.dbConn.escape(nidAsignatura) +
@@ -682,6 +682,7 @@ function insertarEvaluacion(nidTrimestre, nidAsignatura, nidProfesor, nidCurso)
       conexion.dbConn.escape(nidProfesor) +
       ", " +
       conexion.dbConn.escape(nidCurso) +
+      ", 'S'" +
       ")";
 
     conexion.dbConn.query(sql, (err, result) => {
