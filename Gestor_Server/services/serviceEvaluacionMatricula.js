@@ -1,6 +1,7 @@
 const gestorEvaluacion = require("../logica/evaluacion.js");
 const serviceComun = require("./serviceComun.js");
 const constantes = require("../constantes.js");
+const e = require("express");
 
 function peticion_registrar_evaluacion_matricula(evaluacionMatricula) {
   return new Promise((resolve, reject) => {
@@ -115,4 +116,31 @@ function obtener_evaluaciones_matriculas_sucias() {
   });
 }
 
+async function actualizar_evaluaciones_matriculas_sucias()
+{
+  try {
+    const evaluacionesMatricula =
+      await gestorEvaluacion.obtener_evaluacion_matriculas_sucias();
+    console.log(evaluacionesMatricula);
+    for (const evaluacion of evaluacionesMatricula) {
+      // gestorEvaluacion.registrar_evaluacion_servicio(
+      //   evaluacion.nid_evaluacion_matricula,
+      //   evaluacion.nid_evaluacion,
+      //   evaluacion.nota,
+      //   evaluacion.nid_tipo_progreso,
+      //   evaluacion.comentario,
+      //   evaluacion.fecha_actualizacion,
+      //   evaluacion.nid_curso
+      //);
+      console.log(evaluacion)
+    }
+  } catch (error) {
+    console.error(
+      "Error al actualizar las evaluaciones matrícula sucias:",
+      error
+    );
+  }
+}
+
 module.exports.actualizar_sucios = actualizar_sucios;
+module.exports.actualizar_evaluaciones_matriculas_sucias = actualizar_evaluaciones_matriculas_sucias;
