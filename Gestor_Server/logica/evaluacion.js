@@ -184,7 +184,7 @@ function insertar_evaluacion_matricula_servicio(
         "insert into " +
         constantes.ESQUEMA_BD +
         ".evaluacion_matricula" +
-        "(nid_evaluacion_matricula, nid_evaluacion, nota, nid_tipo_progreso, comentario, fecha_actualizacion) " +
+        "(nid_evaluacion_matricula, nid_evaluacion, nota, nid_tipo_progreso, comentario, fecha_actualizacion, sucio, nid_curso) " +
         "values(" +
         conexion.dbConn.escape(nid_evaluacion_matricula) +
         ", " +
@@ -197,6 +197,10 @@ function insertar_evaluacion_matricula_servicio(
         conexion.dbConn.escape(comentario) +
         ", " +
         conexion.dbConn.escape(comun.formatDateToMySQL(fecha_actualizacion)) +
+        ", " +
+        conexion.dbConn.escape('N') +
+        ", " +
+        conexion.dbConn.escape(nid_curso) +
         ")";
       conexion.dbConn.query(sql, (error, results, fields) => {
         if (error) {
@@ -218,7 +222,8 @@ function actualizar_evaluacion_matricula_servicio(
   nota,
   nid_tipo_progreso,
   comentario,
-  fecha_actualizacion
+  fecha_actualizacion,
+  nid_curso
 ) {
   return new Promise((resolve, reject) => {
     conexion.dbConn.beginTransaction(() => {
@@ -237,6 +242,8 @@ function actualizar_evaluacion_matricula_servicio(
         ", fecha_actualizacion = " +
         conexion.dbConn.escape(comun.formatDateToMySQL(fecha_actualizacion)) +
         ", sucio = 'N'" +
+        ", nid_curso = " +
+        conexion.dbConn.escape(nid_curso) +
         " where nid_evaluacion_matricula = " +
         conexion.dbConn.escape(nid_evaluacion_matricula) +
         " and fecha_actualizacion = " +
@@ -261,7 +268,8 @@ async function registrar_evaluacion_servicio(
   nota,
   nid_tipo_progreso,
   comentario,
-  fecha_actualizacion
+  fecha_actualizacion,
+  nid_curso
 ) {
   try {
     const bExiste_evaluacion_matricula = await existe_evaluacion_matricula_nid(
@@ -275,7 +283,8 @@ async function registrar_evaluacion_servicio(
         nota,
         nid_tipo_progreso,
         comentario,
-        fecha_actualizacion
+        fecha_actualizacion,
+        nid_curso
       );
     } else {
       await actualizar_evaluacion_matricula_servicio(
@@ -284,7 +293,8 @@ async function registrar_evaluacion_servicio(
         nota,
         nid_tipo_progreso,
         comentario,
-        fecha_actualizacion
+        fecha_actualizacion,
+        nid_curso
       );
     }
   } catch (error) {
@@ -963,3 +973,4 @@ module.exports.actualizar_evaluacion_matricula_sucio =
   actualizar_evaluacion_matricula_sucio;
 module.exports.existe_evaluacion_nid = existe_evaluacion_nid;
 module.exports.registrar_evaluacion = registrar_evaluacion;
+module.exports.registrar_evaluacion_servicio = registrar_evaluacion_servicio;

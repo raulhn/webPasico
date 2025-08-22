@@ -47,6 +47,8 @@ async function actualizar_sucios() {
       await serviceMusicos.actualizar_sucios();
       await serviceEvaluacion.actualizar_sucios();
       await serviceEvaluacionMatricula.actualizar_sucios();
+      await serviceEvaluacion.actualizar_evaluaciones_sucias();
+      await serviceEvaluacionMatricula.actualizar_evaluaciones_matriculas_sucias();
     } catch (error) {
       console.error("Error en la tarea programada:", error);
     }
