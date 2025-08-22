@@ -329,6 +329,11 @@ app.get(
   servletEvaluacion.solicitar_generar_boletin
 );
 
+app.post(
+  "/registrar_evaluacion",
+  servletEvaluacion.registrarEvaluacion
+);
+
 //Tablon Anuncios //
 app.post(
   "/registrar_tablon_anuncio",

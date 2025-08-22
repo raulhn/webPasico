@@ -21,7 +21,7 @@ export default function CrearEvaluacion() {
   return (
     <ScrollView refreshControl={<RefreshControl refreshing={cargandoAlumnos} onRefresh={lanzarRefresco} />}>
 
-      <EvaluacionesAlumnosForm alumnos={alumnos} evaluacionesRecuperadas={evaluaciones} />
+      <EvaluacionesAlumnosForm alumnos={alumnos} nid_curso={nidCurso} nid_asignatura={nidAsignatura} nid_trimestre={nidTrimestre} evaluacionesRecuperadas={evaluaciones} />
     </ScrollView>
   );
 }
