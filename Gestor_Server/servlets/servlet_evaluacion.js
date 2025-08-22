@@ -3,6 +3,7 @@ const comun = require('./servlet_comun.js')
 const gestion_usuarios = require('../logica/usuario.js')
 const profesor = require('../logica/profesor.js')
 const matricula = require('../logica/matricula.js')
+const gestorCurso = require('../logica/curso.js')
 
 
 function registrar_evaluacion(req, res)
@@ -19,7 +20,9 @@ function registrar_evaluacion(req, res)
             let nid_asignatura = req.body.nid_asignatura;
             let nid_profesor = req.body.nid_profesor;
 
-            let nid_evaluacion = await evaluacion.registrar_evaluacion(nid_trimestre, nid_asignatura, nid_profesor);
+            const nid_curso = await gestorCurso.obtener_ultimo_curso();
+
+            let nid_evaluacion = await evaluacion.registrar_evaluacion(nid_trimestre, nid_asignatura, nid_profesor, nid_curso);
 
             let notas_array = JSON.parse(notas);
             let progreso_array = JSON.parse(progresos);

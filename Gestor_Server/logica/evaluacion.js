@@ -20,7 +20,7 @@ function obtener_trimestres() {
   });
 }
 
-function existe_evaluacion(nid_trimestre, nid_asignatura, nid_profesor) {
+function existe_evaluacion(nid_trimestre, nid_asignatura, nid_profesor, nid_curso) {
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(
       "select count(*) num from " +
@@ -31,7 +31,9 @@ function existe_evaluacion(nid_trimestre, nid_asignatura, nid_profesor) {
         " and nid_asignatura = " +
         conexion.dbConn.escape(nid_asignatura) +
         " and nid_profesor = " +
-        conexion.dbConn.escape(nid_profesor),
+        conexion.dbConn.escape(nid_profesor) +
+        " and nid_curso = " +
+        conexion.dbConn.escape(nid_curso),
       (error, results, fields) => {
         if (error) {
           console.log(error);
@@ -64,7 +66,7 @@ function existe_evaluacion_nid(nid_evaluacion) {
   });
 }
 
-function obtener_evaluacion(nid_trimestre, nid_asignatura, nid_profesor) {
+function obtener_evaluacion(nid_trimestre, nid_asignatura, nid_profesor, nid_curso) {
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(
       "select * from " +
@@ -75,7 +77,9 @@ function obtener_evaluacion(nid_trimestre, nid_asignatura, nid_profesor) {
         " and nid_asignatura = " +
         conexion.dbConn.escape(nid_asignatura) +
         " and nid_profesor = " +
-        conexion.dbConn.escape(nid_profesor),
+        conexion.dbConn.escape(nid_profesor) +
+        " and nid_curso = " +
+        conexion.dbConn.escape(nid_curso),
       (error, results, fields) => {
         if (error) {
           console.log(error);
@@ -88,19 +92,21 @@ function obtener_evaluacion(nid_trimestre, nid_asignatura, nid_profesor) {
   });
 }
 
-function crear_evaluacion(nid_trimestre, nid_asignatura, nid_profesor) {
+function crear_evaluacion(nid_trimestre, nid_asignatura, nid_profesor, nid_curso) {
   return new Promise((resolve, reject) => {
     conexion.dbConn.beginTransaction(() => {
       conexion.dbConn.query(
         "insert into " +
           constantes.ESQUEMA_BD +
           ".evaluacion" +
-          "(nid_trimestre, nid_asignatura, nid_profesor) values(" +
+          "(nid_trimestre, nid_asignatura, nid_profesor, nid_curso) values(" +
           conexion.dbConn.escape(nid_trimestre) +
           ", " +
           conexion.dbConn.escape(nid_asignatura) +
           ", " +
           conexion.dbConn.escape(nid_profesor) +
+          ", " +
+          conexion.dbConn.escape(nid_curso) +
           ")",
         (error, results, fields) => {
           if (error) {
@@ -120,27 +126,31 @@ function crear_evaluacion(nid_trimestre, nid_asignatura, nid_profesor) {
 async function registrar_evaluacion(
   nid_trimestre,
   nid_asignatura,
-  nid_profesor
+  nid_profesor,
+  nid_curso
 ) {
   try {
     let bExiste_evaluacion = await existe_evaluacion(
       nid_trimestre,
       nid_asignatura,
-      nid_profesor
+      nid_profesor,
+      nid_curso
     );
 
     if (bExiste_evaluacion) {
       let evaluacion = await obtener_evaluacion(
         nid_trimestre,
         nid_asignatura,
-        nid_profesor
+        nid_profesor,
+        nid_curso
       );
       return evaluacion["nid_evaluacion"];
     } else {
       let nid_evaluacion = await crear_evaluacion(
         nid_trimestre,
         nid_asignatura,
-        nid_profesor
+        nid_profesor,
+        nid_curso
       );
       return nid_evaluacion;
     }
