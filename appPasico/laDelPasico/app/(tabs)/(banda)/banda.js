@@ -2,9 +2,6 @@ import React from "react";
 import AppBar from "../../../componentes/appBar.jsx"; // Adjust the path if necessary
 import { StyleSheet, View, Text } from "react-native";
 
-import Constants from 'expo-constants';
-
-const KEY_GOOGLE = Constants.expoConfig.extra.GOOGLE;
 
 export default function Banda() {
   return (
