@@ -18,9 +18,10 @@ import {
   Boton,
 } from "../componentesUI/ComponentesUI.jsx";
 
-import Constants from 'expo-constants';
 
-const KEY_GOOGLE = Constants.expoConfig.extra.GOOGLE;
+import { GOOGLE_API_KEI } from '@env';
+
+
 
 export default function registrarUsuario(recaptchaToken) {
   const [inputActivo, setInputActivo] = React.useState(0);
@@ -81,7 +82,7 @@ export default function registrarUsuario(recaptchaToken) {
     if (lanzaRegistro) {
       return (
         <Tunstile
-          siteKey={KEY_GOOGLE.apiKey}
+          siteKey={GOOGLE_API_KEI}
           onVerify={handleVerify}
         />
       );

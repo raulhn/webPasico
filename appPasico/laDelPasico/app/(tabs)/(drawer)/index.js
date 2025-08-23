@@ -13,9 +13,9 @@ import { router } from "expo-router";
 
 import * as Notifications from "expo-notifications";
 
-import Constants from 'expo-constants';
+import { GOOGLE_API_KEI } from '@env';
 
-const KEY_GOOGLE = Constants.expoConfig.extra.GOOGLE;
+
 
 export default function Index() {
   const expoPushToken = useNotification();
@@ -80,7 +80,7 @@ export default function Index() {
 
       <View style={{ display: "none" }}>
         <Tunstile
-          siteKey={KEY_GOOGLE.apiKey}
+          siteKey={GOOGLE_API_KEI}
           onVerify={handleVerify}
         />
       </View>
