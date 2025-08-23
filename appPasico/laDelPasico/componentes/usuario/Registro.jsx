@@ -2,6 +2,7 @@ import React from "react";
 
 import { View, Text, ScrollView, TextInput, Image, Modal } from "react-native";
 
+
 import { StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState, useEffect } from "react";
@@ -16,6 +17,10 @@ import {
   EntradaTexto,
   Boton,
 } from "../componentesUI/ComponentesUI.jsx";
+
+import Constants from 'expo-constants';
+
+const KEY_GOOGLE = Constants.expoConfig.extra.GOOGLE;
 
 export default function registrarUsuario(recaptchaToken) {
   const [inputActivo, setInputActivo] = React.useState(0);
@@ -67,6 +72,7 @@ export default function registrarUsuario(recaptchaToken) {
   function handleVerify(event) {
     const token = event.nativeEvent.data;
 
+    console.log("Token de reCAPTCHA:", token);
     peticionRegistrarUsuario(token);
     setLanzaRegistro(false);
   }
@@ -75,7 +81,7 @@ export default function registrarUsuario(recaptchaToken) {
     if (lanzaRegistro) {
       return (
         <Tunstile
-          siteKey={process.env.GOOGLE_API_KEY}
+          siteKey={KEY_GOOGLE.apiKey}
           onVerify={handleVerify}
         />
       );
@@ -227,6 +233,9 @@ export default function registrarUsuario(recaptchaToken) {
       <ModalExito
         visible={exito}
         callback={() => {
+          setExito(false);
+        }}
+        setVisible={() => {
           setExito(false);
         }}
         mensaje={mensajeExito}
