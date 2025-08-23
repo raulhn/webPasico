@@ -13,6 +13,10 @@ import { router } from "expo-router";
 
 import * as Notifications from "expo-notifications";
 
+import Constants from 'expo-constants';
+
+const KEY_GOOGLE = Constants.expoConfig.extra.GOOGLE;
+
 export default function Index() {
   const expoPushToken = useNotification();
   const [recaptchaToken, setRecaptchaToken] = useState(null);
@@ -76,7 +80,7 @@ export default function Index() {
 
       <View style={{ display: "none" }}>
         <Tunstile
-          siteKey={process.env.GOOGLE_API_KEY}
+          siteKey={KEY_GOOGLE.apiKey}
           onVerify={handleVerify}
         />
       </View>
