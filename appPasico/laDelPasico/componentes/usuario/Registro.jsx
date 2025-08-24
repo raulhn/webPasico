@@ -18,9 +18,7 @@ import {
   Boton,
 } from "../componentesUI/ComponentesUI.jsx";
 
-
-import { GOOGLE_API_KEI } from '@env';
-
+import Constantes from "../../config/constantes.js";
 
 
 export default function registrarUsuario(recaptchaToken) {
@@ -82,7 +80,7 @@ export default function registrarUsuario(recaptchaToken) {
     if (lanzaRegistro) {
       return (
         <Tunstile
-          siteKey={GOOGLE_API_KEI}
+          siteKey={Constantes.PUBLIC_KEY_TURNSTILE}
           onVerify={handleVerify}
         />
       );

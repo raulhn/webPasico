@@ -3,10 +3,7 @@ import React from "react";
 import { View } from "react-native";
 import Recaptcha from "../componentes/Recaptcha";
 import { useState } from "react";
-
-import { GOOGLE_API_KEI } from '@env';
-
-
+import Constantes from "../config/constantes.js";
 
 export default function PantallaRegistro() {
   const [recaptchaToken, setRecaptchaToken] = useState(null);
@@ -19,7 +16,7 @@ export default function PantallaRegistro() {
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       <View style={{ display: "none" }}>
         <Recaptcha
-          siteKey={GOOGLE_API_KEI}
+          siteKey={Constantes.PUBLIC_KEY_TURNSTILE}
           onVerify={handleVerify}
         />
       </View>

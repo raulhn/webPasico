@@ -44,9 +44,6 @@ export default {
       },
       "eas": {
         "projectId": "10a7fcf1-01cb-4d13-b0a7-0bcd9e9b2aae"
-      },
-      "GOOGLE": {
-        "apiKey": process.env.GOOGLE_API_KEY
       }
     }
   }
