@@ -99,21 +99,24 @@ app.get(
 );
 
 // Evaluaciones //
-app.post("/registrar_evaluacion", servletEvaluacion.registrarEvaluacion);
+app.post("/registrar_evaluacion", servletEvaluacion.registrarEvaluacionServicio);
 app.get(
   "/obtener_evaluaciones_sucias",
   servletEvaluacion.obtenerEvaluacionesSucias
 );
+app.post("/actualizar_evaluacion_sucia", servletEvaluacion.actualizarEvaluacionSucia);
+app.post("/actualizar_evaluacion_matricula_sucia", servletEvaluacionMatricula.actualizarEvaluacionMatriculaSucia);
 
 // Evaluacion Matricula //
 app.post(
   "/registrar_evaluacion_matricula",
-  servletEvaluacionMatricula.registrarEvaluacionMatricula
+  servletEvaluacionMatricula.registrarEvaluacionMatriculaServicio
 );
 app.get(
-  "/obtener_evaluaciones_matricula_sucias",
+  "/obtener_evaluaciones_matriculas_sucias",
   servletEvaluacionMatricula.obtenerEvaluacionesMatriculaSucias
 );
+
 
 // Socios //
 app.post("/registrar_socio", servletSocios.registrarSocio);

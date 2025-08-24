@@ -5,27 +5,26 @@ const parametros = require("./parametros");
 const ficheros = require("./ficheros");
 
 function insertarEvaluacion(
-  nid_evaluacion,
   nid_trimestre,
   nid_asignatura,
   nid_profesor,
-  fecha_actualizacion
+  nid_curso,
+  sucio = 'S'
 ) {
   return new Promise((resolve, reject) => {
     const sql =
       "INSERT INTO " +
       constantes.ESQUEMA +
-      ".evaluacion (nid_evaluacion, nid_trimestre, nid_asignatura, nid_profesor, fecha_actualizacion, sucio) VALUES (" +
-      conexion.dbConn.escape(nid_evaluacion) +
-      ", " +
+      ".evaluacion (nid_trimestre, nid_asignatura, nid_profesor, sucio, nid_curso) VALUES (" +
       conexion.dbConn.escape(nid_trimestre) +
       ", " +
       conexion.dbConn.escape(nid_asignatura) +
       ", " +
       conexion.dbConn.escape(nid_profesor) +
       ", " +
-      conexion.dbConn.escape(comun.formatDateToMySQL(fecha_actualizacion)) +
-      ", 'N' " +
+      conexion.dbConn.escape(sucio) +
+      ", " +
+      conexion.dbConn.escape(nid_curso) +
       ")";
 
     conexion.dbConn.beginTransaction(() => {
@@ -43,12 +42,58 @@ function insertarEvaluacion(
   });
 }
 
+
+
+function insertarEvaluacionSucio(
+  nid_trimestre,
+  nid_asignatura,
+  nid_profesor,
+  fecha_actualizacion,
+  nid_curso
+) {
+  return new Promise((resolve, reject) => {
+    const sql =
+      "INSERT INTO " +
+      constantes.ESQUEMA +
+      ".evaluacion (nid_trimestre, nid_asignatura, nid_profesor, fecha_actualizacion, sucio, nid_curso) VALUES (" +
+      conexion.dbConn.escape(nid_trimestre) +
+      ", " +
+      conexion.dbConn.escape(nid_asignatura) +
+      ", " +
+      conexion.dbConn.escape(nid_profesor) +
+      ", " +
+      conexion.dbConn.escape(nid_profesor) +
+      ", " +
+      conexion.dbConn.escape(comun.formatDateToMySQL(fecha_actualizacion)) +
+      ", " +
+      conexion.dbConn.escape('N') +
+      ", " +
+      conexion.dbConn.escape(nid_curso) +
+      ")";
+
+    conexion.dbConn.beginTransaction(() => {
+      conexion.dbConn.query(sql, (err, result) => {
+        if (err) {
+          console.error("Error al insertar la evaluación:", err);
+          conexion.dbConn.rollback();
+          reject(err);
+        } else {
+          conexion.dbConn.commit();
+          resolve(result.insertId);
+        }
+      });
+    });
+  });
+}
+
+
 function actualizarEvaluacion(
   nid_evaluacion,
   nid_trimestre,
   nid_asignatura,
   nid_profesor,
-  fecha_actualizacion
+  fecha_actualizacion,
+  nid_curso
 ) {
   return new Promise((resolve, reject) => {
     const sql =
@@ -60,8 +105,10 @@ function actualizarEvaluacion(
       conexion.dbConn.escape(nid_asignatura) +
       ", nid_profesor = " +
       conexion.dbConn.escape(nid_profesor) +
-      ", fecha_actualizacion = " +
-      conexion.dbConn.escape(comun.formatDateToMySQL(fecha_actualizacion)) +
+      ", fecha_actualizacion = ifnull(" +
+      conexion.dbConn.escape(comun.formatDateToMySQL(fecha_actualizacion)) + ", now())" +
+      ", nid_curso = " +
+      conexion.dbConn.escape(nid_curso) +
       ", sucio = 'N'" +
       " WHERE nid_evaluacion = " +
       conexion.dbConn.escape(nid_evaluacion) +
@@ -129,33 +176,35 @@ async function registrarEvaluacion(
   nid_trimestre,
   nid_asignatura,
   nid_profesor,
-  fecha_actualizacion
+  fecha_actualizacion,
+  nid_curso
 ) {
   try {
-    const existe = await existeEvaluacion(nid_evaluacion);
-    if (existe) {
+    const evaluacion = await obtenerEvaluacion(nid_curso, nid_asignatura, nid_trimestre, nid_profesor);
+    if (evaluacion) {
       const requiereActualizar = await requiereActualizarEvaluacion(
-        nid_evaluacion,
+        evaluacion.nid_evaluacion,
         fecha_actualizacion
       );
       if (requiereActualizar) {
         return await actualizarEvaluacion(
-          nid_evaluacion,
+          evaluacion.nid_evaluacion,
           nid_trimestre,
           nid_asignatura,
           nid_profesor,
-          fecha_actualizacion
+          fecha_actualizacion,
+          nid_curso
         );
       } else {
         return "No se requiere actualización";
       }
     } else {
-      return await insertarEvaluacion(
-        nid_evaluacion,
+      return await insertarEvaluacionSucio(
         nid_trimestre,
         nid_asignatura,
         nid_profesor,
-        fecha_actualizacion
+        fecha_actualizacion,
+        nid_curso
       );
     }
   } catch (error) {
@@ -639,7 +688,7 @@ function obtenerEvaluacionesAsignaturas(nidAsignatura, nidCurso, nidTrimestre, n
 }
 
 
-function obtenerEvaluacion(nidCurso, nidAsignatura, nidTrimestre)
+function obtenerEvaluacion(nidCurso, nidAsignatura, nidTrimestre, nidProfesor)
 {
   return new Promise((resolve, reject) => {
     const sql =
@@ -654,9 +703,10 @@ function obtenerEvaluacion(nidCurso, nidAsignatura, nidTrimestre)
       " AND e.nid_asignatura = " +
       conexion.dbConn.escape(nidAsignatura) +
       " AND e.nid_trimestre = " +
-      conexion.dbConn.escape(nidTrimestre);
+      conexion.dbConn.escape(nidTrimestre) +
+      " AND e.nid_profesor = " +
+      conexion.dbConn.escape(nidProfesor);
 
-    
     conexion.dbConn.query(sql, (err, result) => {
       if (err) {
         console.error("Error al obtener la evaluacion:", err);
@@ -668,33 +718,6 @@ function obtenerEvaluacion(nidCurso, nidAsignatura, nidTrimestre)
   });
 }
 
-function insertarEvaluacion(nidTrimestre, nidAsignatura, nidProfesor, nidCurso)
-{
-  return new Promise((resolve, reject) => {
-    const sql =
-      "INSERT INTO " +
-      constantes.ESQUEMA +
-      ".evaluacion (nid_trimestre, nid_asignatura, nid_profesor, nid_curso, sucio) VALUES (" +
-      conexion.dbConn.escape(nidTrimestre) +
-      ", " +
-      conexion.dbConn.escape(nidAsignatura) +
-      ", " +
-      conexion.dbConn.escape(nidProfesor) +
-      ", " +
-      conexion.dbConn.escape(nidCurso) +
-      ", 'S'" +
-      ")";
-
-    conexion.dbConn.query(sql, (err, result) => {
-      if (err) {
-        console.error("Error al registrar la evaluacion:", err);
-        reject(err);
-      } else {
-        resolve(result);
-      }
-    });
-  });
-}
 
 function insertarEvaluacionMatricula(nidEvaluacion, nota, nid_tipo_progreso, nid_matricula_asignatura, comentario)
 {
@@ -702,7 +725,7 @@ function insertarEvaluacionMatricula(nidEvaluacion, nota, nid_tipo_progreso, nid
     const sql =
       "INSERT INTO " +
       constantes.ESQUEMA +
-      ".evaluacion_matricula (nid_evaluacion, nota, nid_tipo_progreso, nid_matricula_asignatura, comentario) VALUES (" +
+      ".evaluacion_matricula (nid_evaluacion, nota, nid_tipo_progreso, nid_matricula_asignatura, comentario, sucio) VALUES (" +
       conexion.dbConn.escape(nidEvaluacion) +
       ", nullif(" +
       conexion.dbConn.escape(nota) + ", '')" +
@@ -712,7 +735,7 @@ function insertarEvaluacionMatricula(nidEvaluacion, nota, nid_tipo_progreso, nid
       conexion.dbConn.escape(nid_matricula_asignatura) +
       ", trim(" +
       conexion.dbConn.escape(comentario) +
-      "))";
+      "), 'S')";
 
     conexion.dbConn.query(sql, (err, result) => {
       if (err) {
@@ -795,6 +818,29 @@ function obtenerEvaluacionMatricula(nidEvaluacion, nidMatriculaAsignatura)
   });
 }
 
+function actualizarEvaluacionSucia(nidEvaluacion)
+{
+  return new Promise((resolve, reject) => {
+    const sql =
+      "UPDATE " +
+      constantes.ESQUEMA +
+      ".evaluacion SET sucio = 'N' WHERE nid_evaluacion = " +
+      conexion.dbConn.escape(nidEvaluacion);
+
+    conexion.dbConn.beginTransaction(() => {
+    conexion.dbConn.query(sql, (err, result) => {
+      if (err) {
+        console.error("Error al actualizar el estado sucio de la evaluacion:", err);
+        conexion.dbConn.rollback();
+        reject(err);
+      } else {
+        conexion.dbConn.commit();
+        resolve(result);
+      }
+    });
+  });})
+}
+
 module.exports.insertarEvaluacion = insertarEvaluacion;
 module.exports.obtenerEvaluacionesSucias = obtenerEvaluacionesSucias;
 module.exports.obtenerEvaluacionTrimestre = obtenerEvaluacionTrimestre;
@@ -803,8 +849,8 @@ module.exports.generar_boletin = generar_boletin;
 module.exports.obtenerEvaluacionesAsignaturas = obtenerEvaluacionesAsignaturas;
 module.exports.obtenerEvaluacion = obtenerEvaluacion;
 module.exports.insertarEvaluacionMatricula = insertarEvaluacionMatricula;
-module.exports.insertarEvaluacion = insertarEvaluacion;
 module.exports.actualizarEvaluacionMatricula = actualizarEvaluacionMatricula;
 module.exports.existeEvaluacionMatricula = existeEvaluacionMatricula;
 module.exports.obtenerEvaluacionMatricula = obtenerEvaluacionMatricula;
 module.exports.registrarEvaluacion = registrarEvaluacion;
+module.exports.actualizarEvaluacionSucia = actualizarEvaluacionSucia;

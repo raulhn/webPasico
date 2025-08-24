@@ -4,7 +4,9 @@ function formatDateToMySQL(date) {
       return null;
     }
     const d = new Date(date);
-    return d.toISOString().slice(0, 19).replace("T", " ");
+    const madridDate = d.toLocaleString('sv-SE', { timeZone: 'Europe/Madrid' });
+    // Formato sv-SE: 'YYYY-MM-DD HH:mm:ss'
+    return madridDate.replace('T', ' ');
   } catch (error) {
     return null;
   }
