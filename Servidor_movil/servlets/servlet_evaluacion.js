@@ -11,7 +11,7 @@ const libreOffice = require("libreoffice-convert");
 const fs = require("fs").promises;
 libreOffice.convertAsync = require("util").promisify(libreOffice.convert);
 
-async function registrarEvaluacion(req, res) {
+async function registrarEvaluacionServicio(req, res) {
   servletComun.comprobacionAccesoAPIKey(req, res, async () => {
     try {
       const nid_evaluacion = req.body.nid_evaluacion;
@@ -19,13 +19,15 @@ async function registrarEvaluacion(req, res) {
       const nid_asignatura = req.body.nid_asignatura;
       const nid_trimestre = req.body.nid_trimestre;
       const fecha_actualizacion = req.body.fecha_actualizacion;
+      const nid_curso = req.body.nid_curso;
 
       await gestor_evaluacion.registrarEvaluacion(
         nid_evaluacion,
         nid_trimestre,
         nid_asignatura,
         nid_profesor,
-        fecha_actualizacion
+        fecha_actualizacion,
+        nid_curso
       );
       res.status(200).send({
         error: false,
@@ -112,14 +114,7 @@ async function obtenerEvaluaciones(req, res) {
     const nid_persona = await servletPersona.obtenerNidPersona(req);
     const nidMatricula = req.params.nid_matricula;
 
-    console.log(
-      "servlet_evaluacion.js -> obtenerEvaluaciones: nid_persona:",
-      nid_persona
-    );
-    console.log(
-      "servlet_evaluacion.js -> obtenerEvaluaciones: nidMatricula:",
-      nidMatricula
-    );
+
 
     const matricula = await gestorMatricula.obtenerMatricula(nidMatricula);
 
@@ -263,9 +258,6 @@ async function generar_boletin(req, res) {
       tokenDecoded.nid_trimestre
     );
 
-    //console.log(evaluacion);
-    console.log("---------------------------------");
-    //console.log(evaluacion);
     const extensionPdf = ".pdf";
     let pdfBuf = await libreOffice.convertAsync(
       evaluacion,
@@ -350,10 +342,6 @@ async function registrarEvaluaciones(req, res) {
     const nidPersona = await servletPersona.obtenerNidPersona(req);
     const esProfesor = await gestorProfesores.esProfesor(nidPersona, nid_asignatura);
 
-    console.log("Profesor: ", nidPersona)
-    console.log("Asignatura: ", nid_asignatura)
-    console.log("Curso: ", nid_curso)
-    console.log("Trimestre: ", nid_trimestre)
     if(!esProfesor) {
       res.status(403).send({
         error: true,
@@ -362,11 +350,11 @@ async function registrarEvaluaciones(req, res) {
       return;
     }
 
-    let evaluacionRecuperada = await gestor_evaluacion.obtenerEvaluacion(nid_curso, nid_asignatura, nid_trimestre);
+    let evaluacionRecuperada = await gestor_evaluacion.obtenerEvaluacion(nid_curso, nid_asignatura, nid_trimestre, nidPersona);
 
     if(!evaluacionRecuperada) {
-      await gestor_evaluacion.insertarEvaluacion(nid_trimestre, nid_asignatura, nidPersona, nid_curso);
-      evaluacionRecuperada = await gestor_evaluacion.obtenerEvaluacion(nid_curso, nid_asignatura, nid_trimestre);
+      await gestor_evaluacion.insertarEvaluacion( nid_trimestre, nid_asignatura, nidPersona, nid_curso, 'S');
+      evaluacionRecuperada = await gestor_evaluacion.obtenerEvaluacion(nid_curso, nid_asignatura, nid_trimestre, nidPersona);
     }
 
 
@@ -401,7 +389,33 @@ async function registrarEvaluaciones(req, res) {
   }
 }
 
-module.exports.registrarEvaluacion = registrarEvaluacion;
+async function actualizarEvaluacionSucia(req, res)
+{
+   servletComun.comprobacionAccesoAPIKey(req, res, async () => {
+  try {
+    const nidEvaluacion = req.body.nid_evaluacion;
+
+    console.log("Actualizando evaluación sucia:", nidEvaluacion);
+    await gestor_evaluacion.actualizarEvaluacionSucia(nidEvaluacion);
+
+    res.status(200).send({
+      error: false,
+      mensaje: "Estado de la evaluación actualizado correctamente"
+    });
+  } catch (error) {
+    console.error(
+      "servlet_evaluacion.js -> actualizarEvaluacionSucio: Error al actualizar el estado de la evaluación:",
+      error
+    );
+    res.status(400).send({
+      error: true,
+      message: "Se ha producido un error al actualizar el estado de la evaluación",
+    });
+  }
+});
+}
+
+module.exports.registrarEvaluacionServicio = registrarEvaluacionServicio;
 module.exports.obtenerEvaluacionesSucias = obtenerEvaluacionesSucias;
 module.exports.obtenerEvaluacionTrimestre = obtenerEvaluacionTrimestre;
 module.exports.obtenerEvaluaciones = obtenerEvaluaciones;
@@ -409,3 +423,4 @@ module.exports.generar_boletin = generar_boletin;
 module.exports.solicitar_generar_boletin = solicitar_generar_boletin;
 module.exports.obtenerEvaluacionesAsignaturas = obtenerEvaluacionesAsignaturas;
 module.exports.registrarEvaluaciones = registrarEvaluaciones;
+module.exports.actualizarEvaluacionSucia = actualizarEvaluacionSucia;

@@ -79,7 +79,7 @@ function registrar_evaluacion_profesor(req, res)
             {
             
                 let nid_persona = array_persona[i];
-                console.log(nid_persona)
+            
                 let nid_matricula_asignatura = matricula_array[nid_persona];
 
                 let nota = notas_array[nid_persona];
@@ -102,12 +102,13 @@ function obtener_evaluacion(req, res)
             let nid_trimestre = req.params.nid_trimestre;
             let nid_asignatura = req.params.nid_asignatura;
             let nid_profesor = req.params.nid_profesor;
-
-            bExiste_evaluacion = await evaluacion.existe_evaluacion(nid_trimestre, nid_asignatura, nid_profesor);
+const nid_curso = await gestorCurso.obtener_ultimo_curso();
+            bExiste_evaluacion = await evaluacion.existe_evaluacion(nid_trimestre, nid_asignatura, nid_profesor, nid_curso);
             
             if (bExiste_evaluacion)
             {
-                let evaluacion_recuperada = await evaluacion.obtener_evaluacion(nid_trimestre, nid_asignatura, nid_profesor);
+                
+                let evaluacion_recuperada = await evaluacion.obtener_evaluacion(nid_trimestre, nid_asignatura, nid_profesor, nid_curso);
 
                 let evaluaciones_matriculas = await evaluacion.obtener_evaluaciones_matricula(evaluacion_recuperada['nid_evaluacion']);
 

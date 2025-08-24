@@ -19,6 +19,7 @@ function peticion_registrar_evaluacion(evaluacion) {
               nid_trimestre: evaluacion.nid_trimestre,
               nid_asignatura: evaluacion.nid_asignatura,
               nid_profesor: evaluacion.nid_profesor,
+              nid_curso: evaluacion.nid_curso,
               fecha_actualizacion: evaluacion.fecha_actualizacion,
             }),
           }
@@ -58,7 +59,7 @@ async function actualizar_sucios() {
         evaluacion.nid_evaluacion,
         "N"
       );
-      console.log("Actualizar evaluación en servicio móvil", evaluacion);
+
     }
   } catch (error) {
     console.error("Error al actualizar las evaluaciones sucias:", error);
@@ -86,6 +87,44 @@ function obtener_evaluaciones_sucias() {
               console.error("Error en la respuesta de la API:", data.error);
               reject("Error en la respuesta de la API");
             }
+            resolve(data.evaluaciones);
+          })
+          .catch((error) => {
+            console.error("Error al procesar la respuesta JSON:", error);
+            reject("Error al procesar la respuesta JSON");
+          });
+      })
+      .catch((error) => {
+        console.error("Error al realizar la solicitud:", error);
+        reject("Error al realizar la solicitud");
+      });
+  });
+}
+
+function actualizar_evaluacion_sucia(nid_evaluacion) {
+  return new Promise((resolve, reject) => {
+    serviceComun
+      .fetchWithTimeout(
+        constantes.URL_SERVICIO_MOVIL + "actualizar_evaluacion_sucia",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-api-key": process.env.API_KEY_MOVIL,
+          },
+          body: JSON.stringify({
+            nid_evaluacion: nid_evaluacion,
+          }),
+        }
+      )
+      .then((response) => {
+        response
+          .json()
+          .then((data) => {
+            if (data.error) {
+              console.error("Error en la respuesta de la API:", data.error);
+              reject("Error en la respuesta de la API");
+            }
             resolve(data);
           })
           .catch((error) => {
@@ -103,18 +142,24 @@ function obtener_evaluaciones_sucias() {
 async function actualizar_evaluaciones_sucias() {
   try {
     const evaluaciones = await obtener_evaluaciones_sucias();
+
     for (const evaluacion of evaluaciones) {
       const existe = await gestorEvaluacion.existe_evaluacion_nid(
         evaluacion.nid_evaluacion
       );
-      if (!existe) {
-        await gestorEvaluacion.registrar_evaluacion(
+  
+  
+        await gestorEvaluacion.registrar_evaluacion_servicio(
+          evaluacion.nid_evaluacion,
           evaluacion.nid_trimestre,
           evaluacion.nid_asignatura,
-          evaluacion.nid_profesor
+          evaluacion.nid_profesor,
+          evaluacion.nid_curso
         );
-      }
+
+      await actualizar_evaluacion_sucia(evaluacion.nid_evaluacion);
     }
+    return;
   } catch (error) {
     console.error(
       "Error al actualizar las evaluaciones matrícula sucias:",
@@ -122,6 +167,8 @@ async function actualizar_evaluaciones_sucias() {
     );
   }
 }
+
+
 
 module.exports.actualizar_sucios = actualizar_sucios;
 module.exports.actualizar_evaluaciones_sucias = actualizar_evaluaciones_sucias;
