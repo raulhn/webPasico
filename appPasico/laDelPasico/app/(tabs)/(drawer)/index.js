@@ -13,7 +13,7 @@ import { router } from "expo-router";
 
 import * as Notifications from "expo-notifications";
 
-import { GOOGLE_API_KEI } from '@env';
+import Constantes from "../../../config/constantes.js";
 
 
 
@@ -80,7 +80,7 @@ export default function Index() {
 
       <View style={{ display: "none" }}>
         <Tunstile
-          siteKey={GOOGLE_API_KEI}
+          siteKey={Constantes.PUBLIC_KEY_TURNSTILE}
           onVerify={handleVerify}
         />
       </View>
