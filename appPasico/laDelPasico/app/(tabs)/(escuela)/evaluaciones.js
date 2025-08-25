@@ -38,10 +38,6 @@ export default function Evaluaciones() {
   }));
 
 
-
-  
-  console.log(cursoSeleccionado.valor, asignaturaSeleccionada.valor, trimestreSeleccionado.valor);
-
   return (
     <>
                 <View style={{ justifyContent: "center", flex:1, padding: 10, backgroundColor: "#ffffff"}}>
@@ -80,7 +76,7 @@ export default function Evaluaciones() {
 
                   <Boton nombre="Evaluar" onPress={() => 
                   {router.push({ pathname: '/CrearEvaluaciones/' + cursoSeleccionado.valor, 
-                    params: { nidCurso: cursoSeleccionado.valor, nidAsignatura: asignaturaSeleccionada.valor, nidTrimestre: trimestreSeleccionado.valor }})} }/>
+                    params: {  nidAsignatura: asignaturaSeleccionada.valor, nidTrimestre: trimestreSeleccionado.valor }})} }/>
 
               </View>
               </View>

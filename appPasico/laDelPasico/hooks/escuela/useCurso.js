@@ -12,9 +12,7 @@ export const useCursos = (cerrar_sesion) => {
     }
 
     useEffect(() => {
-        console.log("Refrescando cursos...");
         ServiceCurso.obtenerCursos(cerrar_sesion).then((data) => {
-            console.log("Cursos obtenidos:", data);
             setCursos(data);
             setCargando(false);
             setRefrescar(false);

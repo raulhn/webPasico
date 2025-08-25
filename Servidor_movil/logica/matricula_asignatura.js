@@ -83,11 +83,7 @@ function actualizarMatriculaAsignatura(
   fecha_baja,
   fecha_actualizacion
 ) {
-  console.log(
-    "Actualizar matricula asignatura: ",
-    fecha_baja,
-    formatDateToMySQL(fecha_baja)
-  );
+
   return new Promise((resolve, reject) => {
     const sql =
       "UPDATE " +
@@ -273,7 +269,7 @@ function esAlumnoAsignatura(nid_persona, nid_asignatura, nid_curso) {
 function obtenerAlumnosAsignatura(nid_asignatura, nid_curso) {
   return new Promise((resolve, reject) => {
     const sql =
-      "SELECT a.nid_persona, a.nombre, a.primer_apellido, a.segundo_apellido " +
+      "SELECT a.nid_persona, a.nombre, a.primer_apellido, a.segundo_apellido, ma.nid_matricula_asignatura, ma.nid_matricula " +
       "FROM " +
       constantes.ESQUEMA +
       ".asignaturas a, " +
@@ -305,7 +301,7 @@ function obtenerAlumnosAsignaturaProfesor(nid_asignatura, nid_curso, nid_profeso
 {
   return new Promise((resolve, reject) => {
     const sql =
-      "SELECT p.nid_persona, p.nombre, p.primer_apellido, p.segundo_apellido , ma.nid_matricula_asignatura " +
+      "SELECT p.nid_persona, p.nombre, p.primer_apellido, p.segundo_apellido , ma.nid_matricula_asignatura, ma.nid_matricula " +
       "FROM " +
       constantes.ESQUEMA +
       ".persona p, " +

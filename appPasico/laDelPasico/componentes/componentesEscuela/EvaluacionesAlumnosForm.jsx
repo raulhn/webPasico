@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, FlatList, StyleSheet, Button, ScrollView } from 'react-native';
-import { EntradaGroupRadioButton, EntradaTexto, Boton, ModalExito, ModalAviso } from '../componentesUI/ComponentesUI';
+import { EntradaGroupRadioButton, EntradaTexto, Boton, ModalExito, ModalAviso, BotonFixed } from '../componentesUI/ComponentesUI';
 import ServiceEvaluaciones from '../../servicios/serviceEvaluaciones';
+import { useRouter } from 'expo-router';
 
 const opcionesProgreso = [
   { etiqueta: 'Progresa Adecuadamente', valor: 2 },
@@ -11,6 +12,8 @@ const opcionesProgreso = [
 
 export default function EvaluacionesAlumnosForm({ alumnos, evaluacionesRecuperadas=[], nid_curso, nid_asignatura, nid_trimestre }) {
   // Estado para las evaluaciones de cada alumno
+
+  const router = useRouter();
 
   const [modalVisibleExito, setModalVisibleExito] = useState(false);
   const [modalVisibleAviso, setModalVisibleAviso] = useState(false);
@@ -24,7 +27,6 @@ export default function EvaluacionesAlumnosForm({ alumnos, evaluacionesRecuperad
     if (evaluacionActual.nid_alumno === alumno.nid_persona) {
       evaluacionRecuperada = evaluacionActual;
 
-      console.log("Evaluacion recuperada:", evaluacionActual);
       const evaluacionProcesada = {
       id: evaluacionRecuperada.nid_alumno,
       nid_evaluacion: evaluacionRecuperada.nid_evaluacion,
@@ -32,9 +34,10 @@ export default function EvaluacionesAlumnosForm({ alumnos, evaluacionesRecuperad
       nota: evaluacionRecuperada.nota ? evaluacionRecuperada.nota.toString() : '',
       progreso: { valor: evaluacionRecuperada.nid_tipo_progreso, etiqueta: progresos[evaluacionRecuperada.nid_tipo_progreso] },
       comentario: evaluacionRecuperada.comentario,
-      nombre: evaluacionRecuperada.alumno
+      nombre: evaluacionRecuperada.alumno,
+      nid_matricula: alumno.nid_matricula
       };
-      console.log("Evaluacion procesada:", evaluacionProcesada);
+  
       return evaluacionProcesada
     }
   }
@@ -45,7 +48,9 @@ export default function EvaluacionesAlumnosForm({ alumnos, evaluacionesRecuperad
            nota: '',
            progreso: { valor: "0", etiqueta: progresos[0] },
            comentario: '',
-           nombre: alumno.nombre + " " + alumno.primer_apellido + " " + alumno.segundo_apellido };
+           nombre: alumno.nombre + " " + alumno.primer_apellido + " " + alumno.segundo_apellido,
+          nid_matricula: alumno.nid_matricula
+      };
 }
 
   const [evaluaciones, setEvaluaciones] = useState(
@@ -54,7 +59,7 @@ export default function EvaluacionesAlumnosForm({ alumnos, evaluacionesRecuperad
 
   useEffect(() => {
     const evaluacionesProcesadas = alumnos.map(alumno => (recuperarEvaluacion(alumno)));
-    console.log("Evaluaciones procesadas:", evaluacionesProcesadas);
+    
    setEvaluaciones(evaluacionesProcesadas);
   }, [alumnos, evaluacionesRecuperadas]);
 
@@ -62,7 +67,7 @@ export default function EvaluacionesAlumnosForm({ alumnos, evaluacionesRecuperad
   let evaluacionesEdicion = [...evaluaciones]
 
   const handleGuardar = () => {
-    console.log("Guardando evaluaciones:", evaluaciones);
+
     ServiceEvaluaciones.registrarEvaluaciones(evaluaciones, nid_curso, nid_asignatura, nid_trimestre)
       .then(response => {
         console.log("Evaluaciones guardadas:", response);
@@ -74,13 +79,26 @@ export default function EvaluacionesAlumnosForm({ alumnos, evaluacionesRecuperad
       });
   };
 
-  console.log("Evaluaciones estado:", evaluaciones);
+
   return (
     <>
     <ScrollView contentContainerStyle={estilos.scrollContainer}>
       {evaluaciones.map((evaluacion, idx) => (
         <View key={ evaluacion.id} style={estilos.card}>
           <Text style={estilos.nombre}>{evaluacion.nombre}</Text>
+          <View style={{position: "absolute", top: 10, right: 10}}>
+
+        <BotonFixed
+            icon="menu-book"
+            onPress={() => {
+              router.push({
+                pathname: "/Evaluaciones/" + evaluacion.nid_matricula,
+                params: { },
+              });
+            }}
+            size={30}
+          />
+          </View>
           <Text style={estilos.label}>Nota (0-10)</Text>
 
 

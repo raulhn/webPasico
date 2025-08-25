@@ -10,11 +10,11 @@ export const useEvaluaciones = (nidMatricula, cerrar_sesion) => {
   useEffect(() => {
     const fetchEvaluaciones = async () => {
       try {
-        console.log("Fetching evaluations for nidMatricula:", nidMatricula);
         const data = await serviceEvaluaciones.obtenerEvaluaciones(
           nidMatricula,
           cerrar_sesion
         );
+
         setEvaluaciones(data.evaluaciones || []);
         setCargando(false);
         setError(false);
@@ -46,7 +46,6 @@ export const useEvaluacionesAsignatura = (nidCurso, nidAsignatura, nidTrimestre,
   useEffect(() => {
     const fetchEvaluaciones = async () => {
       try {
-        console.log("Fetching subject evaluations for:", nidCurso, nidAsignatura, nidTrimestre);
         const data = await serviceEvaluaciones.obtenerEvaluacionesAsignatura(
           nidCurso,
           nidAsignatura,
