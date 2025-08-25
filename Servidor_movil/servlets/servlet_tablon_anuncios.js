@@ -11,7 +11,7 @@ const servletPersona = require("./servlet_persona");
 const gestorCursos = require("../logica/curso");
 
 // Comprueba si el usuario tiene permisos para acceder a la escuela y si es profesor de la asignatura
-async function tienePermisosRegistroEscuela(req, res) {
+async function tienePermisosRegistroEscuela(req, res, nid_asignatura) {
   try {
     const rolAdministrador = [constantes.ADMINISTRADOR];
     const rolProfesor = [constantes.PROFESOR];
@@ -27,7 +27,7 @@ async function tienePermisosRegistroEscuela(req, res) {
     if (!bAdministrador && !bProfesor) {
       return false;
     } else {
-      const nid_asignatura = req.body.nid_asignatura;
+    
 
       if (!bAdministrador) {
         const nid_persona = await servletPersona.obtenerNidPersona(req);
@@ -49,11 +49,11 @@ async function tienePermisosRegistroEscuela(req, res) {
   }
 }
 
-async function compruebaPermisos(req, res, nidTipoTablon) {
+async function compruebaPermisos(req, res, nidTipoTablon, nid_asignatura) {
   const rolBanda = [constantes.ADMINISTRADOR, constantes.DIRECTOR];
   const rolAdministrador = [constantes.ADMINISTRADOR];
 
-  const bPermisosEscuela = await tienePermisosRegistroEscuela(req, res);
+  const bPermisosEscuela = await tienePermisosRegistroEscuela(req, res, nid_asignatura);
   const bPermisosBanda = await servlet_comun.comprobarRol(req, res, rolBanda);
   const bPermisosAdministrador = await servlet_comun.comprobarRol(
     req,
@@ -73,8 +73,9 @@ async function insertarTablonAnuncio(req, res) {
     const titulo = req.body.titulo;
     const descripcion = req.body.descripcion;
     const nidTipoTablon = req.body.nid_tipo_tablon;
+    const nidAsignatura = req.body.nid_asignatura;
 
-    const bPermisos = await compruebaPermisos(req, res, nidTipoTablon);
+    const bPermisos = await compruebaPermisos(req, res, nidTipoTablon, nidAsignatura);
 
     if (!bPermisos) {
       res.status(403).send({
@@ -121,11 +122,12 @@ async function actualizarTablonAnuncio(req, res) {
     const descripcion = req.body.descripcion;
     const nidTipoTablon = req.body.nid_tipo_tablon;
     const nid_tablon_anuncio = req.body.nid_tablon_anuncio;
+    const nid_asignatura = req.body.nid_asignatura
     const nid_tablon_anuncio_asignatura =
       req.body.nid_tablon_anuncio_asignatura;
     
 
-    const bPermisos = await compruebaPermisos(req, res, nidTipoTablon);
+    const bPermisos = await compruebaPermisos(req, res, nidTipoTablon, nid_asignatura);
 
     if (!bPermisos) {
       res.status(403).send({
@@ -172,8 +174,9 @@ async function actualizarTablonAnuncio(req, res) {
 async function eliminarTablonAnuncio(req, res) {
   try {
     const nid_tablon_anuncio = req.body.nid_tablon_anuncio;
+    const anuncio = await gestorTablonAnuncios.obtenerTablonAnuncio(nid_tablon_anuncio);
 
-    const bPermisos = await compruebaPermisos(req, res, nid_tablon_anuncio);
+    const bPermisos = await compruebaPermisos(req, res, anuncio.nid_tipo_tablon, anuncio.nid_asignatura);
 
     if (!bPermisos) {
       res.status(403).send({
@@ -271,28 +274,17 @@ async function obtenerAnuncios(req, res) {
     let tablonesAnunciosEscuela = [];
 
     const nidPersona = await servletPersona.obtenerNidPersona(req);
-    console.log(
-      "servlet_tablon_anuncios.js -> obtenerAnuncios: nidPersona:",
-      nidPersona
-    );
+
 
     if (nidPersona) {
       let bPermisosBanda = await gestorUsuario.permisosMusico(nidPersona);
       if (bPermisosBanda) {
-        console.log(
-          "servlet_tablon_anuncios.js -> obtenerAnuncios: bPermisosBanda:",
-          bPermisosBanda
-        );
         tablonesAnunciosBanda =
           await gestorTablonAnuncios.obtenerTablonesAnuncioBanda();
       }
 
       let esSocio = await gestorSocios.esSocio(nidPersona);
       if (esSocio) {
-        console.log(
-          "servlet_tablon_anuncios.js -> obtenerAnuncios: esSocio:",
-          esSocio
-        );
         tablonesAnunciosAsociacion =
           await gestorTablonAnuncios.obtenerTablonesAnuncioAsociacion();
       }
