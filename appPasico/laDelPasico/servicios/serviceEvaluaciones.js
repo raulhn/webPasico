@@ -59,7 +59,6 @@ function obtenerEvaluacionesAsignatura(nidCurso, nidAsignatura, nidTrimestre, ce
         null, cerrarSesion
       )
       .then((response) => {
-        console.log("Evaluaciones asignatura response:", response);
         resolve(response);
       })
       .catch((error) => {

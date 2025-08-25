@@ -3,6 +3,7 @@ const servletPersona = require("./servlet_persona");
 const gestorMatricula = require("../logica/matricula");
 const gestorProfesores = require("../logica/profesores");
 const gestorPersonas = require("../logica/persona");
+const gestorProfesorAlumnoMatricula = require("../logica/profesor_alumno_matricula");
 const servletComun = require("./servlet_comun");
 const jwt = require("jsonwebtoken");
 const constantes = require("../constantes.js");
@@ -115,7 +116,6 @@ async function obtenerEvaluaciones(req, res) {
     const nidMatricula = req.params.nid_matricula;
 
 
-
     const matricula = await gestorMatricula.obtenerMatricula(nidMatricula);
 
     if (matricula.nid_persona !== nid_persona) {
@@ -124,12 +124,15 @@ async function obtenerEvaluaciones(req, res) {
         matricula.nid_persona
       );
       if (!bEsPadre) {
-        res.status(403).send({
-          error: true,
-          message: "No tienes permiso para acceder a esta evaluación",
-        });
-
-        return;
+    
+        const bEsProfesorAlumno = await gestorProfesorAlumnoMatricula.esAlumnoProfesor(matricula.nid_persona, nid_persona, matricula.nid_curso);
+        if (!bEsProfesorAlumno) {
+          res.status(403).send({
+            error: true,
+            message: "No tienes permiso para acceder a esta evaluación",
+          });
+          return;
+        }
       }
     }
 
@@ -395,7 +398,6 @@ async function actualizarEvaluacionSucia(req, res)
   try {
     const nidEvaluacion = req.body.nid_evaluacion;
 
-    console.log("Actualizando evaluación sucia:", nidEvaluacion);
     await gestor_evaluacion.actualizarEvaluacionSucia(nidEvaluacion);
 
     res.status(200).send({

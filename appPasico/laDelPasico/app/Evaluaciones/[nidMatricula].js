@@ -20,7 +20,7 @@ import {
 } from "../../componentes/componentesUI/ComponentesUI";
 import CardEvaluacion from "../../componentes/componentesEscuela/CardEvaluacion";
 import serviceEvaluaciones from "../../servicios/serviceEvaluaciones.js";
-import { useState } from "react";
+
 
 import * as Linking from "expo-linking";
 
@@ -46,6 +46,7 @@ export default function Evaluacion() {
       </View>
     );
   }
+
 
   function mostrarEvaluaciones() {
     if (
