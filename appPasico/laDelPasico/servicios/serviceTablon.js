@@ -63,6 +63,7 @@ async function registrarTablonAnuncio(anuncio, cerrarSesion) {
 
 async function actualizarTablonAnuncio(anuncio, cerrarSesion) {
   try {
+    console.log("Actualizando anuncio:", anuncio);
     const data = await serviceComun.peticionSesion(
       "POST",
       Constantes.URL_SERVICIO_MOVIL + "actualizar_tablon_anuncio",

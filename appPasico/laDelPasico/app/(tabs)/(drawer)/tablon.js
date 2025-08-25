@@ -102,7 +102,7 @@ export default function Tablon() {
       />
       <View
         style={[
-          esRol(["ADMINISTRADOR", "DIRECTOR"])
+          esRol(["ADMINISTRADOR", "PROFESOR"])
             ? { display: "flex" }
             : { display: "none" },
           styles.botonAdd,

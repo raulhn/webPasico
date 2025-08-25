@@ -208,7 +208,7 @@ function obtenerTablonesAnuncioEscuela() {
 function obtenerTablonAnuncio(nidTablonAnuncio) {
   return new Promise((resolve, reject) => {
     const sql =
-      "select ta.*, tt.descripcion as tipo_tablon, taa.nid_asignatura, taa.nid_curso from " +
+      "select ta.*, tt.descripcion as tipo_tablon, taa.nid_asignatura, taa.nid_curso, a.descripcion as asignatura from " +
       constantes.ESQUEMA +
       ".tablon_anuncios ta " +
       "left join " +
@@ -217,6 +217,8 @@ function obtenerTablonAnuncio(nidTablonAnuncio) {
       "join " +
       constantes.ESQUEMA +
       ".tipo_tablon tt on ta.nid_tipo_tablon = tt.nid_tipo_tablon " +
+      "left join " +
+      constantes.ESQUEMA + ".asignaturas a on taa.nid_asignatura = a.nid_asignatura " +
       "where ta.nid_tablon_anuncio = " +
       conexion.dbConn.escape(nidTablonAnuncio);
     (" and ta.borrado = 'N'");

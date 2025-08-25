@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     margin: 20,
     paddingBottom: 10,
-    backgroundColor: "#fff",
+    backgroundColor: Constantes.COLOR_GRIS,
     shadowColor: "#000",
     shadowColor: "#000",
     shadowOffset: {
@@ -107,6 +107,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 30,
     padding: 3,
+    color: Constantes.COLOR_AZUL,
+    textAlign: "center",
   },
   imagen: {
     width: "100%",
