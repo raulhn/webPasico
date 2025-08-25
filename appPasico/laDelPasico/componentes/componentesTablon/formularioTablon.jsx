@@ -10,8 +10,10 @@ import {
   ModalAviso,
 } from "../componentesUI/ComponentesUI.jsx";
 const ServiceTablon = require("../../servicios/serviceTablon.js");
-import { useAsignaturas } from "../../hooks/escuela/useAsignaturas.js";
+import { useAsignaturas, useAsignaturasProfesor } from "../../hooks/escuela/useAsignaturas.js";
 import Constantes from "../../config/constantes.js";
+import { useRol } from "../../hooks/useRol.js";
+
 
 export default function FormularioTablon({
   accionCancelar,
@@ -21,6 +23,7 @@ export default function FormularioTablon({
   const [descripcion, setDescripcion] = useState("");
   const [nidTablonAnuncio, setNidTablonAnuncio] = useState(null);
   const [titulo, setTitulo] = useState("");
+  const { esRol } = useRol();
 
   const [aviso, setAviso] = useState(false);
 
@@ -51,6 +54,8 @@ export default function FormularioTablon({
     lanzarRefresco,
   } = useAsignaturas();
 
+  const {asignaturas: asignaturasProfesor} = useAsignaturasProfesor();
+
   function CapitalCase(val) {
     return (
       String(val).charAt(0).toUpperCase() + String(val).slice(1).toLowerCase()
@@ -67,6 +72,11 @@ export default function FormularioTablon({
         valor: anuncio.nid_tipo_tablon,
         etiqueta: CapitalCase(anuncio.tipo_tablon),
       });
+
+      setAsignaturaSeleccionada({
+        valor: anuncio.nid_asignatura,
+        etiqueta: CapitalCase(anuncio.asignatura),
+      });
     }
   }, [anuncio]);
 
@@ -76,6 +86,11 @@ export default function FormularioTablon({
   }));
 
   const listaAsignaturas = asignaturas.map((asignatura) => ({
+    valor: asignatura.nid_asignatura,
+    etiqueta: CapitalCase(asignatura.descripcion),
+  }));
+
+  const listaAsignaturasProfesor = asignaturasProfesor.map((asignatura) => ({
     valor: asignatura.nid_asignatura,
     etiqueta: CapitalCase(asignatura.descripcion),
   }));
@@ -98,6 +113,13 @@ export default function FormularioTablon({
         setAviso(true);
         return;
       }
+      if(esRol(["PROFESOR"]) && tipoTablon.valor == Constantes.ESCUELA && 
+        (!asignaturaSeleccionada || !asignaturaSeleccionada.valor))
+      {
+        setMensaje("La asignatura es obligatoria");
+        setAviso(true);
+        return;
+      }
       const respuesta = await ServiceTablon.registrarTablonAnuncio(
         anuncioEnvio,
         cerrarSesion
@@ -105,8 +127,6 @@ export default function FormularioTablon({
 
       if (!respuesta.error) {
         callback(respuesta.nid_tipo_tablon);
-        setExito(true);
-        callbackRefresco();
       } else {
         setMensaje("Error al registrar el tipo de tablón");
         setAviso(true);
@@ -123,6 +143,7 @@ export default function FormularioTablon({
       titulo: titulo,
       descripcion: descripcion,
       nid_tipo_tablon: tipoTablon.valor,
+      nid_asignatura: asignaturaSeleccionada.valor,
     };
     try {
       if (
@@ -134,6 +155,14 @@ export default function FormularioTablon({
         setAviso(true);
         return;
       }
+
+      if(esRol(["PROFESOR"]) && tipoTablon.valor == Constantes.ESCUELA && 
+        (!asignaturaSeleccionada || !asignaturaSeleccionada.valor))
+      {
+        setMensaje("La asignatura es obligatoria");
+        setAviso(true);
+        return;
+      }
       const respuesta = await ServiceTablon.actualizarTablonAnuncio(
         anuncioActualiza,
         cerrarSesion
@@ -141,13 +170,14 @@ export default function FormularioTablon({
 
       if (!respuesta.error) {
         callback(respuesta.nid_tipo_tablon);
-        callbackRefresco();
-        setExito(true);
+        
       } else {
+        console.log("Error al actualizar el tipo de tablón:", respuesta);
         setMensaje("Error al actualizar el tipo de tablón");
         setAviso(true);
       }
     } catch (error) {
+      console.log("Error al actualizar el tipo de tablón 2:", error);
       setMensaje("Error al actualizar el tipo de tablón");
       setAviso(true);
     }
@@ -159,12 +189,19 @@ export default function FormularioTablon({
 
   function muestraAsignaturas() {
     if (tipoTablon.valor === Constantes.ESCUELA) {
+      let listaAsignaturasMostradas = listaAsignaturas;
+    
+      if(esRol(["PROFESOR"]))
+      {
+        listaAsignaturasMostradas = listaAsignaturasProfesor;
+      
+      }
       return (
         <>
           <Text>Asignatura</Text>
           <EntradaGroupRadioButton
             titulo="Asignatura"
-            opciones={listaAsignaturas}
+            opciones={listaAsignaturasMostradas}
             valor={asignaturaSeleccionada}
             setValorSeleccionado={(valor) => setAsignaturaSeleccionada(valor)}
           />
@@ -172,22 +209,38 @@ export default function FormularioTablon({
       );
     }
   }
-  return (
-    <View style={estilos.container}>
-      <Text style={estilos.titulo}>Registrar Anuncio</Text>
-      <Text>Título</Text>
 
-      <EntradaTexto label="Título" valor={titulo} setValor={setTitulo} />
-      <Text>Categoría</Text>
-      <EntradaGroupRadioButton
+  function muestraCategoria()
+  {
+    if (esRol(["PROFESOR"]))
+    {
+      const listaFiltrada = listaTiposTablon.filter(tipo => tipo.valor == Constantes.ESCUELA);
+       return (<>
+    <Text>Categoría</Text> 
+     <EntradaGroupRadioButton
+        titulo="Categoría del Anuncio"
+        opciones={listaFiltrada}
+        valor={tipoTablon}
+        setValorSeleccionado={(valor) => setTipoTablon(valor)}
+      /></>)
+    }
+    return (<>
+    <Text>Categoría</Text> 
+     <EntradaGroupRadioButton
         titulo="Categoría del Anuncio"
         opciones={listaTiposTablon}
         valor={tipoTablon}
         setValorSeleccionado={(valor) => setTipoTablon(valor)}
-      />
+      /></>)
+  }
 
+  return (
+    <View style={estilos.container}>
+      <Text style={estilos.titulo}>Registrar Anuncio</Text>
+      <Text>Título</Text>
+      <EntradaTexto label="Título" valor={titulo} setValor={setTitulo} />
+    {muestraCategoria()}
       {muestraAsignaturas()}
-
       <Text style={{ paddingTop: 10 }}>Descripción</Text>
       <EntradaTexto
         label="Descripción"

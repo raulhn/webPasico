@@ -46,7 +46,6 @@ function insertarTablonAnuncioAsignatura(
 }
 
 function actualizarTablonAnuncioAsignatura(
-  nidTablonAnuncioAsingatura,
   nidTablonAnuncio,
   nidAsignatura
 ) {
@@ -55,13 +54,11 @@ function actualizarTablonAnuncioAsignatura(
       "update " +
       constantes.ESQUEMA +
       ".tablon_anuncios_asignatura " +
-      "set nid_tablon_anuncio = " +
-      conexion.dbConn.escape(nidTablonAnuncio) +
-      ", nid_asignatura = nullif(" +
+      "set  nid_asignatura = nullif(" +
       conexion.dbConn.escape(nidAsignatura) +
       ", '')" +
-      " where nid_tablon_anuncio_asignatura = " +
-      conexion.dbConn.escape(nidTablonAnuncioAsingatura);
+      " where nid_tablon_anuncio = " +
+      conexion.dbConn.escape(nidTablonAnuncio);
 
     conexion.dbConn.beginTransaction(() => {
       conexion.dbConn.query(sql, (error, results, fields) => {

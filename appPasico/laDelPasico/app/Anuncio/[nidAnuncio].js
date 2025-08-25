@@ -22,6 +22,7 @@ import { useContext } from "react";
 import { AuthContext } from "../../providers/AuthContext.js";
 import ServiceTablon from "../../servicios/serviceTablon.js";
 import { useRouter } from "expo-router";
+import { useAsignaturasProfesor } from "../../hooks/escuela/useAsignaturas.js";
 
 export default function Anuncio() {
   const [modalAvisoVisible, setModalAvisoVisible] = useState(false);
@@ -33,6 +34,8 @@ export default function Anuncio() {
     useTablonAnuncio(nidAnuncio, cerrarSesion, usuario);
   const [modalVisible, setModalVisible] = useState(false);
   const router = useRouter();
+
+  const {asignaturas: asignaturasProfesor} = useAsignaturasProfesor();
 
   function formatearFecha(fechaISO) {
     if (!fechaISO) return "";
@@ -89,6 +92,25 @@ export default function Anuncio() {
     );
   }
 
+  function permisoEdicion()
+  {
+    if (esRol(["PROFESOR"]))
+    {
+      if(anuncio.nid_asignatura)
+      {
+        for(let asignaturaProfesor of asignaturasProfesor)
+        {
+          if(asignaturaProfesor.nid_asignatura === anuncio.nid_asignatura)
+          {
+            return true;
+          }
+        }
+      }
+      else{return false}
+    }
+    return esRol(["ADMINISTRADOR"]);
+  }
+
   return (
     <ScrollView
       contentContainerStyle={styles.container}
@@ -97,15 +119,16 @@ export default function Anuncio() {
       }
     >
       <Text style={styles.titulo}>{anuncio.titulo}</Text>
-      <Text style={styles.fecha}>{formatearFecha(anuncio.fecha_creacion)}</Text>
+     
       <Text style={styles.tipo}>{anuncio.tipo_tablon}</Text>
       <View style={styles.descripcionBox}>
         <Text style={styles.descripcion}>{anuncio.descripcion}</Text>
+        <Text style={styles.fecha}>{formatearFecha(anuncio.fecha_creacion)}</Text>
       </View>
 
       <View
         style={[
-          esRol(["ADMINISTRADOR"]) ? { display: "flex" } : { display: "none" },
+          permisoEdicion() ? { display: "flex" } : { display: "none" },
           styles.botonEditar,
         ]}
       >

@@ -102,8 +102,8 @@ export default function CardPartitura({
 const styles = StyleSheet.create({
   card: {
     width: "95%",
-    height: 130,
-    backgroundColor: "#fff",
+    height: 140,
+    backgroundColor: Constantes.COLOR_GRIS,
     borderRadius: 10,
     padding: 20,
     marginBottom: 20,

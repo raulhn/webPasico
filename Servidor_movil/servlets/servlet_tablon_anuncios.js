@@ -23,6 +23,7 @@ async function tienePermisosRegistroEscuela(req, res) {
     );
     const bProfesor = await servlet_comun.comprobarRol(req, res, rolProfesor);
 
+    console.log("servlet_tablon_anuncios.js -> tienePermisosRegistroEscuela: ", bAdministrador, bProfesor);
     if (!bAdministrador && !bProfesor) {
       return false;
     } else {
@@ -34,7 +35,7 @@ async function tienePermisosRegistroEscuela(req, res) {
           nid_persona,
           nid_asignatura
         );
-
+        console.log("servlet_tablon_anuncios.js -> tienePermisosRegistroEscuela (no admin): ", bEsProfesor, nid_asignatura, nid_persona);
         return bEsProfesor;
       }
       return true;
@@ -122,6 +123,7 @@ async function actualizarTablonAnuncio(req, res) {
     const nid_tablon_anuncio = req.body.nid_tablon_anuncio;
     const nid_tablon_anuncio_asignatura =
       req.body.nid_tablon_anuncio_asignatura;
+    
 
     const bPermisos = await compruebaPermisos(req, res, nidTipoTablon);
 
@@ -141,12 +143,11 @@ async function actualizarTablonAnuncio(req, res) {
     );
 
     if (nidTipoTablon == constantes.ESCUELA) {
-      const nid_tablon_anuncio_asignatura =
-        req.body.nid_tablon_anuncio_asignatura;
+
       const nid_asignatura = req.body.nid_asignatura;
 
+      console.log("servlet_tablon_anuncios.js -> actualizarTablonAnuncio (escuela): ",  nid_tablon_anuncio, nid_asignatura);
       await gestorTablonAnuncionsAsignatura.actualizarTablonAnuncioAsignatura(
-        nid_tablon_anuncio_asignatura,
         nid_tablon_anuncio,
         nid_asignatura
       );
@@ -225,6 +226,10 @@ async function permisosAnuncioAsignatura(nid_persona, anuncio_asignatura) {
           return true;
         }
       }
+    }
+
+    if (await gestorProfesores.esProfesor(nid_persona, anuncio_asignatura.nid_asignatura)) {
+      return true;
     }
 
     return false;
