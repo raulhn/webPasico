@@ -99,7 +99,7 @@ export default function Anuncio() {
       if(anuncio.nid_asignatura)
       {
         for(let asignaturaProfesor of asignaturasProfesor)
-        {
+        {3
           if(asignaturaProfesor.nid_asignatura === anuncio.nid_asignatura)
           {
             return true;
