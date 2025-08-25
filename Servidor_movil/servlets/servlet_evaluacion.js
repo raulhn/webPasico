@@ -170,12 +170,15 @@ async function solicitar_generar_boletin(req, res) {
         matricula.nid_persona
       );
       if (!bEsPadre) {
-        res.status(403).send({
-          error: true,
-          message: "No tienes permiso para acceder a esta evaluación",
-        });
-
-        return;
+        const bEsProfesorAlumno = await gestorProfesorAlumnoMatricula.esAlumnoProfesor(matricula.nid_persona, nid_persona, matricula.nid_curso);
+        if (!bEsProfesorAlumno) {
+          res.status(403).send({
+            error: true,
+            message: "No tienes permiso para acceder a esta evaluación",
+          });
+          return;
+        }
+        
       }
     }
 
@@ -247,12 +250,15 @@ async function generar_boletin(req, res) {
         matricula.nid_persona
       );
       if (!bEsPadre) {
-        res.status(403).send({
-          error: true,
-          message: "No tienes permiso para acceder a esta evaluación",
-        });
+        const bEsProfesorAlumno = await gestorProfesorAlumnoMatricula.esAlumnoProfesor(matricula.nid_persona, tokenDecoded.nid_persona, matricula.nid_curso);
+        if (!bEsProfesorAlumno) {
+          res.status(403).send({
+            error: true,
+            message: "No tienes permiso para acceder a esta evaluación",
+          });
+          return;
+        }
 
-        return;
       }
     }
 
