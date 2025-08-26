@@ -47,6 +47,7 @@ export default function Alumnos()
         valor: curso.nid_curso
     }));
 
+    console.log("Alumnos recuperados: ", cursoSeleccionado);
     return (
         <>
             <View style={{flexDirection: "row", justifyContent: "space-around", padding: 10, backgroundColor: "#ffffff"}}>
@@ -83,7 +84,7 @@ export default function Alumnos()
                        <Link
                          href={{
                            pathname: "/FichaAlumno/" + item.nid_persona,
-                           params: { nidAlumno: item.nid_persona },
+                           params: { nidAlumno: item.nid_persona, nidCurso: cursoSeleccionado.valor},
                          }}
                          key={item.nid_persona}
                          asChild
