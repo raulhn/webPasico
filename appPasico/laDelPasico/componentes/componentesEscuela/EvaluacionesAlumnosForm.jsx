@@ -80,6 +80,7 @@ export default function EvaluacionesAlumnosForm({ alumnos, evaluacionesRecuperad
   };
 
 
+
   return (
     <>
     <ScrollView contentContainerStyle={estilos.scrollContainer}>
@@ -93,7 +94,7 @@ export default function EvaluacionesAlumnosForm({ alumnos, evaluacionesRecuperad
             onPress={() => {
               router.push({
                 pathname: "/Evaluaciones/" + evaluacion.nid_matricula,
-                params: { },
+                params: { pestana: Number(nid_trimestre) - 1 },
               });
             }}
             size={30}

@@ -27,8 +27,10 @@ import * as Linking from "expo-linking";
 import Constantes from "../../config/constantes"; // Asegúrate de que la ruta sea correcta
 
 export default function Evaluacion() {
-  const { nidMatricula } = useLocalSearchParams();
+  const { nidMatricula, pestana = 0} = useLocalSearchParams();
   const { cerrar_sesion } = useContext(AuthContext);
+
+
 
   const { evaluaciones, cargando, error, refrescar, setRefrescar } =
     useEvaluaciones(nidMatricula, cerrar_sesion);
@@ -134,7 +136,7 @@ export default function Evaluacion() {
           });
         }
       }
-      return <CustomTabs tabs={tabsEvaluaciones} />;
+      return <CustomTabs tabs={tabsEvaluaciones} pestana={Number(pestana)} />;
     }
   }
 
