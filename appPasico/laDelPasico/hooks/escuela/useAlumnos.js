@@ -63,7 +63,7 @@ export const useAlumnosAsignaturaProfesor = (nidCurso_, nidAsignatura_, cerrarSe
     return { alumnos, cargando, error, lanzarRefresco, setNidAsignatura, setNidCurso};
 }
 
-export const useAlumnoProfesor = (nidAlumno, cerrarSesion) => {
+export const useAlumnoProfesor = (nidAlumno, nidCurso, cerrarSesion) => {
 
     const [alumno, setAlumno] = useState(null);
     const [cargando, setCargando] = useState(true);
@@ -76,7 +76,7 @@ export const useAlumnoProfesor = (nidAlumno, cerrarSesion) => {
 
     useEffect(() => {
         if (nidAlumno) {
-            servicePersonas.obtenerAlumnoProfesor(nidAlumno, cerrarSesion)
+            servicePersonas.obtenerAlumnoProfesor(nidAlumno, nidCurso, cerrarSesion)
                 .then((data) => {
                     setAlumno(data);
                     setCargando(false);
@@ -89,7 +89,7 @@ export const useAlumnoProfesor = (nidAlumno, cerrarSesion) => {
                     setRefrescar(false);
                 });
         }
-    }, [nidAlumno, refrescar]);
+    }, [nidAlumno, nidCurso, refrescar]);
 
     return { alumno, cargando, error, refrescar, lanzarRefresco};
 }

@@ -69,12 +69,12 @@ function obtenerPersonasAlumnos(cerrar_sesion) {
   });
 }
 
-async function obtenerAlumnoProfesor(nid_alumno,cerrar_sesion)
+async function obtenerAlumnoProfesor(nid_alumno, nid_curso, cerrar_sesion)
 {
    try {
        const response = await servicioComun.peticionSesion(
            "GET",
-           Constantes.URL_SERVICIO_MOVIL + "obtener_alumno_profesor/" + nid_alumno,
+           Constantes.URL_SERVICIO_MOVIL + "obtener_alumno_profesor/" + nid_alumno + "/" + nid_curso,
            null,
            cerrar_sesion
        );

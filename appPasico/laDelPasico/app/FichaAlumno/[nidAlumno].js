@@ -7,10 +7,10 @@ import { RefreshControl } from 'react-native';
 import { Boton } from '../../componentes/componentesUI/ComponentesUI';
 
 export default function FichaAlumno() {
-   const { nidAlumno } = useLocalSearchParams();
+   const { nidAlumno, nidCurso } = useLocalSearchParams();
    const { cerrarSesion } = useContext(AuthContext);
 
-   const { alumno, cargando, error, refrescar, lanzarRefresco} = useAlumnoProfesor(nidAlumno, cerrarSesion);
+   const { alumno, cargando, error, refrescar, lanzarRefresco} = useAlumnoProfesor(nidAlumno, nidCurso, cerrarSesion);
 
    if (cargando)
    {

@@ -263,6 +263,7 @@ async function obtenerAlumnoProfesor(req, res)
   try
   {
     const nid_alumno = req.params.nid_alumno;
+    const nid_curso = req.params.nid_curso;
     const rolesPermitidos = [constantes.PROFESOR];
     let rolProfesor = await servletComun.comprobarRol(
       req, res, rolesPermitidos
@@ -286,8 +287,6 @@ async function obtenerAlumnoProfesor(req, res)
     }
 
 
-    const curso = await gestorCurso.obtenerCursoActivo();
-    const nid_curso = curso.nid_curso;
 
     const esProfesor = await gestorProfesorAlumnoMatricula.esAlumnoProfesor(nid_alumno, nid_profesor, nid_curso);
 

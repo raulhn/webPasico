@@ -272,7 +272,7 @@ app.get(
   "/obtener_alumnos_profesor",
   servletProfesorAlumnoMatricula.obtenerAlumnosProfesor
 );
-app.get("/obtener_alumno_profesor/:nid_alumno", servletPersona.obtenerAlumnoProfesor);
+app.get("/obtener_alumno_profesor/:nid_alumno/:nid_curso", servletPersona.obtenerAlumnoProfesor);
 
 app.get(
   "/obtener_alumnos_asignatura_profesor/:nid_asignatura/:nid_curso",
