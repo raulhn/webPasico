@@ -595,7 +595,7 @@ export function CheckBox({ item, valorSeleccionado, setValorSeleccionado }) {
 }
 
 export function CustomTabs({ tabs, pestana = 0 }) {
-  const [pestanaSeleccionada, setPestanaSeleccionada] = useState(0);
+  const [pestanaSeleccionada, setPestanaSeleccionada] = useState();
 
   function obtenerBackGroundColor(pressed, index) {
     if (pressed) {
@@ -607,6 +607,7 @@ export function CustomTabs({ tabs, pestana = 0 }) {
   useEffect(() => {
     setPestanaSeleccionada(pestana);
   }, [pestana]);
+
 
   return (
     <View style={{ flex: 1 }}>
@@ -715,7 +716,6 @@ export function MenuDesplegable({ opciones }) {
     <View style={{ position: "relative" }}>
       <BotonFixed
         onPress={() => {
-          console.log("Menu desplegable presionado");
           setIsVisible(true);
         }}
         icon="more-vert"
