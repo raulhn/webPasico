@@ -38,7 +38,7 @@ export default function Login() {
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
         <div className="campo">
-      <span>Usuario:</span>
+      <span>Correo electrónico:</span>
       <EntradaTexto setTexto={(texto) => {console.log(texto); setUsuario(texto)}} />
 </div>
       <div className="campo">

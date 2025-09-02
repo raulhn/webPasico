@@ -13,5 +13,14 @@ export const useEvaluacionesAsignatura = (nidCurso, nidAsignatura, nidTrimestre)
         fetchEvaluaciones();
     }, [nidCurso, nidAsignatura, nidTrimestre]);
 
-    return { evaluaciones };
+
+    async function registrarEvaluaciones(evaluaciones_, nidCurso_, nidAsignatura_, nidTrimestre_)
+    {
+        try {
+            await ServicioEvaluaciones.registrarEvaluaciones(evaluaciones_, nidCurso_, nidAsignatura_, nidTrimestre_);
+        } catch (error) {
+            console.error("Error al registrar evaluaciones:", error);
+        }
+    }
+    return { evaluaciones, registrarEvaluaciones };
 }
