@@ -5,6 +5,8 @@ import App from './App.jsx'
 import { BrowserRouter, Routes, Route} from 'react-router'
 import Login from './componentes/Login/Login.jsx'
 import {UsuarioProvider} from "./contexto/usuario.jsx"
+import Evaluaciones from './componentes/Escuela/Evaluaciones/Evaluaciones.jsx'
+import Evaluacion from './componentes/Escuela/Evaluacion/Evaluacion.jsx'
 
 
 createRoot(document.getElementById('root')).render(
@@ -13,6 +15,8 @@ createRoot(document.getElementById('root')).render(
     <Routes>
       <Route  path="/gestion/" element={<App />} />
       <Route path="/gestion/login" element={<Login />} />
+      <Route path="/gestion/evaluaciones" element={<Evaluaciones />} />
+      <Route path="/gestion/evaluacion/:nidCurso/:nidAsignatura/:nidTrimestre" element={<Evaluacion />} />
     </Routes>
   </BrowserRouter>
   </UsuarioProvider>

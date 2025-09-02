@@ -24,12 +24,19 @@ export default function Login() {
     }
   }, [usuarioSesion, navigate]);
 
+    function handleSubmit(e) {
+    e.preventDefault(); // Evita el recargo de la página
+    // Aquí va la acción del botón, por ejemplo:
+    realizarLogin(usuario, password, actualizarUsuario);
+  }
 
   return (
   
     <div className="contenedor">
+
 {usuarioSesion ? usuarioSesion.nid_usuario : "No hay usuario"}
       <h2>Login</h2>
+      <form onSubmit={handleSubmit}>
         <div className="campo">
       <span>Usuario:</span>
       <EntradaTexto setTexto={(texto) => {console.log(texto); setUsuario(texto)}} />
@@ -38,7 +45,8 @@ export default function Login() {
       <span>Contraseña:</span>
       <EntradaTexto secure={true} setTexto={(texto) => {setPassword(texto)}} />
 </div>
-      <Boton texto="Iniciar sesión" onClick={() => { realizarLogin(usuario, password, actualizarUsuario); }} />
+      <Boton texto="Iniciar sesión" type="submit" />
+</form>
     </div>
   );
 }

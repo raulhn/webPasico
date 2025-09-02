@@ -1,0 +1,14 @@
+.card-evaluacion {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px 0;
+}
+
+.card-evaluacion h3 {
+  margin: 0 0 5px 0;
+}
+
+.card-evaluacion p {
+  margin: 5px 0;
+}
