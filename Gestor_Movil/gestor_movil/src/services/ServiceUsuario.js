@@ -1,4 +1,5 @@
 import {URL_SERVICIO_MOVIL} from "../config/Constantes";
+import * as ServiceComun from "./ServiceComun";
 
 export function login(correoElectronico, password) {
   return new Promise((resolve, reject) => {
@@ -27,4 +28,17 @@ export function login(correoElectronico, password) {
   });
 }
 
+export  function logout() {
+  return new Promise((resolve, reject) => {
+    ServiceComun.peticionServicio("POST", URL_SERVICIO_MOVIL + "logout", {})
+      .then((data) => {
+        resolve(data);
+      })
+      .catch((error) => {
+        console.log("Error en el servicio logout");
+        reject(error);
+      });
+  });
+
+}
 
