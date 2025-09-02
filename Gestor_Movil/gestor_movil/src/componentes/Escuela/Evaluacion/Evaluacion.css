@@ -1,0 +1,83 @@
+.card-edicion-evaluacion,
+.card-evaluacion {
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 24px 20px;
+    margin-bottom: 24px;
+    background: #fff;
+    box-shadow: 0 2px 12px rgba(60, 60, 60, 0.08);
+    transition: box-shadow 0.2s;
+}
+
+.card-edicion-evaluacion:hover,
+.card-evaluacion:hover {
+    box-shadow: 0 4px 24px rgba(60, 60, 60, 0.16);
+}
+
+.card-edicion-evaluacion h3,
+.card-evaluacion h3 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    font-size: 1.3rem;
+    color: #2d3a4a;
+    font-weight: 600;
+}
+
+.card-edicion-evaluacion label,
+.card-evaluacion label {
+    display: block;
+    margin-bottom: 6px;
+    color: #4a5568;
+    font-size: 0.98rem;
+}
+
+.card-edicion-evaluacion input,
+.card-edicion-evaluacion select,
+.card-evaluacion input,
+.card-edicion-evaluacion textarea,
+.card-evaluacion textarea,
+.card-evaluacion select {
+    width: 100%;
+    padding: 8px 10px;
+    margin-bottom: 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 1rem;
+    background: #f7fafc;
+    transition: border 0.2s;
+}
+
+.card-edicion-evaluacion input:focus,
+.card-edicion-evaluacion select:focus,
+.card-edicion-evaluacion textarea:focus,
+.card-evaluacion textarea:focus,
+.card-evaluacion input:focus,
+.card-evaluacion select:focus {
+    border-color: #3182ce;
+    outline: none;
+    background: #fff;
+}
+
+.card-edicion-evaluacion button,
+.card-evaluacion button {
+    background: #3182ce;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 18px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.card-edicion-evaluacion button:hover,
+.card-evaluacion button:hover {
+    background: #225ea8;
+}
+
+.campo-evaluacion {
+  margin-bottom: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
