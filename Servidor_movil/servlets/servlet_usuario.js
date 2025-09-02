@@ -95,6 +95,7 @@ async function login(req, res) {
       password
     );
 
+    if (tokenNotificacion) {
     await gestorConexion.limpiarToken(
       tokenNotificacion,
       tokens.usuario.nid_usuario
@@ -103,6 +104,8 @@ async function login(req, res) {
       tokenNotificacion,
       tokens.usuario.nid_usuario
     );
+  }
+  console.log("Actualizar token de notificación:", tokens );
 
     res.cookie(constantes.ACCESS_TOKEN, tokens.accessToken, {
       httpOnly: true,
