@@ -12,6 +12,7 @@ export default function FichaAlumno() {
 
    const { alumno, cargando, error, refrescar, lanzarRefresco} = useAlumnoProfesor(nidAlumno, nidCurso, cerrarSesion);
 
+  
    if (cargando)
    {
      return (

@@ -3,11 +3,14 @@ const gestorUsuarios = require("../logica/usuario.js");
 
 function comprobacionLogin(req, res) {
   const token = req.cookies.access_token;
+
+
   if (!token) {
     res.status(401).send({ error: true, mensaje: "No autenticado", codigo: 1 });
     return;
   }
 
+  
   jwt.verify(token, process.env.SESSION_SECRET, (err, decoded) => {
     if (err) {
       if (err.name === "TokenExpiredError") {
@@ -32,6 +35,9 @@ function obtenerTokenDecoded(req) {
     if (!token) {
       reject({ error: true, mensaje: "No autenticado", codigo: 1 });
     }
+
+    console.log("Cookies:", req.cookies);
+
 
     jwt.verify(token, process.env.SESSION_SECRET, (err, decoded) => {
       if (err) {
