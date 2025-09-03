@@ -7,7 +7,7 @@ import Cabecera from "../../Cabecera/Cabecera";
 
 export default function VisualizarEvaluaciones()
 {
-    const { nidMatricula } = useParams();
+    const { nidMatricula, nidTrimestre } = useParams();
     const { evaluaciones, nombreAlumno } = useEvaluaciones(nidMatricula);
     const { trimestres } = useTrimestres();
 
@@ -61,7 +61,7 @@ function mostrarEvaluaciones() {
       <Cabecera/>
       <div style={{paddingTop: "60px"}}>
         <h1>{nombreAlumno}</h1>
-      <CustomTabs tabs={tabsEvaluaciones} pestana={Number(0)} />
+      <CustomTabs tabs={tabsEvaluaciones} pestana={nidTrimestre ? Number(nidTrimestre) - 1 : 0} />
       </div>
     </>);
   }

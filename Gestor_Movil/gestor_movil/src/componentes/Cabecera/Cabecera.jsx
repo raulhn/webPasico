@@ -13,7 +13,7 @@ export default function Cabecera() {
     const { logout, refrescarUsuario, roles: rolesRecuperados, usuario: usuarioRecuperado } = useUsuario();
     const navigate = useNavigate();
 
-    useEffect(() => { refrescarUsuario(); }, []);
+    useEffect(() => { refrescarUsuario().then(()=>{if(!usuario){navigate("/gestion/login");}}); }, []);
 
     useEffect(() => {
         actualizarUsuario(usuarioRecuperado);
@@ -27,6 +27,8 @@ export default function Cabecera() {
         actualizarRoles([]);
         navigate("/gestion/login");
     }
+
+
 
     return (
         <header className="cabecera-nav" >

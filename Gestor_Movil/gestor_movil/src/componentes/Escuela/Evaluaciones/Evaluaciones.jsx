@@ -31,10 +31,13 @@ export default function Evaluaciones() {
       <div className="contenedor" style={{ paddingTop: "60px" }}>
         <h2>Evaluaciones</h2>
 
+      <label>Curso</label>
       <Selector valor={nidCurso} setValor={setNidCurso} width="200px"
                 opciones={cursos.map(curso => ({ valor: curso.nid_curso, etiqueta: curso.descripcion }))} />
+      <label>Asignatura</label>
       <Selector valor={nidAsignatura} setValor={setNidAsignatura} width="200px"
                 opciones={asignaturas.map(asignatura => ({ valor: asignatura.nid_asignatura, etiqueta: asignatura.descripcion }))} />
+      <label>Trimestre</label>
       <Selector valor={nidTrimestre} setValor={setNidTrimestre} width="200px"
                 opciones={trimestres.map(trimestre => ({ valor: trimestre.nid_trimestre, etiqueta: trimestre.descripcion }))} />
 

@@ -88,7 +88,7 @@ export default function Evaluacion()
 
   function mostrarEvaluaciones(nidMatricula)
   {
-    navigate(`/gestion/visualizar_evaluaciones/${nidMatricula}`);
+    navigate(`/gestion/visualizar_evaluaciones/${nidMatricula}/${nidTrimestre}`);
   }
   console.log("Evaluaciones procesadas", evaluaciones);
 
