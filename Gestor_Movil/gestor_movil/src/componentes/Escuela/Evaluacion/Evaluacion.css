@@ -1,3 +1,23 @@
+/* Estilo para el nombre del alumno en la evaluación */
+.nombre-evaluacion {
+    display: block;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #225ea8;
+    background: #f0f6ff;
+    border-radius: 6px;
+    padding: 8px 14px;
+    margin-bottom: 12px;
+    letter-spacing: 0.01em;
+    box-shadow: 0 1px 4px rgba(34,94,168,0.06);
+}
+.contenedor-evaluacion {
+    display: flex;
+    flex-direction: column;
+    padding-top: 16px;
+    padding-bottom: 16px;
+}
+
 .card-edicion-evaluacion,
 .card-evaluacion {
     border: 1px solid #e0e0e0;

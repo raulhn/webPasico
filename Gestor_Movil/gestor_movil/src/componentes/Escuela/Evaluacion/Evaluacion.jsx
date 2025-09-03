@@ -3,9 +3,10 @@ import { useEvaluacionesAsignatura } from "../../../hooks/useEvaluaciones";
 import { useAlumnosAsignaturaProfesor } from "../../../hooks/useAlumnos";
 import CardEvaluacion from "../CardEvaluacion/CardEvaluacion";
 import { useState, useEffect } from "react";
-import { EntradaTexto, EntradaTextoArea, Boton } from "../../ComponentesUI/ComponentesUI";
+import { EntradaTexto, EntradaTextoArea, Boton, Selector } from "../../ComponentesUI/ComponentesUI";
 
 import "./Evaluacion.css"
+import Cabecera from "../../Cabecera/Cabecera";
 
 export default function Evaluacion()
 {
@@ -83,19 +84,50 @@ export default function Evaluacion()
 
   console.log("Evaluaciones procesadas", evaluaciones);
 
-    return ( <div>
+    return ( 
+
+      <>
+      <Cabecera />
+    <div className="contenedor-evaluacion"  style={{ paddingTop: "60px" }}>
+
         {evaluaciones.map((evaluacion, idx) => (
    <div className="card-edicion-evaluacion">
-  <div className="campo-evaluacion">
-    <label htmlFor={`nota-${idx}`}>Nota</label>
+     <div className="campo-evaluacion">
+    <label>Nombre</label>
+    <strong className="nombre-evaluacion">{evaluacion.nombre}</strong>
+   </div>
+    <div style={{ display: "flex", flexDirection: "row", gap: "20px" }}>
+
+<div className="campo-evaluacion">
+   <label htmlFor={`nota-${idx}`}>Nota</label>
     <EntradaTexto
       id={`nota-${idx}`}
       valorDefecto={evaluacionesEdicion[idx].nota}
+      width="50px"
       setTexto={texto => {
         evaluacionesEdicion[idx].nota = texto;
         setEvaluaciones([...evaluacionesEdicion]);
       }}
     />
+  </div>
+  <div className="campo-evaluacion">
+     <label htmlFor={`progreso-${idx}`}>Progreso</label>
+    <Selector valor={evaluacionesEdicion[idx].progreso.valor} width="250px"
+              opciones={[
+                { valor: "0", etiqueta: "Sin evaluar" },
+                { valor: "1", etiqueta: "Necesita Mejorar" },
+                { valor: "2", etiqueta: "Progresa Adecuadamente" }
+              ]}
+              setValor={(valor) => {
+                const opcionesProgreso = [ { valor: "0", etiqueta: "Sin evaluar" },
+                                           { valor: "1", etiqueta: "Necesita Mejorar" },
+                                           { valor: "2", etiqueta: "Progresa Adecuadamente" } ]
+                evaluacionesEdicion[idx].progreso.valor = valor;
+                evaluacionesEdicion[idx].progreso.etiqueta = opcionesProgreso.find(opcion => opcion.valor === valor).etiqueta;
+                setEvaluaciones([...evaluacionesEdicion]);
+              }}
+    />
+    </div>
   </div>
   <div className="campo-evaluacion">
     <label htmlFor={`comentario-${idx}`}>Comentario</label>
@@ -106,33 +138,23 @@ export default function Evaluacion()
         evaluacionesEdicion[idx].comentario = texto;
         setEvaluaciones([...evaluacionesEdicion]);
       }}
-      width="600px"
+      width="90%"
     />
   </div>
-  <div className="campo-evaluacion">
-    <label htmlFor={`progreso-${idx}`}>Progreso</label>
-    <select
-      id={`progreso-${idx}`}
-      value={evaluacionesEdicion[idx].progreso.valor}
-      onChange={e => {
-        evaluacionesEdicion[idx].progreso.valor = e.target.value;
-        evaluacionesEdicion[idx].progreso.etiqueta = e.target.options[e.target.selectedIndex].text;
-        setEvaluaciones([...evaluacionesEdicion]);
-      }}
-    >
-      <option value="0">Sin evaluar</option>
-      <option value="1">Necesita Mejorar</option>
-      <option value="2">Progresa Adecuadamente</option>
-    </select>
-  </div>
+
+
 </div>
+
         ))}
 
+<div style={{ justifyContent: "center", display: "flex" }}>
         <Boton texto="Guardar Evaluaciones" onClick={() => {
-          console.log("Evaluaciones guardadas:", evaluaciones);
+
           lanzaRegistroEvaluaciones(evaluaciones, nidCurso, nidAsignatura, nidTrimestre);
         }} />
+        </div>
     </div>
-    
-    );
+
+    </>
+  );
 }

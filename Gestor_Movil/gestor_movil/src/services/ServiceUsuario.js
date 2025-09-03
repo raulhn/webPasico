@@ -28,6 +28,19 @@ export function login(correoElectronico, password) {
   });
 }
 
+export function obtenerUsuario() {
+  return new Promise((resolve, reject) => {
+    ServiceComun.peticionServicio("GET", URL_SERVICIO_MOVIL + "usuario", {})
+      .then((data) => {
+        resolve(data);
+      })
+      .catch((error) => {
+        console.log("Error en el servicio obtenerUsuario");
+        reject(error);
+      });
+  });
+}
+
 export  function logout() {
   return new Promise((resolve, reject) => {
     ServiceComun.peticionServicio("POST", URL_SERVICIO_MOVIL + "logout", {})
