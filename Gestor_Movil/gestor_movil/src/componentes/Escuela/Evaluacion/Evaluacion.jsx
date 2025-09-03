@@ -3,7 +3,8 @@ import { useEvaluacionesAsignatura } from "../../../hooks/useEvaluaciones";
 import { useAlumnosAsignaturaProfesor } from "../../../hooks/useAlumnos";
 import CardEvaluacion from "../CardEvaluacion/CardEvaluacion";
 import { useState, useEffect } from "react";
-import { EntradaTexto, EntradaTextoArea, Boton, Selector } from "../../ComponentesUI/ComponentesUI";
+import { EntradaTexto, EntradaTextoArea, Boton, Selector, ModalExito, ModalAviso } from "../../ComponentesUI/ComponentesUI";
+import { useNavigate } from "react-router";
 
 import "./Evaluacion.css"
 import Cabecera from "../../Cabecera/Cabecera";
@@ -12,14 +13,15 @@ export default function Evaluacion()
 {
     const {nidCurso, nidAsignatura,nidTrimestre} = useParams();
 
+    const navigate = useNavigate();
+
     console.log(nidCurso, nidAsignatura,nidTrimestre);
 
     const {evaluaciones: evaluacionesRecuperadas, registrarEvaluaciones} =  useEvaluacionesAsignatura(nidCurso, nidAsignatura, nidTrimestre);
     const {alumnos} = useAlumnosAsignaturaProfesor(nidCurso, nidAsignatura);
 
-
-    console.log("Evaluaciones recuperadas", evaluacionesRecuperadas)
-
+    const [visibleExito, setVisibleExito] = useState(false);
+    const [visibleAviso, setVisibleAviso] = useState(false);
 
     async function lanzaRegistroEvaluaciones(evaluaciones_, nidCurso_, nidAsignatura_, nidTrimestre_)
     {
@@ -27,11 +29,12 @@ export default function Evaluacion()
         {
           console.log("Lanza registro")
           await registrarEvaluaciones(evaluaciones_, nidCurso_, nidAsignatura_, nidTrimestre_);
-          console.log("Evaluaciones registradas con éxito");
+          setVisibleExito(true);
         }
         catch(error)
         {
           console.error("Error al registrar evaluaciones:", error);
+          setVisibleAviso(true);
         }
     }
 
@@ -82,6 +85,11 @@ export default function Evaluacion()
    setEvaluaciones(evaluacionesProcesadas);
   }, [alumnos, evaluacionesRecuperadas]);
 
+
+  function mostrarEvaluaciones(nidMatricula)
+  {
+    navigate(`/gestion/visualizar_evaluaciones/${nidMatricula}`);
+  }
   console.log("Evaluaciones procesadas", evaluaciones);
 
     return ( 
@@ -92,6 +100,7 @@ export default function Evaluacion()
 
         {evaluaciones.map((evaluacion, idx) => (
    <div className="card-edicion-evaluacion">
+
      <div className="campo-evaluacion">
     <label>Nombre</label>
     <strong className="nombre-evaluacion">{evaluacion.nombre}</strong>
@@ -141,7 +150,9 @@ export default function Evaluacion()
       width="90%"
     />
   </div>
-
+    <div style={{ display: "flex",  justifyContent:"flex-end", gap: "8px" }}>
+    <Boton texto="Ver Evaluaciones" onClick={() => mostrarEvaluaciones(evaluacion.nid_matricula)} />
+      </div>
 
 </div>
 
@@ -154,6 +165,10 @@ export default function Evaluacion()
         }} />
         </div>
     </div>
+
+    <ModalExito visible={visibleExito} setVisible={setVisibleExito} mensaje={"Evaluaciones guardadas con éxito."} textBoton={"Aceptar"}/>
+
+    <ModalAviso visible={visibleAviso} setVisible={setVisibleAviso} mensaje={"Se ha producido un error"} textBoton={"Aceptar"} />
 
     </>
   );

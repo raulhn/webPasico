@@ -22,7 +22,6 @@ export const UsuarioProvider = ({ children }) => {
     });
 
     function actualizarUsuario(usuarioActualizado) {
-        console.log("Lanza actualizacion", usuarioActualizado);
         setUsuario(usuarioActualizado);
         if (usuarioActualizado) {
             sessionStorage.setItem("usuario", JSON.stringify(usuarioActualizado));
@@ -32,7 +31,6 @@ export const UsuarioProvider = ({ children }) => {
     }
 
     function actualizarRoles(rolesActualizados) {
-        console.log("Lanza actualizacion de roles", rolesActualizados);
         setRoles(rolesActualizados);
         sessionStorage.setItem("roles", JSON.stringify(rolesActualizados));
     }

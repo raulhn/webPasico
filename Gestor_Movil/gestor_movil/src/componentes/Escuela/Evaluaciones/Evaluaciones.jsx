@@ -22,7 +22,6 @@ export default function Evaluaciones() {
 
   function lanzaEvaluacion()
   {
-    console.log(nidCurso, nidAsignatura, nidTrimestre);
     navigate(`/gestion/evaluacion/${nidCurso}/${nidAsignatura}/${nidTrimestre}`);
   }
 

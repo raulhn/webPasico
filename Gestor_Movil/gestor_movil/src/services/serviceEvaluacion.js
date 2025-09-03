@@ -69,7 +69,7 @@ export function registrarEvaluaciones(evaluaciones, nidCurso, nidAsignatura, nid
 {
   return new Promise((resolve, reject) => {
 
-    console.log("Registrar evaluaciones:", evaluaciones);
+
     peticionServicio(
       "POST",
       URL_SERVICIO_MOVIL + "registrar_evaluaciones",
@@ -81,7 +81,6 @@ export function registrarEvaluaciones(evaluaciones, nidCurso, nidAsignatura, nid
       }
       )
       .then((response) => {
-        console.log("Registrar evaluaciones response:", response);
         resolve(response);
       })
       .catch((error) => {

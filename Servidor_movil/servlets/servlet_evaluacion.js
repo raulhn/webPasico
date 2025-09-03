@@ -143,6 +143,7 @@ async function obtenerEvaluaciones(req, res) {
       error: false,
       mensaje: "Evaluación obtenida correctamente",
       evaluaciones: evaluaciones,
+      nombre_alumno: matricula.nombre + ' ' + matricula.primer_apellido + ' ' + matricula.segundo_apellido
     });
   } catch (error) {
     console.error(
