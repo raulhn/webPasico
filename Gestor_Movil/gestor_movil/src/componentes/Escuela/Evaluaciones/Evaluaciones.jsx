@@ -3,9 +3,10 @@ import { useAsignaturasProfesor } from "../../../hooks/useAsignaturas";
 import { useTrimestres } from "../../../hooks/useTrimestres";
 import { useState } from "react";
 import "./Evaluaciones.css";
-import { Boton } from "../../ComponentesUI/ComponentesUI";
+import { Boton, Selector } from "../../ComponentesUI/ComponentesUI";
 
 import { useNavigate } from "react-router";
+import Cabecera from "../../Cabecera/Cabecera";
 
 export default function Evaluaciones() {
 
@@ -26,31 +27,21 @@ export default function Evaluaciones() {
   }
 
   return (
-    <div className="contenedor">
-      <h2>Evaluaciones</h2>
+    <>
+      <Cabecera />
+      <div className="contenedor" style={{ paddingTop: "60px" }}>
+        <h2>Evaluaciones</h2>
 
-      <select value={nidCurso} onChange={(e) => setNidCurso(e.target.value)}>
-        <option value="">Seleccione un curso</option>
-        {cursos.map((curso) => (
-            <option key={curso.nid_curso} value={curso.nid_curso}>{curso.descripcion}</option>
-        ))}
-      </select>
-      <select value={nidAsignatura} onChange={(e) => setNidAsignatura(e.target.value)}>
-        <option value="">Seleccione una asignatura</option>
-        {asignaturas.map((asignatura) => (
-          <option key={asignatura.nid_asignatura} value={asignatura.nid_asignatura}>{asignatura.descripcion}</option>
-        ))}
-      </select>
-      <select value={nidTrimestre} onChange={(e) => setNidTrimestre(e.target.value)}>
-        <option value="">Seleccione un trimestre</option>
-        {trimestres.map((trimestre) => (
-          <option key={trimestre.nid_trimestre} value={trimestre.nid_trimestre}>{trimestre.descripcion}</option>
-        ))}
-      </select>
+      <Selector valor={nidCurso} setValor={setNidCurso} width="200px"
+                opciones={cursos.map(curso => ({ valor: curso.nid_curso, etiqueta: curso.descripcion }))} />
+      <Selector valor={nidAsignatura} setValor={setNidAsignatura} width="200px"
+                opciones={asignaturas.map(asignatura => ({ valor: asignatura.nid_asignatura, etiqueta: asignatura.descripcion }))} />
+      <Selector valor={nidTrimestre} setValor={setNidTrimestre} width="200px"
+                opciones={trimestres.map(trimestre => ({ valor: trimestre.nid_trimestre, etiqueta: trimestre.descripcion }))} />
 
-      <Boton onClick={lanzaEvaluacion} texto={"Ver Evaluaciones"}>
+      <Boton onClick={lanzaEvaluacion} texto={"Ver Evaluaciones"} />
 
-      </Boton>
     </div>
+    </>
   );
 }

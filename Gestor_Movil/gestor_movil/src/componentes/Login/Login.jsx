@@ -14,9 +14,14 @@ export default function Login() {
 
   const navigate = useNavigate();
 
-  const { actualizarUsuario, usuario: usuarioSesion } = useContext(UsuarioContext);
+  const { actualizarUsuario, usuario: usuarioSesion, actualizarRoles } = useContext(UsuarioContext);
 
 
+  function actualizarLogin(usuario_, roles_)
+  {
+    actualizarUsuario(usuario_);
+    actualizarRoles(roles_);
+  }
 
   useEffect(() => {
     if (usuarioSesion) {
@@ -27,25 +32,27 @@ export default function Login() {
     function handleSubmit(e) {
     e.preventDefault(); // Evita el recargo de la página
     // Aquí va la acción del botón, por ejemplo:
-    realizarLogin(usuario, password, actualizarUsuario);
+    realizarLogin(usuario, password, actualizarLogin);
   }
 
   return (
   
     <div className="contenedor">
 
-{usuarioSesion ? usuarioSesion.nid_usuario : "No hay usuario"}
+
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
         <div className="campo">
       <span>Correo electrónico:</span>
-      <EntradaTexto setTexto={(texto) => {console.log(texto); setUsuario(texto)}} />
+      <EntradaTexto setTexto={(texto) => {setUsuario(texto)}} />
 </div>
       <div className="campo">
       <span>Contraseña:</span>
       <EntradaTexto secure={true} setTexto={(texto) => {setPassword(texto)}} />
 </div>
+<div style={{ justifyContent: "center", display: "flex", paddingTop: "10px" }}>
       <Boton texto="Iniciar sesión" type="submit" />
+      </div>
 </form>
     </div>
   );

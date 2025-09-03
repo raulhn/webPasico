@@ -1,3 +1,32 @@
+/* Estilos para selectores personalizados */
+.selector {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background: #f7fafc;
+    font-size: 1rem;
+    color: #2d3a4a;
+    transition: border 0.2s, box-shadow 0.2s;
+    outline: none;
+    margin-bottom: 12px;
+    appearance: none;
+    box-shadow: 0 1px 4px rgba(49,130,206,0.04);
+    text-align: center;
+    justify-content: center;
+}
+
+.selector:focus {
+    border-color: #3182ce;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(49,130,206,0.10);
+}
+
+.selector:disabled {
+    background: #e2e8f0;
+    color: #a0aec0;
+    cursor: not-allowed;
+}
 .entrada-texto {
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -23,4 +52,50 @@
     border-color: #007bff;
     outline: none;
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.boton {
+    display: inline-block;
+    background: #3182ce;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 22px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(49,130,206,0.08);
+    transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+    outline: none;
+}
+
+.boton:hover, .boton:focus {
+    background: #225ea8;
+    box-shadow: 0 4px 16px rgba(49,130,206,0.16);
+    transform: translateY(-2px) scale(1.03);
+}
+
+.boton:active {
+    background: #1a365d;
+    transform: translateY(1px) scale(0.98);
+}
+
+.boton:hover {
+    background-color: #0056b3;
+}
+
+.boton:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.custom-tabs-bar {
+  display: flex;
+  gap: 5px;
+  padding-left: 10px;
+  padding-top: 5px;
+}
+.custom-tab-btn.active {
+  background: #225ea8 !important;
+  color: #fff !important;
 }
