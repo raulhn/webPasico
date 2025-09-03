@@ -1,3 +1,32 @@
+/* Estilos para enlace-div como botón */
+.enlace-div {
+    display: inline-block;
+    background: #3182ce;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 22px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(49,130,206,0.08);
+    transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+    outline: none;
+    text-align: center;
+    text-decoration: none;
+    user-select: none;
+}
+
+.enlace-div:hover, .enlace-div:focus {
+    background: #225ea8;
+    box-shadow: 0 4px 16px rgba(49,130,206,0.16);
+    transform: translateY(-2px) scale(1.03);
+}
+
+.enlace-div:active {
+    background: #1a365d;
+    transform: translateY(1px) scale(0.98);
+}
 /* Estilos para selectores personalizados */
 .selector {
     width: 100%;
@@ -98,4 +127,44 @@
 .custom-tab-btn.active {
   background: #225ea8 !important;
   color: #fff !important;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+.modal-content {
+  background: #fff;
+  border-radius: 12px;
+  padding: 32px 24px;
+  min-width: 320px;
+  max-width: 90vw;
+  box-shadow: 0 4px 32px rgba(0,0,0,0.18);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+.icono-warning {
+  margin-bottom: 8px;
+}
+.mensaje {
+  font-size: 1.1rem;
+  color: #2d3a4a;
+  text-align: center;
+}
+
+.enlace-div {
+    display: inline-block;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 8px;
+    padding: 12px;
+    width: auto;
+    height: auto;
 }

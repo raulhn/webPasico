@@ -24,3 +24,37 @@ export const useEvaluacionesAsignatura = (nidCurso, nidAsignatura, nidTrimestre)
     }
     return { evaluaciones, registrarEvaluaciones };
 }
+
+
+export const useEvaluaciones = (nidMatricula) => {
+  const [evaluaciones, setEvaluaciones] = useState([]);
+  const [nombreAlumno, setNombreAlumno] = useState("");
+  const [cargando, setCargando] = useState(true);
+  const [error, setError] = useState(false);
+  const [refrescar, setRefrescar] = useState(false);
+
+  useEffect(() => {
+    const fetchEvaluaciones = async () => {
+      try {
+        const data = await ServicioEvaluaciones.obtenerEvaluaciones(
+          nidMatricula
+        );
+
+        setEvaluaciones(data.evaluaciones || []);
+        setNombreAlumno(data.nombre_alumno || "");
+        setCargando(false);
+        setError(false);
+      } catch (error) {
+        console.log("Error al obtener las evaluaciones:", error);
+        setEvaluaciones([]);
+        setNombreAlumno("");
+        setCargando(false);
+        setError(true);
+      }
+    };
+
+    fetchEvaluaciones();
+  }, [nidMatricula, refrescar]);
+
+  return { evaluaciones, nombreAlumno, cargando, error, refrescar, setRefrescar };
+};

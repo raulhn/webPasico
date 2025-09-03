@@ -1,14 +1,49 @@
 .card-evaluacion {
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 10px;
-  margin: 10px 0;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 20px 18px;
+  margin: 18px 0;
+  background: #fff;
+  box-shadow: 0 2px 12px rgba(60, 60, 60, 0.08);
+  transition: box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.card-evaluacion:hover {
+  box-shadow: 0 4px 24px rgba(60, 60, 60, 0.16);
 }
 
 .card-evaluacion h3 {
-  margin: 0 0 5px 0;
+  margin: 0 0 8px 0;
+  font-size: 1.2rem;
+  color: #225ea8;
+  font-weight: 700;
 }
 
 .card-evaluacion p {
-  margin: 5px 0;
+  margin: 4px 0;
+  color: #2d3a4a;
+  font-size: 1rem;
+}
+
+.card-evaluacion .nota {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #3182ce;
+}
+
+.card-evaluacion .progreso {
+  font-size: 0.98rem;
+  font-weight: 500;
+}
+
+.card-evaluacion .comentario {
+  font-size: 0.97rem;
+  color: #4a5568;
+  background: #f7fafc;
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin-top: 6px;
 }

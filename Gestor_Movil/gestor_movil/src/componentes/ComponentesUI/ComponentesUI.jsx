@@ -3,6 +3,8 @@ import "./ComponentesUI.css";
 import {useEffect, useState} from "react";
 import * as Constantes from "../../config/Constantes";
 
+import { MdWarningAmber, MdCheckCircleOutline } from "react-icons/md";
+
 export function EntradaTexto({ valorDefecto = "", secure = false, setTexto, width = "150px", height = "20px" })
 {
     const [valor, setValor] = useState(valorDefecto);
@@ -105,6 +107,87 @@ export function CustomTabs({ tabs, pestana = 0 }) {
           ) : null
         )}
       </div>
+    </div>
+  );
+}
+
+
+// ModalAviso
+export function ModalAviso({ visible, setVisible, mensaje, textBoton }) {
+  if (!visible) return null;
+  return (
+    <div className="modal-overlay">
+      <div className="modal-content">
+        <MdWarningAmber size={60} color="#f87c00" className="icono-warning" />
+        <div className="mensaje">{mensaje}</div>
+        <button className="boton" onClick={() => setVisible(false)}>{textBoton}</button>
+      </div>
+    </div>
+  );
+}
+
+// ModalConfirmacion
+export function ModalConfirmacion({
+  visible,
+  setVisible,
+  mensaje,
+  textBoton,
+  textBotonCancelar,
+  accion,
+  accionCancelar,
+}) {
+  if (!visible) return null;
+  return (
+    <div className="modal-overlay">
+      <div className="modal-content">
+        <MdWarningAmber size={60} color="#f87c00" className="icono-warning" />
+        <div className="mensaje">{mensaje}</div>
+        <div style={{ display: "flex", justifyContent: "center", gap: 10 }}>
+          <button
+            className="boton"
+            onClick={() => {
+              setVisible(false);
+              accion();
+            }}
+            style={{ background: "#007BFF", color: "#FFF" }}
+          >
+            {textBoton}
+          </button>
+          <button
+            className="boton"
+            onClick={() => {
+              accionCancelar();
+              setVisible(false);
+            }}
+            style={{ background: "red", color: "#FFF" }}
+          >
+            {textBotonCancelar}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ModalExito
+export function ModalExito({ visible, setVisible, mensaje, textBoton }) {
+  if (!visible) return null;
+  return (
+    <div className="modal-overlay">
+      <div className="modal-content">
+        <MdCheckCircleOutline size={60} color="#4caf50" className="icono-warning" />
+        <div className="mensaje">{mensaje}</div>
+        <button className="boton" onClick={() => setVisible(false)}>{textBoton}</button>
+      </div>
+    </div>
+  );
+}
+
+
+export function EnlaceDiv({ onClick, contenido}) {
+  return (
+    <div className="enlace-div" onClick={onClick}>
+      {contenido()}
     </div>
   );
 }
