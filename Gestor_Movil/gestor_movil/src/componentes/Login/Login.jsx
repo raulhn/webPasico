@@ -42,9 +42,10 @@ export default function Login() {
 
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
+        <div className='contenedor'>
         <div className="campo">
       <span>Correo electrónico:</span>
-      <EntradaTexto setTexto={(texto) => {setUsuario(texto)}} />
+      <EntradaTexto setTexto={(texto) => {setUsuario(texto)}} width='300px'/>
 </div>
       <div className="campo">
       <span>Contraseña:</span>
@@ -52,6 +53,7 @@ export default function Login() {
 </div>
 <div style={{ justifyContent: "center", display: "flex", paddingTop: "10px" }}>
       <Boton texto="Iniciar sesión" type="submit" />
+      </div>
       </div>
 </form>
     </div>

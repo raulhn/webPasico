@@ -18,7 +18,7 @@ createRoot(document.getElementById('root')).render(
       <Route path="/gestion/login" element={<Login />} />
       <Route path="/gestion/evaluaciones" element={<Evaluaciones />} />
       <Route path="/gestion/evaluacion/:nidCurso/:nidAsignatura/:nidTrimestre" element={<Evaluacion />} />
-      <Route path="/gestion/visualizar_evaluaciones/:nidMatricula" element={<VisualizarEvaluaciones />} />
+      <Route path="/gestion/visualizar_evaluaciones/:nidMatricula/:nidTrimestre" element={<VisualizarEvaluaciones />} />
     </Routes>
   </BrowserRouter>
   </UsuarioProvider>
