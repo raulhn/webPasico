@@ -44,10 +44,10 @@ export function EntradaTextoArea({ valorDefecto = "", setTexto, width= "300px", 
 
 }
 
-export function Selector({valor ="", opciones = [], setValor, width = "150px", height = "30px" }) {
+export function Selector({valor ="", opciones = [], setValor, width = "150px", height = "50px" }) {
     return (
         <select className={"selector"} style={{ width: width, height: height }} value={valor} onChange={e => setValor(e.target.value)}>
-            <option value="">Seleccione una opción</option>
+           
             {opciones.map(opcion => (
                 <option key={opcion.valor} value={opcion.valor}>{opcion.etiqueta}</option>
             ))}
