@@ -14,7 +14,8 @@ export default {
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.ladelpasico.app"
     }, 
     "android": {
       "googleServicesFile":  process.env.GOOGLE_SERVICES_JSON || "./google-services.json",
