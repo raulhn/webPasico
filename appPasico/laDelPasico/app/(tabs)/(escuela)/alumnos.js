@@ -6,7 +6,7 @@ import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../../providers/AuthContext';
 import { useAlumnosAsignaturaProfesor } from '../../../hooks/escuela/useAlumnos';
 import CardAlumno from '../../../componentes/componentesEscuela/CardAlumno';
-import { Link } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 
 
 
@@ -23,6 +23,7 @@ export default function Alumnos()
     const [ asignaturaSeleccionada, setAsignaturaSeleccionada ] = useState(null);
     const [ cursoSeleccionado, setCursoSeleccionado ] = useState(null);
 
+    const router = useRouter();
  
 
     if (cargando || cargandoCursos) {
@@ -47,7 +48,7 @@ export default function Alumnos()
         valor: curso.nid_curso
     }));
 
-    console.log("Alumnos recuperados: ", cursoSeleccionado);
+
     return (
         <>
             <View style={{flexDirection: "row", justifyContent: "space-around", padding: 10, backgroundColor: "#ffffff"}}>
@@ -81,15 +82,14 @@ export default function Alumnos()
         }}
             refreshControl={<RefreshControl refreshing={cargandoAlumnos} onRefresh={() => {lanzarRefrescoAlumnos(); setPresionado(null);}} />}
             renderItem={({ item }) => { return <View >
-                       <Link
-                         href={{
-                           pathname: "/FichaAlumno/" + item.nid_persona,
-                           params: { nidAlumno: item.nid_persona, nidCurso: cursoSeleccionado.valor},
-                         }}
-                         key={item.nid_persona}
-                         asChild
-                       >
+       
                        <Pressable
+                         onPress={() => {
+    router.push({
+      pathname: "/FichaAlumno/" + item.nid_persona,
+      params: { nidAlumno: item.nid_persona, nidCurso: cursoSeleccionado.valor },
+    });
+  }}
                                 onTouchStart={() => {
                                   setPresionado(item.nid_persona); // Cambia el estado a presionado
                                 }}
@@ -105,7 +105,6 @@ export default function Alumnos()
                     <CardAlumno alumno={item} />
                 </View>
                 </Pressable>
-                </Link>
             </View> }}
             keyExtractor={item => item.nid_persona}
             contentContainerStyle={{ gap: 10, flexGrow: 1 }}
