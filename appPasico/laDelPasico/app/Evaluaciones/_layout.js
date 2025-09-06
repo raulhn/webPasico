@@ -24,7 +24,7 @@ export default function PaginaLayout() {
           headerTitleStyle: {
             fontWeight: "bold", // Estilo del título
           },
-        })} // Oculta el encabezado para esta pantalla
+        })} 
       />
     </Stack>
   );

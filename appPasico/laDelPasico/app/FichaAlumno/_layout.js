@@ -16,6 +16,9 @@ export default function PaginaLayout() {
         name="[nidAlumno]" // Nombre de la pantalla principal
         options={({ route }) => ({
           title: "Ficha de Alumno",
+              headerLeft: () => (
+      <Button title="Volver" onPress={() => navigation.goBack()} color="#fff" />
+    ),
           headerTitleAlign: "center", // Centra el título del encabezado
           headerStyle: {
             backgroundColor: Constantes.COLOR_AZUL, // Color de fondo del encabezado
