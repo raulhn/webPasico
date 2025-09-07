@@ -1,10 +1,12 @@
 import {View, ScrollView, Text, ActivityIndicator, StyleSheet} from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { useContext } from 'react';
-import { AuthContext } from '../../providers/AuthContext';
-import { useAlumnoProfesor } from '../../hooks/escuela/useAlumnos';
-import { RefreshControl } from 'react-native';
-import { Boton } from '../../componentes/componentesUI/ComponentesUI';
+import { AuthContext } from '../../../../providers/AuthContext'
+import {useAlumnoProfesor } from '../../../../hooks/escuela/useAlumnos'
+import  { RefreshControl } from 'react-native';
+import { Boton } from '../../../../componentes/componentesUI/ComponentesUI';
+import { useNavigation } from 'expo-router';
+import { useEffect } from 'react';
 
 export default function FichaAlumno() {
    const { nidAlumno, nidCurso } = useLocalSearchParams();
@@ -12,6 +14,16 @@ export default function FichaAlumno() {
 
    const { alumno, cargando, error, refrescar, lanzarRefresco} = useAlumnoProfesor(nidAlumno, nidCurso, cerrarSesion);
 
+       const navigation = useNavigation();
+ useEffect(() => {
+    navigation.getParent()?.setOptions({
+      headerShown: false,
+    });
+    return () =>
+      navigation.getParent()?.setOptions({
+        headerShown: true,
+      });
+  }, [navigation]);
   
    if (cargando)
    {

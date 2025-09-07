@@ -1,13 +1,13 @@
 import {View, Text, ActivityIndicator, StyleSheet, RefreshControl, Pressable, FlatList} from 'react-native';
-import { useAsignaturasProfesor } from '../../../hooks/escuela/useAsignaturas';
-import { EntradaGroupRadioButton } from '../../../componentes/componentesUI/ComponentesUI';
-import { useCursos } from '../../../hooks/escuela/useCurso'; 
+import { useAsignaturasProfesor } from '../../../../hooks/escuela/useAsignaturas';
+import { EntradaGroupRadioButton } from '../../../../componentes/componentesUI/ComponentesUI';
+import { useCursos } from '../../../../hooks/escuela/useCurso'; 
 import { useContext, useEffect, useState } from 'react';
-import { AuthContext } from '../../../providers/AuthContext';
-import { useAlumnosAsignaturaProfesor } from '../../../hooks/escuela/useAlumnos';
-import CardAlumno from '../../../componentes/componentesEscuela/CardAlumno';
+import { AuthContext } from '../../../../providers/AuthContext';
+import { useAlumnosAsignaturaProfesor } from '../../../../hooks/escuela/useAlumnos';
+import CardAlumno from '../../../../componentes/componentesEscuela/CardAlumno';
 import { Link, useRouter } from 'expo-router';
-
+import { useNavigation } from 'expo-router';
 
 
 export default function Alumnos()
@@ -25,6 +25,7 @@ export default function Alumnos()
 
     const router = useRouter();
  
+
 
     if (cargando || cargandoCursos) {
         return (

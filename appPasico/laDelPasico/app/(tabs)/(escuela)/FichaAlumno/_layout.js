@@ -1,24 +1,30 @@
 import { View } from "react-native";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Button} from "react-native";
 import { Stack } from "expo-router";
 import { Image } from "react-native";
-import Constantes from "../../config/constantes.js";
+import Constantes from "../../../../config/constantes.js"
 
 export default function PaginaLayout() {
   return (
     <Stack
       screenOptions={{
-        headerShown: true, // Muestra el encabezado del Stack
+        headerShown: false, // Muestra el encabezado del Stack
         animation: "slide_from_right", // Animación al navegar
       }}
     >
       <Stack.Screen
-        name="[nidAlumno]" // Nombre de la pantalla principal
+        name="alumnos" // Nombre de la pantalla principal
+        options={() => ({
+          headerShown: false,
+          title: "Alumnos",
+
+        })} 
+      />
+
+      <Stack.Screen
+        name="[nidAlumno]"
         options={({ route }) => ({
           title: "Ficha de Alumno",
-              headerLeft: () => (
-      <Button title="Volver" onPress={() => navigation.goBack()} color="#fff" />
-    ),
           headerTitleAlign: "center", // Centra el título del encabezado
           headerStyle: {
             backgroundColor: Constantes.COLOR_AZUL, // Color de fondo del encabezado
@@ -27,6 +33,9 @@ export default function PaginaLayout() {
           headerTitleStyle: {
             fontWeight: "bold", // Estilo del título
           },
+          headerShown: true,
+          headerLeft: () => null,
+          gestureEnabled: false
         })} // Oculta el encabezado para esta pantalla
       />
     </Stack>

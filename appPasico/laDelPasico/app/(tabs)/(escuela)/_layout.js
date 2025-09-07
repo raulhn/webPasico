@@ -39,6 +39,11 @@ export default function DrawerLayout() {
         }}
       />
 
+
+
+   <Drawer.Screen name="FichaAlumno" options={{ title: "Alumnos" }} />
+
+
       <Drawer.Screen
         name="expediente"
         options={{
@@ -47,14 +52,7 @@ export default function DrawerLayout() {
         }}
       ></Drawer.Screen>
 
-      <Drawer.Screen
-        name="alumnos"
-        options={{
-          title: "Alumnos",
-          drawerItemStyle: esRol(["PROFESOR"]) ? {} : { display: "none" },
-        }}
-      />
-
+   
       <Drawer.Screen
         name="evaluaciones"
         options={{
@@ -62,6 +60,8 @@ export default function DrawerLayout() {
           drawerItemStyle: esRol(["PROFESOR"]) ? {} : { display: "none" },
         }}
       />
+
+
     </Drawer>
   );
 }
