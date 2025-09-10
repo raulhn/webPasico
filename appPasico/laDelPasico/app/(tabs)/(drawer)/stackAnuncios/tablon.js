@@ -59,7 +59,7 @@ export default function Tablon() {
         renderItem={({ item }) => (
           <Link
             href={{
-              pathname: "/Anuncio/[nidAnuncio]",
+              pathname: "/stackAnuncios/[nidAnuncio]",
               params: { nidAnuncio: item.nid_tablon_anuncio },
             }}
             key={item.nid_tablon_anuncio}

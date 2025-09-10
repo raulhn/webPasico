@@ -15,6 +15,7 @@ export default function PaginaLayout() {
     >
       <Stack.Screen name="tablon" 
         options={{
+          title: "Tablón de anuncios",
           header: (props) => <CustomHeaderInicio {...props} title={Constantes.TITULO_PAGINA_TABLON} />
         }} />
 
