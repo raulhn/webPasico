@@ -28,7 +28,10 @@ export default function Layout() {
             </SafeAreaView>
           ),
         }}
-      ></Stack>
+      >
+      <Stack.Screen name="(tabs)" />
+
+      </Stack>
     </AuthProvider>
   );
 }

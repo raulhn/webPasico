@@ -5,6 +5,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { CustomHeader } from "../../../componentes/cabecera.jsx";
+import { Stack } from "expo-router";
 
 import { useRol } from "../../../hooks/useRol"; // Asegúrate de que la ruta sea correcta
 
@@ -25,6 +26,7 @@ export default function DrawerLayout() {
 
 
   return (
+    <>
     <Drawer
       screenOptions={{
         title: "Escuela",
@@ -41,27 +43,39 @@ export default function DrawerLayout() {
 
 
 
-   <Drawer.Screen name="FichaAlumno" options={{ title: "Alumnos" }} />
+   <Drawer.Screen name="stackAlumnos" 
+      options={{ title: "Alumnos", headerShown: false,
+       drawerItemStyle: esRol(["PROFESOR"]) ? {} : { display: "none" }}
+    } 
+   />
+
+
 
 
       <Drawer.Screen
-        name="expediente"
+        name="stackMatricula"
         options={{
           title: "Matriculas",
+          headerShown: false,
           drawerItemStyle: esRol(["ALUMNO"]) ? {} : { display: "none" },
         }}
       ></Drawer.Screen>
 
    
       <Drawer.Screen
-        name="evaluaciones"
+
+        name="stackEvaluaciones"
         options={{
-          title: "Evaluaciones",
-          drawerItemStyle: esRol(["PROFESOR"]) ? {} : { display: "none" },
+          headerShown: false,
+            drawerItemStyle: esRol(["PROFESOR"]) ? {} : { display: "none" },
+            title: "Evaluaciones",
         }}
       />
 
 
     </Drawer>
+
+
+    </>
   );
 }

@@ -93,7 +93,7 @@ export default function EvaluacionesAlumnosForm({ alumnos, evaluacionesRecuperad
             icon="menu-book"
             onPress={() => {
               router.push({
-                pathname: "/Evaluaciones/" + evaluacion.nid_matricula,
+                pathname: "/stackEvaluaciones/fichaEvaluacion/" + evaluacion.nid_matricula,
                 params: { pestana: Number(nid_trimestre) - 1 },
               });
             }}
