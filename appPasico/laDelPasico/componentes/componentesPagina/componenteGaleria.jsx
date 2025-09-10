@@ -151,7 +151,7 @@ export default function ComponenteGaleria(componente) {
         animationType="fade"
         onRequestClose={closeModal}
       >
-        <SafeAreaView
+        <View
           style={[styles.modalSafeArea, { paddingTop: insets.top * 2 }]}
         >
           <View style={styles.closeButton}>
@@ -186,8 +186,8 @@ export default function ComponenteGaleria(componente) {
                 style={[
                   styles.modalImage,
                   {
-                    maxWidth: dimensions.width * 0.9, // Ajusta el ancho al 90% de la pantalla
-                    maxHeight: (dimensions.height - insets.top) * 0.9, // Ajusta la altura al 90% de la pantalla
+                    maxWidth: dimensions.width * 0.85, // Ajusta el ancho al 90% de la pantalla
+                    maxHeight: (dimensions.height - insets.top) * 0.80, // Ajusta la altura al 90% de la pantalla
                   },
                 ]}
                 resizeMode="contain" // Asegura que la imagen mantenga su proporción
@@ -215,7 +215,7 @@ export default function ComponenteGaleria(componente) {
               </View>
             </Pressable>
           </View>
-        </SafeAreaView>
+        </View>
       </Modal>
     </View>
   );
@@ -232,12 +232,10 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.8)",
   },
   modalContainer: {
-    flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
   modalBackground: {
-    flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -254,13 +252,13 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 20,
     right: 20,
-    zIndex: 50,
+
   },
   rotateButton: {
     position: "absolute",
     top: 20,
     left: 20,
-    zIndex: 50,
+
   },
   tipoBoton: {
     backgroundColor: "rgba(0, 0, 0, 0.5)",
