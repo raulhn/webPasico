@@ -87,6 +87,35 @@ export const CustomHeader = ({ navigation, route, options, title }) => {
   );
 };
 
+
+export function CustomHeaderEscuela({ navigation, route, options }) {
+  return CustomHeader({
+    navigation,
+    route,
+    options,
+    title: "Escuela",
+  });
+};
+
+export function CustomHeaderBanda({ navigation, route, options }) {
+  return CustomHeader({
+    navigation,
+    route,
+    options,
+    title: "Banda",
+  });
+};
+
+export function CustomHeaderInicio ({ navigation, route, options }) 
+{
+  return CustomHeader({
+    navigation,
+    route,
+    options,
+    title: "Inicio",
+  });
+};
+
 const estilos = StyleSheet.create({
   headerContainer: {
     flex: 1,
@@ -116,3 +145,5 @@ const estilos = StyleSheet.create({
     alignItems: "center",
   },
 });
+
+

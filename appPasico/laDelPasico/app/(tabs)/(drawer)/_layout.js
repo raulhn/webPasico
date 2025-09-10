@@ -1,14 +1,6 @@
 import { Drawer } from "expo-router/drawer";
-import { CustomHeader } from "../../../componentes/cabecera.jsx";
+import { CustomHeaderInicio } from "../../../componentes/cabecera.jsx";
 
-const CustomHeaderInicio = ({ navigation, route, options }) => {
-  return CustomHeader({
-    navigation,
-    route,
-    options,
-    title: "Inicio",
-  });
-};
 
 export default function DrawerLayout() {
   return (
@@ -17,25 +9,30 @@ export default function DrawerLayout() {
         headerBackgroundContainerStyle: { backgroundColor: "#fff" },
         header: (props) => <CustomHeaderInicio {...props} />,
       }}
+
     >
       <Drawer.Screen
         name="index"
         options={{
           title: "Inicio",
+          headerShown: false,
         }}
       />
       <Drawer.Screen
-        name="galeria"
+        name="stackGaleria"
         options={{
           title: "Galería",
         }}
       />
       <Drawer.Screen
-        name="tablon"
+        name="stackAnuncios"
         options={{
           title: "Tablón de anuncios",
+          headerShown: false,
         }}
       />
+
+
     </Drawer>
   );
 }

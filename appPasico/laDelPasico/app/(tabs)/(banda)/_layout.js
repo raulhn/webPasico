@@ -2,15 +2,8 @@ import { Drawer } from "expo-router/drawer";
 
 import { CustomHeader } from "../../../componentes/cabecera.jsx";
 import { useRol } from "../../../hooks/useRol"; // Asegúrate de que la ruta sea correcta
+import { CustomHeaderBanda } from "../../../componentes/cabecera.jsx";
 
-const CustomHeaderBanda = ({ navigation, route, options }) => {
-  return CustomHeader({
-    navigation,
-    route,
-    options,
-    title: "Banda",
-  });
-};
 
 export default function DrawerLayout() {
   const { esRol } = useRol();
@@ -31,9 +24,10 @@ export default function DrawerLayout() {
         }}
       />
       <Drawer.Screen
-        name="eventos"
+        name="stackEventos"
         options={{
           title: "Eventos",
+          headerShown: false,
           drawerItemStyle: esRol(["MUSICO"]) ? {} : { display: "none" },
         }}
       />
@@ -45,6 +39,8 @@ export default function DrawerLayout() {
           drawerItemStyle: esRol(["MUSICO"]) ? {} : { display: "none" },
         }}
       />
+
+
     </Drawer>
   );
 }
