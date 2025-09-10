@@ -252,15 +252,15 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     position: "absolute",
-    top: 10,
+    top: 20,
     right: 20,
-    zIndex: 1,
+    zIndex: 50,
   },
   rotateButton: {
     position: "absolute",
-    top: 10,
+    top: 20,
     left: 20,
-    zIndex: 1,
+    zIndex: 50,
   },
   tipoBoton: {
     backgroundColor: "rgba(0, 0, 0, 0.5)",

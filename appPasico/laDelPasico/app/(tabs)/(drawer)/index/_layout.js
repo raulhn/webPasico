@@ -13,7 +13,7 @@ export default function StackIndex() {
             name="index" // Nombre de la pantalla principal
             options={() => ({
               headerShown: true,
-              title: "Alumnos",
+              title: "Inicio",
               header: (props) => <CustomHeaderInicio {...props} />,
             })}
           />
