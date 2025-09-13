@@ -58,7 +58,16 @@ export const useUsuario = () =>{
     }
   }
 
+  async function cambiarPassword(passwordActual, nuevoPassword) {
+    try {
+      await ServiceUsuario.cambiarPassword(passwordActual, nuevoPassword);
+      return true;
+    } catch (error) {
+      console.log("Error al cambiar la contraseña", error);
+      return false;
+    }
+  }
 
 
-  return { usuario, setUsuario, realizarLogin, logout, refrescarUsuario, roles};
+  return { usuario, setUsuario, realizarLogin, logout, refrescarUsuario, roles, cambiarPassword };
 }

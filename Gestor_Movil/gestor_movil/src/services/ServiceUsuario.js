@@ -52,6 +52,19 @@ export  function logout() {
         reject(error);
       });
   });
+}
 
+export function cambiarPassword(passwordActual, nuevoPassword) {
+  return new Promise((resolve, reject) => {
+    ServiceComun.peticionServicio("POST", URL_SERVICIO_MOVIL + "cambiar_password", {
+      passwordActual: passwordActual,
+      nuevaPassword: nuevoPassword
+    }).then((data) => {
+      resolve(data);
+    }).catch((error) => {
+      console.log("Error en el servicio cambiarPassword");
+      reject(error);
+    });
+  });
 }
 

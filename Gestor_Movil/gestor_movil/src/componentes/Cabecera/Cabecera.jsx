@@ -44,6 +44,7 @@ export default function Cabecera() {
                     }}>
                         <li><Link to="/gestion/" style={{ color: '#fff', textDecoration: 'none', fontWeight: 500 }}>Inicio</Link></li>
                         <li><Link to="/gestion/evaluaciones" style={{ color: '#fff', textDecoration: 'none', fontWeight: 500 }}>Evaluaciones</Link></li>
+                        <li><Link to="/gestion/cambiar_password" style={{ color: '#fff', textDecoration: 'none', fontWeight: 500 }}>Cambiar Contraseña</Link></li>
                     </ul>
                 </nav>
             </div>
