@@ -8,7 +8,7 @@ import {UsuarioProvider} from "./contexto/usuario.jsx"
 import Evaluaciones from './componentes/Escuela/Evaluaciones/Evaluaciones.jsx'
 import Evaluacion from './componentes/Escuela/Evaluacion/Evaluacion.jsx'
 import VisualizarEvaluaciones from './componentes/Escuela/VisualizarEvaluaciones/VisualizarEvaluaciones.jsx'
-
+import CambiarPassword from './componentes/CambiarPassword/CambiarPassword.jsx'
 
 createRoot(document.getElementById('root')).render(
   <UsuarioProvider>
@@ -19,6 +19,7 @@ createRoot(document.getElementById('root')).render(
       <Route path="/gestion/evaluaciones" element={<Evaluaciones />} />
       <Route path="/gestion/evaluacion/:nidCurso/:nidAsignatura/:nidTrimestre" element={<Evaluacion />} />
       <Route path="/gestion/visualizar_evaluaciones/:nidMatricula/:nidTrimestre" element={<VisualizarEvaluaciones />} />
+      <Route path="/gestion/cambiar_password" element={<CambiarPassword />} />
     </Routes>
   </BrowserRouter>
   </UsuarioProvider>
