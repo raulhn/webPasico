@@ -3,7 +3,7 @@ import { useAsignaturasProfesor } from "../../../hooks/useAsignaturas";
 import { useTrimestres } from "../../../hooks/useTrimestres";
 import { useState } from "react";
 import "./Evaluaciones.css";
-import { Boton, Selector } from "../../ComponentesUI/ComponentesUI";
+import { Boton, ModalAviso, Selector } from "../../ComponentesUI/ComponentesUI";
 
 import { useNavigate } from "react-router";
 import Cabecera from "../../Cabecera/Cabecera";
@@ -17,12 +17,18 @@ export default function Evaluaciones() {
   const [nidAsignatura, setNidAsignatura] = useState(null);
   const [nidCurso, setNidCurso] = useState(null);
   const [nidTrimestre, setNidTrimestre] = useState(null);
+  const [visibleError, setVisibleError] = useState(false);
 
   const navigate = useNavigate();
 
   function lanzaEvaluacion()
   {
-    navigate(`/gestion/evaluacion/${nidCurso}/${nidAsignatura}/${nidTrimestre}`);
+    if (nidCurso && nidAsignatura && nidTrimestre) {
+      navigate(`/gestion/evaluacion/${nidCurso}/${nidAsignatura}/${nidTrimestre}`);
+    }
+    else {
+      setVisibleError(true);
+    }
   }
 
   let opcionesCursos = cursos.map(curso => ({ valor: curso.nid_curso, etiqueta: curso.descripcion }));
@@ -49,6 +55,10 @@ export default function Evaluaciones() {
                 opciones={opcionesTrimestres} />
 
       <Boton onClick={lanzaEvaluacion} texto={"Ver Evaluaciones"} />
+
+      <ModalAviso visible={visibleError} setVisible={setVisibleError}
+        mensaje={"Debe seleccionar curso, asignatura y trimestre"}
+        textBoton={"Aceptar"} titulo={"Error"} />
 
     </div>
     </>
