@@ -168,3 +168,9 @@
     width: auto;
     height: auto;
 }
+
+.titulo {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #225ea8;
+}

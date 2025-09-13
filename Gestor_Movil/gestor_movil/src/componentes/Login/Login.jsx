@@ -1,5 +1,5 @@
 
-import { EntradaTexto, Boton} from '../ComponentesUI/ComponentesUI'
+import { EntradaTexto, Boton, ModalAviso} from '../ComponentesUI/ComponentesUI'
 import "./Login.css"
 import {useState, useContext, useEffect} from "react";
 import { useUsuario } from '../../hooks/useUsuario';
@@ -10,17 +10,26 @@ export default function Login() {
 
   const [usuario, setUsuario] = useState("");
   const [password, setPassword] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
+
   const { realizarLogin } = useUsuario();
 
   const navigate = useNavigate();
+
 
   const { actualizarUsuario, usuario: usuarioSesion, actualizarRoles } = useContext(UsuarioContext);
 
 
   function actualizarLogin(usuario_, roles_)
   {
+    if (usuario_ && roles_)
+       {
     actualizarUsuario(usuario_);
     actualizarRoles(roles_);
+      }
+      else{
+          setModalVisible(true);
+      }
   }
 
   useEffect(() => {
@@ -30,10 +39,15 @@ export default function Login() {
   }, [usuarioSesion, navigate]);
 
     function handleSubmit(e) {
-    e.preventDefault(); // Evita el recargo de la página
-    // Aquí va la acción del botón, por ejemplo:
-    realizarLogin(usuario, password, actualizarLogin);
-  }
+      try {
+        e.preventDefault(); // Evita el recargo de la página
+        // Aquí va la acción del botón, por ejemplo:
+        realizarLogin(usuario, password, actualizarLogin);
+      } catch (error) {
+        console.log("Error en el login", error);
+        setModalVisible(true);
+      }
+    }
 
   return (
   
@@ -56,6 +70,15 @@ export default function Login() {
       </div>
       </div>
 </form>
+
+<ModalAviso
+        visible={modalVisible}
+        setVisible={() => setModalVisible(false)}
+        titulo={"Error de login"}
+        mensaje={"Usuario o contraseña incorrectos. Por favor, inténtelo de nuevo."}
+        textBoton={"Aceptar"}
+      >
+      </ModalAviso>
     </div>
   );
 }

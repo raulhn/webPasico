@@ -2,8 +2,9 @@ import { useParams } from "react-router";
 import { useEvaluaciones } from "../../../hooks/useEvaluaciones";
 import { useTrimestres } from "../../../hooks/useTrimestres";
 import CardEvaluacion from "../CardEvaluacion/CardEvaluacion";
-import { CustomTabs } from "../../ComponentesUI/ComponentesUI";
+import { CustomTabs, Boton } from "../../ComponentesUI/ComponentesUI";
 import Cabecera from "../../Cabecera/Cabecera";
+import * as Constantes from "../../../config/Constantes";
 
 export default function VisualizarEvaluaciones()
 {
@@ -40,7 +41,7 @@ function mostrarEvaluaciones() {
           ),
         });
       } else {
-        console.log(evaluacionesTrimestre)
+ 
         tabsEvaluaciones.push({
           nombre: trimestres[i].nombre,
           contenido: () => (
@@ -50,8 +51,10 @@ function mostrarEvaluaciones() {
                   <CardEvaluacion key={item.nid_evaluacion_matricula} evaluacion={item} />
                 ))}
               </div>
-             
-              
+              <Boton texto={"Descargar PDF"}
+                 onClick={() => window.open(Constantes.URL_SERVICIO_MOVIL + 'generar_boletin_web/' + nidMatricula + '/' + trimestres[i].nid_trimestre, '_blank')}
+              />
+
             </div>
           ),
         });

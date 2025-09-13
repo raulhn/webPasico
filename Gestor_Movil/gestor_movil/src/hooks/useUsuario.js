@@ -15,12 +15,12 @@ export const useUsuario = () =>{
 
       await ServiceUsuario.login(correoElectronico, password);
       const infoUsuario = await refrescarUsuario();
-      console.log("infoUsuario", infoUsuario);
       callback(infoUsuario.usuario, infoUsuario.roles);
 
     }
     catch(error) {
       console.log("Error en el login", error);
+      callback(null, null);
     }
   }
 
