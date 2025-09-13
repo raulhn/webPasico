@@ -157,6 +157,61 @@ async function obtenerEvaluaciones(req, res) {
   }
 }
 
+async function generarBoletinWeb(req, res) {
+  try {
+    const nid_persona = await servletPersona.obtenerNidPersona(req, res);
+    const nidMatricula = req.params.nid_matricula;
+    const nidTrimestre = req.params.nid_trimestre;
+
+    const matricula = await gestorMatricula.obtenerMatricula(nidMatricula);
+   
+    if (matricula.nid_persona !== nid_persona) {
+      const bEsPadre = await gestorPersonas.esHijo(
+        nid_persona,
+        matricula.nid_persona
+      );
+      if (!bEsPadre) {
+        const bEsProfesorAlumno = await gestorProfesorAlumnoMatricula.esAlumnoProfesor(matricula.nid_persona, nid_persona, matricula.nid_curso);
+        if (!bEsProfesorAlumno) {
+          res.status(403).send({
+            error: true,
+            message: "No tienes permiso para acceder a esta evaluación",
+          });
+          return;
+        }
+        
+      }
+    }
+
+
+    const evaluacion = await gestor_evaluacion.generar_boletin(
+      nidMatricula,
+      nidTrimestre
+    );
+
+    const extensionPdf = ".pdf";
+    let pdfBuf = await libreOffice.convertAsync(
+      evaluacion,
+      extensionPdf,
+      undefined
+    );
+
+    res.writeHead(200);
+    res.write(pdfBuf);
+
+    return res.end();
+  } catch (error) {
+    console.error(
+      "servlet_evaluacion.js -> generarBoletingWeb: Error al generar la evaluación:",
+      error
+    );
+    res.status(400).send({
+      error: true,
+      message: "Se ha producido un error al generar la evaluación",
+    });
+  }
+}
+
 async function solicitar_generar_boletin(req, res) {
   try {
     const nid_persona = await servletPersona.obtenerNidPersona(req, res);
@@ -428,6 +483,7 @@ module.exports.registrarEvaluacionServicio = registrarEvaluacionServicio;
 module.exports.obtenerEvaluacionesSucias = obtenerEvaluacionesSucias;
 module.exports.obtenerEvaluacionTrimestre = obtenerEvaluacionTrimestre;
 module.exports.obtenerEvaluaciones = obtenerEvaluaciones;
+module.exports.generarBoletinWeb = generarBoletinWeb;
 module.exports.generar_boletin = generar_boletin;
 module.exports.solicitar_generar_boletin = solicitar_generar_boletin;
 module.exports.obtenerEvaluacionesAsignaturas = obtenerEvaluacionesAsignaturas;

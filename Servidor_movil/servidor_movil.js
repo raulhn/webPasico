@@ -332,6 +332,11 @@ app.get(
   servletEvaluacion.solicitar_generar_boletin
 );
 
+app.get(
+  "/generar_boletin_web/:nid_matricula/:nid_trimestre",
+  servletEvaluacion.generarBoletinWeb
+);
+
 app.post(
   "/registrar_evaluaciones",
   servletEvaluacion.registrarEvaluaciones

@@ -113,12 +113,13 @@ export function CustomTabs({ tabs, pestana = 0 }) {
 
 
 // ModalAviso
-export function ModalAviso({ visible, setVisible, mensaje, textBoton }) {
+export function ModalAviso({ visible, setVisible, mensaje, textBoton, titulo =""}) {
   if (!visible) return null;
   return (
     <div className="modal-overlay">
       <div className="modal-content">
         <MdWarningAmber size={60} color="#f87c00" className="icono-warning" />
+        <div className="titulo">{titulo}</div>
         <div className="mensaje">{mensaje}</div>
         <button className="boton" onClick={() => setVisible(false)}>{textBoton}</button>
       </div>
