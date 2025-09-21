@@ -5,7 +5,7 @@ import { View, Text, ScrollView, TextInput, Image, Modal } from "react-native";
 
 import { StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import ServiceUsuario from "../../servicios/serviceUsuario.js";
 import Tunstile from "../../componentes/Turnstile.jsx";
 
