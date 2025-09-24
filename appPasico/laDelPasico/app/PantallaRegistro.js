@@ -1,9 +1,9 @@
 import Registro from "../componentes/usuario/Registro";
-import React from "react";
 import { View } from "react-native";
 import Recaptcha from "../componentes/Recaptcha";
 import { useState } from "react";
 import Constantes from "../config/constantes.js";
+import React from "react";
 
 export default function PantallaRegistro() {
   const [recaptchaToken, setRecaptchaToken] = useState(null);
