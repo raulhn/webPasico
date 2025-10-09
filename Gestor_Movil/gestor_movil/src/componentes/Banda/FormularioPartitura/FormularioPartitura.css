@@ -1,0 +1,65 @@
+.formulario-partitura-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #f9fafb;
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  padding: 2rem 2.5rem;
+  max-width: 400px;
+  margin: 2rem auto;
+}
+
+.formulario-partitura-container h2 {
+  margin-bottom: 1.2rem;
+  color: #2d3748;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.formulario-partitura-container form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.formulario-partitura-container label {
+  display: flex;
+  flex-direction: column;
+  font-size: 1rem;
+  color: #4a5568;
+  margin-bottom: 0.5rem;
+}
+
+.formulario-partitura-container input {
+  padding: 0.6rem 0.8rem;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  font-size: 1rem;
+  margin-top: 0.3rem;
+  background: #fff;
+  transition: border-color 0.2s;
+}
+
+.formulario-partitura-container input:focus {
+  border-color: #3182ce;
+  outline: none;
+}
+
+.formulario-partitura-container button {
+  margin-top: 1.2rem;
+  padding: 0.7rem 1.5rem;
+  background: #3182ce;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.formulario-partitura-container button:hover {
+  background: #2563eb;
+}
