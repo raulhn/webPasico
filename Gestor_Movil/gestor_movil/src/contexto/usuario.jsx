@@ -35,6 +35,18 @@ export const UsuarioProvider = ({ children }) => {
         sessionStorage.setItem("roles", JSON.stringify(rolesActualizados));
     }
 
+    function comprobarRoles(rolesAComprobar) {
+        if (!roles || roles.length === 0) return false;
+        for (let rol of rolesAComprobar) {
+            for (let rolUsuario of roles) {
+                if (rol === rolUsuario.rol) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     // Si el usuario cambia desde otro sitio, sincroniza el estado
     useEffect(() => {
         const handleStorage = () => {
@@ -50,7 +62,8 @@ export const UsuarioProvider = ({ children }) => {
             usuario: usuario,
             actualizarUsuario: actualizarUsuario,
             roles: roles,
-            actualizarRoles: actualizarRoles
+            actualizarRoles: actualizarRoles,
+            comprobarRoles: comprobarRoles
         }}>
             {children}
         </UsuarioContext.Provider>

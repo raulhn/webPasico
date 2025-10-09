@@ -4,7 +4,6 @@ import CardPartitura from '../CardPartitura/CardPartitura.jsx';
 export default function Partituras() {
   const { partituras, loading, error } = usePartituras();
 
-  console.log(partituras);
 
   if (loading) {
     return <div>Cargando...</div>;

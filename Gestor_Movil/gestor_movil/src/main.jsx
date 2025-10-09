@@ -10,6 +10,7 @@ import Evaluacion from './componentes/Escuela/Evaluacion/Evaluacion.jsx'
 import VisualizarEvaluaciones from './componentes/Escuela/VisualizarEvaluaciones/VisualizarEvaluaciones.jsx'
 import CambiarPassword from './componentes/CambiarPassword/CambiarPassword.jsx'
 import Partituras from './componentes/Banda/Partituras/Partituras.jsx'
+import FichaPartitura from './componentes/Banda/FichaPartitura/FichaPartitura.jsx'
 
 createRoot(document.getElementById('root')).render(
   <UsuarioProvider>
@@ -22,6 +23,7 @@ createRoot(document.getElementById('root')).render(
       <Route path="/gestion/visualizar_evaluaciones/:nidMatricula/:nidTrimestre" element={<VisualizarEvaluaciones />} />
       <Route path="/gestion/cambiar_password" element={<CambiarPassword />} />
       <Route path="/gestion/partituras" element={<Partituras />} />
+      <Route path="/gestion/partitura/:nidPartitura" element={<FichaPartitura />}></Route>
     </Routes>
   </BrowserRouter>
   </UsuarioProvider>

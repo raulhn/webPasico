@@ -5,7 +5,7 @@ import * as Constantes from "../../config/Constantes";
 
 import { MdWarningAmber, MdCheckCircleOutline } from "react-icons/md";
 
-export function EntradaTexto({ valorDefecto = "", secure = false, setTexto, width = "150px", height = "20px" })
+export function EntradaTexto({ valorDefecto = "", secure = false, setTexto, width = "150px", height = "30px" })
 {
     const [valor, setValor] = useState(valorDefecto);
 

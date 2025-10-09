@@ -174,3 +174,13 @@
   font-weight: 600;
   color: #225ea8;
 }
+
+.entrada-texto, .entrada-texto-area {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.entrada-texto:focus, .entrada-texto-area:focus {
+  border-color: #3182ce;
+  box-shadow: 0 2px 8px rgba(49,130,206,0.10);
+}
