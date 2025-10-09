@@ -34,6 +34,7 @@ export async function registrarPartitura(datosPartitura)
 {
   try {
 
+    console.log("Datos partitura a registrar: ", datosPartitura);
     const respuesta = await ServiceComun.peticionServicio("POST", 
                           Constantes.URL_SERVICIO_MOVIL + "registrar_partitura", 
                            datosPartitura);
@@ -49,9 +50,10 @@ export async function actualizarPartitura(datosPartitura)
 {
   try {
 
-    const respuesta = await ServiceComun.peticionServicio("PUT", 
-                          Constantes.URL_SERVICIO_MOVIL + "actualizar_partitura/" + datosPartitura.nid_partitura, 
-                           datosPartitura);
+    const respuesta = await ServiceComun.peticionServicio("POST", 
+                          Constantes.URL_SERVICIO_MOVIL + "actualizar_partitura", 
+                          datosPartitura);
+    console.log("Respuesta al actualizar la partitura: ", respuesta);
 
     return respuesta;
   } catch (error) {

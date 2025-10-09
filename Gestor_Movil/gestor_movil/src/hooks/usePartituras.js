@@ -54,15 +54,25 @@ export const usePartitura = (nid_partitura) => {
 
 
   async function registrarPartitura(datosPartitura) {
+    try {
+    let respuesta;
     if (!datosPartitura.nid_partitura) {
-      await ServicePartituras.registrarPartitura(datosPartitura);
+      respuesta = await ServicePartituras.registrarPartitura(datosPartitura);
+      console.log("Respuesta al registrar la partitura: ", respuesta);
     }
     else {
-      await ServicePartituras.actualizarPartitura(datosPartitura);
+      respuesta = await ServicePartituras.actualizarPartitura(datosPartitura);
+      console.log("Respuesta al actualizar la partitura: ", respuesta);
     }
     // Refrescar la partitura después de registrar o actualizar
     const data = await ServicePartituras.obtenerPartitura(datosPartitura.nid_partitura);
     setPartitura(data);
+
+    return respuesta.error;
+    } catch (err) {
+   
+      return true;
+    }
   }
   return { partitura, loading, error, registrarPartitura };
 }
