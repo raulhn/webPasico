@@ -25,8 +25,8 @@ export default function CardPartitura({ partitura }) {
     <div className="card">
       <h3>{partitura.titulo}</h3>
       {editarPartitura()}
-      <p>Compositor: {partitura.compositor}</p>
-      {partitura.url && <a href={partitura.url_partitura} target="_blank" rel="noopener noreferrer">Ver Partitura</a>}
+      <p>Compositor: {partitura.autor}</p>
+      {partitura.url_partitura && <a href={partitura.url_partitura} target="_blank" rel="noopener noreferrer">Ver Partitura</a>}
     </div>
   );
 }
