@@ -92,7 +92,7 @@ export default function FormularioPartitura({ nidPartitura }) {
         { console.log("Guardando partitura con datos: ", {nid_partitura: nidPartitura, titulo: titulo, autor: autor,
             url: url, nidCategoria: nidCategoria});
           const errorRespuesta = registrarPartitura({nid_partitura: nidPartitura, titulo: titulo, autor: autor,
-            url: url, nid_categoria: nidCategoria});
+            url: url, nid_categoria: nidCategoria, url_partitura: url});
           setError(!errorRespuesta);
           setExito(errorRespuesta);
        }}>
