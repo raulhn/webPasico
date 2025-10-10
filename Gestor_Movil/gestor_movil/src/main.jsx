@@ -24,6 +24,7 @@ createRoot(document.getElementById('root')).render(
       <Route path="/gestion/cambiar_password" element={<CambiarPassword />} />
       <Route path="/gestion/partituras" element={<Partituras />} />
       <Route path="/gestion/partitura/:nidPartitura" element={<FichaPartitura />}></Route>
+      <Route path="/gestion/nueva_partitura" element={<FichaPartitura />}></Route>
     </Routes>
   </BrowserRouter>
   </UsuarioProvider>

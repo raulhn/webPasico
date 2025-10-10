@@ -21,13 +21,13 @@ export default function CambiarPassword() {
                 <h2>Cambiar Contraseña</h2>
 
                 <label>Contraseña Actual</label>
-                <EntradaTexto secure={true} valorDefecto={passwordActual} setTexto={setPasswordActual} width="200px" height="20px" />
+                <EntradaTexto secure={true} valorDefecto={passwordActual} setTexto={setPasswordActual} width="200px" />
 
                 <label>Nueva Contraseña</label>
-                <EntradaTexto secure={true} valorDefecto={nuevoPassword} setTexto={setNuevoPassword} width="200px" height="20px" />
+                <EntradaTexto secure={true} valorDefecto={nuevoPassword} setTexto={setNuevoPassword} width="200px"/>
 
                 <label>Confirmar Nueva Contraseña</label>
-                <EntradaTexto secure={true} valorDefecto={confirmarPassword} setTexto={setConfirmarPassword} width="200px" height="20px" />
+                <EntradaTexto secure={true} valorDefecto={confirmarPassword} setTexto={setConfirmarPassword} width="200px" />
 
                 <Boton
                     texto={"Cambiar Contraseña"}

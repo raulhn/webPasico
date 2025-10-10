@@ -9,7 +9,7 @@ import { useNavigate, Link } from "react-router-dom";
 import "./Cabecera.css";
 
 export default function Cabecera() {
-    const { usuario, actualizarUsuario, actualizarRoles } = useContext(UsuarioContext);
+    const { usuario, actualizarUsuario, actualizarRoles, comprobarRoles } = useContext(UsuarioContext);
     const { logout, refrescarUsuario, roles: rolesRecuperados, usuario: usuarioRecuperado } = useUsuario();
     const navigate = useNavigate();
 
@@ -45,6 +45,7 @@ export default function Cabecera() {
                         <li><Link to="/gestion/" style={{ color: '#fff', textDecoration: 'none', fontWeight: 500 }}>Inicio</Link></li>
                         <li><Link to="/gestion/evaluaciones" style={{ color: '#fff', textDecoration: 'none', fontWeight: 500 }}>Evaluaciones</Link></li>
                         <li><Link to="/gestion/cambiar_password" style={{ color: '#fff', textDecoration: 'none', fontWeight: 500 }}>Cambiar Contraseña</Link></li>
+                        {comprobarRoles(['ADMINISTRADOR']) && <li><Link to="/gestion/partituras" style={{ color: '#fff', textDecoration: 'none', fontWeight: 500 }}>Partituras</Link></li>}
                     </ul>
                 </nav>
             </div>
