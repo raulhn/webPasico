@@ -1,9 +1,10 @@
 
 import "./FormularioPartitura.css";
-import { EntradaTexto, Boton, ModalAviso, ModalExito } from "../../ComponentesUI/ComponentesUI"
+import { EntradaTexto, Boton, ModalAviso, ModalExito, Selector } from "../../ComponentesUI/ComponentesUI"
 import { useEffect, useState } from "react"
 import { usePartitura } from "../../../hooks/usePartituras";
-
+import { useCategorias } from "../../../hooks/useCategorias.js";
+import { useNavigate } from "react-router";
 
 export default function FormularioPartitura({ nidPartitura }) {
   const [titulo, setTitulo] = useState('');
@@ -15,6 +16,9 @@ export default function FormularioPartitura({ nidPartitura }) {
   const [exito, setExito] = useState(false);
 
   const {partitura, loading, registrarPartitura} = usePartitura(nidPartitura);
+  const { categorias, loading: loadingCategorias, error: errorCategorias } = useCategorias();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     console.log("Partitura cargada en el formulario: ", partitura);
@@ -22,15 +26,17 @@ export default function FormularioPartitura({ nidPartitura }) {
       setTitulo(partitura.titulo || '');
       setAutor(partitura.autor || '');
       setUrl(partitura.url_partitura || '');
-      setNidCategoria(partitura.nid_categoria || null);
+      setNidCategoria(partitura.nid_categoria || '');
     } else {
       setTitulo('');
       setAutor('');
       setUrl('');
-      setNidCategoria(null);
+      setNidCategoria('');
     }
-  }, [loading]);
+  }, [loading, partitura]);
 
+  const opcionesCategorias = categorias.map(cat => ({ valor: cat.nid_categoria, etiqueta: cat.nombre_categoria }))
+      .concat({ valor: "", etiqueta: "Sin categoría" });
 
   if(loading) return (<div>Cargando...</div>);
 
@@ -43,9 +49,7 @@ export default function FormularioPartitura({ nidPartitura }) {
           <EntradaTexto
             valorDefecto={partitura ? partitura.titulo : ''}
             setTexto={texto => {
-              if (partitura) {
                 setTitulo(texto);
-              }
             }}
             width="300px"
           />
@@ -55,9 +59,7 @@ export default function FormularioPartitura({ nidPartitura }) {
           <EntradaTexto
             valorDefecto={partitura ? partitura.autor : ''}
             setTexto={texto => {
-              if (partitura) {
                 setAutor(texto);
-              }
             }}
             width="300px"
           />
@@ -68,16 +70,29 @@ export default function FormularioPartitura({ nidPartitura }) {
           <EntradaTexto
             valorDefecto={partitura ? partitura.url_partitura : ''}
             setTexto={texto => {
-                if (partitura) {
-                  setUrl(texto);
-                }
-              }}
-              width="300px"
-            />
+                setUrl(texto);
+            }}
+            width="300px"
+          />
 
-    <Boton texto={"Guardar"} onClick={() =>
-       { const errorRespuesta = registrarPartitura({nid_partitura: nidPartitura, titulo: titulo, autor: autor,
-                           url: url, nidCategoria: nidCategoria});
+<label>Categoría:</label>
+      {loadingCategorias ? (
+        <div>Cargando categorías...</div>
+      ) : errorCategorias ? (
+        <div>Error al cargar categorías: {errorCategorias}</div>
+      ) : (
+        <Selector
+          valor={nidCategoria}
+          opciones={opcionesCategorias}
+          setValor={setNidCategoria}
+        />
+      )}
+
+      <Boton texto={"Guardar"} onClick={() =>
+        { console.log("Guardando partitura con datos: ", {nid_partitura: nidPartitura, titulo: titulo, autor: autor,
+            url: url, nidCategoria: nidCategoria});
+          const errorRespuesta = registrarPartitura({nid_partitura: nidPartitura, titulo: titulo, autor: autor,
+            url: url, nid_categoria: nidCategoria});
           setError(!errorRespuesta);
           setExito(errorRespuesta);
        }}>
@@ -93,7 +108,10 @@ export default function FormularioPartitura({ nidPartitura }) {
 
     <ModalExito
       visible={exito}
-      setVisible={() => {setExito(false)}}
+      setVisible={() => {setExito(false); if (!nidPartitura) 
+              {
+                console.log("Navegando a la partitura recien creada con id: ", partitura.nid_partitura);
+                navigate('/gestion/partitura/' + partitura.nid_partitura)}}}
       mensaje={"La partitura se ha guardado correctamente"}
       textBoton={"Aceptar"}
       titulo={"Éxito"}

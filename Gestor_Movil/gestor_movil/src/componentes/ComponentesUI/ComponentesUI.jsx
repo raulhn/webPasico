@@ -192,3 +192,5 @@ export function EnlaceDiv({ onClick, contenido}) {
     </div>
   );
 }
+
+
