@@ -30,6 +30,7 @@ export default function ComponenteGaleria(componente) {
   const insets = useSafeAreaInsets();
   const url_imagen = constantes.URL_SERVICIO + "imagen_url/";
   const [dimensions, setDimensions] = useState(Dimensions.get("window")); // Estado para las dimensiones
+  const [orientation, setOrientation] = useState(null);
 
   // Detectar la orientación actual al cargar el componente
   useEffect(() => {

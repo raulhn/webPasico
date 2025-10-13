@@ -184,3 +184,18 @@
   border-color: #3182ce;
   box-shadow: 0 2px 8px rgba(49,130,206,0.10);
 }
+
+.boton {
+  width: auto;
+  height: auto;
+}
+
+.paginacion {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 20px;
+  width: 100%;
+}
+

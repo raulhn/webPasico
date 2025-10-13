@@ -193,4 +193,57 @@ export function EnlaceDiv({ onClick, contenido}) {
   );
 }
 
+export function Paginacion({array = [], page_size = 10, page_number = 1, className = ""}) {
+
+  // Validar que array sea realmente un array
+  if (!Array.isArray(array)) {
+    console.error("Paginacion: el parámetro 'array' debe ser un array, recibido:", typeof array);
+    return <div>Error: datos no válidos para paginación</div>;
+  }
+
+  const tamanoArray = array.length;
+  const totalPaginas = Math.ceil(tamanoArray / page_size);
+
+  const [paginaActual, setPaginaActual] = useState(page_number);
+
+  useEffect(() => {
+    setPaginaActual(page_number);
+  }, [page_number]);
+
+  if (array.length === 0) {
+    return <div>No hay elementos para mostrar</div>;
+  }
+
+  return ( 
+    <>
+    <div className={className}>
+    {array.map((item, index) => {
+      const inicio = (paginaActual - 1) * page_size;
+      const fin = inicio + page_size;
+      if (index >= inicio && index < fin) {
+        return item;
+      }
+      return null;
+    })}
+    </div>
+    <div className="paginacion">
+      <button className="boton" onClick={() => setPaginaActual(1)} disabled={paginaActual === 1}>
+        {"<<"}
+      </button>
+      <button className="boton" onClick={() => setPaginaActual(paginaActual - 1)} disabled={paginaActual === 1}>
+        {"<"}
+      </button>
+      <span>Página {paginaActual} de {totalPaginas}</span>
+      <button className="boton" onClick={() => setPaginaActual(paginaActual + 1)} disabled={paginaActual === totalPaginas}>
+        {">"}
+      </button>
+      <button className="boton" onClick={() => setPaginaActual(totalPaginas)} disabled={paginaActual === totalPaginas}>
+        {">>"}
+      </button>
+    </div>
+    </>
+  );
+
+
+}
 
