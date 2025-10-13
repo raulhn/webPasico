@@ -5,7 +5,8 @@ import * as Constantes from "../../config/Constantes";
 
 import { MdWarningAmber, MdCheckCircleOutline } from "react-icons/md";
 
-export function EntradaTexto({ valorDefecto = "", secure = false, setTexto, width = "150px", height = "30px" })
+export function EntradaTexto({ valorDefecto = "", secure = false, setTexto, width = "150px", height = "30px",
+  onChange = (e) => {}, placeholder = "" })
 {
     const [valor, setValor] = useState(valorDefecto);
 
@@ -15,8 +16,8 @@ export function EntradaTexto({ valorDefecto = "", secure = false, setTexto, widt
 
     return (
         <input  className={"entrada-texto"} style={{ width: width, height: height }}
-         value={valor} onChange={e => { setValor(e.target.value); setTexto(e.target.value); }} 
-         type={secure ? "password" : "text"} />
+         value={valor} onChange={e => { setValor(e.target.value); setTexto(e.target.value); onChange(e)}} 
+         type={secure ? "password" : "text"} placeholder={placeholder} />
     );
     
 }
@@ -243,7 +244,4 @@ export function Paginacion({array = [], page_size = 10, page_number = 1, classNa
     </div>
     </>
   );
-
-
 }
-
