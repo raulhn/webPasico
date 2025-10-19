@@ -20,7 +20,8 @@
         "UISupportedInterfaceOrientations": [
           "UIInterfaceOrientationPortrait",
           "UIInterfaceOrientationLandscapeLeft",
-          "UIInterfaceOrientationLandscapeRight"
+          "UIInterfaceOrientationLandscapeRight",
+          "UIInterfaceOrientationLandscape"
         ]
       }
     }, 
