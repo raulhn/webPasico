@@ -153,6 +153,8 @@ export default function ComponenteGaleria(componente) {
         transparent={true}
         animationType="fade"
         onRequestClose={closeModal}
+        supportedOrientations={['portrait', 'portrait-upside-down', 'landscape', 'landscape-left', 'landscape-right']}
+        presentationStyle="overFullScreen"
       >
         <View
           style={[styles.modalSafeArea, { paddingTop: insets.top * 2 }]}
