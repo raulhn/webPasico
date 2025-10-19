@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }) => {
   const cerrarSesion = () => {
     setUsuario(null); // Limpia los datos del usuario
     setRoles([]); // Limpia los roles del usuario
-    router.replace("/(tabs)/(drawer)"); // Redirige a la pantalla de inicio de sesión
+   // router.replace("/(tabs)/(drawer)"); // Redirige a la pantalla de inicio de sesión
   };
 
   const guardarTokenNotificacion = (token) => {
