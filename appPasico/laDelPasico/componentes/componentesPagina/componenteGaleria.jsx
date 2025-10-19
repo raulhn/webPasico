@@ -104,6 +104,7 @@ export default function ComponenteGaleria(componente) {
 
   // Función para cambiar la orientación
   const lockToLandscape = async () => {
+    setRotado(true);
     await ScreenOrientation.unlockAsync();
     await ScreenOrientation.lockAsync(
       ScreenOrientation.OrientationLock.LANDSCAPE
@@ -111,6 +112,7 @@ export default function ComponenteGaleria(componente) {
   };
 
   const lockToPortrait = async () => {
+    setRotado(false);
     await ScreenOrientation.unlockAsync();
     await ScreenOrientation.lockAsync(
       ScreenOrientation.OrientationLock.PORTRAIT
@@ -123,7 +125,6 @@ export default function ComponenteGaleria(componente) {
     } else {
       lockToLandscape();
     }
-    setRotado(!rotado);
   }
 
   return (
@@ -153,8 +154,6 @@ export default function ComponenteGaleria(componente) {
         transparent={true}
         animationType="fade"
         onRequestClose={closeModal}
-        supportedOrientations={['portrait', 'portrait-upside-down', 'landscape', 'landscape-left', 'landscape-right']}
-        presentationStyle="overFullScreen"
       >
         <View
           style={[styles.modalSafeArea, { paddingTop: insets.top * 2 }]}
