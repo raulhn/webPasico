@@ -104,7 +104,6 @@ export default function ComponenteGaleria(componente) {
 
   // Función para cambiar la orientación
   const lockToLandscape = async () => {
-    setRotado(false);
     await ScreenOrientation.unlockAsync();
     await ScreenOrientation.lockAsync(
       ScreenOrientation.OrientationLock.LANDSCAPE
@@ -112,7 +111,6 @@ export default function ComponenteGaleria(componente) {
   };
 
   const lockToPortrait = async () => {
-    setRotado(true);
     await ScreenOrientation.unlockAsync();
     await ScreenOrientation.lockAsync(
       ScreenOrientation.OrientationLock.PORTRAIT
@@ -125,6 +123,7 @@ export default function ComponenteGaleria(componente) {
     } else {
       lockToLandscape();
     }
+    setRotado(!rotado);
   }
 
   return (
