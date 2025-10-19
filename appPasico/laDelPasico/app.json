@@ -14,7 +14,8 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "requireFullScreen": true
     }, 
     "android": {
       "googleServicesFile": "./google-services.json",
@@ -30,6 +31,7 @@
     "plugins": [
       "expo-router",
       "expo-secure-store",
+      "expo-screen-orientation",
       "expo-notifications",
       [
         {
