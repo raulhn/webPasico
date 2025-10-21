@@ -117,13 +117,16 @@ export default function ComponenteGaleria(componente) {
     );
   };
 
-  function rotar() {
+  async function rotar() {
     if (rotado) {
-      lockToPortrait();
+      setRotado(false);
+      await lockToPortrait();
+ 
     } else {
-      lockToLandscape();
+      await lockToLandscape();
+      setRotado(true);
     }
-    setRotado(!rotado);
+
   }
 
   return (
@@ -171,8 +174,8 @@ export default function ComponenteGaleria(componente) {
 
           <View style={styles.rotateButton}>
             <Pressable
-              onPress={() => {
-                rotar();
+              onPress={async() => {
+                await rotar();
               }}
             >
               <View style={styles.tipoBoton}>
