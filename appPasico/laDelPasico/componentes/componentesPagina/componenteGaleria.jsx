@@ -1,4 +1,4 @@
-import serviceComponentes from "../../servicios/serviceComponentes.js";
+mport serviceComponentes from "../../servicios/serviceComponentes.js";
 import { useEffect, useState } from "react";
 import constantes from "../../config/constantes.js";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -82,12 +82,7 @@ export default function ComponenteGaleria(componente) {
     return null;
   }
 
-  async function closeModal() {
-    setModalVisible(false);
-    setSelectedImage(null);
-    setRotado(false);
-    await lockToPortrait();
-  }
+
 
   function anterior() {
     if (indice > 0) {
@@ -113,10 +108,16 @@ export default function ComponenteGaleria(componente) {
   const lockToPortrait = async () => {
     await ScreenOrientation.unlockAsync();
     await ScreenOrientation.lockAsync(
-      ScreenOrientation.OrientationLock.PORTRAIT
+      ScreenOrientation.OrientationLock.PORTRAIT_UP
     );
   };
-
+  
+    async function closeModal() {
+    setModalVisible(false);
+    setSelectedImage(null);
+    setRotado(false);
+  }
+  
   async function rotar() {
     if (rotado) {
       setRotado(false);
@@ -162,8 +163,10 @@ export default function ComponenteGaleria(componente) {
         >
           <View style={styles.closeButton}>
             <Pressable
-              onPress={() => {
-                closeModal();
+              onPress={async () => {
+                setModalVisible(false);
+                await lockToPortrait();
+                await closeModal();
               }}
             >
               <View style={styles.tipoBoton}>
