@@ -1,4 +1,4 @@
-mport serviceComponentes from "../../servicios/serviceComponentes.js";
+import serviceComponentes from "../../servicios/serviceComponentes.js";
 import { useEffect, useState } from "react";
 import constantes from "../../config/constantes.js";
 import { MaterialIcons } from "@expo/vector-icons";
