@@ -82,11 +82,11 @@ export default function ComponenteGaleria(componente) {
     return null;
   }
 
-  function closeModal() {
+  async function closeModal() {
     setModalVisible(false);
     setSelectedImage(null);
     setRotado(false);
-    lockToPortrait();
+    await lockToPortrait();
   }
 
   function anterior() {
@@ -155,7 +155,7 @@ export default function ComponenteGaleria(componente) {
         visible={modalVisible}
         transparent={true}
         animationType="fade"
-        onRequestClose={closeModal}
+        onRequestClose={async() => {await closeModal()}}
       >
         <View
           style={[styles.modalSafeArea, { paddingTop: insets.top * 2 }]}
