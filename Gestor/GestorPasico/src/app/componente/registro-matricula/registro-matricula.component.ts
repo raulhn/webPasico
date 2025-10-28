@@ -226,6 +226,10 @@ export class RegistroMatriculaComponent implements OnInit{
     {
       this.matriculasServices.obtener_alumnos_asignaturas(this.curso, this.nid_asignatura, this.activo).subscribe(this.refrescar_alumnos);
     }
+    else if (this.profesor_seleccionado == '-1')
+    {
+      this.matriculasServices.obtener_alumnos_profesores('0', this.curso, this.nid_asignatura, this.activo).subscribe(this.refrescar_alumnos);
+    }
     else
     {
       this.matriculasServices.obtener_alumnos_profesores(this.profesor_seleccionado, this.curso, this.nid_asignatura, this.activo).subscribe(this.refrescar_alumnos);
