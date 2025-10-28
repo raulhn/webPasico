@@ -15,7 +15,7 @@ function alta_profesor_matricula(nid_matricula_asignatura, nid_profesor) {
         if (error) {
           console.log(error);
           conexion.dbConn.rollback();
-          reject();
+          reject('Error al dar de alta profesor-matrícula.');
         } else {
           resolve(results.insertId);
         }

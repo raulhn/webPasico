@@ -168,7 +168,10 @@ function actualizar_fecha_baja_matricula_asignatura(
   });
 }
 
-function add_asignatura(nid_matricula, nid_asignatura, nid_profesor) {
+
+
+
+function add_asignatura(nid_matricula, nid_asignatura) {
   return new Promise((resolve, reject) => {
     conexion.dbConn.beginTransaction(() => {
       conexion.dbConn.query(
@@ -185,18 +188,6 @@ function add_asignatura(nid_matricula, nid_asignatura, nid_profesor) {
             conexion.dbConn.rollback();
             reject();
           } else {
-            try {
-              const nid_profesor_alumno_matricula =
-                await gestorProfesorMatricula.alta_profesor_matricula(
-                  results.insertId,
-                  nid_profesor
-                );
-            } catch (error) {
-              console.log(error);
-              conexion.dbConn.rollback();
-              reject("Error al registrar el profesor-alumno-matricula");
-            }
-
             conexion.dbConn.commit();
             resolve(results.insertId);
           }
@@ -313,6 +304,132 @@ function obtener_matriculas_asignaturas_sucias() {
   });
 }
 
+
+function obtener_alumnos_sin_profesor(nid_curso, nid_asignatura) {
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(
+      "select distinct p.*, a.nid nid_asignatura, a.descripcion descripcion_asignatura, m.nid nid_matricula " +
+        "from " +
+        constantes.ESQUEMA_BD +
+        ".matricula_asignatura ma, " +
+        constantes.ESQUEMA_BD +
+        ".matricula m, " +
+        constantes.ESQUEMA_BD +
+        ".persona p, " +
+        constantes.ESQUEMA_BD +
+        ".asignatura a " +
+        "where m.nid = ma.nid_matricula " +
+        "and p.nid = m.nid_persona " +
+        "and ma.nid_asignatura = a.nid " +
+        "and m.nid_curso = " +
+        conexion.dbConn.escape(nid_curso) +
+        " " +
+        "and (a.nid = " +
+        conexion.dbConn.escape(nid_asignatura) +
+        " or " +
+        conexion.dbConn.escape(nid_asignatura) +
+        " = 0) " +
+        "and not exists( select 1 " +
+        "                from " +
+        constantes.ESQUEMA_BD +
+        ".profesor_alumno_matricula pam " +
+        "                where pam.nid_matricula_asignatura = ma.nid ) ",
+      (error, results, fields) => {
+        if (error) {
+          console.log(error);
+          reject();
+        } else {
+          resolve(results);
+        }
+      }
+    );
+  });
+}
+
+function obtener_alumnos_sin_profesor_alta(nid_curso, nid_asignatura) {
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(
+      "select distinct p.*, a.nid nid_asignatura, a.descripcion descripcion_asignatura, m.nid nid_matricula " +
+        "from " +
+        constantes.ESQUEMA_BD +
+        ".matricula_asignatura ma, " +
+        constantes.ESQUEMA_BD +
+        ".matricula m, " +
+        constantes.ESQUEMA_BD +
+        ".persona p, " +
+        constantes.ESQUEMA_BD +
+        ".asignatura a " +
+        "where m.nid = ma.nid_matricula " +
+        "and p.nid = m.nid_persona " +
+        "and ma.nid_asignatura = a.nid " +
+        "and m.nid_curso = " +
+        conexion.dbConn.escape(nid_curso) +
+        " " +
+        "and (a.nid = " +
+        conexion.dbConn.escape(nid_asignatura) +
+        " or " +
+        conexion.dbConn.escape(nid_asignatura) +
+        " = 0) " +
+        "and not exists( select 1 " +
+        "                from " +
+        constantes.ESQUEMA_BD +
+        ".profesor_alumno_matricula pam " +
+        "                where pam.nid_matricula_asignatura = ma.nid " +
+           "and (pam.fecha_baja is null or pam.fecha_baja >= sysdate()) )",
+      (error, results, fields) => {
+        if (error) {
+          console.log(error);
+          reject();
+        } else {
+          resolve(results);
+        }
+      }
+    );
+  });
+}
+
+  function obtener_alumnos_sin_profesor_baja(nid_curso, nid_asignatura) {
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(
+      "select distinct p.*, a.nid nid_asignatura, a.descripcion descripcion_asignatura, m.nid nid_matricula " +
+        "from " +
+        constantes.ESQUEMA_BD +
+        ".matricula_asignatura ma, " +
+        constantes.ESQUEMA_BD +
+        ".matricula m, " +
+        constantes.ESQUEMA_BD +
+        ".persona p, " +
+        constantes.ESQUEMA_BD +
+        ".asignatura a " +
+        "where m.nid = ma.nid_matricula " +
+        "and p.nid = m.nid_persona " +
+        "and ma.nid_asignatura = a.nid " +
+        "and m.nid_curso = " +
+        conexion.dbConn.escape(nid_curso) +
+        " " +
+        "and (a.nid = " +
+        conexion.dbConn.escape(nid_asignatura) +
+        " or " +
+        conexion.dbConn.escape(nid_asignatura) +
+        " = 0) " +
+        "and not exists( select 1 " +
+        "                from " +
+        constantes.ESQUEMA_BD +
+        ".profesor_alumno_matricula pam " +
+        "                where pam.nid_matricula_asignatura = ma.nid  " +
+              "and (pam.fecha_baja >= sysdate())) " ,
+      (error, results, fields) => {
+        if (error) {
+          console.log(error);
+          reject();
+        } else {
+          resolve(results);
+        }
+      }
+    );
+  });
+}
+
 module.exports.obtener_matriculas_asignaturas_alumno =
   obtener_matriculas_asignaturas_alumno;
 
@@ -333,3 +450,8 @@ module.exports.modificar_sucio = modificar_sucio;
 
 module.exports.obtener_matriculas_asignaturas_sucias =
   obtener_matriculas_asignaturas_sucias;
+
+
+module.exports.obtener_alumnos_sin_profesor = obtener_alumnos_sin_profesor;
+module.exports.obtener_alumnos_sin_profesor_alta = obtener_alumnos_sin_profesor_alta;
+module.exports.obtener_alumnos_sin_profesor_baja = obtener_alumnos_sin_profesor_baja;

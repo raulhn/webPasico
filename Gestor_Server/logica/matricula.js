@@ -341,8 +341,7 @@ function obtener_alumnos_profesor(nid_profesor, nid_curso, nid_asignatura) {
         conexion.dbConn.escape(nid_asignatura) +
         " or " +
         conexion.dbConn.escape(nid_asignatura) +
-        " = 0) " +
-        "and (pam.fecha_baja is null or pam.fecha_baja >= sysdate()) ",
+        " = 0) " ,
       (error, results, fields) => {
         if (error) {
           console.log(error);
@@ -438,7 +437,7 @@ function obtener_alumnos_profesor_baja(
         " or " +
         conexion.dbConn.escape(nid_asignatura) +
         " = 0) " +
-        "and (pam.fecha_baja is null or pam.fecha_baja < sysdate()) ",
+        "and pam.fecha_baja < sysdate() ",
       (error, results, fields) => {
         if (error) {
           console.log(error);
