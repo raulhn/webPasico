@@ -20,8 +20,10 @@ const ESTADO_REMESA_PAGADO = "PAGADO";
 const ESTADO_REMESA_RECHAZADO = "RECHAZADO";
 const ESTADO_REMESA_ERRONEO = "ERROR";
 
+// PRODUCCIÓN //
 const URL_WEB = "https://ladelpasico.es/";
 const URL_SERVICIO_MOVIL = "https://ladelpasico.es/api_movil/";
+
 
 module.exports.RUTA_SUBIDAS = RUTA_SUBIDAS;
 module.exports.IMAGEN_NO_ENCONTRADA = IMAGEN_NO_ENCONTRADA;

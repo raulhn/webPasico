@@ -37,16 +37,22 @@ function registrar_matricula(req, res) {
         const nid_matricula_asignatura =
           await gestorMatriculaAsignatura.add_asignatura(
             nid_matricula,
-            nid_asignatura,
-            nid_profesor
+            nid_asignatura
           );
+
 
         await gestorMatriculaAsignatura.modificar_sucio(
           nid_matricula_asignatura,
           "S"
         );
 
-        let nid_profesor_alumno_matricula =
+        if (nid_profesor) {
+            await gestorProfesorAlumnoMatricula.alta_profesor_matricula(
+              nid_profesor,
+              nid_matricula_asignatura
+            );
+
+              let nid_profesor_alumno_matricula =
           await gestorProfesorAlumnoMatricula.obtener_nid_profesor_alumno_matricula(
             nid_profesor,
             nid_matricula_asignatura
@@ -56,6 +62,9 @@ function registrar_matricula(req, res) {
           nid_profesor_alumno_matricula,
           "S"
         );
+          }
+
+      
         res.status(200).send({ error: false, message: "Matricula registrada" });
       } else {
         res
@@ -162,6 +171,8 @@ function obtener_alumnos_curso(req, res) {
 
 function obtener_alumnos_profesor(req, res) {
   comun.comprobaciones(req, res, async () => {
+
+    try {
     let nid_profesor = req.params.nid_profesor;
     let nid_curso = req.params.nid_curso;
     let activo = req.params.activo;
@@ -169,32 +180,65 @@ function obtener_alumnos_profesor(req, res) {
 
     let resultados;
 
+
+
     if (activo == 3) {
-      resultados = await matricula.obtener_alumnos_profesor(
-        nid_profesor,
-        nid_curso,
-        nid_asignatura
-      );
+      if (nid_profesor == 0) {
+        resultados = await gestorMatriculaAsignatura.obtener_alumnos_sin_profesor(
+          nid_curso,
+          nid_asignatura
+        );
+      } else {
+        resultados = await matricula.obtener_alumnos_profesor(
+          nid_profesor,
+          nid_curso,
+          nid_asignatura
+        );
+      }
     } else if (activo == 2) {
-      resultados = await matricula.obtener_alumnos_profesor_baja(
-        nid_profesor,
-        nid_curso,
-        nid_asignatura
-      );
+      if (nid_profesor == 0) {
+        resultados = await gestorMatriculaAsignatura.obtener_alumnos_sin_profesor_baja(
+          nid_curso,
+          nid_asignatura
+        );
+      } else {
+        resultados = await matricula.obtener_alumnos_profesor_baja(
+          nid_profesor,
+          nid_curso,
+          nid_asignatura
+        );
+      }
     } else if (activo == 1) {
-      resultados = await matricula.obtener_alumnos_profesor_alta(
-        nid_profesor,
-        nid_curso,
-        nid_asignatura
-      );
+      if (nid_profesor == 0) {
+        resultados = await gestorMatriculaAsignatura.obtener_alumnos_sin_profesor_alta(
+          nid_curso,
+          nid_asignatura
+        );
+      } else {
+        resultados = await matricula.obtener_alumnos_profesor_alta(
+          nid_profesor,
+          nid_curso,
+          nid_asignatura
+        );
+      }
     }
 
     res.status(200).send({ error: false, alumnos: resultados });
-  });
+  }
+  catch (error) {
+    console.error("Error al obtener alumnos del profesor:", error);
+      res.status(500).send({
+        error: true,
+        message: "Error al obtener alumnos del profesor",
+      });
+  }
+}
+);
 }
 
 function obtener_alumnos_profesor_rol_profesor(req, res) {
   comun.comprobaciones_profesor(req, res, async () => {
+    try {
     let usuario = req.session.nombre;
     let nid_profesor = await gestion_usuarios.obtener_nid_persona(usuario);
 
@@ -225,7 +269,14 @@ function obtener_alumnos_profesor_rol_profesor(req, res) {
     }
 
     res.status(200).send({ error: false, alumnos: resultados });
-  });
+  } catch (error) {
+    console.error("Error al obtener alumnos del profesor:", error);
+      res.status(500).send({
+        error: true,
+        message: "Error al obtener alumnos del profesor",
+      });
+  }
+});
 }
 
 function obtener_cursos_profesor(req, res) {

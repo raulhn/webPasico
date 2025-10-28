@@ -242,6 +242,10 @@ export class ListaPersonasComponent {
     {
       this.matriculasService.obtener_alumnos_asignaturas(this.curso_seleccionado, this.asignatura_seleccionada, this.alumno_activo).subscribe(this.refrescar_alumnos);
     }
+    else if (this.profesor_seleccionado == '-1')
+    {
+      this.matriculasService.obtener_alumnos_profesores('0', this.curso_seleccionado, this.asignatura_seleccionada, this.alumno_activo).subscribe(this.refrescar_alumnos);
+    }
     else
     {
       this.matriculasService.obtener_alumnos_profesores(this.profesor_seleccionado, this.curso_seleccionado, this.asignatura_seleccionada, this.alumno_activo).subscribe(this.refrescar_alumnos);
