@@ -40,7 +40,7 @@ export function CardBlog({ noticia }) {
   );
 }
 
-export function AnimatedCardBlog({ noticia, index }) {
+export function AnimatedCardBlog({ noticia, index, ruta = "/pagina/[nidPagina]" }) {
   const opacity = useRef(new Animated.Value(0)).current;
   useEffect(() => {
     Animated.timing(opacity, {
@@ -54,7 +54,7 @@ export function AnimatedCardBlog({ noticia, index }) {
   return (
     <Link
       href={{
-        pathname: "/pagina/[nidPagina]",
+        pathname: ruta,
         params: { nidPagina: noticia.nid_menu, titulo: noticia.titulo },
       }}
       key={noticia.nid_menu}
