@@ -85,7 +85,7 @@ export default function ComponenteGalerias() {
               presionado === item.nid_imagen ? styles.tarjetaPresionada : null
             }
           >
-            <AnimatedCardBlog noticia={item}></AnimatedCardBlog>
+            <AnimatedCardBlog ruta={"/stackGaleria/paginaGaleria/[nidPaginaGaleria]"} noticia={item}></AnimatedCardBlog>
           </Pressable>
         )}
         contentContainerStyle={styles.flatListContent} // Estilo para el contenedor de la lista

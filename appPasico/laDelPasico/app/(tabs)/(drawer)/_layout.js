@@ -22,6 +22,7 @@ export default function DrawerLayout() {
         name="stackGaleria"
         options={{
           title: "Galería",
+          headerShown: false,
         }}
       />
       <Drawer.Screen

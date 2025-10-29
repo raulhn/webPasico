@@ -12,6 +12,28 @@ export default function StackIndex() {
 
           <Stack.Screen
             name="galeria"
-            options={{headerShown: false}}
+        
+              options={() => ({
+              headerShown: true,
+              title: "Galería",
+              header: (props) => <CustomHeaderInicio {...props} />,
+            })}
       />
+       <Stack.Screen
+            name="paginaGaleria"
+            options={({ route }) => ({
+              title: route.params.titulo,
+              headerTitleAlign: "center", // Centra el título del encabezado
+              headerStyle: {
+                backgroundColor: Constantes.COLOR_AZUL, // Color de fondo del encabezado
+              },
+              headerTintColor: "#fff", // Color del texto del encabezado
+              headerTitleStyle: {
+                fontWeight: "bold", // Estilo del título
+              },
+              headerShown: true,
+              headerLeft: () => null,
+              gestureEnabled: false
+            })} // Oculta el encabezado para esta pantalla
+          />
         </Stack>)}
