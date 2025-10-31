@@ -161,6 +161,9 @@ async function construirRoles(nid_usuario) {
 
     const persona = await gestorPersona.obtenerPersonaUsuario(nid_usuario);
 
+    if(!persona) {
+      return roles; // Si no hay persona asociada, devuelve los roles existentes
+    }
     // Rol Socio //
     let esSocio = await gestorSocios.esSocio(persona.nid_persona);
     if (esSocio) {

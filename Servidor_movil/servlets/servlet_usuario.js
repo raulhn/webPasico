@@ -184,13 +184,16 @@ function obtenerUsuario(req, res) {
         return;
       }
 
-      let roles = await gestorUsuario.construirRoles(decoded.nid_usuario);
-
-      const usuario = {
+        const usuario = {
         nid_usuario: decoded.nid_usuario,
         correoElectronico: decoded.correoElectronico,
         nombre: decoded.nombre,
       };
+
+
+      let roles = await gestorUsuario.construirRoles(decoded.nid_usuario);
+
+    
       res.status(200).send({ error: false, usuario: usuario, roles: roles });
     } catch (error) {
       console.error("Error al obtener el usuario:", error);

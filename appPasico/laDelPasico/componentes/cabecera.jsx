@@ -22,6 +22,7 @@ export const CustomHeader = ({ navigation, route, options, title }) => {
           iniciarSesion(response.usuario); // Actualiza el estado del usuario en el contexto
           guardarRoles(response.roles); // Guarda los roles en el contexto
         } else {
+          console.log("No hay usuario autenticado");
           iniciarSesion(null); // Si no hay usuario, establece el estado como nulo
           guardarRoles([]); // Limpia los roles en el contexto
         }
@@ -31,6 +32,7 @@ export const CustomHeader = ({ navigation, route, options, title }) => {
       });
   }, []);
 
+  console.log("Usuario en cabecera:", usuario);
   const logo = require("../assets/logo.png");
 
   function enlaceLogin() {
