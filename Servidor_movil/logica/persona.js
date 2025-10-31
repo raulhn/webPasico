@@ -517,7 +517,11 @@ function obtenerPersonaUsuario(nid_usuario) {
         console.error("Error al obtener la persona del usuario:", error);
         reject(error);
       }
-      resolve(results[0]);
+      if (results.length === 0) {
+        resolve(null); // No se encontró la persona asociada al usuario
+      } else {
+        resolve(results[0]);
+      }
     });
   });
 }
