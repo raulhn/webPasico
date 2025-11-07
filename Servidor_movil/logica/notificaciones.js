@@ -7,10 +7,11 @@ const cron = require("node-cron");
 const gestorMusicos = require("./musicos.js");
 const gestorSocios = require("./socios.js");
 const gestorMatriculaAsignatura = require("./matricula_asignatura.js");
+const gestorComun = require("./comun.js");
 
 const Expo = require("expo-server-sdk");
 
-function insertarNotificacion(pushToken, titulo, body, data) {
+function insertarNotificacion(pushToken, titulo, body, data, fecha_a_enviar) {
   return new Promise((resolve, reject) => {
     conexion.dbConn.beginTransaction(() => {
       const sql =
@@ -26,6 +27,8 @@ function insertarNotificacion(pushToken, titulo, body, data) {
         conexion.dbConn.escape(JSON.stringify(data)) +
         ", " +
         conexion.dbConn.escape("PENDIENTE") +
+        ", " + 
+        conexion.dbConn.escape(gestorComun.formatDateToMySQL(fecha_a_enviar)) +        
         ")";
 
       conexion.dbConn.query(sql, (error, result) => {
