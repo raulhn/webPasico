@@ -13,3 +13,25 @@ export async function obtenerAlumnosAsignaturaProfesor(nid_curso, nid_asignatura
     throw new Error("Error al obtener los alumnos de la asignatura del profesor: " + error.message);
   }
 }
+
+export async function obtenerAlumnosAsignatura(nid_curso, nid_asignatura)
+{
+  try {
+    const respuesta = await serviceComun.peticionServicion(
+      "GET",
+      Constantes.URL_SERVICIO_MOVIL +
+        "obtener_alumnos_asignatura/" +
+        nid_asignatura +
+        "/" +
+        nid_curso,
+      null
+    );
+
+    return respuesta.alumnos;
+  } catch (error) {
+    console.log("Error en el servicio obtenerAlumnosAsignatura");
+    throw new Error(
+      "Error al obtener los alumnos de la asignatura: " + error.message
+    );
+  }
+}
