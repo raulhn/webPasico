@@ -39,7 +39,7 @@ export const useAlumnosAsignaturaProfesor = (nidCurso_, nidAsignatura_) => {
     return { alumnos, cargando, error, lanzarRefresco, setNidAsignatura, setNidCurso};
 }
 
-export const useAlumnosAsignatura = (nidCurso_, nidAsignatura_) => {
+export const useAlumnosAsignatura = (nidCurso_, nidAsignatura_, activo_) => {
     const [alumnos, setAlumnos] = useState([]);
     const [cargando, setCargando] = useState(true);
     const [error, setError] = useState(null);
@@ -47,6 +47,7 @@ export const useAlumnosAsignatura = (nidCurso_, nidAsignatura_) => {
 
     const [nidAsignatura, setNidAsignatura] = useState(nidAsignatura_);
     const [nidCurso, setNidCurso] = useState(nidCurso_);
+    const [activo, setActivo] = useState(activo_);
 
     function lanzarRefresco() {
         setRefrescar(true);
@@ -55,7 +56,7 @@ export const useAlumnosAsignatura = (nidCurso_, nidAsignatura_) => {
     useEffect(() => {
       
           if(nidAsignatura && nidCurso)      {
-        serviceMatriculaAsignatura.obtenerAlumnosAsignatura(nidCurso, nidAsignatura)
+        serviceMatriculaAsignatura.obtenerAlumnosAsignatura(nidCurso, nidAsignatura, activo)
             .then((data) => {
                 setAlumnos(data);
                 setCargando(false);
@@ -72,7 +73,7 @@ export const useAlumnosAsignatura = (nidCurso_, nidAsignatura_) => {
             setAlumnos([]);
             setRefrescar(false)
           }
-    }, [refrescar, nidCurso, nidAsignatura]);
+    }, [refrescar, nidCurso, nidAsignatura, activo]);
 
     return { alumnos, cargando, error, lanzarRefresco, setNidAsignatura, setNidCurso};
 }

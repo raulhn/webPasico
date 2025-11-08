@@ -14,16 +14,18 @@ export async function obtenerAlumnosAsignaturaProfesor(nid_curso, nid_asignatura
   }
 }
 
-export async function obtenerAlumnosAsignatura(nid_curso, nid_asignatura)
+export async function obtenerAlumnosAsignatura(nid_curso, nid_asignatura, activo)
 {
   try {
     const respuesta = await serviceComun.peticionServicion(
       "GET",
       Constantes.URL_SERVICIO_MOVIL +
-        "obtener_alumnos_asignatura/" +
+        "obtener_perosnas_alumnos_asignatura/" +
         nid_asignatura +
         "/" +
-        nid_curso,
+        nid_curso
+        "/" +
+        activo,
       null
     );
 

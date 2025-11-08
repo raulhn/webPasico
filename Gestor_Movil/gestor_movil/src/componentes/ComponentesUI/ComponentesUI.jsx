@@ -245,3 +245,36 @@ export function Paginacion({array = [], page_size = 10, page_number = 1, classNa
     </>
   );
 }
+
+export function DataTable(cabeceras, datos)
+{
+  const useState[filtro, setFiltro] = useState("");
+  
+  return (
+    <EntradaTexto onChange=(texto) => {setFiltro(texto)}></EntradaTexto>
+    <table className="data-table">
+      <thead>
+        <tr>
+          {cabeceras.map((cabecera, index) => (
+            <th key={index}>{cabecera}</th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {datos
+          .filter((fila) =>
+            fila.some((celda) =>
+              celda.toString().toLowerCase().includes(filtro.toLowerCase())
+            )
+          )
+          .map((fila, indexFila) => (
+            <tr key={indexFila}>
+              {fila.map((celda, indexCelda) => (
+                <td key={indexCelda}>{celda}</td>
+              ))}
+            </tr>
+          ))}
+      </tbody>
+    </table>
+  )
+}

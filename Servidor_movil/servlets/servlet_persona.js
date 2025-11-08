@@ -328,7 +328,7 @@ async function obtenerAlumnoProfesor(req, res)
   }
 }
 
-async function obtenerPersonasAlumnos(req, res)
+async function obtenerPersonasAlumnosAsignatura(req, res)
 {
   try {
     const rolesPermitidos = [constantes.ADMINISTRADOR];
@@ -349,7 +349,7 @@ async function obtenerPersonasAlumnos(req, res)
     const nid_asignatura = req.params.nid_asignatura;
     const activo = req.params.activo;
 
-    const personasAlumnos = await gestorMatricula.obtenerPersonasAlumnos(nid_curso, nid_asignatura, activo);    
+    const personasAlumnos = await gestorPersona.obtenerPersonasAlumnosAsignatura(nid_curso, nid_asignatura, activo); 
 
     res.status(200).send({
       error: false,
@@ -363,6 +363,7 @@ async function obtenerPersonasAlumnos(req, res)
       mensaje: "Error al obtener los alumnos",
     });
   }
+}
 
 module.exports.obtenerPersona = obtenerPersona;
 module.exports.registrarPersona = registrarPersona;
@@ -374,4 +375,4 @@ module.exports.obtenerNidPersona = obtenerNidPersona;
 module.exports.obtenerPersonasAlumnos = obtenerPersonasAlumnos;
 module.exports.obtenerPersonasSocios = obtenerPersonasSocios;
 module.exports.obtenerAlumnoProfesor = obtenerAlumnoProfesor;
-module.exports.obtenerPersonasAlumnos = obtenerPersonasAlumnos;
+module.exports.obtenerPersonasAlumnosAsignatura = obtenerPersonasAlumnosAsignatura;
