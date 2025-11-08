@@ -328,6 +328,42 @@ async function obtenerAlumnoProfesor(req, res)
   }
 }
 
+async function obtenerPersonasAlumnos(req, res)
+{
+  try {
+    const rolesPermitidos = [constantes.ADMINISTRADOR];
+    let rolAdministrador = await servletComun.comprobarRol(
+      req,
+      res,
+      rolesPermitidos
+    );
+    if (!rolAdministrador) {
+      res.status(403).send({
+        error: true,
+        mensaje: "No tienes permisos para obtener los alumnos",
+      });
+      return;
+    }
+
+    const nid_curso = req.params.nid_curso;
+    const nid_asignatura = req.params.nid_asignatura;
+    const activo = req.params.activo;
+
+    const personasAlumnos = await gestorMatricula.obtenerPersonasAlumnos(nid_curso, nid_asignatura, activo);    
+
+    res.status(200).send({
+      error: false,
+      mensaje: "Alumnos obtenidos correctamente",
+      personas: personasAlumnos,
+    });
+  } catch (error) {
+    console.error("Error al obtener los alumnos:", error.message);
+    res.status(400).send({
+      error: true,
+      mensaje: "Error al obtener los alumnos",
+    });
+  }
+
 module.exports.obtenerPersona = obtenerPersona;
 module.exports.registrarPersona = registrarPersona;
 module.exports.obtenerPersonasSucias = obtenerPersonasSucias;
@@ -338,3 +374,4 @@ module.exports.obtenerNidPersona = obtenerNidPersona;
 module.exports.obtenerPersonasAlumnos = obtenerPersonasAlumnos;
 module.exports.obtenerPersonasSocios = obtenerPersonasSocios;
 module.exports.obtenerAlumnoProfesor = obtenerAlumnoProfesor;
+module.exports.obtenerPersonasAlumnos = obtenerPersonasAlumnos;
