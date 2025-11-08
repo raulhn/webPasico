@@ -645,6 +645,38 @@ function obtenerPersonasSocios() {
   });
 }
 
+funciton obtenerPersonasAlumnos(nid_curso, nid_asignatura, activo)
+{
+  return new Promise((resolve, reject) => {
+    const sql = "select p.* from " +
+       constantes.ESQUEMA + ".persona p, " +
+       constantes.ESQUEMA + ".matricula m, " +
+       constantes.ESQUEMA + ".matricula_asignaturas ma " +
+       " where p.nid_persona = m.nid_persona " +
+       "   and m.nid_matricula = ma.nid_matricula " +
+        "   and ma.nid_curso = " + conexion.dbConn.escape(nid_curso) +
+        "   and ma.nid_asignatura = " + conexion.dbConn.escape(nid_asignatura) ;
+
+    if (activo == 1)
+    {
+      sql = sql + " and (ma.fecha_baja is null or ma.fecha_baja > NOW())";
+    }
+    else if(activo == 2)
+    {
+      sql = sql + " and ma.fecha_baja is not null and ma.fecha_baja <= NOW()";
+    }
+
+    conexion.dbConn.query(sql, (error, results) => {
+      if (error) {
+        console.error("Error al obtener las personas alumnos:", error);
+        reject(error);
+      }
+      resolve(results);
+    });
+  });
+    
+}
+
 function esHijo(nid_persona, nid_hijo) {
   return new Promise((resolve, reject) => {
     const sql =
