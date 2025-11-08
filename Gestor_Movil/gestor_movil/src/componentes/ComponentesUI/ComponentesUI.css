@@ -199,3 +199,7 @@
   width: 100%;
 }
 
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+}

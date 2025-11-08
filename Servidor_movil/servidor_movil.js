@@ -86,7 +86,7 @@ app.post("/registrar_persona", servletPersona.registrarPersona);
 app.get("/obtener_persona/:nid_persona", servletPersona.obtenerPersona);
 app.get("/obtener_personas_sucias", servletPersona.obtenerPersonasSucias);
 app.post("/limpiar_persona", servletPersona.limpiarPersona);
-app.get("/obtener_personas_alumnos/:nid_curso/:nid_asignatura/:activo", servletPersona.obtenerPersonasAlumnos);
+app.get("/obtener_personas_alumnos_asignatura/:nid_curso/:nid_asignatura/:activo", servletPersona.obtenerPersonasAlumnosAsignatura);
 
 // Trimestres //
 app.post("/registrar_trimestre", servletTrimestre.registrarTrimestre);

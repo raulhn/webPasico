@@ -645,16 +645,16 @@ function obtenerPersonasSocios() {
   });
 }
 
-funciton obtenerPersonasAlumnos(nid_curso, nid_asignatura, activo)
+function obtenerPersonasAlumnosAsignatura(nid_curso, nid_asignatura, activo)
 {
   return new Promise((resolve, reject) => {
     const sql = "select p.* from " +
        constantes.ESQUEMA + ".persona p, " +
        constantes.ESQUEMA + ".matricula m, " +
-       constantes.ESQUEMA + ".matricula_asignaturas ma " +
+       constantes.ESQUEMA + ".matricula_asignatura ma " +
        " where p.nid_persona = m.nid_persona " +
        "   and m.nid_matricula = ma.nid_matricula " +
-        "   and ma.nid_curso = " + conexion.dbConn.escape(nid_curso) +
+        "   and m.nid_curso = " + conexion.dbConn.escape(nid_curso) +
         "   and ma.nid_asignatura = " + conexion.dbConn.escape(nid_asignatura) ;
 
     if (activo == 1)
@@ -666,6 +666,7 @@ funciton obtenerPersonasAlumnos(nid_curso, nid_asignatura, activo)
       sql = sql + " and ma.fecha_baja is not null and ma.fecha_baja <= NOW()";
     }
 
+    console.log('SQL obtenerPersonasAlumnos: ' + sql);
     conexion.dbConn.query(sql, (error, results) => {
       if (error) {
         console.error("Error al obtener las personas alumnos:", error);
@@ -718,6 +719,7 @@ module.exports.obtenerPersonas = obtenerPersonas;
 module.exports.obtenerPersona = obtenerPersona;
 module.exports.obtenerPersonasMusicos = obtenerPersonasMusicos;
 module.exports.obtenerPersonasSocios = obtenerPersonasSocios;
+module.exports.obtenerPersonasAlumnosAsignatura = obtenerPersonasAlumnosAsignatura;
 
 module.exports.obtenerPadre = obtenerPadre;
 module.exports.obtenerMadre = obtenerMadre;
