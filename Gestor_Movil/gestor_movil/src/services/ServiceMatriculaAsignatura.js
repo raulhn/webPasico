@@ -17,19 +17,19 @@ export async function obtenerAlumnosAsignaturaProfesor(nid_curso, nid_asignatura
 export async function obtenerAlumnosAsignatura(nid_curso, nid_asignatura, activo)
 {
   try {
-    const respuesta = await serviceComun.peticionServicion(
+    const respuesta = await serviceComun.peticionServicio(
       "GET",
       Constantes.URL_SERVICIO_MOVIL +
-        "obtener_perosnas_alumnos_asignatura/" +
-        nid_asignatura +
+        "obtener_personas_alumnos_asignatura/" +
+        nid_curso +
         "/" +
-        nid_curso
+        nid_asignatura +
         "/" +
         activo,
       null
     );
+    return respuesta.personas;  
 
-    return respuesta.alumnos;
   } catch (error) {
     console.log("Error en el servicio obtenerAlumnosAsignatura");
     throw new Error(

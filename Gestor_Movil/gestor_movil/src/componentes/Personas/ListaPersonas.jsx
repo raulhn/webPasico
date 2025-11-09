@@ -1,25 +1,36 @@
 
-import { useAlumnosAsignatura} from "../../hooks/useAlumnosAsignatura";
 import { DataTable, Selector } from "../ComponentesUI/ComponentesUI";
 import { useCursos } from "../../hooks/useCursos";
 import { useAsignaturas } from "../../hooks/useAsignaturas";
-
+import { useAlumnosAsignatura } from "../../hooks/useAlumnos";
+import { useState } from "react";
 
 export default function ListaPersonas()
 {
+  const {cursos} = useCursos();
+  const {asignaturas} = useAsignaturas();
+
   const [curso, setCurso] = useState(null);
   const [asignatura, setAsignatura] = useState(null);
   const [activo, setActivo] = useState(0);
 
-  const {cursos} = useCursos();
-  const {asignaturas} = useAsignaturas();
+  console.log("Cursos:", cursos);
+  console.log("Asignaturas:", asignaturas);
 
-  const opcionesAsignatura = 
-    asignaturas.map(asignatura => ({ valor: asignatura.nid_asignatura, etiqueta: asignatura.descripcion }));
+  let opcionesAsignatura = 
+    asignaturas.map(
+             asignatura => ({ 
+                              valor: asignatura.nid_asignatura, 
+                              etiqueta: asignatura.descripcion 
+                            }));
   opcionesAsignatura.push({valor: "", etiqueta: "Seleccione asignatura"});
 
-  const opcionesCurso = 
-    cursos.map(curso => ({ valor: curso.nid_curso, etiqueta: curso.descripcion }));
+  let opcionesCurso = 
+    cursos.map(curso => ({ 
+                          valor: curso.nid_curso, 
+                          etiqueta: curso.descripcion 
+                        }));
+
   opcionesCurso.push({valor: "", etiqueta: "Seleccione curso"});
 
   const activos = [
@@ -31,13 +42,32 @@ export default function ListaPersonas()
   const opcionesActivos = 
     activos.map(activo => ({ valor: activo.nid, etiqueta: activo.nombre }));
 
-  const { alumnos, cargando, error, lanzarRefresco, setNidAsignatura, setNidCurso } = useAlumnosAsignatura(curso, asignatura, activo);
+  const { alumnos, cargando, error, lanzarRefresco, setNidAsignatura, setNidCurso } 
+         = useAlumnosAsignatura(curso, asignatura, activo);
 
+  const bidimensional = alumnos.map(persona => [persona.nombre, persona.primer_apellido]);
+
+  console.log("Alumnos recuperados", bidimensional); 
   return (
-    <Selector opciones={opcionesCurso} valor={curso} setValor={(valor) => { setCurso(valor); setNidCurso(valor); lanzarRefresco(); }} width="250px"/>
-    <Selector opciones={opcionesAsignatura} valor={asignatura} setValor={(valor) => { setAsignatura(valor); setNidAsignatura(valor); lanzarRefresco(); }} width="250px"/>
-    <Selector opciones={opcionesActivos} valor={activo} setValor={(valor) => { setActivo(valor); lanzarRefresco(); }} width="150px"/>
-    <DataTable cabeceras={["NID", "Nombre", "Apellidos", "Email"]} datos={alumnos} />
-
+  <>
+    <Selector opciones={opcionesCurso} valor={curso}
+              setValor={(valor) => { setCurso(valor); setNidCurso(valor); lanzarRefresco(); }} 
+              width="250px"/>
+    <Selector opciones={opcionesAsignatura} valor={asignatura}
+              setValor={(valor) => {
+                                     setAsignatura(valor); 
+                                     setNidAsignatura(valor); 
+                                     lanzarRefresco(); 
+                                   }
+                       } 
+              width="250px"/>
+    <Selector opciones={opcionesActivos} valor={activo} 
+              setValor={(valor) => { setActivo(valor); lanzarRefresco(); }} 
+              width="150px"/>
+    <DataTable datos={bidimensional} cargando={cargando} error={error}
+               columnas={["Nombre", "Apellidos", "DNI", "Activo"]}
+               propiedades={["nombre", "apellidos", "dni", "activo"]}/>
+  </>
   ) 
+
 }

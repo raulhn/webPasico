@@ -9,8 +9,9 @@ export const useAsignaturas = () => {
 
   async function fetchAsignaturas() {
     try {
+      console.log("Petición obtener asignaturas")
       const data = await serviceAsignaturas.obtenerAsignaturas();
-
+      console.log('Retorno ', data)
       setAsignaturas(data.asignaturas);
       setRefrescar(false);
     } catch (error) {
