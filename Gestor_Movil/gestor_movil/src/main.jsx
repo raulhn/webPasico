@@ -11,6 +11,7 @@ import VisualizarEvaluaciones from './componentes/Escuela/VisualizarEvaluaciones
 import CambiarPassword from './componentes/CambiarPassword/CambiarPassword.jsx'
 import Partituras from './componentes/Banda/Partituras/Partituras.jsx'
 import FichaPartitura from './componentes/Banda/FichaPartitura/FichaPartitura.jsx'
+import ListaPersonas from './componentes/Personas/ListaPersonas.jsx'
 
 createRoot(document.getElementById('root')).render(
   <UsuarioProvider>
@@ -25,6 +26,7 @@ createRoot(document.getElementById('root')).render(
       <Route path="/gestion/partituras" element={<Partituras />} />
       <Route path="/gestion/partitura/:nidPartitura" element={<FichaPartitura />}></Route>
       <Route path="/gestion/nueva_partitura" element={<FichaPartitura />}></Route>
+      <Route path="/gestion/lista_personas" element={<ListaPersonas/>}></Route>
     </Routes>
   </BrowserRouter>
   </UsuarioProvider>

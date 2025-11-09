@@ -246,12 +246,18 @@ export function Paginacion({array = [], page_size = 10, page_number = 1, classNa
   );
 }
 
-export function DataTable(cabeceras, datos)
+export function DataTable({cabeceras, datos})
 {
-  const useState[filtro, setFiltro] = useState("");
+  const [filtro, setFiltro] = useState("");
   
+  if (!datos || datos.length === 0) {
+    return <div>No hay datos para mostrar</div>;
+  }
+
+  console.log("Datos DataTable:", datos);
   return (
-    <EntradaTexto onChange=(texto) => {setFiltro(texto)}></EntradaTexto>
+  <>
+    <EntradaTexto onChange={(texto) => {setFiltro(texto)}}></EntradaTexto>
     <table className="data-table">
       <thead>
         <tr>
@@ -276,5 +282,6 @@ export function DataTable(cabeceras, datos)
           ))}
       </tbody>
     </table>
+  </>
   )
 }
