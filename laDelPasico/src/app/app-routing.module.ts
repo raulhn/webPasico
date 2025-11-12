@@ -8,7 +8,7 @@ import { FormularioPreinscripcionComponent } from './src/formulario-preinscripci
 import { ListadoPreinscripcionesComponent } from './src/listado-preinscripciones/listado-preinscripciones.component';
 import { ListadoPreinscripcionesCompletoComponent } from './src/listado-preinscripciones-completo/listado-preinscripciones-completo.component';
 import { ListaOrdenadaComponent } from './src/lista-ordenada/lista-ordenada.component';
-
+import { FormularioEliminaUsuario } from './src/formulario-elimina-usuario/formulario-elimina-usuario';
 
 const routes: Routes = [
   {
@@ -38,6 +38,10 @@ const routes: Routes = [
   {
     path: 'lista_ordenada',
     component: ListaOrdenadaComponent
+  },
+  {
+    path: 'solicitud_elimina_usuario',
+    component: FormularioEliminaUsuario
   }
 
 ];

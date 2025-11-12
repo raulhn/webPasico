@@ -51,17 +51,17 @@ export class FormularioPreinscripcionComponent implements OnInit {
 
   instrumentos_seleccionados_tp:Instrumento [] = [];
 
-    
+
   @ViewChild('instancia_sustituir') instancia_sustituir!: ElementRef;
 
-  constructor(private recaptchaV3Service: ReCaptchaV3Service, private servicioPreinscripcion: ServicioPreinscripcionService) { 
+  constructor(private recaptchaV3Service: ReCaptchaV3Service, private servicioPreinscripcion: ServicioPreinscripcionService) {
     for(let i=0; i<3; i++)
       {
         this.instrumentos_seleccionados_tp[i] = new Instrumento;
       }
   }
 
-  datos_formulario_torre_pacheco = 
+  datos_formulario_torre_pacheco =
   { };
   datos_formulario_roldan =  {};
   datos_formulario_balsicas = {};
@@ -75,7 +75,7 @@ export class FormularioPreinscripcionComponent implements OnInit {
   realiza_registro =
   {
     next: (respuesta: any) =>
-    {  
+    {
       Swal.fire({
       icon: 'success',
       title: 'Registro correcto',
@@ -94,9 +94,9 @@ export class FormularioPreinscripcionComponent implements OnInit {
 
   calculo_edad()
   {
-    let date_nacimiento = new Date(this.fecha_nacimiento) 
+    let date_nacimiento = new Date(this.fecha_nacimiento)
     var fecha_actual = new Date();
-    let resta =  fecha_actual.getTime() - date_nacimiento.getTime() 
+    let resta =  fecha_actual.getTime() - date_nacimiento.getTime()
 
     return Math.trunc(resta / (1000*60*60*24*365))
   }
@@ -105,7 +105,7 @@ export class FormularioPreinscripcionComponent implements OnInit {
   {
     return this.calculo_edad() > 7;
   }
-  
+
   comprueba_edad_primero()
   {
     return this.calculo_edad() > 7 && this.calculo_edad() < 18;
@@ -126,9 +126,9 @@ export class FormularioPreinscripcionComponent implements OnInit {
       if(this.comprueba_edad())
       {
         let data = {token: this.token, nombre: this.nombre_alumno, primer_apellido: this.primer_apellido_alumno, segundo_apellido: this.segundo_apellido_alumno,
-        fecha_nacimiento: this.fecha_nacimiento, dni: this.dni_alumno, nombre_padre: this.nombre_padre, primer_apellido_padre: this.primer_apellido_padre, 
+        fecha_nacimiento: this.fecha_nacimiento, dni: this.dni_alumno, nombre_padre: this.nombre_padre, primer_apellido_padre: this.primer_apellido_padre,
         segundo_apellido_padre: this.segundo_apellido_padre, dni_padre: this.dni_padre, correo_electronico: this.correo_electronico, telefono: this.telefono,
-        provincia: this.provincia, municipio: this.municipio, direccion: this.direccion, codigo_postal: this.codigo_postal, numero: this.numero, 
+        provincia: this.provincia, municipio: this.municipio, direccion: this.direccion, codigo_postal: this.codigo_postal, numero: this.numero,
         escalera: this.escalera, puerta: this.puerta, instrumento: this.instrumento, familia_instrumento: this.familia_instrumento, sucursal: this.sucursal};
 
         this.servicioPreinscripcion.registrar_preinscripcion(data).subscribe(this.realiza_registro);
@@ -136,11 +136,11 @@ export class FormularioPreinscripcionComponent implements OnInit {
       else
       {
         let data = {token: this.token, nombre: this.nombre_alumno, primer_apellido: this.primer_apellido_alumno, segundo_apellido: this.segundo_apellido_alumno,
-        fecha_nacimiento: this.fecha_nacimiento, dni: this.dni_alumno, nombre_padre: this.nombre_padre, primer_apellido_padre: this.primer_apellido_padre, 
+        fecha_nacimiento: this.fecha_nacimiento, dni: this.dni_alumno, nombre_padre: this.nombre_padre, primer_apellido_padre: this.primer_apellido_padre,
         segundo_apellido_padre: this.segundo_apellido_padre, dni_padre: this.dni_padre, correo_electronico: this.correo_electronico, telefono: this.telefono,
-        provincia: this.provincia, municipio: this.municipio, direccion: this.direccion, codigo_postal: this.codigo_postal, numero: this.numero, 
+        provincia: this.provincia, municipio: this.municipio, direccion: this.direccion, codigo_postal: this.codigo_postal, numero: this.numero,
         escalera: this.escalera, puerta: this.puerta, instrumento: "", familia_instrumento: "", sucursal: this.sucursal};
-        
+
         this.servicioPreinscripcion.registrar_preinscripcion(data).subscribe(this.realiza_registro);
       }
     }
@@ -201,32 +201,32 @@ export class FormularioPreinscripcionComponent implements OnInit {
       try
       {
       this.recaptchaV3Service.execute(environment.recaptcha.siteKey, 'importantAction',
-        (token) => {
+        (token: string) => {
           this.token = token;
 
             if (this.familia_instrumento == "3")
             {
               this.instrumento = 'Percusión'
             }
-      
+
             if(this.comprueba_edad())
             {
               let data = {token: this.token, nombre: this.nombre_alumno, primer_apellido: this.primer_apellido_alumno, segundo_apellido: this.segundo_apellido_alumno,
-              fecha_nacimiento: this.fecha_nacimiento, dni: this.dni_alumno, nombre_padre: this.nombre_padre, primer_apellido_padre: this.primer_apellido_padre, 
+              fecha_nacimiento: this.fecha_nacimiento, dni: this.dni_alumno, nombre_padre: this.nombre_padre, primer_apellido_padre: this.primer_apellido_padre,
               segundo_apellido_padre: this.segundo_apellido_padre, dni_padre: this.dni_padre, correo_electronico: this.correo_electronico, telefono: this.telefono,
-              provincia: this.provincia, municipio: this.municipio, direccion: this.direccion, codigo_postal: this.codigo_postal, numero: this.numero, 
+              provincia: this.provincia, municipio: this.municipio, direccion: this.direccion, codigo_postal: this.codigo_postal, numero: this.numero,
               escalera: this.escalera, puerta: this.puerta, instrumento: this.instrumento, familia_instrumento: this.familia_instrumento, sucursal: this.sucursal};
-      
+
               this.servicioPreinscripcion.registrar_preinscripcion(data).subscribe(this.realiza_registro);
             }
             else
             {
               let data = {token: this.token, nombre: this.nombre_alumno, primer_apellido: this.primer_apellido_alumno, segundo_apellido: this.segundo_apellido_alumno,
-              fecha_nacimiento: this.fecha_nacimiento, dni: this.dni_alumno, nombre_padre: this.nombre_padre, primer_apellido_padre: this.primer_apellido_padre, 
+              fecha_nacimiento: this.fecha_nacimiento, dni: this.dni_alumno, nombre_padre: this.nombre_padre, primer_apellido_padre: this.primer_apellido_padre,
               segundo_apellido_padre: this.segundo_apellido_padre, dni_padre: this.dni_padre, correo_electronico: this.correo_electronico, telefono: this.telefono,
-              provincia: this.provincia, municipio: this.municipio, direccion: this.direccion, codigo_postal: this.codigo_postal, numero: this.numero, 
+              provincia: this.provincia, municipio: this.municipio, direccion: this.direccion, codigo_postal: this.codigo_postal, numero: this.numero,
               escalera: this.escalera, puerta: this.puerta, instrumento: "", familia_instrumento: "", sucursal: this.sucursal};
-              
+
               this.servicioPreinscripcion.registrar_preinscripcion(data).subscribe(this.realiza_registro);
             }
         });
