@@ -1,7 +1,43 @@
-<form>
-  <div class="form-group">
-    <label for="correo_electronico">Correo electrónico:</label>
-    <input type="text" [(ngModel)]="correo_electronico" id="correo_electronico" name="correo_electronico" class="form-control" required>
+<div class="eliminar-usuario-container">
+  <div class="eliminar-usuario-card">
+    <div class="card-header">
+      <i class="fas fa-user-times"></i>
+      <h3>Eliminar Usuario</h3>
+      <p class="warning-text">Esta acción eliminará permanentemente tu cuenta</p>
+    </div>
+    
+    <form class="eliminar-usuario-form">
+      <div class="form-group">
+        <label for="correo_electronico" class="form-label">
+          <i class="fas fa-envelope"></i>
+          Correo electrónico
+        </label>
+        <input 
+          type="email" 
+          [(ngModel)]="correo_electronico" 
+          id="correo_electronico" 
+          name="correo_electronico" 
+          class="form-control" 
+          placeholder="Introduce tu correo electrónico"
+          required>
+      </div>
+      
+      <div class="warning-box">
+        <i class="fas fa-exclamation-triangle"></i>
+        <div>
+          <strong>¡Advertencia!</strong>
+          <p>Esta acción no se puede deshacer. Se eliminarán todos tus datos de forma permanente.</p>
+        </div>
+      </div>
+      
+      <button 
+        type="submit" 
+        (click)="lanzaPeticion()" 
+        class="btn btn-eliminar"
+        [disabled]="!correo_electronico">
+        <i class="fas fa-trash-alt"></i>
+        Eliminar Usuario
+      </button>
+    </form>
   </div>
-  <button type="submit" (click)="lanzaPeticion()" class="btn btn-danger">Eliminar Usuario</button>
-</form>
+</div>
