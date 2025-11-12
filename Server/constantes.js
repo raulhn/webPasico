@@ -2,6 +2,7 @@ const RUTA_SUBIDAS = "./subidas/";
 const IMAGEN_NO_ENCONTRADA = "./subidas/imagen_not_found.jpg";
 
 const ESQUEMA_BD = "pasico";
+const ESQUEMA_BD_MOVIL = "pasico_movil";
 const ROL_ADMINISTRADOR = 1;
 
 const TIPO_COMPONENTE_TEXTO = 1;
@@ -37,3 +38,4 @@ module.exports.TIPO_ASOCIACION_COMPONENTE = TIPO_ASOCIACION_COMPONENTE;
 module.exports.TIPO_ASOCIACION_PAGINA = TIPO_ASOCIACION_PAGINA;
 
 module.exports.TIPO_PAGINA_GENERAL = TIPO_PAGINA_GENERAL;
+module.exports ESQUEMA_BD_MOVIL = ESQUEMA_BD_MOVIL;

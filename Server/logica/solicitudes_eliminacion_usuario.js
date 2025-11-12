@@ -8,7 +8,7 @@ function insertarSolicitudEliminacionUsuario(correo_electronico)
   return new Promise((resolve, reject) => {
     const sql =
       "INSERT INTO " +
-      constantes.ESQUEMA +
+      constantes.ESQUEMA_BD_MOVIL +
       ".solicitudes_eliminar_usuario (correo_electronico) VALUES (" +
       conexion.dbConn.escape(correo_electronico) +
       ")";
@@ -27,7 +27,7 @@ function insertarSolicitudEliminacionUsuario(correo_electronico)
 function registrarCorreoEliminacion(to, subject, html) {
     const query =
       "INSERT INTO " +
-      constantes.ESQUEMA +
+      constantes.ESQUEMA_BD_MOVIL +
       ".envio_correo (correo_electronico, asunto, cuerpo, estado) " +
       "VALUES (" +
       conexion.dbConn.escape(correoElectronico) +
