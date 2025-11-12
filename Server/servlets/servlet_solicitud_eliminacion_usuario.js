@@ -67,4 +67,4 @@ async function registrarSolicitudEliminacionUsuario(req, res) {
 }
 
   
-
+module.exports.registrarSolicitudEliminacionUsuario = registrarSolicitudEliminacionUsuario;
