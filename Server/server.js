@@ -21,6 +21,7 @@ const servlet_componente_componentes = require("./servlets/servlet_componente_co
 const servlet_imagen = require("./servlets/servlet_imagen.js");
 const servlet_video = require("./servlets/servlet_video.js");
 const servlet_galeria = require("./servlets/servlet_galeria.js");
+const servler_solicitud_eliminacion_usuario = require("./servlets/servlet_solicitud_eliminacion_usuario.js");
 
 var sesion_config = require("./config/sesion.json");
 
@@ -49,7 +50,7 @@ app.use(
   cors({
     origin: [url_web, url_web_gestor, url_web_gestor2],
     credentials: true,
-  })
+  }),
 ); // Se configura el control de peticiones permitidas para poder recibir peticiones del front-end
 // credentials: true permite la comunicación de la sesión
 
@@ -57,7 +58,7 @@ app.use(
 app.use(
   fileUpload({
     createParentPath: true,
-  })
+  }),
 );
 
 app.use(session(sesion_config));
@@ -116,7 +117,7 @@ app.get("/numero_componentes/:id_pagina", servlet_componente.num_componentes);
 
 app.get(
   "/obtiene_orden/:id_pagina/:id_componente",
-  servlet_componente.obtiene_orden
+  servlet_componente.obtiene_orden,
 );
 
 // Registra el texto de un componente de texto, si no existe lo crea
@@ -126,7 +127,7 @@ app.post("/registrar_componente", servlet_componente.registrar_componente);
 
 app.get(
   "/obtener_componentes/:id_pagina",
-  servlet_componente.obtener_componentes
+  servlet_componente.obtener_componentes,
 );
 
 app.post("/incrementa_orden", servlet_componente.incrementa_orden);
@@ -138,17 +139,17 @@ app.post("/eliminar_componente", servlet_componente.eliminar_componente);
 // Obtiene el número de componetes hijos registrados que tiene un componente de componentes
 app.get(
   "/numero_componente_componentes/:id",
-  servlet_componente_componentes.obtener_num_componente_componentes
+  servlet_componente_componentes.obtener_num_componente_componentes,
 );
 
 app.get(
   "/numero_componente_componentes_definidos/:id",
-  servlet_componente_componentes.num_componente_componentes_definidos
+  servlet_componente_componentes.num_componente_componentes_definidos,
 );
 
 app.get(
   "/obtiene_componente_componentes/:id_componente/:nOrden",
-  servlet_componente_componentes.obtiene_componente_componentes
+  servlet_componente_componentes.obtiene_componente_componentes,
 );
 
 /**************************
@@ -172,7 +173,7 @@ app.get("/obtiene_url/:id", servlet_menu.obtener_url);
  ****************************/
 app.get(
   "/obtiene_imagenes_galeria/:id",
-  servlet_galeria.obtener_imagenes_galeria
+  servlet_galeria.obtener_imagenes_galeria,
 );
 app.post("/add_imagen_galeria", servlet_galeria.add_imagen_galeria);
 app.post("/eliminar_imagen_galeria", servlet_galeria.eliminar_galeria);
@@ -182,15 +183,15 @@ app.post("/eliminar_imagen_galeria", servlet_galeria.eliminar_galeria);
  ***********************/
 app.get(
   "/obtener_paginas_componente/:id",
-  servlet_pagina_componente.obtener_paginas_componente
+  servlet_pagina_componente.obtener_paginas_componente,
 );
 app.post(
   "/add_pagina_componente",
-  servlet_pagina_componente.add_pagina_componente
+  servlet_pagina_componente.add_pagina_componente,
 );
 app.post(
   "/remove_pagina_componente",
-  servlet_pagina_componente.remove_pagina_componente
+  servlet_pagina_componente.remove_pagina_componente,
 );
 
 /**************************
@@ -198,19 +199,19 @@ app.post(
  ***********************/
 app.get(
   "/obtener_carusel/:id_componente",
-  servlet_componente.obtener_componente_carusel
+  servlet_componente.obtener_componente_carusel,
 );
 
 app.post("/add_imagen_carusel", servlet_componente.add_imagen_carusel);
 
 app.post(
   "/eliminar_imagen_carusel",
-  servlet_componente.eliminar_imagen_carusel
+  servlet_componente.eliminar_imagen_carusel,
 );
 
 app.post(
   "/actualizar_elementos_simultaneos",
-  servlet_componente.actualizar_elementos_simultaneos
+  servlet_componente.actualizar_elementos_simultaneos,
 );
 
 /**************************
@@ -218,14 +219,14 @@ app.post(
  ***********************/
 app.get(
   "/obtener_componente_blog/:id_componente",
-  servlet_componente_blog.obtener_componente_blog
+  servlet_componente_blog.obtener_componente_blog,
 );
 
 app.post("/add_componente_blog", servlet_componente_blog.add_elemento_blog);
 
 app.post(
   "/eliminar_elemento_blog",
-  servlet_componente_blog.eliminar_elemento_blog
+  servlet_componente_blog.eliminar_elemento_blog,
 );
 
 /**************************
@@ -233,25 +234,33 @@ app.post(
  ***********************/
 app.post(
   "/registrar_preinscripcion",
-  servlet_preinscripcion.registrar_preinscripcion
+  servlet_preinscripcion.registrar_preinscripcion,
 );
 app.get(
   "/obtener_preinscripciones",
-  servlet_preinscripcion.obtener_preinscripciones_api
+  servlet_preinscripcion.obtener_preinscripciones_api,
 );
 app.get(
   "/obtener_preinscripciones_detalle/:nid_preinscripcion",
-  servlet_preinscripcion.obtener_preinscripciones_detalle
+  servlet_preinscripcion.obtener_preinscripciones_detalle,
 );
 
 app.get(
   "/obtener_preinscripciones_login",
-  servlet_preinscripcion.obtener_preinscripciones
+  servlet_preinscripcion.obtener_preinscripciones,
 );
 
 app.get(
   "/obtener_preinscripciones_detalle_login/:nid_preinscripcion",
-  servlet_preinscripcion.obtener_preinscripciones_detalle_login
+  servlet_preinscripcion.obtener_preinscripciones_detalle_login,
+);
+
+/**
+ * Petición de eliminación de usuario
+ */
+app.post(
+  "/solicita_elimina_usuario",
+  servler_solicitud_eliminacion_usuario.registrarSolicitudEliminacionUsuario,
 );
 
 /**
@@ -266,7 +275,7 @@ https
       key: fs.readFileSync("apache.key"),
       cert: fs.readFileSync("apache-certificate.crt"),
     },
-    app
+    app,
   )
   .listen(PORT, function () {
     console.log("My HTTPS server listening on port " + PORT + "...");
