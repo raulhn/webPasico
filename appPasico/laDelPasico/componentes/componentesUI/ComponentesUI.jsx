@@ -230,11 +230,17 @@ export function EntradaTexto({
                   width: ancho,
                   height: alto,
                   textAlignVertical: "top",
+                  color: "black",
                 },
               ]
             : [
                 estilos.input,
-                { width: ancho, height: alto, textAlignVertical: "top" },
+                {
+                  width: ancho,
+                  color: black,
+                  height: alto,
+                  textAlignVertical: "top",
+                },
               ]
         }
       />
@@ -607,7 +613,6 @@ export function CustomTabs({ tabs, pestana = 0 }) {
   useEffect(() => {
     setPestanaSeleccionada(pestana);
   }, [pestana]);
-
 
   return (
     <View style={{ flex: 1 }}>

@@ -106,12 +106,12 @@ export default function SelectorPartituras({ callback, edicion, refrescar }) {
       >
         <TextInput
           placeholder="Buscar partitura..."
-          style={{ width: "50%" }}
+          style={{ width: "50%", color: "black" }}
           onChangeText={(text) => {
             const filteredPartituras = partituras.filter(
               (partitura) =>
-                partitura.titulo.toLowerCase().includes(text.toLowerCase()) ||
-                partitura.autor.toLowerCase().includes(text.toLowerCase()) ||
+                (partitura.titulo.toLowerCase().includes(text.toLowerCase()) ||
+                  partitura.autor.toLowerCase().includes(text.toLowerCase())) &&
                 partitura.nombre_categoria
                   .toLowerCase()
                   .includes(text.toLowerCase())
@@ -176,7 +176,13 @@ export default function SelectorPartituras({ callback, edicion, refrescar }) {
           setModalVisible(false);
         }}
       >
-        <FormularioPartitura accionCancelar={cancelar} callback={() => {setRefresco(true); setModalVisible(false);}} />
+        <FormularioPartitura
+          accionCancelar={cancelar}
+          callback={() => {
+            setRefresco(true);
+            setModalVisible(false);
+          }}
+        />
       </Modal>
 
       <Modal
