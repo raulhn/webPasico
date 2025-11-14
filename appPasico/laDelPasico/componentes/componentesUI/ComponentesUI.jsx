@@ -778,6 +778,7 @@ const estilos = StyleSheet.create({
     padding: 10,
     marginBottom: 10,
     borderRadius: 5,
+    color: "black",
     borderColor: "#ccc",
   },
   inputFocus: {
