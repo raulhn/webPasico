@@ -27,7 +27,7 @@ export default function SelectorPartituras({ callback, edicion, refrescar }) {
   const { categorias, lanzarRefresco } = useCategoriasPartitura(cerrarSesion);
 
   const { esRol } = useRol();
-
+  const [categoriaSeleccionada, setCategoriaSeleccionada] = useState(null);
   useEffect(() => {
     ServicePartituras.obtenerPartituras()
       .then((response) => {
@@ -52,6 +52,7 @@ export default function SelectorPartituras({ callback, edicion, refrescar }) {
   }
 
   const actualizarCategoria = (texto) => {
+    setCategoriaSeleccionada(texto);
     const resultado = partituras.filter((partitura) =>
       partitura.nombre_categoria
         .toLowerCase()
@@ -111,10 +112,12 @@ export default function SelectorPartituras({ callback, edicion, refrescar }) {
             const filteredPartituras = partituras.filter(
               (partitura) =>
                 (partitura.titulo.toLowerCase().includes(text.toLowerCase()) ||
-                  partitura.autor.toLowerCase().includes(text.toLowerCase())) &&
-                partitura.nombre_categoria
-                  .toLowerCase()
-                  .includes(text.toLowerCase())
+                  partitura.autor.toLowerCase().includes(text.toLowerCase()) ||
+                  partitura.nombre_categoria
+                    .toLowerCase()
+                    .includes(text.toLowerCase())) &&
+                (categoriaSeleccionada === null ||
+                  partitura.nombre_categoria === categoriaSeleccionada.etiqueta)
             );
             setPartiturasFiltradas(filteredPartituras);
           }}
