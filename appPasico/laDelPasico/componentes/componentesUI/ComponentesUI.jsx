@@ -237,7 +237,7 @@ export function EntradaTexto({
                 estilos.input,
                 {
                   width: ancho,
-                  color: black,
+                  color: "black",
                   height: alto,
                   textAlignVertical: "top",
                 },
