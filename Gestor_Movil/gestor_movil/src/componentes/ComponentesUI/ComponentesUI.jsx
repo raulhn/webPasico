@@ -1,61 +1,93 @@
-
 import "./ComponentesUI.css";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import * as Constantes from "../../config/Constantes";
 
 import { MdWarningAmber, MdCheckCircleOutline } from "react-icons/md";
 
-export function EntradaTexto({ valorDefecto = "", secure = false, setTexto, width = "150px", height = "30px",
-  onChange = (e) => {}, placeholder = "" })
-{
-    const [valor, setValor] = useState(valorDefecto);
+export function EntradaTexto({
+  valorDefecto = "",
+  secure = false,
+  setTexto,
+  width = "150px",
+  height = "30px",
+  placeholder = "",
+}) {
+  const [valor, setValor] = useState(valorDefecto);
 
-    useEffect(() => {
-        setValor(valorDefecto);
-    }, [valorDefecto]);
+  useEffect(() => {
+    setValor(valorDefecto);
+  }, [valorDefecto]);
 
-    return (
-        <input  className={"entrada-texto"} style={{ width: width, height: height }}
-         value={valor} onChange={e => { setValor(e.target.value); setTexto(e.target.value); onChange(e)}} 
-         type={secure ? "password" : "text"} placeholder={placeholder} />
-    );
-    
+  return (
+    <input
+      className={"entrada-texto"}
+      style={{ width: width, height: height }}
+      value={valor}
+      onChange={(e) => {
+        setValor(e.target.value);
+        setTexto(e.target.value);
+      }}
+      type={secure ? "password" : "text"}
+      placeholder={placeholder}
+    />
+  );
 }
 
 export function Boton({ texto = "Botón", onClick = () => {} }) {
-    return (
-        <button className={"boton"} onClick={onClick}>
-            {texto}
-        </button>
-    );
+  return (
+    <button className={"boton"} onClick={onClick}>
+      {texto}
+    </button>
+  );
 }
 
+export function EntradaTextoArea({
+  valorDefecto = "",
+  setTexto,
+  width = "300px",
+  height = "100px",
+}) {
+  const [valor, setValor] = useState(valorDefecto);
 
-export function EntradaTextoArea({ valorDefecto = "", setTexto, width= "300px", height= "100px" }) {
-    const [valor, setValor] = useState(valorDefecto);
+  useEffect(() => {
+    setValor(valorDefecto);
+  }, [valorDefecto]);
 
-    useEffect(() => {
-        setValor(valorDefecto);
-    }, [valorDefecto]);
-
-    return (
-        <textarea className={"entrada-texto-area"} style={{ width: width, height: height }}
-            value={valor} onChange={e => { setValor(e.target.value); setTexto(e.target.value); }} />
-    );
-
+  return (
+    <textarea
+      className={"entrada-texto-area"}
+      style={{ width: width, height: height }}
+      value={valor}
+      onChange={(e) => {
+        setValor(e.target.value);
+        setTexto(e.target.value);
+      }}
+    />
+  );
 }
 
-export function Selector({valor ="", opciones = [], setValor, width = "150px", height = "50px" }) {
-    return (
-        <select className={"selector"} style={{ width: width, height: height }} value={valor} onChange={e => setValor(e.target.value)}>
-           
-            {opciones.map(opcion => (
-                <option key={opcion.valor} value={opcion.valor}>{opcion.etiqueta}</option>
-            ))}
-        </select>
-    );
+export function Selector({
+  valor = "",
+  opciones = [],
+  setValor,
+  width = "150px",
+  height = "50px",
+}) {
+  return (
+    <select
+      className={"selector"}
+      style={{ width: width, height: height }}
+      value={valor}
+      onChange={(e) => setValor(e.target.value)}
+    >
+      {opciones.map((opcion) => (
+        <option key={opcion.valor} value={opcion.valor}>
+          {opcion.etiqueta}
+        </option>
+      ))}
+    </select>
+  );
 }
-
 
 export function CustomTabs({ tabs, pestana = 0 }) {
   const [pestanaSeleccionada, setPestanaSeleccionada] = useState();
@@ -88,12 +120,27 @@ export function CustomTabs({ tabs, pestana = 0 }) {
               marginRight: "5px",
               cursor: "pointer",
               fontWeight: 500,
-              transition: "background 0.2s, color 0.2s"
+              transition: "background 0.2s, color 0.2s",
             }}
             onClick={() => setPestanaSeleccionada(index)}
-            onMouseDown={e => e.currentTarget.style.background = obtenerBackGroundColor(true, index)}
-            onMouseUp={e => e.currentTarget.style.background = obtenerBackGroundColor(false, index)}
-            onMouseLeave={e => e.currentTarget.style.background = obtenerBackGroundColor(false, index)}
+            onMouseDown={(e) =>
+              (e.currentTarget.style.background = obtenerBackGroundColor(
+                true,
+                index,
+              ))
+            }
+            onMouseUp={(e) =>
+              (e.currentTarget.style.background = obtenerBackGroundColor(
+                false,
+                index,
+              ))
+            }
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.background = obtenerBackGroundColor(
+                false,
+                index,
+              ))
+            }
           >
             {tab.nombre}
           </button>
@@ -105,16 +152,21 @@ export function CustomTabs({ tabs, pestana = 0 }) {
             <div key={index} style={{ flexGrow: 1 }}>
               {tab.contenido()}
             </div>
-          ) : null
+          ) : null,
         )}
       </div>
     </div>
   );
 }
 
-
 // ModalAviso
-export function ModalAviso({ visible, setVisible, mensaje, textBoton, titulo =""}) {
+export function ModalAviso({
+  visible,
+  setVisible,
+  mensaje,
+  textBoton,
+  titulo = "",
+}) {
   if (!visible) return null;
   return (
     <div className="modal-overlay">
@@ -122,7 +174,9 @@ export function ModalAviso({ visible, setVisible, mensaje, textBoton, titulo =""
         <MdWarningAmber size={60} color="#f87c00" className="icono-warning" />
         <div className="titulo">{titulo}</div>
         <div className="mensaje">{mensaje}</div>
-        <button className="boton" onClick={() => setVisible(false)}>{textBoton}</button>
+        <button className="boton" onClick={() => setVisible(false)}>
+          {textBoton}
+        </button>
       </div>
     </div>
   );
@@ -177,16 +231,21 @@ export function ModalExito({ visible, setVisible, mensaje, textBoton }) {
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-        <MdCheckCircleOutline size={60} color="#4caf50" className="icono-warning" />
+        <MdCheckCircleOutline
+          size={60}
+          color="#4caf50"
+          className="icono-warning"
+        />
         <div className="mensaje">{mensaje}</div>
-        <button className="boton" onClick={() => setVisible(false)}>{textBoton}</button>
+        <button className="boton" onClick={() => setVisible(false)}>
+          {textBoton}
+        </button>
       </div>
     </div>
   );
 }
 
-
-export function EnlaceDiv({ onClick, contenido}) {
+export function EnlaceDiv({ onClick, contenido }) {
   return (
     <div className="enlace-div" onClick={onClick}>
       {contenido()}
@@ -194,94 +253,141 @@ export function EnlaceDiv({ onClick, contenido}) {
   );
 }
 
-export function Paginacion({array = [], page_size = 10, page_number = 1, className = ""}) {
-
-  // Validar que array sea realmente un array
-  if (!Array.isArray(array)) {
-    console.error("Paginacion: el parámetro 'array' debe ser un array, recibido:", typeof array);
-    return <div>Error: datos no válidos para paginación</div>;
-  }
-
-  const tamanoArray = array.length;
-  const totalPaginas = Math.ceil(tamanoArray / page_size);
-
+export function Paginacion({
+  array = [],
+  page_size = 10,
+  page_number = 1,
+  className = "",
+}) {
   const [paginaActual, setPaginaActual] = useState(page_number);
 
   useEffect(() => {
     setPaginaActual(page_number);
   }, [page_number]);
 
+  // Validar que array sea realmente un array
+  if (!Array.isArray(array)) {
+    console.error(
+      "Paginacion: el parámetro 'array' debe ser un array, recibido:",
+      typeof array,
+    );
+    return <div>Error: datos no válidos para paginación</div>;
+  }
+
+  const tamanoArray = array.length;
+  const totalPaginas = Math.ceil(tamanoArray / page_size);
+
   if (array.length === 0) {
     return <div>No hay elementos para mostrar</div>;
   }
 
-  return ( 
+  return (
     <>
-    <div className={className}>
-    {array.map((item, index) => {
-      const inicio = (paginaActual - 1) * page_size;
-      const fin = inicio + page_size;
-      if (index >= inicio && index < fin) {
-        return item;
-      }
-      return null;
-    })}
-    </div>
-    <div className="paginacion">
-      <button className="boton" onClick={() => setPaginaActual(1)} disabled={paginaActual === 1}>
-        {"<<"}
-      </button>
-      <button className="boton" onClick={() => setPaginaActual(paginaActual - 1)} disabled={paginaActual === 1}>
-        {"<"}
-      </button>
-      <span>Página {paginaActual} de {totalPaginas}</span>
-      <button className="boton" onClick={() => setPaginaActual(paginaActual + 1)} disabled={paginaActual === totalPaginas}>
-        {">"}
-      </button>
-      <button className="boton" onClick={() => setPaginaActual(totalPaginas)} disabled={paginaActual === totalPaginas}>
-        {">>"}
-      </button>
-    </div>
+      <div className={className}>
+        {array.map((item, index) => {
+          const inicio = (paginaActual - 1) * page_size;
+          const fin = inicio + page_size;
+          if (index >= inicio && index < fin) {
+            return item;
+          }
+          return null;
+        })}
+      </div>
+      <div className="paginacion">
+        <button
+          className="boton"
+          onClick={() => setPaginaActual(1)}
+          disabled={paginaActual === 1}
+        >
+          {"<<"}
+        </button>
+        <button
+          className="boton"
+          onClick={() => setPaginaActual(paginaActual - 1)}
+          disabled={paginaActual === 1}
+        >
+          {"<"}
+        </button>
+        <span>
+          Página {paginaActual} de {totalPaginas}
+        </span>
+        <button
+          className="boton"
+          onClick={() => setPaginaActual(paginaActual + 1)}
+          disabled={paginaActual === totalPaginas}
+        >
+          {">"}
+        </button>
+        <button
+          className="boton"
+          onClick={() => setPaginaActual(totalPaginas)}
+          disabled={paginaActual === totalPaginas}
+        >
+          {">>"}
+        </button>
+      </div>
     </>
   );
 }
 
-export function DataTable({cabeceras, datos})
-{
+export function DataTable({ cabeceras, datos }) {
   const [filtro, setFiltro] = useState("");
-  
-  if (!datos || datos.length === 0) {
-    return <div>No hay datos para mostrar</div>;
+  const [datosFiltrados, setDatosFiltrados] = useState(datos);
+  console.log("Filtro", filtro);
+  useEffect(() => {
+    const nuevosDatosFiltrados = datos.filter((fila) =>
+      fila.some((celda) =>
+        celda.toString().toLowerCase().includes(filtro.toLowerCase()),
+      ),
+    );
+    console.log("Nuevos datos filtrados", nuevosDatosFiltrados);
+    if (!nuevosDatosFiltrados || nuevosDatosFiltrados.length === 0) {
+      console.log("No se encontraron datos que coincidan con el filtro.");
+      setDatosFiltrados([]);
+    } else {
+      setDatosFiltrados(nuevosDatosFiltrados);
+    }
+  }, [filtro, datos]);
+  console.log("Datos filtrados", datosFiltrados);
+  if (!datosFiltrados || datosFiltrados.length === 0) {
+    return (
+      <>
+        <EntradaTexto
+          setTexto={(texto) => {
+            setFiltro(texto);
+          }}
+        ></EntradaTexto>
+        <div>No hay datos para mostrar</div>
+      </>
+    );
   }
 
-  console.log("Datos DataTable:", datos);
   return (
-  <>
-    <EntradaTexto onChange={(texto) => {setFiltro(texto)}}></EntradaTexto>
-    <table className="data-table">
-      <thead>
-        <tr>
-          {cabeceras.map((cabecera, index) => (
-            <th key={index}>{cabecera}</th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {datos
-          .filter((fila) =>
-            fila.some((celda) =>
-              celda.toString().toLowerCase().includes(filtro.toLowerCase())
-            )
-          )
-          .map((fila, indexFila) => (
+    <>
+      <EntradaTexto
+        setTexto={(texto) => {
+          setFiltro(texto);
+        }}
+      ></EntradaTexto>
+
+      <table className="data-table">
+        <thead>
+          <tr>
+            {cabeceras.map((cabecera, index) => (
+              <th key={index}>{cabecera}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {datosFiltrados.map((fila, indexFila) => (
             <tr key={indexFila}>
               {fila.map((celda, indexCelda) => (
                 <td key={indexCelda}>{celda}</td>
               ))}
             </tr>
           ))}
-      </tbody>
-    </table>
-  </>
-  )
+        </tbody>
+      </table>
+    </>
+  );
 }
