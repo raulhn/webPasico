@@ -1,3 +1,4 @@
+import "./ListaPersonas.css";
 import { DataTable, Selector } from "../ComponentesUI/ComponentesUI";
 import { useCursos } from "../../hooks/useCursos";
 import { useAsignaturas } from "../../hooks/useAsignaturas";
@@ -12,9 +13,6 @@ export default function ListaPersonas() {
   const [curso, setCurso] = useState(null);
   const [asignatura, setAsignatura] = useState(null);
   const [activo, setActivo] = useState(0);
-
-  console.log("Cursos:", cursos);
-  console.log("Asignaturas:", asignaturas);
 
   let opcionesAsignatura = asignaturas.map((asignatura) => ({
     valor: asignatura.nid_asignatura,
@@ -59,7 +57,8 @@ export default function ListaPersonas() {
   return (
     <>
       <Cabecera />
-      <div className="contenedor" style={{ paddingTop: "60px" }}>
+      <div className="lista-personas-container">
+        <div className="filtros-container">
         <Selector
           opciones={opcionesCurso}
           valor={curso}
@@ -89,12 +88,15 @@ export default function ListaPersonas() {
           }}
           width="150px"
         />
-        <DataTable
-          datos={bidimensional}
-          cargando={cargando}
-          error={error}
-          cabeceras={["Nombre", "Primer Apellido", "Segundo Apellido"]}
-        />
+        </div>
+        <div className="tabla-container">
+          <DataTable
+            datos={bidimensional}
+            cargando={cargando}
+            error={error}
+            cabeceras={["Nombre", "Primer Apellido", "Segundo Apellido"]}
+          />
+        </div>
       </div>
     </>
   );
