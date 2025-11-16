@@ -330,25 +330,37 @@ export function Paginacion({
   );
 }
 
+function removeAccents(text) {
+  return text
+    .toString()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .normalize();
+}
+
+function concatenarArray(array) {
+  return array.join(" ");
+}
+
 export function DataTable({ cabeceras, datos }) {
   const [filtro, setFiltro] = useState("");
   const [datosFiltrados, setDatosFiltrados] = useState(datos);
-  console.log("Filtro", filtro);
   useEffect(() => {
-    const nuevosDatosFiltrados = datos.filter((fila) =>
-      fila.some((celda) =>
-        celda.toString().toLowerCase().includes(filtro.toLowerCase()),
-      ),
-    );
-    console.log("Nuevos datos filtrados", nuevosDatosFiltrados);
+    const nuevosDatosFiltrados = datos.filter((fila) => {
+      let textoFila = fila.join(" ");
+      let filtroSinAcentos = removeAccents(filtro);
+      let textoFilaSinAcentos = removeAccents(textoFila);
+      return textoFilaSinAcentos
+        .toString()
+        .toLowerCase()
+        .includes(filtroSinAcentos.toLowerCase());
+    });
     if (!nuevosDatosFiltrados || nuevosDatosFiltrados.length === 0) {
-      console.log("No se encontraron datos que coincidan con el filtro.");
       setDatosFiltrados([]);
     } else {
       setDatosFiltrados(nuevosDatosFiltrados);
     }
   }, [filtro, datos]);
-  console.log("Datos filtrados", datosFiltrados);
   if (!datosFiltrados || datosFiltrados.length === 0) {
     return (
       <>
