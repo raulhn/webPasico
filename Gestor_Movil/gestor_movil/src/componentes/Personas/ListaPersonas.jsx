@@ -3,6 +3,7 @@ import { useCursos } from "../../hooks/useCursos";
 import { useAsignaturas } from "../../hooks/useAsignaturas";
 import { useAlumnosAsignatura } from "../../hooks/useAlumnos";
 import { useState } from "react";
+import Cabecera from "../Cabecera/Cabecera";
 
 export default function ListaPersonas() {
   const { cursos } = useCursos();
@@ -57,41 +58,44 @@ export default function ListaPersonas() {
   console.log("Alumnos recuperados", bidimensional);
   return (
     <>
-      <Selector
-        opciones={opcionesCurso}
-        valor={curso}
-        setValor={(valor) => {
-          setCurso(valor);
-          setNidCurso(valor);
-          lanzarRefresco();
-        }}
-        width="250px"
-      />
-      <Selector
-        opciones={opcionesAsignatura}
-        valor={asignatura}
-        setValor={(valor) => {
-          setAsignatura(valor);
-          setNidAsignatura(valor);
-          lanzarRefresco();
-        }}
-        width="250px"
-      />
-      <Selector
-        opciones={opcionesActivos}
-        valor={activo}
-        setValor={(valor) => {
-          setActivo(valor);
-          lanzarRefresco();
-        }}
-        width="150px"
-      />
-      <DataTable
-        datos={bidimensional}
-        cargando={cargando}
-        error={error}
-        cabeceras={["Nombre", "Primer Apellido", "Segundo Apellido"]}
-      />
+      <Cabecera />
+      <div className="contenedor" style={{ paddingTop: "60px" }}>
+        <Selector
+          opciones={opcionesCurso}
+          valor={curso}
+          setValor={(valor) => {
+            setCurso(valor);
+            setNidCurso(valor);
+            lanzarRefresco();
+          }}
+          width="250px"
+        />
+        <Selector
+          opciones={opcionesAsignatura}
+          valor={asignatura}
+          setValor={(valor) => {
+            setAsignatura(valor);
+            setNidAsignatura(valor);
+            lanzarRefresco();
+          }}
+          width="250px"
+        />
+        <Selector
+          opciones={opcionesActivos}
+          valor={activo}
+          setValor={(valor) => {
+            setActivo(valor);
+            lanzarRefresco();
+          }}
+          width="150px"
+        />
+        <DataTable
+          datos={bidimensional}
+          cargando={cargando}
+          error={error}
+          cabeceras={["Nombre", "Primer Apellido", "Segundo Apellido"]}
+        />
+      </div>
     </>
   );
 }
