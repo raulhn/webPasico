@@ -74,7 +74,7 @@ function obtenerPadre(nid_persona) {
       } else if (results.length === 0) {
         resolve(null);
       } else {
-        resolve(results[0]);
+        resolve(results[0]["nid_padre"]);
       }
     });
   });
@@ -95,7 +95,7 @@ function obtenerMadre(nid_persona) {
       } else if (results.length === 0) {
         resolve(null);
       } else {
-        resolve(results[0]);
+        resolve(results[0]["nid_madre"]);
       }
     });
   });
@@ -113,13 +113,13 @@ function obtenerSocioAsociado(nid_persona) {
       if (error) {
         console.error(
           "Error al obtener el socio asociado de la persona:",
-          error
+          error,
         );
         reject(error);
       } else if (results.length === 0) {
         resolve(null);
       } else {
-        resolve(results[0]);
+        resolve(results[0]["nid_socio"]);
       }
     });
   });
@@ -140,7 +140,7 @@ function requiereActualizarPersona(nid_persona, fecha_actualizacion) {
       if (error) {
         console.error(
           "Error al verificar si se requiere actualizar la persona:",
-          error
+          error,
         );
         reject(error);
       }
@@ -161,7 +161,7 @@ function actualizarPersona(
   nid_madre,
   nid_padre,
   nid_socio,
-  fecha_actualizacion
+  fecha_actualizacion,
 ) {
   return new Promise((resolve, reject) => {
     const sql =
@@ -226,7 +226,7 @@ function insertarPersona(
   nid_madre,
   nid_padre,
   nid_socio,
-  fecha_actualizacion
+  fecha_actualizacion,
 ) {
   return new Promise((resolve, reject) => {
     const sql =
@@ -293,7 +293,7 @@ async function registrarPersona(
   nid_madre,
   nid_padre,
   nid_socio,
-  fecha_actualizacion
+  fecha_actualizacion,
 ) {
   try {
     const existe = await existePersona(nid_persona);
@@ -301,7 +301,7 @@ async function registrarPersona(
     if (existe) {
       const requiereActualizar = await requiereActualizarPersona(
         nid_persona,
-        fecha_actualizacion
+        fecha_actualizacion,
       );
       if (requiereActualizar) {
         await actualizarPersona(
@@ -316,7 +316,7 @@ async function registrarPersona(
           nid_madre,
           nid_padre,
           nid_socio,
-          fecha_actualizacion
+          fecha_actualizacion,
         );
 
         return;
@@ -336,7 +336,7 @@ async function registrarPersona(
         nid_madre,
         nid_padre,
         nid_socio,
-        fecha_actualizacion
+        fecha_actualizacion,
       );
       console.log("Persona insertada correctamente.");
     }
@@ -427,7 +427,7 @@ function obtenerPersonaNombre(
   nombre,
   primer_apellido,
   segundo_apellido,
-  correo_electronico
+  correo_electronico,
 ) {
   return new Promise((resolve, reject) => {
     const sql =
@@ -487,7 +487,7 @@ async function asociarUsuarioPersona(nid_usuario) {
         usuario.nombre,
         usuario.primer_apellido,
         usuario.segundo_apellido,
-        usuario.correo_electronico
+        usuario.correo_electronico,
       );
 
       if (persona) {
@@ -591,6 +591,7 @@ function obtenerPersona(nid_persona) {
       constantes.ESQUEMA +
       ".persona WHERE nid_persona = " +
       conexion.dbConn.escape(nid_persona);
+    console.log("SQL", sql);
     conexion.dbConn.query(sql, (error, results) => {
       if (error) {
         console.error("Error al obtener la persona:", error);
@@ -645,28 +646,30 @@ function obtenerPersonasSocios() {
   });
 }
 
-function obtenerPersonasAlumnosAsignatura(nid_curso, nid_asignatura, activo)
-{
+function obtenerPersonasAlumnosAsignatura(nid_curso, nid_asignatura, activo) {
   return new Promise((resolve, reject) => {
-    const sql = "select p.* from " +
-       constantes.ESQUEMA + ".persona p, " +
-       constantes.ESQUEMA + ".matricula m, " +
-       constantes.ESQUEMA + ".matricula_asignatura ma " +
-       " where p.nid_persona = m.nid_persona " +
-       "   and m.nid_matricula = ma.nid_matricula " +
-        "   and m.nid_curso = " + conexion.dbConn.escape(nid_curso) +
-        "   and ma.nid_asignatura = " + conexion.dbConn.escape(nid_asignatura) ;
+    const sql =
+      "select p.* from " +
+      constantes.ESQUEMA +
+      ".persona p, " +
+      constantes.ESQUEMA +
+      ".matricula m, " +
+      constantes.ESQUEMA +
+      ".matricula_asignatura ma " +
+      " where p.nid_persona = m.nid_persona " +
+      "   and m.nid_matricula = ma.nid_matricula " +
+      "   and m.nid_curso = " +
+      conexion.dbConn.escape(nid_curso) +
+      "   and ma.nid_asignatura = " +
+      conexion.dbConn.escape(nid_asignatura);
 
-    if (activo == 1)
-    {
+    if (activo == 1) {
       sql = sql + " and (ma.fecha_baja is null or ma.fecha_baja > NOW())";
-    }
-    else if(activo == 2)
-    {
+    } else if (activo == 2) {
       sql = sql + " and ma.fecha_baja is not null and ma.fecha_baja <= NOW()";
     }
 
-    console.log('SQL obtenerPersonasAlumnos: ' + sql);
+    console.log("SQL obtenerPersonasAlumnos: " + sql);
     conexion.dbConn.query(sql, (error, results) => {
       if (error) {
         console.error("Error al obtener las personas alumnos:", error);
@@ -675,7 +678,6 @@ function obtenerPersonasAlumnosAsignatura(nid_curso, nid_asignatura, activo)
       resolve(results);
     });
   });
-    
 }
 
 function esHijo(nid_persona, nid_hijo) {
@@ -703,9 +705,6 @@ function esHijo(nid_persona, nid_hijo) {
   });
 }
 
-
-
-
 module.exports.registrarPersona = registrarPersona;
 module.exports.obtenerPersonasSucias = obtenerPersonasSucias;
 module.exports.limpiarPersona = limpiarPersona;
@@ -719,7 +718,8 @@ module.exports.obtenerPersonas = obtenerPersonas;
 module.exports.obtenerPersona = obtenerPersona;
 module.exports.obtenerPersonasMusicos = obtenerPersonasMusicos;
 module.exports.obtenerPersonasSocios = obtenerPersonasSocios;
-module.exports.obtenerPersonasAlumnosAsignatura = obtenerPersonasAlumnosAsignatura;
+module.exports.obtenerPersonasAlumnosAsignatura =
+  obtenerPersonasAlumnosAsignatura;
 
 module.exports.obtenerPadre = obtenerPadre;
 module.exports.obtenerMadre = obtenerMadre;

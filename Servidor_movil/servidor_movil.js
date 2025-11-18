@@ -77,7 +77,7 @@ app.post("/recuperar_password", servletUsuario.recuperarPassword);
 // Tipo evento Musico //
 app.get(
   "/obtener_tipos_evento/:nid_evento_concierto",
-  servlet_tipo_evento_musico.obtener_tipos_evento
+  servlet_tipo_evento_musico.obtener_tipos_evento,
 );
 
 /** Llamadas por API KEY **/
@@ -86,7 +86,6 @@ app.post("/registrar_persona", servletPersona.registrarPersona);
 app.get("/obtener_persona/:nid_persona", servletPersona.obtenerPersona);
 app.get("/obtener_personas_sucias", servletPersona.obtenerPersonasSucias);
 app.post("/limpiar_persona", servletPersona.limpiarPersona);
-app.get("/obtener_personas_alumnos_asignatura/:nid_curso/:nid_asignatura/:activo", servletPersona.obtenerPersonasAlumnosAsignatura);
 
 // Trimestres //
 app.post("/registrar_trimestre", servletTrimestre.registrarTrimestre);
@@ -96,28 +95,36 @@ app.get("/obtener_trimestres_sucios", servletTrimestre.obtenerTrimestresSucios);
 app.post("/registrar_tipo_progreso", servletTipoProgreso.registrarTipoProgreso);
 app.get(
   "/obtener_tipos_progreso_sucios",
-  servletTipoProgreso.obtenerTipoProgresoSucios
+  servletTipoProgreso.obtenerTipoProgresoSucios,
 );
 
 // Evaluaciones //
-app.post("/registrar_evaluacion", servletEvaluacion.registrarEvaluacionServicio);
+app.post(
+  "/registrar_evaluacion",
+  servletEvaluacion.registrarEvaluacionServicio,
+);
 app.get(
   "/obtener_evaluaciones_sucias",
-  servletEvaluacion.obtenerEvaluacionesSucias
+  servletEvaluacion.obtenerEvaluacionesSucias,
 );
-app.post("/actualizar_evaluacion_sucia", servletEvaluacion.actualizarEvaluacionSucia);
-app.post("/actualizar_evaluacion_matricula_sucia", servletEvaluacionMatricula.actualizarEvaluacionMatriculaSucia);
+app.post(
+  "/actualizar_evaluacion_sucia",
+  servletEvaluacion.actualizarEvaluacionSucia,
+);
+app.post(
+  "/actualizar_evaluacion_matricula_sucia",
+  servletEvaluacionMatricula.actualizarEvaluacionMatriculaSucia,
+);
 
 // Evaluacion Matricula //
 app.post(
   "/registrar_evaluacion_matricula",
-  servletEvaluacionMatricula.registrarEvaluacionMatriculaServicio
+  servletEvaluacionMatricula.registrarEvaluacionMatriculaServicio,
 );
 app.get(
   "/obtener_evaluaciones_matriculas_sucias",
-  servletEvaluacionMatricula.obtenerEvaluacionesMatriculaSucias
+  servletEvaluacionMatricula.obtenerEvaluacionesMatriculaSucias,
 );
-
 
 // Socios //
 app.post("/registrar_socio", servletSocios.registrarSocio);
@@ -147,13 +154,13 @@ app.post("/registrar_matricula", servletMatricula.registrarMatricula);
 // Matricula Asignatura //
 app.post(
   "/registrar_matricula_asignatura",
-  servletMatriculaAsignatura.registrarMatriculaAsignatura
+  servletMatriculaAsignatura.registrarMatriculaAsignatura,
 );
 
 // Profesor Alumno Matricula //
 app.post(
   "/registrar_profesor_alumno_matricula",
-  servletProfesorAlumnoMatricula.registrarProfesorAlumnoMatricula
+  servletProfesorAlumnoMatricula.registrarProfesorAlumnoMatricula,
 );
 
 // Tipo Musico //
@@ -166,13 +173,13 @@ app.get("/generar_boletin/:token", servletEvaluacion.generar_boletin);
 app.get("/obtener_tipos_tablon", servletTipoTablon.obtenerTiposTablon);
 app.get(
   "/obtener_tipo_tablon/:nid_tipo_tablon",
-  servletTipoTablon.obtenerTipoTablon
+  servletTipoTablon.obtenerTipoTablon,
 );
 
 app.get("/obtener_tablon_anuncios", servletTablonAnuncios.obtenerAnuncios);
 app.get(
   "/obtener_anuncio/:nid_tablon_anuncio",
-  servletTablonAnuncios.obtenerAnuncio
+  servletTablonAnuncios.obtenerAnuncio,
 );
 
 app.get("/obtener_asignaturas", servletAsignaturas.obtenerAsignaturas);
@@ -198,28 +205,28 @@ app.get("/obtener_cursos", servletCurso.obtenerCursos);
 // Eventos //
 app.post(
   "/registrar_evento_concierto",
-  servletEventoConcierto.insertarEventoConcierto
+  servletEventoConcierto.insertarEventoConcierto,
 );
 app.post(
   "/actualizar_evento_concierto",
-  servletEventoConcierto.actualizarEventoConcierto
+  servletEventoConcierto.actualizarEventoConcierto,
 );
 app.get(
   "/obtener_eventos_concierto",
-  servletEventoConcierto.obtenerEventosConcierto
+  servletEventoConcierto.obtenerEventosConcierto,
 );
 
 app.post(
   "/registrar_partitura_evento",
-  servletEventoConcierto.registrar_partitura_evento
+  servletEventoConcierto.registrar_partitura_evento,
 );
 app.post(
   "/eliminar_partitura_evento",
-  servletEventoConcierto.eliminar_partitura_evento
+  servletEventoConcierto.eliminar_partitura_evento,
 );
 app.get(
   "/obtener_evento_concierto/:nid_evento_concierto",
-  servletEventoConcierto.obtenerPartiturasEvento
+  servletEventoConcierto.obtenerPartiturasEvento,
 );
 
 app.post("/eliminar_evento_concierto", servletEventoConcierto.eliminar_evento);
@@ -227,11 +234,11 @@ app.post("/eliminar_evento_concierto", servletEventoConcierto.eliminar_evento);
 // Tipo evento musico //
 app.post(
   "/registrar_tipo_evento_musico",
-  servlet_tipo_evento_musico.registrar_tipo_evento_musico
+  servlet_tipo_evento_musico.registrar_tipo_evento_musico,
 );
 app.post(
   "/eliminar_tipo_evento_musico",
-  servlet_tipo_evento_musico.eliminar_tipo_evento_musico
+  servlet_tipo_evento_musico.eliminar_tipo_evento_musico,
 );
 
 // Partituras //
@@ -240,28 +247,28 @@ app.post("/actualizar_partitura", servletPartituras.actualizarPartitura);
 app.get("/obtener_partituras", servletPartituras.obtenerPartituras);
 app.get(
   "/obtener_partitura/:nid_partitura",
-  servletPartituras.obtenerPartitura
+  servletPartituras.obtenerPartitura,
 );
 
 // Evaluaciones //
 app.get(
   "/obtener_evaluaciones_asignaturas/:nid_asignatura/:nid_curso/:nid_trimestre",
-  servletEvaluacion.obtenerEvaluacionesAsignaturas
+  servletEvaluacion.obtenerEvaluacionesAsignaturas,
 );
 
 // Categorias Partituras //
 app.post(
   "/registrar_categoria_partitura",
-  servlet_categoria_partituras.insertarCategoriaPartitura
+  servlet_categoria_partituras.insertarCategoriaPartitura,
 );
 app.post(
   "/actualizar_categoria_partitura",
-  servlet_categoria_partituras.actualizarCategoriaPartitura
+  servlet_categoria_partituras.actualizarCategoriaPartitura,
 );
 
 app.get(
   "/obtener_categorias_partitura",
-  servlet_categoria_partituras.obtenerCategoriasPartitura
+  servlet_categoria_partituras.obtenerCategoriasPartitura,
 );
 
 // Obtener Personas //
@@ -271,92 +278,103 @@ app.get("/obtener_personas_alumnos", servletPersona.obtenerPersonasAlumnos);
 app.get("/obtener_personas_socios", servletPersona.obtenerPersonasSocios);
 app.get(
   "/obtener_alumnos_profesor",
-  servletProfesorAlumnoMatricula.obtenerAlumnosProfesor
+  servletProfesorAlumnoMatricula.obtenerAlumnosProfesor,
 );
-app.get("/obtener_alumno_profesor/:nid_alumno/:nid_curso", servletPersona.obtenerAlumnoProfesor);
+app.get(
+  "/obtener_info_persona/:nid_persona",
+  servletPersona.obtenerInfoPersona,
+);
+app.get(
+  "/obtener_alumno_profesor/:nid_alumno/:nid_curso",
+  servletPersona.obtenerAlumnoProfesor,
+);
+app.get(
+  "/obtener_personas_alumnos_asignatura/:nid_curso/:nid_asignatura/:activo",
+  servletPersona.obtenerPersonasAlumnosAsignatura,
+);
 
 app.get(
   "/obtener_alumnos_asignatura_profesor/:nid_asignatura/:nid_curso",
-  servletMatriculaAsignatura.obtenerAlumnosAsignaturaProfesor
+  servletMatriculaAsignatura.obtenerAlumnosAsignaturaProfesor,
 );
 
 app.get(
   "/obtener_alumnos_asignatura/:nid_asignatura",
-  servletMatriculaAsignatura.obtenerAlumnosAsignatura
+  servletMatriculaAsignatura.obtenerAlumnosAsignatura,
 );
 
 app.get(
   "/obtener_alumnos_curso_activo",
-  servletMatriculaAsignatura.obtenerAlumnosCursoActivo
+  servletMatriculaAsignatura.obtenerAlumnosCursoActivo,
 );
 app.get(
   "/obtener_alumnos_curso_activo_asignatura/:nid_asignatura",
-  servletMatriculaAsignatura.obtenerAlumnosCursoActivoAsignatura
+  servletMatriculaAsignatura.obtenerAlumnosCursoActivoAsignatura,
 );
 
 // Asignaturas //
 app.get(
   "/obtener_asignaturas_profesor",
-  servletAsignaturas.obtenerAsignaturasProfesor
+  servletAsignaturas.obtenerAsignaturasProfesor,
 );
 
 // Matriculas //
 app.get(
   "/obtener_matriculas_persona",
-  servletMatricula.obtenerMatriculasPersona
+  servletMatricula.obtenerMatriculasPersona,
 );
 
 app.get(
   "/obtener_matriculas_asignatura_persona/:nid_matricula",
-  servletMatriculaAsignatura.obtenerMatriculasAsignaturaPersona
+  servletMatriculaAsignatura.obtenerMatriculasAsignaturaPersona,
 );
 
 // Notificaciones //
 app.post(
   "/registrar_notificacion",
-  servletNotificaciones.registrarNotificacion
+  servletNotificaciones.registrarNotificacion,
 );
 app.post(
   "/registrar_notificacion_grupo",
-  servletNotificaciones.registrarNotificacionGrupo
+  servletNotificaciones.registrarNotificacionGrupo,
 );
 
 //Evaluaciones //
 app.get(
   "/obtener_evaluaciones/:nid_matricula",
-  servletEvaluacion.obtenerEvaluaciones
+  servletEvaluacion.obtenerEvaluaciones,
 );
-app.get("/obtener_evaluaciones_asignatura/:nid_curso/:nid_asignatura/:nid_trimestre", servletEvaluacion.obtenerEvaluacionesAsignaturas);
+app.get(
+  "/obtener_evaluaciones_asignatura/:nid_curso/:nid_asignatura/:nid_trimestre",
+  servletEvaluacion.obtenerEvaluacionesAsignaturas,
+);
 
 app.get(
   "/solicitar_generar_boletin/:nid_matricula/:nid_trimestre",
-  servletEvaluacion.solicitar_generar_boletin
+  servletEvaluacion.solicitar_generar_boletin,
 );
 
 app.get(
   "/generar_boletin_web/:nid_matricula/:nid_trimestre",
-  servletEvaluacion.generarBoletinWeb
+  servletEvaluacion.generarBoletinWeb,
 );
 
-app.post(
-  "/registrar_evaluaciones",
-  servletEvaluacion.registrarEvaluaciones
-);
+app.post("/registrar_evaluaciones", servletEvaluacion.registrarEvaluaciones);
 
 //Tablon Anuncios //
 app.post(
   "/registrar_tablon_anuncio",
-  servletTablonAnuncios.insertarTablonAnuncio
+  servletTablonAnuncios.insertarTablonAnuncio,
 );
 
 app.post(
   "/actualizar_tablon_anuncio",
-  servletTablonAnuncios.actualizarTablonAnuncio
+  servletTablonAnuncios.actualizarTablonAnuncio,
 );
 
 app.post(
   "/eliminar_tablon_anuncio",
-  servletTablonAnuncios.eliminarTablonAnuncio
+  servletTablonAnuncios.eliminarTablonAnuncio,
 );
 
 https
@@ -365,7 +383,7 @@ https
       key: fs.readFileSync("apache.key"),
       cert: fs.readFileSync("apache-certificate.crt"),
     },
-    app
+    app,
   )
   .listen(config.puerto, () => {
     console.log("Escuchando en el puerto " + config.puerto);
