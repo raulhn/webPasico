@@ -345,6 +345,10 @@ function concatenarArray(array) {
 export function DataTable({ cabeceras, datos }) {
   const [filtro, setFiltro] = useState("");
   const [datosFiltrados, setDatosFiltrados] = useState(datos);
+  const [paginaActual, setPaginaActual] = useState(1);
+  const [seleccionado, setSeleccionado] = useState(null);
+  const TAM_PAGINA = 10;
+
   useEffect(() => {
     const nuevosDatosFiltrados = datos.filter((fila) => {
       let textoFila = fila.join(" ");
@@ -392,7 +396,21 @@ export function DataTable({ cabeceras, datos }) {
         </thead>
         <tbody>
           {datosFiltrados.map((fila, indexFila) => (
-            <tr key={indexFila}>
+            <tr
+              key={indexFila}
+              style={{
+                ...(indexFila >= TAM_PAGINA * (paginaActual - 1) &&
+                indexFila < TAM_PAGINA * paginaActual
+                  ? {}
+                  : { display: "none" }),
+                ...(seleccionado === indexFila
+                  ? { backgroundColor: "#d3d3d3" }
+                  : {}),
+              }}
+              onClick={() => {
+                setSeleccionado(indexFila);
+              }}
+            >
               {fila.map((celda, indexCelda) => (
                 <td key={indexCelda}>{celda}</td>
               ))}
@@ -400,6 +418,46 @@ export function DataTable({ cabeceras, datos }) {
           ))}
         </tbody>
       </table>
+      <div className="paginacion">
+        <button
+          className="boton"
+          onClick={() => setPaginaActual(1)}
+          disabled={paginaActual === 1}
+        >
+          {"<<"}
+        </button>
+        <button
+          className="boton"
+          onClick={() => setPaginaActual(paginaActual - 1)}
+          disabled={paginaActual === 1}
+        >
+          {"<"}
+        </button>
+        <span>
+          Página {paginaActual} de{" "}
+          {Math.ceil(datosFiltrados.length / TAM_PAGINA)}
+        </span>
+        <button
+          className="boton"
+          onClick={() => setPaginaActual(paginaActual + 1)}
+          disabled={
+            paginaActual === Math.ceil(datosFiltrados.length / TAM_PAGINA)
+          }
+        >
+          {">"}
+        </button>
+        <button
+          className="boton"
+          onClick={() =>
+            setPaginaActual(Math.ceil(datosFiltrados.length / TAM_PAGINA))
+          }
+          disabled={
+            paginaActual === Math.ceil(datosFiltrados.length / TAM_PAGINA)
+          }
+        >
+          {">>"}
+        </button>
+      </div>
     </>
   );
 }
