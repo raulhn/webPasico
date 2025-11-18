@@ -359,10 +359,16 @@ export function DataTable({ cabeceras, datos }) {
         .toLowerCase()
         .includes(filtroSinAcentos.toLowerCase());
     });
+
     if (!nuevosDatosFiltrados || nuevosDatosFiltrados.length === 0) {
       setDatosFiltrados([]);
+      setPaginaActual(1);
     } else {
       setDatosFiltrados(nuevosDatosFiltrados);
+
+      if (paginaActual > Math.ceil(nuevosDatosFiltrados.length / TAM_PAGINA)) {
+        setPaginaActual(Math.ceil(nuevosDatosFiltrados.length / TAM_PAGINA));
+      }
     }
   }, [filtro, datos]);
   if (!datosFiltrados || datosFiltrados.length === 0) {
