@@ -342,7 +342,7 @@ function concatenarArray(array) {
   return array.join(" ");
 }
 
-export function DataTable({ cabeceras, datos }) {
+export function DataTable({ cabeceras, datos, accion = (e) => {} }) {
   const [filtro, setFiltro] = useState("");
   const [datosFiltrados, setDatosFiltrados] = useState(datos);
   const [paginaActual, setPaginaActual] = useState(1);
@@ -415,10 +415,16 @@ export function DataTable({ cabeceras, datos }) {
               }}
               onClick={() => {
                 setSeleccionado(indexFila);
+                accion(fila[0]);
               }}
             >
               {fila.map((celda, indexCelda) => (
-                <td key={indexCelda}>{celda}</td>
+                <td
+                  key={indexCelda}
+                  style={indexCelda === 0 ? { display: "none" } : {}}
+                >
+                  {celda}
+                </td>
               ))}
             </tr>
           ))}

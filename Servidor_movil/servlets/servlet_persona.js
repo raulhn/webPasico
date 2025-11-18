@@ -34,7 +34,7 @@ function registrarPersona(req, res) {
         nid_madre,
         nid_padre,
         nid_socio,
-        fecha_actualizacion
+        fecha_actualizacion,
       );
 
       res.status(200).send({
@@ -123,7 +123,7 @@ async function obtenerPersonas(req, res) {
     let rolPermitido = await servletComun.comprobarRol(
       req,
       res,
-      rolesPermitidos
+      rolesPermitidos,
     );
 
     if (!rolPermitido) {
@@ -202,7 +202,7 @@ async function obtenerPersonasAlumnos(req, res) {
     let rolAdministrador = await servletComun.comprobarRol(
       req,
       res,
-      rolesPermitidos
+      rolesPermitidos,
     );
     if (!rolAdministrador) {
       res.status(403).send({
@@ -233,7 +233,7 @@ async function obtenerPersonasSocios(req, res) {
     let rolAdministrador = await servletComun.comprobarRol(
       req,
       res,
-      rolesPermitidos
+      rolesPermitidos,
     );
     if (!rolAdministrador) {
       res.status(403).send({
@@ -258,15 +258,15 @@ async function obtenerPersonasSocios(req, res) {
   }
 }
 
-async function obtenerAlumnoProfesor(req, res)
-{
-  try
-  {
+async function obtenerAlumnoProfesor(req, res) {
+  try {
     const nid_alumno = req.params.nid_alumno;
     const nid_curso = req.params.nid_curso;
     const rolesPermitidos = [constantes.PROFESOR];
     let rolProfesor = await servletComun.comprobarRol(
-      req, res, rolesPermitidos
+      req,
+      res,
+      rolesPermitidos,
     );
 
     if (!rolProfesor) {
@@ -286,9 +286,11 @@ async function obtenerAlumnoProfesor(req, res)
       return;
     }
 
-
-
-    const esProfesor = await gestorProfesorAlumnoMatricula.esAlumnoProfesor(nid_alumno, nid_profesor, nid_curso);
+    const esProfesor = await gestorProfesorAlumnoMatricula.esAlumnoProfesor(
+      nid_alumno,
+      nid_profesor,
+      nid_curso,
+    );
 
     if (!esProfesor) {
       res.status(403).send({
@@ -317,9 +319,7 @@ async function obtenerAlumnoProfesor(req, res)
       padre: padre,
       madre: madre,
     });
-  }
-  catch(error)
-  {
+  } catch (error) {
     console.error("Error al obtener el alumno profesor:", error.message);
     res.status(400).send({
       error: true,
@@ -328,14 +328,13 @@ async function obtenerAlumnoProfesor(req, res)
   }
 }
 
-async function obtenerPersonasAlumnosAsignatura(req, res)
-{
+async function obtenerPersonasAlumnosAsignatura(req, res) {
   try {
     const rolesPermitidos = [constantes.ADMINISTRADOR];
     let rolAdministrador = await servletComun.comprobarRol(
       req,
       res,
-      rolesPermitidos
+      rolesPermitidos,
     );
     if (!rolAdministrador) {
       res.status(403).send({
@@ -344,12 +343,16 @@ async function obtenerPersonasAlumnosAsignatura(req, res)
       });
       return;
     }
-
     const nid_curso = req.params.nid_curso;
     const nid_asignatura = req.params.nid_asignatura;
     const activo = req.params.activo;
 
-    const personasAlumnos = await gestorPersona.obtenerPersonasAlumnosAsignatura(nid_curso, nid_asignatura, activo); 
+    const personasAlumnos =
+      await gestorPersona.obtenerPersonasAlumnosAsignatura(
+        nid_curso,
+        nid_asignatura,
+        activo,
+      );
 
     res.status(200).send({
       error: false,
@@ -365,6 +368,54 @@ async function obtenerPersonasAlumnosAsignatura(req, res)
   }
 }
 
+async function obtenerInfoPersona(req, res) {
+  try {
+    const rolesPermitidos = [constantes.ADMINISTRADOR];
+    let rolAdministrador = await servletComun.comprobarRol(
+      req,
+      res,
+      rolesPermitidos,
+    );
+    if (!rolAdministrador) {
+      res.status(403).send({
+        error: true,
+        mensaje: "No tienes permisos para obtener la información de la persona",
+      });
+      return;
+    }
+    const nid_persona = req.params.nid_persona;
+    const persona = await gestorPersona.obtenerPersona(nid_persona);
+    if (!persona) {
+      res.status(404).send({
+        error: true,
+        mensaje: "No se encontró la información de la persona",
+      });
+      return;
+    }
+    const nid_padre = await gestorPersona.obtenerPadre(nid_persona);
+    const nid_madre = await gestorPersona.obtenerMadre(nid_persona);
+    const padre = await gestorPersona.obtenerPersona(nid_padre);
+    console.log(nid_padre, padre);
+    const madre = await gestorPersona.obtenerPersona(nid_madre);
+    console.log(nid_madre, madre);
+    res.status(200).send({
+      error: false,
+      mensaje: "Información de la persona obtenida correctamente",
+      persona: persona,
+      padre: padre,
+      madre: madre,
+    });
+  } catch (error) {
+    console.error(
+      "Error al obtener la información de la persona:",
+      error.message,
+    );
+    res.status(400).send({
+      error: true,
+      mensaje: "Error al obtener la información de la persona",
+    });
+  }
+}
 module.exports.obtenerPersona = obtenerPersona;
 module.exports.registrarPersona = registrarPersona;
 module.exports.obtenerPersonasSucias = obtenerPersonasSucias;
@@ -375,4 +426,6 @@ module.exports.obtenerNidPersona = obtenerNidPersona;
 module.exports.obtenerPersonasAlumnos = obtenerPersonasAlumnos;
 module.exports.obtenerPersonasSocios = obtenerPersonasSocios;
 module.exports.obtenerAlumnoProfesor = obtenerAlumnoProfesor;
-module.exports.obtenerPersonasAlumnosAsignatura = obtenerPersonasAlumnosAsignatura;
+module.exports.obtenerPersonasAlumnosAsignatura =
+  obtenerPersonasAlumnosAsignatura;
+module.exports.obtenerInfoPersona = obtenerInfoPersona;
