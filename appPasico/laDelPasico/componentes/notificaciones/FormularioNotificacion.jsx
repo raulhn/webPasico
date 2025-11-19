@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useEffect, useState } from "react";
 
 import { EntradaTexto, Boton } from "../componentesUI/ComponentesUI";
@@ -76,61 +76,63 @@ export default function FormularioNotificacion({
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Formulario de Notificación</Text>
+    <SafeAreaView style={{ flex: 1 }}>
+      <View style={styles.container}>
+        <Text style={styles.title}>Formulario de Notificación</Text>
 
-      <Text style={{ marginBottom: 3 }}>Titulo</Text>
-      <EntradaTexto
-        placeholder={"Título"}
-        valor={titulo}
-        setValor={(texto) => {
-          setTitulo(texto);
-        }}
-      />
-
-      <Text style={{ marginBottom: 3 }}>Descripción</Text>
-      <EntradaTexto
-        placeholder={"Mensaje"}
-        setValor={(texto) => {
-          setMensaje(texto);
-        }}
-        valor={mensaje}
-        multiline={true}
-        alto={100}
-        ancho={300}
-      />
-
-      <Text>Destinatarios</Text>
-      <ItemSelectorPersona
-        tipo={tipo}
-        callback={(personasSeleccionadasRecuperadas) => {
-          setPersonasSeleccionadas(personasSeleccionadasRecuperadas);
-        }}
-        nid_asignatura={nid_asignatura}
-      />
-
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "center",
-          gap: 10,
-        }}
-      >
-        <Boton
-          nombre={"Enviar"}
-          onPress={() => {
-            enviarNotificacion();
+        <Text style={{ marginBottom: 3 }}>Titulo</Text>
+        <EntradaTexto
+          placeholder={"Título"}
+          valor={titulo}
+          setValor={(texto) => {
+            setTitulo(texto);
           }}
         />
-        <Boton
-          nombre={"Cancelar"}
-          onPress={() => {
-            cancelar();
+
+        <Text style={{ marginBottom: 3 }}>Descripción</Text>
+        <EntradaTexto
+          placeholder={"Mensaje"}
+          setValor={(texto) => {
+            setMensaje(texto);
           }}
-          color="red"
+          valor={mensaje}
+          multiline={true}
+          alto={100}
+          ancho={300}
         />
+
+        <Text>Destinatarios</Text>
+        <ItemSelectorPersona
+          tipo={tipo}
+          callback={(personasSeleccionadasRecuperadas) => {
+            setPersonasSeleccionadas(personasSeleccionadasRecuperadas);
+          }}
+          nid_asignatura={nid_asignatura}
+        />
+
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "center",
+            gap: 10,
+          }}
+        >
+          <Boton
+            nombre={"Enviar"}
+            onPress={() => {
+              enviarNotificacion();
+            }}
+          />
+          <Boton
+            nombre={"Cancelar"}
+            onPress={() => {
+              cancelar();
+            }}
+            color="red"
+          />
+        </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
