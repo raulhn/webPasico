@@ -32,7 +32,6 @@ export const CustomHeader = ({ navigation, route, options, title }) => {
       });
   }, []);
 
-  console.log("Usuario en cabecera:", usuario);
   const logo = require("../assets/logo.png");
 
   function enlaceLogin() {
@@ -89,7 +88,6 @@ export const CustomHeader = ({ navigation, route, options, title }) => {
   );
 };
 
-
 export function CustomHeaderEscuela({ navigation, route, options }) {
   return CustomHeader({
     navigation,
@@ -97,7 +95,7 @@ export function CustomHeaderEscuela({ navigation, route, options }) {
     options,
     title: "Escuela",
   });
-};
+}
 
 export function CustomHeaderBanda({ navigation, route, options }) {
   return CustomHeader({
@@ -106,17 +104,16 @@ export function CustomHeaderBanda({ navigation, route, options }) {
     options,
     title: "Banda",
   });
-};
+}
 
-export function CustomHeaderInicio ({ navigation, route, options }) 
-{
+export function CustomHeaderInicio({ navigation, route, options }) {
   return CustomHeader({
     navigation,
     route,
     options,
     title: "Inicio",
   });
-};
+}
 
 const estilos = StyleSheet.create({
   headerContainer: {
@@ -147,5 +144,3 @@ const estilos = StyleSheet.create({
     alignItems: "center",
   },
 });
-
-

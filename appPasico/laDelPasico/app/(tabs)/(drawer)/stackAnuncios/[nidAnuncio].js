@@ -35,7 +35,7 @@ export default function Anuncio() {
   const [modalVisible, setModalVisible] = useState(false);
   const router = useRouter();
 
-  const {asignaturas: asignaturasProfesor} = useAsignaturasProfesor();
+  const { asignaturas: asignaturasProfesor } = useAsignaturasProfesor();
 
   function formatearFecha(fechaISO) {
     if (!fechaISO) return "";
@@ -67,7 +67,7 @@ export default function Anuncio() {
       await ServiceTablon.eliminarTablonAnuncio(nidAnuncio, cerrarSesion);
       console.log("Anuncio eliminado correctamente");
       setModalAvisoVisible(false);
-      router.replace("/(tabs)/(drawer)/tablon");
+      router.replace("/(tabs)/(drawer)/stackAnuncios/tablon");
     } catch (error) {
       console.error("Error al eliminar el anuncio:", error);
     }
@@ -92,21 +92,16 @@ export default function Anuncio() {
     );
   }
 
-  function permisoEdicion()
-  {
-    if (esRol(["PROFESOR"]))
-    {
-      if(anuncio.nid_asignatura)
-      {
-        for(let asignaturaProfesor of asignaturasProfesor)
-        {3
-          if(asignaturaProfesor.nid_asignatura === anuncio.nid_asignatura)
-          {
+  function permisoEdicion() {
+    if (esRol(["PROFESOR"])) {
+      if (anuncio.nid_asignatura) {
+        for (let asignaturaProfesor of asignaturasProfesor) {
+          3;
+          if (asignaturaProfesor.nid_asignatura === anuncio.nid_asignatura) {
             return true;
           }
         }
       }
-      else{return false}
     }
     return esRol(["ADMINISTRADOR"]);
   }
@@ -119,11 +114,13 @@ export default function Anuncio() {
       }
     >
       <Text style={styles.titulo}>{anuncio.titulo}</Text>
-     
+
       <Text style={styles.tipo}>{anuncio.tipo_tablon}</Text>
       <View style={styles.descripcionBox}>
         <Text style={styles.descripcion}>{anuncio.descripcion}</Text>
-        <Text style={styles.fecha}>{formatearFecha(anuncio.fecha_creacion)}</Text>
+        <Text style={styles.fecha}>
+          {formatearFecha(anuncio.fecha_creacion)}
+        </Text>
       </View>
 
       <View
