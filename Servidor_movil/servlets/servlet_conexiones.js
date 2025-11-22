@@ -2,22 +2,27 @@ const gestorConexion = require("../logica/gestorConexiones.js");
 const config = require("../config/config.js");
 
 async function comprobarRecaptcha(recaptchaToken) {
-  const url = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
+  try {
+    const url = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
 
-  const params = new URLSearchParams();
-  params.append("secret", config.apikeyCloudflare);
-  params.append("response", recaptchaToken);
+    const params = new URLSearchParams();
+    params.append("secret", config.apikeyCloudflare);
+    params.append("response", recaptchaToken);
 
-  let respuesta = await fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: params.toString(),
-  });
-  console.log("Respuesta de reCAPTCHA: " + respuesta);
-  let respuesta_json = await respuesta.json();
+    let respuesta = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: params.toString(),
+    });
+    console.log("Respuesta de reCAPTCHA: " + respuesta);
+    let respuesta_json = await respuesta.json();
 
-  let bSuccess = respuesta_json.success;
-  return bSuccess;
+    let bSuccess = respuesta_json.success;
+    return bSuccess;
+  } catch (error) {
+    console.error("Error al verificar reCAPTCHA: " + error);
+    return false;
+  }
 }
 
 async function registrarConexion(req, res) {
