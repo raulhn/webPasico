@@ -23,7 +23,7 @@ async function asyncReegistrarConexion(token, resolve, reject) {
           } else {
             resolve(results);
           }
-        }
+        },
       );
     } else {
       conexion.dbConn.query(
@@ -38,7 +38,7 @@ async function asyncReegistrarConexion(token, resolve, reject) {
           } else {
             resolve(results);
           }
-        }
+        },
       );
     }
   }
@@ -60,7 +60,7 @@ function limpiarToken(token, nidUsuario) {
         } else {
           resolve(results);
         }
-      }
+      },
     );
   });
 }
@@ -79,7 +79,7 @@ function eliminarToken(token) {
         } else {
           resolve(results);
         }
-      }
+      },
     );
   });
 }
@@ -100,7 +100,7 @@ function actualizarTokenUsuario(token, nidUsuario) {
         } else {
           resolve();
         }
-      }
+      },
     );
   });
 }
@@ -121,14 +121,53 @@ function obtenerTokenUsuario(nidUsuario) {
         } else {
           resolve(null); // No se encontró el token
         }
-      }
+      },
     );
   });
 }
 
-function registrarConexion(token) {
+async function registrarConexion(token) {
+  let bExsiste = await existeConexion(token);
+  let numeroConexiones = await numConexiones();
   return new Promise((resolve, reject) => {
-    asyncReegistrarConexion(token, resolve, reject);
+    if (numeroConexiones > constantes.MAX_CONEXIONES) {
+      console.error("Se ha alcanzado el número máximo de conexiones.");
+      reject("Se ha alcanzado el número máximo de conexiones.");
+    } else {
+      if (!bExsiste) {
+        conexion.dbConn.query(
+          "INSERT INTO " +
+            constantes.ESQUEMA +
+            ".conexiones (token, fecha) " +
+            "values (" +
+            conexion.dbConn.escape(token) +
+            ", sysdate() )",
+          (error, results) => {
+            if (error) {
+              console.error("Error al registrar la conexión:", error);
+              reject(error);
+            } else {
+              resolve(results);
+            }
+          },
+        );
+      } else {
+        conexion.dbConn.query(
+          "UPDATE " +
+            constantes.ESQUEMA +
+            ".conexiones SET fecha = sysdate() WHERE token = " +
+            conexion.dbConn.escape(token),
+          (error, results) => {
+            if (error) {
+              console.error("Error al actualizar la conexión:", error);
+              reject(error);
+            } else {
+              resolve(results);
+            }
+          },
+        );
+      }
+    }
   });
 }
 
@@ -146,7 +185,7 @@ function existeConexion(token) {
         } else {
           resolve(results.length > 0);
         }
-      }
+      },
     );
   });
 }
@@ -164,7 +203,7 @@ function numConexiones() {
         } else {
           resolve(results[0].numConexiones);
         }
-      }
+      },
     );
   });
 }
