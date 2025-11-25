@@ -64,7 +64,7 @@ export default function RecuperarPassword() {
       <ModalExito
         visible={exito !== null}
         mensaje={exito}
-        callback={() => setExito(null)}
+        setVisible={() => setExito(null)}
         textBoton="Aceptar"
       />
     </View>

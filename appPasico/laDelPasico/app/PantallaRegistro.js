@@ -1,5 +1,5 @@
 import Registro from "../componentes/usuario/Registro";
-import { View } from "react-native";
+import { View, ScrollView } from "react-native";
 import Recaptcha from "../componentes/Recaptcha";
 import { useState } from "react";
 import Constantes from "../config/constantes.js";
@@ -20,7 +20,9 @@ export default function PantallaRegistro() {
           onVerify={handleVerify}
         />
       </View>
-      <Registro recaptchaToken={recaptchaToken} />
+      <ScrollView>
+        <Registro recaptchaToken={recaptchaToken} />
+      </ScrollView>
     </View>
   );
 }

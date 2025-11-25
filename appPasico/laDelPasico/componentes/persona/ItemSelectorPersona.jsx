@@ -3,6 +3,7 @@ import { useState } from "react";
 import SelectorPersona from "./SelectorPersona"; // Asegúrate de que la ruta sea correcta
 import TabSelector from "./TabSelector";
 import Constantes from "../../config/constantes"; // Asegúrate de que la ruta sea correcta
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ItemSelectorPersona({
   tipo = "",
@@ -43,37 +44,41 @@ export default function ItemSelectorPersona({
 
   return (
     <>
-      <Pressable
-        onPress={() => {
-          setVisible(true);
-        }}
-        style={({ pressed }) => [
-          {
-            backgroundColor: pressed ? "#ddd" : "#fff",
-            borderRadius: 5,
-            marginVertical: 5,
-          },
-        ]}
-      >
-        <View style={estilos.container}>
-          <Text>{mensajeSeleccionado()}</Text>
-        </View>
-      </Pressable>
+      <SafeAreaView>
+        <Pressable
+          onPress={() => {
+            setVisible(true);
+          }}
+          style={({ pressed }) => [
+            {
+              backgroundColor: pressed ? "#ddd" : "#fff",
+              borderRadius: 5,
+              marginVertical: 5,
+            },
+          ]}
+        >
+          <View style={estilos.container}>
+            <Text>{mensajeSeleccionado()}</Text>
+          </View>
+        </Pressable>
 
-      <Modal
-        animationType="slide"
-        visible={esVisible}
-        onRequestClose={() => {
-          setVisible(!esVisible);
-        }}
-      >
-        <TabSelector
-          callback={seleccionPersona}
-          personasSeleccionadas={personasSeleccionadas}
-          tipo={tipo}
-          nid_asignatura={nid_asignatura}
-        />
-      </Modal>
+        <Modal
+          animationType="slide"
+          visible={esVisible}
+          onRequestClose={() => {
+            setVisible(!esVisible);
+          }}
+        >
+          <SafeAreaView style={{ flex: 1 }}>
+            <TabSelector
+              callback={seleccionPersona}
+              personasSeleccionadas={personasSeleccionadas}
+              tipo={tipo}
+              nid_asignatura={nid_asignatura}
+            />
+          </SafeAreaView>
+        </Modal>
+      </SafeAreaView>
     </>
   );
 }

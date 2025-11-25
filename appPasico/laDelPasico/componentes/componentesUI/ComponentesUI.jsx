@@ -11,6 +11,7 @@ import {
   Text,
   FlatList,
   Modal,
+  KeyboardAvoidingView,
 } from "react-native";
 import { useState, useEffect } from "react";
 import { Link } from "expo-router";
@@ -212,6 +213,7 @@ export function EntradaTexto({
     >
       <TextInput
         placeholder={placeholder}
+        placeholderTextColor="gray"
         value={valor}
         editable={editable}
         secureTextEntry={isSecure}
