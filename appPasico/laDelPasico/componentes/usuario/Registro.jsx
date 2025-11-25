@@ -1,7 +1,14 @@
 import React from "react";
 
-import { View, Text, ScrollView, TextInput, Image, Modal } from "react-native";
-
+import {
+  View,
+  Text,
+  ScrollView,
+  Image,
+  Modal,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
 
 import { StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -19,7 +26,6 @@ import {
 } from "../componentesUI/ComponentesUI.jsx";
 
 import Constantes from "../../config/constantes.js";
-
 
 export default function registrarUsuario(recaptchaToken) {
   const [inputActivo, setInputActivo] = React.useState(0);
@@ -137,90 +143,95 @@ export default function registrarUsuario(recaptchaToken) {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
-      <ScrollView>
-        <View
-          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-        >
-          <View style={estilos.container}>
-            <View style={{ paddingBottom: 30 }}>
-              <Image source={logo} style={estilos.logo}></Image>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0} // Ajusta según tu header
+      >
+        <ScrollView>
+          <View
+            style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+          >
+            <View style={estilos.container}>
+              <View style={{ paddingBottom: 30 }}>
+                <Image source={logo} style={estilos.logo}></Image>
+              </View>
+              <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+                Registro de Usuario
+              </Text>
+              <View
+                style={{
+                  paddingTop: 20,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Text>Nombre</Text>
+                <EntradaTexto
+                  valor={nombre}
+                  setValor={setNombre}
+                  secureTextEntry={false}
+                  placeholder="Nombre"
+                  ancho="300"
+                />
+
+                <Text>Primer Apellido</Text>
+                <EntradaTexto
+                  valor={primerApellido}
+                  setValor={setPrimerApellido}
+                  secureTextEntry={false}
+                  placeholder="Primer Apellido"
+                  ancho={"300"}
+                />
+
+                <Text>Segundo Apellido</Text>
+                <EntradaTexto
+                  valor={segundoApellido}
+                  setValor={setSegundoApellido}
+                  secureTextEntry={false}
+                  placeholder={"Segundo Apellido"}
+                  ancho={"300"}
+                />
+
+                <Text>Correo Electrónico</Text>
+                <EntradaTexto
+                  valor={correo}
+                  setValor={setCorreo}
+                  secureTextEntry={false}
+                  placeholder={"Correo Electrónico"}
+                  ancho={"300"}
+                />
+
+                <Text>Contraseña</Text>
+                <EntradaTexto
+                  valor={password}
+                  setValor={setPassword}
+                  secureTextEntry={true}
+                  placeholder="Contraseña"
+                  ancho="200"
+                />
+
+                <Text>Repita la contraseña</Text>
+                <EntradaTexto
+                  valor={password2}
+                  setValor={setPassword2}
+                  secureTextEntry={true}
+                  placeholder="Contraseña"
+                  ancho="200"
+                />
+
+                <Boton
+                  onPress={lanzarRegistro}
+                  nombre="Registrarse"
+                  colorTexto="#FFF"
+                  color="#007BFF"
+                />
+              </View>
+              {incluyeRecaptcha()}
             </View>
-            <Text style={{ fontSize: 20, fontWeight: "bold" }}>
-              Registro de Usuario
-            </Text>
-            <View
-              style={{
-                paddingTop: 20,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Text>Nombre</Text>
-              <EntradaTexto
-                valor={nombre}
-                setValor={setNombre}
-                secureTextEntry={false}
-                placeholder="Nombre"
-                ancho="300"
-              />
-
-              <Text>Primer Apellido</Text>
-              <EntradaTexto
-                valor={primerApellido}
-                setValor={setPrimerApellido}
-                secureTextEntry={false}
-                placeholder="Primer Apellido"
-                ancho={"300"}
-              />
-
-              <Text>Segundo Apellido</Text>
-              <EntradaTexto
-                valor={segundoApellido}
-                setValor={setSegundoApellido}
-                secureTextEntry={false}
-                placeholder={"Segundo Apellido"}
-                ancho={"300"}
-              />
-
-              <Text>Correo Electrónico</Text>
-              <EntradaTexto
-                valor={correo}
-                setValor={setCorreo}
-                secureTextEntry={false}
-                placeholder={"Correo Electrónico"}
-                ancho={"300"}
-              />
-
-              <Text>Contraseña</Text>
-              <EntradaTexto
-                valor={password}
-                setValor={setPassword}
-                secureTextEntry={true}
-                placeholder="Contraseña"
-                ancho="200"
-              />
-
-              <Text>Repita la contraseña</Text>
-              <EntradaTexto
-                valor={password2}
-                setValor={setPassword2}
-                secureTextEntry={true}
-                placeholder="Contraseña"
-                ancho="200"
-              />
-
-              <Boton
-                onPress={lanzarRegistro}
-                nombre="Registrarse"
-                colorTexto="#FFF"
-                color="#007BFF"
-              />
-            </View>
-            {incluyeRecaptcha()}
           </View>
-        </View>
-      </ScrollView>
-
+        </ScrollView>
+      </KeyboardAvoidingView>
       <ModalAviso
         visible={errorValidacion}
         setVisible={() => {

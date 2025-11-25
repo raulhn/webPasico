@@ -107,6 +107,7 @@ export default function SelectorPartituras({ callback, edicion, refrescar }) {
       >
         <TextInput
           placeholder="Buscar partitura..."
+          placeholderTextColor="#888"
           style={{ width: "50%", color: "black" }}
           onChangeText={(text) => {
             const filteredPartituras = partituras.filter(
