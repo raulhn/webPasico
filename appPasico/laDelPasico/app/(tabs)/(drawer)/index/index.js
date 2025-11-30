@@ -15,8 +15,6 @@ import * as Notifications from "expo-notifications";
 
 import Constantes from "../../../../config/constantes.js";
 
-
-
 export default function Index() {
   const expoPushToken = useNotification();
   const [recaptchaToken, setRecaptchaToken] = useState(null);
@@ -35,7 +33,9 @@ export default function Index() {
     Notifications.getLastNotificationResponseAsync().then((notificacion) => {
       if (notificacion) {
         if (notificacion.notification.request.content.data) {
-          router.push(notificacion.notification.request.content.data);
+          console.log(notificacion.notification.request.content);
+          console.log(notificacion.notification.request.content.data.params);
+          router.replace(notificacion.notification.request.content.data);
         }
       }
     });

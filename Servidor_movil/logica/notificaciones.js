@@ -17,7 +17,7 @@ function insertarNotificacion(pushToken, titulo, body, data, fecha_a_enviar) {
       const sql =
         "INSERT INTO " +
         constantes.ESQUEMA +
-        ".notificaciones (push_token, titulo, body, data, estado) VALUES (" +
+        ".notificaciones (push_token, titulo, body, data, estado, fecha_a_enviar) VALUES (" +
         conexion.dbConn.escape(pushToken) +
         ", " +
         conexion.dbConn.escape(titulo) +
@@ -27,9 +27,9 @@ function insertarNotificacion(pushToken, titulo, body, data, fecha_a_enviar) {
         conexion.dbConn.escape(JSON.stringify(data)) +
         ", " +
         conexion.dbConn.escape("PENDIENTE") +
-        ", " + 
-        conexion.dbConn.escape(gestorComun.formatDateToMySQL(fecha_a_enviar)) +        
-        ")";
+        ", ifnull( " +
+        conexion.dbConn.escape(gestorComun.formatDateToMySQL(fecha_a_enviar)) +
+        ", now()) )";
 
       conexion.dbConn.query(sql, (error, result) => {
         if (error) {
@@ -53,7 +53,7 @@ async function registrarNotificacion(nid_persona, titulo, body, data) {
       return null;
     }
     const pushToken = await gestorConexiones.obtenerTokenUsuario(
-      usuario.nid_usuario
+      usuario.nid_usuario,
     );
     if (!pushToken) {
       console.log("No se encontró un token de notificación para el usuario.");
@@ -63,7 +63,7 @@ async function registrarNotificacion(nid_persona, titulo, body, data) {
         pushToken,
         titulo,
         body,
-        data
+        data,
       );
       return nid_notificacion; // Retorna el ID de la notificación insertada
     }
@@ -97,7 +97,7 @@ async function enviarNotificaciones(personas, titulo, body, data) {
         nid_persona,
         titulo,
         body,
-        data
+        data,
       );
     }
   } catch (error) {
@@ -115,7 +115,7 @@ async function enviarNotificacionesTodos(titulo, body, data) {
         pushToken,
         titulo,
         body,
-        data
+        data,
       );
     }
   } catch (error) {
@@ -158,7 +158,7 @@ function actualizarIdEnvioNotificacion(nid_notificacion, id_envio) {
         if (error) {
           console.error(
             "Error al actualizar el ID de envío de la notificación:",
-            error
+            error,
           );
           conexion.dbConn.rollback();
           reject(error);
@@ -188,7 +188,7 @@ async function enviarChunk(chunks, expo) {
 
         await actualizarIdEnvioNotificacion(
           notificacion.nid_notificacion,
-          ticket.id
+          ticket.id,
         );
       }
 
@@ -217,7 +217,7 @@ function actualizarEstadoNotificacion(nid_notificacion, estado) {
         if (error) {
           console.error(
             "Error al actualizar el estado de la notificación:",
-            error
+            error,
           );
           conexion.dbConn.rollback();
           reject(error);
@@ -257,7 +257,7 @@ async function enviarNotificacionesPendientes() {
     for (const notificacion of notificacionesPendientes) {
       await actualizarEstadoNotificacion(
         notificacion.nid_notificacion,
-        "ENVIADA"
+        "ENVIADA",
       );
     }
   } catch (error) {
@@ -371,7 +371,7 @@ async function eliminarErrorRecibos() {
         console.error(
           "Error al eliminar la conexión con push token" +
             notificacion.push_token,
-          error
+          error,
         );
       }
     }
@@ -386,7 +386,7 @@ async function registrarNotificacionGrupo(
   grupos,
   titulo,
   body,
-  data
+  data,
 ) {
   try {
     if (nid_grupo === constantes.BANDA) {
@@ -401,11 +401,11 @@ async function registrarNotificacionGrupo(
       for (const grupo of grupos) {
         const personas =
           await gestorMatriculaAsignatura.obtenerAlumnosCursoActivoAsignatura(
-            grupo
+            grupo,
           );
 
         const personasANotificar = personas.map(
-          (persona) => persona.nid_persona
+          (persona) => persona.nid_persona,
         );
 
         listaPersonasANotificar =
@@ -418,7 +418,7 @@ async function registrarNotificacionGrupo(
         Array.from(conjuntoPersonas),
         titulo,
         body,
-        data
+        data,
       );
     }
   } catch (error) {
