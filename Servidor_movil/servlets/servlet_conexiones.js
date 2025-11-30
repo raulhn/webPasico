@@ -14,7 +14,7 @@ async function comprobarRecaptcha(recaptchaToken) {
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: params.toString(),
     });
-    console.log("Respuesta de reCAPTCHA: " + respuesta);
+    console.log("Respuesta de reCAPTCHA: ", respuesta);
     let respuesta_json = await respuesta.json();
 
     let bSuccess = respuesta_json.success;
@@ -37,7 +37,7 @@ async function registrarConexion(req, res) {
   if (await comprobarRecaptcha(recaptchaToken)) {
     try {
       console.log("Registrando conexión: " + token);
-      gestorConexion.registrarConexion(token);
+      await gestorConexion.registrarConexion(token);
       res
         .status(200)
         .send({ error: false, mensaje: "Conexión registrada correctamente." });
