@@ -201,7 +201,7 @@ export default function Anuncio() {
               : anuncio.nid_tipo_tablon
           }
           data={{
-            pathname: "/Anuncio/[nidAnuncio]",
+            pathname: "/stackAnuncios/[nidAnuncio]",
             params: { nidAnuncio: anuncio.nid_tablon_anuncio },
           }}
         />
