@@ -20,7 +20,7 @@ function existe_matricula(nid_persona, nid_curso) {
         } else {
           resolve(results[0]["cont"] > 0);
         }
-      }
+      },
     );
   });
 }
@@ -44,7 +44,7 @@ function obtener_nid_matricula(nid_persona, nid_curso) {
         } else {
           resolve(results[0]["nid"]);
         }
-      }
+      },
     );
   });
 }
@@ -72,7 +72,7 @@ async function registrar_matricula(nid_persona, nid_curso) {
                 conexion.dbConn.commit();
                 resolve(results.insertId);
               }
-            }
+            },
           );
         });
       });
@@ -102,7 +102,7 @@ function actualizar_matricula(nid_matricula, nid_persona, nid_curso) {
             conexion.dbConn.commit();
             resolve();
           }
-        }
+        },
       );
     });
   });
@@ -122,7 +122,7 @@ function obtener_matriculas(nid_persona) {
         } else {
           resolve(results);
         }
-      }
+      },
     );
   });
 }
@@ -147,7 +147,7 @@ function obtener_alumnos_asignaturas(nid_curso, nid_asignatura) {
         } else {
           resolve(results);
         }
-      }
+      },
     );
   });
 }
@@ -173,7 +173,7 @@ function obtener_alumnos_asignaturas_alta(nid_curso, nid_asignatura) {
         } else {
           resolve(results);
         }
-      }
+      },
     );
   });
 }
@@ -199,7 +199,7 @@ function obtener_alumnos_asignaturas_baja(nid_curso, nid_asignatura) {
         } else {
           resolve(results);
         }
-      }
+      },
     );
   });
 }
@@ -224,11 +224,11 @@ function obtener_alumnos_cursos_alta(nid_curso) {
         "and (ma.fecha_baja is null or ma.fecha_baja > sysdate()))",
       (error, results, fields) => {
         if (error) {
-          console.log(error), reject();
+          (console.log(error), reject());
         } else {
           resolve(results);
         }
-      }
+      },
     );
   });
 }
@@ -253,11 +253,11 @@ function obtener_alumnos_cursos_baja(nid_curso) {
         "and (ma.fecha_baja is null or ma.fecha_baja > sysdate()))",
       (error, results, fields) => {
         if (error) {
-          console.log(error), reject();
+          (console.log(error), reject());
         } else {
           resolve(results);
         }
-      }
+      },
     );
   });
 }
@@ -275,11 +275,11 @@ function obtener_alumnos_cursos(nid_curso) {
         conexion.dbConn.escape(nid_curso),
       (error, results, fields) => {
         if (error) {
-          console.log(error), reject();
+          (console.log(error), reject());
         } else {
           resolve(results);
         }
-      }
+      },
     );
   });
 }
@@ -307,7 +307,7 @@ function obtener_alumnos_curso_actual() {
         } else {
           resolve(results);
         }
-      }
+      },
     );
   });
 }
@@ -341,7 +341,7 @@ function obtener_alumnos_profesor(nid_profesor, nid_curso, nid_asignatura) {
         conexion.dbConn.escape(nid_asignatura) +
         " or " +
         conexion.dbConn.escape(nid_asignatura) +
-        " = 0) " ,
+        " = 0) ",
       (error, results, fields) => {
         if (error) {
           console.log(error);
@@ -349,7 +349,7 @@ function obtener_alumnos_profesor(nid_profesor, nid_curso, nid_asignatura) {
         } else {
           resolve(results);
         }
-      }
+      },
     );
   });
 }
@@ -357,7 +357,7 @@ function obtener_alumnos_profesor(nid_profesor, nid_curso, nid_asignatura) {
 function obtener_alumnos_profesor_alta(
   nid_profesor,
   nid_curso,
-  nid_asignatura
+  nid_asignatura,
 ) {
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(
@@ -397,7 +397,7 @@ function obtener_alumnos_profesor_alta(
         } else {
           resolve(results);
         }
-      }
+      },
     );
   });
 }
@@ -405,7 +405,7 @@ function obtener_alumnos_profesor_alta(
 function obtener_alumnos_profesor_baja(
   nid_profesor,
   nid_curso,
-  nid_asignatura
+  nid_asignatura,
 ) {
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(
@@ -445,7 +445,7 @@ function obtener_alumnos_profesor_baja(
         } else {
           resolve(results);
         }
-      }
+      },
     );
   });
 }
@@ -467,7 +467,7 @@ function obtener_matriculas_alumno(nid_alumno) {
         } else {
           resolve(results);
         }
-      }
+      },
     );
   });
 }
@@ -496,7 +496,7 @@ function obtener_matricula(nid_matricula) {
         } else {
           resolve(results[0]);
         }
-      }
+      },
     );
   });
 }
@@ -518,7 +518,7 @@ function obtener_objeto_matricula(nid_matricula) {
         } else {
           resolve(results[0]);
         }
-      }
+      },
     );
   });
 }
@@ -551,13 +551,13 @@ function obtener_asignaturas_matricula(nid_matricula) {
       (error, results, fields) => {
         if (error) {
           console.log(
-            "matricula.js - obtenerr_asignaturas_matricula ->" + error
+            "matricula.js - obtenerr_asignaturas_matricula ->" + error,
           );
           reject("Se ha producido un error al recuperar las matriculas");
         } else {
           resolve(results);
         }
-      }
+      },
     );
   });
 }
@@ -590,7 +590,7 @@ function obtener_asignaturas_matricula_activas(nid_matricula) {
         } else {
           resolve(results);
         }
-      }
+      },
     );
   });
 }
@@ -598,7 +598,7 @@ function obtener_asignaturas_matricula_activas(nid_matricula) {
 function obtener_asignaturas_matricula_activas_fecha(
   nid_matricula,
   fecha_desde,
-  fecha_hasta
+  fecha_hasta,
 ) {
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(
@@ -636,7 +636,7 @@ function obtener_asignaturas_matricula_activas_fecha(
         } else {
           resolve(results);
         }
-      }
+      },
     );
   });
 }
@@ -666,7 +666,7 @@ function obtener_cursos_profesor(nid_profesor) {
         } else {
           resolve(results);
         }
-      }
+      },
     );
   });
 }
@@ -689,13 +689,17 @@ function registrar_precio_manual(nid_matricula, precio, comentario_precio) {
         } else {
           resolve();
         }
-      }
+      },
     );
   });
 }
 
 // Funciones para dar de baja en matriculas a un profesor //
-function obtener_matriculas_activas_profesor(nid_profesor, nid_asignatura) {
+function obtener_matriculas_activas_profesor(
+  nid_profesor,
+  nid_asignatura,
+  nid_curso,
+) {
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(
       " select pam.* from " +
@@ -707,7 +711,9 @@ function obtener_matriculas_activas_profesor(nid_profesor, nid_asignatura) {
         ".matricula m " +
         "where pam.nid_matricula_asignatura = ma.nid and " +
         "ma.nid_matricula = m.nid and " +
-        " m.nid_curso = (select max(nid_curso) from pasico_gestor.curso) and " +
+        " m.nid_curso = " +
+        conexion.dbConn.escape(nid_curso) +
+        " and " +
         " pam.nid_profesor = " +
         conexion.dbConn.escape(nid_profesor) +
         " and " +
@@ -720,14 +726,14 @@ function obtener_matriculas_activas_profesor(nid_profesor, nid_asignatura) {
         } else {
           resolve(results);
         }
-      }
+      },
     );
   });
 }
 
 async function obtener_matriculas_activas_asignatura(
   nid_profesor,
-  nid_asignatura
+  nid_asignatura,
 ) {
   try {
     nid_ultimo_curso = await curso.obtener_ultimo_curso();
@@ -763,7 +769,7 @@ async function obtener_matriculas_activas_asignatura(
           } else {
             resolve(results);
           }
-        }
+        },
       );
     });
   } catch (error) {
@@ -790,7 +796,7 @@ function obtener_matricula_asignatura(nid_matricula, nid_asignatura) {
         } else {
           resolve(results[0]);
         }
-      }
+      },
     );
   });
 }
@@ -824,7 +830,7 @@ async function obtener_matriculas_activas() {
           } else {
             resolve(results);
           }
-        }
+        },
       );
     });
   } catch (error) {
@@ -864,7 +870,7 @@ async function obtener_personas_con_matricula_activa() {
           } else {
             resolve(results);
           }
-        }
+        },
       );
     });
   } catch (error) {
@@ -875,7 +881,7 @@ async function obtener_personas_con_matricula_activa() {
 
 async function obtener_personas_matricula_activa_fecha(
   fecha_desde,
-  fecha_hasta
+  fecha_hasta,
 ) {
   try {
     nid_ultimo_curso = await curso.obtener_ultimo_curso();
@@ -914,7 +920,7 @@ async function obtener_personas_matricula_activa_fecha(
           } else {
             resolve(results);
           }
-        }
+        },
       );
     });
   } catch (error) {
@@ -937,14 +943,14 @@ function baja_profesor_alumno_matricula(nid_profesor_alumno_matricula) {
         } else {
           resolve();
         }
-      }
+      },
     );
   });
 }
 
 function alta_profesor_alumno_matricula_baja(
   nid_profesor_sustituto,
-  nid_profesor_alumno_matricula
+  nid_profesor_alumno_matricula,
 ) {
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(
@@ -962,7 +968,7 @@ function alta_profesor_alumno_matricula_baja(
         } else {
           resolve(results.insertId);
         }
-      }
+      },
     );
   });
 }
@@ -984,7 +990,7 @@ function obtener_profesor_alumno_matricula(nid_matricula_asignatura) {
         } else {
           resolve(results[0]);
         }
-      }
+      },
     );
   });
 }
@@ -992,45 +998,47 @@ function obtener_profesor_alumno_matricula(nid_matricula_asignatura) {
 function sustituir_profesor_curso_actual(
   nid_profesor,
   nid_profesor_sustituto,
-  nid_asignatura
+  nid_asignatura,
 ) {
   return new Promise((resolve, reject) => {
     conexion.dbConn.beginTransaction(async () => {
       try {
+        nid_curso_actual = await curso.obtener_ultimo_curso();
         let matriculas_a_susituir = await obtener_matriculas_activas_profesor(
           nid_profesor,
-          nid_asignatura
+          nid_asignatura,
+          nid_curso_actual,
         );
 
         for (let i = 0; i < matriculas_a_susituir.length; i++) {
           const nid_profesor_alumno_matricula =
             await alta_profesor_alumno_matricula_baja(
               nid_profesor_sustituto,
-              matriculas_a_susituir[i]["nid"]
+              matriculas_a_susituir[i]["nid"],
             );
 
           await gestorProfesorAlumnoMatricula.actualizar_sucio(
             nid_profesor_alumno_matricula,
-            "S"
+            "S",
           );
           await baja_profesor_alumno_matricula(matriculas_a_susituir[i]["nid"]);
 
           await gestorProfesorAlumnoMatricula.actualizar_sucio(
             matriculas_a_susituir[i]["nid"],
-            "S"
+            "S",
           );
         }
 
         console.log(
           "Se han dado de baja los profesores de la asignatura " +
             nid_asignatura +
-            " y se han dado de alta los profesores sustitutos"
+            " y se han dado de alta los profesores sustitutos",
         );
         await logica_asignatura.eliminar_profesor(nid_asignatura, nid_profesor);
         await logica_asignatura.modificar_sucio_profesor(
           nid_profesor,
           nid_asignatura,
-          "S"
+          "S",
         );
         conexion.dbConn.commit();
         resolve();
@@ -1051,22 +1059,22 @@ function sustituir_profesor_alumno(nid_profesor, nid_matricula_asignatura) {
           let profesor_alumno_matricula =
             await obtener_profesor_alumno_matricula(nid_matricula_asignatura);
           await baja_profesor_alumno_matricula(
-            profesor_alumno_matricula["nid"]
+            profesor_alumno_matricula["nid"],
           );
 
           await gestorProfesorAlumnoMatricula.actualizar_sucio(
             profesor_alumno_matricula["nid"],
-            "S"
+            "S",
           );
           const nid_profesor_alumno_matricula =
             await alta_profesor_alumno_matricula_baja(
               nid_profesor,
-              profesor_alumno_matricula["nid"]
+              profesor_alumno_matricula["nid"],
             );
 
           await gestorProfesorAlumnoMatricula.actualizar_sucio(
             nid_profesor_alumno_matricula,
-            "S"
+            "S",
           );
 
           conexion.dbConn.commit();
@@ -1103,7 +1111,7 @@ function actualizar_sucio(nid_matricula, sucio) {
             conexion.dbConn.commit();
             resolve();
           }
-        }
+        },
       );
     });
   });
@@ -1120,7 +1128,7 @@ function obtener_matriculas_sucias() {
         } else {
           resolve(results);
         }
-      }
+      },
     );
   });
 }
