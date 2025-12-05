@@ -9,7 +9,7 @@ function insertarEvaluacion(
   nid_asignatura,
   nid_profesor,
   nid_curso,
-  sucio = 'S'
+  sucio = "S",
 ) {
   return new Promise((resolve, reject) => {
     const sql =
@@ -42,14 +42,12 @@ function insertarEvaluacion(
   });
 }
 
-
-
 function insertarEvaluacionSucio(
   nid_trimestre,
   nid_asignatura,
   nid_profesor,
   fecha_actualizacion,
-  nid_curso
+  nid_curso,
 ) {
   return new Promise((resolve, reject) => {
     const sql =
@@ -66,7 +64,7 @@ function insertarEvaluacionSucio(
       ", " +
       conexion.dbConn.escape(comun.formatDateToMySQL(fecha_actualizacion)) +
       ", " +
-      conexion.dbConn.escape('N') +
+      conexion.dbConn.escape("N") +
       ", " +
       conexion.dbConn.escape(nid_curso) +
       ")";
@@ -86,14 +84,13 @@ function insertarEvaluacionSucio(
   });
 }
 
-
 function actualizarEvaluacion(
   nid_evaluacion,
   nid_trimestre,
   nid_asignatura,
   nid_profesor,
   fecha_actualizacion,
-  nid_curso
+  nid_curso,
 ) {
   return new Promise((resolve, reject) => {
     const sql =
@@ -106,7 +103,8 @@ function actualizarEvaluacion(
       ", nid_profesor = " +
       conexion.dbConn.escape(nid_profesor) +
       ", fecha_actualizacion = ifnull(" +
-      conexion.dbConn.escape(comun.formatDateToMySQL(fecha_actualizacion)) + ", now())" +
+      conexion.dbConn.escape(comun.formatDateToMySQL(fecha_actualizacion)) +
+      ", now())" +
       ", nid_curso = " +
       conexion.dbConn.escape(nid_curso) +
       ", sucio = 'N'" +
@@ -142,7 +140,7 @@ function existeEvaluacion(nid_evaluacion) {
       if (error) {
         console.error(
           "Error al verificar la existencia de la evaluación:",
-          error
+          error,
         );
         reject(error);
       }
@@ -177,14 +175,19 @@ async function registrarEvaluacion(
   nid_asignatura,
   nid_profesor,
   fecha_actualizacion,
-  nid_curso
+  nid_curso,
 ) {
   try {
-    const evaluacion = await obtenerEvaluacion(nid_curso, nid_asignatura, nid_trimestre, nid_profesor);
+    const evaluacion = await obtenerEvaluacion(
+      nid_curso,
+      nid_asignatura,
+      nid_trimestre,
+      nid_profesor,
+    );
     if (evaluacion) {
       const requiereActualizar = await requiereActualizarEvaluacion(
         evaluacion.nid_evaluacion,
-        fecha_actualizacion
+        fecha_actualizacion,
       );
       if (requiereActualizar) {
         return await actualizarEvaluacion(
@@ -193,7 +196,7 @@ async function registrarEvaluacion(
           nid_asignatura,
           nid_profesor,
           fecha_actualizacion,
-          nid_curso
+          nid_curso,
         );
       } else {
         return "No se requiere actualización";
@@ -204,7 +207,7 @@ async function registrarEvaluacion(
         nid_asignatura,
         nid_profesor,
         fecha_actualizacion,
-        nid_curso
+        nid_curso,
       );
     }
   } catch (error) {
@@ -273,7 +276,7 @@ function obtenerEvaluacionTrimestre(nid_matricula, nid_trimestre) {
       if (err) {
         console.error(
           "evaluacion.js -> obtenerEvaluacionTrimestre: Error al obtener la evaluación del trimestre:",
-          err
+          err,
         );
         reject(err);
       }
@@ -320,7 +323,7 @@ function obtenerEvaluaciones(nid_matricula) {
       if (err) {
         console.error(
           "evaluacion.js -> obtenerEvaluaciones: Error al obtener las evaluaciones:",
-          err
+          err,
         );
         reject(err);
       } else {
@@ -333,7 +336,7 @@ function obtenerEvaluaciones(nid_matricula) {
 function obtener_evaluacion_matricula_asginatura_tipo(
   nid_matricula,
   tipo_asignatura,
-  nid_trimestre
+  nid_trimestre,
 ) {
   return new Promise((resolve, reject) => {
     let filtro_tipo_asignatura = "";
@@ -404,7 +407,7 @@ function obtener_evaluacion_matricula_asginatura_tipo(
         } else {
           resolve(results);
         }
-      }
+      },
     );
   });
 }
@@ -432,6 +435,46 @@ function textoAcentosARtf(texto) {
   return texto.replace(/[áéíóúÁÉÍÓÚñÑüÜºª]/g, (c) => mapa[c] || c);
 }
 
+async function obtener_evaluacion_tutor(nid_matricula, nid_trimestre) {
+  try {
+    let array_evaluacion_matricula =
+      await obtener_evaluacion_matricula_asginatura_tipo(
+        nid_matricula,
+        constantes.ASIGNATURA_INSTRUMENTO_BANDA,
+        nid_trimestre,
+      );
+
+    if (array_evaluacion_matricula.length > 0) {
+      return array_evaluacion_matricula[0];
+    } else {
+      array_evaluacion_matricula =
+        await obtener_evaluacion_matricula_asginatura_tipo(
+          nid_matricula,
+          constantes.ASIGNATURA_INSTRUMENTO_NO_BANDA,
+          nid_trimestre,
+        );
+      if (array_evaluacion_matricula.length > 0) {
+        return array_evaluacion_matricula[0];
+      } else {
+        array_evaluacion_matricula =
+          await obtener_evaluacion_matricula_asginatura_tipo(
+            nid_matricula,
+            constantes.ASIGNATURA_LENGUAJE,
+            nid_trimestre,
+          );
+        if (array_evaluacion_matricula.length > 0) {
+          return array_evaluacion_matricula[0];
+        } else {
+          return null;
+        }
+      }
+    }
+  } catch (error) {
+    console.log("evaluacion.js - obtener_evaluacion_tutor ->" + error);
+    throw new Error("Error al obtener la evaluación de tutor");
+  }
+}
+
 async function generar_boletin(nid_matricula, nid_trimestre) {
   try {
     // Se recupera la plantilla //
@@ -440,9 +483,9 @@ async function generar_boletin(nid_matricula, nid_trimestre) {
 
     // Se obtiene la evaluación de tutor //
     let evaluacion_tutor = null;
-    evaluacion_tutor = await obtenerEvaluacionTrimestre(
+    evaluacion_tutor = await obtener_evaluacion_tutor(
       nid_matricula,
-      nid_trimestre
+      nid_trimestre,
     );
 
     let profesor = "";
@@ -464,7 +507,7 @@ async function generar_boletin(nid_matricula, nid_trimestre) {
         await obtener_evaluacion_matricula_asginatura_tipo(
           nid_matricula,
           constantes.ASIGNATURA_LENGUAJE,
-          nid_trimestre
+          nid_trimestre,
         );
 
       let asignatura_lenguaje = "";
@@ -489,7 +532,7 @@ async function generar_boletin(nid_matricula, nid_trimestre) {
       texto = texto.replace("||COMENTARIO_LENGUAJE||", comentario_lenguaje);
       texto = texto.replace(
         "||NIVEL_SOLFEO||",
-        textoAcentosARtf(asignatura_lenguaje)
+        textoAcentosARtf(asignatura_lenguaje),
       );
       texto = texto.replace("||ASIGNATURA_SOLFEO||", "Lenguaje Musical");
 
@@ -499,13 +542,13 @@ async function generar_boletin(nid_matricula, nid_trimestre) {
         await obtener_evaluacion_matricula_asginatura_tipo(
           nid_matricula,
           constantes.ASIGNATURA_INSTRUMENTO_BANDA,
-          nid_trimestre
+          nid_trimestre,
         );
 
       for (let i = 0; i < array_evaluacion_instrumento_banda.length; i++) {
         let evaluacion_instrumento = array_evaluacion_instrumento_banda[i];
         let texto_instrumento_parametro = await parametros.obtener_valor(
-          "PLANTILLA_NOTAS_INSTRUMENTO"
+          "PLANTILLA_NOTAS_INSTRUMENTO",
         );
         let texto_instrumento_aux = texto_instrumento_parametro["valor"];
         if (evaluacion_instrumento["nota"] == 0) {
@@ -518,25 +561,25 @@ async function generar_boletin(nid_matricula, nid_trimestre) {
           .toString()
           .replace(
             "||NOTA_INSTRUMENTO||",
-            "(" + evaluacion_instrumento["nota"] + ")"
+            "(" + evaluacion_instrumento["nota"] + ")",
           );
         texto_instrumento_aux = texto_instrumento_aux
           .toString()
           .replace(
             "||ASIGNATURA_INSTRUMENTO||",
-            evaluacion_instrumento["asignatura"]
+            evaluacion_instrumento["asignatura"],
           );
         texto_instrumento_aux = texto_instrumento_aux
           .toString()
           .replace(
             "||PROGRESO_INSTRUMENTO||",
-            evaluacion_instrumento["progreso"]
+            evaluacion_instrumento["progreso"],
           );
         texto_instrumento_aux = texto_instrumento_aux
           .toString()
           .replace(
             "||COMENTARIO_INSTRUMENTO||",
-            evaluacion_instrumento["comentario"]
+            evaluacion_instrumento["comentario"],
           );
 
         texto_instrumento = texto_instrumento + texto_instrumento_aux;
@@ -546,13 +589,13 @@ async function generar_boletin(nid_matricula, nid_trimestre) {
         await obtener_evaluacion_matricula_asginatura_tipo(
           nid_matricula,
           constantes.ASIGNATURA_INSTRUMENTO_NO_BANDA,
-          nid_trimestre
+          nid_trimestre,
         );
 
       for (let i = 0; i < array_evaluacion_instrumento_no_banda.length; i++) {
         let evaluacion_instrumento = array_evaluacion_instrumento_no_banda[i];
         let texto_instrumento_parametro = await parametros.obtener_valor(
-          "PLANTILLA_NOTAS_INSTRUMENTO"
+          "PLANTILLA_NOTAS_INSTRUMENTO",
         );
         let texto_instrumento_aux = texto_instrumento_parametro["valor"];
 
@@ -566,25 +609,25 @@ async function generar_boletin(nid_matricula, nid_trimestre) {
           .toString()
           .replace(
             "||NOTA_INSTRUMENTO||",
-            "(" + evaluacion_instrumento["nota"] + ")"
+            "(" + evaluacion_instrumento["nota"] + ")",
           );
         texto_instrumento_aux = texto_instrumento_aux
           .toString()
           .replace(
             "||ASIGNATURA_INSTRUMENTO||",
-            evaluacion_instrumento["asignatura"]
+            evaluacion_instrumento["asignatura"],
           );
         texto_instrumento_aux = texto_instrumento_aux
           .toString()
           .replace(
             "||PROGRESO_INSTRUMENTO||",
-            evaluacion_instrumento["progreso"]
+            evaluacion_instrumento["progreso"],
           );
         texto_instrumento_aux = texto_instrumento_aux
           .toString()
           .replace(
             "||COMENTARIO_INSTRUMENTO||",
-            evaluacion_instrumento["comentario"]
+            evaluacion_instrumento["comentario"],
           );
 
         texto_instrumento = texto_instrumento + texto_instrumento_aux;
@@ -594,13 +637,13 @@ async function generar_boletin(nid_matricula, nid_trimestre) {
         await obtener_evaluacion_matricula_asginatura_tipo(
           nid_matricula,
           constantes.ASIGNATURA_BANDA,
-          nid_trimestre
+          nid_trimestre,
         );
 
       for (let i = 0; i < array_evaluacion_banda.length; i++) {
         let evaluacion_instrumento = array_evaluacion_banda[i];
         let texto_instrumento_parametro = await parametros.obtener_valor(
-          "PLANTILLA_NOTAS_INSTRUMENTO"
+          "PLANTILLA_NOTAS_INSTRUMENTO",
         );
         let texto_instrumento_aux = texto_instrumento_parametro["valor"];
 
@@ -614,25 +657,25 @@ async function generar_boletin(nid_matricula, nid_trimestre) {
           .toString()
           .replace(
             "||NOTA_INSTRUMENTO||",
-            "(" + evaluacion_instrumento["nota"] + ")"
+            "(" + evaluacion_instrumento["nota"] + ")",
           );
         texto_instrumento_aux = texto_instrumento_aux
           .toString()
           .replace(
             "||ASIGNATURA_INSTRUMENTO||",
-            evaluacion_instrumento["asignatura"]
+            evaluacion_instrumento["asignatura"],
           );
         texto_instrumento_aux = texto_instrumento_aux
           .toString()
           .replace(
             "||PROGRESO_INSTRUMENTO||",
-            evaluacion_instrumento["progreso"]
+            evaluacion_instrumento["progreso"],
           );
         texto_instrumento_aux = texto_instrumento_aux
           .toString()
           .replace(
             "||COMENTARIO_INSTRUMENTO||",
-            evaluacion_instrumento["comentario"]
+            evaluacion_instrumento["comentario"],
           );
 
         texto_instrumento = texto_instrumento + texto_instrumento_aux;
@@ -656,8 +699,12 @@ async function generar_boletin(nid_matricula, nid_trimestre) {
   }
 }
 
-function obtenerEvaluacionesAsignaturas(nidAsignatura, nidCurso, nidTrimestre, nidProfesor)
-{
+function obtenerEvaluacionesAsignaturas(
+  nidAsignatura,
+  nidCurso,
+  nidTrimestre,
+  nidProfesor,
+) {
   return new Promise((resolve, reject) => {
     const sql =
       "SELECT e.nid_evaluacion, e.nid_trimestre, e.nid_asignatura, e.nid_profesor, " +
@@ -665,16 +712,35 @@ function obtenerEvaluacionesAsignaturas(nidAsignatura, nidCurso, nidTrimestre, n
       "ma.nid_matricula_asignatura, " +
       "concat(p.nombre, ' ', p.primer_apellido, ' ', p.segundo_apellido) as profesor, " +
       "concat(pa.nombre, ' ', pa.primer_apellido, ' ', pa.segundo_apellido) as alumno " +
-      "FROM " + constantes.ESQUEMA + ".evaluacion e " +
-      "JOIN " + constantes.ESQUEMA + ".evaluacion_matricula em ON e.nid_evaluacion = em.nid_evaluacion " +
-      "JOIN " + constantes.ESQUEMA + ".matricula_asignatura ma ON ma.nid_matricula_asignatura = em.nid_matricula_asignatura " +
-      "JOIN " + constantes.ESQUEMA + ".matricula m ON m.nid_matricula = ma.nid_matricula " +
-      "JOIN " + constantes.ESQUEMA + ".persona p ON p.nid_persona = e.nid_profesor " +
-      "JOIN " + constantes.ESQUEMA + ".persona pa ON pa.nid_persona = m.nid_persona " +
-      "JOIN " + constantes.ESQUEMA + ".profesor_alumno_matricula pam on pam.nid_matricula_asignatura = em.nid_matricula_asignatura " +
-      "WHERE e.nid_asignatura = " + conexion.dbConn.escape(nidAsignatura) + " AND e.nid_trimestre = " +
-      conexion.dbConn.escape(nidTrimestre) + " AND m.nid_curso = " + conexion.dbConn.escape(nidCurso) +
-       " AND e.nid_profesor = " + conexion.dbConn.escape(nidProfesor);
+      "FROM " +
+      constantes.ESQUEMA +
+      ".evaluacion e " +
+      "JOIN " +
+      constantes.ESQUEMA +
+      ".evaluacion_matricula em ON e.nid_evaluacion = em.nid_evaluacion " +
+      "JOIN " +
+      constantes.ESQUEMA +
+      ".matricula_asignatura ma ON ma.nid_matricula_asignatura = em.nid_matricula_asignatura " +
+      "JOIN " +
+      constantes.ESQUEMA +
+      ".matricula m ON m.nid_matricula = ma.nid_matricula " +
+      "JOIN " +
+      constantes.ESQUEMA +
+      ".persona p ON p.nid_persona = e.nid_profesor " +
+      "JOIN " +
+      constantes.ESQUEMA +
+      ".persona pa ON pa.nid_persona = m.nid_persona " +
+      "JOIN " +
+      constantes.ESQUEMA +
+      ".profesor_alumno_matricula pam on pam.nid_matricula_asignatura = em.nid_matricula_asignatura " +
+      "WHERE e.nid_asignatura = " +
+      conexion.dbConn.escape(nidAsignatura) +
+      " AND e.nid_trimestre = " +
+      conexion.dbConn.escape(nidTrimestre) +
+      " AND m.nid_curso = " +
+      conexion.dbConn.escape(nidCurso) +
+      " AND e.nid_profesor = " +
+      conexion.dbConn.escape(nidProfesor);
 
     conexion.dbConn.query(sql, (err, results) => {
       if (err) {
@@ -687,9 +753,7 @@ function obtenerEvaluacionesAsignaturas(nidAsignatura, nidCurso, nidTrimestre, n
   });
 }
 
-
-function obtenerEvaluacion(nidCurso, nidAsignatura, nidTrimestre, nidProfesor)
-{
+function obtenerEvaluacion(nidCurso, nidAsignatura, nidTrimestre, nidProfesor) {
   return new Promise((resolve, reject) => {
     const sql =
       "SELECT e.* FROM " +
@@ -718,9 +782,13 @@ function obtenerEvaluacion(nidCurso, nidAsignatura, nidTrimestre, nidProfesor)
   });
 }
 
-
-function insertarEvaluacionMatricula(nidEvaluacion, nota, nid_tipo_progreso, nid_matricula_asignatura, comentario)
-{
+function insertarEvaluacionMatricula(
+  nidEvaluacion,
+  nota,
+  nid_tipo_progreso,
+  nid_matricula_asignatura,
+  comentario,
+) {
   return new Promise((resolve, reject) => {
     const sql =
       "INSERT INTO " +
@@ -728,7 +796,8 @@ function insertarEvaluacionMatricula(nidEvaluacion, nota, nid_tipo_progreso, nid
       ".evaluacion_matricula (nid_evaluacion, nota, nid_tipo_progreso, nid_matricula_asignatura, comentario, sucio) VALUES (" +
       conexion.dbConn.escape(nidEvaluacion) +
       ", nullif(" +
-      conexion.dbConn.escape(nota) + ", '')" +
+      conexion.dbConn.escape(nota) +
+      ", '')" +
       ", " +
       conexion.dbConn.escape(nid_tipo_progreso) +
       ", " +
@@ -748,20 +817,34 @@ function insertarEvaluacionMatricula(nidEvaluacion, nota, nid_tipo_progreso, nid
   });
 }
 
-function actualizarEvaluacionMatricula(nidEvaluacionMatricula, nidEvaluacion, nota, nid_tipo_progreso, nid_matricula_asignatura, comentario)
-{
+function actualizarEvaluacionMatricula(
+  nidEvaluacionMatricula,
+  nidEvaluacion,
+  nota,
+  nid_tipo_progreso,
+  nid_matricula_asignatura,
+  comentario,
+) {
   return new Promise((resolve, reject) => {
     const sql =
       "UPDATE " +
       constantes.ESQUEMA +
-      ".evaluacion_matricula SET nota = nullif(" + conexion.dbConn.escape(nota) + ", ''" +
-      "), nid_tipo_progreso = " + conexion.dbConn.escape(nid_tipo_progreso) +
-      ", comentario = trim(" + conexion.dbConn.escape(comentario) + ")" +
-      ", nid_evaluacion = " + conexion.dbConn.escape(nidEvaluacion) +
-      ", nid_matricula_asignatura = " + conexion.dbConn.escape(nid_matricula_asignatura) +
+      ".evaluacion_matricula SET nota = nullif(" +
+      conexion.dbConn.escape(nota) +
+      ", ''" +
+      "), nid_tipo_progreso = " +
+      conexion.dbConn.escape(nid_tipo_progreso) +
+      ", comentario = trim(" +
+      conexion.dbConn.escape(comentario) +
+      ")" +
+      ", nid_evaluacion = " +
+      conexion.dbConn.escape(nidEvaluacion) +
+      ", nid_matricula_asignatura = " +
+      conexion.dbConn.escape(nid_matricula_asignatura) +
       ", sucio =  'S'" +
       ", fecha_actualizacion = NOW()" +
-      " WHERE nid_evaluacion_matricula = " + conexion.dbConn.escape(nidEvaluacionMatricula);
+      " WHERE nid_evaluacion_matricula = " +
+      conexion.dbConn.escape(nidEvaluacionMatricula);
 
     conexion.dbConn.query(sql, (err, result) => {
       if (err) {
@@ -774,8 +857,7 @@ function actualizarEvaluacionMatricula(nidEvaluacionMatricula, nidEvaluacion, no
   });
 }
 
-function existeEvaluacionMatricula(nidEvaluacion, nidMatriculaAsignatura)
-{
+function existeEvaluacionMatricula(nidEvaluacion, nidMatriculaAsignatura) {
   return new Promise((resolve, reject) => {
     const sql =
       "SELECT COUNT(*) AS existe FROM " +
@@ -796,8 +878,7 @@ function existeEvaluacionMatricula(nidEvaluacion, nidMatriculaAsignatura)
   });
 }
 
-function obtenerEvaluacionMatricula(nidEvaluacion, nidMatriculaAsignatura)
-{
+function obtenerEvaluacionMatricula(nidEvaluacion, nidMatriculaAsignatura) {
   return new Promise((resolve, reject) => {
     const sql =
       "SELECT * FROM " +
@@ -818,8 +899,7 @@ function obtenerEvaluacionMatricula(nidEvaluacion, nidMatriculaAsignatura)
   });
 }
 
-function actualizarEvaluacionSucia(nidEvaluacion)
-{
+function actualizarEvaluacionSucia(nidEvaluacion) {
   return new Promise((resolve, reject) => {
     const sql =
       "UPDATE " +
@@ -828,17 +908,21 @@ function actualizarEvaluacionSucia(nidEvaluacion)
       conexion.dbConn.escape(nidEvaluacion);
 
     conexion.dbConn.beginTransaction(() => {
-    conexion.dbConn.query(sql, (err, result) => {
-      if (err) {
-        console.error("Error al actualizar el estado sucio de la evaluacion:", err);
-        conexion.dbConn.rollback();
-        reject(err);
-      } else {
-        conexion.dbConn.commit();
-        resolve(result);
-      }
+      conexion.dbConn.query(sql, (err, result) => {
+        if (err) {
+          console.error(
+            "Error al actualizar el estado sucio de la evaluacion:",
+            err,
+          );
+          conexion.dbConn.rollback();
+          reject(err);
+        } else {
+          conexion.dbConn.commit();
+          resolve(result);
+        }
+      });
     });
-  });})
+  });
 }
 
 module.exports.insertarEvaluacion = insertarEvaluacion;
@@ -854,3 +938,4 @@ module.exports.existeEvaluacionMatricula = existeEvaluacionMatricula;
 module.exports.obtenerEvaluacionMatricula = obtenerEvaluacionMatricula;
 module.exports.registrarEvaluacion = registrarEvaluacion;
 module.exports.actualizarEvaluacionSucia = actualizarEvaluacionSucia;
+
