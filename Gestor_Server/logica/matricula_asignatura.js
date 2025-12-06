@@ -36,13 +36,13 @@ function obtener_matriculas_asignaturas_alumno(nid_alumno, nid_curso) {
         if (error) {
           console.log(
             "matricula_asignatura.js - obtener_matriculas_asignaturas_alumno - Error en la consulta: " +
-              error
+              error,
           );
           reject(error);
         } else {
           resolve(results);
         }
-      }
+      },
     );
   });
 }
@@ -65,13 +65,13 @@ function obtener_matricula_asignatura(nid_matricula_asignatura) {
         if (error) {
           console.log(
             "matricula_asignatura.js - obtener_matricula_asignatura - Error en la consulta: " +
-              error
+              error,
           );
           reject(new Error("Error en la consulta"));
         } else {
           resolve(results[0]);
         }
-      }
+      },
     );
   });
 }
@@ -91,20 +91,23 @@ function obtener_nid_matricula_asignatura(nid_matricula, nid_asignatura) {
         if (error) {
           console.log(
             "matricula_asignatura.js - obtener_nid_matricula_asignatura - Error en la consulta: " +
-              error
+              error,
           );
           reject(new Error("Error en la consulta"));
+        }
+        if (results.length == 0) {
+          resolve(null);
         } else {
           resolve(results[0]["nid_matricula_asignatura"]);
         }
-      }
+      },
     );
   });
 }
 
 function actualizar_fecha_alta_matricula_asignatura(
   nid_matricula_asignatura,
-  fecha_alta
+  fecha_alta,
 ) {
   return new Promise((resolve, reject) => {
     try {
@@ -126,7 +129,7 @@ function actualizar_fecha_alta_matricula_asignatura(
             conexion.dbConn.commit();
             resolve();
           }
-        }
+        },
       );
     } catch (error) {
       console.log(error);
@@ -137,7 +140,7 @@ function actualizar_fecha_alta_matricula_asignatura(
 
 function actualizar_fecha_baja_matricula_asignatura(
   nid_matricula_asignatura,
-  fecha_baja
+  fecha_baja,
 ) {
   return new Promise((resolve, reject) => {
     try {
@@ -159,7 +162,7 @@ function actualizar_fecha_baja_matricula_asignatura(
             conexion.dbConn.commit();
             resolve();
           }
-        }
+        },
       );
     } catch (error) {
       console.log(error);
@@ -167,9 +170,6 @@ function actualizar_fecha_baja_matricula_asignatura(
     }
   });
 }
-
-
-
 
 function add_asignatura(nid_matricula, nid_asignatura) {
   return new Promise((resolve, reject) => {
@@ -191,7 +191,7 @@ function add_asignatura(nid_matricula, nid_asignatura) {
             conexion.dbConn.commit();
             resolve(results.insertId);
           }
-        }
+        },
       );
     });
   });
@@ -216,7 +216,7 @@ function eliminar_asignatura(nid_matricula, nid_asignatura) {
             conexion.dbConn.commit();
             resolve();
           }
-        }
+        },
       );
     });
   });
@@ -246,7 +246,7 @@ function dar_baja_asignatura(nid, nid_matricula, nid_asignatura, fecha_baja) {
             conexion.dbConn.commit();
             resolve();
           }
-        }
+        },
       );
     });
   });
@@ -271,7 +271,7 @@ function modificar_sucio(nid_matricula_asignatura, sucio) {
             conexion.dbConn.commit();
             resolve();
           }
-        }
+        },
       );
     });
   });
@@ -290,7 +290,7 @@ function obtener_matriculas_asignaturas_sucias() {
           if (error) {
             console.log(
               "matricula_asignatura.js - obtener_matriculas_asignaturas_sucias - Error en la consulta: " +
-                error
+                error,
             );
             conexion.dbConn.rollback();
             reject(error);
@@ -298,12 +298,11 @@ function obtener_matriculas_asignaturas_sucias() {
             conexion.dbConn.commit();
             resolve(results);
           }
-        }
+        },
       );
     });
   });
 }
-
 
 function obtener_alumnos_sin_profesor(nid_curso, nid_asignatura) {
   return new Promise((resolve, reject) => {
@@ -341,7 +340,7 @@ function obtener_alumnos_sin_profesor(nid_curso, nid_asignatura) {
         } else {
           resolve(results);
         }
-      }
+      },
     );
   });
 }
@@ -375,7 +374,7 @@ function obtener_alumnos_sin_profesor_alta(nid_curso, nid_asignatura) {
         constantes.ESQUEMA_BD +
         ".profesor_alumno_matricula pam " +
         "                where pam.nid_matricula_asignatura = ma.nid " +
-           "and (pam.fecha_baja is null or pam.fecha_baja >= sysdate()) )",
+        "and (pam.fecha_baja is null or pam.fecha_baja >= sysdate()) )",
       (error, results, fields) => {
         if (error) {
           console.log(error);
@@ -383,12 +382,12 @@ function obtener_alumnos_sin_profesor_alta(nid_curso, nid_asignatura) {
         } else {
           resolve(results);
         }
-      }
+      },
     );
   });
 }
 
-  function obtener_alumnos_sin_profesor_baja(nid_curso, nid_asignatura) {
+function obtener_alumnos_sin_profesor_baja(nid_curso, nid_asignatura) {
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(
       "select distinct p.*, a.nid nid_asignatura, a.descripcion descripcion_asignatura, m.nid nid_matricula " +
@@ -417,7 +416,7 @@ function obtener_alumnos_sin_profesor_alta(nid_curso, nid_asignatura) {
         constantes.ESQUEMA_BD +
         ".profesor_alumno_matricula pam " +
         "                where pam.nid_matricula_asignatura = ma.nid  " +
-              "and (pam.fecha_baja >= sysdate())) " ,
+        "and (pam.fecha_baja >= sysdate())) ",
       (error, results, fields) => {
         if (error) {
           console.log(error);
@@ -425,7 +424,7 @@ function obtener_alumnos_sin_profesor_alta(nid_curso, nid_asignatura) {
         } else {
           resolve(results);
         }
-      }
+      },
     );
   });
 }
@@ -451,7 +450,9 @@ module.exports.modificar_sucio = modificar_sucio;
 module.exports.obtener_matriculas_asignaturas_sucias =
   obtener_matriculas_asignaturas_sucias;
 
-
 module.exports.obtener_alumnos_sin_profesor = obtener_alumnos_sin_profesor;
-module.exports.obtener_alumnos_sin_profesor_alta = obtener_alumnos_sin_profesor_alta;
-module.exports.obtener_alumnos_sin_profesor_baja = obtener_alumnos_sin_profesor_baja;
+module.exports.obtener_alumnos_sin_profesor_alta =
+  obtener_alumnos_sin_profesor_alta;
+module.exports.obtener_alumnos_sin_profesor_baja =
+  obtener_alumnos_sin_profesor_baja;
+
