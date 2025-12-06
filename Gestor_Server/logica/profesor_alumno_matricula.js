@@ -16,7 +16,7 @@ function obtener_profesor_alumno_matricula(nid_profesor_alumno_matricula) {
       if (error) {
         console.log(
           "profesor_alumno_matricula.js - obtener_profesor_alumno_matricula - Error en la consulta: " +
-            error
+            error,
         );
         reject(new Error("Error en la consulta"));
       } else {
@@ -28,7 +28,7 @@ function obtener_profesor_alumno_matricula(nid_profesor_alumno_matricula) {
 
 function obtener_nid_profesor_alumno_matricula(
   nid_profesor,
-  nid_matricula_asignatura
+  nid_matricula_asignatura,
 ) {
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(
@@ -44,13 +44,15 @@ function obtener_nid_profesor_alumno_matricula(
         if (error) {
           console.log(
             "profesor_alumno_matricula.js - obtener_nid_profesor_alumno_matricula - Error en la consulta: " +
-              error
+              error,
           );
           reject(new Error("Error en la consulta"));
+        } else if (results.length === 0) {
+          resolve(null);
         } else {
           resolve(results[0]["nid_profesor_alumno_matricula"]);
         }
-      }
+      },
     );
   });
 }
@@ -68,13 +70,13 @@ function actualizar_sucio(nid_profesor_alumno_matricula, sucio) {
         if (error) {
           console.log(
             "profesor_alumno_matricula.js - actualizar_sucio - Error en la consulta: " +
-              error
+              error,
           );
           reject(new Error("Error en la consulta"));
         } else {
           resolve();
         }
-      }
+      },
     );
   });
 }
@@ -92,7 +94,7 @@ function obtener_sucios() {
           if (error) {
             console.log(
               "profesor_alumno_matricula.js - obtener_sucios - Error en la consulta: " +
-                error
+                error,
             );
             conexion.dbConn.rollback();
             reject(new Error("Error en la consulta"));
@@ -100,7 +102,7 @@ function obtener_sucios() {
             conexion.dbConn.commit();
             resolve(results);
           }
-        }
+        },
       );
     });
   });

@@ -3,6 +3,7 @@ const constantes = require("../constantes.js");
 const logica_asignatura = require("./asignatura.js");
 const curso = require("./curso.js");
 const gestorProfesorAlumnoMatricula = require("./profesor_alumno_matricula.js");
+const gestorProfesorMatricula = require("./profesor_matricula.js");
 
 function existe_matricula(nid_persona, nid_curso) {
   return new Promise((resolve, reject) => {
@@ -986,7 +987,7 @@ function obtener_profesor_alumno_matricula(nid_matricula_asignatura) {
           console.log(error);
           reject();
         } else if (results.length < 1) {
-          reject();
+          resolve(null);
         } else {
           resolve(results[0]);
         }
@@ -1058,25 +1059,36 @@ function sustituir_profesor_alumno(nid_profesor, nid_matricula_asignatura) {
         try {
           let profesor_alumno_matricula =
             await obtener_profesor_alumno_matricula(nid_matricula_asignatura);
-          await baja_profesor_alumno_matricula(
-            profesor_alumno_matricula["nid"],
-          );
-
-          await gestorProfesorAlumnoMatricula.actualizar_sucio(
-            profesor_alumno_matricula["nid"],
-            "S",
-          );
-          const nid_profesor_alumno_matricula =
-            await alta_profesor_alumno_matricula_baja(
+          if (!profesor_alumno_matricula) {
+            console.log(
+              "Se registra nueva matricula a profesor: ",
               nid_profesor,
+              nid_matricula_asignatura,
+            );
+            await gestorProfesorMatricula.alta_profesor_matricula(
+              nid_matricula_asignatura,
+              nid_profesor,
+            );
+          } else {
+            await baja_profesor_alumno_matricula(
               profesor_alumno_matricula["nid"],
             );
 
-          await gestorProfesorAlumnoMatricula.actualizar_sucio(
-            nid_profesor_alumno_matricula,
-            "S",
-          );
+            await gestorProfesorAlumnoMatricula.actualizar_sucio(
+              profesor_alumno_matricula["nid"],
+              "S",
+            );
+            const nid_profesor_alumno_matricula =
+              await alta_profesor_alumno_matricula_baja(
+                nid_profesor,
+                profesor_alumno_matricula["nid"],
+              );
 
+            await gestorProfesorAlumnoMatricula.actualizar_sucio(
+              nid_profesor_alumno_matricula,
+              "S",
+            );
+          }
           conexion.dbConn.commit();
           resolve();
         } catch (error) {
