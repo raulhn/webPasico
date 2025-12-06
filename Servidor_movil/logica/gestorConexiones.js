@@ -100,7 +100,7 @@ async function registrarConexion(token) {
                 ".conexiones (token, fecha) " +
                 "values (" +
                 conexion.dbConn.escape(token) +
-                ", sysdate() )",
+                ", now() )",
               (error, results) => {
                 if (error) {
                   console.error("Error al registrar la conexión:", error);
@@ -114,7 +114,7 @@ async function registrarConexion(token) {
             conexion.dbConn.query(
               "UPDATE " +
                 constantes.ESQUEMA +
-                ".conexiones SET fecha = sysdate() WHERE token = " +
+                ".conexiones SET fecha = now() WHERE token = " +
                 conexion.dbConn.escape(token),
               (error, results) => {
                 if (error) {
