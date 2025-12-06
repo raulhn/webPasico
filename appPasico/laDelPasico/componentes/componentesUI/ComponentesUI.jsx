@@ -108,7 +108,7 @@ export function EntradaFecha({ onChangeFecha, valorFecha }) {
         });
         setFechaEvento(formattedDate);
         console.log("Fecha seleccionada1:", currentDate.toDateString());
-        onChangeFecha(fecha);
+        onChangeFecha(currentDate);
       }
     } else {
       togglePicker();
@@ -780,7 +780,7 @@ const estilos = StyleSheet.create({
     corlor: "#FFF",
   },
   inputFecha: {
-    width: 100,
+    width: 110,
     borderWidth: 1,
     padding: 10,
     marginBottom: 10,

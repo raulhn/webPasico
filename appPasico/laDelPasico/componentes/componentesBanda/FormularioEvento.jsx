@@ -216,6 +216,7 @@ export default function FormularioEvento({ cancelar, callback, nidEvento }) {
         <Text>Fecha</Text>
         <EntradaFecha
           onChangeFecha={(fecha) => {
+            console.log("Fecha modificada:", fecha);
             setFechaEvento(fecha);
           }}
           valorFecha={fechaEvento}
@@ -226,7 +227,7 @@ export default function FormularioEvento({ cancelar, callback, nidEvento }) {
           style={{ justifyContent: "center", gap: 10, alignItems: "center" }}
         >
           <SelectorMultipleTipoPersona
-          titulo={"Tipo de Evento"}
+            titulo={"Tipo de Evento"}
             tiposEventos={tiposEventoRecuperados}
             callback={(eventos) => {
               setTiposEventoRecuperados(eventos);

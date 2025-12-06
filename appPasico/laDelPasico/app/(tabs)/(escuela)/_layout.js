@@ -21,61 +21,61 @@ const CustomHeaderEscuela = ({ navigation, route, options }) => {
 export default function DrawerLayout() {
   const { esRol } = useRol(); // Hook para verificar roles
 
-
   const logo = require("../../../assets/logo.png");
-
 
   return (
     <>
-    <Drawer
-      screenOptions={{
-        title: "Escuela",
-        headerBackgroundContainerStyle: { backgroundColor: "#fff" },
-        header: (props) => <CustomHeaderEscuela {...props} />,
-      }}
-    >
-      <Drawer.Screen
-        name="escuela"
-        options={{
+      <Drawer
+        screenOptions={{
           title: "Escuela",
+          headerBackgroundContainerStyle: { backgroundColor: "#fff" },
+          header: (props) => <CustomHeaderEscuela {...props} />,
         }}
-      />
+      >
+        <Drawer.Screen
+          name="escuela"
+          options={{
+            title: "Escuela",
+          }}
+        />
 
+        <Drawer.Screen
+          name="stackAlumnos"
+          options={{
+            title: "Alumnos",
+            headerShown: false,
+            drawerItemStyle: esRol(["PROFESOR"]) ? {} : { display: "none" },
+          }}
+        />
 
+        <Drawer.Screen
+          name="stackMatricula"
+          options={{
+            title: "Matriculas",
+            headerShown: false,
+            drawerItemStyle: esRol(["ALUMNO"]) ? {} : { display: "none" },
+          }}
+        ></Drawer.Screen>
 
-   <Drawer.Screen name="stackAlumnos" 
-      options={{ title: "Alumnos", headerShown: false,
-       drawerItemStyle: esRol(["PROFESOR"]) ? {} : { display: "none" }}
-    } 
-   />
-
-
-
-
-      <Drawer.Screen
-        name="stackMatricula"
-        options={{
-          title: "Matriculas",
-          headerShown: false,
-          drawerItemStyle: esRol(["ALUMNO"]) ? {} : { display: "none" },
-        }}
-      ></Drawer.Screen>
-
-   
-      <Drawer.Screen
-
-        name="stackEvaluaciones"
-        options={{
-          headerShown: false,
+        <Drawer.Screen
+          name="stackEvaluaciones"
+          options={{
+            headerShown: false,
             drawerItemStyle: esRol(["PROFESOR"]) ? {} : { display: "none" },
             title: "Evaluaciones",
-        }}
-      />
+          }}
+        />
 
-
-    </Drawer>
-
-
+        <Drawer.Screen
+          name="escuela_privada"
+          options={{
+            title: "Zona Privada",
+            drawerItemStyle: !esRol(["PROFESOR", "ALUMNO"])
+              ? {}
+              : { display: "none" },
+          }}
+        />
+      </Drawer>
     </>
   );
 }
