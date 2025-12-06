@@ -4,7 +4,6 @@ import { CustomHeader } from "../../../componentes/cabecera.jsx";
 import { useRol } from "../../../hooks/useRol"; // Asegúrate de que la ruta sea correcta
 import { CustomHeaderBanda } from "../../../componentes/cabecera.jsx";
 
-
 export default function DrawerLayout() {
   const { esRol } = useRol();
 
@@ -40,7 +39,13 @@ export default function DrawerLayout() {
         }}
       />
 
-
+      <Drawer.Screen
+        name="banda_privada"
+        options={{
+          title: "Zona Privada",
+          drawerItemStyle: !esRol(["MUSICO"]) ? {} : { display: "none" },
+        }}
+      />
     </Drawer>
   );
 }
