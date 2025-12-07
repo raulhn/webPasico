@@ -36,6 +36,10 @@ async function registrarConexion(req, res) {
 
   if (await comprobarRecaptcha(recaptchaToken)) {
     try {
+      if (token.length > 50) {
+        res.status(400).send("Token demasiado largo");
+        return;
+      }
       console.log("Registrando conexión: " + token);
       await gestorConexion.registrarConexion(token);
       res
