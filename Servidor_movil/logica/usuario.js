@@ -52,7 +52,7 @@ async function registrarUsuario(
   primerApellido,
   segundoApellido,
   correoElectronico,
-  password
+  password,
 ) {
   try {
     const saltRounds = constantes.SALT_ROUNDS; // Número de rondas de sal para bcrypt
@@ -86,7 +86,7 @@ async function registrarUsuario(
           } else {
             await validacionEmail.enviarEmailValidacion(
               results.insertId,
-              correoElectronico
+              correoElectronico,
             );
             resolve(results);
           }
@@ -115,7 +115,7 @@ async function permisosMusico(nid_persona) {
   } catch (error) {
     console.error(
       "usuario.js -> permisosMusico: Error al comprobar permisos de músico:",
-      error.message
+      error.message,
     );
     throw new Error("Error al comprobar permisos de músico");
   }
@@ -132,7 +132,7 @@ async function permisosEscuela(nid_persona) {
 
       const bEsPadreAlumno = await gestorMatriculas.esPadreAlumno(
         nid_persona,
-        false
+        false,
       );
       if (bEsPadreAlumno) {
         return true;
@@ -142,7 +142,7 @@ async function permisosEscuela(nid_persona) {
   } catch (error) {
     console.error(
       "usuario.js -> permisosEscuela: Error al comprobar permisos de escuela:",
-      error
+      error,
     );
     throw new Error("Error al comprobar permisos de escuela");
   }
@@ -161,7 +161,7 @@ async function construirRoles(nid_usuario) {
 
     const persona = await gestorPersona.obtenerPersonaUsuario(nid_usuario);
 
-    if(!persona) {
+    if (!persona) {
       return roles; // Si no hay persona asociada, devuelve los roles existentes
     }
     // Rol Socio //
@@ -186,7 +186,7 @@ async function construirRoles(nid_usuario) {
 
     // Rol Profesor //
     const profesores = await gestorProfesor.obtenerProfesor(
-      persona.nid_persona
+      persona.nid_persona,
     );
     if (profesores.length > 0) {
       roles.push({ rol: "PROFESOR" });
@@ -302,16 +302,16 @@ async function realizarLogin(correoElectronico, password) {
       if (usuarioNoVerificado) {
         let compara = await comparaPasswords(
           password,
-          usuarioNoVerificado.password
+          usuarioNoVerificado.password,
         );
         if (compara) {
           await validacionEmail.enviarEmailValidacion(
             usuarioNoVerificado.nid_usuario,
-            correoElectronico
+            correoElectronico,
           );
           console.error("El usuario no está verificado.");
           throw new Error(
-            "El usuario no está verificado. Se ha enviado un correo de verificación."
+            "El usuario no está verificado. Se ha enviado un correo de verificación. Compruebe su bandeja de entrada y el correo no deseado.",
           );
         }
         throw new Error("Error al realizar login");
@@ -334,7 +334,7 @@ async function realizarLogin(correoElectronico, password) {
       process.env.SESSION_SECRET,
       {
         expiresIn: constantes.TIEMPO_ACCESS_TOKEN,
-      }
+      },
     );
 
     const refreshToken = jwt.sign(
@@ -342,7 +342,7 @@ async function realizarLogin(correoElectronico, password) {
       process.env.SESSION_SECRET,
       {
         expiresIn: constantes.TIEMPO_REFRESH_TOKEN,
-      }
+      },
     );
 
     return {
