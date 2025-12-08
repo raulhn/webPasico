@@ -41,7 +41,7 @@ function darDeBajaProfesor(nid_profesor, nid_asignatura) {
       "update " +
       constantes.ESQUEMA_BD +
       ".profesor " +
-      " set esBaja = 'S' " +
+      " set esBaja = 'S', sucio = 'S' " +
       " where nid_persona = " +
       conexion.dbConn.escape(nid_profesor) +
       "   and nid_asignatura = " +
@@ -62,4 +62,3 @@ function darDeBajaProfesor(nid_profesor, nid_asignatura) {
 
 module.exports.esAlumnoProfesor = esAlumnoProfesor;
 module.exports.darDeBajaProfesor = darDeBajaProfesor;
-
