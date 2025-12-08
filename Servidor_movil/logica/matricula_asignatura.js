@@ -39,7 +39,7 @@ function insertarMatriculaAsignatura(
   nid_asignatura,
   fecha_alta,
   fecha_baja,
-  fecha_actualizacion
+  fecha_actualizacion,
 ) {
   return new Promise((resolve, reject) => {
     const sql =
@@ -81,9 +81,8 @@ function actualizarMatriculaAsignatura(
   nid_asignatura,
   fecha_alta,
   fecha_baja,
-  fecha_actualizacion
+  fecha_actualizacion,
 ) {
-
   return new Promise((resolve, reject) => {
     const sql =
       "UPDATE " +
@@ -121,7 +120,7 @@ async function registrarMatriculaAsignatura(
   nid_asignatura,
   fecha_alta,
   fecha_baja,
-  fecha_actualizacion
+  fecha_actualizacion,
 ) {
   try {
     const existe = await existeMatriculaAsignatura(nid_matricula_asignatura);
@@ -132,7 +131,7 @@ async function registrarMatriculaAsignatura(
         nid_asignatura,
         fecha_alta,
         fecha_baja,
-        fecha_actualizacion
+        fecha_actualizacion,
       );
     } else {
       return await insertarMatriculaAsignatura(
@@ -141,7 +140,7 @@ async function registrarMatriculaAsignatura(
         nid_asignatura,
         fecha_alta,
         fecha_baja,
-        fecha_actualizacion
+        fecha_actualizacion,
       );
     }
   } catch (error) {
@@ -196,10 +195,10 @@ async function obtenerAlumnosCursoActivoAsignatura(nid_asignatura) {
   } catch (error) {
     console.error(
       "Error al obtener los alumnos del curso activo por asignatura:",
-      error
+      error,
     );
     throw new Error(
-      "Error al obtener los alumnos del curso activo por asignatura"
+      "Error al obtener los alumnos del curso activo por asignatura",
     );
   }
 }
@@ -296,9 +295,11 @@ function obtenerAlumnosAsignatura(nid_asignatura, nid_curso) {
   });
 }
 
-
-function obtenerAlumnosAsignaturaProfesor(nid_asignatura, nid_curso, nid_profesor)
-{
+function obtenerAlumnosAsignaturaProfesor(
+  nid_asignatura,
+  nid_curso,
+  nid_profesor,
+) {
   return new Promise((resolve, reject) => {
     const sql =
       "SELECT p.nid_persona, p.nombre, p.primer_apellido, p.segundo_apellido , ma.nid_matricula_asignatura, ma.nid_matricula " +
@@ -318,8 +319,10 @@ function obtenerAlumnosAsignaturaProfesor(nid_asignatura, nid_curso, nid_profeso
       " AND m.nid_curso = " +
       conexion.dbConn.escape(nid_curso) +
       " AND pam.nid_matricula_asignatura = ma.nid_matricula_asignatura" +
-      " AND pam.nid_profesor = " + conexion.dbConn.escape(nid_profesor) +
-      " AND (ma.fecha_baja IS NULL OR ma.fecha_baja > NOW())";
+      " AND pam.nid_profesor = " +
+      conexion.dbConn.escape(nid_profesor) +
+      " AND (ma.fecha_baja IS NULL OR ma.fecha_baja > NOW())" +
+      " and (pam.fecha_baja IS NULL OR pam.fecha_baja > NOW())";
 
     conexion.dbConn.query(sql, (err, result) => {
       if (err) {
@@ -332,12 +335,13 @@ function obtenerAlumnosAsignaturaProfesor(nid_asignatura, nid_curso, nid_profeso
   });
 }
 
-
-
 module.exports.registrarMatriculaAsignatura = registrarMatriculaAsignatura;
 module.exports.obtenerAlumnosCursoActivo = obtenerAlumnosCursoActivo;
-module.exports.obtenerAlumnosCursoActivoAsignatura = obtenerAlumnosCursoActivoAsignatura;
+module.exports.obtenerAlumnosCursoActivoAsignatura =
+  obtenerAlumnosCursoActivoAsignatura;
 module.exports.esAlumnoAsignatura = esAlumnoAsignatura;
 module.exports.obtenerMatriculasAsignatura = obtenerMatriculasAsignatura;
 module.exports.obtenerAlumnosAsignatura = obtenerAlumnosAsignatura;
-module.exports.obtenerAlumnosAsignaturaProfesor = obtenerAlumnosAsignaturaProfesor;
+module.exports.obtenerAlumnosAsignaturaProfesor =
+  obtenerAlumnosAsignaturaProfesor;
+
