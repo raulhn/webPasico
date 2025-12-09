@@ -18,13 +18,12 @@ function obtener_matriculas_asignaturas_alumno(req, res) {
     let bEsProfesor = await profesor.esAlumnoProfesor(
       nid_alumno,
       nid_profesor,
-      nid_curso
+      nid_curso,
     );
 
     if (bEsProfesor) {
-      let resultados = await matricula.obtener_asignaturas_matricula(
-        nid_matricula
-      );
+      let resultados =
+        await matricula.obtener_asignaturas_matricula(nid_matricula);
       res.status(200).send({
         error: false,
         mensaje: "Matriculas de asignaturas obtenidas correctamente",
@@ -48,18 +47,18 @@ function actualizar_fecha_alta_matricula_asignatura(req, res) {
 
       await gestorMatriculaAsignatura.actualizar_fecha_alta_matricula_asignatura(
         nid_matricula_asignatura,
-        fecha_alta
+        fecha_alta,
       );
 
       await gestorMatriculaAsignatura.modificar_sucio(
         nid_matricula_asignatura,
-        "S"
+        "S",
       );
       res.status(200).send({ error: false, message: "Fecha actualizada" });
     } catch (error) {
       console.error(
         "Error en la función actualizar_fecha_alta_matricula_asignatura:",
-        error
+        error,
       );
       res.status(500).send({
         error: true,
@@ -77,18 +76,18 @@ function actualizar_fecha_baja_matricula_asignatura(req, res) {
 
       await gestorMatriculaAsignatura.actualizar_fecha_baja_matricula_asignatura(
         nid_matricula_asignatura,
-        fecha_baja
+        fecha_baja,
       );
 
       await gestorMatriculaAsignatura.modificar_sucio(
         nid_matricula_asignatura,
-        "S"
+        "S",
       );
       res.status(200).send({ error: false, message: "Fecha actualizada" });
     } catch (error) {
       console.error(
         "Error en la función actualizar_fecha_baja_matricula_asignatura:",
-        error
+        error,
       );
       res.status(500).send({
         error: true,
@@ -106,22 +105,22 @@ function dar_baja_asignatura(req, res) {
       let fecha_baja = req.body.fecha_baja;
       let nid = req.body.nid;
 
-      await matricula.dar_baja_asignatura(
+      await gestorMatriculaAsignatura.dar_baja_asignatura(
         nid,
         nid_matricula,
         nid_asignatura,
-        fecha_baja
+        fecha_baja,
       );
 
       let nid_matricula_asignatura =
         await gestorMatriculaAsignatura.obtener_nid_matricula_asignatura(
           nid_matricula,
-          nid_asignatura
+          nid_asignatura,
         );
 
       await gestorMatriculaAsignatura.modificar_sucio(
         nid_matricula_asignatura,
-        "S"
+        "S",
       );
       res.status(200).send({ error: false, message: "Alumno dado de baja" });
     } catch (error) {

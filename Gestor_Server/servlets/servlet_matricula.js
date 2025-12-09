@@ -4,6 +4,7 @@ const comun = require("./servlet_comun.js");
 const gestion_usuarios = require("../logica/usuario.js");
 const gestorMatriculaAsignatura = require("../logica/matricula_asignatura.js");
 const gestorProfesorAlumnoMatricula = require("../logica/profesor_alumno_matricula.js");
+const gestorProfesorMatricula = require("../logica/profesor_matricula.js");
 
 function registrar_matricula(req, res) {
   comun.comprobaciones(req, res, async () => {
@@ -46,9 +47,9 @@ function registrar_matricula(req, res) {
         );
 
         if (nid_profesor) {
-          await gestorProfesorAlumnoMatricula.alta_profesor_matricula(
-            nid_profesor,
+          await gestorProfesorMatricula.alta_profesor_matricula(
             nid_matricula_asignatura,
+            nid_profesor,
           );
 
           let nid_profesor_alumno_matricula =
