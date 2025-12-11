@@ -15,7 +15,7 @@ function insertarAsignatura(
   descripcion,
   instrumento_banda,
   tipo_asignatura,
-  fecha_actualizacion
+  fecha_actualizacion,
 ) {
   return new Promise((resolve, reject) => {
     const sql =
@@ -55,7 +55,7 @@ function actualizarAsignatura(
   descripcion,
   instrumento_banda,
   tipo_asignatura,
-  fecha_actualizacion
+  fecha_actualizacion,
 ) {
   return new Promise((resolve, reject) => {
     const sql =
@@ -119,7 +119,7 @@ function existeAsignatura(nid_asignatura) {
       if (error) {
         console.log(
           "Error al comprobar la existencia de la asignatura: ",
-          error
+          error,
         );
         reject(new Error("Error al comprobar la existencia de la asignatura"));
       } else {
@@ -134,7 +134,7 @@ async function registrarAsignatura(
   descripcion,
   instrumento_banda,
   tipo_asignatura,
-  fecha_actualizacion
+  fecha_actualizacion,
 ) {
   try {
     let asignatura = await existeAsignatura(nid_asignatura);
@@ -144,7 +144,7 @@ async function registrarAsignatura(
         descripcion,
         instrumento_banda,
         tipo_asignatura,
-        fecha_actualizacion
+        fecha_actualizacion,
       );
     } else {
       await insertarAsignatura(
@@ -152,7 +152,7 @@ async function registrarAsignatura(
         descripcion,
         instrumento_banda,
         tipo_asignatura,
-        fecha_actualizacion
+        fecha_actualizacion,
       );
     }
   } catch (error) {
@@ -188,7 +188,8 @@ function obtenerAsignaturasProfesor(nid_profesor) {
       constantes.ESQUEMA +
       ".profesor p where a.nid_asignatura = p.nid_asignatura " +
       "and p.nid_persona = " +
-      conexion.dbConn.escape(nid_profesor);
+      conexion.dbConn.escape(nid_profesor) +
+      " and p.esBaja = 'N'";
 
     conexion.dbConn.query(sql, (error, results) => {
       if (error) {
