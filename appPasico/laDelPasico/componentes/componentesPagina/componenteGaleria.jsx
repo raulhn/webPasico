@@ -82,8 +82,6 @@ export default function ComponenteGaleria(componente) {
     return null;
   }
 
-
-
   function anterior() {
     if (indice > 0) {
       setIndice(indice - 1);
@@ -111,23 +109,21 @@ export default function ComponenteGaleria(componente) {
       ScreenOrientation.OrientationLock.PORTRAIT_UP
     );
   };
-  
-    async function closeModal() {
+
+  async function closeModal() {
     setModalVisible(false);
     setSelectedImage(null);
     setRotado(false);
   }
-  
+
   async function rotar() {
     if (rotado) {
       setRotado(false);
       await lockToPortrait();
- 
     } else {
       await lockToLandscape();
       setRotado(true);
     }
-
   }
 
   return (
@@ -156,11 +152,11 @@ export default function ComponenteGaleria(componente) {
         visible={modalVisible}
         transparent={true}
         animationType="fade"
-        onRequestClose={async() => {await closeModal()}}
+        onRequestClose={async () => {
+          await closeModal();
+        }}
       >
-        <View
-          style={[styles.modalSafeArea, { paddingTop: insets.top * 2 }]}
-        >
+        <View style={[styles.modalSafeArea, { paddingTop: insets.top * 2 }]}>
           <View style={styles.closeButton}>
             <Pressable
               onPress={async () => {
@@ -177,7 +173,7 @@ export default function ComponenteGaleria(componente) {
 
           <View style={styles.rotateButton}>
             <Pressable
-              onPress={async() => {
+              onPress={async () => {
                 await rotar();
               }}
             >
@@ -196,7 +192,7 @@ export default function ComponenteGaleria(componente) {
                   styles.modalImage,
                   {
                     maxWidth: dimensions.width * 0.85, // Ajusta el ancho al 90% de la pantalla
-                    maxHeight: (dimensions.height - insets.top) * 0.80, // Ajusta la altura al 90% de la pantalla
+                    maxHeight: (dimensions.height - insets.top) * 0.8, // Ajusta la altura al 90% de la pantalla
                   },
                 ]}
                 resizeMode="contain" // Asegura que la imagen mantenga su proporción
@@ -259,15 +255,13 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     position: "absolute",
-    top: 20,
+    top: 30,
     right: 20,
-
   },
   rotateButton: {
     position: "absolute",
-    top: 20,
+    top: 30,
     left: 20,
-
   },
   tipoBoton: {
     backgroundColor: "rgba(0, 0, 0, 0.5)",
@@ -288,3 +282,4 @@ const styles = StyleSheet.create({
     padding: 10,
   },
 });
+
