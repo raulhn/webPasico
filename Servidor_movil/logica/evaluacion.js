@@ -430,9 +430,11 @@ function textoAcentosARtf(texto) {
     Ü: "\\'dc",
     º: "\\'ba",
     ª: "\\'aa",
+    "¿": "\\'bf",
+    "¡": "\\'a1",
   };
   // Incluye º y ª en la expresión regular:
-  return texto.replace(/[áéíóúÁÉÍÓÚñÑüÜºª]/g, (c) => mapa[c] || c);
+  return texto.replace(/[áéíóúÁÉÍÓÚñÑüÜºª¿¡]/g, (c) => mapa[c] || c);
 }
 
 async function obtener_evaluacion_tutor(nid_matricula, nid_trimestre) {
@@ -473,6 +475,10 @@ async function obtener_evaluacion_tutor(nid_matricula, nid_trimestre) {
     console.log("evaluacion.js - obtener_evaluacion_tutor ->" + error);
     throw new Error("Error al obtener la evaluación de tutor");
   }
+}
+
+function nvl(valor, defecto) {
+  return valor === null || valor === undefined ? defecto : valor;
 }
 
 async function generar_boletin(nid_matricula, nid_trimestre) {
@@ -521,7 +527,14 @@ async function generar_boletin(nid_matricula, nid_trimestre) {
 
         asignatura_lenguaje = evaluacion_lenguaje["asignatura"];
 
-        nota_lenguaje = "(" + evaluacion_lenguaje["nota"] + ")";
+        nota_lenguaje = "(" + nvl(evaluacion_lenguaje["nota"], "") + ")";
+        if (
+          evaluacion_lenguaje["nota"] == 0 ||
+          evaluacion_lenguaje["nota"] === null ||
+          evaluacion_lenguaje["nota"] === undefined
+        ) {
+          nota_lenguaje = "";
+        }
         progreso_lenguaje = evaluacion_lenguaje["progreso"];
         comentario_lenguaje = evaluacion_lenguaje["comentario"];
       }
@@ -551,7 +564,11 @@ async function generar_boletin(nid_matricula, nid_trimestre) {
           "PLANTILLA_NOTAS_INSTRUMENTO",
         );
         let texto_instrumento_aux = texto_instrumento_parametro["valor"];
-        if (evaluacion_instrumento["nota"] == 0) {
+        if (
+          evaluacion_instrumento["nota"] == 0 ||
+          evaluacion_instrumento["nota"] === null ||
+          evaluacion_instrumento["nota"] === undefined
+        ) {
           texto_instrumento_aux = texto_instrumento_aux
             .toString()
             .replace("||NOTA_INSTRUMENTO||", "");
@@ -561,7 +578,7 @@ async function generar_boletin(nid_matricula, nid_trimestre) {
           .toString()
           .replace(
             "||NOTA_INSTRUMENTO||",
-            "(" + evaluacion_instrumento["nota"] + ")",
+            "(" + nvl(evaluacion_instrumento["nota"], "") + ")",
           );
         texto_instrumento_aux = texto_instrumento_aux
           .toString()
@@ -599,7 +616,11 @@ async function generar_boletin(nid_matricula, nid_trimestre) {
         );
         let texto_instrumento_aux = texto_instrumento_parametro["valor"];
 
-        if (evaluacion_instrumento["nota"] == 0) {
+        if (
+          evaluacion_instrumento["nota"] == 0 ||
+          evaluacion_instrumento["nota"] === null ||
+          evaluacion_instrumento["nota"] === undefined
+        ) {
           texto_instrumento_aux = texto_instrumento_aux
             .toString()
             .replace("||NOTA_INSTRUMENTO||", "");
@@ -609,7 +630,7 @@ async function generar_boletin(nid_matricula, nid_trimestre) {
           .toString()
           .replace(
             "||NOTA_INSTRUMENTO||",
-            "(" + evaluacion_instrumento["nota"] + ")",
+            "(" + nvl(evaluacion_instrumento["nota"], "") + ")",
           );
         texto_instrumento_aux = texto_instrumento_aux
           .toString()
@@ -647,7 +668,11 @@ async function generar_boletin(nid_matricula, nid_trimestre) {
         );
         let texto_instrumento_aux = texto_instrumento_parametro["valor"];
 
-        if (evaluacion_instrumento["nota"] == 0) {
+        if (
+          evaluacion_instrumento["nota"] == 0 ||
+          evaluacion_instrumento["nota"] === null ||
+          evaluacion_instrumento["nota"] === undefined
+        ) {
           texto_instrumento_aux = texto_instrumento_aux
             .toString()
             .replace("||NOTA_INSTRUMENTO||", "");
@@ -657,7 +682,7 @@ async function generar_boletin(nid_matricula, nid_trimestre) {
           .toString()
           .replace(
             "||NOTA_INSTRUMENTO||",
-            "(" + evaluacion_instrumento["nota"] + ")",
+            "(" + nvl(evaluacion_instrumento["nota"], "") + ")",
           );
         texto_instrumento_aux = texto_instrumento_aux
           .toString()
@@ -938,4 +963,3 @@ module.exports.existeEvaluacionMatricula = existeEvaluacionMatricula;
 module.exports.obtenerEvaluacionMatricula = obtenerEvaluacionMatricula;
 module.exports.registrarEvaluacion = registrarEvaluacion;
 module.exports.actualizarEvaluacionSucia = actualizarEvaluacionSucia;
-
