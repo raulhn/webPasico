@@ -355,7 +355,7 @@ function obtener_evaluacion_matricula_asginatura_tipo(
     conexion.dbConn.query(
       "select a.descripcion asignatura, t.descripcion trimestre, concat(p.nombre, ' ' , p.primer_apellido, ' ', p.segundo_apellido) profesor, " +
         "em.nota, em.nid_tipo_progreso, em.comentario, t.nid_trimestre, t.descripcion nombre_trimestre, tp.descripcion tipo_progreso, " +
-        "  tp.descripcion progreso,  c.descripcion curso,  concat(p2.nombre, ' ' , p2.primer_apellido, ' ', p2.segundo_apellido) alumno " +
+        "  tp.descripcion progreso,  c.descripcion curso,  concat(p2.nombre, ' ' , p2.primer_apellido, ' ', p2.segundo_apellido) alumno, ma.curso curso_instrumento " +
         "from " +
         constantes.ESQUEMA +
         ".evaluacion e, " +
@@ -564,6 +564,12 @@ async function generar_boletin(nid_matricula, nid_trimestre) {
           "PLANTILLA_NOTAS_INSTRUMENTO",
         );
         let texto_instrumento_aux = texto_instrumento_parametro["valor"];
+        let curso_instrumento = evaluacion_instrumento["curso_instrumento"];
+        if (curso_instrumento == null || curso_instrumento === undefined) {
+          curso_instrumento = "";
+        } else {
+          curso_instrumento = curso_instrumento + " ";
+        }
         if (
           evaluacion_instrumento["nota"] == 0 ||
           evaluacion_instrumento["nota"] === null ||
@@ -584,7 +590,7 @@ async function generar_boletin(nid_matricula, nid_trimestre) {
           .toString()
           .replace(
             "||ASIGNATURA_INSTRUMENTO||",
-            evaluacion_instrumento["asignatura"],
+            curso_instrumento + evaluacion_instrumento["asignatura"],
           );
         texto_instrumento_aux = texto_instrumento_aux
           .toString()
@@ -615,7 +621,12 @@ async function generar_boletin(nid_matricula, nid_trimestre) {
           "PLANTILLA_NOTAS_INSTRUMENTO",
         );
         let texto_instrumento_aux = texto_instrumento_parametro["valor"];
-
+        let curso_instrumento = evaluacion_instrumento["curso_instrumento"];
+        if (curso_instrumento == null || curso === undefined) {
+          curso_instrumento = "";
+        } else {
+          curso_instrumento = curso_instrumento + " ";
+        }
         if (
           evaluacion_instrumento["nota"] == 0 ||
           evaluacion_instrumento["nota"] === null ||
@@ -636,7 +647,7 @@ async function generar_boletin(nid_matricula, nid_trimestre) {
           .toString()
           .replace(
             "||ASIGNATURA_INSTRUMENTO||",
-            evaluacion_instrumento["asignatura"],
+            curso_instrumento + evaluacion_instrumento["asignatura"],
           );
         texto_instrumento_aux = texto_instrumento_aux
           .toString()
@@ -667,7 +678,12 @@ async function generar_boletin(nid_matricula, nid_trimestre) {
           "PLANTILLA_NOTAS_INSTRUMENTO",
         );
         let texto_instrumento_aux = texto_instrumento_parametro["valor"];
-
+        let curso_instrumento = evaluacion_instrumento["curso_instrumento"];
+        if (curso_instrumento == null || curso_instrumento === undefined) {
+          curso_instrumento = "";
+        } else {
+          curso_instrumento = curso_instrumento + " ";
+        }
         if (
           evaluacion_instrumento["nota"] == 0 ||
           evaluacion_instrumento["nota"] === null ||
@@ -688,7 +704,7 @@ async function generar_boletin(nid_matricula, nid_trimestre) {
           .toString()
           .replace(
             "||ASIGNATURA_INSTRUMENTO||",
-            evaluacion_instrumento["asignatura"],
+            curso_instrumento + evaluacion_instrumento["asignatura"],
           );
         texto_instrumento_aux = texto_instrumento_aux
           .toString()
