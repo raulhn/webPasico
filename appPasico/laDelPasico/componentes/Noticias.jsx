@@ -37,8 +37,14 @@ export function Noticias() {
     }
   }
 
-  useEffect(() => {
-    cargarNoticias();
+  useEffect(async() => {
+    try{
+    await cargarNoticias();
+    } catch (e) {
+      console.log("Error en el useEffect de Noticias:", e);
+      setError(true);
+      setCargando(false);
+    }
   }, [refrescar]);
 
   if (cargando) {
