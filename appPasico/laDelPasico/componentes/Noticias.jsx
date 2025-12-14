@@ -20,9 +20,15 @@ export function Noticias() {
     serviceNoticias
       .obtenerUltimasNoticias()
       .then((v_noticias) => {
-        let array_noticias = v_noticias["componente_blog"].slice(0, 6);
-        setNoticias(array_noticias);
-        setCargando(false); // Finaliza la carga
+        try {
+          let array_noticias = v_noticias["componente_blog"].slice(0, 6);
+          setNoticias(array_noticias);
+          setCargando(false); // Finaliza la carga
+        } catch (e) {
+          console.log("Error al procesar noticias:", e);
+          setError(true);
+          setCargando(false);
+        }
       })
       .catch((error) => {
         console.log("Error al obtener noticias:", error);
