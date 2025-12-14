@@ -15,33 +15,30 @@ export function Noticias() {
   const [refrescar, setRefresco] = useState(false);
   const [error, setError] = useState(false);
 
-  useEffect(() => {
+  const cargarNoticias = async () => {
     try {
       setPresionado(null);
-      serviceNoticias
-        .obtenerUltimasNoticias()
-        .then((v_noticias) => {
-          try {
-            let array_noticias = v_noticias["componente_blog"].slice(0, 6);
-            setNoticias(array_noticias);
+      let v_noticias = await serviceNoticias.obtenerUltimasNoticias();
+      try {
+        let array_noticias = v_noticias["componente_blog"].slice(0, 6);
+        setNoticias(array_noticias);
             setCargando(false); // Finaliza la carga
           } catch (e) {
             console.log("Error al procesar noticias:", e);
             setError(true);
             setCargando(false);
           }
-        })
-        .catch((error) => {
-          console.log("Error al obtener noticias:", error);
-          setError(true); // Asegúrate de finalizar la carga incluso si hay un error
-          setCargando(false);
-        });
+        
       setRefresco(false);
     } catch (e) {
       console.log("Error en el useEffect de Noticias:", e);
       setError(true);
       setCargando(false);
     }
+  }
+
+  useEffect(() => {
+    cargarNoticias();
   }, [refrescar]);
 
   if (cargando) {
