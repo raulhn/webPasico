@@ -7,7 +7,7 @@ import { StyleSheet, ActivityIndicator, RefreshControl } from "react-native";
 const serviceNoticias = require("../servicios/serviceNoticias.js");
 
 export function Noticias() {
-  const [listaNoticias, obtenerNoticias] = useState([]);
+  const [listaNoticias, setNoticias] = useState([]);
   const [cargando, setCargando] = useState(true); // Estado para controlar la carga
 
   const [presionado, setPresionado] = useState(null);
@@ -21,7 +21,7 @@ export function Noticias() {
       .obtenerUltimasNoticias()
       .then((v_noticias) => {
         let array_noticias = v_noticias["componente_blog"].slice(0, 6);
-        obtenerNoticias(array_noticias);
+        setNoticias(array_noticias);
         setCargando(false); // Finaliza la carga
       })
       .catch((error) => {
@@ -73,7 +73,7 @@ export function Noticias() {
         onScrollEndDrag={() => {
           setPresionado(null); // Cambia el estado a no presionado al hacer scroll
         }}
-        style={{ flexGrow: 1, backgroundColor: "white"}}
+        style={{ flexGrow: 1, backgroundColor: "white" }}
         data={listaNoticias}
         keyExtractor={(noticia) => noticia.nid_imagen}
         renderItem={({ item }) => (

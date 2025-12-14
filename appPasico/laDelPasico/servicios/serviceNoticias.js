@@ -8,10 +8,16 @@ function obtenerUltimasNoticias() {
         "Content-Type": "application/json",
       },
     })
-      .then((response) => response.json())
-      .then((data) => {
-        resolve(data);
-      })
+      .then((response) =>
+        response
+          .json()
+          .then((data) => {
+            resolve(data);
+          })
+          .catch((error) => {
+            reject(error);
+          })
+      )
       .catch((error) => {
         reject(error);
       });
@@ -26,10 +32,16 @@ function obtenerGalerias() {
         "Content-Type": "application/json",
       },
     })
-      .then((response) => response.json())
-      .then((data) => {
-        resolve(data);
-      })
+      .then((response) =>
+        response
+          .json()
+          .then((data) => {
+            resolve(data);
+          })
+          .catch((error) => {
+            reject(error);
+          })
+      )
       .catch((error) => {
         reject(error);
       });
