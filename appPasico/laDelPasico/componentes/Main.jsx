@@ -1,13 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 
 import { Noticias } from "./Noticias";
-import { Image } from "react-native";
 import { StyleSheet, View, Text } from "react-native";
-import { MenuPasico } from "./MenuPasico"; // Adjust the path if necessary
-import { Link } from "expo-router";
-import AppBar from "./appBar.jsx";
-
-const logo = require("../assets/logo.png");
 
 export default function Main() {
   return (

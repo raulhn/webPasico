@@ -11,10 +11,16 @@ export function registrarConexion(token, recaptchaToken) {
         recaptchaToken: recaptchaToken,
       }),
     })
-      .then((response) => response.json())
-      .then((data) => {
-        resolve(data);
-      })
+      .then((response) =>
+        response
+          .json()
+          .then((data) => {
+            resolve(data);
+          })
+          .catch((error) => {
+            reject(error);
+          })
+      )
       .catch((error) => {
         reject(error);
       });

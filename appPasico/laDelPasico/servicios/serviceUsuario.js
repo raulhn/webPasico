@@ -24,17 +24,22 @@ function registrarUsuario(
         password: password,
         recaptchaToken: recaptchaToken,
       }),
-    }).then((response) => {
-      response
-        .json()
-        .then((data) => {
-          resolve(data);
-        })
-        .catch((error) => {
-          console.log("Error en el servicio registrarUsuario");
-          reject(error);
-        });
-    });
+    })
+      .then((response) => {
+        response
+          .json()
+          .then((data) => {
+            resolve(data);
+          })
+          .catch((error) => {
+            console.log("Error en el servicio registrarUsuario");
+            reject(error);
+          });
+      })
+      .catch((error) => {
+        console.log("Error en el servicio registrarUsuario");
+        reject(error);
+      });
   });
 }
 
@@ -50,36 +55,39 @@ function login(correoElectronico, password, tokenNotificacion) {
         password: password,
         tokenNotificacion: tokenNotificacion,
       }),
-    }).then(async (response) => {
-      response
-        .json()
-        .then((data) => {
-          secureStorage.guardarToken("refresh_token", data.refreshToken);
-          resolve(data);
-        })
-        .catch((error) => {
-          console.log("Error en el servicio login");
-          reject(error);
-        });
-    });
+    })
+      .then(async (response) => {
+        response
+          .json()
+          .then((data) => {
+            secureStorage.guardarToken("refresh_token", data.refreshToken);
+            resolve(data);
+          })
+          .catch((error) => {
+            console.log("Error en el servicio login");
+            reject(error);
+          });
+      })
+      .catch((error) => {
+        console.log("Error en el servicio login");
+        reject(error);
+      });
   });
 }
 
-function obtenerUsuario(cerrarSesion) {
-  return new Promise((resolve, reject) => {
-    try {
-      let data = servicioComun.peticionSesion(
-        "GET",
-        Constantes.URL_SERVICIO_MOVIL + "usuario",
-        null,
-        cerrarSesion
-      );
-      resolve(data);
-    } catch (error) {
-      console.log("Error en el servicio obtenerUsuario", error);
-      reject(error);
-    }
-  });
+async function obtenerUsuario(cerrarSesion) {
+  try {
+    let data = await servicioComun.peticionSesion(
+      "GET",
+      Constantes.URL_SERVICIO_MOVIL + "usuario",
+      null,
+      cerrarSesion
+    );
+    return data;
+  } catch (error) {
+    console.log("Error en el servicio obtenerUsuario", error);
+    throw new Error(error);
+  }
 }
 
 function logout() {
@@ -89,18 +97,23 @@ function logout() {
       headers: {
         "Content-Type": "application/json",
       },
-    }).then((response) => {
-      response
-        .json()
-        .then((data) => {
-          secureStorage.eliminarToken("refresh_token");
-          resolve(data);
-        })
-        .catch((error) => {
-          console.log("Error en el servicio logout");
-          reject(error);
-        });
-    });
+    })
+      .then((response) => {
+        response
+          .json()
+          .then((data) => {
+            secureStorage.eliminarToken("refresh_token");
+            resolve(data);
+          })
+          .catch((error) => {
+            console.log("Error en el servicio logout");
+            reject(error);
+          });
+      })
+      .catch((error) => {
+        console.log("Error en el servicio logout");
+        reject(error);
+      });
   });
 }
 
