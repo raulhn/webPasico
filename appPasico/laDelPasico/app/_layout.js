@@ -1,10 +1,9 @@
 import { View } from "react-native";
 import { StyleSheet } from "react-native";
 import { Stack } from "expo-router";
-import { Text, Image } from "react-native";
+import { Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AuthProvider } from "../providers/AuthContext"; // Ajusta la ruta según tu estructura de carpetas
-import { use, useEffect } from "react";
 
 export default function Layout() {
   const logo = require("../assets/logo.png");
@@ -29,8 +28,7 @@ export default function Layout() {
           ),
         }}
       >
-      <Stack.Screen name="(tabs)" />
-
+        <Stack.Screen name="(tabs)" />
       </Stack>
     </AuthProvider>
   );
