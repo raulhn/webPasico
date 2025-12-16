@@ -9,28 +9,37 @@ function obtenerAsignaturas() {
         "Content-Type": "application/json",
       },
     })
-      .then((response) => response.json())
-      .then((data) => {
-        resolve(data);
-      })
+      .then((response) =>
+        response
+          .json()
+          .then((data) => {
+            resolve(data);
+          })
+          .catch((error) => {
+            reject(error);
+          })
+      )
       .catch((error) => {
         reject(error);
       });
   });
 }
 
-function obtenerAsignaturasProfesor()
-{
+function obtenerAsignaturasProfesor() {
   return new Promise((resolve, reject) => {
-    
-    ServiceComun.peticionServicio("GET", Constantes.URL_SERVICIO_MOVIL + "obtener_asignaturas_profesor", null).then((data) => {
-      resolve(data.asignaturas);
-    }).catch((error) => {
-      reject(error);
-    });
+    ServiceComun.peticionServicio(
+      "GET",
+      Constantes.URL_SERVICIO_MOVIL + "obtener_asignaturas_profesor",
+      null
+    )
+      .then((data) => {
+        resolve(data.asignaturas);
+      })
+      .catch((error) => {
+        reject(error);
+      });
   });
 }
-
 
 module.exports.obtenerAsignaturas = obtenerAsignaturas;
 module.exports.obtenerAsignaturasProfesor = obtenerAsignaturasProfesor;

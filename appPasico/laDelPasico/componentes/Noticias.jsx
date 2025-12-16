@@ -1,5 +1,5 @@
 import { FlatList, Pressable } from "react-native";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { CardBlog, AnimatedCardBlog } from "./CardBlog.jsx";
 import { View, Text } from "react-native";
 import { StyleSheet, ActivityIndicator, RefreshControl } from "react-native";
@@ -15,31 +15,41 @@ export function Noticias() {
   const [refrescar, setRefresco] = useState(false);
   const [error, setError] = useState(false);
 
-  const cargarNoticias = async () => {
+  function cargarNoticias() {
     try {
       setPresionado(null);
-      let v_noticias = await serviceNoticias.obtenerUltimasNoticias();
-      try {
-        let array_noticias = v_noticias["componente_blog"].slice(0, 6);
-        setNoticias(array_noticias);
+      serviceNoticias
+        .obtenerUltimasNoticias()
+        .then((v_noticias) => {
+          try {
+            let array_noticias = v_noticias["componente_blog"].slice(0, 6);
+            setNoticias(array_noticias);
             setCargando(false); // Finaliza la carga
           } catch (e) {
             console.log("Error al procesar noticias:", e);
             setError(true);
             setCargando(false);
           }
-        
-      setRefresco(false);
+
+          setRefresco(false);
+        })
+        .catch((e) => {
+          console.log("Error al obtener noticias:", e);
+          setError(true);
+          setCargando(false);
+          setRefresco(false);
+        });
     } catch (e) {
-      console.log("Error en el useEffect de Noticias:", e);
+      console.log("Error en cargarNoticias:", e);
       setError(true);
       setCargando(false);
+      setRefresco(false);
     }
   }
 
-  useEffect(async() => {
-    try{
-    await cargarNoticias();
+  useEffect(() => {
+    try {
+      cargarNoticias();
     } catch (e) {
       console.log("Error en el useEffect de Noticias:", e);
       setError(true);

@@ -11,7 +11,6 @@ function obtenerEvaluaciones(nidMatricula, cerrarSesion) {
         cerrarSesion
       )
       .then((response) => {
-
         resolve(response);
       })
       .catch((error) => {
@@ -44,7 +43,12 @@ function generarBoletin(nidMatricula, nidTrimestre, cerrarSesion) {
   });
 }
 
-function obtenerEvaluacionesAsignatura(nidCurso, nidAsignatura, nidTrimestre, cerrarSesion) {
+function obtenerEvaluacionesAsignatura(
+  nidCurso,
+  nidAsignatura,
+  nidTrimestre,
+  cerrarSesion
+) {
   return new Promise((resolve, reject) => {
     serviceComun
       .peticionSesion(
@@ -56,7 +60,8 @@ function obtenerEvaluacionesAsignatura(nidCurso, nidAsignatura, nidTrimestre, ce
           nidAsignatura +
           "/" +
           nidTrimestre,
-        null, cerrarSesion
+        null,
+        cerrarSesion
       )
       .then((response) => {
         resolve(response);
@@ -67,11 +72,14 @@ function obtenerEvaluacionesAsignatura(nidCurso, nidAsignatura, nidTrimestre, ce
   });
 }
 
-
-function registrarEvaluaciones(evaluaciones, nidCurso, nidAsignatura, nidTrimestre, cerrarSesion)
-{
+function registrarEvaluaciones(
+  evaluaciones,
+  nidCurso,
+  nidAsignatura,
+  nidTrimestre,
+  cerrarSesion
+) {
   return new Promise((resolve, reject) => {
-
     console.log("Registrar evaluaciones:", evaluaciones);
     serviceComun
       .peticionSesion(
@@ -81,7 +89,7 @@ function registrarEvaluaciones(evaluaciones, nidCurso, nidAsignatura, nidTrimest
           evaluaciones: evaluaciones,
           nid_curso: nidCurso,
           nid_asignatura: nidAsignatura,
-          nid_trimestre: nidTrimestre
+          nid_trimestre: nidTrimestre,
         },
         cerrarSesion
       )
@@ -94,7 +102,6 @@ function registrarEvaluaciones(evaluaciones, nidCurso, nidAsignatura, nidTrimest
       });
   });
 }
-
 
 module.exports.obtenerEvaluaciones = obtenerEvaluaciones;
 module.exports.generarBoletin = generarBoletin;

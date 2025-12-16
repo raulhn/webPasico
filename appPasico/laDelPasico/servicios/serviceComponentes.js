@@ -8,10 +8,16 @@ function recuperarComponentes(nidPagina) {
         "Content-Type": "application/json",
       },
     })
-      .then((response) => response.json())
-      .then((data) => {
-        resolve(data);
-      })
+      .then((response) =>
+        response
+          .json()
+          .then((data) => {
+            resolve(data);
+          })
+          .catch((error) => {
+            reject(error);
+          })
+      )
       .catch((error) => {
         reject(error);
       });
@@ -26,10 +32,16 @@ function recuperarComponenteTexto(nidComponente) {
         "Content-Type": "application/json",
       },
     })
-      .then((response) => response.json())
-      .then((data) => {
-        resolve(data);
-      })
+      .then((response) =>
+        response
+          .json()
+          .then((data) => {
+            resolve(data);
+          })
+          .catch((error) => {
+            reject(error);
+          })
+      )
       .catch((error) => {
         reject(error);
       });
@@ -47,10 +59,16 @@ function recuperarImagenesGaleria(nidComponente) {
         },
       }
     )
-      .then((response) => response.json())
-      .then((data) => {
-        resolve(data);
-      })
+      .then((response) =>
+        response
+          .json()
+          .then((data) => {
+            resolve(data);
+          })
+          .catch((error) => {
+            reject(error);
+          })
+      )
       .catch((error) => {
         reject(error);
       });
