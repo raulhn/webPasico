@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { CardBlog, AnimatedCardBlog } from "./CardBlog.jsx";
 import { View, Text } from "react-native";
 import { StyleSheet, ActivityIndicator, RefreshControl } from "react-native";
-
+import { Boton } from "./componentesUI/ComponentesUI.jsx";
 const serviceNoticias = require("../servicios/serviceNoticias.js");
 
 export function Noticias() {
