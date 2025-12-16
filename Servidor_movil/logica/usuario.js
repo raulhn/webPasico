@@ -311,7 +311,7 @@ async function realizarLogin(correoElectronico, password) {
           );
           console.error("El usuario no está verificado.");
           throw new Error(
-            "El usuario no está verificado. Se ha enviado un correo de verificación. Compruebe su bandeja de entrada y el correo no deseado.",
+            "El usuario no está verificado. Se ha enviado un correo de verificación. Compruebe su bandeja de entrada y la bandeja de correo no deseado.",
           );
         }
         throw new Error("Error al realizar login");
