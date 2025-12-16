@@ -114,7 +114,7 @@ export default function registrarUsuario(recaptchaToken) {
               setErrorValidacion(true);
             } else {
               setMensajeExito(
-                "Usuario registrado correctamente. Se ha enviado un mensaje de verificación a su correo. Compruebe su bandeja de entrada y el correo no deseado."
+                "Usuario registrado correctamente. Se ha enviado un mensaje de verificación a su correo. Compruebe su bandeja de entrada y la bandeja de correo no deseado."
               );
               setExito(true);
             }
