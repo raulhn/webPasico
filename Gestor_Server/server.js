@@ -32,6 +32,8 @@ var servlet_prestamo = require("./servlets/servlet_prestamos.js");
 var servlet_matricula_asignatura = require("./servlets/servlet_matricula_asignatura.js");
 var servlet_profesor = require("./servlets/servlet_profesor.js");
 
+import * as servlet_profesor_alumno_matricula from "./servlets/servlet_profesor_alumno_matricula.js";
+
 var fs = require("fs");
 
 var conexion = require("./conexion.js");
@@ -219,6 +221,14 @@ app.post("/sustituir_profesor", servlet_matricula.sustituir_profesor);
 app.post(
   "/sustituir_profesor_alumno",
   servlet_matricula.sustituir_profesor_alumno,
+);
+app.post(
+  "/cambiar_fecha_baja_alumno_profesor",
+  servlet_profesor_alumno_matricula.cambiarFechaBajaAlumnoDeProfesor,
+);
+app.post(
+  "/cambiar_fecha_alta_alumno_profesor",
+  servlet_profesor_alumno_matricula.cambiarFechaAltaAlumnoDeProfesor,
 );
 
 app.get(
