@@ -1,30 +1,54 @@
 import * as ServicioEvaluaciones from "../services/serviceEvaluacion.js";
 import { useState, useEffect } from "react";
 
-export const useEvaluacionesAsignatura = (nidCurso, nidAsignatura, nidTrimestre) => {
-    const [evaluaciones, setEvaluaciones] = useState([]);
+export const useEvaluacionesAsignatura = (
+  nidCurso,
+  nidAsignatura,
+  nidTrimestre,
+) => {
+  const [evaluaciones, setEvaluaciones] = useState([]);
+  const [error, setError] = useState(false);
+  useEffect(() => {
+    const fetchEvaluaciones = async () => {
+      const response = await ServicioEvaluaciones.obtenerEvaluacionesAsignatura(
+        nidCurso,
+        nidAsignatura,
+        nidTrimestre,
+      );
+      setEvaluaciones(response);
+    };
 
-    useEffect(() => {
-        const fetchEvaluaciones = async () => {
-            const response = await ServicioEvaluaciones.obtenerEvaluacionesAsignatura(nidCurso, nidAsignatura, nidTrimestre);
-            setEvaluaciones(response);
-        };
+    fetchEvaluaciones();
+  }, [nidCurso, nidAsignatura, nidTrimestre]);
 
-        fetchEvaluaciones();
-    }, [nidCurso, nidAsignatura, nidTrimestre]);
-
-
-    async function registrarEvaluaciones(evaluaciones_, nidCurso_, nidAsignatura_, nidTrimestre_)
-    {
-        try {
-            await ServicioEvaluaciones.registrarEvaluaciones(evaluaciones_, nidCurso_, nidAsignatura_, nidTrimestre_);
-        } catch (error) {
-            console.error("Error al registrar evaluaciones:", error);
-        }
+  async function registrarEvaluaciones(
+    evaluaciones_,
+    nidCurso_,
+    nidAsignatura_,
+    nidTrimestre_,
+  ) {
+    try {
+      let resultado = await ServicioEvaluaciones.registrarEvaluaciones(
+        evaluaciones_,
+        nidCurso_,
+        nidAsignatura_,
+        nidTrimestre_,
+      );
+      if (resultado && resultado.error) {
+        setError(true);
+      } else if (!resultado) {
+        setError(false);
+      } else {
+        setError(true);
+      }
+      return resultado;
+    } catch (error) {
+      setError(true);
+      console.error("Error al registrar evaluaciones:", error);
     }
-    return { evaluaciones, registrarEvaluaciones };
-}
-
+  }
+  return { evaluaciones, registrarEvaluaciones, error };
+};
 
 export const useEvaluaciones = (nidMatricula) => {
   const [evaluaciones, setEvaluaciones] = useState([]);
@@ -36,9 +60,8 @@ export const useEvaluaciones = (nidMatricula) => {
   useEffect(() => {
     const fetchEvaluaciones = async () => {
       try {
-        const data = await ServicioEvaluaciones.obtenerEvaluaciones(
-          nidMatricula
-        );
+        const data =
+          await ServicioEvaluaciones.obtenerEvaluaciones(nidMatricula);
 
         setEvaluaciones(data.evaluaciones || []);
         setNombreAlumno(data.nombre_alumno || "");
@@ -56,7 +79,12 @@ export const useEvaluaciones = (nidMatricula) => {
     fetchEvaluaciones();
   }, [nidMatricula, refrescar]);
 
-  return { evaluaciones, nombreAlumno, cargando, error, refrescar, setRefrescar };
+  return {
+    evaluaciones,
+    nombreAlumno,
+    cargando,
+    error,
+    refrescar,
+    setRefrescar,
+  };
 };
-
-
