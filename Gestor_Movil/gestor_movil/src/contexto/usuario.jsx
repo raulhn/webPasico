@@ -36,12 +36,10 @@ export const UsuarioProvider = ({ children }) => {
   }
 
   function comprobarRoles(rolesAComprobar) {
-    console.log("Roles a comprobar:", rolesAComprobar);
-    console.log("Roles del usuario:", roles);
     if (!roles || roles.length === 0) return false;
     for (let rol of rolesAComprobar) {
       for (let rolUsuario of roles) {
-        if (rol === rolUsuario.rol) {
+        if (rol === rolUsuario.nombre) {
           return true;
         }
       }
@@ -73,4 +71,3 @@ export const UsuarioProvider = ({ children }) => {
     </UsuarioContext.Provider>
   );
 };
-
