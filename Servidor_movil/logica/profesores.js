@@ -6,7 +6,7 @@ function insertarProfesor(
   nid_persona,
   nid_asignatura,
   esBaja,
-  fecha_actualizacion
+  fecha_actualizacion,
 ) {
   return new Promise((resolve, reject) => {
     const sql =
@@ -41,7 +41,7 @@ function actualizarProfesor(
   nid_persona,
   nid_asignatura,
   esBaja,
-  fecha_actualizacion
+  fecha_actualizacion,
 ) {
   return new Promise((resolve, reject) => {
     const sql =
@@ -96,7 +96,7 @@ async function registrarProfesor(
   nid_persona,
   nid_asignatura,
   esBaja,
-  fecha_actualizacion
+  fecha_actualizacion,
 ) {
   try {
     const existe = await existeProfesor(nid_persona, nid_asignatura);
@@ -105,14 +105,14 @@ async function registrarProfesor(
         nid_persona,
         nid_asignatura,
         esBaja,
-        fecha_actualizacion
+        fecha_actualizacion,
       );
     } else {
       return await insertarProfesor(
         nid_persona,
         nid_asignatura,
         esBaja,
-        fecha_actualizacion
+        fecha_actualizacion,
       );
     }
   } catch (error) {
@@ -167,35 +167,77 @@ function obtenerProfesor(nid_persona) {
   }
 }
 
-function esProfesor(nid_persona, nid_asignatura)
-{
-  return new Promise(
-    (resolve, reject) =>
-    {
-      const sql = "select count(*) num " +
-                  " from " + constantes.ESQUEMA + ".profesor " +
-                  "where nid_persona = " + conexion.dbConn.escape(nid_persona) + 
-                  " and nid_asignatura = " + conexion.dbConn.escape(nid_asignatura);
+function esProfesor(nid_persona, nid_asignatura) {
+  return new Promise((resolve, reject) => {
+    const sql =
+      "select count(*) num " +
+      " from " +
+      constantes.ESQUEMA +
+      ".profesor " +
+      "where nid_persona = " +
+      conexion.dbConn.escape(nid_persona) +
+      " and nid_asignatura = " +
+      conexion.dbConn.escape(nid_asignatura);
 
-      conexion.dbConn.query(sql,
-        (error, results, fields) =>
-        {
-          if(error)
-          {
-            console.log("profesores.js -> esProfesor: ", error);
-            reject("Se ha producido un error al comprobar el profesor")
-          }
-          else
-          {
-            resolve(results[0]['num'] > 0)
-          }
-        }
-      )
-    }
-  )
+    conexion.dbConn.query(sql, (error, results, fields) => {
+      if (error) {
+        console.log("profesores.js -> esProfesor: ", error);
+        reject("Se ha producido un error al comprobar el profesor");
+      } else {
+        resolve(results[0]["num"] > 0);
+      }
+    });
+  });
 }
 
+function obtenerProfesores() {
+  return new Promise((resolve, reject) => {
+    const sql =
+      "SELECT pr.*, pe.nombre, pe.primer_apellido, pe.segundo_apellido FROM " +
+      constantes.ESQUEMA +
+      ".profesor pr, " +
+      constantes.ESQUEMA +
+      ".persona pe " +
+      " where pr.nid_persona = pe.nid_persona" +
+      " where esBaja = 'N'";
 
+    conexion.dbConn.query(sql, (error, result) => {
+      if (error) {
+        console.error("Error al obtener los profesores: " + error.message);
+        reject(new Error("Error al obtener los profesores"));
+      } else {
+        resolve(result);
+      }
+    });
+  });
+}
+
+function obtenerProfesoresAsignatura(nid_asignatura) {
+  return new Promise((resolve, reject) => {
+    const sql =
+      "SELECT pr.*, pe.nombre, pe.primer_apellido, pe.segundo_apellido FROM " +
+      constantes.ESQUEMA +
+      ".profesor pr, " +
+      constantes.ESQUEMA +
+      ".persona pe " +
+      " where pr.nid_persona = pe.nid_persona" +
+      " and pr.nid_asignatura = " +
+      conexion.dbConn.escape(nid_asignatura) +
+      " and pr.esBaja = 'N'";
+
+    conexion.dbConn.query(sql, (error, result) => {
+      if (error) {
+        console.error("Error al obtener los profesores: " + error.message);
+        reject(new Error("Error al obtener los profesores"));
+      } else {
+        resolve(result);
+      }
+    });
+  });
+}
+
+module.exports.obtenerProfesoresAsignatura = obtenerProfesoresAsignatura;
+module.exports.obtenerProfesores = obtenerProfesores;
 module.exports.registrarProfesor = registrarProfesor;
 module.exports.eliminarProfesor = eliminarProfesor;
 module.exports.obtenerProfesor = obtenerProfesor;

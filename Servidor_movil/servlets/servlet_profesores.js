@@ -13,14 +13,14 @@ function registrarProfesor(req, res) {
         "Registrar Profesor: ",
         nid_persona,
         nid_asignatura,
-        fecha_actualizacion
+        fecha_actualizacion,
       );
       await gestorProfesores
         .registrarProfesor(
           nid_persona,
           nid_asignatura,
           esBaja,
-          fecha_actualizacion
+          fecha_actualizacion,
         )
         .then(() => {
           res.status(200).send({
@@ -77,9 +77,21 @@ function eliminarProfesor(req, res) {
   });
 }
 
-
-
-
+async function obtenerProfesores(req, res) {
+  try {
+    let profesores = await gestorProfesores.obtenerProfesores();
+    res.status(200).send({
+      error: false,
+      profesores: profesores,
+    });
+  } catch (error) {
+    console.error("Error al obtener los profesores:" + error.message);
+    res.status(400).send({
+      error: true,
+      mensaje: "Error al obtener los profesores",
+    });
+  }
+}
 
 module.exports.registrarProfesor = registrarProfesor;
 module.exports.eliminarProfesor = eliminarProfesor;
