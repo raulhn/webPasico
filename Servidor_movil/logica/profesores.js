@@ -199,7 +199,7 @@ function obtenerProfesores() {
       constantes.ESQUEMA +
       ".persona pe " +
       " where pr.nid_persona = pe.nid_persona" +
-      " where esBaja = 'N'";
+      " and esBaja = 'N'";
 
     conexion.dbConn.query(sql, (error, result) => {
       if (error) {
