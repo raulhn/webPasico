@@ -29,7 +29,7 @@ async function registrarUsuario(req, res) {
           primerApellido,
           segundoApellido,
           correoElectronico,
-          password
+          password,
         )
         .then((resultado) => {
           res.status(200).send({
@@ -92,20 +92,20 @@ async function login(req, res) {
   try {
     const tokens = await gestorUsuario.realizarLogin(
       correoElectronico,
-      password
+      password,
     );
 
     if (tokenNotificacion) {
-    await gestorConexion.limpiarToken(
-      tokenNotificacion,
-      tokens.usuario.nid_usuario
-    );
-    await gestorConexion.actualizarTokenUsuario(
-      tokenNotificacion,
-      tokens.usuario.nid_usuario
-    );
-  }
-  console.log("Actualizar token de notificación:", tokens );
+      await gestorConexion.limpiarToken(
+        tokenNotificacion,
+        tokens.usuario.nid_usuario,
+      );
+      await gestorConexion.actualizarTokenUsuario(
+        tokenNotificacion,
+        tokens.usuario.nid_usuario,
+      );
+    }
+    console.log("Actualizar token de notificación:", tokens);
 
     res.cookie(constantes.ACCESS_TOKEN, tokens.accessToken, {
       httpOnly: true,
@@ -154,7 +154,7 @@ async function cambiarPassword(req, res) {
       await gestorUsuario.realizarCambioPassword(
         decoded.nid_usuario,
         passwordActual,
-        nuevaPassword
+        nuevaPassword,
       );
       res.status(200).send({
         error: false,
@@ -167,41 +167,55 @@ async function cambiarPassword(req, res) {
   });
 }
 
-function obtenerUsuario(req, res) {
-  const token = req.cookies.access_token;
-  if (!token) {
-    res.status(401).send({ error: true, mensaje: "No autenticado", codigo: 1 });
-    return;
-  }
-
-  jwt.verify(token, process.env.SESSION_SECRET, async (err, decoded) => {
-    try {
-      if (err) {
-        console.error("Error al verificar el token:", err);
-        res
-          .status(401)
-          .send({ error: true, mensaje: "No autenticado", codigo: 2 });
-        return;
-      }
+function obtenerTokenUsuario(token) {
+  return new Promise((resolve, reject) => {
+    jwt.verify(token, process.env.SESSION_SECRET, async (err, decoded) => {
+      try {
+        if (err) {
+          console.error("Error al verificar el token:", err);
+          reject("No autenticado");
+          return;
+        }
 
         const usuario = {
-        nid_usuario: decoded.nid_usuario,
-        correoElectronico: decoded.correoElectronico,
-        nombre: decoded.nombre,
-      };
+          nid_usuario: decoded.nid_usuario,
+          correoElectronico: decoded.correoElectronico,
+          nombre: decoded.nombre,
+        };
 
-
-      let roles = await gestorUsuario.construirRoles(decoded.nid_usuario);
-
-    
-      res.status(200).send({ error: false, usuario: usuario, roles: roles });
-    } catch (error) {
-      console.error("Error al obtener el usuario:", error);
-      res
-        .status(400)
-        .send({ error: true, mensaje: "Error al obtener el usuario" });
-    }
+        resolve({ usuario: usuario, roles: roles });
+      } catch (error) {
+        console.error("Error al obtener el usuario:", error);
+        reject("Error al obtener el usuario");
+      }
+    });
   });
+}
+
+async function obtenerUsuario(req, res) {
+  try {
+    const token = req.cookies.access_token;
+    if (!token) {
+      res
+        .status(401)
+        .send({ error: true, mensaje: "No autenticado", codigo: 1 });
+      return;
+    }
+    const tokenUsuario = await obtenerTokenUsuario(token);
+    const usuario = {
+      nid_usuario: tokenUsuario.usuario.nid_usuario,
+      correoElectronico: tokenUsuario.usuario.correoElectronico,
+      nombre: tokenUsuario.usuario.nombre,
+    };
+    const roles = tokenUsuario.roles;
+
+    res.status(200).send({ error: false, usuario: usuario, roles: roles });
+  } catch (error) {
+    console.error("Error inesperado al obtener el usuario:", error);
+    res
+      .status(500)
+      .send({ error: true, mensaje: "Error inesperado al obtener el usuario" });
+  }
 }
 
 function refreshToken(req, res) {
@@ -233,7 +247,7 @@ function refreshToken(req, res) {
           usuario.segundo_apellido,
       },
       process.env.SESSION_SECRET,
-      { expiresIn: constantes.TIEMPO_ACCESS_TOKEN }
+      { expiresIn: constantes.TIEMPO_ACCESS_TOKEN },
     );
 
     res.cookie(constantes.ACCESS_TOKEN, nuevoToken, {
