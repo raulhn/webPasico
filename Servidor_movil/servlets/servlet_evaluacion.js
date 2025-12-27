@@ -28,7 +28,7 @@ async function registrarEvaluacionServicio(req, res) {
         nid_asignatura,
         nid_profesor,
         fecha_actualizacion,
-        nid_curso
+        nid_curso,
       );
       res.status(200).send({
         error: false,
@@ -37,7 +37,7 @@ async function registrarEvaluacionServicio(req, res) {
     } catch (error) {
       console.error(
         "servlet_evaluacion.js -> registrarEvaluacion: Error al registrar la evaluación:",
-        error
+        error,
       );
       res.status(400).send({
         error: true,
@@ -55,7 +55,7 @@ async function obtenerEvaluacionesSucias(req, res) {
     } catch (error) {
       console.error(
         "servlet_evaluacion.js -> obtenerEvaluacionesSucias: Error al obtener las evaluaciones sucias:",
-        error
+        error,
       );
       res.status(400).send({
         error: true,
@@ -76,7 +76,7 @@ async function obtenerEvaluacionTrimestre(req, res) {
     if (matricula.nid_persona !== nidPersona) {
       const bEsPadre = gestorPersonas.esPadre(
         nidPersona,
-        matricula.nid_persona
+        matricula.nid_persona,
       );
       if (!bEsPadre) {
         res.status(403).send({
@@ -90,7 +90,7 @@ async function obtenerEvaluacionTrimestre(req, res) {
 
     const evaluacion = await gestor_evaluacion.obtenerEvaluacionTrimestre(
       nidMatricula,
-      nidTrimestre
+      nidTrimestre,
     );
 
     res.status(200).send({
@@ -101,7 +101,7 @@ async function obtenerEvaluacionTrimestre(req, res) {
   } catch (error) {
     console.error(
       "servlet_evaluacion.js -> obtenerEvaluacion: Error al obtener la evaluación:",
-      error
+      error,
     );
     res.status(400).send({
       error: true,
@@ -115,17 +115,20 @@ async function obtenerEvaluaciones(req, res) {
     const nid_persona = await servletPersona.obtenerNidPersona(req);
     const nidMatricula = req.params.nid_matricula;
 
-
     const matricula = await gestorMatricula.obtenerMatricula(nidMatricula);
 
     if (matricula.nid_persona !== nid_persona) {
       const bEsPadre = await gestorPersonas.esHijo(
         nid_persona,
-        matricula.nid_persona
+        matricula.nid_persona,
       );
       if (!bEsPadre) {
-    
-        const bEsProfesorAlumno = await gestorProfesorAlumnoMatricula.esAlumnoProfesor(matricula.nid_persona, nid_persona, matricula.nid_curso);
+        const bEsProfesorAlumno =
+          await gestorProfesorAlumnoMatricula.esAlumnoProfesor(
+            matricula.nid_persona,
+            nid_persona,
+            matricula.nid_curso,
+          );
         if (!bEsProfesorAlumno) {
           res.status(403).send({
             error: true,
@@ -143,12 +146,17 @@ async function obtenerEvaluaciones(req, res) {
       error: false,
       mensaje: "Evaluación obtenida correctamente",
       evaluaciones: evaluaciones,
-      nombre_alumno: matricula.nombre + ' ' + matricula.primer_apellido + ' ' + matricula.segundo_apellido
+      nombre_alumno:
+        matricula.nombre +
+        " " +
+        matricula.primer_apellido +
+        " " +
+        matricula.segundo_apellido,
     });
   } catch (error) {
     console.error(
       "servlet_evaluacion.js -> obtenerEvaluaciones: Error al obtener la evaluación:",
-      error
+      error,
     );
     res.status(400).send({
       error: true,
@@ -164,14 +172,19 @@ async function generarBoletinWeb(req, res) {
     const nidTrimestre = req.params.nid_trimestre;
 
     const matricula = await gestorMatricula.obtenerMatricula(nidMatricula);
-   
+
     if (matricula.nid_persona !== nid_persona) {
       const bEsPadre = await gestorPersonas.esHijo(
         nid_persona,
-        matricula.nid_persona
+        matricula.nid_persona,
       );
       if (!bEsPadre) {
-        const bEsProfesorAlumno = await gestorProfesorAlumnoMatricula.esAlumnoProfesor(matricula.nid_persona, nid_persona, matricula.nid_curso);
+        const bEsProfesorAlumno =
+          await gestorProfesorAlumnoMatricula.esAlumnoProfesor(
+            matricula.nid_persona,
+            nid_persona,
+            matricula.nid_curso,
+          );
         if (!bEsProfesorAlumno) {
           res.status(403).send({
             error: true,
@@ -179,21 +192,19 @@ async function generarBoletinWeb(req, res) {
           });
           return;
         }
-        
       }
     }
 
-
     const evaluacion = await gestor_evaluacion.generar_boletin(
       nidMatricula,
-      nidTrimestre
+      nidTrimestre,
     );
 
     const extensionPdf = ".pdf";
     let pdfBuf = await libreOffice.convertAsync(
       evaluacion,
       extensionPdf,
-      undefined
+      undefined,
     );
 
     res.writeHead(200);
@@ -203,7 +214,7 @@ async function generarBoletinWeb(req, res) {
   } catch (error) {
     console.error(
       "servlet_evaluacion.js -> generarBoletingWeb: Error al generar la evaluación:",
-      error
+      error,
     );
     res.status(400).send({
       error: true,
@@ -223,10 +234,15 @@ async function solicitar_generar_boletin(req, res) {
     if (matricula.nid_persona !== nid_persona) {
       const bEsPadre = await gestorPersonas.esHijo(
         nid_persona,
-        matricula.nid_persona
+        matricula.nid_persona,
       );
       if (!bEsPadre) {
-        const bEsProfesorAlumno = await gestorProfesorAlumnoMatricula.esAlumnoProfesor(matricula.nid_persona, nid_persona, matricula.nid_curso);
+        const bEsProfesorAlumno =
+          await gestorProfesorAlumnoMatricula.esAlumnoProfesor(
+            matricula.nid_persona,
+            nid_persona,
+            matricula.nid_curso,
+          );
         if (!bEsProfesorAlumno) {
           res.status(403).send({
             error: true,
@@ -234,7 +250,6 @@ async function solicitar_generar_boletin(req, res) {
           });
           return;
         }
-        
       }
     }
 
@@ -247,7 +262,7 @@ async function solicitar_generar_boletin(req, res) {
       process.env.SESSION_SECRET,
       {
         expiresIn: constantes.TIEMPO_GENERA_BOLETIN,
-      }
+      },
     );
 
     res.status(200).send({
@@ -258,7 +273,7 @@ async function solicitar_generar_boletin(req, res) {
   } catch (error) {
     console.error(
       "servlet_evaluacion.js -> solicitar_generar_boletin: Error al solicitar la generación del boletín:",
-      error
+      error,
     );
     res.status(400).send({
       error: true,
@@ -297,16 +312,21 @@ async function generar_boletin(req, res) {
 
     const tokenDecoded = await decodificarToken(token);
     const matricula = await gestorMatricula.obtenerMatricula(
-      tokenDecoded.nid_matricula
+      tokenDecoded.nid_matricula,
     );
 
     if (matricula.nid_persona !== tokenDecoded.nid_persona) {
       const bEsPadre = await gestorPersonas.esHijo(
         tokenDecoded.nid_persona,
-        matricula.nid_persona
+        matricula.nid_persona,
       );
       if (!bEsPadre) {
-        const bEsProfesorAlumno = await gestorProfesorAlumnoMatricula.esAlumnoProfesor(matricula.nid_persona, tokenDecoded.nid_persona, matricula.nid_curso);
+        const bEsProfesorAlumno =
+          await gestorProfesorAlumnoMatricula.esAlumnoProfesor(
+            matricula.nid_persona,
+            tokenDecoded.nid_persona,
+            matricula.nid_curso,
+          );
         if (!bEsProfesorAlumno) {
           res.status(403).send({
             error: true,
@@ -314,20 +334,19 @@ async function generar_boletin(req, res) {
           });
           return;
         }
-
       }
     }
 
     const evaluacion = await gestor_evaluacion.generar_boletin(
       tokenDecoded.nid_matricula,
-      tokenDecoded.nid_trimestre
+      tokenDecoded.nid_trimestre,
     );
 
     const extensionPdf = ".pdf";
     let pdfBuf = await libreOffice.convertAsync(
       evaluacion,
       extensionPdf,
-      undefined
+      undefined,
     );
 
     res.writeHead(200);
@@ -337,7 +356,7 @@ async function generar_boletin(req, res) {
   } catch (error) {
     console.error(
       "servlet_evaluacion.js -> generar_evaluacion: Error al generar la evaluación:",
-      error
+      error,
     );
     res.status(400).send({
       error: true,
@@ -346,38 +365,36 @@ async function generar_boletin(req, res) {
   }
 }
 
-
 async function obtenerEvaluacionesAsignaturas(req, res) {
   try {
     const nidAsignatura = req.params.nid_asignatura;
     const nidCurso = req.params.nid_curso;
     const nidTrimestre = req.params.nid_trimestre;
-  
 
     const rolesPermitidos = ["PROFESOR"];
-        let rolPermitido = await servletComun.comprobarRol(
-          req,
-          res,
-          rolesPermitidos
-        );
+    let rolPermitido = await servletComun.comprobarRol(
+      req,
+      res,
+      rolesPermitidos,
+    );
 
     if (!rolPermitido) {
       res.status(403).send({
         error: true,
-        message: "No tienes permisos para obtener las evaluaciones de asignaturas",
+        message:
+          "No tienes permisos para obtener las evaluaciones de asignaturas",
       });
       return;
     }
 
     const nidProfesor = await servletPersona.obtenerNidPersona(req);
 
-    const evaluaciones =
-      await gestor_evaluacion.obtenerEvaluacionesAsignaturas(
-        nidAsignatura,
-        nidCurso,
-        nidTrimestre,
-        nidProfesor
-      );
+    const evaluaciones = await gestor_evaluacion.obtenerEvaluacionesAsignaturas(
+      nidAsignatura,
+      nidCurso,
+      nidTrimestre,
+      nidProfesor,
+    );
 
     res.status(200).send({
       error: false,
@@ -387,15 +404,65 @@ async function obtenerEvaluacionesAsignaturas(req, res) {
   } catch (error) {
     console.error(
       "servlet_evaluacion.js -> obtenerEvaluacionesAsignaturas: Error al obtener las evaluaciones de asignaturas:",
-      error
+      error,
     );
     res.status(400).send({
       error: true,
-      message: "Se ha producido un error al obtener las evaluaciones de asignaturas",
+      message:
+        "Se ha producido un error al obtener las evaluaciones de asignaturas",
     });
   }
 }
 
+async function obtenerEvaluacionesAsignaturasProfesor(req, res) {
+  try {
+    let nidProfesor = req.params.nid_profesor;
+    const nidAsignatura = req.params.nid_asignatura;
+    const nidCurso = req.params.nid_curso;
+    const nidTrimestre = req.params.nid_trimestre;
+
+    const rolesPermitidos = ["ADMINISTRADOR", "COMISION"];
+    let rolPermitido = await servletComun.comprobarRol(
+      req,
+      res,
+      rolesPermitidos,
+    );
+    if (!rolPermitido) {
+      console.log(
+        "servlet_evaluacion.js -> obtenerEvaluacionesAsignaturasProfesor: No es administrador o comisión educativa",
+      );
+      res.status(403).send({
+        error: true,
+        message:
+          "No tienes permisos para obtener las evaluaciones de asignaturas del profesor",
+      });
+      return;
+    }
+
+    const evaluaciones = await gestor_evaluacion.obtenerEvaluacionesAsignaturas(
+      nidAsignatura,
+      nidCurso,
+      nidTrimestre,
+      nidProfesor,
+    );
+
+    res.status(200).send({
+      error: false,
+      mensaje: "Evaluaciones obtenidas correctamente",
+      evaluaciones: evaluaciones,
+    });
+  } catch (error) {
+    console.error(
+      "servlet_evaluacion.js -> obtenerEvaluacionesAsignaturasProfesor: Error al obtener las evaluaciones de asignaturas del profesor:",
+      error,
+    );
+    res.status(400).send({
+      error: true,
+      message:
+        "Se ha producido un error al obtener las evaluaciones de asignaturas del profesor",
+    });
+  }
+}
 
 async function registrarEvaluaciones(req, res) {
   try {
@@ -405,9 +472,12 @@ async function registrarEvaluaciones(req, res) {
     const nid_trimestre = req.body.nid_trimestre;
 
     const nidPersona = await servletPersona.obtenerNidPersona(req);
-    const esProfesor = await gestorProfesores.esProfesor(nidPersona, nid_asignatura);
+    const esProfesor = await gestorProfesores.esProfesor(
+      nidPersona,
+      nid_asignatura,
+    );
 
-    if(!esProfesor) {
+    if (!esProfesor) {
       res.status(403).send({
         error: true,
         message: "No tienes permisos para registrar evaluaciones",
@@ -415,37 +485,65 @@ async function registrarEvaluaciones(req, res) {
       return;
     }
 
-    let evaluacionRecuperada = await gestor_evaluacion.obtenerEvaluacion(nid_curso, nid_asignatura, nid_trimestre, nidPersona);
+    let evaluacionRecuperada = await gestor_evaluacion.obtenerEvaluacion(
+      nid_curso,
+      nid_asignatura,
+      nid_trimestre,
+      nidPersona,
+    );
 
-    if(!evaluacionRecuperada) {
-      await gestor_evaluacion.insertarEvaluacion( nid_trimestre, nid_asignatura, nidPersona, nid_curso, 'S');
-      evaluacionRecuperada = await gestor_evaluacion.obtenerEvaluacion(nid_curso, nid_asignatura, nid_trimestre, nidPersona);
+    if (!evaluacionRecuperada) {
+      await gestor_evaluacion.insertarEvaluacion(
+        nid_trimestre,
+        nid_asignatura,
+        nidPersona,
+        nid_curso,
+        "S",
+      );
+      evaluacionRecuperada = await gestor_evaluacion.obtenerEvaluacion(
+        nid_curso,
+        nid_asignatura,
+        nid_trimestre,
+        nidPersona,
+      );
     }
 
-
-    for(const evaluacion of evaluaciones)
-    {
-      if (evaluacion.progreso.valor !=0){
-      const evaluacionMatricula = await gestor_evaluacion.obtenerEvaluacionMatricula(evaluacionRecuperada.nid_evaluacion, evaluacion.nid_matricula_asignatura);
-      if(!evaluacionMatricula) {
-        await gestor_evaluacion.insertarEvaluacionMatricula(evaluacionRecuperada.nid_evaluacion, evaluacion.nota,
-          evaluacion.progreso.valor, evaluacion.nid_matricula_asignatura, evaluacion.comentario);
-      } else {
-        await gestor_evaluacion.actualizarEvaluacionMatricula(evaluacionMatricula.nid_evaluacion_matricula,
-          evaluacionRecuperada.nid_evaluacion, evaluacion.nota,
-          evaluacion.progreso.valor, evaluacion.nid_matricula_asignatura, evaluacion.comentario);
+    for (const evaluacion of evaluaciones) {
+      if (evaluacion.progreso.valor != 0) {
+        const evaluacionMatricula =
+          await gestor_evaluacion.obtenerEvaluacionMatricula(
+            evaluacionRecuperada.nid_evaluacion,
+            evaluacion.nid_matricula_asignatura,
+          );
+        if (!evaluacionMatricula) {
+          await gestor_evaluacion.insertarEvaluacionMatricula(
+            evaluacionRecuperada.nid_evaluacion,
+            evaluacion.nota,
+            evaluacion.progreso.valor,
+            evaluacion.nid_matricula_asignatura,
+            evaluacion.comentario,
+          );
+        } else {
+          await gestor_evaluacion.actualizarEvaluacionMatricula(
+            evaluacionMatricula.nid_evaluacion_matricula,
+            evaluacionRecuperada.nid_evaluacion,
+            evaluacion.nota,
+            evaluacion.progreso.valor,
+            evaluacion.nid_matricula_asignatura,
+            evaluacion.comentario,
+          );
+        }
       }
-    }
     }
 
     res.status(200).send({
       error: false,
-      mensaje: "Evaluaciones registradas correctamente"
+      mensaje: "Evaluaciones registradas correctamente",
     });
   } catch (error) {
     console.error(
       "servlet_evaluacion.js -> registrarEvaluaciones: Error al registrar las evaluaciones:",
-      error
+      error,
     );
     res.status(400).send({
       error: true,
@@ -454,29 +552,29 @@ async function registrarEvaluaciones(req, res) {
   }
 }
 
-async function actualizarEvaluacionSucia(req, res)
-{
-   servletComun.comprobacionAccesoAPIKey(req, res, async () => {
-  try {
-    const nidEvaluacion = req.body.nid_evaluacion;
+async function actualizarEvaluacionSucia(req, res) {
+  servletComun.comprobacionAccesoAPIKey(req, res, async () => {
+    try {
+      const nidEvaluacion = req.body.nid_evaluacion;
 
-    await gestor_evaluacion.actualizarEvaluacionSucia(nidEvaluacion);
+      await gestor_evaluacion.actualizarEvaluacionSucia(nidEvaluacion);
 
-    res.status(200).send({
-      error: false,
-      mensaje: "Estado de la evaluación actualizado correctamente"
-    });
-  } catch (error) {
-    console.error(
-      "servlet_evaluacion.js -> actualizarEvaluacionSucio: Error al actualizar el estado de la evaluación:",
-      error
-    );
-    res.status(400).send({
-      error: true,
-      message: "Se ha producido un error al actualizar el estado de la evaluación",
-    });
-  }
-});
+      res.status(200).send({
+        error: false,
+        mensaje: "Estado de la evaluación actualizado correctamente",
+      });
+    } catch (error) {
+      console.error(
+        "servlet_evaluacion.js -> actualizarEvaluacionSucio: Error al actualizar el estado de la evaluación:",
+        error,
+      );
+      res.status(400).send({
+        error: true,
+        message:
+          "Se ha producido un error al actualizar el estado de la evaluación",
+      });
+    }
+  });
 }
 
 module.exports.registrarEvaluacionServicio = registrarEvaluacionServicio;
@@ -487,5 +585,8 @@ module.exports.generarBoletinWeb = generarBoletinWeb;
 module.exports.generar_boletin = generar_boletin;
 module.exports.solicitar_generar_boletin = solicitar_generar_boletin;
 module.exports.obtenerEvaluacionesAsignaturas = obtenerEvaluacionesAsignaturas;
+module.exports.obtenerEvaluacionesAsignaturasProfesor =
+  obtenerEvaluacionesAsignaturasProfesor;
 module.exports.registrarEvaluaciones = registrarEvaluaciones;
 module.exports.actualizarEvaluacionSucia = actualizarEvaluacionSucia;
+
