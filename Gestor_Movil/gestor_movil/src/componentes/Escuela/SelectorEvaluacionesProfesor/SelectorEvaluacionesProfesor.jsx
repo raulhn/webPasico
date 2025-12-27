@@ -1,7 +1,7 @@
 import { useCursos } from "../../../hooks/useCursos";
 import { useAsignaturas } from "../../../hooks/useAsignaturas";
 import { useTrimestres } from "../../../hooks/useTrimestres";
-import { useProfesoresAsignatura } from "../../../hooks/useProfesoresAsignatura";
+import { useProfesoresAsignatura } from "../../../hooks/useProfesores";
 
 import { useState } from "react";
 import "./SelectorEvaluacionesProfesor.css";
