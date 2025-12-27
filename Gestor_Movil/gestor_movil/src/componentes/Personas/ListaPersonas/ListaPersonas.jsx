@@ -41,8 +41,13 @@ export default function ListaPersonas() {
     etiqueta: activo.nombre,
   }));
 
-  const { alumnos, lanzarRefresco, setNidAsignatura, setNidCurso } =
-    useAlumnosAsignatura(curso, asignatura, activo);
+  const {
+    alumnos,
+    lanzarRefresco,
+    setNidAsignatura,
+    setNidCurso,
+    setActivo: setActivoHook,
+  } = useAlumnosAsignatura(curso, asignatura, activo);
 
   const bidimensional = alumnos.map((persona) => [
     persona.nid_persona,
@@ -86,6 +91,7 @@ export default function ListaPersonas() {
             valor={activo}
             setValor={(valor) => {
               setActivo(valor);
+              setActivoHook(valor);
               lanzarRefresco();
             }}
             width="150px"
