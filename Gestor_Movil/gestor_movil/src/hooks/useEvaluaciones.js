@@ -50,6 +50,48 @@ export const useEvaluacionesAsignatura = (
   return { evaluaciones, registrarEvaluaciones, error };
 };
 
+export const useEvaluacionesAsignaturaProfesor = (
+  nidCurso,
+  nidAsignatura,
+  nidTrimestre,
+  nidProfesor,
+) => {
+  const [evaluaciones, setEvaluaciones] = useState([]);
+  const [error, setError] = useState(false);
+  const [refrescar, setRefrescar] = useState(false);
+  function refrescaEvaluaciones() {
+    setRefrescar(true);
+  }
+  useEffect(() => {
+    const fetchEvaluaciones = async () => {
+      try {
+        const response =
+          await ServicioEvaluaciones.obtenerEvaluacionesAsignaturaProfesor(
+            nidCurso,
+            nidAsignatura,
+            nidTrimestre,
+            nidProfesor,
+          );
+        setEvaluaciones(response);
+        setError(false);
+        setRefrescar(false);
+      } catch (error) {
+        console.error("Error al obtener evaluaciones:", error);
+        setError(true);
+        setRefrescar(false);
+      }
+    };
+    try {
+      fetchEvaluaciones();
+    } catch (error) {
+      console.error("Error al obtener evaluaciones:", error);
+      setError(true);
+    }
+  }, [nidCurso, nidAsignatura, nidTrimestre, nidProfesor, refrescar]);
+
+  return { evaluaciones, error, refrescaEvaluaciones };
+};
+
 export const useEvaluaciones = (nidMatricula) => {
   const [evaluaciones, setEvaluaciones] = useState([]);
   const [nombreAlumno, setNombreAlumno] = useState("");

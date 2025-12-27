@@ -147,6 +147,11 @@ app.post("/registrar_curso", servletCurso.registrarCurso);
 // Profesores //
 app.post("/registrar_profesor", servletProfesores.registrarProfesor);
 app.post("/eliminar_profesor", servletProfesores.eliminarProfesor);
+app.get("/obtener_profesores", servletProfesores.obtenerProfesores);
+app.get(
+  "/obtener_profesores_asignatura/:nid_asignatura",
+  servletProfesores.obtenerProfesoresAsignatura,
+);
 
 // Matriculas //
 app.post("/registrar_matricula", servletMatricula.registrarMatricula);
