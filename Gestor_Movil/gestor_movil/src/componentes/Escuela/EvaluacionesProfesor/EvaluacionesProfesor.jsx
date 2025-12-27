@@ -36,16 +36,18 @@ export default function EvaluacionesProfesor() {
   return (
     <div>
       <Cabecera />
-      <h2>Evaluaciones del Profesor</h2>
+      <div style={{ paddingTop: "60px" }}>
+        <h2>Evaluaciones del Profesor</h2>
 
-      {/* Aquí se implementaría la lógica para mostrar las evaluaciones del profesor */}
-      {evaluaciones.map((evaluacion) => (
-        <CardVisualizarEvaluacion evaluacion={evaluacion} />
-      ))}
-      {error && <p>Error al cargar las evaluaciones: {error}</p>}
-      {evaluaciones.length === 0 && !error && (
-        <p className="card-evaluacion">No hay evaluaciones disponibles.</p>
-      )}
+        {/* Aquí se implementaría la lógica para mostrar las evaluaciones del profesor */}
+        {evaluaciones.map((evaluacion) => (
+          <CardVisualizarEvaluacion evaluacion={evaluacion} />
+        ))}
+        {error && <p>Error al cargar las evaluaciones: {error}</p>}
+        {evaluaciones.length === 0 && !error && (
+          <p className="card-evaluacion">No hay evaluaciones disponibles.</p>
+        )}
+      </div>
     </div>
   );
 }
