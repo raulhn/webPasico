@@ -190,7 +190,8 @@ app.get("/obtener_asignaturas", servletAsignaturas.obtenerAsignaturas);
 ///////////////////////////////////////////////
 app.use((req, res, next) => {
   try {
-    servletComun.comprobacionLogin
+    servletComun
+      .comprobacionLogin(req, res)
       .then(() => {
         next();
       })
