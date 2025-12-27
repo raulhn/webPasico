@@ -39,7 +39,7 @@ export const UsuarioProvider = ({ children }) => {
     if (!roles || roles.length === 0) return false;
     for (let rol of rolesAComprobar) {
       for (let rolUsuario of roles) {
-        if (rol === rolUsuario.nombre) {
+        if (rol === rolUsuario.rol) {
           return true;
         }
       }
