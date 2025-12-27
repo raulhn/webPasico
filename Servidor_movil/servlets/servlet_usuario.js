@@ -176,13 +176,16 @@ function obtenerTokenUsuario(token) {
           reject("No autenticado");
           return;
         }
-
+        console.log("Decoded Token:", decoded);
         const usuario = {
           nid_usuario: decoded.nid_usuario,
           correoElectronico: decoded.correoElectronico,
           nombre: decoded.nombre,
         };
 
+        const roles = (obtenerRoles = await gestorRoles.obtenerRolesUsuario(
+          decoded.nid_usuario,
+        ));
         resolve({ usuario: usuario, roles: roles });
       } catch (error) {
         console.error("Error al obtener el usuario:", error);
@@ -195,6 +198,7 @@ function obtenerTokenUsuario(token) {
 async function obtenerUsuario(req, res) {
   try {
     const token = req.cookies.access_token;
+    console.log("Cookies: ", req.cookies);
     if (!token) {
       res
         .status(401)
