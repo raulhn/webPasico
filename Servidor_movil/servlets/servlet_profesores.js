@@ -93,5 +93,27 @@ async function obtenerProfesores(req, res) {
   }
 }
 
+async function obtenerProfesoresAsignatura(req, res) {
+  try {
+    let nid_asignatura = req.params.nid_asignatura;
+    let profesores =
+      await gestorProfesores.obtenerProfesoresAsignatura(nid_asignatura);
+    res.status(200).send({
+      error: false,
+      profesores: profesores,
+    });
+  } catch (error) {
+    console.error(
+      "Error al obtener los profesores de la asignatura:" + error.message,
+    );
+    res.status(400).send({
+      error: true,
+      mensaje: "Error al obtener los profesores de la asignatura",
+    });
+  }
+}
+
+module.exports.obtenerProfesores = obtenerProfesores;
+module.exports.obtenerProfesoresAsignatura = obtenerProfesoresAsignatura;
 module.exports.registrarProfesor = registrarProfesor;
 module.exports.eliminarProfesor = eliminarProfesor;
