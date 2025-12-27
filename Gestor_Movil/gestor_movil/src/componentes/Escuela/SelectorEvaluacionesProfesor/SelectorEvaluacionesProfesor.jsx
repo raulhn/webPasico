@@ -29,7 +29,14 @@ export default function SelectorEvaluacionesProfesor() {
   function lanzaEvaluacion() {
     if (nidCurso && nidAsignatura && nidTrimestre) {
       navigate(
-        `/gestion/evaluacion/${nidCurso}/${nidAsignatura}/${nidTrimestre}`,
+        "/gestion/evaluaciones_profesor/" +
+          nidCurso +
+          "/" +
+          nidAsignatura +
+          "/" +
+          nidProfesor +
+          "/" +
+          nidTrimestre,
       );
     } else {
       setVisibleError(true);
@@ -61,7 +68,11 @@ export default function SelectorEvaluacionesProfesor() {
   let opcionesProfesores = profesores.map((profesor) => ({
     valor: profesor.nid_persona,
     etiqueta:
-      profesor.nombre + profesor.primer_apellido + profesor.segundo_apellido,
+      profesor.nombre +
+      " " +
+      profesor.primer_apellido +
+      " " +
+      profesor.segundo_apellido,
   }));
   opcionesProfesores.push({ valor: "", etiqueta: "Seleccione profesor" });
 
