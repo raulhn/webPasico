@@ -13,7 +13,7 @@ import Partituras from "./componentes/Banda/Partituras/Partituras.jsx";
 import FichaPartitura from "./componentes/Banda/FichaPartitura/FichaPartitura.jsx";
 import ListaPersonas from "./componentes/Personas/ListaPersonas/ListaPersonas.jsx";
 import FichaPersona from "./componentes/Personas/FichaPersona/FichaPersona.jsx";
-import SelectorEvaluacionesProfesor from "./componentes/Escuela/SelectorEvaluacionProfesor/SelectorEvaluacionesProfesor.jsx";
+import SelectorEvaluacionesProfesor from "./componentes/Escuela/SelectorEvaluacionesProfesor/SelectorEvaluacionesProfesor.jsx";
 
 createRoot(document.getElementById("root")).render(
   <UsuarioProvider>
