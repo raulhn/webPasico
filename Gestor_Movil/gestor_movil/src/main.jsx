@@ -14,6 +14,7 @@ import FichaPartitura from "./componentes/Banda/FichaPartitura/FichaPartitura.js
 import ListaPersonas from "./componentes/Personas/ListaPersonas/ListaPersonas.jsx";
 import FichaPersona from "./componentes/Personas/FichaPersona/FichaPersona.jsx";
 import SelectorEvaluacionesProfesor from "./componentes/Escuela/SelectorEvaluacionesProfesor/SelectorEvaluacionesProfesor.jsx";
+import EvaluacionesProfesor from "./componentes/Escuela/EvaluacionesProfesor/EvaluacionesProfesor.jsx";
 
 createRoot(document.getElementById("root")).render(
   <UsuarioProvider>
@@ -51,6 +52,10 @@ createRoot(document.getElementById("root")).render(
         <Route
           path="/gestion/selector_evaluacion_profesor"
           element={<SelectorEvaluacionesProfesor />}
+        />
+        <Route
+          path="/gestion/evaluaciones_profesor/:nidCurso/:nidAsignatura/:nidProfesor/:nidTrimestre"
+          element={<EvaluacionesProfesor />}
         />
       </Routes>
     </BrowserRouter>
