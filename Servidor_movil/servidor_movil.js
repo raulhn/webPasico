@@ -350,6 +350,11 @@ app.get(
 );
 
 app.get(
+  "/obtener_evaluaciones_asignatura_profesor/:nid_curso/:nid_asignatura/:nid_profesor/:nid_trimestre",
+  servletEvaluacion.obtenerEvaluacionesAsignaturasProfesor,
+);
+
+app.get(
   "/solicitar_generar_boletin/:nid_matricula/:nid_trimestre",
   servletEvaluacion.solicitar_generar_boletin,
 );
