@@ -421,7 +421,7 @@ async function obtenerEvaluacionesAsignaturasProfesor(req, res) {
     const nidCurso = req.params.nid_curso;
     const nidTrimestre = req.params.nid_trimestre;
 
-    const rolesPermitidos = ["ADMINISTRADOR", "COMISION"];
+    const rolesPermitidos = ["ADMINISTRADOR", "COMISION_EDUCATIVA"];
     let rolPermitido = await servletComun.comprobarRol(
       req,
       res,
@@ -589,4 +589,3 @@ module.exports.obtenerEvaluacionesAsignaturasProfesor =
   obtenerEvaluacionesAsignaturasProfesor;
 module.exports.registrarEvaluaciones = registrarEvaluaciones;
 module.exports.actualizarEvaluacionSucia = actualizarEvaluacionSucia;
-
