@@ -27,7 +27,7 @@ export default function SelectorEvaluacionesProfesor() {
   const navigate = useNavigate();
 
   function lanzaEvaluacion() {
-    if (nidCurso && nidAsignatura && nidTrimestre) {
+    if (nidCurso && nidAsignatura && nidTrimestre && nidProfesor) {
       navigate(
         "/gestion/evaluaciones_profesor/" +
           nidCurso +
@@ -119,7 +119,7 @@ export default function SelectorEvaluacionesProfesor() {
         <ModalAviso
           visible={visibleError}
           setVisible={setVisibleError}
-          mensaje={"Debe seleccionar curso, asignatura y trimestre"}
+          mensaje={"Debe seleccionar curso, asignatura, profesor y trimestre"}
           textBoton={"Aceptar"}
           titulo={"Error"}
         />
