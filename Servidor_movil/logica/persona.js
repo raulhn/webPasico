@@ -648,7 +648,7 @@ function obtenerPersonasSocios() {
 
 function obtenerPersonasAlumnosAsignatura(nid_curso, nid_asignatura, activo) {
   return new Promise((resolve, reject) => {
-    const sql =
+    let sql =
       "select p.* from " +
       constantes.ESQUEMA +
       ".persona p, " +
