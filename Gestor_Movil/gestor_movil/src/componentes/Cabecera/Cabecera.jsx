@@ -72,18 +72,34 @@ export default function Cabecera() {
                 Inicio
               </Link>
             </li>
-            <li>
-              <Link
-                to="/gestion/evaluaciones"
-                style={{
-                  color: "#fff",
-                  textDecoration: "none",
-                  fontWeight: 500,
-                }}
-              >
-                Evaluaciones
-              </Link>
-            </li>
+            {comprobarRoles(["PROFESOR"]) && (
+              <li>
+                <Link
+                  to="/gestion/evaluaciones"
+                  style={{
+                    color: "#fff",
+                    textDecoration: "none",
+                    fontWeight: 500,
+                  }}
+                >
+                  Evaluaciones
+                </Link>
+              </li>
+            )}
+            {comprobarRoles(["ADMINISTRADOR"]) && (
+              <li>
+                <Link
+                  to="/gestion/selector_evaluacion_profesor"
+                  style={{
+                    color: "#fff",
+                    textDecoration: "none",
+                    fontWeight: 500,
+                  }}
+                >
+                  Evaluaciones por Profesor{" "}
+                </Link>
+              </li>
+            )}
             <li>
               <Link
                 to="/gestion/cambiar_password"
@@ -151,4 +167,3 @@ export default function Cabecera() {
     </header>
   );
 }
-
