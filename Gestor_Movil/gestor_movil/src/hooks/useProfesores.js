@@ -1,11 +1,16 @@
 import * as ServiceProfesores from "../services/ServiceProfesores";
 import { useState, useEffect } from "react";
 
-export const useProfesoresAsignatura = (nidAsignatura, cerrarSesion) => {
+export const useProfesoresAsignatura = (nidAsignaturaDefault, cerrarSesion) => {
   const [profesores, setProfesores] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(false);
   const [refrescar, setRefrescar] = useState(false);
+  const [nidAsignatura, setNidAsignatura] = useState(nidAsignaturaDefault);
+
+  function actualizarAsignatura(nidNuevaAsignatura) {
+    setNidAsignatura(nidNuevaAsignatura);
+  }
 
   async function fetchProfesoresAsignatura() {
     try {
@@ -26,14 +31,14 @@ export const useProfesoresAsignatura = (nidAsignatura, cerrarSesion) => {
 
   useEffect(() => {
     fetchProfesoresAsignatura();
-  }, [refrescar]);
+  }, [refrescar, nidAsignatura]);
 
   function lanzarRefresco() {
     setCargando(true);
     setRefrescar(true);
   }
 
-  return { profesores, cargando, error, lanzarRefresco };
+  return { profesores, cargando, error, lanzarRefresco, actualizarAsignatura };
 };
 
 export const useProfesores = (cerrarSesion) => {

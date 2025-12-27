@@ -21,7 +21,8 @@ export default function SelectorEvaluacionesProfesor() {
   const [visibleError, setVisibleError] = useState(false);
   const [nidProfesor, setNidProfesor] = useState(null);
 
-  const { profesores } = useProfesoresAsignatura(nidAsignatura);
+  const { profesores, actualizarAsignatura } =
+    useProfesoresAsignatura(nidAsignatura);
 
   const navigate = useNavigate();
 
@@ -80,7 +81,10 @@ export default function SelectorEvaluacionesProfesor() {
         <label>Asignatura</label>
         <Selector
           valor={nidAsignatura}
-          setValor={setNidAsignatura}
+          setValor={(nidAsignatura) => {
+            setNidAsignatura(nidAsignatura);
+            actualizarAsignatura(nidAsignatura);
+          }}
           width="200px"
           opciones={opcionesAsignaturas}
         />
