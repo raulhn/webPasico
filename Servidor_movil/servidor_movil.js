@@ -189,8 +189,17 @@ app.get("/obtener_asignaturas", servletAsignaturas.obtenerAsignaturas);
 // Peticiones que requieren inicio de sesión //
 ///////////////////////////////////////////////
 app.use((req, res, next) => {
-  servletComun.comprobacionLogin;
-  next();
+  try {
+    servletComun.comprobacionLogin
+      .then(() => {
+        next();
+      })
+      .catch((error) => {
+        res.status(401).send({ error: true, mensaje: "No autenticado" });
+      });
+  } catch (error) {
+    res.status(401).send({ error: true, mensaje: "No autenticado" });
+  }
 });
 //
 // Profeosres //
