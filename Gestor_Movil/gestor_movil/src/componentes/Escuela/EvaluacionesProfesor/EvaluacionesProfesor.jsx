@@ -8,8 +8,17 @@ function CardVisualizarEvaluacion({ evaluacion }) {
   return (
     <div key={evaluacion.nid_evaluacion} className="card-evaluacion">
       <h3>Evaluación: {evaluacion.nota}</h3>
+      <h4>Alumno: {evaluacion.alumno}</h4>
       <p>Comentario: {evaluacion.comentario}</p>
-      <p>Progreso: {progresos[evaluacion.nid_tipo_progreso]}</p>
+      <p
+        className="progreso"
+        style={{
+          color: evaluacion.nid_tipo_progreso == "2" ? "#38a169" : "#e53e3e",
+        }}
+      >
+        Progreso: {progresos[evaluacion.nid_tipo_progreso]}
+      </p>
+      <p>Profesor: {evaluacion.profesor}</p>
     </div>
   );
 }

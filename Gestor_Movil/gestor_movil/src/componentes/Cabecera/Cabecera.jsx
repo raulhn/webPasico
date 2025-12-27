@@ -95,9 +95,7 @@ export default function Cabecera() {
                     textDecoration: "none",
                     fontWeight: 500,
                   }}
-                >
-                  Evaluaciones por Profesor{" "}
-                </Link>
+                ></Link>
               </li>
             )}
             <li>
