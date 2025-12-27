@@ -1,6 +1,7 @@
 const servletConexion = require("./servlet_conexiones.js");
 const gestorConexion = require("../logica/gestorConexiones.js");
 const gestorUsuario = require("../logica/usuario.js");
+const gestorRoles = require("../logica/roles.js");
 const validacionEmail = require("../logica/validacionEmail.js");
 const nodeMail = require("../logica/nodemail.js");
 const jwt = require("jsonwebtoken");
@@ -183,7 +184,7 @@ function obtenerTokenUsuario(token) {
           nombre: decoded.nombre,
         };
 
-        const roles = (obtenerRoles = await gestorRoles.obtenerRolesUsuario(
+        const roles = (obtenerRoles = await gestorRoles.obtenerRoles(
           decoded.nid_usuario,
         ));
         resolve({ usuario: usuario, roles: roles });
