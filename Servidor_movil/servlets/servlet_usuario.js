@@ -184,9 +184,7 @@ function obtenerTokenUsuario(token) {
           nombre: decoded.nombre,
         };
 
-        const roles = (obtenerRoles = await gestorRoles.obtenerRoles(
-          decoded.nid_usuario,
-        ));
+        const roles = await gestorRoles.obtenerRoles(decoded.nid_usuario);
         resolve({ usuario: usuario, roles: roles });
       } catch (error) {
         console.error("Error al obtener el usuario:", error);
