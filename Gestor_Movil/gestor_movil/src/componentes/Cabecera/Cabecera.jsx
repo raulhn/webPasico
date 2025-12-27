@@ -86,7 +86,7 @@ export default function Cabecera() {
                 </Link>
               </li>
             )}
-            {comprobarRoles(["ADMINISTRADOR"]) && (
+            {comprobarRoles(["ADMINISTRADOR", "COMISION_EDUCATIVA"]) && (
               <li>
                 <Link
                   to="/gestion/selector_evaluacion_profesor"
