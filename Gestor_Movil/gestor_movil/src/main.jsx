@@ -48,11 +48,11 @@ createRoot(document.getElementById("root")).render(
           path="/gestion/lista_personas"
           element={<ListaPersonas />}
         ></Route>
+        <Route
+          path="/gestion/selector_evaluacion_profesor"
+          element={<SelectorEvaluacionesProfesor />}
+        />
       </Routes>
-      <Route
-        path="/gestion/selector_evaluacion_profesor"
-        element={<SelectorEvaluacionesProfesor />}
-      />
     </BrowserRouter>
   </UsuarioProvider>,
 );
