@@ -696,15 +696,13 @@ function obtenerPersonasSociosActivos(activo) {
     ".persona p, " +
     constantes.ESQUEMA +
     ".socios s " +
-    " where p.nid_persona = s.nid_persona " +
-    " and (s.fecha_baja is null or s.fecha_baja > NOW())";
+    " where p.nid_persona = s.nid_persona ";
 
   if (activo == 1) {
     sql = sql + " and (s.fecha_baja is null or s.fecha_baja > NOW())";
   } else if (activo == 2) {
     sql = sql + " and s.fecha_baja is not null and s.fecha_baja <= NOW()";
   }
-  console.log("SQL obtenerPersonasSociosActivos:", sql);
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(sql, (error, results) => {
       if (error) {
