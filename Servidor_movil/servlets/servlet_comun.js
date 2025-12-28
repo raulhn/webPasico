@@ -6,8 +6,9 @@ function comprobacionLogin(req, res) {
     try {
       const token = req.cookies.access_token;
 
-      if (!token) {
+      if (!token || token === undefined) {
         reject("No autenticado");
+        return;
       }
 
       jwt.verify(token, process.env.SESSION_SECRET, (err, decoded) => {
