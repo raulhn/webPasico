@@ -704,6 +704,7 @@ function obtenerPersonasSociosActivos(activo) {
   } else if (activo == 2) {
     sql = sql + " and s.fecha_baja is not null and s.fecha_baja <= NOW()";
   }
+  console.log("SQL obtenerPersonasSociosActivos:", sql);
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(sql, (error, results) => {
       if (error) {
@@ -739,7 +740,6 @@ function obtenerPersonasAlumnosAsignatura(nid_curso, nid_asignatura, activo) {
       sql = sql + " and ma.fecha_baja is not null and ma.fecha_baja <= NOW()";
     }
 
-    console.log("SQL obtenerPersonasAlumnos: " + sql);
     conexion.dbConn.query(sql, (error, results) => {
       if (error) {
         console.error("Error al obtener las personas alumnos:", error);
