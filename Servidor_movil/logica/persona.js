@@ -456,6 +456,39 @@ function obtenerPersonaNombre(
   });
 }
 
+function obtenerPersonaApellido(
+  primer_apellido,
+  segundo_apellido,
+  correo_electronico,
+) {
+  return new Promise((resolve, reject) => {
+    const sql =
+      "SELECT * FROM " +
+      constantes.ESQUEMA +
+      ".persona WHERE primer_apellido = " +
+      conexion.dbConn.escape(primer_apellido) +
+      " AND segundo_apellido = " +
+      conexion.dbConn.escape(segundo_apellido) +
+      " AND correo_electronico = " +
+      conexion.dbConn.escape(correo_electronico);
+
+    conexiondbConn.query(sql, (error, results) => {
+      if (error) {
+        console.error("Error al obtener la persona:", error);
+        reject(error);
+      }
+      if (results.length === 0) {
+        resolve(null); // No se encontró la persona
+      } else if (results.length > 1) {
+        // Se ha encontrado más de una persona
+        resolve(null);
+      } else {
+        resolve(results[0]);
+      }
+    });
+  });
+}
+
 function actualizarPersonaUsuario(nid_persona, nid_usuario) {
   return new Promise((resolve, reject) => {
     const sql =
@@ -493,7 +526,17 @@ async function asociarUsuarioPersona(nid_usuario) {
       if (persona) {
         await actualizarPersonaUsuario(persona.nid_persona, nid_usuario);
       } else {
-        return null;
+        persona = await obtenerPersonaApellido(
+          usuario.primer_apellido,
+          usuario.segundo_apellido,
+          usuario.correo_electronico,
+        );
+        // No se encuentra por nombre, se buscar solo por apellidos y correo
+        if (persona) {
+          await actualizarPersonaUsuario(persona.nid_persona, nid_usuario);
+        } else {
+          return null;
+        }
       }
     }
   } catch (error) {
@@ -646,6 +689,33 @@ function obtenerPersonasSocios() {
   });
 }
 
+function obtenerPersonasSociosActivos(activo) {
+  let sql =
+    "Select p.* from " +
+    constantes.ESQUEMA +
+    ".persona p, " +
+    constantes.ESQUEMA +
+    ".socios s " +
+    " where p.nid_persona = s.nid_persona " +
+    " and (s.fecha_baja is null or s.fecha_baja > NOW())";
+
+  if (activo == 1) {
+    sql = sql + " and (s.fecha_baja is null or s.fecha_baja > NOW())";
+  } else if (activo == 2) {
+    sql = sql + " and s.fecha_baja is not null and s.fecha_baja <= NOW()";
+  }
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(sql, (error, results) => {
+      if (error) {
+        console.error("Error al obtener las personas socios activos:", error);
+        reject(error);
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
+
 function obtenerPersonasAlumnosAsignatura(nid_curso, nid_asignatura, activo) {
   return new Promise((resolve, reject) => {
     let sql =
@@ -718,6 +788,7 @@ module.exports.obtenerPersonas = obtenerPersonas;
 module.exports.obtenerPersona = obtenerPersona;
 module.exports.obtenerPersonasMusicos = obtenerPersonasMusicos;
 module.exports.obtenerPersonasSocios = obtenerPersonasSocios;
+module.exports.obtenerPersonasSociosActivos = obtenerPersonasSociosActivos;
 module.exports.obtenerPersonasAlumnosAsignatura =
   obtenerPersonasAlumnosAsignatura;
 

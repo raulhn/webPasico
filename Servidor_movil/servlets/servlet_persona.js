@@ -119,7 +119,7 @@ function limpiarPersona(req, res) {
 async function obtenerPersonas(req, res) {
   try {
     console.log("Obteniendo personas...");
-    const rolesPermitidos = ["ADMINISTRADOR"];
+    const rolesPermitidos = [constantes.ADMINISTRADOR];
     let rolPermitido = await servletComun.comprobarRol(
       req,
       res,
@@ -145,6 +145,49 @@ async function obtenerPersonas(req, res) {
     res.status(400).send({
       error: true,
       mensaje: "Error al obtener las personas",
+    });
+  }
+}
+
+async function obtenerListadoPersona(req, res) {
+  try {
+    const rolesPermitidos = [constantes.ADMINISTRADOR];
+    let rolPermitido = await servletComun.comprobarRol(
+      req,
+      res,
+      rolesPermitidos,
+    );
+    if (!rolPermitido) {
+      res.status(403).send({
+        error: true,
+        mensaje: "No tienes permisos para obtener el listado de personas",
+      });
+      return;
+    }
+
+    const tipo = req.params.tipo;
+    if (tipo == 1) {
+      const personas = await gestorPersona.obtenerPersonas();
+      res.status(200).send({
+        error: false,
+        mensaje: "Listado de personas obtenido correctamente",
+        personas: personas,
+      });
+    }
+    if (tipo == 2) {
+      const activo = req.params.activo;
+      const personas = await gestorPersona.obtenerPersonasSociosActivos(activo);
+      res.status(200).send({
+        error: false,
+        mensaje: "Listado de personas obtenido correctamente",
+        personas: personas,
+      });
+    }
+  } catch (error) {
+    console.error("Error al obtener el listado de personas:", error.message);
+    res.status(400).send({
+      error: true,
+      mensaje: "Error al obtener el listado de personas",
     });
   }
 }
@@ -423,6 +466,7 @@ module.exports.limpiarPersona = limpiarPersona;
 module.exports.obtenerPersonas = obtenerPersonas;
 module.exports.obtenerPersonasMusicos = obtenerPersonasMusicos;
 module.exports.obtenerNidPersona = obtenerNidPersona;
+module.exports.obtenerListadoPersona = obtenerListadoPersona;
 module.exports.obtenerPersonasAlumnos = obtenerPersonasAlumnos;
 module.exports.obtenerPersonasSocios = obtenerPersonasSocios;
 module.exports.obtenerAlumnoProfesor = obtenerAlumnoProfesor;
