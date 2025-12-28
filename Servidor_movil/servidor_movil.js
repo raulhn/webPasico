@@ -330,6 +330,11 @@ app.get(
   "/obtener_alumnos_curso_activo",
   servletMatriculaAsignatura.obtenerAlumnosCursoActivo,
 );
+
+app.get(
+  "/obtener_alumnos_curso/:nid_curso",
+  servletMatriculaAsignatura.obtenerAlumnosCurso,
+);
 app.get(
   "/obtener_alumnos_curso_activo_asignatura/:nid_asignatura",
   servletMatriculaAsignatura.obtenerAlumnosCursoActivoAsignatura,

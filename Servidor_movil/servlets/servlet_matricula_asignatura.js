@@ -22,7 +22,7 @@ function registrarMatriculaAsignatura(req, res) {
         "Registrar matricula asignatura: ",
         nid_matricula_asignatura,
         nid_matricula,
-        fecha_baja
+        fecha_baja,
       );
       await gestorMatriculaAsignatura.registrarMatriculaAsignatura(
         nid_matricula_asignatura,
@@ -30,7 +30,7 @@ function registrarMatriculaAsignatura(req, res) {
         nid_asignatura,
         fecha_alta,
         fecha_baja,
-        fecha_actualizacion
+        fecha_actualizacion,
       );
       res.status(200).json({
         error: false,
@@ -52,7 +52,7 @@ async function obtenerAlumnosCursoActivo(req, res) {
     let rolAdministrador = await servletComun.comprobarRol(
       req,
       res,
-      rolesPermitidos
+      rolesPermitidos,
     );
     if (!rolAdministrador) {
       res.status(403).send({
@@ -73,13 +73,42 @@ async function obtenerAlumnosCursoActivo(req, res) {
   }
 }
 
+async function obtenerAlumnosCurso(req, res) {
+  try {
+    const rolesPermitidos = [constantes.ADMINISTRADOR];
+    let rolAdministrador = await servletComun.comprobarRol(
+      req,
+      res,
+      rolesPermitidos,
+    );
+    if (!rolAdministrador) {
+      res.status(403).send({
+        error: true,
+        mensaje: "No tienes permisos para obtener los alumnos del curso actual",
+      });
+      return;
+    }
+    const nid_curso = req.params.nid_curso;
+    const alumnos = await gestorMatriculaAsignatura.obtenerAlumnos(nid_curso);
+    res.status(200).send({ error: false, alumnos: alumnos });
+  } catch (error) {
+    console.error(
+      "servlet_matricula_asignatura.js -> obtenerAlumnosCurso: Error al obtener los alumnos del curso: ",
+      error,
+    );
+    res
+      .status(400)
+      .send({ error: true, mensaje: "Error al obtener los alumnos del curso" });
+  }
+}
+
 async function obtenerAlumnosCursoActivoAsignatura(req, res) {
   try {
     const rolesPermitidos = [constantes.ADMINISTRADOR];
     let rolAdministrador = await servletComun.comprobarRol(
       req,
       res,
-      rolesPermitidos
+      rolesPermitidos,
     );
     if (!rolAdministrador) {
       res.status(403).send({
@@ -90,14 +119,14 @@ async function obtenerAlumnosCursoActivoAsignatura(req, res) {
       const nid_asignatura = req.params.nid_asignatura;
       const alumnos =
         await gestorMatriculaAsignatura.obtenerAlumnosCursoActivoAsignatura(
-          nid_asignatura
+          nid_asignatura,
         );
       res.status(200).send({ error: false, alumnos: alumnos });
     }
   } catch (error) {
     console.error(
       "servlet_matricula_asignatura.js -> obtenerAlumnosCursoActivo: Error al obtener los alumnos del curso actual: ",
-      error
+      error,
     );
     res.status(400).send({
       error: true,
@@ -125,12 +154,12 @@ async function obtenerMatriculasAsignaturaPersona(req, res) {
         matricula.nid_persona === persona.nid_persona ||
           (await gestorPersonas.esHijo(
             persona.nid_persona,
-            matricula.nid_persona
+            matricula.nid_persona,
           ));
       } catch (error) {
         console.error(
           "servlet_matricula_asignatura.js -> obtenerMatriculasAsignaturaPersona: Error al filtrar las matriculas por persona: ",
-          error
+          error,
         );
         return false;
       }
@@ -142,7 +171,7 @@ async function obtenerMatriculasAsignaturaPersona(req, res) {
       let matricula = matriculas[i];
       const profesores =
         await gestorProfesorAlumnoMatricula.obtenerProfesorAlumnoMatricula(
-          matricula.nid_matricula_asignatura
+          matricula.nid_matricula_asignatura,
         );
       matricula.profesores = profesores;
       matriculasProfesor.push(matricula);
@@ -156,7 +185,7 @@ async function obtenerMatriculasAsignaturaPersona(req, res) {
   } catch (error) {
     console.error(
       "servlet_matricula_asignatura.js -> obtenerMatriculasAsignaturaPersona: Error al obtener la persona del usuario:",
-      error
+      error,
     );
     res.status(400).send({
       error: true,
@@ -172,7 +201,7 @@ async function obtenerAlumnosAsignatura(req, res) {
     let rolAdministrador = await servletComun.comprobarRol(
       req,
       res,
-      rolesPermitidos
+      rolesPermitidos,
     );
 
     if (!rolAdministrador) {
@@ -181,13 +210,13 @@ async function obtenerAlumnosAsignatura(req, res) {
       const rolProfesor = await servletComun.comprobarRol(
         req,
         res,
-        rolPermitidoProfesor
+        rolPermitidoProfesor,
       );
 
       const nid_profesor = await servletPersona.obtenerNidPersona(req);
       const esProfesor = await gestorProfesores.esProfesor(
         nid_profesor,
-        nid_asignatura
+        nid_asignatura,
       );
 
       if (!rolProfesor && !esProfesor) {
@@ -212,13 +241,13 @@ async function obtenerAlumnosAsignatura(req, res) {
 
     const alumnos = await gestorMatriculaAsignatura.obtenerAlumnosAsignatura(
       nid_asignatura,
-      curso.nid_curso
+      curso.nid_curso,
     );
     res.status(200).send({ error: false, alumnos: alumnos });
   } catch (error) {
     console.error(
       "servlet_matricula_asignatura.js -> obtenerAlumnosAsignatura: Error al obtener los alumnos de la asignatura:",
-      error
+      error,
     );
     res.status(400).send({
       error: true,
@@ -233,16 +262,17 @@ async function obtenerAlumnosAsignaturaProfesor(req, res) {
     const nid_curso = req.params.nid_curso;
     const nid_profesor = await servletPersona.obtenerNidPersona(req);
 
-    const alumnos = await gestorMatriculaAsignatura.obtenerAlumnosAsignaturaProfesor(
-      nid_asignatura,
-      nid_curso,
-      nid_profesor
-    );
+    const alumnos =
+      await gestorMatriculaAsignatura.obtenerAlumnosAsignaturaProfesor(
+        nid_asignatura,
+        nid_curso,
+        nid_profesor,
+      );
     res.status(200).send({ error: false, alumnos: alumnos });
   } catch (error) {
     console.error(
       "servlet_matricula_asignatura.js -> obtenerAlumnosAsignaturaProfesor: Error al obtener los alumnos de la asignatura:",
-      error
+      error,
     );
     res.status(400).send({
       error: true,
@@ -253,9 +283,12 @@ async function obtenerAlumnosAsignaturaProfesor(req, res) {
 
 module.exports.registrarMatriculaAsignatura = registrarMatriculaAsignatura;
 module.exports.obtenerAlumnosCursoActivo = obtenerAlumnosCursoActivo;
+module.exports.obtenerAlumnosCurso = obtenerAlumnosCurso;
 module.exports.obtenerAlumnosCursoActivoAsignatura =
   obtenerAlumnosCursoActivoAsignatura;
 module.exports.obtenerMatriculasAsignaturaPersona =
   obtenerMatriculasAsignaturaPersona;
 module.exports.obtenerAlumnosAsignatura = obtenerAlumnosAsignatura;
-module.exports.obtenerAlumnosAsignaturaProfesor = obtenerAlumnosAsignaturaProfesor
+module.exports.obtenerAlumnosAsignaturaProfesor =
+  obtenerAlumnosAsignaturaProfesor;
+
