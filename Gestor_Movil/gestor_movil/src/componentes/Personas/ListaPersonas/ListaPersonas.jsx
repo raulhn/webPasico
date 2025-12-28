@@ -70,7 +70,7 @@ export default function ListaPersonas() {
 
   let bidimensional = [];
 
-  if (tipo != 3 && asignatura == "") {
+  if (tipo != 3 || asignatura == "") {
     bidimensional = personas.map((persona) => [
       persona.nid_persona,
       persona.nombre,
