@@ -89,7 +89,11 @@ async function obtenerAlumnosCurso(req, res) {
       return;
     }
     const nid_curso = req.params.nid_curso;
-    const alumnos = await gestorMatriculaAsignatura.obtenerAlumnos(nid_curso);
+    const activo = req.params.activo;
+    const alumnos = await gestorMatriculaAsignatura.obtenerAlumnos(
+      nid_curso,
+      activo,
+    );
     res.status(200).send({ error: false, alumnos: alumnos });
   } catch (error) {
     console.error(
@@ -291,4 +295,3 @@ module.exports.obtenerMatriculasAsignaturaPersona =
 module.exports.obtenerAlumnosAsignatura = obtenerAlumnosAsignatura;
 module.exports.obtenerAlumnosAsignaturaProfesor =
   obtenerAlumnosAsignaturaProfesor;
-
