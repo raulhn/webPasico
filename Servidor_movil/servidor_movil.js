@@ -312,6 +312,11 @@ app.get(
 );
 
 app.get(
+  "/obtener_personas_listado/:tipo/:activo",
+  servletPersona.obtenerListadoPersona,
+);
+
+app.get(
   "/obtener_alumnos_asignatura_profesor/:nid_asignatura/:nid_curso",
   servletMatriculaAsignatura.obtenerAlumnosAsignaturaProfesor,
 );
