@@ -14,7 +14,7 @@ export default function ListaPersonas() {
 
   const [curso, setCurso] = useState("");
   const [asignatura, setAsignatura] = useState("");
-  const [activo, setActivo] = useState(0);
+  const [activo, setActivo] = useState(1);
   const [seleccionado, setSeleccionado] = useState(null);
   const [tipo, setTipo] = useState(1);
 
@@ -33,7 +33,7 @@ export default function ListaPersonas() {
   opcionesCurso.push({ valor: "", etiqueta: "Seleccione curso" });
 
   const tipoPersonas = [
-    { nid: 1, nombre: "Todos" },
+    { nid: 1, nombre: "Personas" },
     { nid: 2, nombre: "Socios" },
     { nid: 3, nombre: "Alumnos" },
   ];
@@ -131,7 +131,7 @@ export default function ListaPersonas() {
             </>
           )}
 
-          {(tipo == 1 || tipo == 2) && (
+          {(tipo == 3 || tipo == 2) && (
             <Selector
               opciones={opcionesActivos}
               valor={activo}
