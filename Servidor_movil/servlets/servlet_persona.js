@@ -173,14 +173,19 @@ async function obtenerListadoPersona(req, res) {
         mensaje: "Listado de personas obtenido correctamente",
         personas: personas,
       });
-    }
-    if (tipo == 2) {
+    } else if (tipo == 2) {
       const activo = req.params.activo;
       const personas = await gestorPersona.obtenerPersonasSociosActivos(activo);
       res.status(200).send({
         error: false,
         mensaje: "Listado de personas obtenido correctamente",
         personas: personas,
+      });
+    } else {
+      res.status(400).send({
+        error: false,
+        personas: [],
+        mensaje: "Tipo de listado de personas no válido",
       });
     }
   } catch (error) {
