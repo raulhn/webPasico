@@ -7,9 +7,6 @@ function comprobacionLogin(req, res) {
       const token = req.cookies.access_token;
 
       if (!token) {
-        res
-          .status(401)
-          .send({ error: true, mensaje: "No autenticado", codigo: 1 });
         reject("No autenticado");
       }
 
@@ -17,15 +14,9 @@ function comprobacionLogin(req, res) {
         if (err) {
           if (err.name === "TokenExpiredError") {
             console.error("El token ha expirado:", err);
-            res
-              .status(401)
-              .send({ error: true, mensaje: "Token expirado", codigo: 1 });
             reject("Token expirado");
           }
           console.error("Error al verificar el token:", err);
-          res
-            .status(401)
-            .send({ error: true, mensaje: "No autenticado", codigo: 2 });
           reject("No autenticado");
         } else {
           resolve();
