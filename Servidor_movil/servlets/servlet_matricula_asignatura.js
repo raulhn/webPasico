@@ -94,7 +94,7 @@ async function obtenerAlumnosCurso(req, res) {
       nid_curso,
       activo,
     );
-    res.status(200).send({ error: false, alumnos: alumnos });
+    res.status(200).send({ error: false, personas: alumnos });
   } catch (error) {
     console.error(
       "servlet_matricula_asignatura.js -> obtenerAlumnosCurso: Error al obtener los alumnos del curso: ",
