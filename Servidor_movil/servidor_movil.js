@@ -332,7 +332,7 @@ app.get(
 );
 
 app.get(
-  "/obtener_alumnos_curso/:nid_curso",
+  "/obtener_alumnos_curso/:nid_curso/:activo",
   servletMatriculaAsignatura.obtenerAlumnosCurso,
 );
 app.get(
