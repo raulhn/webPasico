@@ -3,6 +3,7 @@ import { Boton, DataTable, Selector } from "../../ComponentesUI/ComponentesUI";
 import { useCursos } from "../../../hooks/useCursos";
 import { useAsignaturas } from "../../../hooks/useAsignaturas";
 import { useAlumnosAsignatura } from "../../../hooks/useAlumnos";
+import { usePersonas } from "../../../hooks/usePersonas";
 import { useState } from "react";
 import Cabecera from "../../Cabecera/Cabecera";
 import { useNavigate } from "react-router";
@@ -15,6 +16,7 @@ export default function ListaPersonas() {
   const [asignatura, setAsignatura] = useState(null);
   const [activo, setActivo] = useState(0);
   const [seleccionado, setSeleccionado] = useState(null);
+  const [tipo, setTipo] = useState(1);
 
   const navigate = useNavigate();
   let opcionesAsignatura = asignaturas.map((asignatura) => ({
@@ -30,6 +32,12 @@ export default function ListaPersonas() {
 
   opcionesCurso.push({ valor: "", etiqueta: "Seleccione curso" });
 
+  const tipoPersonas = [
+    { nid: 1, nombre: "Todos" },
+    { nid: 2, nombre: "Socios" },
+    { nid: 3, nombre: "Alumnos" },
+  ];
+
   const activos = [
     { nid: 0, nombre: "Todos" },
     { nid: 1, nombre: "Activos" },
@@ -41,6 +49,11 @@ export default function ListaPersonas() {
     etiqueta: activo.nombre,
   }));
 
+  const opcionesTipoPersonas = tipoPersonas.map((tipo) => ({
+    valor: tipo.nid,
+    etiqueta: tipo.nombre,
+  }));
+
   const {
     alumnos,
     lanzarRefresco,
@@ -49,12 +62,26 @@ export default function ListaPersonas() {
     setActivo: setActivoHook,
   } = useAlumnosAsignatura(curso, asignatura, activo);
 
-  const bidimensional = alumnos.map((persona) => [
-    persona.nid_persona,
-    persona.nombre,
-    persona.primer_apellido,
-    persona.segundo_apellido,
-  ]);
+  const { personas, error, refresh, setTipoPersona, setActivoPersona } =
+    usePersonas(tipo, activo);
+
+  let bidimensional = [];
+
+  if (tipo != 3) {
+    bidimensional = personas.map((persona) => [
+      persona.nid_persona,
+      persona.nombre,
+      persona.primer_apellido,
+      persona.segundo_apellido,
+    ]);
+  } else {
+    bidimensional = alumnos.map((persona) => [
+      persona.nid_persona,
+      persona.nombre,
+      persona.primer_apellido,
+      persona.segundo_apellido,
+    ]);
+  }
 
   function accionSeleccion(filaSeleccionada) {
     setSeleccionado(filaSeleccionada);
@@ -67,35 +94,52 @@ export default function ListaPersonas() {
       <div className="lista-personas-container">
         <div className="filtros-container">
           <Selector
-            opciones={opcionesCurso}
-            valor={curso}
+            opciones={opcionesTipoPersonas}
+            valor={tipo}
             setValor={(valor) => {
-              setCurso(valor);
-              setNidCurso(valor);
-              lanzarRefresco();
-            }}
-            width="250px"
-          />
-          <Selector
-            opciones={opcionesAsignatura}
-            valor={asignatura}
-            setValor={(valor) => {
-              setAsignatura(valor);
-              setNidAsignatura(valor);
-              lanzarRefresco();
-            }}
-            width="250px"
-          />
-          <Selector
-            opciones={opcionesActivos}
-            valor={activo}
-            setValor={(valor) => {
-              setActivo(valor);
-              setActivoHook(valor);
-              lanzarRefresco();
+              setTipo(valor);
+              setTipoPersona(valor);
             }}
             width="150px"
           />
+          {tipo == 3 && (
+            <>
+              <Selector
+                opciones={opcionesCurso}
+                valor={curso}
+                setValor={(valor) => {
+                  setCurso(valor);
+                  setNidCurso(valor);
+                  lanzarRefresco();
+                }}
+                width="250px"
+              />
+              <Selector
+                opciones={opcionesAsignatura}
+                valor={asignatura}
+                setValor={(valor) => {
+                  setAsignatura(valor);
+                  setNidAsignatura(valor);
+                  lanzarRefresco();
+                }}
+                width="250px"
+              />
+            </>
+          )}
+
+          {(tipo == 1 || tipo == 2) && (
+            <Selector
+              opciones={opcionesActivos}
+              valor={activo}
+              setValor={(valor) => {
+                setActivo(valor);
+                setActivoHook(valor);
+                lanzarRefresco();
+                setActivoPersona(valor);
+              }}
+              width="150px"
+            />
+          )}
         </div>
         <div className="tabla-container">
           <DataTable
