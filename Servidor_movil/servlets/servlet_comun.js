@@ -3,33 +3,38 @@ const gestorUsuarios = require("../logica/usuario.js");
 
 function comprobacionLogin(req, res) {
   return new Promise((resolve, reject) => {
-    const token = req.cookies.access_token;
+    try {
+      const token = req.cookies.access_token;
 
-    if (!token) {
-      res
-        .status(401)
-        .send({ error: true, mensaje: "No autenticado", codigo: 1 });
-      reject("No autenticado");
-    }
-
-    jwt.verify(token, process.env.SESSION_SECRET, (err, decoded) => {
-      if (err) {
-        if (err.name === "TokenExpiredError") {
-          console.error("El token ha expirado:", err);
-          res
-            .status(401)
-            .send({ error: true, mensaje: "Token expirado", codigo: 1 });
-          reject("Token expirado");
-        }
-        console.error("Error al verificar el token:", err);
+      if (!token) {
         res
           .status(401)
-          .send({ error: true, mensaje: "No autenticado", codigo: 2 });
+          .send({ error: true, mensaje: "No autenticado", codigo: 1 });
         reject("No autenticado");
-      } else {
-        resolve();
       }
-    });
+
+      jwt.verify(token, process.env.SESSION_SECRET, (err, decoded) => {
+        if (err) {
+          if (err.name === "TokenExpiredError") {
+            console.error("El token ha expirado:", err);
+            res
+              .status(401)
+              .send({ error: true, mensaje: "Token expirado", codigo: 1 });
+            reject("Token expirado");
+          }
+          console.error("Error al verificar el token:", err);
+          res
+            .status(401)
+            .send({ error: true, mensaje: "No autenticado", codigo: 2 });
+          reject("No autenticado");
+        } else {
+          resolve();
+        }
+      });
+    } catch (error) {
+      console.error("Error en la comprobacion de login:", error);
+      reject("Error en la comprobacion de login");
+    }
   });
 }
 
