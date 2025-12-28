@@ -64,6 +64,7 @@ export const usePersonas = (tipo, activo, nidCurso) => {
 
   const [tipoPersona, setTipoPersona] = useState(tipo);
   const [activoPersona, setActivoPersona] = useState(activo);
+  const [nidCursoPersona, setNidCursoPersona] = useState(nidCurso);
 
   useEffect(() => {
     const fetchPersonas = async () => {
@@ -84,7 +85,7 @@ export const usePersonas = (tipo, activo, nidCurso) => {
           }
         } else {
           const data = await obtenerPersonasAlumnosCurso(
-            nidCurso,
+            nidCursoPersona,
             activoPersona,
           );
           if (!data.error) {
@@ -106,7 +107,7 @@ export const usePersonas = (tipo, activo, nidCurso) => {
     };
 
     fetchPersonas();
-  }, [tipoPersona, activoPersona, refrescar]);
+  }, [tipoPersona, activoPersona, nidCursoPersona, refrescar]);
 
   function refresh() {
     setRefrescar(!refrescar);
@@ -118,5 +119,6 @@ export const usePersonas = (tipo, activo, nidCurso) => {
     refresh,
     setTipoPersona,
     setActivoPersona,
+    setNidCursoPersona,
   };
 };
