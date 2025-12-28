@@ -159,7 +159,7 @@ export default function ListaPersonas() {
           <Boton
             texto={"Ver Ficha"}
             onClick={() => {
-              navigate(`/gestion/ficha_persona/` + seleccionado);
+              window.open(`/gestion/ficha_persona/` + seleccionado, "_blank");
             }}
           />
         </div>

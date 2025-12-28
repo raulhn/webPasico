@@ -391,7 +391,7 @@ export function DataTable({ cabeceras, datos, accion = (e) => {} }) {
           setFiltro(texto);
         }}
       ></EntradaTexto>
-
+      <p style={{ textAlign: "right" }}>Total: {datosFiltrados.length}</p>
       <table className="data-table">
         <thead>
           <tr>
