@@ -50,6 +50,7 @@ export async function obtenerPersonasAlumnosCurso(nidCurso, activo) {
         activo,
       null,
     );
+    console.log("Respuesta obtenerPersonasAlumnosCurso:", respuesta);
     return respuesta.personas;
   } catch (error) {
     console.log("Error en el servicio obtenerPersonasAlumnosCurso");
