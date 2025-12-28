@@ -38,3 +38,23 @@ export async function obtenerListadoPersonas(tipo, activo) {
     );
   }
 }
+
+export async function obtenerPersonasAlumnosCurso(nidCurso, activo) {
+  try {
+    const respuesta = await peticionServicio(
+      "GET",
+      Constantes.URL_SERVICIO_MOVIL +
+        "obtener_alumnos_curso/" +
+        nidCurso +
+        "/" +
+        activo,
+      null,
+    );
+    return respuesta.personas;
+  } catch (error) {
+    console.log("Error en el servicio obtenerPersonasAlumnosCurso");
+    throw new Error(
+      "Error al obtener el listado de alumnos del curso: " + error.message,
+    );
+  }
+}

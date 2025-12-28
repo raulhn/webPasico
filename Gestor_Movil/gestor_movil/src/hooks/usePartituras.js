@@ -1,6 +1,6 @@
-import * as ServicePartituras from '../services/ServicePartituras';
+import * as ServicePartituras from "../services/ServicePartituras";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 export const usePartituras = () => {
   const [partituras, setPartituras] = useState([]);
@@ -22,10 +22,8 @@ export const usePartituras = () => {
     fetchPartituras();
   }, []);
 
-
   return { partituras, loading, error };
-}
-
+};
 
 export const usePartitura = (nid_partitura) => {
   const [partitura, setPartitura] = useState(null);
@@ -52,32 +50,32 @@ export const usePartitura = (nid_partitura) => {
     fetchPartitura();
   }, [nid_partitura]);
 
-
   async function registrarPartitura(datosPartitura) {
     try {
-    let respuesta;
-    if (!datosPartitura.nid_partitura) {
-      respuesta = await ServicePartituras.registrarPartitura(datosPartitura);
-      console.log("Respuesta al registrar la partitura: ", respuesta);
-      const nid_partitura = respuesta.nid_partitura;
-      // Refrescar la partitura después de registrar o actualizar
-      const data = await ServicePartituras.obtenerPartitura(nid_partitura);
-      setPartitura(data);
-    }
-    else {
-      respuesta = await ServicePartituras.actualizarPartitura(datosPartitura);
-      console.log("Respuesta al actualizar la partitura: ", respuesta);
-       // Refrescar la partitura después de registrar o actualizar
-      const data = await ServicePartituras.obtenerPartitura(datosPartitura.nid_partitura);
-      setPartitura(data);
-    }
+      let respuesta;
+      if (!datosPartitura.nid_partitura) {
+        respuesta = await ServicePartituras.registrarPartitura(datosPartitura);
+        console.log("Respuesta al registrar la partitura: ", respuesta);
+        const nid_partitura = respuesta.nid_partitura;
+        // Refrescar la partitura después de registrar o actualizar
+        const data = await ServicePartituras.obtenerPartitura(nid_partitura);
+        setPartitura(data);
+      } else {
+        respuesta = await ServicePartituras.actualizarPartitura(datosPartitura);
+        console.log("Respuesta al actualizar la partitura: ", respuesta);
+        // Refrescar la partitura después de registrar o actualizar
+        const data = await ServicePartituras.obtenerPartitura(
+          datosPartitura.nid_partitura,
+        );
+        setPartitura(data);
+      }
 
-
-    return respuesta.error;
+      return respuesta.error;
     } catch (err) {
-   
+      console.log("Error al registrar/actualizar la partitura: ", err);
       return true;
     }
   }
   return { partitura, loading, error, registrarPartitura };
-}
+};
+
