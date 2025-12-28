@@ -6,7 +6,6 @@ import { useAlumnosAsignatura } from "../../../hooks/useAlumnos";
 import { usePersonas } from "../../../hooks/usePersonas";
 import { useState } from "react";
 import Cabecera from "../../Cabecera/Cabecera";
-import { useNavigate } from "react-router";
 
 export default function ListaPersonas() {
   const { cursos } = useCursos();
@@ -18,7 +17,6 @@ export default function ListaPersonas() {
   const [seleccionado, setSeleccionado] = useState(null);
   const [tipo, setTipo] = useState(1);
 
-  const navigate = useNavigate();
   let opcionesAsignatura = asignaturas.map((asignatura) => ({
     valor: asignatura.nid_asignatura,
     etiqueta: asignatura.descripcion,
@@ -65,11 +63,12 @@ export default function ListaPersonas() {
   const { personas, setTipoPersona, refresh, setActivoPersona } = usePersonas(
     tipo,
     activo,
+    curso,
   );
 
   let bidimensional = [];
 
-  if (tipo != 3) {
+  if (tipo != 3 && asignatura == "") {
     bidimensional = personas.map((persona) => [
       persona.nid_persona,
       persona.nombre,

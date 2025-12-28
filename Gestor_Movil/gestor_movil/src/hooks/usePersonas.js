@@ -1,6 +1,7 @@
 import {
   obtenerInfoPersona,
   obtenerListadoPersonas,
+  obtenerPersonasAlumnosCurso,
 } from "../services/servicePersonas.js";
 import { useState, useEffect } from "react";
 
@@ -55,7 +56,7 @@ export const usePersona = (nidPersona) => {
   return { info, loading, error, refresh };
 };
 
-export const usePersonas = (tipo, activo) => {
+export const usePersonas = (tipo, activo, nidCurso) => {
   const [personas, setPersonas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -70,15 +71,31 @@ export const usePersonas = (tipo, activo) => {
       setError(true);
 
       try {
-        const data = await obtenerListadoPersonas(tipoPersona, activoPersona);
-        if (!data.error) {
-          setError(false);
-          setPersonas(data);
-          setLoading(false);
+        if (tipo != 3) {
+          const data = await obtenerListadoPersonas(tipoPersona, activoPersona);
+          if (!data.error) {
+            setError(false);
+            setPersonas(data);
+            setLoading(false);
+          } else {
+            setError(true);
+            setPersonas([]);
+            setLoading(false);
+          }
         } else {
-          setError(true);
-          setPersonas([]);
-          setLoading(false);
+          const data = await obtenerPersonasAlumnosCurso(
+            nidCurso,
+            activoPersona,
+          );
+          if (!data.error) {
+            setError(false);
+            setPersonas(data);
+            setLoading(false);
+          } else {
+            setError(true);
+            setPersonas([]);
+            setLoading(false);
+          }
         }
       } catch (err) {
         console.log("Error al obtener el listado de personas:", err);
