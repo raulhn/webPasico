@@ -88,7 +88,6 @@ export const usePersonas = (tipo, activo, nidCurso) => {
             nidCursoPersona,
             activoPersona,
           );
-          console.log("Datos obtenidos de alumnos del curso:", data);
           if (!data.error) {
             setError(false);
             setPersonas(data);
