@@ -24,7 +24,7 @@ export async function obtenerListadoPersonas(tipo, activo) {
     const respuesta = await peticionServicio(
       "GET",
       Constantes.URL_SERVICIO_MOVIL +
-        "obtener_listado_personas/" +
+        "obtener_personas_listado/" +
         tipo +
         "/" +
         activo,
