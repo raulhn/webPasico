@@ -152,6 +152,41 @@ async function registrarMatriculaAsignatura(
 function obtenerAlumnos(nid_curso, activo = 1) {
   return new Promise((resolve, reject) => {
     let sql =
+      "SELECT p.nid_persona, p.nombre, p.primer_apellido, p.segundo_apellido FROM " +
+      constantes.ESQUEMA +
+      ".persona p, " +
+      constantes.ESQUEMA +
+      ".matricula m, " +
+      constantes.ESQUEMA +
+      ".matricula_asignatura ma " +
+      "WHERE p.nid_persona = m.nid_persona " +
+      "AND m.nid_matricula = ma.nid_matricula " +
+      "AND m.nid_curso = " +
+      conexion.dbConn.escape(nid_curso);
+    if (activo == 1) {
+      sql = sql + " AND (ma.fecha_baja IS NULL OR ma.fecha_baja > NOW()) ";
+    } else if (activo == 2) {
+      sql =
+        sql + " AND (ma.fecha_baja IS NOT NULL AND ma.fecha_baja <= NOW()) ";
+    }
+    sql =
+      sql +
+      " GROUP BY p.nid_persona, p.primer_apellido, p.segundo_apellido, p.nombre";
+
+    conexion.dbConn.query(sql, (err, result) => {
+      if (err) {
+        console.error("Error al obtener los alumnos activos:", err);
+        reject(err);
+      } else {
+        resolve(result);
+      }
+    });
+  });
+}
+
+function obtenerAlumnosCurso(nid_curso, activo = 1) {
+  return new Promise((resolve, reject) => {
+    let sql =
       "SELECT p.*, ma.nid_asignatura FROM " +
       constantes.ESQUEMA +
       ".persona p, " +
@@ -180,11 +215,10 @@ function obtenerAlumnos(nid_curso, activo = 1) {
     });
   });
 }
-
 async function obtenerAlumnosCursoActivo() {
   try {
     const cursoActivo = await gestorCurso.obtenerCursoActivo();
-    const alumnos = await obtenerAlumnos(cursoActivo.nid_curso);
+    const alumnos = await obtenerAlumnosCurso(cursoActivo.nid_curso);
     return alumnos;
   } catch (error) {
     console.error("Error al obtener los alumnos del curso activo:", error);
@@ -195,7 +229,7 @@ async function obtenerAlumnosCursoActivo() {
 async function obtenerAlumnosCursoActivoAsignatura(nid_asignatura) {
   try {
     const cursoActivo = await gestorCurso.obtenerCursoActivo();
-    const alumnos = await obtenerAlumnos(cursoActivo.nid_curso);
+    const alumnos = await obtenerAlumnosCurso(cursoActivo.nid_curso);
     return alumnos.filter((alumno) => alumno.nid_asignatura === nid_asignatura);
   } catch (error) {
     console.error(
