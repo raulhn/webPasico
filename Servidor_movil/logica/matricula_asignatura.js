@@ -149,9 +149,9 @@ async function registrarMatriculaAsignatura(
   }
 }
 
-function obtenerAlumnosActivos(nid_curso) {
+function obtenerAlumnos(nid_curso, activo = 1) {
   return new Promise((resolve, reject) => {
-    const sql =
+    let sql =
       "SELECT p.*, ma.nid_asignatura FROM " +
       constantes.ESQUEMA +
       ".persona p, " +
@@ -162,8 +162,13 @@ function obtenerAlumnosActivos(nid_curso) {
       "WHERE p.nid_persona = m.nid_persona " +
       "AND m.nid_matricula = ma.nid_matricula " +
       "AND m.nid_curso = " +
-      conexion.dbConn.escape(nid_curso) +
-      " AND (ma.fecha_baja IS NULL OR ma.fecha_baja > NOW()) ";
+      conexion.dbConn.escape(nid_curso);
+    if (activo == 1) {
+      sql = sql + " AND (ma.fecha_baja IS NULL OR ma.fecha_baja > NOW()) ";
+    } else if (activo == 2) {
+      sql =
+        sql + " AND (ma.fecha_baja IS NOT NULL AND ma.fecha_baja <= NOW()) ";
+    }
 
     conexion.dbConn.query(sql, (err, result) => {
       if (err) {
@@ -179,7 +184,7 @@ function obtenerAlumnosActivos(nid_curso) {
 async function obtenerAlumnosCursoActivo() {
   try {
     const cursoActivo = await gestorCurso.obtenerCursoActivo();
-    const alumnos = await obtenerAlumnosActivos(cursoActivo.nid_curso);
+    const alumnos = await obtenerAlumnos(cursoActivo.nid_curso);
     return alumnos;
   } catch (error) {
     console.error("Error al obtener los alumnos del curso activo:", error);
@@ -190,7 +195,7 @@ async function obtenerAlumnosCursoActivo() {
 async function obtenerAlumnosCursoActivoAsignatura(nid_asignatura) {
   try {
     const cursoActivo = await gestorCurso.obtenerCursoActivo();
-    const alumnos = await obtenerAlumnosActivos(cursoActivo.nid_curso);
+    const alumnos = await obtenerAlumnos(cursoActivo.nid_curso);
     return alumnos.filter((alumno) => alumno.nid_asignatura === nid_asignatura);
   } catch (error) {
     console.error(
@@ -336,6 +341,7 @@ function obtenerAlumnosAsignaturaProfesor(
 }
 
 module.exports.registrarMatriculaAsignatura = registrarMatriculaAsignatura;
+module.exports.obtenerAlumnos = obtenerAlumnos;
 module.exports.obtenerAlumnosCursoActivo = obtenerAlumnosCursoActivo;
 module.exports.obtenerAlumnosCursoActivoAsignatura =
   obtenerAlumnosCursoActivoAsignatura;
@@ -344,4 +350,3 @@ module.exports.obtenerMatriculasAsignatura = obtenerMatriculasAsignatura;
 module.exports.obtenerAlumnosAsignatura = obtenerAlumnosAsignatura;
 module.exports.obtenerAlumnosAsignaturaProfesor =
   obtenerAlumnosAsignaturaProfesor;
-
