@@ -12,8 +12,8 @@ export default function ListaPersonas() {
   const { cursos } = useCursos();
   const { asignaturas } = useAsignaturas();
 
-  const [curso, setCurso] = useState(null);
-  const [asignatura, setAsignatura] = useState(null);
+  const [curso, setCurso] = useState("");
+  const [asignatura, setAsignatura] = useState("");
   const [activo, setActivo] = useState(0);
   const [seleccionado, setSeleccionado] = useState(null);
   const [tipo, setTipo] = useState(1);
@@ -62,8 +62,10 @@ export default function ListaPersonas() {
     setActivo: setActivoHook,
   } = useAlumnosAsignatura(curso, asignatura, activo);
 
-  const { personas, error, refresh, setTipoPersona, setActivoPersona } =
-    usePersonas(tipo, activo);
+  const { personas, setTipoPersona, refresh, setActivoPersona } = usePersonas(
+    tipo,
+    activo,
+  );
 
   let bidimensional = [];
 
@@ -99,6 +101,8 @@ export default function ListaPersonas() {
             setValor={(valor) => {
               setTipo(valor);
               setTipoPersona(valor);
+              lanzarRefresco();
+              refresh();
             }}
             width="150px"
           />
