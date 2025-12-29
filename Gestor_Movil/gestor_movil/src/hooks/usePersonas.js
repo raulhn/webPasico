@@ -1,7 +1,11 @@
-import { obtenerInfoPersona } from "../services/servicePersonas.js";
+import {
+  obtenerInfoPersona,
+  obtenerListadoPersonas,
+  obtenerPersonasAlumnosCurso,
+} from "../services/servicePersonas.js";
 import { useState, useEffect } from "react";
 
-export const usePersonas = (nidPersona) => {
+export const usePersona = (nidPersona) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [refrescar, setRefrescar] = useState(false);
@@ -50,4 +54,71 @@ export const usePersonas = (nidPersona) => {
   }
 
   return { info, loading, error, refresh };
+};
+
+export const usePersonas = (tipo, activo, nidCurso) => {
+  const [personas, setPersonas] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const [refrescar, setRefrescar] = useState(false);
+
+  const [tipoPersona, setTipoPersona] = useState(tipo);
+  const [activoPersona, setActivoPersona] = useState(activo);
+  const [nidCursoPersona, setNidCursoPersona] = useState(nidCurso);
+
+  useEffect(() => {
+    const fetchPersonas = async () => {
+      setLoading(true);
+      setError(true);
+
+      try {
+        if (tipo != 3) {
+          const data = await obtenerListadoPersonas(tipoPersona, activoPersona);
+          if (!data.error) {
+            setError(false);
+            setPersonas(data);
+            setLoading(false);
+          } else {
+            setError(true);
+            setPersonas([]);
+            setLoading(false);
+          }
+        } else {
+          const data = await obtenerPersonasAlumnosCurso(
+            nidCursoPersona,
+            activoPersona,
+          );
+          if (!data.error) {
+            setError(false);
+            setPersonas(data);
+            setLoading(false);
+          } else {
+            setError(true);
+            setPersonas([]);
+            setLoading(false);
+          }
+        }
+      } catch (err) {
+        console.log("Error al obtener el listado de personas:", err);
+        setError(true);
+        setLoading(false);
+        setPersonas([]);
+      }
+    };
+
+    fetchPersonas();
+  }, [tipoPersona, activoPersona, nidCursoPersona, refrescar]);
+
+  function refresh() {
+    setRefrescar(!refrescar);
+  }
+  return {
+    personas,
+    loading,
+    error,
+    refresh,
+    setTipoPersona,
+    setActivoPersona,
+    setNidCursoPersona,
+  };
 };

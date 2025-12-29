@@ -6,26 +6,18 @@ function comprobacionLogin(req, res) {
     try {
       const token = req.cookies.access_token;
 
-      if (!token) {
-        res
-          .status(401)
-          .send({ error: true, mensaje: "No autenticado", codigo: 1 });
+      if (!token || token === undefined) {
         reject("No autenticado");
+        return;
       }
 
       jwt.verify(token, process.env.SESSION_SECRET, (err, decoded) => {
         if (err) {
           if (err.name === "TokenExpiredError") {
             console.error("El token ha expirado:", err);
-            res
-              .status(401)
-              .send({ error: true, mensaje: "Token expirado", codigo: 1 });
             reject("Token expirado");
           }
           console.error("Error al verificar el token:", err);
-          res
-            .status(401)
-            .send({ error: true, mensaje: "No autenticado", codigo: 2 });
           reject("No autenticado");
         } else {
           resolve();

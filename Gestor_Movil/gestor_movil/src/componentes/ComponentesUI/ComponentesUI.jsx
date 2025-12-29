@@ -386,12 +386,21 @@ export function DataTable({ cabeceras, datos, accion = (e) => {} }) {
 
   return (
     <>
-      <EntradaTexto
-        setTexto={(texto) => {
-          setFiltro(texto);
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "10px",
         }}
-      ></EntradaTexto>
-
+      >
+        <EntradaTexto
+          setTexto={(texto) => {
+            setFiltro(texto);
+          }}
+        />
+        <p style={{ margin: 0 }}>Total: {datosFiltrados.length}</p>
+      </div>
       <table className="data-table">
         <thead>
           <tr>

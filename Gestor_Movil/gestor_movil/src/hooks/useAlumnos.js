@@ -59,7 +59,7 @@ export const useAlumnosAsignatura = (nidCurso_, nidAsignatura_, activo_) => {
   const [activo, setActivo] = useState(activo_);
 
   function lanzarRefresco() {
-    setRefrescar(true);
+    setRefrescar(!refrescar);
   }
 
   useEffect(() => {
@@ -69,7 +69,6 @@ export const useAlumnosAsignatura = (nidCurso_, nidAsignatura_, activo_) => {
         .then((data) => {
           setAlumnos(data);
           setCargando(false);
-          setRefrescar(false);
         })
         .catch((error) => {
           console.error(
@@ -78,11 +77,9 @@ export const useAlumnosAsignatura = (nidCurso_, nidAsignatura_, activo_) => {
           );
           setError(error);
           setCargando(false);
-          setRefrescar(false);
         });
     } else {
       setAlumnos([]);
-      setRefrescar(false);
     }
   }, [refrescar, nidCurso, nidAsignatura, activo]);
 
