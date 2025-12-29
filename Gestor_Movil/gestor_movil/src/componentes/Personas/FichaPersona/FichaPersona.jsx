@@ -1,11 +1,11 @@
 import "./FichaPersona.css";
 import { useParams } from "react-router";
-import { usePersonas } from "../../../hooks/usePersonas.js";
+import { usePersona } from "../../../hooks/usePersonas.js";
 import Cabecera from "../../Cabecera/Cabecera.jsx";
 
 export default function FichaPersona() {
   const { nidPersona } = useParams();
-  const { info, loading, error } = usePersonas(nidPersona);
+  const { info, loading, error } = usePersona(nidPersona);
 
   if (loading || !info) {
     return (
