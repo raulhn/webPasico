@@ -1,4 +1,4 @@
-var comun = require("./logica/comun.js");
+var comun = require("../logica/comun.js");
 var gestorProfesorAlumnoMatricula = require("../logica/profesor_alumno_matricula.js");
 
 function cambiarFechaBajaAlumnoDeProfesor(req, res) {
