@@ -1,7 +1,7 @@
-import * as comun from "./comun.js";
-import * as gestorProfesorAlumnoMatricula from "../logica/profesor_alumno_matricula.js";
+var comun = require("./logica/comun.js");
+var gestorProfesorAlumnoMatricula = require("../logica/profesor_alumno_matricula.js");
 
-export function cambiarFechaBajaAlumnoDeProfesor(req, res) {
+function cambiarFechaBajaAlumnoDeProfesor(req, res) {
   comun.comprobaciones(req, res, async () => {
     try {
       let nid_profesor_alumno_matricula =
@@ -25,7 +25,7 @@ export function cambiarFechaBajaAlumnoDeProfesor(req, res) {
   });
 }
 
-export function cambiarFechaAltaAlumnoDeProfesor(req, res) {
+function cambiarFechaAltaAlumnoDeProfesor(req, res) {
   comun.comprobaciones(req, res, async () => {
     try {
       let nid_profesor_alumno_matricula =
@@ -48,3 +48,8 @@ export function cambiarFechaAltaAlumnoDeProfesor(req, res) {
     }
   });
 }
+
+module.exports.cambiarFechaBajaAlumnoDeProfesor =
+  cambiarFechaBajaAlumnoDeProfesor;
+module.exports.cambiarFechaAltaAlumnoDeProfesor =
+  cambiarFechaAltaAlumnoDeProfesor;

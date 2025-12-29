@@ -31,8 +31,7 @@ var servlet_pasarela_pago = require("./servlets/servlet_pasarela_pago.js");
 var servlet_prestamo = require("./servlets/servlet_prestamos.js");
 var servlet_matricula_asignatura = require("./servlets/servlet_matricula_asignatura.js");
 var servlet_profesor = require("./servlets/servlet_profesor.js");
-
-import * as servlet_profesor_alumno_matricula from "./servlets/servlet_profesor_alumno_matricula.js";
+var servlet_profesor_alumno_matricula = require("./servlets/servlet_profesor_alumno_matricula.js");
 
 var fs = require("fs");
 

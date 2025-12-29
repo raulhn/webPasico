@@ -1,9 +1,9 @@
-import * as GestorProfesor from "../logica/profesor.js";
-import * as comun from "./comun.js";
-import * as gestorMatricula from "../logica/matricula.js";
-import * as GestorCurso from "../logica/curso.js";
+var GestorProfesor = require("../logica/profesor.js");
+var comun = require("../logica/comun.js");
+var gestorMatricula = require("../logica/matricula.js");
+var GestorCurso = require("../logica/curso.js");
 
-export function darDeBajaProfesor(req, res) {
+function darDeBajaProfesor(req, res) {
   comun.comprobaciones(req, res, async () => {
     try {
       let nid_profesor = req.body.nid_profesor;
@@ -34,3 +34,5 @@ export function darDeBajaProfesor(req, res) {
     }
   });
 }
+
+module.exports.darDeBajaProfesor = darDeBajaProfesor;
