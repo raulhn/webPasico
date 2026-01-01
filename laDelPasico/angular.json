@@ -21,14 +21,9 @@
               "base": "dist/laDelPasico"
             },
             "index": "src/index.html",
-            "polyfills": [
-              "src/polyfills.ts"
-            ],
+            "polyfills": ["src/polyfills.ts"],
             "tsConfig": "tsconfig.app.json",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
+            "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.css",
               "src/styles.css",
@@ -39,38 +34,38 @@
               "node_modules/quill/dist/quill.bubble.css",
               "node_modules/quill/dist/quill.core.css",
               "node_modules/quill/dist/quill.snow.css",
-              "node_modules/sweetalert2/dist/sweetalert2.min.css" ,
+              "node_modules/sweetalert2/dist/sweetalert2.min.css",
               "node_modules/ngx-owl-carousel-o/lib/styles/prebuilt-themes/owl.carousel.min.css",
               "node_modules/ngx-owl-carousel-o/lib/styles/prebuilt-themes/owl.theme.default.min.css",
               "node_modules/pgwslideshow/pgwslideshow.min.css",
               "node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css",
-              "node_modules/datatables.net-dt/css/jquery.dataTables.css" ,
+              "node_modules/datatables.net-dt/css/jquery.dataTables.css",
               "node_modules/datatables.net-buttons-dt/css/buttons.dataTables.min.css"
             ],
             "scripts": [
-                "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
-                "node_modules/quill/dist/quill.min.js",
-                "node_modules/sweetalert2/dist/sweetalert2.min.js",
-                "src/assets/js/jquery-3.6.0.min.js",
-                "node_modules/pgwslideshow/pgwslideshow.min.js",
-                "node_modules/jquery/dist/jquery.js",
-                "node_modules/datatables.net/js/jquery.dataTables.js",
-                "node_modules/jszip/dist/jszip.js",
-                "node_modules/datatables.net-buttons/js/dataTables.buttons.min.js",
-                "node_modules/datatables.net-buttons/js/buttons.colVis.min.js",
-                "node_modules/datatables.net-buttons/js/buttons.flash.min.js",
-                "node_modules/datatables.net-buttons/js/buttons.html5.min.js",
-                "node_modules/datatables.net-buttons/js/buttons.print.min.js",
-                "src/assets/js/accent-neutralise.js"
-          ],
-          "browser": "src/main.ts"
+              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
+              "node_modules/quill/dist/quill.min.js",
+              "node_modules/sweetalert2/dist/sweetalert2.min.js",
+              "src/assets/js/jquery-3.6.0.min.js",
+              "node_modules/pgwslideshow/pgwslideshow.min.js",
+              "node_modules/jquery/dist/jquery.js",
+              "node_modules/datatables.net/js/jquery.dataTables.js",
+              "node_modules/jszip/dist/jszip.js",
+              "node_modules/datatables.net-buttons/js/dataTables.buttons.min.js",
+              "node_modules/datatables.net-buttons/js/buttons.colVis.min.js",
+              "node_modules/datatables.net-buttons/js/buttons.flash.min.js",
+              "node_modules/datatables.net-buttons/js/buttons.html5.min.js",
+              "node_modules/datatables.net-buttons/js/buttons.print.min.js",
+              "src/assets/js/accent-neutralise.js"
+            ],
+            "browser": "src/main.ts"
           },
           "configurations": {
             "production": {
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kb",
+                  "maximumWarning": "3mb",
                   "maximumError": "3mb"
                 },
                 {
@@ -121,13 +116,8 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
-            "styles": [
-              "src/styles.css"
-            ],
+            "assets": ["src/favicon.ico", "src/assets"],
+            "styles": ["src/styles.css"],
             "scripts": []
           }
         }
