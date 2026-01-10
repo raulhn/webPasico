@@ -79,7 +79,11 @@ export default function Agenda({ mes_, anio_ }) {
     }
     semanasCalendario.push(componentesDiaSemana);
     for (let i = 0; i < diasMes.length; i++) {
-      semanasCalendario.push(diasMes[i].map((dia) => <Dia numDia={dia.day} />));
+      semanasCalendario.push(
+        diasMes[i].map((dia) => (
+          <Dia numDia={dia.day} disabled={mes != dia.month} />
+        ))
+      );
     }
     return semanasCalendario;
   }
