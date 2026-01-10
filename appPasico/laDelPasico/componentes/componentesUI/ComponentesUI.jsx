@@ -52,7 +52,7 @@ export function BotonIcono({
   nombre,
   onPress,
   color = "#007BFF",
-  colorTexto = "#fff",
+  colorTexto = "#000",
 }) {
   const [presionado, setPresionado] = useState(false);
 
@@ -65,7 +65,6 @@ export function BotonIcono({
       <View
         style={[
           estilos.boton,
-          { backgroundColor: color },
           presionado && { opacity: 0.5, transform: [{ scale: 0.95 }] },
         ]}
       >
@@ -79,7 +78,7 @@ export function BotonIconoComunity({
   nombreIcono,
   onPress,
   color = "#007BFF",
-  colorTexto = "#fff",
+  colorTexto = "#000",
 }) {
   const [presionado, setPresionado] = useState(false);
 
@@ -92,7 +91,6 @@ export function BotonIconoComunity({
       <View
         style={[
           estilos.boton,
-          { backgroundColor: color },
           presionado && { opacity: 0.5, transform: [{ scale: 0.95 }] },
         ]}
       >

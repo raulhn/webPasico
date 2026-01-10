@@ -51,7 +51,6 @@ export default function Tablon() {
     );
   }
 
-  return <Agenda mes_={1} anio_={2026} />;
   return (
     <View style={styles.container}>
       <FlatList
