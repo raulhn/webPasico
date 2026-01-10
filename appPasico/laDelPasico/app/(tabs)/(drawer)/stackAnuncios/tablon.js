@@ -15,6 +15,7 @@ import { StyleSheet, RefreshControl, Pressable } from "react-native";
 import CardAnuncio from "../../../../componentes/componentesTablon/cardAnuncio.jsx";
 
 import { Link } from "expo-router";
+import Agenda from "../../../../componentes/componentesGeneral/agenda/Agenda.jsx";
 
 export default function Tablon() {
   const { cerrarSesion, usuario } = useContext(AuthContext);
@@ -50,6 +51,7 @@ export default function Tablon() {
     );
   }
 
+  return <Agenda mes_={1} anio_={2026} />;
   return (
     <View style={styles.container}>
       <FlatList

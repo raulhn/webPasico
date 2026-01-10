@@ -1,5 +1,5 @@
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { MaterialIcons } from "@expo/vector-icons";
+import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 import {
   Pressable,
   Platform,
@@ -48,6 +48,63 @@ export function Boton({
   );
 }
 
+export function BotonIcono({
+  nombre,
+  onPress,
+  color = "#007BFF",
+  colorTexto = "#fff",
+}) {
+  const [presionado, setPresionado] = useState(false);
+
+  return (
+    <Pressable
+      onPress={onPress}
+      onPressIn={() => setPresionado(true)}
+      onPressOut={() => setPresionado(false)}
+    >
+      <View
+        style={[
+          estilos.boton,
+          { backgroundColor: color },
+          presionado && { opacity: 0.5, transform: [{ scale: 0.95 }] },
+        ]}
+      >
+        <MaterialIcons name={nombre} size={24} color={colorTexto} />
+      </View>
+    </Pressable>
+  );
+}
+
+export function BotonIconoComunity({
+  nombreIcono,
+  onPress,
+  color = "#007BFF",
+  colorTexto = "#fff",
+}) {
+  const [presionado, setPresionado] = useState(false);
+
+  return (
+    <Pressable
+      onPress={onPress}
+      onPressIn={() => setPresionado(true)}
+      onPressOut={() => setPresionado(false)}
+    >
+      <View
+        style={[
+          estilos.boton,
+          { backgroundColor: color },
+          presionado && { opacity: 0.5, transform: [{ scale: 0.95 }] },
+        ]}
+      >
+        <MaterialCommunityIcons
+          name={nombreIcono}
+          size={24}
+          color={colorTexto}
+        />
+      </View>
+    </Pressable>
+  );
+}
 export function BotonFixed({
   onPress,
   icon = "add",
