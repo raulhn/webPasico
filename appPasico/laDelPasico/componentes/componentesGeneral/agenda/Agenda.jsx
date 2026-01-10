@@ -8,6 +8,11 @@ export default function Agenda({ mes_, anio_ }) {
   const [anio, setAnio] = useState(anio_);
   const [diasMes, setDiasMes] = useState([]);
 
+  useEffect(() => {
+    setMes(mes_);
+    setAnio(anio_);
+  }, [mes_, anio_]);
+
   function getCalendarWeeks(year, month) {
     const weeks = [];
 
@@ -63,7 +68,7 @@ export default function Agenda({ mes_, anio_ }) {
 
   useEffect(() => {
     setDiasMes(getCalendarWeeks(anio, mes));
-  }, [mes]);
+  }, [mes, anio]);
 
   function mostrarCalendario() {
     const diasSemanas = ["L", "M", "X", "J", "V", "S", "D"];
@@ -88,15 +93,18 @@ export default function Agenda({ mes_, anio_ }) {
       </View>
     ));
   }
-  var calendarioResultado = mostrarCalendario();
 
+  console.log("Anio inicial:", anio_, "Mes inicial:", mes_);
+  console.log("Anio:", anio, "Mes:", mes);
   return (
     <>
       {mes && (
         <SelectorMes
           mes={mes}
-          setMes={(nMes) => {
+          anio={anio}
+          setMes={(nMes, nAnio) => {
             setMes(nMes);
+            setAnio(nAnio);
           }}
         />
       )}

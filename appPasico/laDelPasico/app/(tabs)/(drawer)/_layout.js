@@ -1,7 +1,6 @@
 import { Drawer } from "expo-router/drawer";
 import { CustomHeaderInicio } from "../../../componentes/cabecera.jsx";
 
-
 export default function DrawerLayout() {
   return (
     <Drawer
@@ -9,7 +8,6 @@ export default function DrawerLayout() {
         headerBackgroundContainerStyle: { backgroundColor: "#fff" },
         header: (props) => <CustomHeaderInicio {...props} />,
       }}
-
     >
       <Drawer.Screen
         name="index"
@@ -32,8 +30,10 @@ export default function DrawerLayout() {
           headerShown: false,
         }}
       />
-
-
+      <Drawer.Screen
+        name="stackAgenda"
+        options={{ title: "Agenda", headerShown: false }}
+      />
     </Drawer>
   );
 }
