@@ -87,6 +87,39 @@ function recuperarEventos(bPublicos) {
   });
 }
 
+function recuperarEventosFecha(bPublicos, fecha) {
+  let sql =
+    "select nid_agenda_evento, nombre, descripcion, fecha " +
+    "from " +
+    constantes.ESQUEMA +
+    ".agenda_eventos ";
+
+  if (bPublicos) {
+    sql += "where publico = 'S' ";
+    if (fecha) {
+      sql += "and fecha = " + conexion.dbConn.escape(fecha) + " ";
+    }
+  } else {
+    if (fecha) {
+      sql += "where fecha = " + conexion.dbConn.escape(fecha) + " ";
+    }
+  }
+
+  sql += "order by fecha desc";
+
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(sql, (error, results) => {
+      if (error) {
+        console.log("Error al recuperar los eventos de la agenda: ", error);
+        reject(new Error("Error al recuperar los eventos de la agenda"));
+      } else {
+        console.log("Eventos de la agenda recuperados correctamente");
+        resolve(results);
+      }
+    });
+  });
+}
+
 function eliminarAgendaEvento(nid_evento) {
   const sql =
     "update " +
@@ -115,4 +148,5 @@ function eliminarAgendaEvento(nid_evento) {
 module.exports.registrarAgendaEvento = registrarAgendaEvento;
 module.exports.actualizarAgendaEvento = actualizarAgendaEvento;
 module.exports.recuperarEventos = recuperarEventos;
+module.exports.recuperarEventosFecha = recuperarEventosFecha;
 module.exports.eliminarAgendaEvento = eliminarAgendaEvento;

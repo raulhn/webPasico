@@ -32,6 +32,7 @@ const servletTrimestre = require("./servlets/servlet_trimestre.js");
 const servletTipoProgreso = require("./servlets/servlet_tipo_progreso.js");
 const servletEvaluacion = require("./servlets/servlet_evaluacion.js");
 const servletEvaluacionMatricula = require("./servlets/servlet_evaluacion_matricula.js");
+const servletAgendaEvento = require("./servlets/servlet_agenda_evento.js");
 
 // Tablon Anuncios //
 const servletTablonAnuncios = require("./servlets/servlet_tablon_anuncios.js");
@@ -185,6 +186,12 @@ app.get(
 
 app.get("/obtener_asignaturas", servletAsignaturas.obtenerAsignaturas);
 
+// Agenda Eventos //
+app.get("/obtener_agenda_eventos", servletAgendaEvento.obtenerEventos);
+app.get(
+  "/obtener_agenda_eventos_fecha/:fecha",
+  servletAgendaEvento.obtenerEventosFecha,
+);
 ///////////////////////////////////////////////
 // Peticiones que requieren inicio de sesión //
 ///////////////////////////////////////////////
@@ -203,7 +210,7 @@ app.use((req, res, next) => {
   }
 });
 //
-// Profeosres //
+// Profesores //
 app.get("/obtener_profesores", servletProfesores.obtenerProfesores);
 app.get(
   "/obtener_profesores_asignatura/:nid_asignatura",
@@ -268,6 +275,10 @@ app.get(
   servletPartituras.obtenerPartitura,
 );
 
+// Agenda Eventos //
+app.post("/registrar_agenda_evento", servletAgendaEvento.registrarEvento);
+app.post("/actualizar_agenda_evento", servletAgendaEvento.actualizarEvento);
+app.post("/eliminar_agenda_evento", servletAgendaEvento.eliminarEvento);
 // Evaluaciones //
 app.get(
   "/obtener_evaluaciones_asignaturas/:nid_asignatura/:nid_curso/:nid_trimestre",
