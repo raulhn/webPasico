@@ -1,11 +1,30 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Pressable } from "react-native";
 
-export default function Dia({ numDia, disabled = false }) {
+export default function Dia({
+  numDia,
+  accion,
+  disabled = false,
+  esHoy = false,
+  esSeleccionado = false,
+}) {
   return (
     <View style={estilos.contenedor}>
-      <Text style={disabled ? estilos.textoDisabled : estilos.texto}>
-        {numDia}
-      </Text>
+      <Pressable
+        onPress={() => {
+          accion();
+        }}
+      >
+        <View
+          style={[
+            esHoy ? estilos.contenedorHoy : {},
+            esSeleccionado ? estilos.contenedorSeleccionado : {},
+          ]}
+        >
+          <Text style={disabled ? estilos.textoDisabled : estilos.texto}>
+            {numDia}
+          </Text>
+        </View>
+      </Pressable>
     </View>
   );
 }
@@ -23,5 +42,19 @@ const estilos = StyleSheet.create({
   textoDisabled: {
     color: "#ccc",
     fontSize: 20,
+  },
+  contenedorHoy: {
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#ffeb3b",
+    borderRadius: 80,
+    width: 30,
+  },
+  contenedorSeleccionado: {
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#90caf9",
+    borderRadius: 80,
+    width: 30,
   },
 });

@@ -46,9 +46,6 @@ export default function SelectorMes({ mes, anio, setMes }) {
 
   return (
     <>
-      <View style={styles.contenedorSelectorAnio}>
-        <Text style={styles.textoMes}>{anioActual}</Text>
-      </View>
       <View style={styles.contenedorSelector}>
         <BotonIconoComunity
           nombreIcono="arrow-left-drop-circle"
@@ -58,7 +55,9 @@ export default function SelectorMes({ mes, anio, setMes }) {
             decrementarMes();
           }}
         />
-        <Text style={styles.textoMes}>{MESES[mesActual - 1]}</Text>
+        <Text style={styles.textoMes}>
+          {anioActual + " - " + MESES[mesActual - 1]}
+        </Text>
         <BotonIconoComunity
           nombreIcono="arrow-right-drop-circle"
           tamaño={24}
