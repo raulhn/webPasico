@@ -1,18 +1,20 @@
 import { useState, useEffect } from "react";
 import Dia from "./Dia";
-import { View } from "react-native";
+import { View, StyleSheet, Pressable } from "react-native";
 import SelectorMes from "./SelectorMes";
 
 export default function Agenda({ mes_, anio_ }) {
   const [mes, setMes] = useState(mes_);
   const [anio, setAnio] = useState(anio_);
   const [diasMes, setDiasMes] = useState([]);
-
   useEffect(() => {
     setMes(mes_);
     setAnio(anio_);
   }, [mes_, anio_]);
 
+  const [diaSelecionado, setDiaSeleccionado] = useState(null);
+
+  //Funcion para obtener las semanas del calendario
   function getCalendarWeeks(year, month) {
     const weeks = [];
 
@@ -74,14 +76,40 @@ export default function Agenda({ mes_, anio_ }) {
     const diasSemanas = ["L", "M", "X", "J", "V", "S", "D"];
     var semanasCalendario = [];
     var componentesDiaSemana = [];
+
+    const fechaHoy = new Date();
     for (let i = 0; i < diasSemanas.length; i++) {
-      componentesDiaSemana.push(<Dia numDia={diasSemanas[i]} />);
+      componentesDiaSemana.push(
+        <Dia key={diasSemanas[i]} numDia={diasSemanas[i]} />
+      );
     }
     semanasCalendario.push(componentesDiaSemana);
     for (let i = 0; i < diasMes.length; i++) {
       semanasCalendario.push(
         diasMes[i].map((dia) => (
-          <Dia numDia={dia.day} disabled={mes != dia.month} />
+          <Dia
+            key={dia.day + "-" + dia.month + "-" + dia.year}
+            numDia={dia.day}
+            disabled={mes != dia.month}
+            accion={() => {
+              setDiaSeleccionado({
+                dia: dia.day,
+                mes: dia.month,
+                año: dia.year,
+              });
+            }}
+            esHoy={
+              dia.year == fechaHoy.getFullYear() &&
+              dia.month == fechaHoy.getMonth() + 1 &&
+              dia.day == fechaHoy.getDate()
+            }
+            esSeleccionado={
+              diaSelecionado &&
+              dia.year == diaSelecionado.año &&
+              dia.month == diaSelecionado.mes &&
+              dia.day == diaSelecionado.dia
+            }
+          />
         ))
       );
     }
@@ -98,21 +126,25 @@ export default function Agenda({ mes_, anio_ }) {
     ));
   }
 
-  console.log("Anio inicial:", anio_, "Mes inicial:", mes_);
-  console.log("Anio:", anio, "Mes:", mes);
   return (
-    <>
-      {mes && (
-        <SelectorMes
-          mes={mes}
-          anio={anio}
-          setMes={(nMes, nAnio) => {
-            setMes(nMes);
-            setAnio(nAnio);
-          }}
-        />
-      )}
-      <MostrarSemanas />{" "}
-    </>
+    <View style={estilos.contenedor}>
+      <SelectorMes
+        mes={mes}
+        anio={anio}
+        setMes={(nMes, nAnio) => {
+          setMes(nMes);
+          setAnio(nAnio);
+        }}
+      />
+      <MostrarSemanas />
+    </View>
   );
 }
+
+const estilos = StyleSheet.create({
+  contenedor: {
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "white",
+  },
+});
