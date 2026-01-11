@@ -113,7 +113,31 @@ async function obtenerEventos(req, res) {
   }
 }
 
+async function obtenerEventosFecha(req, res) {
+  try {
+    const rolesPermitidos = [constantes.DIRECTOR, constantes.ADMINISTRADOR];
+    let rolDirector = await servlet_comun.comprobarRol(
+      req,
+      res,
+      rolesPermitidos,
+    );
+    const bPublicos = !rolDirector;
+
+    const fecha = req.params.fecha;
+
+    const eventos = await gestorAgendaEvento.recuperarEventosFecha(
+      bPublicos,
+      fecha,
+    );
+
+    res.status(200).send({ eventos: eventos });
+  } catch (error) {
+    res.status(500).send({ error: "Error interno del servidor" });
+  }
+}
+
 module.exports.obtenerEventos = obtenerEventos;
+module.exports.obtenerEventosFecha = obtenerEventosFecha;
 module.exports.registrarEvento = registrarEvento;
 module.exports.actualizarEvento = actualizarEvento;
 module.exports.eliminarEvento = eliminarEvento;
