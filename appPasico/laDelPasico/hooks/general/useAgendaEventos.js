@@ -1,12 +1,11 @@
-import ServiceAgendaEventos from "../../services/ServiceAgendaEventos";
+import ServiceAgendaEventos from "../../servicios/serviceAgendaEventos";
 import { useState, useEffect } from "react";
 
-export const useAgendaEventos = (fecha, cerrar_sesion) => {
+export const useAgendaEventosFecha = (fecha, cerrar_sesion) => {
   const [eventos, setEventos] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(false);
   const [refrescar, setRefrescar] = useState(false);
-  const cerrar_sesion = false; // Placeholder, replace with actual session management
 
   function lanzarRefresco() {
     setRefrescar(true);
@@ -20,7 +19,6 @@ export const useAgendaEventos = (fecha, cerrar_sesion) => {
         setError(false);
       })
       .catch((error) => {
-        console.log("Error al obtener los eventos de la agenda:", error);
         setEventos([]);
         setCargando(false);
         setRefrescar(false);
@@ -28,6 +26,15 @@ export const useAgendaEventos = (fecha, cerrar_sesion) => {
       });
   }, [refrescar, cerrar_sesion]);
 
+  return {
+    eventos,
+    cargando,
+    error,
+    lanzarRefresco,
+  };
+};
+
+export const useAgendaEventos = (cerrar_sesion) => {
   function registrarEvento(evento) {
     return ServiceAgendaEventos.registrarEvento(evento, cerrar_sesion);
   }
@@ -39,11 +46,8 @@ export const useAgendaEventos = (fecha, cerrar_sesion) => {
   function eliminarEvento(nid_evento) {
     return ServiceAgendaEventos.eliminarEvento(nid_evento, cerrar_sesion);
   }
+
   return {
-    eventos,
-    cargando,
-    error,
-    lanzarRefresco,
     registrarEvento,
     actualizarEvento,
     eliminarEvento,
