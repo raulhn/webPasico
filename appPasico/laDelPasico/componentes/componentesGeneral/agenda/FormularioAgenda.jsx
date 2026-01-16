@@ -1,5 +1,5 @@
 import { useAgendaEventos } from "../../../hooks/general/useAgendaEventos";
-import { View, Text } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { EntradaTexto, Boton } from "../../componentesUI/ComponentesUI.jsx";
 import { useState } from "react";
@@ -37,25 +37,25 @@ export default function FormularioAgenda({
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <View>
+      <View style={estilos.contenedor}>
         <Text>Formulario de Agenda</Text>
         <Text>Nombre</Text>
         <EntradaTexto
-          setTexto={(valor) => {
+          setValor={(valor) => {
             setNombre(valor);
           }}
           valor={nombre}
         />
         <Text>Descripción</Text>
         <EntradaTexto
-          setTexto={(valor) => {
+          setValor={(valor) => {
             setDescripcion(valor);
           }}
           valor={descripcion}
         />
         <Text>Fecha</Text>
         <EntradaTexto
-          setTexto={(valor) => {
+          setValor={(valor) => {
             setFecha(valor);
           }}
           valor={fecha}
@@ -77,3 +77,11 @@ export default function FormularioAgenda({
     </SafeAreaView>
   );
 }
+
+const estilos = StyleSheet.create({
+  contenedor: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});
