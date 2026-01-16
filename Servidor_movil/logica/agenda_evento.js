@@ -5,7 +5,7 @@ function registrarAgendaEvento(nombre, descripcion, fecha) {
   const sql =
     "insert into " +
     constantes.ESQUEMA +
-    ".agenda_eventos (nombre, descripcion, fecha) " +
+    ".agenda_evento (nombre, descripcion, fecha) " +
     " values (" +
     conexion.dbConn.escape(nombre) +
     ", " +
@@ -35,7 +35,7 @@ function actualizarAgendaEvento(nid_evento, nombre, descripcion, fecha) {
   const sql =
     "update " +
     constantes.ESQUEMA +
-    ".agenda_eventos set nombre = " +
+    ".agenda_evento set nombre = " +
     conexion.dbConn.escape(nombre) +
     ", descripcion = " +
     conexion.dbConn.escape(descripcion) +
@@ -66,7 +66,7 @@ function recuperarEventos(bPublicos) {
     "select nid_agenda_evento, nombre, descripcion, fecha " +
     "from " +
     constantes.ESQUEMA +
-    ".agenda_eventos ";
+    ".agenda_evento ";
 
   if (bPublicos) {
     sql += "where publico = 'S' ";
@@ -92,7 +92,7 @@ function recuperarEventosFecha(bPublicos, fecha) {
     "select nid_agenda_evento, nombre, descripcion, fecha " +
     "from " +
     constantes.ESQUEMA +
-    ".agenda_eventos ";
+    ".agenda_evento ";
 
   if (bPublicos) {
     sql += "where publico = 'S' ";
@@ -124,7 +124,7 @@ function eliminarAgendaEvento(nid_evento) {
   const sql =
     "update " +
     constantes.ESQUEMA +
-    ".agenda_eventos set borrado = 'S' where " +
+    ".agenda_evento set borrado = 'S' where " +
     "nid_agenda_evento = " +
     conexion.dbConn.escape(nid_evento);
 
