@@ -11,7 +11,7 @@ function registrarEvento(evento, cerrarSesion) {
     };
     ServiceComun.peticionSesion(
       "POST",
-      Constantes.URL_SERVICIO_MOVIL + "registrar_evento",
+      Constantes.URL_SERVICIO_MOVIL + "registrar_agenda_evento",
       data,
       cerrarSesion
     )
@@ -35,7 +35,7 @@ function actualizarEvento(evento, cerrarSesion) {
     };
     ServiceComun.peticionSesion(
       "POST",
-      Constantes.URL_SERVICIO_MOVIL + "actualizar_evento",
+      Constantes.URL_SERVICIO_MOVIL + "actualizar_agenda_evento",
       data,
       cerrarSesion
     )
@@ -55,7 +55,7 @@ function eliminarEvento(nid_evento, cerrarSesion) {
     };
     ServiceComun.peticionSesion(
       "POST",
-      Constantes.URL_SERVICIO_MOVIL + "eliminar_evento",
+      Constantes.URL_SERVICIO_MOVIL + "eliminar_agenda_evento",
       data,
       cerrarSesion
     )
