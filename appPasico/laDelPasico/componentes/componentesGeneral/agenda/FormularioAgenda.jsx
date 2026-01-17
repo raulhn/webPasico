@@ -1,7 +1,11 @@
 import { useAgendaEventos } from "../../../hooks/general/useAgendaEventos";
 import { View, Text, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { EntradaTexto, Boton } from "../../componentesUI/ComponentesUI.jsx";
+import {
+  EntradaTexto,
+  Boton,
+  ModalAviso,
+} from "../../componentesUI/ComponentesUI.jsx";
 import { useState } from "react";
 
 export default function FormularioAgenda({
@@ -15,6 +19,7 @@ export default function FormularioAgenda({
   const [descripcion, setDescripcion] = useState(evento.descripcion);
   const [fecha, setFecha] = useState(evento.fecha);
   const [nidEvento, setIdEvento] = useState(evento.nid_evento || null);
+  const [error, setError] = useState(null);
 
   function registrarEventoFormulario() {
     if (!nidEvento) {
@@ -27,12 +32,15 @@ export default function FormularioAgenda({
         .then((respuesta) => {
           if (respuesta.error) {
             console.log("Error al registrar el evento:", respuesta.error);
+            setError(respuesta.error);
           } else {
             console.log("Evento registrado con éxito:", respuesta);
+            volver();
           }
         })
         .catch((error) => {
           console.log("Error al registrar el evento:", error);
+          setError(error);
         });
     } else {
       const eventoActualizado = {
@@ -45,12 +53,15 @@ export default function FormularioAgenda({
         .then((respuesta) => {
           if (respuesta.error) {
             console.log("Error al actualizar el evento:", respuesta.error);
+            setError(respuesta.error);
           } else {
             console.log("Evento actualizado con éxito:", respuesta);
+            volver();
           }
         })
         .catch((error) => {
           console.log("Error al actualizar el evento:", error);
+          setError(error);
         });
     }
   }
@@ -84,7 +95,6 @@ export default function FormularioAgenda({
           nombre="Guardar"
           onPress={() => {
             registrarEventoFormulario();
-            volver();
           }}
         />
         <Boton
@@ -94,6 +104,14 @@ export default function FormularioAgenda({
           }}
         />
       </View>
+      <ModalAviso
+        visible={error}
+        setVisible={() => {
+          setError(false);
+        }}
+        textBoton="Aceptar"
+        mensaje={"Se ha producido un error"}
+      />
     </SafeAreaView>
   );
 }
