@@ -16,6 +16,7 @@ function registrarEvento(evento, cerrarSesion) {
       cerrarSesion
     )
       .then((response) => {
+        console.log("Respuesta al registrar evento:", response);
         resolve(response);
       })
       .catch((error) => {
