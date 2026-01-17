@@ -120,7 +120,7 @@ function recuperarEventosFecha(bPublicos, fecha) {
   });
 }
 
-function recuperarEventosMes(mes, anio, bPublicos) {
+function recuperarEventosMes(bPublicos, mes, anio) {
   let sql =
     "select nid_agenda_evento, nombre, descripcion, fecha, MONTH(fecha) mes, YEAR(fecha) anio " +
     "from " +
