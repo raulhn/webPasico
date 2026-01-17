@@ -58,6 +58,9 @@ export const useAgendaEventosMes = (mes, anio, cerrar_sesion) => {
         setCargando(false);
         setRefrescar(false);
         setError(false);
+        if (!eventosRecuperados.eventos) {
+          setEventos([]);
+        }
       })
       .catch((error) => {
         setEventos([]);

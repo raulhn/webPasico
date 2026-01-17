@@ -130,18 +130,16 @@ function recuperarEventosMes(mes, anio, bPublicos) {
     conexion.dbConn.escape(mes) +
     " " +
     "and YEAR(fecha) = " +
-    conexion.dbConn.escape(anio) +
-    " " +
-    "order by fecha desc";
+    conexion.dbConn.escape(anio);
 
   if (bPublicos) {
-    sql += "where publico = 'S' ";
+    sql += " and publico = 'S' ";
     if (fecha) {
       sql += "and fecha = " + conexion.dbConn.escape(fecha) + " ";
     }
   } else {
     if (fecha) {
-      sql += "where fecha = " + conexion.dbConn.escape(fecha) + " ";
+      sql += " and fecha = " + conexion.dbConn.escape(fecha) + " ";
     }
   }
 
