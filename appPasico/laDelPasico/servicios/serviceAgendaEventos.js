@@ -77,7 +77,10 @@ function obtenerEventosFecha(fecha_evento, cerrarSesion) {
     };
     ServiceComun.peticionSesion(
       "GET",
-      Constantes.URL_SERVICIO_MOVIL + "obtener_eventos_fecha",
+      Constantes.URL_SERVICIO_MOVIL +
+        "obtener_eventos_fecha" +
+        "/" +
+        fecha_evento,
       data,
       cerrarSesion
     )
@@ -98,11 +101,16 @@ function obtenerEventosMes(mes, anio, cerrarSesion) {
     };
     ServiceComun.peticionSesion(
       "GET",
-      Constantes.URL_SERVICIO_MOVIL + "obtener_eventos_mes",
+      Constantes.URL_SERVICIO_MOVIL +
+        "obtener_agenda_eventos_mes/" +
+        mes +
+        "/" +
+        anio,
       data,
       cerrarSesion
     )
       .then((response) => {
+        console.log("Respuesta al obtener eventos del mes:", response);
         resolve(response);
       })
       .catch((error) => {
