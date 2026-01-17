@@ -1,6 +1,7 @@
 const servlet_comun = require("./servlet_comun.js");
 const constantes = require("../constantes.js");
 const gestorAgendaEvento = require("../logica/agenda_evento.js");
+const gestorComun = require("../logica/comun.js");
 
 async function registrarEvento(req, res) {
   try {
@@ -26,7 +27,12 @@ async function registrarEvento(req, res) {
       return;
     }
 
-    await gestorAgendaEvento.registrarAgendaEvento(nombre, descripcion, fecha);
+    let fecha_evento = gestorComun.formatDateToMySQL(fecha);
+    await gestorAgendaEvento.registrarAgendaEvento(
+      nombre,
+      descripcion,
+      fecha_evento,
+    );
 
     res
       .status(200)
@@ -59,11 +65,13 @@ async function actualizarEvento(req, res) {
       return;
     }
 
+    let fecha_evento = gestorComun.formatDateToMySQL(fecha);
+
     await gestorAgendaEvento.actualizarAgendaEvento(
       nid_evento,
       nombre,
       descripcion,
-      fecha,
+      fecha_evento,
     );
 
     res

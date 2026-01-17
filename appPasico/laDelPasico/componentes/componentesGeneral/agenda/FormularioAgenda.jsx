@@ -5,6 +5,7 @@ import {
   EntradaTexto,
   Boton,
   ModalAviso,
+  EntradaFecha,
 } from "../../componentesUI/ComponentesUI.jsx";
 import { useState } from "react";
 
@@ -85,11 +86,11 @@ export default function FormularioAgenda({
           valor={descripcion}
         />
         <Text>Fecha</Text>
-        <EntradaTexto
-          setValor={(valor) => {
+        <EntradaFecha
+          onChangeFecha={(valor) => {
             setFecha(valor);
           }}
-          valor={fecha}
+          valorFecha={fecha}
         />
         <Boton
           nombre="Guardar"
