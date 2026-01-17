@@ -110,7 +110,6 @@ function obtenerEventosMes(mes, anio, cerrarSesion) {
       cerrarSesion
     )
       .then((response) => {
-        console.log("Respuesta al obtener eventos del mes:", response);
         resolve(response);
       })
       .catch((error) => {
