@@ -109,7 +109,7 @@ export default function Agenda({ mes_, anio_ }) {
                 año: dia.year,
               });
               const eventosDiaHoy = eventos.filter((evento) => {
-                const fechaEvento = new Date(evento.fecha_evento);
+                const fechaEvento = new Date(evento.fecha);
                 return (
                   fechaEvento.getDate() == dia.day &&
                   fechaEvento.getMonth() + 1 == dia.month &&
