@@ -133,17 +133,10 @@ function recuperarEventosMes(bPublicos, mes, anio) {
     conexion.dbConn.escape(anio);
 
   if (bPublicos) {
-    sql += " and publico = 'S' ";
-    if (fecha) {
-      sql += "and fecha = " + conexion.dbConn.escape(fecha) + " ";
-    }
-  } else {
-    if (fecha) {
-      sql += " and fecha = " + conexion.dbConn.escape(fecha) + " ";
-    }
+    sql = sql + " and publico = 'S' ";
   }
 
-  sql += "order by fecha desc";
+  sql = sql + "order by fecha desc";
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(sql, (error, results) => {
       if (error) {
