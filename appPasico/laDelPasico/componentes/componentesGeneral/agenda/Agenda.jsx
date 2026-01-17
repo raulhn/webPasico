@@ -2,17 +2,27 @@ import { useState, useEffect } from "react";
 import Dia from "./Dia";
 import { View, StyleSheet, Pressable } from "react-native";
 import SelectorMes from "./SelectorMes";
+import { useAgendaEventosMes } from "../../../hooks/general/useAgendaEventos";
+import { AuthContext } from "../../../providers/AuthContext";
+import { useContext } from "react";
 
 export default function Agenda({ mes_, anio_ }) {
   const [mes, setMes] = useState(mes_);
   const [anio, setAnio] = useState(anio_);
   const [diasMes, setDiasMes] = useState([]);
+  const [eventosDia, setEventosDia] = useState([]);
   useEffect(() => {
     setMes(mes_);
     setAnio(anio_);
   }, [mes_, anio_]);
 
+  const { cerrarSesion } = useContext(AuthContext);
   const [diaSelecionado, setDiaSeleccionado] = useState(null);
+  const { eventos, cargando, error, lanzarRefresco } = useAgendaEventosMes(
+    mes,
+    anio,
+    cerrarSesion
+  );
 
   //Funcion para obtener las semanas del calendario
   function getCalendarWeeks(year, month) {
@@ -97,6 +107,15 @@ export default function Agenda({ mes_, anio_ }) {
                 mes: dia.month,
                 año: dia.year,
               });
+              const eventosDiaHoy = eventos.filter((evento) => {
+                const fechaEvento = new Date(evento.fecha_evento);
+                return (
+                  fechaEvento.getDate() == dia.day &&
+                  fechaEvento.getMonth() + 1 == dia.month &&
+                  fechaEvento.getFullYear() == dia.year
+                );
+              });
+              setEventosDia(eventosDiaHoy);
             }}
             esHoy={
               dia.year == fechaHoy.getFullYear() &&

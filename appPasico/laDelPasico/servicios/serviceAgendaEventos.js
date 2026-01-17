@@ -89,7 +89,29 @@ function obtenerEventosFecha(fecha_evento, cerrarSesion) {
   });
 }
 
+function obtenerEventosMes(mes, anio, cerrarSesion) {
+  return new Promise((resolve, reject) => {
+    const data = {
+      mes: mes,
+      anio: anio,
+    };
+    ServiceComun.peticionSesion(
+      "GET",
+      Constantes.URL_SERVICIO_MOVIL + "obtener_eventos_mes",
+      data,
+      cerrarSesion
+    )
+      .then((response) => {
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+}
+
 module.exports.obtenerEventosFecha = obtenerEventosFecha;
 module.exports.registrarEvento = registrarEvento;
 module.exports.actualizarEvento = actualizarEvento;
 module.exports.eliminarEvento = eliminarEvento;
+module.exports.obtenerEventosMes = obtenerEventosMes;

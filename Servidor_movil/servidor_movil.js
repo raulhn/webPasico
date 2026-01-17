@@ -192,6 +192,10 @@ app.get(
   "/obtener_agenda_eventos_fecha/:fecha",
   servletAgendaEvento.obtenerEventosFecha,
 );
+app.get(
+  "/obtener_agenda_eventos_mes/:mes/:anio",
+  servletAgendaEvento.obtenerEventosMes,
+);
 ///////////////////////////////////////////////
 // Peticiones que requieren inicio de sesión //
 ///////////////////////////////////////////////
