@@ -5,10 +5,11 @@ function registrarEvento(evento, cerrarSesion) {
   return new Promise((resolve, reject) => {
     const data = {
       nombre: evento.nombre,
-      fecha_evento: evento.fecha_evento,
+      fecha: evento.fecha,
       descripcion: evento.descripcion,
       publicado: evento.publicado,
     };
+
     ServiceComun.peticionSesion(
       "POST",
       Constantes.URL_SERVICIO_MOVIL + "registrar_agenda_evento",
@@ -30,7 +31,7 @@ function actualizarEvento(evento, cerrarSesion) {
     const data = {
       nid_evento: evento.nid_evento,
       nombre: evento.nombre,
-      fecha_evento: evento.fecha_evento,
+      fecha: evento.fecha,
       descripcion: evento.descripcion,
       publicado: evento.publicado,
     };

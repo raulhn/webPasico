@@ -24,6 +24,7 @@ export default function Agenda({ mes_, anio_ }) {
     cerrarSesion
   );
 
+  console.log("Eventos del mes:", eventos);
   //Funcion para obtener las semanas del calendario
   function getCalendarWeeks(year, month) {
     const weeks = [];
