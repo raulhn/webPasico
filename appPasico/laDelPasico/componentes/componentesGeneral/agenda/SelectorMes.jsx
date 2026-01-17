@@ -31,7 +31,7 @@ export default function SelectorMes({ mes, anio, setMes }) {
     setMesActual(nuevoMes);
     setMes(nuevoMes, nuevoAnio);
   }
-  console.log(mesActual, anioActual);
+
   function decrementarMes() {
     let nuevoMes = mesActual - 1;
     let nuevoAnio = anioActual;
