@@ -23,12 +23,17 @@ export default function FormularioAgenda({
         descripcion: descripcion,
         fecha: fecha,
       };
-      const respuesta = registrarEvento(nuevoEvento);
-      if (respuesta.error) {
-        console.log("Error al registrar el evento:", respuesta.error);
-      } else {
-        console.log("Evento registrado con éxito:", respuesta);
-      }
+      registrarEvento(nuevoEvento)
+        .then((respuesta) => {
+          if (respuesta.error) {
+            console.log("Error al registrar el evento:", respuesta.error);
+          } else {
+            console.log("Evento registrado con éxito:", respuesta);
+          }
+        })
+        .catch((error) => {
+          console.log("Error al registrar el evento:", error);
+        });
     } else {
       const eventoActualizado = {
         nid_evento: nidEvento,
@@ -36,12 +41,17 @@ export default function FormularioAgenda({
         descripcion: descripcion,
         fecha: fecha,
       };
-      const respuesta = actualizarEvento(eventoActualizado);
-      if (respuesta.error) {
-        console.log("Error al actualizar el evento:", respuesta.error);
-      } else {
-        console.log("Evento actualizado con éxito:", respuesta);
-      }
+      actualizarEvento(eventoActualizado)
+        .then((respuesta) => {
+          if (respuesta.error) {
+            console.log("Error al actualizar el evento:", respuesta.error);
+          } else {
+            console.log("Evento actualizado con éxito:", respuesta);
+          }
+        })
+        .catch((error) => {
+          console.log("Error al actualizar el evento:", error);
+        });
     }
   }
 

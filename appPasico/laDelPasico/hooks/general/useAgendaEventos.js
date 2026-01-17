@@ -35,16 +35,16 @@ export const useAgendaEventosFecha = (fecha, cerrar_sesion) => {
 };
 
 export const useAgendaEventos = (cerrar_sesion) => {
-  function registrarEvento(evento) {
-    return ServiceAgendaEventos.registrarEvento(evento, cerrar_sesion);
+  async function registrarEvento(evento) {
+    return await ServiceAgendaEventos.registrarEvento(evento, cerrar_sesion);
   }
 
-  function actualizarEvento(evento) {
-    return ServiceAgendaEventos.actualizarEvento(evento, cerrar_sesion);
+  async function actualizarEvento(evento) {
+    return await ServiceAgendaEventos.actualizarEvento(evento, cerrar_sesion);
   }
 
-  function eliminarEvento(nid_evento) {
-    return ServiceAgendaEventos.eliminarEvento(nid_evento, cerrar_sesion);
+  async function eliminarEvento(nid_evento) {
+    return await ServiceAgendaEventos.eliminarEvento(nid_evento, cerrar_sesion);
   }
 
   return {
