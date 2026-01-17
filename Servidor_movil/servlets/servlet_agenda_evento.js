@@ -26,9 +26,13 @@ async function registrarEvento(req, res) {
 
     await gestorAgendaEvento.registrarAgendaEvento(nombre, descripcion, fecha);
 
-    res.status(200).send({ mensaje: "Evento registrado correctamente" });
+    res
+      .status(200)
+      .send({ error: false, mensaje: "Evento registrado correctamente" });
   } catch (error) {
-    res.status(500).send({ error: "Error interno del servidor" });
+    res
+      .status(500)
+      .send({ error: true, mensaje: "Error interno del servidor" });
   }
 }
 
@@ -60,9 +64,13 @@ async function actualizarEvento(req, res) {
       fecha,
     );
 
-    res.status(200).send({ mensaje: "Evento actualizado correctamente" });
+    res
+      .status(200)
+      .send({ error: false, mensaje: "Evento actualizado correctamente" });
   } catch (error) {
-    res.status(500).send({ error: "Error interno del servidor" });
+    res
+      .status(500)
+      .send({ error: true, mensaje: "Error interno del servidor" });
   }
 }
 
@@ -83,15 +91,21 @@ async function eliminarEvento(req, res) {
     }
     const { nid_evento } = req.body;
     if (!nid_evento) {
-      res.status(400).send({ error: "Faltan parámetros obligatorios" });
+      res
+        .status(400)
+        .send({ error: true, mennsaje: "Faltan parámetros obligatorios" });
       return;
     }
 
     await gestorAgendaEvento.eliminarAgendaEvento(nid_evento);
 
-    res.status(200).send({ mensaje: "Evento eliminado correctamente" });
+    res
+      .status(200)
+      .send({ error: false, mensaje: "Evento eliminado correctamente" });
   } catch (error) {
-    res.status(500).send({ error: "Error interno del servidor" });
+    res
+      .status(500)
+      .send({ error: true, mensaje: "Error interno del servidor" });
   }
 }
 
@@ -107,9 +121,11 @@ async function obtenerEventos(req, res) {
 
     const eventos = await gestorAgendaEvento.recuperarEventos(bPublicos);
 
-    res.status(200).send({ eventos: eventos });
+    res.status(200).send({ error: false, eventos: eventos });
   } catch (error) {
-    res.status(500).send({ error: "Error interno del servidor" });
+    res
+      .status(500)
+      .send({ error: true, mensaje: "Error interno del servidor" });
   }
 }
 
@@ -130,9 +146,11 @@ async function obtenerEventosFecha(req, res) {
       fecha,
     );
 
-    res.status(200).send({ eventos: eventos });
+    res.status(200).send({ error: false, eventos: eventos });
   } catch (error) {
-    res.status(500).send({ error: "Error interno del servidor" });
+    res
+      .status(500)
+      .send({ error: true, mensaje: "Error interno del servidor" });
   }
 }
 

@@ -11,6 +11,8 @@ const INDIVIDUAL = 4;
 const GENERAL = 5;
 const PUBLIC_KEY_TURNSTILE = "0x4AAAAAABLQCI15qARYrCno";
 
+const ROL_ADMINISTRADOR = "ADMINISTRADOR";
+
 module.exports.BANDA = BANDA;
 module.exports.ESCUELA = ESCUELA;
 module.exports.ASOCIACION = ASOCIACION;
@@ -24,3 +26,5 @@ module.exports.COLOR_ROJO = COLOR_ROJO;
 module.exports.COLOR_GRIS = COLOR_GRIS;
 
 module.exports.PUBLIC_KEY_TURNSTILE = PUBLIC_KEY_TURNSTILE;
+
+module.exports.ROL_ADMINISTRADOR = ROL_ADMINISTRADOR;
