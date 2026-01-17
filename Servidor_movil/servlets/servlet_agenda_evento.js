@@ -20,7 +20,9 @@ async function registrarEvento(req, res) {
     const { nombre, descripcion, fecha } = req.body;
 
     if (!nombre) {
-      res.status(400).send({ error: "Faltan parámetros obligatorios" });
+      res
+        .status(400)
+        .send({ error: true, mensaje: "Faltan parámetros obligatorios" });
       return;
     }
 
