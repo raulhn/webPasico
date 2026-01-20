@@ -1,10 +1,16 @@
 import { useState, useEffect } from "react";
 import Dia from "./Dia";
-import { View, StyleSheet, Pressable } from "react-native";
+import { View, StyleSheet, FlatList, Modal } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import SelectorMes from "./SelectorMes";
 import { useAgendaEventosMes } from "../../../hooks/general/useAgendaEventos";
 import { AuthContext } from "../../../providers/AuthContext";
 import { useContext } from "react";
+import EventoAgenda from "./EventoAgenda";
+import FormularioAgenda from "./FormularioAgenda";
+import { BotonFixed } from "../../componentesUI/ComponentesUI";
+import Constantes from "../../../config/constantes.js";
+import { useRol } from "../../../hooks/useRol.js";
 
 export default function Agenda({ mes_, anio_ }) {
   const [mes, setMes] = useState(mes_);
@@ -15,7 +21,7 @@ export default function Agenda({ mes_, anio_ }) {
     setMes(mes_);
     setAnio(anio_);
   }, [mes_, anio_]);
-
+  const { esRol } = useRol();
   const { cerrarSesion } = useContext(AuthContext);
   const [diaSelecionado, setDiaSeleccionado] = useState(null);
   const { eventos, cargando, error, lanzarRefresco } = useAgendaEventosMes(
@@ -23,7 +29,22 @@ export default function Agenda({ mes_, anio_ }) {
     anio,
     cerrarSesion
   );
+  const [visibleFormulario, setVisibleFormulario] = useState(false);
 
+  function ButtonAdd() {
+    if (esRol([Constantes.ROL_ADMINISTRADOR])) {
+      return (
+        <BotonFixed
+          onPress={() => {
+            setVisibleFormulario(true);
+          }}
+        />
+      );
+    }
+    return null;
+  }
+
+  console.log(eventosDia);
   //Funcion para obtener las semanas del calendario
   function getCalendarWeeks(year, month) {
     const weeks = [];
@@ -146,24 +167,59 @@ export default function Agenda({ mes_, anio_ }) {
   }
 
   return (
-    <View style={estilos.contenedor}>
-      <SelectorMes
-        mes={mes}
-        anio={anio}
-        setMes={(nMes, nAnio) => {
-          setMes(nMes);
-          setAnio(nAnio);
-        }}
-      />
-      <MostrarSemanas />
-    </View>
+    <>
+      <SafeAreaView style={estilos.contenedor}>
+        <SelectorMes
+          mes={mes}
+          anio={anio}
+          setMes={(nMes, nAnio) => {
+            setMes(nMes);
+            setAnio(nAnio);
+          }}
+        />
+        <MostrarSemanas />
+        <View style={{ marginTop: 20, width: "100%", paddingHorizontal: 10 }}>
+          <FlatList
+            data={eventosDia}
+            keyExtractor={(item) => item.nid_agenda_evento.toString()}
+            renderItem={({ item }) => <EventoAgenda evento={item} />}
+          />
+        </View>
+
+        <View style={estilos.botonFix}>
+          <ButtonAdd />
+        </View>
+        <Modal
+          animationType="slide"
+          visible={visibleFormulario}
+          onRequestClose={() => {
+            setVisibleFormulario(false);
+          }}
+        >
+          <FormularioAgenda
+            cerrar_sesion={cerrarSesion}
+            volver={() => {
+              setVisibleFormulario(false);
+            }}
+          />
+        </Modal>
+      </SafeAreaView>
+    </>
   );
 }
 
 const estilos = StyleSheet.create({
   contenedor: {
-    justifyContent: "center",
-    alignItems: "center",
     backgroundColor: "white",
+    padding: 10,
+    height: "100%",
+  },
+  contendorAgenda: {
+    alignItems: "center",
+  },
+  botonFix: {
+    position: "absolute",
+    bottom: 200,
+    right: 20,
   },
 });
