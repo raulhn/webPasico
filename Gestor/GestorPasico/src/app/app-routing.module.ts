@@ -39,165 +39,169 @@ import { ListaAlumnosComponent } from './componente/lista-alumnos/lista-alumnos.
 import { FichaMatriculaProfesorComponent } from './componente/ficha-matricula-profesor/ficha-matricula-profesor.component';
 import { ListaTipoMusicoComponent } from './componente/lista-tipo-musico/lista-tipo-musico.component';
 import { ListaInstrumentosComponent } from './componente/lista-instrumentos/lista-instrumentos.component';
-
+import { CargaDatosComponent } from './componente/carga-datos/carga-datos.component';
 
 const routes: Routes = [
-  { 
+  {
     path: 'login',
-    component: LoginComponent
+    component: LoginComponent,
   },
   {
     path: '',
-    component: HomeComponent
+    component: HomeComponent,
   },
   {
     path: 'registrar',
-    component: UsuarioComponent
+    component: UsuarioComponent,
   },
   {
     path: 'usuarios',
-    component: UsuariosComponent
+    component: UsuariosComponent,
   },
   {
     path: 'personas',
-    component: ListaPersonasComponent
+    component: ListaPersonasComponent,
   },
   {
     path: 'registrar-persona',
-    component: RegistroPersonaComponent
+    component: RegistroPersonaComponent,
   },
   {
     path: 'ficha_persona/:id',
-    component: FichaPersonaComponent 
+    component: FichaPersonaComponent,
   },
   {
     path: 'registrar-socio',
-    component: RegistroSocioComponent
+    component: RegistroSocioComponent,
   },
   {
     path: 'asignaturas',
-    component: AsignaturasComponent
+    component: AsignaturasComponent,
   },
   {
     path: 'ficha_asignatura/:nid_asignatura',
-    component: RegistroMatriculaComponent
+    component: RegistroMatriculaComponent,
   },
   {
     path: 'cursos',
-    component: RegistroCursoComponent
+    component: RegistroCursoComponent,
   },
   {
     path: 'ficha_matricula/:nid_matricula',
-    component: FichaMatriculaComponent
+    component: FichaMatriculaComponent,
   },
   {
     path: 'ficha_profesor/:nid_profesor',
-    component: FichaProfesorComponent
+    component: FichaProfesorComponent,
   },
   {
     path: 'listado_preinscripciones',
-    component: ListadoPreinscripcionesComponent
+    component: ListadoPreinscripcionesComponent,
   },
   {
     path: 'registrar_remesa',
-    component: RemesasComponent
+    component: RemesasComponent,
   },
   {
     path: 'detalle_remesa/:nid_remesa',
-    component: DetalleRemesaComponent
+    component: DetalleRemesaComponent,
   },
   {
     path: 'parametros',
-    component: ParametrosComponent
+    component: ParametrosComponent,
   },
   {
     path: 'horario/:nid_horario',
-    component: HorarioComponent
+    component: HorarioComponent,
   },
   {
     path: 'horario_profesor/:nid_profesor',
-    component: HorariosProfesorComponent
+    component: HorariosProfesorComponent,
   },
   {
     path: 'horario_clase/:nid_horario_clase',
-    component: HorarioClaseComponent
+    component: HorarioClaseComponent,
   },
   {
     path: 'musicos',
-    component: RegistroMusicoComponent
+    component: RegistroMusicoComponent,
   },
   {
     path: 'evaluacion',
-    component: EvaluacionComponent
+    component: EvaluacionComponent,
   },
   {
     path: 'evaluacion_profesor',
-    component: EvaluacionProfesorComponent
+    component: EvaluacionProfesorComponent,
   },
   {
     path: 'crea_ficha_asistencia',
-    component: CreaFichaAsistenciaComponent
+    component: CreaFichaAsistenciaComponent,
   },
   {
     path: 'lista_ficha_asistencias',
-    component: ListaFichasAsistenciasComponent
+    component: ListaFichasAsistenciasComponent,
   },
   {
     path: 'ficha_asistencia/:nid_ficha_asistencia',
-    component: FichaAsistenciaComponent
+    component: FichaAsistenciaComponent,
   },
   {
     path: 'registro_inventario',
-    component: CrearFichaInventarioComponent
+    component: CrearFichaInventarioComponent,
   },
   {
     path: 'ficha_inventario/:nid_inventario',
-    component: FichaInventarioComponent
+    component: FichaInventarioComponent,
   },
   {
     path: 'lista_inventario',
-    component: ListaInventariosComponent
+    component: ListaInventariosComponent,
   },
   {
     path: 'lista_forma_pagos/:nid_persona',
-    component: ListaFormaPagosComponent
+    component: ListaFormaPagosComponent,
   },
   {
     path: 'ficha_forma_pago/:nid_forma_pago',
-    component: FichaFormaPagoComponent
+    component: FichaFormaPagoComponent,
   },
   {
     path: 'registrar_prestamo',
-    component: RegistrarPrestamoComponent
+    component: RegistrarPrestamoComponent,
   },
   {
     path: 'lista_prestamos',
-    component: ListaPrestamosComponent
+    component: ListaPrestamosComponent,
   },
   {
     path: 'ficha_prestamo/:nid_prestamo',
-    component: FichaPrestamoComponent
+    component: FichaPrestamoComponent,
   },
   {
     path: 'lista_alumnos',
-    component: ListaAlumnosComponent
+    component: ListaAlumnosComponent,
   },
   {
     path: 'ficha_matricula_profesor/:nid_matricula',
-    component: FichaMatriculaProfesorComponent
+    component: FichaMatriculaProfesorComponent,
   },
   {
     path: 'lista_tipo_musico',
-    component: ListaTipoMusicoComponent 
+    component: ListaTipoMusicoComponent,
   },
   {
     path: 'lista_instrumentos',
-    component: ListaInstrumentosComponent
+    component: ListaInstrumentosComponent,
+  },
+  {
+    path: 'carga_datos',
+    component: CargaDatosComponent,
   },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
