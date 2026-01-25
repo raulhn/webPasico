@@ -494,7 +494,7 @@ app.get(
 );
 
 /** Carga de datos **/
-app.post("/carga_datos", servlet_carga_datos.carga_fichero);
+app.post("/cargar_datos", servlet_carga_datos.carga_fichero);
 
 https
   .createServer(
