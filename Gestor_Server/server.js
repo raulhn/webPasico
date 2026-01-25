@@ -32,6 +32,7 @@ var servlet_prestamo = require("./servlets/servlet_prestamos.js");
 var servlet_matricula_asignatura = require("./servlets/servlet_matricula_asignatura.js");
 var servlet_profesor = require("./servlets/servlet_profesor.js");
 var servlet_profesor_alumno_matricula = require("./servlets/servlet_profesor_alumno_matricula.js");
+var servlet_carga_datos = require("./servlets/servlet_carga_datos.js");
 
 var fs = require("fs");
 
@@ -491,6 +492,9 @@ app.get(
   "/generar_boletin_profesor/:nid_matricula/:nid_trimestre",
   servlet_evaluacion.generar_boletin_profesor,
 );
+
+/** Carga de datos **/
+app.post("/carga_datos", servlet_carga_datos.carga_fichero);
 
 https
   .createServer(
