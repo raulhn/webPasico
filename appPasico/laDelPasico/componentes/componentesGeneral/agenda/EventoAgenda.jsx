@@ -1,7 +1,30 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Modal } from "react-native";
 import { obtenerFechaFormateada } from "../../../comun/fechas.js";
+import { BotonFixed } from "../../componentesUI/ComponentesUI.jsx";
+import * as Constantes from "../../../config/constantes.js";
+import { useState } from "react";
+import { useRol } from "../../../hooks/useRol.js";
+import FormularioAgenda from "./FormularioAgenda.jsx";
 
 export default function EventoAgenda({ evento }) {
+  const [modalEdicionVisible, setModalEdicionVisible] = useState(false);
+  const { esRol } = useRol();
+  function addBotonEditar() {
+    if (esRol([Constantes.ROL_ADMINISTRADOR])) {
+      return (
+        <BotonFixed
+          onPress={() => {
+            setModalEdicionVisible(true);
+          }}
+          icon="mode-edit"
+          color={Constantes.COLOR_AZUL}
+          size={30}
+        />
+      );
+    }
+    return null;
+  }
+
   return (
     <View style={estilos.contenedorEvento}>
       <Text style={estilos.tituloEvento}>{evento.nombre}</Text>
@@ -9,6 +32,24 @@ export default function EventoAgenda({ evento }) {
       <Text style={estilos.fechaEvento}>
         {obtenerFechaFormateada(evento.fecha)}
       </Text>
+      {addBotonEditar()}
+      <Modal
+        visible={modalEdicionVisible}
+        animationType="slide"
+        onRequestClose={() => setModalEdicionVisible(false)}
+      >
+        {/* Aquí iría el formulario de edición del evento */}
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <FormularioAgenda
+            evento={evento}
+            volver={() => {
+              setModalEdicionVisible(false);
+            }}
+          />
+        </View>
+      </Modal>
     </View>
   );
 }
