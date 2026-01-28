@@ -6,6 +6,7 @@ import {
   Boton,
   ModalAviso,
   EntradaFecha,
+  EntradaGroupRadioButton,
 } from "../../componentesUI/ComponentesUI.jsx";
 import { useState } from "react";
 
@@ -19,9 +20,14 @@ export default function FormularioAgenda({
   const [nombre, setNombre] = useState(evento.nombre);
   const [descripcion, setDescripcion] = useState(evento.descripcion);
   const [fecha, setFecha] = useState(evento.fecha);
-  const [nidEvento, setIdEvento] = useState(evento.nid_evento || null);
+  const [nidEvento, setIdEvento] = useState(evento.nid_agenda_evento || null);
   const [error, setError] = useState(null);
+  const [tipoSeleccionado, setTipoSeleccionado] = useState(null);
 
+  const tipos = [
+    { etiqueta: "General", valor: 1 },
+    { etiqueta: "Banda", valor: 2 },
+  ];
   function registrarEventoFormulario() {
     if (!nidEvento) {
       const nuevoEvento = {
@@ -84,6 +90,15 @@ export default function FormularioAgenda({
             setDescripcion(valor);
           }}
           valor={descripcion}
+        />
+        <Text>Tipo</Text>
+        <EntradaGroupRadioButton
+          titulo={"Tipo de Evento"}
+          opciones={tipos}
+          valor={tipoSeleccionado}
+          setValorSeleccionado={(valor) => {
+            setTipoSeleccionado(valor);
+          }}
         />
         <Text>Fecha</Text>
         <EntradaFecha
