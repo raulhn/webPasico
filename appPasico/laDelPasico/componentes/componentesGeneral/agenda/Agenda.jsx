@@ -3,7 +3,10 @@ import Dia from "./Dia";
 import { View, StyleSheet, FlatList, Modal } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SelectorMes from "./SelectorMes";
-import { useAgendaEventosMes } from "../../../hooks/general/useAgendaEventos";
+import {
+  useAgendaEventosMes,
+  useAgendaEventosRangoFechas,
+} from "../../../hooks/general/useAgendaEventos";
 import { AuthContext } from "../../../providers/AuthContext";
 import { useContext } from "react";
 import EventoAgenda from "./EventoAgenda";
@@ -17,6 +20,9 @@ export default function Agenda({ mes_, anio_ }) {
   const [anio, setAnio] = useState(anio_);
   const [diasMes, setDiasMes] = useState([]);
   const [eventosDia, setEventosDia] = useState([]);
+  const [fechaInicio, setFechaInicio] = useState(null);
+  const [fechaFin, setFechaFin] = useState(null);
+
   useEffect(() => {
     setMes(mes_);
     setAnio(anio_);
@@ -24,11 +30,9 @@ export default function Agenda({ mes_, anio_ }) {
   const { esRol } = useRol();
   const { cerrarSesion } = useContext(AuthContext);
   const [diaSelecionado, setDiaSeleccionado] = useState(null);
-  const { eventos, cargando, error, lanzarRefresco } = useAgendaEventosMes(
-    mes,
-    anio,
-    cerrarSesion
-  );
+
+  const { eventos, cargando, error, lanzarRefresco } =
+    useAgendaEventosRangoFechas(fechaInicio, fechaFin, cerrarSesion);
   const [visibleFormulario, setVisibleFormulario] = useState(false);
 
   function ButtonAdd() {
@@ -115,6 +119,8 @@ export default function Agenda({ mes_, anio_ }) {
 
   useEffect(() => {
     setDiasMes(getCalendarWeeks(anio, mes));
+    setFechaInicio(diasMes[0][0].date);
+    setFechaFin(diasMes[diasMes.length - 1][6].date);
   }, [mes, anio]);
 
   function actualizarEventosDia(dia_) {
