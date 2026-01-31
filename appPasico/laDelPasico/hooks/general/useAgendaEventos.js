@@ -88,6 +88,7 @@ export const useAgendaEventos = (cerrar_sesion) => {
   }
 
   async function eliminarEvento(nid_evento) {
+    console.log("eliminar evento hook", nid_evento);
     return await ServiceAgendaEventos.eliminarEvento(nid_evento, cerrar_sesion);
   }
 

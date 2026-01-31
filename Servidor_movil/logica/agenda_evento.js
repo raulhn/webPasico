@@ -130,7 +130,8 @@ function recuperarEventosMes(bPublicos, mes, anio) {
     conexion.dbConn.escape(mes) +
     " " +
     "and YEAR(fecha) = " +
-    conexion.dbConn.escape(anio);
+    conexion.dbConn.escape(anio) +
+    " and borrado = 'N' ";
 
   if (bPublicos) {
     sql = sql + " and publico = 'S' ";
