@@ -174,13 +174,16 @@ async function obtenerEventosRangoFechas(req, res) {
     );
     const bPublicos = !rolDirector;
 
-    const fechaInicio = req.params.fechaInicio;
-    const fechaFin = req.params.fechaFin;
+    const fechaInicio = req.params.fecha_inicio;
+    const fechaFin = req.params.fecha_fin;
+
+    const fechaInicioFormateada = gestorComun.formatDateToMySQL(fechaInicio);
+    const fechaFinFormateada = gestorComun.formatDateToMySQL(fechaFin);
 
     const eventos = await gestorAgendaEvento.recuperarEventosRangoFecha(
       bPublicos,
-      fechaInicio,
-      fechaFin,
+      fechaInicioFormateada,
+      fechaFinFormateada,
     );
 
     res.status(200).send({ error: false, eventos: eventos });

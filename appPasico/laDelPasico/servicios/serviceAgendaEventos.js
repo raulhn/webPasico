@@ -83,7 +83,7 @@ function obtenerEventosFecha(fecha_evento, cerrarSesion) {
         "obtener_eventos_fecha" +
         "/" +
         fecha_evento,
-      null,
+      data,
       cerrarSesion
     )
       .then((response) => {
@@ -101,6 +101,7 @@ function obtenerEventosRangoFechas(fecha_inicio, fecha_fin, cerrarSesion) {
       fecha_inicio: fecha_inicio,
       fecha_fin: fecha_fin,
     };
+    console.log("Petición rango fechas", data);
     ServiceComun.peticionSesion(
       "GET",
       Constantes.URL_SERVICIO_MOVIL +
@@ -109,10 +110,11 @@ function obtenerEventosRangoFechas(fecha_inicio, fecha_fin, cerrarSesion) {
         fecha_inicio +
         "/" +
         fecha_fin,
-      null,
+      data,
       cerrarSesion
     )
       .then((response) => {
+        console.log("Respuesta al obtener eventos rango fechas:", response);
         resolve(response);
       })
       .catch((error) => {
