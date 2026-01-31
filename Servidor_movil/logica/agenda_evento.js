@@ -120,6 +120,36 @@ function recuperarEventosFecha(bPublicos, fecha) {
   });
 }
 
+function recuperarEventosRangoFecha(bPublicos, fechaInicio, fechaFin) {
+  let sql =
+    "select nid_agenda_evento, nombre, descripcion, fecha " +
+    "from " +
+    constantes.ESQUEMA +
+    ".agenda_evento " +
+    "where fecha between " +
+    conexion.dbConn.escape(fechaInicio) +
+    " and " +
+    conexion.dbConn.escape(fechaFin) +
+    " borrado = 'N' ";
+
+  if (bPublicos) {
+    sql = sql + " and publico = 'S' ";
+  }
+
+  sql = sql + "order by fecha desc";
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(sql, (error, results) => {
+      if (error) {
+        console.log("Error al recuperar los eventos de la agenda: ", error);
+        reject(new Error("Error al recuperar los eventos de la agenda"));
+      } else {
+        console.log("Eventos de la agenda recuperados correctamente");
+        resolve(results);
+      }
+    });
+  });
+}
+
 function recuperarEventosMes(bPublicos, mes, anio) {
   let sql =
     "select nid_agenda_evento, nombre, descripcion, fecha, MONTH(fecha) mes, YEAR(fecha) anio " +
@@ -180,5 +210,6 @@ module.exports.registrarAgendaEvento = registrarAgendaEvento;
 module.exports.actualizarAgendaEvento = actualizarAgendaEvento;
 module.exports.recuperarEventos = recuperarEventos;
 module.exports.recuperarEventosFecha = recuperarEventosFecha;
+module.exports.recuperarEventosRangoFecha = recuperarEventosRangoFecha;
 module.exports.recuperarEventosMes = recuperarEventosMes;
 module.exports.eliminarAgendaEvento = eliminarAgendaEvento;

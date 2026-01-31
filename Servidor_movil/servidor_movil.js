@@ -193,6 +193,10 @@ app.get(
   servletAgendaEvento.obtenerEventosFecha,
 );
 app.get(
+  "/obtener_agenda_eventos_rango_fecha/:fecha_inicio/:fecha_fin",
+  servletAgendaEvento.obtenerEventosRangoFechas,
+);
+app.get(
   "/obtener_agenda_eventos_mes/:mes/:anio",
   servletAgendaEvento.obtenerEventosMes,
 );
