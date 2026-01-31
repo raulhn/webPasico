@@ -47,10 +47,18 @@ export default function Agenda({ mes_, anio_ }) {
   useEffect(() => {
     if (diaSelecionado) {
       actualizarEventosDia(diaSelecionado);
+    } else {
+      const diaHoy = new Date();
+      const diaFormateado = {
+        dia: diaHoy.getDate(),
+        mes: diaHoy.getMonth() + 1,
+        año: diaHoy.getFullYear(),
+      };
+      setDiaSeleccionado(diaFormateado);
+      actualizarEventosDia(diaFormateado);
     }
   }, [eventos]);
 
-  console.log(eventosDia);
   //Funcion para obtener las semanas del calendario
   function getCalendarWeeks(year, month) {
     const weeks = [];
@@ -120,6 +128,19 @@ export default function Agenda({ mes_, anio_ }) {
     });
     setEventosDia(eventosDiaHoy);
   }
+
+  function existeAlgunEvento(dia_) {
+    const existe = eventos.some((evento) => {
+      const fechaEvento = new Date(evento.fecha);
+      return (
+        fechaEvento.getDate() == dia_.day &&
+        fechaEvento.getMonth() + 1 == dia_.month &&
+        fechaEvento.getFullYear() == dia_.year
+      );
+    });
+    return existe;
+  }
+
   function mostrarCalendario() {
     const diasSemanas = ["L", "M", "X", "J", "V", "S", "D"];
     var semanasCalendario = [];
@@ -159,6 +180,7 @@ export default function Agenda({ mes_, anio_ }) {
               dia.month == diaSelecionado.mes &&
               dia.day == diaSelecionado.dia
             }
+            tieneEvento={existeAlgunEvento(dia)}
           />
         ))
       );

@@ -6,6 +6,7 @@ export default function Dia({
   disabled = false,
   esHoy = false,
   esSeleccionado = false,
+  tieneEvento = false,
 }) {
   return (
     <View style={estilos.contenedor}>
@@ -16,6 +17,7 @@ export default function Dia({
       >
         <View
           style={[
+            tieneEvento ? estilos.contenedorConEvento : {},
             esHoy ? estilos.contenedorHoy : {},
             esSeleccionado ? estilos.contenedorSeleccionado : {},
           ]}
@@ -56,5 +58,10 @@ const estilos = StyleSheet.create({
     backgroundColor: "#90caf9",
     borderRadius: 80,
     width: 30,
+  },
+  contenedorConEvento: {
+    borderRadius: 80,
+    borderWidth: 2,
+    borderColor: "#4caf50",
   },
 });

@@ -177,7 +177,6 @@ function obtenerTokenUsuario(token) {
           reject("No autenticado");
           return;
         }
-        console.log("Decoded Token:", decoded);
         const usuario = {
           nid_usuario: decoded.nid_usuario,
           correoElectronico: decoded.correoElectronico,
@@ -197,7 +196,6 @@ function obtenerTokenUsuario(token) {
 async function obtenerUsuario(req, res) {
   try {
     const token = req.cookies.access_token;
-    console.log("Cookies: ", req.cookies);
     if (!token) {
       res
         .status(401)

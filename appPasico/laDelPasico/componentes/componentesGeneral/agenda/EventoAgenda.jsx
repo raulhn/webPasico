@@ -86,9 +86,9 @@ export default function EventoAgenda({ evento, accion }) {
         titulo="Eliminar Evento"
         mensaje="¿Estás seguro de que deseas eliminar este evento?"
         accion={() => {
-          console.log("Accion eliminar evento:", evento.nid_agenda_evento);
           eliminarEvento(evento.nid_agenda_evento).then(() => {
             setVisibleAvisoEliminado(false);
+            accion();
           });
         }}
         accionCancelar={() => {
