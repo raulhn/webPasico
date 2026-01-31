@@ -1,14 +1,24 @@
 import { View, Text, StyleSheet, Modal } from "react-native";
 import { obtenerFechaFormateada } from "../../../comun/fechas.js";
-import { BotonFixed } from "../../componentesUI/ComponentesUI.jsx";
+import {
+  BotonFixed,
+  ModalConfirmacion,
+} from "../../componentesUI/ComponentesUI.jsx";
 import * as Constantes from "../../../config/constantes.js";
 import { useState } from "react";
 import { useRol } from "../../../hooks/useRol.js";
 import FormularioAgenda from "./FormularioAgenda.jsx";
+import { useAgendaEventos } from "../../../hooks/general/useAgendaEventos.js";
+import { AuthContext } from "../../../providers/AuthContext";
+import { useContext } from "react";
 
-export default function EventoAgenda({ evento }) {
+export default function EventoAgenda({ evento, accion }) {
   const [modalEdicionVisible, setModalEdicionVisible] = useState(false);
+  const [visibleAvisoEliminalo, setVisibleAvisoEliminado] = useState(false);
   const { esRol } = useRol();
+  const { cerrarSesion } = useContext(AuthContext);
+  const { eliminarEvento } = useAgendaEventos(cerrarSesion);
+
   function addBotonEditar() {
     if (esRol([Constantes.ROL_ADMINISTRADOR])) {
       return (
@@ -17,7 +27,23 @@ export default function EventoAgenda({ evento }) {
             setModalEdicionVisible(true);
           }}
           icon="mode-edit"
-          color={Constantes.COLOR_AZUL}
+          colorBoton={Constantes.COLOR_AZUL}
+          size={30}
+        />
+      );
+    }
+    return null;
+  }
+
+  function addBotonEliminar() {
+    if (esRol([Constantes.ROL_ADMINISTRADOR])) {
+      return (
+        <BotonFixed
+          onPress={() => {
+            setVisibleAvisoEliminado(true);
+          }}
+          icon="delete"
+          colorBoton={Constantes.COLOR_ROJO}
           size={30}
         />
       );
@@ -33,6 +59,7 @@ export default function EventoAgenda({ evento }) {
         {obtenerFechaFormateada(evento.fecha)}
       </Text>
       {addBotonEditar()}
+      {addBotonEliminar()}
       <Modal
         visible={modalEdicionVisible}
         animationType="slide"
@@ -46,10 +73,30 @@ export default function EventoAgenda({ evento }) {
             evento={evento}
             volver={() => {
               setModalEdicionVisible(false);
+              accion();
             }}
           />
         </View>
       </Modal>
+      <ModalConfirmacion
+        visible={visibleAvisoEliminalo}
+        setVisible={() => {
+          setVisibleAvisoEliminado(false);
+        }}
+        titulo="Eliminar Evento"
+        mensaje="¿Estás seguro de que deseas eliminar este evento?"
+        accion={() => {
+          console.log("Accion eliminar evento:", evento.nid_agenda_evento);
+          eliminarEvento(evento.nid_agenda_evento).then(() => {
+            setVisibleAvisoEliminado(false);
+          });
+        }}
+        accionCancelar={() => {
+          setVisibleAvisoEliminado(false);
+        }}
+        textBoton={"Eliminar"}
+        textBotonCancelar={"Cancelar"}
+      />
     </View>
   );
 }

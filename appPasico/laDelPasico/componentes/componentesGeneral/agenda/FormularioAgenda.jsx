@@ -35,6 +35,7 @@ export default function FormularioAgenda({
         descripcion: descripcion,
         fecha: fecha,
       };
+      console.log("registrar evento");
       registrarEvento(nuevoEvento)
         .then((respuesta) => {
           if (respuesta.error) {
@@ -50,6 +51,7 @@ export default function FormularioAgenda({
           setError(error);
         });
     } else {
+      console.log("actualizar evento");
       const eventoActualizado = {
         nid_evento: nidEvento,
         nombre: nombre,

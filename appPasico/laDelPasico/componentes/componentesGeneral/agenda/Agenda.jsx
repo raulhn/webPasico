@@ -44,6 +44,12 @@ export default function Agenda({ mes_, anio_ }) {
     return null;
   }
 
+  useEffect(() => {
+    if (diaSelecionado) {
+      actualizarEventosDia(diaSelecionado);
+    }
+  }, [eventos]);
+
   console.log(eventosDia);
   //Funcion para obtener las semanas del calendario
   function getCalendarWeeks(year, month) {
@@ -103,6 +109,17 @@ export default function Agenda({ mes_, anio_ }) {
     setDiasMes(getCalendarWeeks(anio, mes));
   }, [mes, anio]);
 
+  function actualizarEventosDia(dia_) {
+    const eventosDiaHoy = eventos.filter((evento) => {
+      const fechaEvento = new Date(evento.fecha);
+      return (
+        fechaEvento.getDate() == dia_.dia &&
+        fechaEvento.getMonth() + 1 == dia_.mes &&
+        fechaEvento.getFullYear() == dia_.año
+      );
+    });
+    setEventosDia(eventosDiaHoy);
+  }
   function mostrarCalendario() {
     const diasSemanas = ["L", "M", "X", "J", "V", "S", "D"];
     var semanasCalendario = [];
@@ -123,20 +140,13 @@ export default function Agenda({ mes_, anio_ }) {
             numDia={dia.day}
             disabled={mes != dia.month}
             accion={() => {
-              setDiaSeleccionado({
+              const diaFormateado = {
                 dia: dia.day,
                 mes: dia.month,
                 año: dia.year,
-              });
-              const eventosDiaHoy = eventos.filter((evento) => {
-                const fechaEvento = new Date(evento.fecha);
-                return (
-                  fechaEvento.getDate() == dia.day &&
-                  fechaEvento.getMonth() + 1 == dia.month &&
-                  fechaEvento.getFullYear() == dia.year
-                );
-              });
-              setEventosDia(eventosDiaHoy);
+              };
+              setDiaSeleccionado(diaFormateado);
+              actualizarEventosDia(diaFormateado);
             }}
             esHoy={
               dia.year == fechaHoy.getFullYear() &&
@@ -182,7 +192,16 @@ export default function Agenda({ mes_, anio_ }) {
           <FlatList
             data={eventosDia}
             keyExtractor={(item) => item.nid_agenda_evento.toString()}
-            renderItem={({ item }) => <EventoAgenda evento={item} />}
+            onRefresh={() => lanzarRefresco()}
+            refreshing={cargando}
+            renderItem={({ item }) => (
+              <EventoAgenda
+                evento={item}
+                accion={() => {
+                  lanzarRefresco();
+                }}
+              />
+            )}
           />
         </View>
 
@@ -200,6 +219,7 @@ export default function Agenda({ mes_, anio_ }) {
             cerrar_sesion={cerrarSesion}
             volver={() => {
               setVisibleFormulario(false);
+              lanzarRefresco();
             }}
           />
         </Modal>

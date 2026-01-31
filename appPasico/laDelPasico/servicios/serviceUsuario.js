@@ -64,11 +64,14 @@ function login(correoElectronico, password, tokenNotificacion) {
             resolve(data);
           })
           .catch((error) => {
+            console.log(response);
             console.log("Error en el servicio login");
             reject(error);
           });
       })
       .catch((error) => {
+        console.log(Constantes.URL_SERVICIO_MOVIL + "login");
+        console.log(error);
         console.log("Error en el servicio login");
         reject(error);
       });
