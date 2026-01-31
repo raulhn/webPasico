@@ -119,8 +119,10 @@ export default function Agenda({ mes_, anio_ }) {
 
   useEffect(() => {
     setDiasMes(getCalendarWeeks(anio, mes));
-    setFechaInicio(diasMes[0][0].date);
-    setFechaFin(diasMes[diasMes.length - 1][6].date);
+    if (diasMes.length > 0) {
+      setFechaInicio(diasMes[0][0].date);
+      setFechaFin(diasMes[diasMes.length - 1][6].date);
+    }
   }, [mes, anio]);
 
   function actualizarEventosDia(dia_) {

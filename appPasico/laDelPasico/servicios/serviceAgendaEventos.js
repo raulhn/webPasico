@@ -104,7 +104,7 @@ function obtenerEventosRangoFechas(fecha_inicio, fecha_fin, cerrarSesion) {
     ServiceComun.peticionSesion(
       "GET",
       Constantes.URL_SERVICIO_MOVIL +
-        "obtener_eventos_rango_fechas" +
+        "obtener_agenda_eventos_rango_fecha" +
         "/" +
         fecha_inicio +
         "/" +

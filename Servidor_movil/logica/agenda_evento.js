@@ -130,7 +130,7 @@ function recuperarEventosRangoFecha(bPublicos, fechaInicio, fechaFin) {
     conexion.dbConn.escape(fechaInicio) +
     " and " +
     conexion.dbConn.escape(fechaFin) +
-    " borrado = 'N' ";
+    " and borrado = 'N' ";
 
   if (bPublicos) {
     sql = sql + " and publico = 'S' ";
