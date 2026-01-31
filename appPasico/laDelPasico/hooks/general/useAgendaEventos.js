@@ -93,6 +93,13 @@ export const useAgendaEventosRangoFechas = (
   }
 
   useEffect(() => {
+    if (fecha_inicio == null || fecha_fin == null) {
+      setEventos([]);
+      setCargando(false);
+      setRefrescar(false);
+      setError(false);
+      return;
+    }
     ServiceAgendaEventos.obtenerEventosRangoFechas(
       fecha_inicio,
       fecha_fin,

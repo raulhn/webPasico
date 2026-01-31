@@ -81,7 +81,6 @@ async function peticionSesion(metodo, url, body, cerrarSesion) {
     let data = await peticionServicio(metodo, url, body);
     if (data.error && data.codigo === 1) {
       let response = await refrescarSesion();
-      console.log("Respuesta al refrescar sesión:", response);
       if (!response.error) {
         return await peticionServicio(metodo, url, body);
       } else {
