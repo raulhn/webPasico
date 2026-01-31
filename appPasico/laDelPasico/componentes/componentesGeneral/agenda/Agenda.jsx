@@ -118,14 +118,19 @@ export default function Agenda({ mes_, anio_ }) {
   }
 
   useEffect(() => {
-    setDiasMes(getCalendarWeeks(anio, mes));
-    if (diasMes.length > 0) {
-      setFechaInicio(diasMes[0][0].date);
-      setFechaFin(diasMes[diasMes.length - 1][6].date);
+    const arrayCalendario = getCalendarWeeks(anio, mes);
+    setDiasMes(arrayCalendario);
+    if (arrayCalendario.length > 0) {
+      setFechaInicio(arrayCalendario[0][0].date);
+      setFechaFin(arrayCalendario[arrayCalendario.length - 1][6].date);
     }
   }, [mes, anio]);
 
   function actualizarEventosDia(dia_) {
+    if (!eventos) {
+      setEventosDia([]);
+      return;
+    }
     const eventosDiaHoy = eventos.filter((evento) => {
       const fechaEvento = new Date(evento.fecha);
       return (
@@ -138,6 +143,9 @@ export default function Agenda({ mes_, anio_ }) {
   }
 
   function existeAlgunEvento(dia_) {
+    if (!eventos) {
+      return false;
+    }
     const existe = eventos.some((evento) => {
       const fechaEvento = new Date(evento.fecha);
       return (
