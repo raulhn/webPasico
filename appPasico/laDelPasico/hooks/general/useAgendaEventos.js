@@ -78,6 +78,48 @@ export const useAgendaEventosMes = (mes, anio, cerrar_sesion) => {
   };
 };
 
+export const useAgendaEventosRangoFechas = (
+  fecha_inicio,
+  fecha_fin,
+  cerrar_sesion
+) => {
+  const [eventos, setEventos] = useState([]);
+  const [cargando, setCargando] = useState(true);
+  const [error, setError] = useState(false);
+  const [refrescar, setRefrescar] = useState(false);
+
+  function lanzarRefresco() {
+    setRefrescar(true);
+  }
+
+  useEffect(() => {
+    ServiceAgendaEventos.obtenerEventosRangoFechas(
+      fecha_inicio,
+      fecha_fin,
+      cerrar_sesion
+    )
+      .then((eventosRecuperados) => {
+        setEventos(eventosRecuperados.eventos);
+        setCargando(false);
+        setRefrescar(false);
+        setError(false);
+      })
+      .catch((error) => {
+        setEventos([]);
+        setCargando(false);
+        setRefrescar(false);
+        setError(true);
+      });
+  }, [refrescar, fecha_inicio, fecha_fin, cerrar_sesion]);
+
+  return {
+    eventos,
+    cargando,
+    error,
+    lanzarRefresco,
+  };
+};
+
 export const useAgendaEventos = (cerrar_sesion) => {
   async function registrarEvento(evento) {
     return await ServiceAgendaEventos.registrarEvento(evento, cerrar_sesion);
@@ -88,7 +130,6 @@ export const useAgendaEventos = (cerrar_sesion) => {
   }
 
   async function eliminarEvento(nid_evento) {
-    console.log("eliminar evento hook", nid_evento);
     return await ServiceAgendaEventos.eliminarEvento(nid_evento, cerrar_sesion);
   }
 

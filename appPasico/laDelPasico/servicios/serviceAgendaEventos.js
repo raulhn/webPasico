@@ -83,7 +83,33 @@ function obtenerEventosFecha(fecha_evento, cerrarSesion) {
         "obtener_eventos_fecha" +
         "/" +
         fecha_evento,
-      data,
+      null,
+      cerrarSesion
+    )
+      .then((response) => {
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+}
+
+function obtenerEventosRangoFechas(fecha_inicio, fecha_fin, cerrarSesion) {
+  return new Promise((resolve, reject) => {
+    const data = {
+      fecha_inicio: fecha_inicio,
+      fecha_fin: fecha_fin,
+    };
+    ServiceComun.peticionSesion(
+      "GET",
+      Constantes.URL_SERVICIO_MOVIL +
+        "obtener_eventos_rango_fechas" +
+        "/" +
+        fecha_inicio +
+        "/" +
+        fecha_fin,
+      null,
       cerrarSesion
     )
       .then((response) => {
@@ -125,3 +151,4 @@ module.exports.registrarEvento = registrarEvento;
 module.exports.actualizarEvento = actualizarEvento;
 module.exports.eliminarEvento = eliminarEvento;
 module.exports.obtenerEventosMes = obtenerEventosMes;
+module.exports.obtenerEventosRangoFechas = obtenerEventosRangoFechas;
