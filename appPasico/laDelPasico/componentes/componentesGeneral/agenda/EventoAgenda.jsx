@@ -58,8 +58,10 @@ export default function EventoAgenda({ evento, accion }) {
       <Text style={estilos.fechaEvento}>
         {obtenerFechaFormateada(evento.fecha)}
       </Text>
-      {addBotonEditar()}
-      {addBotonEliminar()}
+      <View style={{ flexDirection: "row", marginTop: 10, gap: 10 }}>
+        {addBotonEditar()}
+        {addBotonEliminar()}
+      </View>
       <Modal
         visible={modalEdicionVisible}
         animationType="slide"
