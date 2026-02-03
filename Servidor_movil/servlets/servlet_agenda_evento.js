@@ -1,6 +1,7 @@
 const servlet_comun = require("./servlet_comun.js");
 const constantes = require("../constantes.js");
 const gestorAgendaEvento = require("../logica/agenda_evento.js");
+const gestorEventoConcierto = require("../logica/eventoConcierto.js");
 const gestorComun = require("../logica/comun.js");
 
 async function registrarEvento(req, res) {
@@ -186,7 +187,16 @@ async function obtenerEventosRangoFechas(req, res) {
       fechaFinFormateada,
     );
 
-    res.status(200).send({ error: false, eventos: eventos });
+    const eventosConcertos =
+      await gestorEventoConcierto.obtenerEventosConciertoRangoFecha(
+        fechaInicioFormateada,
+        fechaFinFormateada,
+        bPublicos,
+      );
+
+    const eventosCombinados = eventos.concat(eventosConcertos);
+
+    res.status(200).send({ error: false, eventos: eventosCombinados });
   } catch (error) {
     res
       .status(500)

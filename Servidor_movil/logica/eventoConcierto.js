@@ -8,7 +8,7 @@ function insertarEventoConcierto(
   tipo_evento,
   publicado,
   vestimenta,
-  lugar
+  lugar,
 ) {
   return new Promise((resolve, reject) => {
     const sql =
@@ -37,7 +37,7 @@ function insertarEventoConcierto(
       conexion.dbConn.query(sql, (err, results) => {
         if (err) {
           console.log(
-            "eventoConcienrot.js - insertarEventoConcierot -> Error: " + err
+            "eventoConcienrot.js - insertarEventoConcierot -> Error: " + err,
           );
           conexion.dbConn.rollback();
           reject("Error al insertar el evento de concierto");
@@ -58,7 +58,7 @@ function actualizarEventoConcierto(
   tipo_evento,
   publicado,
   vestimenta,
-  lugar
+  lugar,
 ) {
   return new Promise((resolve, reject) => {
     const sql =
@@ -130,7 +130,7 @@ function obtenerEventosConcierto() {
     conexion.dbConn.query(sql, (err, result) => {
       if (err) {
         console.log(
-          "eventoConcierto.js - obtenerEventosConcierto -> Error: " + err
+          "eventoConcierto.js - obtenerEventosConcierto -> Error: " + err,
         );
         reject("Error al obtener los eventos de concierto");
       } else {
@@ -152,7 +152,7 @@ function obtenerEventoConcierto(nid_evento_concierto) {
     conexion.dbConn.query(sql, (err, result) => {
       if (err) {
         console.log(
-          "eventoConcierto.js - obtenerInforEventoConcierto -> Error: " + err
+          "eventoConcierto.js - obtenerInforEventoConcierto -> Error: " + err,
         );
         reject("Error al obtener la información del evento de concierto");
       } else {
@@ -177,7 +177,7 @@ function registrar_partitura_evento(nid_evento_concierto, nid_partitura) {
     conexion.dbConn.query(sql, (err, result) => {
       if (err) {
         console.log(
-          "eventoConcierto.js - registrar_partitura_evento -> Error: " + err
+          "eventoConcierto.js - registrar_partitura_evento -> Error: " + err,
         );
         reject("Error al registrar la partitura en el evento de concierto");
       } else {
@@ -200,7 +200,7 @@ function eliminar_partitura_evento(nid_evento_concierto, nid_partitura) {
     conexion.dbConn.query(sql, (err, result) => {
       if (err) {
         console.log(
-          "eventoConcierto.js - eliminar_partitura_evento -> Error: " + err
+          "eventoConcierto.js - eliminar_partitura_evento -> Error: " + err,
         );
         reject("Error al eliminar la partitura del evento de concierto");
       } else {
@@ -218,7 +218,9 @@ function obtenerPartiturasEvento(nid_evento_concierto) {
       ".partituras_evento pe, " +
       constantes.ESQUEMA +
       ".partituras p  " +
-      " left join " + constantes.ESQUEMA + ".categoria_partitura cp on p.nid_categoria = cp.nid_categoria " +
+      " left join " +
+      constantes.ESQUEMA +
+      ".categoria_partitura cp on p.nid_categoria = cp.nid_categoria " +
       " where pe.nid_partitura = p.nid_partitura " +
       "and pe.nid_evento_concierto = " +
       conexion.dbConn.escape(nid_evento_concierto);
@@ -226,9 +228,37 @@ function obtenerPartiturasEvento(nid_evento_concierto) {
     conexion.dbConn.query(sql, (err, result) => {
       if (err) {
         console.log(
-          "eventoConcierto.js - obtenerPartiturasEvento -> Error: " + err
+          "eventoConcierto.js - obtenerPartiturasEvento -> Error: " + err,
         );
         reject("Error al obtener las partituras del evento de concierto");
+      } else {
+        resolve(result);
+      }
+    });
+  });
+}
+
+function obtenerEventosConciertoRangoFecha(fecha_inicio, fecha_fin, publicado) {
+  const sql =
+    "select ev.*, 'Concierto' tipo from " +
+    constantes.ESQUEMA +
+    ".evento_concierto ev where fecha_evento between " +
+    conexion.dbConn.escape(fecha_inicio) +
+    " and " +
+    conexion.dbConn.escape(fecha_fin) +
+    (publicado ? " and publicado = 'S' " : " ") +
+    " order by fecha_evento desc";
+
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(sql, (err, result) => {
+      if (err) {
+        console.log(
+          "eventoConcierto.js - obtenerEventosConciertoRangoFecha -> Error: " +
+            err,
+        );
+        reject(
+          "Error al obtener los eventos de concierto en el rango de fechas",
+        );
       } else {
         resolve(result);
       }
@@ -249,7 +279,7 @@ function existePartituraEvento(nid_evento_concierto, nid_partitura) {
     conexion.dbConn.query(sql, (err, result) => {
       if (err) {
         console.log(
-          "eventoConcierto.js - existePartituraEvento -> Error: " + err
+          "eventoConcierto.js - existePartituraEvento -> Error: " + err,
         );
         reject("Error al verificar la existencia de la partitura en el evento");
       } else {
@@ -268,4 +298,6 @@ module.exports.obtenerEventoConcierto = obtenerEventoConcierto;
 module.exports.registrar_partitura_evento = registrar_partitura_evento;
 module.exports.eliminar_partitura_evento = eliminar_partitura_evento;
 module.exports.obtenerPartiturasEvento = obtenerPartiturasEvento;
+module.exports.obtenerEventosConciertoRangoFecha =
+  obtenerEventosConciertoRangoFecha;
 module.exports.existePartituraEvento = existePartituraEvento;
