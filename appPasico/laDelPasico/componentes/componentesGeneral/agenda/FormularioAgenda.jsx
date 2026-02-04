@@ -9,6 +9,7 @@ import {
   EntradaGroupRadioButton,
 } from "../../componentesUI/ComponentesUI.jsx";
 import { useState } from "react";
+import { useEventoConcierto } from "../../../hooks/banda/useEventoConcierto.js";
 
 export default function FormularioAgenda({
   evento = { nombre: "", descripcion: "", fecha: null },
@@ -23,19 +24,79 @@ export default function FormularioAgenda({
   const [nidEvento, setIdEvento] = useState(evento.nid_agenda_evento || null);
   const [error, setError] = useState(null);
   const [tipoSeleccionado, setTipoSeleccionado] = useState(null);
+  const { registrarEventoConcierto, actualizarEventoConcierto } =
+    useEventoConcierto(cerrar_sesion);
 
   const tipos = [
     { etiqueta: "General", valor: 1 },
     { etiqueta: "Banda", valor: 2 },
   ];
-  function registrarEventoFormulario() {
+
+  function registrarEventoConciero() {
     if (!nidEvento) {
       const nuevoEvento = {
         nombre: nombre,
         descripcion: descripcion,
         fecha: fecha,
       };
-      console.log("registrar evento");
+
+      registrarEventoConcierto(nuevoEvento)
+        .then((respuesta) => {
+          if (respuesta.error) {
+            console.log(
+              "Error al registrar el evento de concierto:",
+              respuesta.error
+            );
+            setError(respuesta.error);
+          } else {
+            console.log("Evento de concierto registrado con éxito:", respuesta);
+            volver();
+          }
+        })
+        .catch((error) => {
+          console.log("Error al registrar el evento de concierto:", error);
+          setError(error);
+        });
+    } else {
+      console.log("actualizar evento");
+      const eventoActualizado = {
+        nid_evento: nidEvento,
+        nombre: nombre,
+        descripcion: descripcion,
+        fecha: fecha,
+      };
+
+      actualizarEventoConcierto(eventoActualizado)
+        .then((respuesta) => {
+          if (respuesta.error) {
+            console.log(
+              "Error al actualizar el evento de concierto:",
+              respuesta.error
+            );
+            setError(respuesta.error);
+          } else {
+            console.log(
+              "Evento de concierto actualizado con éxito:",
+              respuesta
+            );
+            volver();
+          }
+        })
+        .catch((error) => {
+          console.log("Error al actualizar el evento de concierto:", error);
+          setError(error);
+        });
+    }
+  }
+
+  function registrarEventoAgenda() {
+    if (!nidEvento) {
+      const nuevoEvento = {
+        nombre: nombre,
+        descripcion: descripcion,
+        fecha: fecha,
+      };
+
       registrarEvento(nuevoEvento)
         .then((respuesta) => {
           if (respuesta.error) {
@@ -58,6 +119,7 @@ export default function FormularioAgenda({
         descripcion: descripcion,
         fecha: fecha,
       };
+
       actualizarEvento(eventoActualizado)
         .then((respuesta) => {
           if (respuesta.error) {
@@ -72,6 +134,15 @@ export default function FormularioAgenda({
           console.log("Error al actualizar el evento:", error);
           setError(error);
         });
+    }
+  }
+  function registrarEventoFormulario() {
+    if (tipoSeleccionado === 1) {
+      registrarEventoAgenda();
+    } else if (tipoSeleccionado === 2) {
+      registrarEventoConciero();
+    } else {
+      setError("Por favor, selecciona un tipo de evento.");
     }
   }
 

@@ -57,6 +57,7 @@ function login(correoElectronico, password, tokenNotificacion) {
       }),
     })
       .then(async (response) => {
+        console.log("Respuesta del servicio login:", response);
         response
           .json()
           .then((data) => {

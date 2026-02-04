@@ -129,15 +129,33 @@ export const useAgendaEventosRangoFechas = (
 
 export const useAgendaEventos = (cerrar_sesion) => {
   async function registrarEvento(evento) {
-    return await ServiceAgendaEventos.registrarEvento(evento, cerrar_sesion);
+    try {
+      return await ServiceAgendaEventos.registrarEvento(evento, cerrar_sesion);
+    } catch (error) {
+      console.log("Error al registrar el evento:", error);
+      throw new Error("Error al registrar el evento");
+    }
   }
 
   async function actualizarEvento(evento) {
-    return await ServiceAgendaEventos.actualizarEvento(evento, cerrar_sesion);
+    try {
+      return await ServiceAgendaEventos.actualizarEvento(evento, cerrar_sesion);
+    } catch (error) {
+      console.log("Error al actualizar el evento:", error);
+      throw new Error("Error al actualizar el evento");
+    }
   }
 
   async function eliminarEvento(nid_evento) {
-    return await ServiceAgendaEventos.eliminarEvento(nid_evento, cerrar_sesion);
+    try {
+      return await ServiceAgendaEventos.eliminarEvento(
+        nid_evento,
+        cerrar_sesion
+      );
+    } catch (error) {
+      console.log("Error al eliminar el evento:", error);
+      throw new Error("Error al eliminar el evento");
+    }
   }
 
   return {
