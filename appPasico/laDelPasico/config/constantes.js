@@ -1,10 +1,10 @@
 // Producción //
-//const URL_SERVICIO = "https://ladelpasico.es/api/";
-//const URL_SERVICIO_MOVIL = "https://ladelpasico.es/api_movil/";
+const URL_SERVICIO = "https://ladelpasico.es/api/";
+const URL_SERVICIO_MOVIL = "https://ladelpasico.es/api_movil/";
 
 // Desarrollo //
-const URL_SERVICIO = "https://192.168.18.11/api/";
-const URL_SERVICIO_MOVIL = "https://192.168.18.11/api_movil/";
+//const URL_SERVICIO = "https://192.168.18.11:8082/api/";
+//const URL_SERVICIO_MOVIL = "https://192.168.18.11:8082/api_movil/";
 
 const COLOR_AZUL = "#007CFA";
 const COLOR_ROJO = "#FF0000";
