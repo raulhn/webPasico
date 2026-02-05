@@ -36,6 +36,7 @@ const estilos = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    padding: 5,
   },
   texto: {
     fontSize: 20,
@@ -60,8 +61,11 @@ const estilos = StyleSheet.create({
     width: 30,
   },
   contenedorConEvento: {
-    borderRadius: 80,
+    borderRadius: 60,
     borderWidth: 2,
     borderColor: "#4caf50",
+    width: 30,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

@@ -29,7 +29,11 @@ export default function EventoAgenda({ evento, accion }) {
       return (
         <FormularioEvento
           cancelar={() => setModalEdicionVisible(false)}
-          nidEvento={evento.nid_evento_concierto}
+          callback={() => {
+            setModalEdicionVisible(false);
+            accion();
+          }}
+          nidEvento={evento.nid_evento}
         />
       );
     }
@@ -97,7 +101,7 @@ export default function EventoAgenda({ evento, accion }) {
         titulo="Eliminar Evento"
         mensaje="¿Estás seguro de que deseas eliminar este evento?"
         accion={() => {
-          eliminarEvento(evento.nid_agenda_evento).then(() => {
+          eliminarEvento(evento.nid_evento).then(() => {
             setVisibleAvisoEliminado(false);
             accion();
           });
