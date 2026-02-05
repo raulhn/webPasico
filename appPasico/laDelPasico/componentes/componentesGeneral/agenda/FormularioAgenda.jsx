@@ -149,7 +149,11 @@ export default function FormularioAgenda({
     }
   }
   function registrarEventoFormulario() {
-    console.log(tipoSeleccionado);
+    console.log(nidEvento);
+    if (nidEvento) {
+      registrarEventoAgenda();
+      return;
+    }
     const valorTipoSeleccionado = tipoSeleccionado.valor;
     if (valorTipoSeleccionado === 1) {
       registrarEventoAgenda();
@@ -160,6 +164,24 @@ export default function FormularioAgenda({
     }
   }
 
+  function recuperaTipoEvento() {
+    if (!nidEvento) {
+      return (
+        <>
+          {" "}
+          <Text>Tipo</Text>
+          <EntradaGroupRadioButton
+            titulo={"Tipo de Evento"}
+            opciones={tipos}
+            valor={tipoSeleccionado}
+            setValorSeleccionado={(valor) => {
+              setTipoSeleccionado(valor);
+            }}
+          />
+        </>
+      );
+    }
+  }
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={estilos.contenedor}>
@@ -178,15 +200,7 @@ export default function FormularioAgenda({
           }}
           valor={descripcion}
         />
-        <Text>Tipo</Text>
-        <EntradaGroupRadioButton
-          titulo={"Tipo de Evento"}
-          opciones={tipos}
-          valor={tipoSeleccionado}
-          setValorSeleccionado={(valor) => {
-            setTipoSeleccionado(valor);
-          }}
-        />
+        {recuperaTipoEvento()}
         <Text>Fecha</Text>
         <EntradaFecha
           onChangeFecha={(valor) => {
