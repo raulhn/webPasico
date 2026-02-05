@@ -230,7 +230,7 @@ export default function Agenda({ mes_, anio_ }) {
         <View style={{ marginTop: 20, width: "100%", paddingHorizontal: 10 }}>
           <FlatList
             data={eventosDia}
-            keyExtractor={(item) => item.nid_agenda_evento.toString()}
+            keyExtractor={(item) => item.nid_evento.toString()}
             onRefresh={() => lanzarRefresco()}
             refreshing={cargando}
             renderItem={({ item }) => (

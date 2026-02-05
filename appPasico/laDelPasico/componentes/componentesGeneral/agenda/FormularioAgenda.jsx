@@ -10,7 +10,7 @@ import {
 } from "../../componentesUI/ComponentesUI.jsx";
 import { useState } from "react";
 import { useEventoConcierto } from "../../../hooks/banda/useEventoConcierto.js";
-import { formatearFecha } from "../../../comun/fechas.js";
+import { obtenerFechaFormateada } from "../../../comun/fechas.js";
 
 export default function FormularioAgenda({
   evento = { nombre: "", descripcion: "", fecha: null },
@@ -22,7 +22,7 @@ export default function FormularioAgenda({
   const [nombre, setNombre] = useState(evento.nombre);
   const [descripcion, setDescripcion] = useState(evento.descripcion);
   const [fecha, setFecha] = useState(evento.fecha);
-  const [nidEvento, setIdEvento] = useState(evento.nid_agenda_evento || null);
+  const [nidEvento, setIdEvento] = useState(evento.nid_evento || null);
   const [error, setError] = useState(null);
   const [tipoSeleccionado, setTipoSeleccionado] = useState(null);
   const { registrarEventoConcierto, actualizarEventoConcierto } =
@@ -33,14 +33,21 @@ export default function FormularioAgenda({
     { etiqueta: "Banda", valor: 2 },
   ];
 
+  function formatearFecha(fecha) {
+    const formattedDate = `${fecha.getFullYear()}-${String(
+      fecha.getMonth() + 1
+    ).padStart(2, "0")}-${String(fecha.getDate()).padStart(2, "0")}`;
+    return formattedDate;
+  }
   function registrarEventoConciero() {
     if (!nidEvento) {
       const nuevoEvento = {
-        nombre: nombreEvento,
+        nombre: nombre,
         fecha_evento: formatearFecha(fecha),
         descripcion: descripcion,
         tipo_evento: "Concierto",
         publicado: "N",
+        tiposEvento: [],
       };
 
       registrarEventoConcierto(nuevoEvento)
@@ -142,9 +149,11 @@ export default function FormularioAgenda({
     }
   }
   function registrarEventoFormulario() {
-    if (tipoSeleccionado === 1) {
+    console.log(tipoSeleccionado);
+    const valorTipoSeleccionado = tipoSeleccionado.valor;
+    if (valorTipoSeleccionado === 1) {
       registrarEventoAgenda();
-    } else if (tipoSeleccionado === 2) {
+    } else if (valorTipoSeleccionado === 2) {
       registrarEventoConciero();
     } else {
       setError("Por favor, selecciona un tipo de evento.");

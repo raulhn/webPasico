@@ -247,7 +247,8 @@ function obtenerEventosConciertoRangoFecha(fecha_inicio, fecha_fin, publicado) {
     " and " +
     conexion.dbConn.escape(fecha_fin) +
     (publicado ? " and publicado = 'S' " : " ") +
-    " order by fecha_evento desc";
+    " and borrado = 'N'";
+  (" order by fecha_evento desc");
 
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(sql, (err, result) => {
