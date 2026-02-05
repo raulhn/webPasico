@@ -122,7 +122,7 @@ function recuperarEventosFecha(bPublicos, fecha) {
 
 function recuperarEventosRangoFecha(bPublicos, fechaInicio, fechaFin) {
   let sql =
-    "select nid_agenda_evento, nombre, descripcion, fecha, 'Agenda' tipo " +
+    "select nid_agenda_evento nid_evento, nombre, descripcion, fecha, 'Agenda' tipo " +
     "from " +
     constantes.ESQUEMA +
     ".agenda_evento " +

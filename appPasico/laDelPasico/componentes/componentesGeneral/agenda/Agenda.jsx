@@ -48,6 +48,7 @@ export default function Agenda({ mes_, anio_ }) {
     return null;
   }
 
+  console.log("Eveentos recuperados", eventos);
   useEffect(() => {
     if (diaSelecionado) {
       actualizarEventosDia(diaSelecionado);
