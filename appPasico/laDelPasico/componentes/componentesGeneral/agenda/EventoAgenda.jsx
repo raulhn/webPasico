@@ -11,6 +11,7 @@ import FormularioAgenda from "./FormularioAgenda.jsx";
 import { useAgendaEventos } from "../../../hooks/general/useAgendaEventos.js";
 import { AuthContext } from "../../../providers/AuthContext";
 import { useContext } from "react";
+import FormularioEvento from "../../componentesBanda/FormularioEvento.jsx";
 
 export default function EventoAgenda({ evento, accion }) {
   const [modalEdicionVisible, setModalEdicionVisible] = useState(false);
@@ -19,6 +20,18 @@ export default function EventoAgenda({ evento, accion }) {
   const { cerrarSesion } = useContext(AuthContext);
   const { eliminarEvento } = useAgendaEventos(cerrarSesion);
 
+  function Formulario(evento) {
+    if (evento.tipo_evento === "Concierto") {
+      return <FormularioAgenda evento={evento} />;
+    } else {
+      return (
+        <FormularioEvento
+          cancelar={() => setModalEdicionVisible(false)}
+          nidEvento={evento.nid_evento_concierto}
+        />
+      );
+    }
+  }
   function addBotonEditar() {
     if (esRol([Constantes.ROL_ADMINISTRADOR])) {
       return (
@@ -71,13 +84,7 @@ export default function EventoAgenda({ evento, accion }) {
         <View
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
-          <FormularioAgenda
-            evento={evento}
-            volver={() => {
-              setModalEdicionVisible(false);
-              accion();
-            }}
-          />
+          {Formulario(evento)}
         </View>
       </Modal>
       <ModalConfirmacion
