@@ -23,9 +23,9 @@ export default function EventoAgenda({ evento, accion }) {
   function Formulario(evento) {
     console.log("Tipo de evento", evento.tipo);
     console.log("Evnto", evento);
-    if (evento.tipo === "Concierto") {
+    if (evento.tipo === "Agenda") {
       return <FormularioAgenda evento={evento} />;
-    } else {
+    } else if (evento.tipo === "Concierto") {
       return (
         <FormularioEvento
           cancelar={() => setModalEdicionVisible(false)}

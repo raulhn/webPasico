@@ -240,7 +240,7 @@ function obtenerPartiturasEvento(nid_evento_concierto) {
 
 function obtenerEventosConciertoRangoFecha(fecha_inicio, fecha_fin, publicado) {
   const sql =
-    "select ev.*, 'Concierto' tipo from " +
+    "select ev.nid_evento_concierto nid_evento, nombre, fecha_evento fecha, descripcion, publicado, vestimenta, lugar, 'Concierto' tipo from " +
     constantes.ESQUEMA +
     ".evento_concierto ev where fecha_evento between " +
     conexion.dbConn.escape(fecha_inicio) +
