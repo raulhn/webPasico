@@ -24,7 +24,15 @@ export default function EventoAgenda({ evento, accion }) {
     console.log("Tipo de evento", evento.tipo);
     console.log("Evnto", evento);
     if (evento.tipo === "Agenda") {
-      return <FormularioAgenda evento={evento} />;
+      return (
+        <FormularioAgenda
+          evento={evento}
+          volver={() => {
+            setModalEdicionVisible(false);
+            accion();
+          }}
+        />
+      );
     } else if (evento.tipo === "Concierto") {
       return (
         <FormularioEvento
