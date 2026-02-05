@@ -10,6 +10,7 @@ import {
 } from "../../componentesUI/ComponentesUI.jsx";
 import { useState } from "react";
 import { useEventoConcierto } from "../../../hooks/banda/useEventoConcierto.js";
+import { formatearFecha } from "../../../comun/fechas.js";
 
 export default function FormularioAgenda({
   evento = { nombre: "", descripcion: "", fecha: null },
@@ -35,9 +36,11 @@ export default function FormularioAgenda({
   function registrarEventoConciero() {
     if (!nidEvento) {
       const nuevoEvento = {
-        nombre: nombre,
+        nombre: nombreEvento,
+        fecha_evento: formatearFecha(fecha),
         descripcion: descripcion,
-        fecha: fecha,
+        tipo_evento: "Concierto",
+        publicado: "N",
       };
 
       registrarEventoConcierto(nuevoEvento)
@@ -61,9 +64,11 @@ export default function FormularioAgenda({
       console.log("actualizar evento");
       const eventoActualizado = {
         nid_evento: nidEvento,
-        nombre: nombre,
+        nombre: nombreEvento,
+        fecha_evento: formatearFecha(fecha),
         descripcion: descripcion,
-        fecha: fecha,
+        tipo_evento: "Concierto",
+        publicado: "N",
       };
 
       actualizarEventoConcierto(eventoActualizado)
