@@ -16,10 +16,17 @@ import {
   ModalExito,
 } from "../componentesUI/ComponentesUI";
 
-export default function FormularioEvento({ cancelar, callback, nidEvento }) {
+export default function FormularioEvento({
+  cancelar,
+  callback,
+  nidEvento,
+  fechaDefecto,
+}) {
   const [nombreEvento, setNombreEvento] = useState("");
   const [descripcion, setDescripcion] = useState("");
-  const [fechaEvento, setFechaEvento] = useState(new Date());
+  const [fechaEvento, setFechaEvento] = useState(
+    fechaDefecto ? fechaDefecto : new Date()
+  );
   const [vestimenta, setVestimenta] = useState("");
   const [lugar, setLugar] = useState("");
   const [tiposEventoRecuperados, setTiposEventoRecuperados] = useState([]);
@@ -36,16 +43,24 @@ export default function FormularioEvento({ cancelar, callback, nidEvento }) {
 
   useEffect(() => {
     if (!nidEvento) return;
-
+    console.log("Nid evento", nidEvento);
     serviceEventoConcierto
       .obtenerEventoConcierto(nidEvento, cerrarSesion)
       .then((response) => {
         if (!response.error) {
-          setNombreEvento(response.evento_concierto.nombre);
-          setDescripcion(response.evento_concierto.descripcion);
-          setFechaEvento(new Date(response.evento_concierto.fecha_evento));
-          setVestimenta(response.evento_concierto.vestimenta);
-          setLugar(response.evento_concierto.lugar);
+          console.log("Evento recuperado:", response.evento_concierto);
+          console.log(
+            "Fecha recuperado:",
+            new Date(response.evento_concierto.fecha_evento)
+          );
+          const evento = response.evento_concierto;
+          setNombreEvento(evento.nombre);
+          setDescripcion(evento.descripcion);
+          console.log("Fecha evento", fechaEvento);
+          setFechaEvento(new Date(evento.fecha_evento));
+          console.log("Fecha evento 2: ", fechaEvento);
+          setVestimenta(evento.vestimenta);
+          setLugar(evento.lugar);
 
           let auxTiposEvento = [];
 
@@ -67,7 +82,6 @@ export default function FormularioEvento({ cancelar, callback, nidEvento }) {
       })
       .catch((error) => {
         console.log("Error al obtener el evento:", error);
-        cerrarSesion();
       });
   }, [nidEvento]);
 
