@@ -9,6 +9,7 @@ import { useState } from "react";
 import { useRol } from "../../../hooks/useRol.js";
 import FormularioAgenda from "./FormularioAgenda.jsx";
 import { useAgendaEventos } from "../../../hooks/general/useAgendaEventos.js";
+import { useEventoConcierto } from "../../../hooks/banda/useEventoConcierto.js";
 import { AuthContext } from "../../../providers/AuthContext";
 import { useContext } from "react";
 import FormularioEvento from "../../componentesBanda/FormularioEvento.jsx";
@@ -19,6 +20,7 @@ export default function EventoAgenda({ evento, accion }) {
   const { esRol } = useRol();
   const { cerrarSesion } = useContext(AuthContext);
   const { eliminarEvento } = useAgendaEventos(cerrarSesion);
+  const { eliminarEventoConcierto } = useEventoConcierto(cerrarSesion);
 
   function Formulario(evento) {
     if (evento.tipo === "Agenda") {
@@ -107,10 +109,17 @@ export default function EventoAgenda({ evento, accion }) {
         titulo="Eliminar Evento"
         mensaje="¿Estás seguro de que deseas eliminar este evento?"
         accion={() => {
-          eliminarEvento(evento.nid_evento).then(() => {
-            setVisibleAvisoEliminado(false);
-            accion();
-          });
+          if (evento.tipo === "Concierto") {
+            eliminarEventoConcierto(evento.nid_evento).then(() => {
+              setVisibleAvisoEliminado(false);
+              accion();
+            });
+          } else {
+            eliminarEvento(evento.nid_evento).then(() => {
+              setVisibleAvisoEliminado(false);
+              accion();
+            });
+          }
         }}
         accionCancelar={() => {
           setVisibleAvisoEliminado(false);
