@@ -27,8 +27,21 @@ export const useEventoConcierto = (cerrarSesion) => {
     }
   }
 
+  async function eliminarEventoConcierto(nidEvento) {
+    try {
+      await ServicioEventoConcierto.eliminarEventoConcierto(
+        nidEvento,
+        cerrarSesion
+      );
+    } catch (error) {
+      console.log("Error al eliminar el evento:", error);
+      throw new Error("Error al eliminar el evento");
+    }
+  }
+
   return {
     registrarEventoConcierto,
     actualizarEventoConcierto,
+    eliminarEventoConcierto,
   };
 };
