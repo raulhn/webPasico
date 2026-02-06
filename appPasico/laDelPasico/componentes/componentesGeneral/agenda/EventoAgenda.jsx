@@ -21,8 +21,6 @@ export default function EventoAgenda({ evento, accion }) {
   const { eliminarEvento } = useAgendaEventos(cerrarSesion);
 
   function Formulario(evento) {
-    console.log("Tipo de evento", evento.tipo);
-    console.log("Evnto", evento);
     if (evento.tipo === "Agenda") {
       return (
         <FormularioAgenda

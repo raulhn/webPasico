@@ -192,7 +192,7 @@ export function EntradaFecha({ onChangeFecha, valorFecha }) {
       });
       setFechaEvento(formattedDate);
     }
-  }, []);
+  }, [valorFecha]);
 
   return (
     <View>

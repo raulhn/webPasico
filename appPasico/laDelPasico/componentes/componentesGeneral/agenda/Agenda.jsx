@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Dia from "./Dia";
-import { View, StyleSheet, FlatList, Modal } from "react-native";
+import { View, Text, StyleSheet, FlatList, Modal } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SelectorMes from "./SelectorMes";
 import {
@@ -11,7 +11,11 @@ import { AuthContext } from "../../../providers/AuthContext";
 import { useContext } from "react";
 import EventoAgenda from "./EventoAgenda";
 import FormularioAgenda from "./FormularioAgenda";
-import { BotonFixed } from "../../componentesUI/ComponentesUI";
+import FormularioEvento from "../../componentesBanda/FormularioEvento.jsx";
+import {
+  BotonFixed,
+  EntradaGroupRadioButton,
+} from "../../componentesUI/ComponentesUI";
 import Constantes from "../../../config/constantes.js";
 import { useRol } from "../../../hooks/useRol.js";
 
@@ -22,6 +26,13 @@ export default function Agenda({ mes_, anio_ }) {
   const [eventosDia, setEventosDia] = useState([]);
   const [fechaInicio, setFechaInicio] = useState(null);
   const [fechaFin, setFechaFin] = useState(null);
+
+  const [tipoSeleccionado, setTipoSeleccionado] = useState(null);
+
+  const tipos = [
+    { etiqueta: "General", valor: 1 },
+    { etiqueta: "Banda", valor: 2 },
+  ];
 
   useEffect(() => {
     setMes(mes_);
@@ -48,7 +59,6 @@ export default function Agenda({ mes_, anio_ }) {
     return null;
   }
 
-  console.log("Eveentos recuperados", eventos);
   useEffect(() => {
     if (diaSelecionado) {
       actualizarEventosDia(diaSelecionado);
@@ -64,6 +74,40 @@ export default function Agenda({ mes_, anio_ }) {
     }
   }, [eventos]);
 
+  function formularioRegistro() {
+    if (!tipoSeleccionado) {
+      return null;
+    }
+    const fechaRegistro = diaSelecionado
+      ? new Date(diaSelecionado.año, diaSelecionado.mes - 1, diaSelecionado.dia)
+      : diaHoy;
+
+    if (tipoSeleccionado.valor === 2) {
+      return (
+        <FormularioEvento
+          cancelar={() => setVisibleFormulario(false)}
+          callback={() => {
+            setVisibleFormulario(false);
+            lanzarRefresco();
+          }}
+          fechaDefecto={fechaRegistro}
+        />
+      );
+    } else if (tipoSeleccionado.valor === 1) {
+      return (
+        <FormularioAgenda
+          cerrar_sesion={cerrarSesion}
+          volver={() => {
+            setVisibleFormulario(false);
+            lanzarRefresco();
+          }}
+          fechaDefecto={fechaRegistro}
+        />
+      );
+    } else {
+      return null;
+    }
+  }
   //Funcion para obtener las semanas del calendario
   function getCalendarWeeks(year, month) {
     const weeks = [];
@@ -254,13 +298,24 @@ export default function Agenda({ mes_, anio_ }) {
             setVisibleFormulario(false);
           }}
         >
-          <FormularioAgenda
-            cerrar_sesion={cerrarSesion}
-            volver={() => {
-              setVisibleFormulario(false);
-              lanzarRefresco();
+          <SafeAreaView
+            style={{
+              justyfyContent: "center",
+              alignItems: "center",
+              flex: 1,
             }}
-          />
+          >
+            <Text>Tipo</Text>
+            <EntradaGroupRadioButton
+              titulo={"Tipo de Evento"}
+              opciones={tipos}
+              valor={tipoSeleccionado}
+              setValorSeleccionado={(valor) => {
+                setTipoSeleccionado(valor);
+              }}
+            />
+            {formularioRegistro()}
+          </SafeAreaView>
         </Modal>
       </SafeAreaView>
     </>
