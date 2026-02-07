@@ -19,7 +19,7 @@ async function registrarEvento(req, res) {
       });
       return;
     }
-    const { nombre, descripcion, fecha } = req.body;
+    const { nombre, descripcion, fecha, publicado } = req.body;
 
     if (!nombre) {
       res

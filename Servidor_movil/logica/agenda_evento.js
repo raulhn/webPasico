@@ -1,18 +1,20 @@
 const constantes = require("../constantes");
 const conexion = require("../conexion");
 
-function registrarAgendaEvento(nombre, descripcion, fecha) {
+function registrarAgendaEvento(nombre, descripcion, fecha, publicado) {
   const sql =
     "insert into " +
     constantes.ESQUEMA +
-    ".agenda_evento (nombre, descripcion, fecha) " +
+    ".agenda_evento (nombre, descripcion, fecha, publicado) " +
     " values (" +
     conexion.dbConn.escape(nombre) +
     ", " +
     conexion.dbConn.escape(descripcion) +
     ", " +
     conexion.dbConn.escape(fecha) +
-    ")";
+    ", " +
+    conexion.dbConn.escape(publicado);
+  (")");
 
   return new Promise((resolve, reject) => {
     conexion.dbConn.beginTransaction(() => {
@@ -31,7 +33,13 @@ function registrarAgendaEvento(nombre, descripcion, fecha) {
   });
 }
 
-function actualizarAgendaEvento(nid_evento, nombre, descripcion, fecha) {
+function actualizarAgendaEvento(
+  nid_evento,
+  nombre,
+  descripcion,
+  fecha,
+  publicado,
+) {
   const sql =
     "update " +
     constantes.ESQUEMA +
@@ -41,6 +49,8 @@ function actualizarAgendaEvento(nid_evento, nombre, descripcion, fecha) {
     conexion.dbConn.escape(descripcion) +
     ", fecha = " +
     conexion.dbConn.escape(fecha) +
+    ", publicado = " +
+    conexion.dbConn.escape(publicado) +
     " where nid_agenda_evento = " +
     conexion.dbConn.escape(nid_evento);
 
@@ -69,7 +79,7 @@ function recuperarEventos(bPublicos) {
     ".agenda_evento ";
 
   if (bPublicos) {
-    sql += "where publico = 'S' ";
+    sql += "where publicado = 'S' ";
   }
 
   sql += "order by fecha desc";
@@ -95,7 +105,7 @@ function recuperarEventosFecha(bPublicos, fecha) {
     ".agenda_evento ";
 
   if (bPublicos) {
-    sql += "where publico = 'S' ";
+    sql += "where publicado = 'S' ";
     if (fecha) {
       sql += "and fecha = " + conexion.dbConn.escape(fecha) + " ";
     }
@@ -133,7 +143,7 @@ function recuperarEventosRangoFecha(bPublicos, fechaInicio, fechaFin) {
     " and borrado = 'N' ";
 
   if (bPublicos) {
-    sql = sql + " and publico = 'S' ";
+    sql = sql + " and publicado = 'S' ";
   }
 
   sql = sql + "order by fecha desc";
@@ -164,7 +174,7 @@ function recuperarEventosMes(bPublicos, mes, anio) {
     " and borrado = 'N' ";
 
   if (bPublicos) {
-    sql = sql + " and publico = 'S' ";
+    sql = sql + " and publicado = 'S' ";
   }
 
   sql = sql + "order by fecha desc";
