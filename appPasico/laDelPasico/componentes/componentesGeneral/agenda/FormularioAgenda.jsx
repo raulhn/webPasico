@@ -1,19 +1,16 @@
 import { useAgendaEventos } from "../../../hooks/general/useAgendaEventos";
 import { View, Text, StyleSheet } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import {
   EntradaTexto,
   Boton,
   ModalAviso,
   EntradaFecha,
-  EntradaGroupRadioButton,
+  CheckBox,
 } from "../../componentesUI/ComponentesUI.jsx";
 import { useState } from "react";
-import { useEventoConcierto } from "../../../hooks/banda/useEventoConcierto.js";
-import { obtenerFechaFormateada } from "../../../comun/fechas.js";
 
 export default function FormularioAgenda({
-  evento = { nombre: "", descripcion: "", fecha: null },
+  evento = { nombre: "", descripcion: "", fecha: null, publicado: "N" },
   fechaDefecto,
   volver = () => {},
   cerrar_sesion,
@@ -25,14 +22,17 @@ export default function FormularioAgenda({
   const [fecha, setFecha] = useState(
     evento.fecha ? evento.fecha : fechaDefecto
   );
+  const [publicado, setPublicado] = useState(evento.publicado);
   const [nidEvento, setIdEvento] = useState(evento.nid_evento || null);
   const [error, setError] = useState(null);
+
   function formatearFecha(fecha) {
     const formattedDate = `${fecha.getFullYear()}-${String(
       fecha.getMonth() + 1
     ).padStart(2, "0")}-${String(fecha.getDate()).padStart(2, "0")}`;
     return formattedDate;
   }
+
   function registrarEventoAgenda() {
     if (!nidEvento) {
       const nuevoEvento = {
@@ -104,6 +104,15 @@ export default function FormularioAgenda({
         }}
         valorFecha={fecha}
       />
+      <CheckBox
+        item={{ etiqueta: "Publico", valor: publicado }}
+        valorSeleccionado={publicado == "S" ? true : false}
+        setValorSeleccionado={(item, seleccionado) => {
+          console.log("Item seleccionado", item);
+          setPublicado(seleccionado ? "S" : "N");
+        }}
+      />
+
       <View
         style={{
           flexDirection: "row",

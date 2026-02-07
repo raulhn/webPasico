@@ -14,6 +14,7 @@ import {
   EntradaFecha,
   Boton,
   ModalExito,
+  CheckBox,
 } from "../componentesUI/ComponentesUI";
 
 export default function FormularioEvento({
@@ -30,6 +31,7 @@ export default function FormularioEvento({
   const [vestimenta, setVestimenta] = useState("");
   const [lugar, setLugar] = useState("");
   const [tiposEventoRecuperados, setTiposEventoRecuperados] = useState([]);
+  const [publicado, setPublicado] = useState("N");
 
   const { cerrarSesion } = useContext(AuthContext);
 
@@ -56,11 +58,10 @@ export default function FormularioEvento({
           const evento = response.evento_concierto;
           setNombreEvento(evento.nombre);
           setDescripcion(evento.descripcion);
-          console.log("Fecha evento", fechaEvento);
           setFechaEvento(new Date(evento.fecha_evento));
-          console.log("Fecha evento 2: ", fechaEvento);
           setVestimenta(evento.vestimenta);
           setLugar(evento.lugar);
+          setPublicado(evento.publicado);
 
           let auxTiposEvento = [];
 
@@ -235,6 +236,14 @@ export default function FormularioEvento({
           }}
           valorFecha={fechaEvento}
         ></EntradaFecha>
+        <CheckBox
+          item={{ etiqueta: "Publico", valor: publicado }}
+          valorSeleccionado={publicado == "S" ? true : false}
+          setValorSeleccionado={(item, seleccionado) => {
+            console.log("Item seleccionado", item);
+            setPublicado(seleccionado ? "S" : "N");
+          }}
+        />
 
         <Text> Tipo de Evento </Text>
         <View
