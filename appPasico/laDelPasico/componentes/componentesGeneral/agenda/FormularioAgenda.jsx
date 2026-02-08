@@ -26,6 +26,7 @@ export default function FormularioAgenda({
   const [nidEvento, setIdEvento] = useState(evento.nid_evento || null);
   const [error, setError] = useState(null);
 
+  console.log("Evento recibido en el formulario:", evento);
   function formatearFecha(fecha) {
     const formattedDate = `${fecha.getFullYear()}-${String(
       fecha.getMonth() + 1
