@@ -80,14 +80,31 @@ export default function EventoAgenda({ evento, accion }) {
 
   return (
     <View style={estilos.contenedorEvento}>
-      <Text style={estilos.tituloEvento}>{evento.nombre}</Text>
-      <Text style={estilos.descripcionEvento}>{evento.descripcion}</Text>
-      <Text style={estilos.fechaEvento}>
-        {obtenerFechaFormateada(evento.fecha)}
-      </Text>
-      <View style={{ flexDirection: "row", marginTop: 10, gap: 10 }}>
-        {addBotonEditar()}
-        {addBotonEliminar()}
+      <View style={estilos.row}>
+        <View style={estilos.content}>
+          <View style={estilos.titleRow}>
+            <Text style={estilos.tituloEvento} numberOfLines={1}>
+              {evento.nombre}
+            </Text>
+            <View style={[estilos.badge, evento.tipo === "Concierto" ? estilos.badgeConcierto : estilos.badgeAgenda]}>
+              <Text style={estilos.badgeText}>{evento.tipo === "Concierto" ? "Concierto" : "Agenda"}</Text>
+            </View>
+          </View>
+
+          <Text style={estilos.descripcionEvento} numberOfLines={2}>
+            {evento.descripcion}
+          </Text>
+
+          <Text style={estilos.fechaEvento}>
+            {obtenerFechaFormateada(evento.fecha)}
+          </Text>
+        </View>
+
+        <View style={estilos.actions}>
+          {addBotonEditar()}
+          <View style={{ height: 8 }} />
+          {addBotonEliminar()}
+        </View>
       </View>
       <Modal
         visible={modalEdicionVisible}
@@ -133,25 +150,64 @@ export default function EventoAgenda({ evento, accion }) {
 
 const estilos = StyleSheet.create({
   contenedorEvento: {
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
-    justifyContent: "center",
+    padding: 12,
+    borderRadius: 10,
+    marginBottom: 12,
+    backgroundColor: "#ffffff",
+    borderWidth: 1,
+    borderColor: "#eee",
+    shadowColor: "#000",
+    shadowOpacity: 0.03,
+    shadowRadius: 6,
+    elevation: 2,
+  },
+  row: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+  },
+  content: {
+    flex: 1,
+    paddingRight: 8,
+  },
+  actions: {
+    width: 54,
     alignItems: "center",
-    borderRadius: 5,
-    marginBottom: 10,
-    backgroundColor: "#f9f9f9",
+    justifyContent: "flex-start",
+  },
+  titleRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 6,
+  },
+  badge: {
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 12,
+  },
+  badgeText: {
+    fontSize: 11,
+    color: "#fff",
+  },
+  badgeConcierto: {
+    backgroundColor: "#ff7043",
+  },
+  badgeAgenda: {
+    backgroundColor: "#42a5f5",
   },
   tituloEvento: {
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: "700",
+    color: "#212121",
   },
   descripcionEvento: {
     fontSize: 14,
-    color: "#666",
+    color: "#616161",
+    marginBottom: 6,
   },
   fechaEvento: {
     fontSize: 12,
-    color: "#999",
+    color: "#9e9e9e",
+    marginTop: 2,
   },
 });

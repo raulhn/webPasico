@@ -1,5 +1,6 @@
 import { useAgendaEventos } from "../../../hooks/general/useAgendaEventos";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
+import Constantes from "../../../config/constantes.js";
 import {
   EntradaTexto,
   Boton,
@@ -84,75 +85,101 @@ export default function FormularioAgenda({
     }
   }
   return (
-    <View style={estilos.contenedor}>
-      <Text>Formulario de Agenda</Text>
-      <Text>Nombre</Text>
-      <EntradaTexto
-        setValor={(valor) => {
-          setNombre(valor);
-        }}
-        valor={nombre}
-      />
-      <Text>Descripción</Text>
-      <EntradaTexto
-        setValor={(valor) => {
-          setDescripcion(valor);
-        }}
-        valor={descripcion}
-      />
-      <Text>Fecha</Text>
-      <EntradaFecha
-        onChangeFecha={(valor) => {
-          setFecha(valor);
-        }}
-        valorFecha={fecha}
-      />
-      <CheckBox
-        item={{ etiqueta: "Publico", valor: publicado }}
-        valorSeleccionado={publicado == "S" ? true : false}
-        setValorSeleccionado={(item, seleccionado) => {
-          console.log("Item seleccionado", item);
-          console.log("Seleccionado", seleccionado);
-          setPublicado(seleccionado ? "S" : "N");
-          console.log(publicado);
-        }}
-      />
+    <ScrollView>
+      <View style={estilos.container}>
+        <Text style={estilos.titulo}>Registrar Agenda </Text>
 
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "center",
-          gap: 10,
-        }}
-      >
-        <Boton
-          nombre="Guardar"
-          onPress={() => {
-            registrarEventoAgenda();
+        <Text style={estilos.label}>Nombre</Text>
+        <EntradaTexto
+          placeholder={"Nombre"}
+          setValor={(valor) => {
+            setNombre(valor);
+          }}
+          valor={nombre}
+        />
+
+        <Text style={estilos.label}>Descripción</Text>
+        <EntradaTexto
+          placeholder={"Descripción"}
+          setValor={(valor) => {
+            setDescripcion(valor);
+          }}
+          valor={descripcion}
+          ancho={300}
+          alto={100}
+          multiline={true}
+        />
+
+        <Text style={estilos.label}>Fecha</Text>
+        <EntradaFecha
+          onChangeFecha={(valor) => {
+            setFecha(valor);
+          }}
+          valorFecha={fecha}
+        />
+
+        <CheckBox
+          item={{ etiqueta: "Público", valor: publicado }}
+          valorSeleccionado={publicado == "S" ? true : false}
+          setValorSeleccionado={(item, seleccionado) => {
+            setPublicado(seleccionado ? "S" : "N");
           }}
         />
-        <Boton
-          nombre="Volver"
-          onPress={() => {
-            volver();
+
+        <View style={estilos.actionsRow}>
+          <Boton
+            nombre="Guardar"
+            onPress={() => {
+              registrarEventoAgenda();
+            }}
+          />
+          <Boton
+            nombre="Volver"
+            color={Constantes.COLOR_ROJO}
+            onPress={() => {
+              volver();
+            }}
+          />
+        </View>
+
+        <ModalAviso
+          visible={error}
+          setVisible={() => {
+            setError(false);
           }}
+          textBoton="Aceptar"
+          mensaje={"Se ha producido un error"}
         />
       </View>
-      <ModalAviso
-        visible={error}
-        setVisible={() => {
-          setError(false);
-        }}
-        textBoton="Aceptar"
-        mensaje={"Se ha producido un error"}
-      />
-    </View>
+    </ScrollView>
   );
 }
 
 const estilos = StyleSheet.create({
-  contenedor: {
+  container: {
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    padding: 16,
+  },
+  titulo: {
+    fontSize: 22,
+    fontWeight: "700",
+    color: Constantes.COLOR_AZUL,
+    marginBottom: 16,
+    textAlign: "center",
+  },
+  label: {
+    alignSelf: "flex-start",
+    marginLeft: 12,
+    marginBottom: 6,
+    color: "#444",
+  },
+  actionsRow: {
+    flexDirection: "row",
+    justifyContent: "center",
+    gap: 10,
+    width: "100%",
+    marginTop: 12,
   },
 });

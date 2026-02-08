@@ -12,19 +12,31 @@ export default function Dia({
     <View style={estilos.contenedor}>
       <Pressable
         onPress={() => {
-          accion();
+          if (!disabled && typeof accion === "function") accion();
         }}
+        disabled={disabled}
+        android_ripple={{ color: "rgba(0,0,0,0.06)", radius: 24 }}
       >
         <View
           style={[
-            tieneEvento ? estilos.contenedorConEvento : {},
-            esHoy ? estilos.contenedorHoy : {},
-            esSeleccionado ? estilos.contenedorSeleccionado : {},
+            estilos.dayBox,
+            esHoy && estilos.dayToday,
+            esSeleccionado && estilos.daySelected,
+            tieneEvento && estilos.dayWithEvent,
           ]}
         >
-          <Text style={disabled ? estilos.textoDisabled : estilos.texto}>
+          <Text
+            style={
+              disabled
+                ? estilos.textoDisabled
+                : esSeleccionado
+                ? estilos.textoSelected
+                : estilos.texto
+            }
+          >
             {numDia}
           </Text>
+          {tieneEvento && <View style={[estilos.eventDot, esSeleccionado && estilos.eventDotOnSelected]} />}
         </View>
       </Pressable>
     </View>
@@ -36,7 +48,7 @@ const estilos = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    padding: 5,
+    padding: 4,
   },
   texto: {
     fontSize: 20,
@@ -46,26 +58,45 @@ const estilos = StyleSheet.create({
     color: "#ccc",
     fontSize: 20,
   },
-  contenedorHoy: {
-    justifyContent: "center",
+  dayBox: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     alignItems: "center",
-    backgroundColor: "#ffeb3b",
-    borderRadius: 80,
-    width: 30,
-  },
-  contenedorSeleccionado: {
     justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#90caf9",
-    borderRadius: 80,
-    width: 30,
+    backgroundColor: "transparent",
   },
-  contenedorConEvento: {
-    borderRadius: 60,
-    borderWidth: 2,
+  dayToday: {
+    backgroundColor: "#fff59d",
+    elevation: 2,
+    shadowColor: "#000",
+    shadowOpacity: 0.08,
+    shadowRadius: 4,
+  },
+  daySelected: {
+    backgroundColor: "#1976d2",
+    elevation: 3,
+    shadowColor: "#000",
+    shadowOpacity: 0.12,
+    shadowRadius: 6,
+  },
+  dayWithEvent: {
+    borderWidth: 1.5,
     borderColor: "#4caf50",
-    width: 30,
-    alignItems: "center",
-    justifyContent: "center",
+  },
+  textoSelected: {
+    color: "#fff",
+    fontSize: 20,
+  },
+  eventDot: {
+    position: "absolute",
+    bottom: 4,
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: "#4caf50",
+  },
+  eventDotOnSelected: {
+    backgroundColor: "#a5d6a7",
   },
 });
