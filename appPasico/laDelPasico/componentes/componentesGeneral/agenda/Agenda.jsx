@@ -259,9 +259,24 @@ export default function Agenda({ mes_, anio_ }) {
     ));
   }
 
+
   return (
     <>
-      <SafeAreaView style={estilos.contenedor}>
+      <SafeAreaView edges={["left", "right", "bottom"]} style={estilos.contenedor}>
+        <View style={estilos.legendContainer}>
+          <View style={estilos.legendItem}>
+            <View style={[estilos.legendDot, estilos.legendDotToday]} />
+            <Text style={estilos.legendLabel}>Hoy</Text>
+          </View>
+          <View style={estilos.legendItem}>
+            <View style={[estilos.legendDot, estilos.legendDotSelected]} />
+            <Text style={estilos.legendLabel}>Día Seleccionado</Text>
+          </View>
+          <View style={estilos.legendItem}>
+            <View style={[estilos.legendDot, estilos.legendDotEvent]} />
+            <Text style={estilos.legendLabel}>Día con eventos</Text>
+          </View>
+        </View>
         <SelectorMes
           mes={mes}
           anio={anio}
@@ -325,8 +340,9 @@ export default function Agenda({ mes_, anio_ }) {
 const estilos = StyleSheet.create({
   contenedor: {
     backgroundColor: "white",
-    padding: 10,
     height: "100%",
+    paddingTop: 0,
+    paddingHorizontal: 6,
   },
   contendorAgenda: {
     alignItems: "center",
@@ -335,5 +351,40 @@ const estilos = StyleSheet.create({
     position: "absolute",
     bottom: 200,
     right: 20,
+  },
+  legendContainer: {
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    gap: 12,
+    paddingVertical: 4,
+    paddingHorizontal: 6,
+  },
+  legendItem: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  legendDot: {
+    width: 14,
+    height: 14,
+    borderRadius: 7,
+    marginRight: 6,
+  },
+  legendDotToday: {
+    backgroundColor: "#fff176",
+    borderWidth: 1,
+    borderColor: "rgba(0,0,0,0.06)",
+  },
+  legendDotSelected: {
+    backgroundColor: "#90caf9",
+  },
+  legendDotEvent: {
+    backgroundColor: "transparent",
+    borderWidth: 2,
+    borderColor: "#4caf50",
+  },
+  legendLabel: {
+    fontSize: 12,
+    color: "#424242",
   },
 });
