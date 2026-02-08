@@ -39,6 +39,7 @@ export default function FormularioAgenda({
         nombre: nombre,
         descripcion: descripcion,
         fecha: fecha,
+        publicado: publicado,
       };
 
       registrarEvento(nuevoEvento)
@@ -62,6 +63,7 @@ export default function FormularioAgenda({
         nombre: nombre,
         descripcion: descripcion,
         fecha: fecha,
+        publicado: publicado,
       };
 
       actualizarEvento(eventoActualizado)
@@ -109,7 +111,9 @@ export default function FormularioAgenda({
         valorSeleccionado={publicado == "S" ? true : false}
         setValorSeleccionado={(item, seleccionado) => {
           console.log("Item seleccionado", item);
+          console.log("Seleccionado", seleccionado);
           setPublicado(seleccionado ? "S" : "N");
+          console.log(publicado);
         }}
       />
 

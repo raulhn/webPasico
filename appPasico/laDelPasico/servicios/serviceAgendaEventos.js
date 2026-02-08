@@ -34,6 +34,7 @@ function actualizarEvento(evento, cerrarSesion) {
       descripcion: evento.descripcion,
       publicado: evento.publicado,
     };
+    console.log("Evento", data);
     ServiceComun.peticionSesion(
       "POST",
       Constantes.URL_SERVICIO_MOVIL + "actualizar_agenda_evento",
