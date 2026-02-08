@@ -73,7 +73,7 @@ function actualizarAgendaEvento(
 
 function recuperarEventos(bPublicos) {
   let sql =
-    "select nid_agenda_evento, nombre, descripcion, fecha " +
+    "select nid_agenda_evento, nombre, descripcion, fecha, publicado " +
     "from " +
     constantes.ESQUEMA +
     ".agenda_evento ";
@@ -99,7 +99,7 @@ function recuperarEventos(bPublicos) {
 
 function recuperarEventosFecha(bPublicos, fecha) {
   let sql =
-    "select nid_agenda_evento, nombre, descripcion, fecha " +
+    "select nid_agenda_evento, nombre, descripcion, fecha, publicado " +
     "from " +
     constantes.ESQUEMA +
     ".agenda_evento ";
@@ -132,7 +132,7 @@ function recuperarEventosFecha(bPublicos, fecha) {
 
 function recuperarEventosRangoFecha(bPublicos, fechaInicio, fechaFin) {
   let sql =
-    "select nid_agenda_evento nid_evento, nombre, descripcion, fecha, 'Agenda' tipo " +
+    "select nid_agenda_evento nid_evento, nombre, descripcion, fecha, 'Agenda' tipo, publicado " +
     "from " +
     constantes.ESQUEMA +
     ".agenda_evento " +
@@ -162,7 +162,7 @@ function recuperarEventosRangoFecha(bPublicos, fechaInicio, fechaFin) {
 
 function recuperarEventosMes(bPublicos, mes, anio) {
   let sql =
-    "select nid_agenda_evento, nombre, descripcion, fecha, MONTH(fecha) mes, YEAR(fecha) anio " +
+    "select nid_agenda_evento, nombre, descripcion, fecha, MONTH(fecha) mes, YEAR(fecha) anio , publicado" +
     "from " +
     constantes.ESQUEMA +
     ".agenda_evento " +
