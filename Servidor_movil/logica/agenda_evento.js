@@ -1,11 +1,11 @@
 const constantes = require("../constantes");
 const conexion = require("../conexion");
 
-function registrarAgendaEvento(nombre, descripcion, fecha, publicado) {
+function registrarAgendaEvento(nombre, descripcion, fecha, hora, publicado) {
   const sql =
     "insert into " +
     constantes.ESQUEMA +
-    ".agenda_evento (nombre, descripcion, fecha, publicado) " +
+    ".agenda_evento (nombre, descripcion, fecha, hora, publicado) " +
     " values (" +
     conexion.dbConn.escape(nombre) +
     ", " +
@@ -13,8 +13,10 @@ function registrarAgendaEvento(nombre, descripcion, fecha, publicado) {
     ", " +
     conexion.dbConn.escape(fecha) +
     ", " +
-    conexion.dbConn.escape(publicado);
-  (")");
+    conexion.dbConn.escape(hora) +
+    ", " +
+    conexion.dbConn.escape(publicado) +
+    ")";
 
   return new Promise((resolve, reject) => {
     conexion.dbConn.beginTransaction(() => {
@@ -38,6 +40,7 @@ function actualizarAgendaEvento(
   nombre,
   descripcion,
   fecha,
+  hora,
   publicado,
 ) {
   const sql =
@@ -51,6 +54,8 @@ function actualizarAgendaEvento(
     conexion.dbConn.escape(fecha) +
     ", publicado = " +
     conexion.dbConn.escape(publicado) +
+    ", hora = " +
+    conexion.dbConn.escape(hora) +
     " where nid_agenda_evento = " +
     conexion.dbConn.escape(nid_evento);
 
@@ -99,7 +104,7 @@ function recuperarEventos(bPublicos) {
 
 function recuperarEventosFecha(bPublicos, fecha) {
   let sql =
-    "select nid_agenda_evento, nombre, descripcion, fecha, publicado " +
+    "select nid_agenda_evento, nombre, descripcion, fecha, hora, publicado " +
     "from " +
     constantes.ESQUEMA +
     ".agenda_evento ";
@@ -132,7 +137,7 @@ function recuperarEventosFecha(bPublicos, fecha) {
 
 function recuperarEventosRangoFecha(bPublicos, fechaInicio, fechaFin) {
   let sql =
-    "select nid_agenda_evento nid_evento, nombre, descripcion, fecha, 'Agenda' tipo, publicado " +
+    "select nid_agenda_evento nid_evento, nombre, descripcion, fecha, 'Agenda' tipo, publicado, hora " +
     "from " +
     constantes.ESQUEMA +
     ".agenda_evento " +
@@ -162,7 +167,7 @@ function recuperarEventosRangoFecha(bPublicos, fechaInicio, fechaFin) {
 
 function recuperarEventosMes(bPublicos, mes, anio) {
   let sql =
-    "select nid_agenda_evento, nombre, descripcion, fecha, MONTH(fecha) mes, YEAR(fecha) anio , publicado" +
+    "select nid_agenda_evento, nombre, descripcion, fecha, MONTH(fecha) mes, YEAR(fecha) anio , publicado, hora " +
     "from " +
     constantes.ESQUEMA +
     ".agenda_evento " +

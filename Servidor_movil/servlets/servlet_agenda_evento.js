@@ -19,7 +19,7 @@ async function registrarEvento(req, res) {
       });
       return;
     }
-    const { nombre, descripcion, fecha, publicado } = req.body;
+    const { nombre, descripcion, fecha, hora, publicado } = req.body;
 
     if (!nombre) {
       res
@@ -33,6 +33,7 @@ async function registrarEvento(req, res) {
       nombre,
       descripcion,
       fecha_evento,
+      hora,
       publicado,
     );
 
@@ -61,7 +62,8 @@ async function actualizarEvento(req, res) {
       });
       return;
     }
-    const { nid_evento, nombre, descripcion, fecha, publicado } = req.body;
+    const { nid_evento, nombre, descripcion, fecha, publicado, hora } =
+      req.body;
     if (!nid_evento || !nombre || !descripcion || !fecha) {
       res.status(400).send({ error: "Faltan parámetros obligatorios" });
       return;
@@ -74,6 +76,7 @@ async function actualizarEvento(req, res) {
       nombre,
       descripcion,
       fecha_evento,
+      hora,
       publicado,
     );
 
