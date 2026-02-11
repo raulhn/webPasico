@@ -5,6 +5,7 @@ function insertarEventoConcierto(
   nombre,
   descripcion,
   fecha_evento,
+  hora,
   tipo_evento,
   publicado,
   vestimenta,
@@ -14,13 +15,15 @@ function insertarEventoConcierto(
     const sql =
       "INSERT INTO " +
       constantes.ESQUEMA +
-      ".evento_concierto (nombre, descripcion, fecha_evento, tipo_evento, publicado, vestimenta, lugar) " +
+      ".evento_concierto (nombre, descripcion, fecha_evento, hora, tipo_evento, publicado, vestimenta, lugar) " +
       "values(" +
       conexion.dbConn.escape(nombre) +
       ", " +
       conexion.dbConn.escape(descripcion) +
       ", " +
       conexion.dbConn.escape(fecha_evento) +
+      ", " +
+      conexion.dbConn.escape(hora) +
       ", " +
       conexion.dbConn.escape(tipo_evento) +
       ", " +
@@ -55,6 +58,7 @@ function actualizarEventoConcierto(
   nombre,
   descripcion,
   fecha_evento,
+  hora,
   tipo_evento,
   publicado,
   vestimenta,
@@ -78,6 +82,8 @@ function actualizarEventoConcierto(
       conexion.dbConn.escape(vestimenta) +
       ", lugar = " +
       conexion.dbConn.escape(lugar) +
+      ",hora = " +
+      conexion.dbConn.escape(hora) +
       " WHERE nid_evento_concierto = " +
       conexion.dbConn.escape(nid_evento_concierto);
 
@@ -240,7 +246,7 @@ function obtenerPartiturasEvento(nid_evento_concierto) {
 
 function obtenerEventosConciertoRangoFecha(fecha_inicio, fecha_fin, publicado) {
   const sql =
-    "select ev.nid_evento_concierto nid_evento, nombre, fecha_evento fecha, descripcion, publicado, vestimenta, lugar, 'Concierto' tipo from " +
+    "select ev.nid_evento_concierto nid_evento, nombre, fecha_evento fecha, descripcion, publicado, vestimenta, lugar, 'Concierto' tipo, hora from " +
     constantes.ESQUEMA +
     ".evento_concierto ev where fecha_evento between " +
     conexion.dbConn.escape(fecha_inicio) +

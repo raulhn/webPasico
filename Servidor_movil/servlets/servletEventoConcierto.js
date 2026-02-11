@@ -9,7 +9,7 @@ async function insertarEventoConcierto(req, res) {
     let rolDirector = await servlet_comun.comprobarRol(
       req,
       res,
-      rolesPermitidos
+      rolesPermitidos,
     );
     if (!rolDirector) {
       res.status(403).send({
@@ -24,6 +24,7 @@ async function insertarEventoConcierto(req, res) {
       let publicado = req.body.publicado;
       let vestimenta = req.body.vestimenta;
       let lugar = req.body.lugar;
+      let hora = req.body.hora;
 
       let tiposEvento = req.body.tiposEvento;
 
@@ -32,27 +33,29 @@ async function insertarEventoConcierto(req, res) {
         nombre,
         descripcion,
         fecha_evento,
+        hora,
         tipo_evento,
         publicado,
         vestimenta,
-        lugar
+        lugar,
       );
 
       const nidEventoConcierto = await gestorEventos.insertarEventoConcierto(
         nombre,
         descripcion,
         fecha_evento,
+        hora,
         tipo_evento,
         publicado,
         vestimenta,
-        lugar
+        lugar,
       );
 
       if (tiposEvento !== null && tiposEvento.length > 0) {
         for (let i = 0; i < tiposEvento.length; i++) {
           await gestor_tipo_evento_musico.registrar_tipo_evento_musico(
             nidEventoConcierto,
-            tiposEvento[i]
+            tiposEvento[i],
           );
         }
       }
@@ -64,7 +67,7 @@ async function insertarEventoConcierto(req, res) {
   } catch (error) {
     console.error(
       "servletEventoConcierto.js -> insertarEventoConcierto: Error al registrar el evento de concierto:" +
-        error.message
+        error.message,
     );
     res.status(400).send({
       error: true,
@@ -79,7 +82,7 @@ async function actualizarEventoConcierto(req, res) {
     let rolDirector = await servlet_comun.comprobarRol(
       req,
       res,
-      rolesPermitidos
+      rolesPermitidos,
     );
     if (!rolDirector) {
       res.status(403).send({
@@ -95,6 +98,7 @@ async function actualizarEventoConcierto(req, res) {
       let publicado = req.body.publicado;
       let vestimenta = req.body.vestimenta;
       let lugar = req.body.lugar;
+      let hora = req.body.hora;
 
       let tiposEvento = req.body.tiposEvento;
 
@@ -103,10 +107,11 @@ async function actualizarEventoConcierto(req, res) {
         nombre,
         descripcion,
         fecha_evento,
+        hora,
         tipo_evento,
         publicado,
         vestimenta,
-        lugar
+        lugar,
       );
 
       await gestor_tipo_evento_musico.eliminar_tipos_evento_musico(nid_evento);
@@ -114,7 +119,7 @@ async function actualizarEventoConcierto(req, res) {
       for (let i = 0; i < tiposEvento.length; i++) {
         await gestor_tipo_evento_musico.registrar_tipo_evento_musico(
           nid_evento,
-          tiposEvento[i]
+          tiposEvento[i],
         );
       }
 
@@ -125,7 +130,7 @@ async function actualizarEventoConcierto(req, res) {
     }
   } catch (error) {
     console.error(
-      "Error al actualizar el evento de concierto:" + error.message
+      "Error al actualizar el evento de concierto:" + error.message,
     );
     res.status(400).send({
       error: true,
@@ -145,7 +150,7 @@ async function obtenerEventosConcierto(req, res) {
     let rolPermitido = await servlet_comun.comprobarRol(
       req,
       res,
-      rolesPermitidos
+      rolesPermitidos,
     );
     if (!rolPermitido) {
       res.status(403).send({
@@ -157,7 +162,7 @@ async function obtenerEventosConcierto(req, res) {
 
       for (let i = 0; i < eventos.length; i++) {
         let tiposEvento = await gestor_tipo_evento_musico.obtener_tipos_evento(
-          eventos[i].nid_evento_concierto
+          eventos[i].nid_evento_concierto,
         );
         eventos[i].tipos_evento = tiposEvento;
       }
@@ -190,7 +195,7 @@ async function registrar_partitura_evento(req, res) {
     let rolDirector = await servlet_comun.comprobarRol(
       req,
       res,
-      rolesPermitidos
+      rolesPermitidos,
     );
     if (!rolDirector) {
       res.status(403).send({
@@ -205,12 +210,12 @@ async function registrar_partitura_evento(req, res) {
       console.log(
         "Registrar Partitura Evento Concierto: ",
         nid_evento_concierto,
-        nid_partitura
+        nid_partitura,
       );
 
       let existe = await gestorEventos.existePartituraEvento(
         nid_evento_concierto,
-        nid_partitura
+        nid_partitura,
       );
 
       if (existe) {
@@ -221,7 +226,7 @@ async function registrar_partitura_evento(req, res) {
       } else {
         await gestorEventos.registrar_partitura_evento(
           nid_evento_concierto,
-          nid_partitura
+          nid_partitura,
         );
 
         res.status(200).send({
@@ -232,7 +237,7 @@ async function registrar_partitura_evento(req, res) {
     }
   } catch (error) {
     console.error(
-      "Error al registrar la partitura en el evento:" + error.message
+      "Error al registrar la partitura en el evento:" + error.message,
     );
     res.status(400).send({
       error: true,
@@ -247,7 +252,7 @@ async function eliminar_partitura_evento(req, res) {
     let rolDirector = await servlet_comun.comprobarRol(
       req,
       res,
-      rolesPermitidos
+      rolesPermitidos,
     );
     if (!rolDirector) {
       res.status(403).send({
@@ -262,12 +267,12 @@ async function eliminar_partitura_evento(req, res) {
       console.log(
         "Eliminar Partitura Evento Concierto: ",
         nid_evento_concierto,
-        nid_partitura
+        nid_partitura,
       );
 
       await gestorEventos.eliminar_partitura_evento(
         nid_evento_concierto,
-        nid_partitura
+        nid_partitura,
       );
 
       res.status(200).send({
@@ -277,7 +282,7 @@ async function eliminar_partitura_evento(req, res) {
     }
   } catch (error) {
     console.error(
-      "Error al eliminar la partitura del evento de concierto:" + error.message
+      "Error al eliminar la partitura del evento de concierto:" + error.message,
     );
     res.status(400).send({
       error: true,
@@ -296,7 +301,7 @@ async function obtenerPartiturasEvento(req, res) {
     let rolPermitido = await servlet_comun.comprobarRol(
       req,
       res,
-      rolesPermitidos
+      rolesPermitidos,
     );
     if (!rolPermitido) {
       res.status(403).send({
@@ -311,7 +316,7 @@ async function obtenerPartiturasEvento(req, res) {
         await gestorEventos.obtenerPartiturasEvento(nid_evento_concierto);
       let tipos_evento =
         await gestor_tipo_evento_musico.obtener_tipos_evento(
-          nid_evento_concierto
+          nid_evento_concierto,
         );
       if (evento_concierto) {
         res.status(200).send({
@@ -331,7 +336,7 @@ async function obtenerPartiturasEvento(req, res) {
   } catch (error) {
     console.error(
       "servletEventoConcierto.js -> obtenerPartiturasEvento: Error al obtener las partituras del evento de concierto:" +
-        error
+        error,
     );
     res.status(400).send({
       error: true,
@@ -346,7 +351,7 @@ async function eliminar_evento(req, res) {
     let rolDirector = await servlet_comun.comprobarRol(
       req,
       res,
-      rolesPermitidos
+      rolesPermitidos,
     );
     if (!rolDirector) {
       res.status(403).send({

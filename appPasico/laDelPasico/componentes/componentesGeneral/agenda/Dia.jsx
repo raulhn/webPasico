@@ -26,17 +26,25 @@ export default function Dia({
           ]}
         >
           <Text
-            style={
+            style={[
               disabled
                 ? estilos.textoDisabled
                 : esSeleccionado
                 ? estilos.textoSelected
-                : estilos.texto
-            }
+                : estilos.texto,
+              esHoy && estilos.dayToday,
+            ]}
           >
             {numDia}
           </Text>
-          {tieneEvento && <View style={[estilos.eventDot, esSeleccionado && estilos.eventDotOnSelected]} />}
+          {tieneEvento && (
+            <View
+              style={[
+                estilos.eventDot,
+                esSeleccionado && estilos.eventDotOnSelected,
+              ]}
+            />
+          )}
         </View>
       </Pressable>
     </View>
@@ -67,11 +75,8 @@ const estilos = StyleSheet.create({
     backgroundColor: "transparent",
   },
   dayToday: {
-    backgroundColor: "#fff59d",
-    elevation: 2,
-    shadowColor: "#000",
-    shadowOpacity: 0.08,
-    shadowRadius: 4,
+    fontWeight: "bold",
+    fontSize: 24,
   },
   daySelected: {
     backgroundColor: "#1976d2",

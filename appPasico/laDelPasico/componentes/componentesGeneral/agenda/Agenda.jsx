@@ -259,15 +259,13 @@ export default function Agenda({ mes_, anio_ }) {
     ));
   }
 
-
   return (
     <>
-      <SafeAreaView edges={["left", "right", "bottom"]} style={estilos.contenedor}>
+      <SafeAreaView
+        edges={["left", "right", "bottom"]}
+        style={estilos.contenedor}
+      >
         <View style={estilos.legendContainer}>
-          <View style={estilos.legendItem}>
-            <View style={[estilos.legendDot, estilos.legendDotToday]} />
-            <Text style={estilos.legendLabel}>Hoy</Text>
-          </View>
           <View style={estilos.legendItem}>
             <View style={[estilos.legendDot, estilos.legendDotSelected]} />
             <Text style={estilos.legendLabel}>Día Seleccionado</Text>
