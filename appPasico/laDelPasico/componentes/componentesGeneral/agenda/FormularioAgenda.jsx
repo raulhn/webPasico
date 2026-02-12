@@ -26,6 +26,8 @@ export default function FormularioAgenda({
   const [publicado, setPublicado] = useState(evento.publicado);
   const [nidEvento, setIdEvento] = useState(evento.nid_evento || null);
   const [error, setError] = useState(null);
+  const [hora, setHora] = useState(evento.hora ? hora.split(":")[0] : "");
+  const [minutos, setMinutos] = useState(evento.hora ? hora.split(":")[1] : "");
 
   console.log("Evento recibido en el formulario:", evento);
   function formatearFecha(fecha) {
@@ -118,6 +120,35 @@ export default function FormularioAgenda({
           valorFecha={fecha}
         />
 
+        <Text style={estilos.label}>Hora</Text>
+        <View style={{ flexDirection: "row", gap: 10, alignItems: "center" }}>
+          <EntradaTexto
+            placeholder={"HH"}
+            ancho={50}
+            setValor={(valor) => {
+              const valorHora = parseInt(valor);
+              if ((valorHora >= 0 && valorHora < 24) || valorHora === "") {
+                setHora(valorHora);
+              }
+            }}
+            valor={hora}
+          />
+          <Text>:</Text>
+          <EntradaTexto
+            ancho={50}
+            placeholder={"MM"}
+            setValor={(valor) => {
+              const valorMinuto = parseInt(valor);
+              if (
+                (valorMinuto >= 0 && valorMinuto < 60) ||
+                valorMinuto === ""
+              ) {
+                setMinutos(valorMinuto);
+              }
+            }}
+            valor={minutos}
+          />
+        </View>
         <CheckBox
           item={{ etiqueta: "Público", valor: publicado }}
           valorSeleccionado={publicado == "S" ? true : false}
