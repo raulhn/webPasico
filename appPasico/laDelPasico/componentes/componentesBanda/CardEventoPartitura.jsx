@@ -83,7 +83,9 @@ export default function CardEventoPartitura({ EventoPartitura }) {
         <Text style={{ color: Constantes.COLOR_AZUL, fontWeight: "bold" }}>
           Fecha:{" "}
         </Text>
-        <Text>{fecha_evento}</Text>
+        <Text>
+          {fecha_evento} {EventoPartitura.hora}
+        </Text>
       </View>
     </View>
   );

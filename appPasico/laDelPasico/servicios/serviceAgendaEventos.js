@@ -8,6 +8,7 @@ function registrarEvento(evento, cerrarSesion) {
       fecha: evento.fecha,
       descripcion: evento.descripcion,
       publicado: evento.publicado,
+      hora: evento.hora,
     };
 
     ServiceComun.peticionSesion(
@@ -33,6 +34,7 @@ function actualizarEvento(evento, cerrarSesion) {
       fecha: evento.fecha,
       descripcion: evento.descripcion,
       publicado: evento.publicado,
+      hora: evento.hora,
     };
     console.log("Evento", data);
     ServiceComun.peticionSesion(

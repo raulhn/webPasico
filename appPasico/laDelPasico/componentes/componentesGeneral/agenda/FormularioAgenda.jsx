@@ -26,8 +26,12 @@ export default function FormularioAgenda({
   const [publicado, setPublicado] = useState(evento.publicado);
   const [nidEvento, setIdEvento] = useState(evento.nid_evento || null);
   const [error, setError] = useState(null);
-  const [hora, setHora] = useState(evento.hora ? hora.split(":")[0] : "");
-  const [minutos, setMinutos] = useState(evento.hora ? hora.split(":")[1] : "");
+  const [hora, setHora] = useState(
+    evento.hora ? evento.hora.split(":")[0] : ""
+  );
+  const [minutos, setMinutos] = useState(
+    evento.hora ? evento.hora.split(":")[1] : ""
+  );
 
   console.log("Evento recibido en el formulario:", evento);
   function formatearFecha(fecha) {
@@ -44,7 +48,7 @@ export default function FormularioAgenda({
         descripcion: descripcion,
         fecha: fecha,
         publicado: publicado,
-        hora: hora + ":" + minutos,
+        hora: hora == "" && minutos == "" ? null : hora + ":" + minutos,
       };
 
       registrarEvento(nuevoEvento)
@@ -62,14 +66,13 @@ export default function FormularioAgenda({
           setError(error);
         });
     } else {
-      console.log("actualizar evento");
       const eventoActualizado = {
         nid_evento: nidEvento,
         nombre: nombre,
         descripcion: descripcion,
         fecha: fecha,
         publicado: publicado,
-        hora: hora + ":" + minutos,
+        hora: hora == "" && minutos == "" ? null : hora + ":" + minutos,
       };
 
       actualizarEvento(eventoActualizado)
@@ -128,10 +131,7 @@ export default function FormularioAgenda({
             placeholder={"HH"}
             ancho={50}
             setValor={(valor) => {
-              const valorHora = parseInt(valor);
-              if ((valorHora >= 0 && valorHora < 24) || valorHora === "") {
-                setHora(valorHora);
-              }
+              setHora(valor);
             }}
             valor={hora}
           />
@@ -140,13 +140,7 @@ export default function FormularioAgenda({
             ancho={50}
             placeholder={"MM"}
             setValor={(valor) => {
-              const valorMinuto = parseInt(valor);
-              if (
-                (valorMinuto >= 0 && valorMinuto < 60) ||
-                valorMinuto === ""
-              ) {
-                setMinutos(valorMinuto);
-              }
+              setMinutos(valor);
             }}
             valor={minutos}
           />
@@ -203,7 +197,7 @@ const estilos = StyleSheet.create({
     textAlign: "center",
   },
   label: {
-    alignSelf: "flex-start",
+    alignSelf: "center",
     marginLeft: 12,
     marginBottom: 6,
     color: "#444",

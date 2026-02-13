@@ -14,6 +14,7 @@ import {
   EntradaFecha,
   Boton,
   ModalExito,
+  ModalAviso,
   CheckBox,
 } from "../componentesUI/ComponentesUI";
 
@@ -32,10 +33,13 @@ export default function FormularioEvento({
   const [lugar, setLugar] = useState("");
   const [tiposEventoRecuperados, setTiposEventoRecuperados] = useState([]);
   const [publicado, setPublicado] = useState("N");
-
+  const [hora, setHora] = useState("");
+  const [minutos, setMinutos] = useState("");
   const { cerrarSesion } = useContext(AuthContext);
 
   const [exito, setExito] = useState(false);
+  const [error, setError] = useState(false);
+  const [errorMensaje, setErrorMensaje] = useState("");
 
   const { tiposMusicos } = useTiposMusicos();
   const listaTiposMusicos = tiposMusicos.map((tipo) => ({
@@ -62,7 +66,8 @@ export default function FormularioEvento({
           setVestimenta(evento.vestimenta);
           setLugar(evento.lugar);
           setPublicado(evento.publicado);
-
+          setHora(evento.hora ? evento.hora.split(":")[0] : "");
+          setMinutos(evento.hora ? evento.hora.split(":")[1] : "");
           let auxTiposEvento = [];
 
           let tiposEventoRecuperados = response.tipos_evento;
@@ -88,7 +93,8 @@ export default function FormularioEvento({
 
   function registrarEventoConcierto() {
     if (nombreEvento === "" || descripcion === "") {
-      alert("Por favor, completa todos los campos.");
+      setErrorMensaje("Por favor, completa nombre y descripción.");
+      setError(true);
       return;
     }
 
@@ -103,6 +109,7 @@ export default function FormularioEvento({
       vestimenta: vestimenta,
       lugar: lugar,
       tiposEvento: conjuntoTiposEvento,
+      hora: hora == "" && minutos == "" ? null : hora + ":" + minutos,
     };
 
     serviceEventoConcierto
@@ -120,7 +127,10 @@ export default function FormularioEvento({
       })
       .catch((error) => {
         console.log("Error al registrar el evento:", error);
-        alert("Error al registrar el evento");
+        setErrorMensaje(
+          "Error al registrar el evento. Por favor, inténtalo de nuevo."
+        );
+        setError(true);
       });
   }
 
@@ -150,7 +160,8 @@ export default function FormularioEvento({
 
   function actualizarEventoConcierto() {
     if (nombreEvento === "" || descripcion === "") {
-      alert("Por favor, completa todos los campos.");
+      setErrorMensaje("Por favor, completa nombre y descripcion.");
+      setError(true);
       return;
     }
 
@@ -166,6 +177,7 @@ export default function FormularioEvento({
       vestimenta: vestimenta,
       lugar: lugar,
       tiposEvento: conjuntoTiposEvento,
+      hora: hora == "" && minutos == "" ? null : hora + ":" + minutos,
     };
 
     serviceEventoConcierto
@@ -182,7 +194,10 @@ export default function FormularioEvento({
       })
       .catch((error) => {
         console.log("Error al actualizar el evento:", error);
-        alert("Error al actualizar el evento");
+        setErrorMensaje(
+          "Error al actualizar el evento. Por favor, inténtalo de nuevo."
+        );
+        setError(true);
       });
   }
 
@@ -244,6 +259,26 @@ export default function FormularioEvento({
             setPublicado(seleccionado ? "S" : "N");
           }}
         />
+        <Text style={estilos.label}>Hora</Text>
+        <View style={{ flexDirection: "row", gap: 10, alignItems: "center" }}>
+          <EntradaTexto
+            placeholder={"HH"}
+            ancho={50}
+            setValor={(valor) => {
+              setHora(valor);
+            }}
+            valor={hora}
+          />
+          <Text>:</Text>
+          <EntradaTexto
+            ancho={50}
+            placeholder={"MM"}
+            setValor={(valor) => {
+              setMinutos(valor);
+            }}
+            valor={minutos}
+          />
+        </View>
 
         <Text> Tipo de Evento </Text>
         <View
@@ -285,6 +320,15 @@ export default function FormularioEvento({
             callback(); // Llama a la función de callback para refrescar la lista de eventos
           }} // Cambia esto según tu lógica
           mensaje="Evento registrado con éxito"
+          textBoton="Aceptar"
+        />
+        <ModalAviso
+          visible={error} // Cambia esto según tu lógica
+          setVisible={() => {
+            setError(false);
+            setErrorMensaje("");
+          }}
+          mensaje={errorMensaje}
           textBoton="Aceptar"
         />
       </View>

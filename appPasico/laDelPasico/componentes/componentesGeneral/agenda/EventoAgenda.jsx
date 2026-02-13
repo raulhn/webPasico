@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, Modal } from "react-native";
-import { obtenerFechaFormateada } from "../../../comun/fechas.js";
+import { obtenerFechaFormateadaSoloFecha } from "../../../comun/fechas.js";
 import {
   BotonFixed,
   ModalConfirmacion,
@@ -86,8 +86,17 @@ export default function EventoAgenda({ evento, accion }) {
             <Text style={estilos.tituloEvento} numberOfLines={1}>
               {evento.nombre}
             </Text>
-            <View style={[estilos.badge, evento.tipo === "Concierto" ? estilos.badgeConcierto : estilos.badgeAgenda]}>
-              <Text style={estilos.badgeText}>{evento.tipo === "Concierto" ? "Concierto" : "Agenda"}</Text>
+            <View
+              style={[
+                estilos.badge,
+                evento.tipo === "Concierto"
+                  ? estilos.badgeConcierto
+                  : estilos.badgeAgenda,
+              ]}
+            >
+              <Text style={estilos.badgeText}>
+                {evento.tipo === "Concierto" ? "Concierto" : "Agenda"}
+              </Text>
             </View>
           </View>
 
@@ -96,7 +105,7 @@ export default function EventoAgenda({ evento, accion }) {
           </Text>
 
           <Text style={estilos.fechaEvento}>
-            {obtenerFechaFormateada(evento.fecha)}
+            {obtenerFechaFormateadaSoloFecha(evento.fecha)} {evento.hora}
           </Text>
         </View>
 
