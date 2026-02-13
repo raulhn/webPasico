@@ -44,6 +44,7 @@ export default function FormularioAgenda({
         descripcion: descripcion,
         fecha: fecha,
         publicado: publicado,
+        hora: hora + ":" + minutos,
       };
 
       registrarEvento(nuevoEvento)
@@ -68,6 +69,7 @@ export default function FormularioAgenda({
         descripcion: descripcion,
         fecha: fecha,
         publicado: publicado,
+        hora: hora + ":" + minutos,
       };
 
       actualizarEvento(eventoActualizado)
