@@ -53,6 +53,7 @@ export default function Agenda({ mes_, anio_ }) {
           onPress={() => {
             setVisibleFormulario(true);
           }}
+          size={40}
         />
       );
     }
@@ -253,7 +254,7 @@ export default function Agenda({ mes_, anio_ }) {
     var semanasCalendario = mostrarCalendario();
 
     return semanasCalendario.map((semana, index) => (
-      <View key={index} style={{ flexDirection: "row" }}>
+      <View key={index} style={{ flexDirection: "row", height: 50 }}>
         {semana}
       </View>
     ));
@@ -261,10 +262,7 @@ export default function Agenda({ mes_, anio_ }) {
 
   return (
     <>
-      <SafeAreaView
-        edges={["left", "right", "bottom"]}
-        style={estilos.contenedor}
-      >
+      <View style={estilos.contenedor}>
         <View style={estilos.legendContainer}>
           <View style={estilos.legendItem}>
             <View style={[estilos.legendDot, estilos.legendDotSelected]} />
@@ -275,19 +273,34 @@ export default function Agenda({ mes_, anio_ }) {
             <Text style={estilos.legendLabel}>Día con eventos</Text>
           </View>
         </View>
-        <SelectorMes
-          mes={mes}
-          anio={anio}
-          setMes={(nMes, nAnio) => {
-            setMes(nMes);
-            setAnio(nAnio);
+        <View
+          style={{
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
           }}
-        />
-        <MostrarSemanas />
-        <View style={{ marginTop: 20, width: "100%", paddingHorizontal: 10 }}>
+        >
+          <SelectorMes
+            mes={mes}
+            anio={anio}
+            setMes={(nMes, nAnio) => {
+              setMes(nMes);
+              setAnio(nAnio);
+            }}
+          />
+
+          <MostrarSemanas />
+        </View>
+        {/* Hay que incluir un marginBottom debido a que al no usar flex el
+        contenedor principal hay que tener en cuenta el menu inferior de
+        navegación */}
+        <View style={{ flexGrow: 1, marginTop: 12, marginBottom: 95 }}>
           <FlatList
             data={eventosDia}
             keyExtractor={(item) => item.nid_evento.toString()}
+            style={{ flex: 1 }}
+            contentContainerStyle={{ paddingBottom: 20 }}
+            showsVerticalScrollIndicator={true}
             onRefresh={() => lanzarRefresco()}
             refreshing={cargando}
             renderItem={({ item }) => (
@@ -300,7 +313,6 @@ export default function Agenda({ mes_, anio_ }) {
             )}
           />
         </View>
-
         <View style={estilos.botonFix}>
           <ButtonAdd />
         </View>
@@ -313,9 +325,8 @@ export default function Agenda({ mes_, anio_ }) {
         >
           <SafeAreaView
             style={{
-              justyfyContent: "center",
+              justifyContent: "center",
               alignItems: "center",
-              flex: 1,
             }}
           >
             <Text>Tipo</Text>
@@ -330,7 +341,7 @@ export default function Agenda({ mes_, anio_ }) {
             {formularioRegistro()}
           </SafeAreaView>
         </Modal>
-      </SafeAreaView>
+      </View>
     </>
   );
 }
@@ -338,17 +349,15 @@ export default function Agenda({ mes_, anio_ }) {
 const estilos = StyleSheet.create({
   contenedor: {
     backgroundColor: "white",
-    height: "100%",
     paddingTop: 0,
     paddingHorizontal: 6,
+    height: "100%",
   },
-  contendorAgenda: {
-    alignItems: "center",
-  },
+
   botonFix: {
     position: "absolute",
-    bottom: 200,
-    right: 20,
+    bottom: 140,
+    left: 20,
   },
   legendContainer: {
     flexDirection: "row",

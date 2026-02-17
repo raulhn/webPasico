@@ -79,41 +79,38 @@ export default function EventoAgenda({ evento, accion }) {
   }
 
   return (
-    <View style={estilos.contenedorEvento}>
-      <View style={estilos.row}>
-        <View style={estilos.content}>
-          <View style={estilos.titleRow}>
-            <Text style={estilos.tituloEvento} numberOfLines={1}>
-              {evento.nombre}
-            </Text>
-            <View
-              style={[
-                estilos.badge,
-                evento.tipo === "Concierto"
-                  ? estilos.badgeConcierto
-                  : estilos.badgeAgenda,
-              ]}
-            >
-              <Text style={estilos.badgeText}>
-                {evento.tipo === "Concierto" ? "Concierto" : "Agenda"}
-              </Text>
-            </View>
-          </View>
+    <View style={[estilos.contenedorEvento, esRol([Constantes.ROL_ADMINISTRADOR]) ? { paddingBottom: 50 } : {}]}>
+      <View style={estilos.content}>
+        <Text style={estilos.tituloEvento} numberOfLines={1}>
+          {evento.nombre}
+        </Text>
 
-          <Text style={estilos.descripcionEvento} numberOfLines={2}>
-            {evento.descripcion}
-          </Text>
+        <Text style={estilos.descripcionEvento} numberOfLines={2}>
+          {evento.descripcion}
+        </Text>
 
+        <View style={estilos.fechaRow}>
           <Text style={estilos.fechaEvento}>
             {obtenerFechaFormateadaSoloFecha(evento.fecha)} {evento.hora}
           </Text>
+          <View
+            style={[
+              estilos.badge,
+              evento.tipo === "Concierto"
+                ? estilos.badgeConcierto
+                : estilos.badgeAgenda,
+            ]}
+          >
+            <Text style={estilos.badgeText}>
+              {evento.tipo === "Concierto" ? "Concierto" : "Agenda"}
+            </Text>
+          </View>
         </View>
+      </View>
 
-        <View style={estilos.actions}>
-          {addBotonEditar()}
-          <View style={{ height: 8 }} />
-          {addBotonEliminar()}
-        </View>
+      <View style={estilos.actions}>
+        {addBotonEditar()}
+        {addBotonEliminar()}
       </View>
       <Modal
         visible={modalEdicionVisible}
@@ -159,6 +156,7 @@ export default function EventoAgenda({ evento, accion }) {
 
 const estilos = StyleSheet.create({
   contenedorEvento: {
+    position: "relative",
     padding: 12,
     borderRadius: 10,
     marginBottom: 12,
@@ -170,24 +168,31 @@ const estilos = StyleSheet.create({
     shadowRadius: 6,
     elevation: 2,
   },
-  row: {
-    flexDirection: "row",
-    alignItems: "flex-start",
-  },
   content: {
     flex: 1,
-    paddingRight: 8,
   },
   actions: {
-    width: 54,
-    alignItems: "center",
-    justifyContent: "flex-start",
+    position: "absolute",
+    bottom: 12,
+    right: 12,
+    flexDirection: "row",
+    gap: 8,
   },
-  titleRow: {
+  tituloEvento: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: "#212121",
+    marginBottom: 6,
+  },
+  descripcionEvento: {
+    fontSize: 14,
+    color: "#616161",
+    marginBottom: 6,
+  },
+  fechaRow: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginBottom: 6,
   },
   badge: {
     paddingHorizontal: 8,
@@ -203,11 +208,6 @@ const estilos = StyleSheet.create({
   },
   badgeAgenda: {
     backgroundColor: "#42a5f5",
-  },
-  tituloEvento: {
-    fontSize: 16,
-    fontWeight: "700",
-    color: "#212121",
   },
   descripcionEvento: {
     fontSize: 14,

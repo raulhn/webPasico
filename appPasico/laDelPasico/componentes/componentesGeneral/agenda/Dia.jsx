@@ -53,7 +53,7 @@ export default function Dia({
 
 const estilos = StyleSheet.create({
   contenedor: {
-    flex: 1,
+    height: 50,
     justifyContent: "center",
     alignItems: "center",
     padding: 4,
