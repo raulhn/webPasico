@@ -498,9 +498,7 @@ const estilos = StyleSheet.create({
     width: "100%",
     backgroundColor: "white",
     borderRadius: 12,
-
     borderColor: "#ccc",
-
     alignItems: "center",
   },
   botonFix: {
