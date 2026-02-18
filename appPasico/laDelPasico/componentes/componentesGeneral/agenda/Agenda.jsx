@@ -1,3 +1,4 @@
+import { useLocalSearchParams } from "expo-router";
 import { useState, useEffect } from "react";
 import Dia from "./Dia";
 import { View, Text, StyleSheet, FlatList, Modal } from "react-native";
@@ -18,6 +19,7 @@ import {
 } from "../../componentesUI/ComponentesUI";
 import Constantes from "../../../config/constantes.js";
 import { useRol } from "../../../hooks/useRol.js";
+import FormularioNotificacion from "../../notificaciones/FormularioNotificacion.jsx";
 
 export default function Agenda({ mes_, anio_ }) {
   const [mes, setMes] = useState(mes_);
@@ -26,8 +28,10 @@ export default function Agenda({ mes_, anio_ }) {
   const [eventosDia, setEventosDia] = useState([]);
   const [fechaInicio, setFechaInicio] = useState(null);
   const [fechaFin, setFechaFin] = useState(null);
-
+  const [modalVisibleNotificacion, setModalVisibleNotificacion] =
+    useState(false);
   const [tipoSeleccionado, setTipoSeleccionado] = useState(null);
+  const { mesParametro, anioParametro, diaParametro } = useLocalSearchParams();
 
   const tipos = [
     { etiqueta: "General", valor: 1 },
@@ -35,9 +39,19 @@ export default function Agenda({ mes_, anio_ }) {
   ];
 
   useEffect(() => {
-    setMes(mes_);
-    setAnio(anio_);
-  }, [mes_, anio_]);
+    if (mesParametro && anioParametro && diaParametro) {
+      setMes(parseInt(mesParametro));
+      setAnio(parseInt(anioParametro));
+      setDiaSeleccionado({
+        dia: parseInt(diaParametro),
+        mes: parseInt(mesParametro),
+        año: parseInt(anioParametro),
+      });
+    } else {
+      setMes(mes_);
+      setAnio(anio_);
+    }
+  }, [mes_, anio_, mesParametro, anioParametro, diaParametro]);
   const { esRol } = useRol();
   const { cerrarSesion } = useContext(AuthContext);
   const [diaSelecionado, setDiaSeleccionado] = useState(null);
@@ -202,7 +216,22 @@ export default function Agenda({ mes_, anio_ }) {
     });
     return existe;
   }
-
+  function botonNotificar() {
+    let rol_director = esRol(["DIRECTOR", "ADMINISTRADOR"]);
+    if (!rol_director) {
+      return null; // No mostrar el botón si no es director o administrador
+    }
+    return (
+      <BotonFixed
+        onPress={() => {
+          setModalVisibleNotificacion(true);
+        }}
+        size={40}
+        icon="notifications"
+        color={Constantes.COLOR_AZUL}
+      />
+    );
+  }
   function mostrarCalendario() {
     const diasSemanas = ["L", "M", "X", "J", "V", "S", "D"];
     var semanasCalendario = [];
@@ -294,7 +323,7 @@ export default function Agenda({ mes_, anio_ }) {
         {/* Hay que incluir un marginBottom debido a que al no usar flex el
         contenedor principal hay que tener en cuenta el menu inferior de
         navegación */}
-        <View style={{ flexGrow: 1, marginTop: 12, marginBottom: 95 }}>
+        <View style={{ flexGrow: 1, marginTop: 12, marginBottom: 140 }}>
           <FlatList
             data={eventosDia}
             keyExtractor={(item) => item.nid_evento.toString()}
@@ -314,7 +343,10 @@ export default function Agenda({ mes_, anio_ }) {
           />
         </View>
         <View style={estilos.botonFix}>
-          <ButtonAdd />
+          <View style={{ flexDirection: "row", gap: 12 }}>
+            <ButtonAdd />
+            {botonNotificar()}
+          </View>
         </View>
         <Modal
           animationType="slide"
@@ -341,6 +373,33 @@ export default function Agenda({ mes_, anio_ }) {
             {formularioRegistro()}
           </SafeAreaView>
         </Modal>
+        <Modal
+          animationType="slide"
+          visible={modalVisibleNotificacion}
+          onRequestClose={() => {
+            setModalVisibleNotificacion(false);
+          }}
+        >
+          <FormularioNotificacion
+            cancelar={() => {
+              setModalVisibleNotificacion(false);
+            }}
+            callback={() => {
+              setModalVisibleNotificacion(false);
+            }}
+            valorMensaje={"Eventos del día "}
+            valorTitulo={"Eventos"}
+            tipo={Constantes.GENERAL}
+            data={{
+              pathname: "/stackAgenda",
+              params: {
+                mesParametro: mes,
+                anioParametro: anio,
+                diaParametro: diaSelecionado ? diaSelecionado.dia : null,
+              },
+            }}
+          />
+        </Modal>
       </View>
     </>
   );
@@ -350,14 +409,19 @@ const estilos = StyleSheet.create({
   contenedor: {
     backgroundColor: "white",
     paddingTop: 0,
-    paddingHorizontal: 6,
+    paddingHorizontal: 2,
     height: "100%",
   },
 
   botonFix: {
     position: "absolute",
-    bottom: 140,
+    bottom: 180,
     left: 20,
+  },
+  botonFixRight: {
+    position: "absolute",
+    bottom: 180,
+    right: 20,
   },
   legendContainer: {
     flexDirection: "row",
