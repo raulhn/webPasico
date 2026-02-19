@@ -173,8 +173,23 @@ function numConexiones() {
   });
 }
 
+function obtenerConexiones() {
+  const sql = "SELECT * FROM " + constantes.ESQUEMA + ".conexiones";
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(sql, (error, results) => {
+      if (error) {
+        console.error("Error al obtener las conexiones:", error);
+        reject(error);
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
+
 module.exports.registrarConexion = registrarConexion;
 module.exports.actualizarTokenUsuario = actualizarTokenUsuario;
 module.exports.limpiarToken = limpiarToken;
 module.exports.obtenerTokenUsuario = obtenerTokenUsuario;
 module.exports.eliminarToken = eliminarToken;
+module.exports.obtenerConexiones = obtenerConexiones;

@@ -16,7 +16,7 @@ async function registrarNotificacion(req, res) {
       personas,
       titulo,
       mensaje,
-      data
+      data,
     );
 
     res.status(200).send({
@@ -50,7 +50,7 @@ async function registrarNotificacionGrupo(req, res) {
       grupos,
       titulo,
       mensaje,
-      data
+      data,
     );
 
     res.status(200).send({
@@ -66,5 +66,38 @@ async function registrarNotificacionGrupo(req, res) {
   }
 }
 
+async function registrarNotificacionTodos(req, res) {
+  try {
+    const { titulo, mensaje, data } = req.body;
+
+    if (!titulo || !mensaje) {
+      res.status(400).send({
+        error: true,
+        mensaje:
+          "Faltan datos necesarios para registrar la notificación para todos",
+      });
+      return;
+    }
+
+    await gestorNotificaciones.registrarNotificacionTodos(
+      titulo,
+      mensaje,
+      data,
+    );
+
+    res.status(200).send({
+      error: false,
+      mensaje: "Notificación para todos registrada correctamente",
+    });
+  } catch (error) {
+    console.error("Error al registrar la notificación para todos:", error);
+    res.status(500).send({
+      error: true,
+      mensaje: "Error al registrar la notificación para todos",
+    });
+  }
+}
+
 module.exports.registrarNotificacion = registrarNotificacion;
 module.exports.registrarNotificacionGrupo = registrarNotificacionGrupo;
+module.exports.registrarNotificacionTodos = registrarNotificacionTodos;
