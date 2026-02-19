@@ -386,6 +386,11 @@ app.post(
   servletNotificaciones.registrarNotificacionGrupo,
 );
 
+app.post(
+  "/registrar_notificaciones_todos",
+  servletNotificaciones.registrarNotificacionTodos,
+);
+
 //Evaluaciones //
 app.get(
   "/obtener_evaluaciones/:nid_matricula",

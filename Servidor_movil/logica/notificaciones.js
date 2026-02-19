@@ -73,6 +73,19 @@ async function registrarNotificacion(nid_persona, titulo, body, data) {
   }
 }
 
+async function registrarNotificacionesTodos(titulo, body, data) {
+  try {
+    const conexiones = await gestorConexiones.obtenerConexiones();
+
+    for (const conexion of conexiones) {
+      await insertarNotificacion(conexion.token, titulo, body, data);
+    }
+  } catch (error) {
+    console.error("Error al registrar las notificaciones para todos:", error);
+    throw new Error("Error al registrar las notificaciones para todos");
+  }
+}
+
 async function enviarNotificaciones(personas, titulo, body, data) {
   try {
     let personasANotificar = [...personas];
@@ -428,6 +441,7 @@ async function registrarNotificacionGrupo(
 }
 
 module.exports.enviarNotificaciones = enviarNotificaciones;
+module.exports.registrarNotificacionesTodos = registrarNotificacionesTodos;
 module.exports.enviarNotificacionesTodos = enviarNotificacionesTodos;
 module.exports.procesoEnviarNotificaciones = procesoEnviarNotificaciones;
 module.exports.registrarNotificacion = registrarNotificacion;
