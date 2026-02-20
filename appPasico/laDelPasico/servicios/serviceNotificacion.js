@@ -69,5 +69,38 @@ function registrarNotificacionGrupo(
   });
 }
 
+function registrarNotificacionGeneral(titulo, mensaje, data, cerrar_sesion) {
+  const body = {
+    titulo: titulo,
+    mensaje: mensaje,
+    data: data,
+  };
+
+  return new Promise((resolve, reject) => {
+    servletComun
+      .peticionSesion(
+        "POST",
+        Constantes.URL_SERVICIO_MOVIL + "registrar_notificaciones_todos",
+        body,
+        cerrar_sesion
+      )
+      .then((response) => {
+        if (!response.error) {
+          resolve(response);
+        } else {
+          reject("Se ha producido un error al realizar la notificación");
+        }
+      })
+      .catch((error) => {
+        console.log(
+          "serviceNotificacion -> registrarNotificacionGeneral:",
+          error
+        );
+        reject(error);
+      });
+  });
+}
+
 module.exports.registrarNotificacion = registrarNotificacion;
 module.exports.registrarNotificacionGrupo = registrarNotificacionGrupo;
+module.exports.registrarNotificacionGeneral = registrarNotificacionGeneral;
