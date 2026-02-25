@@ -20,6 +20,7 @@ import {
 import Constantes from "../../../config/constantes.js";
 import { useRol } from "../../../hooks/useRol.js";
 import FormularioNotificacion from "../../notificaciones/FormularioNotificacion.jsx";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
 export default function Agenda({ mes_, anio_ }) {
   const [mes, setMes] = useState(mes_);
@@ -32,7 +33,8 @@ export default function Agenda({ mes_, anio_ }) {
     useState(false);
   const [tipoSeleccionado, setTipoSeleccionado] = useState(null);
   const { mesParametro, anioParametro, diaParametro } = useLocalSearchParams();
-
+  const bottomTabBarHeight = useBottomTabBarHeight();
+  const alturaMenu = bottomTabBarHeight * 2;
   const tipos = [
     { etiqueta: "General", valor: 1 },
     { etiqueta: "Banda", valor: 2 },
@@ -323,7 +325,13 @@ export default function Agenda({ mes_, anio_ }) {
         {/* Hay que incluir un marginBottom debido a que al no usar flex el
         contenedor principal hay que tener en cuenta el menu inferior de
         navegación */}
-        <View style={{ flexGrow: 1, marginTop: 12, marginBottom: 140 }}>
+        <View
+          style={{
+            flexGrow: 1,
+            marginTop: 12,
+            marginBottom: alturaMenu,
+          }}
+        >
           <FlatList
             data={eventosDia}
             keyExtractor={(item) => item.nid_evento.toString()}
@@ -342,7 +350,7 @@ export default function Agenda({ mes_, anio_ }) {
             )}
           />
         </View>
-        <View style={estilos.botonFix}>
+        <View style={[estilos.botonFix, { bottom: alturaMenu + 40 }]}>
           <View style={{ flexDirection: "row", gap: 12 }}>
             <ButtonAdd />
             {botonNotificar()}
@@ -415,12 +423,10 @@ const estilos = StyleSheet.create({
 
   botonFix: {
     position: "absolute",
-    bottom: 180,
     left: 20,
   },
   botonFixRight: {
     position: "absolute",
-    bottom: 180,
     right: 20,
   },
   legendContainer: {
