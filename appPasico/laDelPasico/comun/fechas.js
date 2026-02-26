@@ -20,7 +20,8 @@ export function obtenerFechaFormateadaSoloFecha(date) {
     const d = new Date(date);
     const madridDate = d.toLocaleString("en-GB", { timeZone: "Europe/Madrid" });
     // Formato sv-SE: 'YYYY-MM-DD HH:mm:ss'
-    return madridDate.split(" ")[0];
+    const fecha = madridDate.split(" ")[0];
+    return fecha.replace(",", "");
   } catch (error) {
     return null;
   }
