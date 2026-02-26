@@ -79,7 +79,12 @@ export default function EventoAgenda({ evento, accion }) {
   }
 
   return (
-    <View style={[estilos.contenedorEvento, esRol([Constantes.ROL_ADMINISTRADOR]) ? { paddingBottom: 50 } : {}]}>
+    <View
+      style={[
+        estilos.contenedorEvento,
+        esRol([Constantes.ROL_ADMINISTRADOR]) ? { paddingBottom: 50 } : {},
+      ]}
+    >
       <View style={estilos.content}>
         <Text style={estilos.tituloEvento} numberOfLines={1}>
           {evento.nombre}
@@ -90,9 +95,15 @@ export default function EventoAgenda({ evento, accion }) {
         </Text>
 
         <View style={estilos.fechaRow}>
-          <Text style={estilos.fechaEvento}>
-            {obtenerFechaFormateadaSoloFecha(evento.fecha)} {evento.hora}
-          </Text>
+          <View style={{ justifyContent: "flex-start", flexDirection: "row" }}>
+            <Text style={estilos.fechaEvento}>
+              {obtenerFechaFormateadaSoloFecha(evento.fecha)}
+            </Text>
+            <Text style={estilos.horaEvento}>
+              {" "}
+              {evento.hora ? " - Hora: " + evento.hora : ""}
+            </Text>
+          </View>
           <View
             style={[
               estilos.badge,
@@ -217,6 +228,12 @@ const estilos = StyleSheet.create({
   fechaEvento: {
     fontSize: 12,
     color: "#9e9e9e",
+    marginTop: 2,
+  },
+  horaEvento: {
+    fontSize: 12,
+    fontWeight: "bold",
+    color: "black",
     marginTop: 2,
   },
 });
