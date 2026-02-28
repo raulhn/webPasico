@@ -236,6 +236,32 @@ async function obtenerEventosMes(req, res) {
   }
 }
 
+async function obtenerAgendaEvento(req, res) {
+  try {
+    const rolesPermitidos = [constantes.DIRECTOR, constantes.ADMINISTRADOR];
+
+    let rolDirector = await servlet_comun.comprobarRol(
+      req,
+      res,
+      rolesPermitidos,
+    );
+    const bPublicos = !rolDirector;
+    const nid_agenda_evento = req.params.nid_agenda_evento;
+
+    const evento = await gestorAgendaEvento.obtenerAgendaEvento(
+      nid_agenda_evento,
+      bPublicos,
+    );
+
+    res.status(200).send({ error: false, evento: evento });
+  } catch (error) {
+    console.log("servelt_agenda_evento -> obtenerAgendaEvento:", error);
+    res
+      .status(500)
+      .send({ error: true, mensaje: "Error interno del servidor" });
+  }
+}
+
 module.exports.obtenerEventos = obtenerEventos;
 module.exports.obtenerEventosFecha = obtenerEventosFecha;
 module.exports.registrarEvento = registrarEvento;
@@ -243,3 +269,4 @@ module.exports.actualizarEvento = actualizarEvento;
 module.exports.eliminarEvento = eliminarEvento;
 module.exports.obtenerEventosRangoFechas = obtenerEventosRangoFechas;
 module.exports.obtenerEventosMes = obtenerEventosMes;
+module.exports.obtenerAgendaEvento = obtenerAgendaEvento;
