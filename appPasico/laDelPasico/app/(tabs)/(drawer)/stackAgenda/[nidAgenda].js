@@ -1,7 +1,12 @@
 import { useLocalSearchParams } from "expo-router";
+import { View, Text } from "react-native";
 import DetalleEvento from "../../../../componentes/componentesGeneral/agenda/DetalleEvento";
 export default function PantallDetalleEvento() {
-  const { evento } = useLocalSearchParams();
+  const { nidAgenda } = useLocalSearchParams();
 
-  return <DetalleEvento evento={evento} />;
+  return (
+    <View>
+      <Text>{nidAgenda}</Text>
+    </View>
+  );
 }
