@@ -842,12 +842,29 @@ export function ListaSeleccionable({ data, renderItem, onSelect }) {
   );
 }
 
-export function ListaNavegable({ data, renderItem, onSelect, dataLink }) {
+export function ListaNavegable({ 
+  data, 
+  renderItem, 
+  onSelect, 
+  dataLink, 
+  style,
+  contentContainerStyle,
+  showsVerticalScrollIndicator,
+  onRefresh,
+  refreshing,
+  keyExtractor
+}) {
   const [presionado, setPresionado] = useState(null);
 
   return (
     <FlatList
       data={data}
+      keyExtractor={keyExtractor || ((item, index) => index.toString())}
+      style={style}
+      contentContainerStyle={contentContainerStyle}
+      showsVerticalScrollIndicator={showsVerticalScrollIndicator}
+      onRefresh={onRefresh}
+      refreshing={refreshing}
       renderItem={({ item, index }) => (
         <Link href={dataLink(item)} key={index} asChild>
           <Pressable
@@ -855,7 +872,7 @@ export function ListaNavegable({ data, renderItem, onSelect, dataLink }) {
               setPresionado(index);
               onSelect(item);
             }}
-            style={presionado === index ? estilos.presionado : {}}
+            style={presionado === index ? estilos.tarjetaPresionada : {}}
             onPressIn={() => setPresionado(index)}
             onPressOut={() => setPresionado(null)}
           >

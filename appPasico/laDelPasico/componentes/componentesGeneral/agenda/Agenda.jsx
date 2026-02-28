@@ -323,24 +323,22 @@ export default function Agenda({ mes_, anio_ }) {
 
           <MostrarSemanas />
         </View>
-        {/* Hay que incluir un marginBottom debido a que al no usar flex el
-        contenedor principal hay que tener en cuenta el menu inferior de
-        navegación */}
+        {/* Lista de eventos del día seleccionado con navegación integrada */}
         <View
           style={{
-            flexGrow: 1,
+            flex: 1,
             marginTop: 12,
-            marginBottom: alturaMenu + 40,
           }}
         >
           <ListaNavegable
             data={eventosDia}
+            keyExtractor={(item) => item.nid_evento.toString()}
             onSelect={(item) => {
               lanzarRefresco();
             }}
             dataLink={(item) => {
               return {
-                pathname: "/stackAgenda/[nidAgenda]",
+                pathname: "/(tabs)/(drawer)/stackAgenda/[nidAgenda]",
                 params: { evento: item },
               };
             }}
@@ -352,23 +350,15 @@ export default function Agenda({ mes_, anio_ }) {
                 }}
               />
             )}
-          />
-          <FlatList
-            data={eventosDia}
-            keyExtractor={(item) => item.nid_evento.toString()}
             style={{ flex: 1 }}
-            contentContainerStyle={{ paddingBottom: 20 }}
+            contentContainerStyle={{ 
+              paddingBottom: alturaMenu + 10,
+              paddingHorizontal: 8,
+              paddingTop: 4
+            }}
             showsVerticalScrollIndicator={true}
             onRefresh={() => lanzarRefresco()}
             refreshing={cargando}
-            renderItem={({ item }) => (
-              <EventoAgenda
-                evento={item}
-                accion={() => {
-                  lanzarRefresco();
-                }}
-              />
-            )}
           />
         </View>
         <View style={[estilos.botonFix, { bottom: alturaMenu + 40 }]}>
@@ -439,7 +429,7 @@ const estilos = StyleSheet.create({
     backgroundColor: "white",
     paddingTop: 0,
     paddingHorizontal: 2,
-    height: "100%",
+    flex: 1,
   },
 
   botonFix: {
