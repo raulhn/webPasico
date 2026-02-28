@@ -57,43 +57,6 @@ export default function Partituras() {
     return <ActivityIndicator size="large" color="#0000ff" />;
   }
 
-  if (eventosConciertos.length === 0) {
-    return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-          backgroundColor: "white",
-        }}
-      >
-        <Text>No hay eventos disponibles</Text>
-
-        <View
-          style={[
-            esRol(["ADMINISTRADOR", "DIRECTOR"])
-              ? { display: "flex" }
-              : { display: "none" },
-            styles.botonAdd,
-          ]}
-        >
-          <BotonFixed
-            onPress={() => {
-              setModalVisible(true);
-            }}
-          />
-        </View>
-        <Modal
-          animationType="slide"
-          visible={modalVisible}
-          onRequestClose={() => {}}
-        >
-          <FormularioEvento cancelar={cerrar} callback={refrescarLista} />
-        </Modal>
-      </View>
-    );
-  }
-
   if (error) {
     // Muestra un mensaje de error si no se pueden cargar las galerías
     return (
@@ -124,6 +87,11 @@ export default function Partituras() {
               }}
             />
           }
+          ListEmptyComponent={() => (
+            <View style={{ alignItems: "center", marginTop: 20 }}>
+              <Text>No hay eventos disponibles</Text>
+            </View>
+          )}
           onScrollEndDrag={() => {
             setPresionado(null); // Cambia el estado a no presionado al hacer scroll
           }}

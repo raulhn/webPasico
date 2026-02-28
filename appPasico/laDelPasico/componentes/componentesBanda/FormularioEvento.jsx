@@ -209,7 +209,7 @@ export default function FormularioEvento({
   }
 
   return (
-    <ScrollView>
+    <ScrollView style={{ flex: 1 }}>
       <View style={estilos.container}>
         <Text style={estilos.titulo}>Registrar evento</Text>
         <Text>Nombre de Evento</Text>
