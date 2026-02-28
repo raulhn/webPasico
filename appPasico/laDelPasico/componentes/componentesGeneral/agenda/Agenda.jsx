@@ -36,6 +36,7 @@ export default function Agenda({ mes_, anio_ }) {
   const { mesParametro, anioParametro, diaParametro } = useLocalSearchParams();
   const bottomTabBarHeight = useBottomTabBarHeight();
   const alturaMenu = bottomTabBarHeight * 2;
+
   const tipos = [
     { etiqueta: "General", valor: 1 },
     { etiqueta: "Banda", valor: 2 },
@@ -326,8 +327,8 @@ export default function Agenda({ mes_, anio_ }) {
         {/* Lista de eventos del día seleccionado con navegación integrada */}
         <View
           style={{
-            flex: 1,
             marginTop: 12,
+            marginBottom: 396,
           }}
         >
           <ListaNavegable
@@ -339,7 +340,7 @@ export default function Agenda({ mes_, anio_ }) {
             dataLink={(item) => {
               return {
                 pathname: "/(tabs)/(drawer)/stackAgenda/[nidAgenda]",
-                params: { evento: item },
+                params: { nidAgenda: item.nid_evento },
               };
             }}
             renderItem={({ item }) => (
@@ -350,18 +351,17 @@ export default function Agenda({ mes_, anio_ }) {
                 }}
               />
             )}
-            style={{ flex: 1 }}
-            contentContainerStyle={{ 
+            contentContainerStyle={{
               paddingBottom: alturaMenu + 10,
               paddingHorizontal: 8,
-              paddingTop: 4
+              paddingTop: 4,
             }}
             showsVerticalScrollIndicator={true}
             onRefresh={() => lanzarRefresco()}
             refreshing={cargando}
           />
         </View>
-        <View style={[estilos.botonFix, { bottom: alturaMenu + 40 }]}>
+        <View style={[estilos.botonFix, { bottom: alturaMenu + 30 }]}>
           <View style={{ flexDirection: "row", gap: 12 }}>
             <ButtonAdd />
             {botonNotificar()}
@@ -429,7 +429,7 @@ const estilos = StyleSheet.create({
     backgroundColor: "white",
     paddingTop: 0,
     paddingHorizontal: 2,
-    flex: 1,
+    height: "100%",
   },
 
   botonFix: {
