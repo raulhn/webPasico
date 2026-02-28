@@ -1,6 +1,6 @@
 import { useLocalSearchParams } from "expo-router";
-import DetalleEvento from "../../../../componentes/componentesAgenda/DetalleEvento";
-export default function PantallDetalleEvento({ evento }) {
+import DetalleEvento from "../../../../componentes/componentesGeneral/agenda/DetalleEvento";
+export default function PantallDetalleEvento() {
   const { evento } = useLocalSearchParams();
 
   return <DetalleEvento evento={evento} />;
