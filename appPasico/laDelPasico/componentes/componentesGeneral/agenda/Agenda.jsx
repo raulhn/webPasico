@@ -16,6 +16,7 @@ import FormularioEvento from "../../componentesBanda/FormularioEvento.jsx";
 import {
   BotonFixed,
   EntradaGroupRadioButton,
+  ListaNavegable,
 } from "../../componentesUI/ComponentesUI";
 import Constantes from "../../../config/constantes.js";
 import { useRol } from "../../../hooks/useRol.js";
@@ -329,9 +330,29 @@ export default function Agenda({ mes_, anio_ }) {
           style={{
             flexGrow: 1,
             marginTop: 12,
-            marginBottom: alturaMenu,
+            marginBottom: alturaMenu + 40,
           }}
         >
+          <ListaNavegable
+            data={eventosDia}
+            onSelect={(item) => {
+              lanzarRefresco();
+            }}
+            dataLink={(item) => {
+              return {
+                pathname: "/stackAgenda/[nidAgenda]",
+                params: { evento: item },
+              };
+            }}
+            renderItem={({ item }) => (
+              <EventoAgenda
+                evento={item}
+                accion={() => {
+                  lanzarRefresco();
+                }}
+              />
+            )}
+          />
           <FlatList
             data={eventosDia}
             keyExtractor={(item) => item.nid_evento.toString()}

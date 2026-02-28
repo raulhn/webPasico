@@ -143,7 +143,7 @@ export default function EventoAgenda({ evento, accion }) {
         titulo="Eliminar Evento"
         mensaje="¿Estás seguro de que deseas eliminar este evento?"
         accion={() => {
-          if (evento.tipo === "Concierto") {
+          if (evento.tipo === "Banda") {
             eliminarEventoConcierto(evento.nid_evento).then(() => {
               setVisibleAvisoEliminado(false);
               accion();

@@ -815,6 +815,61 @@ export function MenuDesplegable({ opciones }) {
   );
 }
 
+export function ListaSeleccionable({ data, renderItem, onSelect }) {
+  const [presionado, setPresionado] = useState(null);
+
+  return (
+    <FlatList
+      data={data}
+      renderItem={({ item, index }) => (
+        <Pressable
+          onPress={() => {
+            setPresionado(index);
+            onSelect(item);
+          }}
+          style={presionado === index ? estilos.presionado : {}}
+          onPressIn={() => setPresionado(index)}
+          onPressOut={() => setPresionado(null)}
+        >
+          <View
+            style={presionado === index ? { backgroundColor: "#e0e0e0" } : {}}
+          >
+            {renderItem({ item })}
+          </View>
+        </Pressable>
+      )}
+    />
+  );
+}
+
+export function ListaNavegable({ data, renderItem, onSelect, dataLink }) {
+  const [presionado, setPresionado] = useState(null);
+
+  return (
+    <FlatList
+      data={data}
+      renderItem={({ item, index }) => (
+        <Link href={dataLink(item)} key={index} asChild>
+          <Pressable
+            onPress={() => {
+              setPresionado(index);
+              onSelect(item);
+            }}
+            style={presionado === index ? estilos.presionado : {}}
+            onPressIn={() => setPresionado(index)}
+            onPressOut={() => setPresionado(null)}
+          >
+            <View
+              style={presionado === index ? { backgroundColor: "#e0e0e0" } : {}}
+            >
+              {renderItem({ item })}
+            </View>
+          </Pressable>
+        </Link>
+      )}
+    />
+  );
+}
 const estilos = StyleSheet.create({
   boton: {
     padding: 10,
@@ -922,5 +977,8 @@ const estilos = StyleSheet.create({
     borderRadius: 5,
     borderColor: "#ccc",
     borderWidth: 1,
+  },
+  tarjetaPresionada: {
+    transform: [{ scale: 1.05 }],
   },
 });

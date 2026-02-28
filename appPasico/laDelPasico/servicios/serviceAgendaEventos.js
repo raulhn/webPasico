@@ -148,9 +148,29 @@ function obtenerEventosMes(mes, anio, cerrarSesion) {
   });
 }
 
+function obtenerAgendaEvento(nid_agenda_evento, cerrarSesion) {
+  return new Promise((resolve, reject) => {
+    ServiceComun.peticionSesion(
+      "GET",
+      Constantes.URL_SERVICIO_MOVIL +
+        "obtener_agenda_evento/" +
+        nid_agenda_evento,
+      null,
+      cerrarSesion
+    )
+      .then((response) => {
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+}
+
 module.exports.obtenerEventosFecha = obtenerEventosFecha;
 module.exports.registrarEvento = registrarEvento;
 module.exports.actualizarEvento = actualizarEvento;
 module.exports.eliminarEvento = eliminarEvento;
 module.exports.obtenerEventosMes = obtenerEventosMes;
 module.exports.obtenerEventosRangoFechas = obtenerEventosRangoFechas;
+module.exports.obtenerAgendaEvento = obtenerAgendaEvento;

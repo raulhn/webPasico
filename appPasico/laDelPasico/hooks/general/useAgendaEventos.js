@@ -158,9 +158,21 @@ export const useAgendaEventos = (cerrar_sesion) => {
     }
   }
 
+  async function obtenerAgendaEvento(nid_agenda_evento) {
+    try {
+      return await ServiceAgendaEventos.obtenerAgendaEvento(
+        nid_agenda_evento,
+        cerrar_sesion
+      );
+    } catch (error) {
+      console.log("Error al obtener el evento:", error);
+      throw new Error("Error al obtener el evento");
+    }
+  }
   return {
     registrarEvento,
     actualizarEvento,
     eliminarEvento,
+    obtenerAgendaEvento,
   };
 };
