@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
 export class ButacaComponent {
   @Input() fila = 0;
   @Input() butaca: number = 0;
+  @Input() tamIcono: number = 20;
   @Output() clickButaca = new EventEmitter<any>();
 
   seleccionado: boolean = false;
@@ -18,8 +19,6 @@ export class ButacaComponent {
   faCouch = faCouch;
 
   click() {
-    console.log('x');
-    console.log('Se ha hecho click: ', this.fila, this.butaca);
     this.seleccionado = !this.seleccionado;
     console.log('seleccionado', this.seleccionado);
     this.clickButaca.emit({

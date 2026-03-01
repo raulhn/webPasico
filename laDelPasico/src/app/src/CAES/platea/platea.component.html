@@ -4,31 +4,39 @@
     <app-bloque-butacas
       [filas]="1"
       [butacas]="13"
-      [margenIzquierdo]="0"
+      [desplazamientoIzquierdo]="0"
       [reverse]="0"
       [indice]="9"
+      [tamGap]="tamGap"
+      [tamIconos]="tamIconos"
     ></app-bloque-butacas>
     <app-bloque-butacas
       [filas]="3"
       [butacas]="12"
-      [margenIzquierdo]="46"
+      [desplazamientoIzquierdo]="0"
       [reverse]="0"
       [indice]="6"
+      [tamGap]="tamGap"
+      [tamIconos]="tamIconos"
     ></app-bloque-butacas>
     <app-bloque-butacas
       [filas]="3"
       [butacas]="11"
-      [margenIzquierdo]="69"
+      [desplazamientoIzquierdo]="0.5"
       [reverse]="0"
       [indice]="3"
+      [tamGap]="tamGap"
+      [tamIconos]="tamIconos"
     ></app-bloque-butacas>
     <div style="margin-top: 30px"></div>
     <app-bloque-butacas
       [filas]="1"
       [butacas]="9"
-      [margenIzquierdo]="230"
+      [desplazamientoIzquierdo]="5"
       [reverse]="0"
       [indice]="1"
+      [tamGap]="tamGap"
+      [tamIconos]="tamIconos"
     ></app-bloque-butacas>
   </div>
   <div>
@@ -36,23 +44,29 @@
       <app-bloque-butacas
         [filas]="1"
         [butacas]="13"
-        [margenDerecho]="0"
+        [desplazamientoIzquierdo]="0"
         [reverse]="1"
         [indice]="6"
+        [tamGap]="tamGap"
+        [tamIconos]="tamIconos"
       ></app-bloque-butacas>
       <app-bloque-butacas
         [filas]="3"
         [butacas]="12"
-        [margenDerecho]="46"
+        [desplazamientoDerecho]="0"
         [reverse]="1"
         [indice]="3"
+        [tamGap]="tamGap"
+        [tamIconos]="tamIconos"
       ></app-bloque-butacas>
       <app-bloque-butacas
         [filas]="3"
         [butacas]="11"
-        [margenDerecho]="69"
+        [desplazamientoDerecho]="0.5"
         [reverse]="1"
         [indice]="1"
+        [tamGap]="tamGap"
+        [tamIconos]="tamIconos"
       ></app-bloque-butacas>
       <div style="margin-top: 30px"></div>
 
@@ -60,37 +74,50 @@
         [filas]="1"
         [butacas]="9"
         [reverse]="0"
+        [tamGap]="tamGap"
+        [tamIconos]="tamIconos"
       ></app-bloque-butacas>
     </div>
   </div>
 </div>
 <div class="platea-lateral">
-  <div class="rotar_platea_izquierda">
+  <div
+    class="rotar_platea_izquierda"
+    [style.width.px]="(tamGap + tamIconos) * 7 + tamGap * 8"
+  >
     <app-bloque-butacas
       [filas]="1"
       [butacas]="7"
-      [margenDerecho]="0"
+      [desplazamientoDerecho]="0"
       [reverse]="0"
+      [tamGap]="tamGap"
+      [tamIconos]="tamIconos"
     ></app-bloque-butacas>
     <app-bloque-butacas
       [filas]="1"
       [butacas]="6"
-      [margenDerecho]="46"
+      [desplazamientoDerecho]="1"
       [reverse]="0"
+      [tamGap]="tamGap"
+      [tamIconos]="tamIconos"
     ></app-bloque-butacas>
   </div>
-  <div class="rotar_platea_derecha">
+  <div class="rotar_platea_derecha" [style.width.px]="tamIconos * 7">
     <app-bloque-butacas
       [filas]="1"
       [butacas]="7"
-      [margenDerecho]="0"
+      [desplazamientoDerecho]="0"
       [reverse]="1"
+      [tamGap]="tamGap"
+      [tamIconos]="tamIconos"
     ></app-bloque-butacas>
     <app-bloque-butacas
       [filas]="1"
       [butacas]="6"
-      [margenIzquierdo]="46"
+      [desplazamientoIzquierdo]="1"
       [reverse]="1"
+      [tamGap]="tamGap"
+      [tamIconos]="tamIconos"
     ></app-bloque-butacas>
   </div>
 </div>
