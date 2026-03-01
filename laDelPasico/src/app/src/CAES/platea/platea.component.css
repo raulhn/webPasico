@@ -1,11 +1,11 @@
 .rotar_platea_derecha {
-  transform: translate(0px, 0px) rotate(45deg);
+  transform: translate(0px, 40px) rotate(45deg);
   border-width: 1;
   border-color: "black";
 }
 
 .rotar_platea_izquierda {
-  transform: translate(0px, 0px) rotate(-45deg);
+  transform: translate(0px, 40px) rotate(-45deg);
 }
 
 .platea-lateral {
