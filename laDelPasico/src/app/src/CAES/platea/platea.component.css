@@ -1,0 +1,9 @@
+.rotar_platea_derecha {
+  transform: translate(60px, -520px) rotate(45deg);
+  border-width: 1;
+  border-color: "black";
+}
+
+.rotar_platea_izquierda {
+  transform: translate(-60px, -430px) rotate(-45deg);
+}
