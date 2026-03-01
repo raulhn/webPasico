@@ -1,0 +1,24 @@
+.bloque {
+  display: flex;
+  flex-direction: column; /* filas una debajo de otra */
+  gap: 10px;
+}
+
+.fila {
+  display: flex; /* necesario */
+  flex-direction: row; /* butacas en horizontal */
+  gap: 8px;
+}
+
+.fila-reverse {
+  display: flex; /* necesario */
+  flex-direction: row-reverse; /* butacas en horizontal */
+  gap: 8px;
+}
+.butaca {
+  width: 28px;
+  height: 28px;
+  border: 1px solid #999;
+  display: grid;
+  place-items: center;
+}
