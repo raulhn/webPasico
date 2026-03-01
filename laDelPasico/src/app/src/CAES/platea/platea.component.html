@@ -1,0 +1,87 @@
+<p>platea works!</p>
+<div style="display: flex; gap: 8px; justify-content: center">
+  <div>
+    <app-bloque-butacas
+      [filas]="1"
+      [butacas]="13"
+      [margenIzquierdo]="0"
+      [reverse]="0"
+    ></app-bloque-butacas>
+    <app-bloque-butacas
+      [filas]="3"
+      [butacas]="12"
+      [margenIzquierdo]="46"
+      [reverse]="0"
+    ></app-bloque-butacas>
+    <app-bloque-butacas
+      [filas]="3"
+      [butacas]="11"
+      [margenIzquierdo]="69"
+      [reverse]="0"
+    ></app-bloque-butacas>
+    <div style="margin-top: 30px"></div>
+    <app-bloque-butacas
+      [filas]="1"
+      [butacas]="9"
+      [margenIzquierdo]="230"
+      [reverse]="0"
+    ></app-bloque-butacas>
+  </div>
+  <div>
+    <div>
+      <app-bloque-butacas
+        [filas]="1"
+        [butacas]="13"
+        [margenDerecho]="0"
+        [reverse]="1"
+      ></app-bloque-butacas>
+      <app-bloque-butacas
+        [filas]="3"
+        [butacas]="12"
+        [margenDerecho]="46"
+        [reverse]="1"
+      ></app-bloque-butacas>
+      <app-bloque-butacas
+        [filas]="3"
+        [butacas]="11"
+        [margenDerecho]="69"
+        [reverse]="1"
+      ></app-bloque-butacas>
+      <div style="margin-top: 30px"></div>
+
+      <app-bloque-butacas
+        [filas]="1"
+        [butacas]="9"
+        [reverse]="0"
+      ></app-bloque-butacas>
+    </div>
+  </div>
+</div>
+<div class="rotar_platea_izquierda">
+  <app-bloque-butacas
+    [filas]="1"
+    [butacas]="7"
+    [margenDerecho]="0"
+    [reverse]="0"
+  ></app-bloque-butacas>
+  <app-bloque-butacas
+    [filas]="1"
+    [butacas]="6"
+    [margenDerecho]="46"
+    [reverse]="0"
+  ></app-bloque-butacas>
+</div>
+<div class="rotar_platea_derecha">
+  <app-bloque-butacas
+    [filas]="1"
+    [butacas]="7"
+    [margenDerecho]="0"
+    [reverse]="1"
+  ></app-bloque-butacas>
+  <app-bloque-butacas
+    [filas]="1"
+    [butacas]="6"
+    [margenIzquierdo]="46"
+    [reverse]="1"
+  ></app-bloque-butacas>
+</div>

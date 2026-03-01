@@ -9,45 +9,48 @@ import { ListadoPreinscripcionesComponent } from './src/listado-preinscripciones
 import { ListadoPreinscripcionesCompletoComponent } from './src/listado-preinscripciones-completo/listado-preinscripciones-completo.component';
 import { ListaOrdenadaComponent } from './src/lista-ordenada/lista-ordenada.component';
 import { FormularioEliminaUsuario } from './src/formulario-elimina-usuario/formulario-elimina-usuario';
+import { PatioButacasComponent } from './src/CAES/patio-butacas/patio-butacas.component';
+import { PlateaComponent } from './src/CAES/platea/platea.component';
 
 const routes: Routes = [
   {
     path: 'login',
-    component: FormularioLoginComponent
+    component: FormularioLoginComponent,
   },
   {
     path: '',
-    component: HomeComponent
+    component: HomeComponent,
   },
   {
     path: 'general/:id',
-    component: PaginaComponent
+    component: PaginaComponent,
   },
   {
     path: 'preinscripcion',
-    component: FormularioPreinscripcionComponent
+    component: FormularioPreinscripcionComponent,
   },
   {
     path: 'info_preinscripcion',
-    component: ListadoPreinscripcionesComponent
+    component: ListadoPreinscripcionesComponent,
   },
   {
     path: 'info_preinscripcion_completa',
-    component: ListadoPreinscripcionesCompletoComponent
+    component: ListadoPreinscripcionesCompletoComponent,
   },
   {
     path: 'lista_ordenada',
-    component: ListaOrdenadaComponent
+    component: ListaOrdenadaComponent,
   },
   {
     path: 'solicitud_elimina_usuario',
-    component: FormularioEliminaUsuario
-  }
-
+    component: FormularioEliminaUsuario,
+  },
+  { path: 'patio_butacas', component: PatioButacasComponent },
+  { path: 'platea', component: PlateaComponent },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

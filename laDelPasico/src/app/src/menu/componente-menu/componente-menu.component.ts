@@ -1,4 +1,3 @@
-
 import { Component, OnInit } from '@angular/core';
 import { MenuService } from 'src/app/servicios/menu.service';
 import { UsuariosService } from 'src/app/servicios/usuarios.service';
@@ -8,17 +7,26 @@ import { Router } from '@angular/router';
 //https://sweetalert2.github.io/#declarative-templates
 import Swal from 'sweetalert2';
 
-import { faTwitter, faInstagram, faFacebook } from '@fortawesome/free-brands-svg-icons';
-import { faFloppyDisk, faPen, faX, faArrowDown, faArrowUp, faPlus } from '@fortawesome/free-solid-svg-icons';
+import {
+  faTwitter,
+  faInstagram,
+  faFacebook,
+} from '@fortawesome/free-brands-svg-icons';
+import {
+  faFloppyDisk,
+  faPen,
+  faX,
+  faArrowDown,
+  faArrowUp,
+  faPlus,
+} from '@fortawesome/free-solid-svg-icons';
 import { Constantes } from '../../logica/constantes';
 
-
-
 @Component({
-    selector: 'app-componente-menu',
-    templateUrl: './componente-menu.component.html',
-    styleUrls: ['./componente-menu.component.css'],
-    standalone: false
+  selector: 'app-componente-menu',
+  templateUrl: './componente-menu.component.html',
+  styleUrls: ['./componente-menu.component.css'],
+  standalone: false,
 })
 export class ComponenteMenuComponent implements OnInit {
   menu_completo: Menu[][] = [];
@@ -43,187 +51,164 @@ export class ComponenteMenuComponent implements OnInit {
   faXmark = faX;
   faPlus = faPlus;
 
-
-  opcion_menu: string ='';
+  opcion_menu: string = '';
   tipo_menu: number = 0;
-  
-  bCargado: Promise<boolean>|null = null;
 
+  bCargado: Promise<boolean> | null = null;
 
+  constructor(
+    private menuService: MenuService,
+    private usuarioService: UsuariosService,
+    private router: Router,
+  ) {}
 
-  constructor(private menuService: MenuService, private usuarioService: UsuariosService, private router: Router) { 
-   
-  }
-
- 
-
-  private iniciar_menu(menu: Menu[]):void{
+  private iniciar_menu(menu: Menu[]): void {
     this.menu_completo[0] = menu;
 
-
-
-    for (let i = 0; i < menu.length; i++)
-    {
-
-
+    for (let i = 0; i < menu.length; i++) {
       this.menuService.obtenerMenu(menu[i].nid).subscribe((res: any) => {
-        var menu_aux:Menu[];
-        menu_aux =res.data;
+        var menu_aux: Menu[];
+        menu_aux = res.data;
         this.menu_completo[menu[i].nid] = res.data;
-        
-        if(menu_aux.length == 0 && i + 1 == menu.length)
-        {
+
+        if (menu_aux.length == 0 && i + 1 == menu.length) {
           this.bCargado = Promise.resolve(true);
         }
-        for (var menu_item of menu_aux)
-        {
-
-           this.menuService.obtiene_url(menu_item.nid).subscribe((res:any) => 
-          {
-
-            if(!res.error)
-            {
-
+        for (var menu_item of menu_aux) {
+          this.menuService.obtiene_url(menu_item.nid).subscribe((res: any) => {
+            if (!res.error) {
               this.menu_url[res.id_menu] = res.url;
 
               // Se considera que se ha terminado de recuperar cuando se ha recuperado la url del último item del menu, aunque eso no sea realmente asi
-              if(menu[i].nid ==  menu[menu.length -1].nid && menu_aux[menu_aux.length - 1].nid == res.id_menu)
-              {
-                
+              if (
+                menu[i].nid == menu[menu.length - 1].nid &&
+                menu_aux[menu_aux.length - 1].nid == res.id_menu
+              ) {
                 this.bCargado = Promise.resolve(true);
               }
             }
-          }
-
-          );
+          });
         }
-
-      }
-      );
-     
+      });
     }
- 
   }
 
   ngOnInit(): void {
-    let respuesta_: any= [];
+    let respuesta_: any = [];
     let datos: any[];
-    this.menuService.obtenerMenu(0).subscribe((res: any) => {  this.iniciar_menu(res.data); });
-
-    
-    this.usuarioService.logueado_administrador().subscribe((res) =>{
-
-        this.esAdministrador = res.administrador;
+    this.menuService.obtenerMenu(0).subscribe((res: any) => {
+      this.iniciar_menu(res.data);
     });
 
-    this.usuarioService.logueado().subscribe(respuesta => {
-      
-        if (respuesta.logueado)
-        {
-          this.esLogueado = true;
-
-          this.usuario = respuesta.usuario;
-        }
-
+    this.usuarioService.logueado_administrador().subscribe((res) => {
+      this.esAdministrador = res.administrador;
     });
 
-    }
+    this.usuarioService.logueado().subscribe((respuesta) => {
+      if (respuesta.logueado) {
+        this.esLogueado = true;
 
-    logout()
-    {
-      this.usuarioService.logout().subscribe(res => { if (!res.error) {this.router.navigate(['']).then(() => {window.location.reload();});}});
-    }
+        this.usuario = respuesta.usuario;
+      }
+    });
+  }
 
+  logout() {
+    this.usuarioService.logout().subscribe((res) => {
+      if (!res.error) {
+        this.router.navigate(['']).then(() => {
+          window.location.reload();
+        });
+      }
+    });
+  }
 
-    crear_menu(id_padre: any)
-    {
-      Swal.fire({
-        title: 'Crear página',
-        html : `<input type="text" id="nombre_menu" class="swal2-input" placeholder="Username">
+  crear_menu(id_padre: any) {
+    Swal.fire({
+      title: 'Crear página',
+      html: `<input type="text" id="nombre_menu" class="swal2-input" placeholder="Username">
                 <select id="tipo_menu" class="swal2-select">
                   <option value="1">General </option>
                 </select>`,
-        confirmButtonText: 'Crear',
-        focusConfirm: false,
-        preConfirm: () => {
-          this.nombre_menu = (<HTMLInputElement>document.getElementById("nombre_menu")).value;
-          this.tipo_menu = Number((<HTMLInputElement>document.getElementById("tipo_menu")).value);
+      confirmButtonText: 'Crear',
+      focusConfirm: false,
+      preConfirm: () => {
+        this.nombre_menu = (<HTMLInputElement>(
+          document.getElementById('nombre_menu')
+        )).value;
+        this.tipo_menu = Number(
+          (<HTMLInputElement>document.getElementById('tipo_menu')).value,
+        );
+      },
+    }).then(() => {
+      this.menuService
+        .registrarMenu(this.nombre_menu, id_padre, this.tipo_menu, '')
+        .subscribe((res) => {
+          window.location.reload();
+        });
+    });
+  }
 
-        }
-      }).then(
-        () =>
-        {
-          this.menuService.registrarMenu(this.nombre_menu, id_padre, this.tipo_menu, '').subscribe((res) => {window.location.reload();});
-          
-        }
-      )
+  incrementa_orden(nOrden: number) {
+    var nSustituye = nOrden - 1;
+    var html_sustituye = document.getElementById(
+      'menu_' + nSustituye,
+    ) as HTMLInputElement;
+    var html_orden = document.getElementById(
+      'menu_' + nOrden,
+    ) as HTMLInputElement;
 
-    }
+    var html_aux = html_sustituye.value;
 
-    incrementa_orden(nOrden: number)
-    {
-      var nSustituye = nOrden -1;
-      var html_sustituye =  document.getElementById("menu_" + nSustituye) as HTMLInputElement;
-      var html_orden = document.getElementById("menu_" + nOrden) as HTMLInputElement;
-    
-      var html_aux = html_sustituye.value;
+    html_sustituye.value = html_orden.value;
+    html_orden.value = html_aux;
+  }
 
-      html_sustituye.value = html_orden.value;
-      html_orden.value = html_aux;
-    }
+  obtiene_url(id: number) {
+    return this.menu_url[id];
+  }
 
-    obtiene_url(id: number)
-    {
-      return this.menu_url[id];
-    }
+  eliminar_menu(id_menu: number) {
+    this.menuService.eliminarMenu(id_menu).subscribe((res: any) => {
+      if (!res.error) {
+        window.location.reload();
+      }
+    });
+  }
 
-    eliminar_menu(id_menu: number)
-    {
-      this.menuService.eliminarMenu(id_menu).subscribe(
-        (res:any) =>
-        {
-          if(!res.error)
-          {
-            window.location.reload();
-          }
-        }
-      )
-    }
+  actualizar_titulo_menu(id_menu: number) {
+    let nuevo_titulo: string;
+    Swal.fire({
+      title: 'Cambiar titulo',
+      html: `<input type="text" id="nuevo_titulo" class="swal2-input" />`,
+      confirmButtonText: 'Guadar',
+      focusConfirm: false,
+      preConfirm: () => {
+        nuevo_titulo = (<HTMLInputElement>(
+          document.getElementById('nuevo_titulo')
+        )).value;
+      },
+    }).then(() => {
+      this.menuService
+        .actualizar_titulo_menu(id_menu, nuevo_titulo)
+        .subscribe((res) => {
+          window.location.reload();
+        });
+    });
+  }
 
-    actualizar_titulo_menu(id_menu: number)
-    {
-      let nuevo_titulo: string;
-      Swal.fire({
-        title: 'Cambiar titulo',
-        html : `<input type="text" id="nuevo_titulo" class="swal2-input" />`,
-        confirmButtonText: 'Guadar',
-        focusConfirm: false,
-        preConfirm: () => {
-          nuevo_titulo = (<HTMLInputElement>document.getElementById("nuevo_titulo")).value;
-        }
-      }).then(
-        () =>
-        {
-          this.menuService.actualizar_titulo_menu(id_menu, nuevo_titulo).subscribe((res) => { window.location.reload();});
-        }
-      )
-    }
+  /**
+   * Muestra los botones y elementos para editar el menu
+   */
+  activar_edicion() {
+    this.modoEdicion = true;
+  }
 
-    /**
-     * Muestra los botones y elementos para editar el menu
-     */
-    activar_edicion()
-    {
-      this.modoEdicion = true;
-    }
+  desactivar_edicion() {
+    this.modoEdicion = false;
+  }
 
-    desactivar_edicion()
-    {
-      this.modoEdicion = false;
-    }
-
-    obtener_url_preinscripcion()
-    {
-      return Constantes.General.URL_FRONTED + '/preinscripcion';
-    }
+  obtener_url_preinscripcion() {
+    return Constantes.General.URL_FRONTED + '/preinscripcion';
+  }
 }
