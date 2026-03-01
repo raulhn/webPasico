@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "853542771046",
+    "project_id": "banda-del-pasico",
+    "storage_bucket": "banda-del-pasico.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:853542771046:android:a296da849eb80385ee90a7",
+        "android_client_info": {
+          "package_name": "com.ladelpasico.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCkheM2xOaKjBZ9xvJe3k5QzRxihOp7db4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
