@@ -1,16 +1,18 @@
-<div class="bloque">
+<div class="bloque" [style.gap.px]="tamGap">
   @for (fila of arrayFilas; track fila) {
     <div
       [ngClass]="reverse != 0 ? 'fila-reverse' : 'fila'"
       [style.marginLeft.px]="margenIzquierdo"
       [style.marginRight.px]="margenDerecho"
+      [style.gap.px]="tamGap"
     >
       @for (butaca of arrayButacas; track butaca) {
         <app-butaca
           [fila]="fila"
           [butaca]="butaca"
+          [tamIcono]="tamGap + tamIconos"
           (clickButaca)="clickButaca($event)"
-        />
+        ></app-butaca>
       }
     </div>
   }

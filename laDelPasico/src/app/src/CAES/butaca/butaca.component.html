@@ -1,7 +1,7 @@
 <div (click)="click()">
   <fa-icon
     [ngClass]="seleccionado ? 'seleccionado' : 'no-seleccionado'"
-    style="font-size: 30px"
+    [style.font-size.px]="tamIcono"
     [fixedWidth]="true"
     [icon]="faCouch"
   ></fa-icon>

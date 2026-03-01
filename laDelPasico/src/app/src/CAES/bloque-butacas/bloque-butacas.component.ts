@@ -11,15 +11,19 @@ import { CommonModule } from '@angular/common';
 export class BloqueButacasComponent implements OnInit {
   @Input() filas = 0;
   @Input() butacas: number = 0;
-  @Input() margenIzquierdo: number = 0;
-  @Input() margenDerecho: number = 0;
+  @Input() desplazamientoIzquierdo: number = 0;
+  @Input() desplazamientoDerecho: number = 0;
   @Input() indice: number = 1;
   @Input() reverse: number = 0;
+  @Input() tamIconos: number = 15;
+  @Input() tamGap: number = 5;
 
   arrayFilas: number[] = [];
   arrayButacas: number[] = [];
-
   butacasSeleccionadas: any[] = [];
+
+  margenIzquierdo: number = 0;
+  margenDerecho: number = 0;
 
   clickButaca(data: any) {
     console.log(data);
@@ -33,7 +37,15 @@ export class BloqueButacasComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('indice', this.indice);
+    this.margenIzquierdo =
+      (this.tamIconos + this.tamGap + 4) * this.desplazamientoIzquierdo;
+    this.margenDerecho =
+      (this.tamIconos + this.tamGap) * this.desplazamientoDerecho;
+
+    console.log('desplazamientoIzquierdo', this.desplazamientoIzquierdo);
+    console.log('desplazamientoDerecho', this.desplazamientoDerecho);
+    console.log('margenDerecho', this.margenDerecho);
+    console.log('margenIzquierdo', this.margenIzquierdo);
     for (let i = 0; i < this.filas; i++) {
       this.arrayFilas[i] = this.filas - i + (this.indice - 1);
       console.log(this.filas - i + (this.indice - 1));
