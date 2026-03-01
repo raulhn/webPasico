@@ -6,7 +6,11 @@
       [style.marginRight.px]="margenDerecho"
     >
       @for (butaca of arrayButacas; track butaca) {
-        <app-butaca [fila]="fila * indice" [butaca]="butaca" />
+        <app-butaca
+          [fila]="fila"
+          [butaca]="butaca"
+          (clickButaca)="clickButaca($event)"
+        />
       }
     </div>
   }

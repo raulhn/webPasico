@@ -1,43 +1,50 @@
 <p>patio-butacas works!</p>
-<div style="display: flex; gap: 8px">
+<div style="display: flex; gap: 8px; justify-content: center">
   <div>
     <app-bloque-butacas
       [filas]="4"
       [butacas]="13"
       [margenIzquierdo]="0"
       [reverse]="0"
+      [indice]="12"
     ></app-bloque-butacas>
     <app-bloque-butacas
       [filas]="8"
       [butacas]="12"
       [margenIzquierdo]="46"
       [reverse]="0"
+      [indice]="4"
     ></app-bloque-butacas>
     <app-bloque-butacas
       [filas]="3"
       [butacas]="11"
       [margenIzquierdo]="92"
       [reverse]="0"
+      [indice]="1"
     ></app-bloque-butacas>
   </div>
+  <div style="width: 60px"></div>
   <div>
     <app-bloque-butacas
       [filas]="4"
       [butacas]="13"
       [margenDerecho]="0"
       [reverse]="1"
+      [indice]="12"
     ></app-bloque-butacas>
     <app-bloque-butacas
       [filas]="8"
       [butacas]="12"
       [margenDerecho]="46"
       [reverse]="1"
+      [indice]="4"
     ></app-bloque-butacas>
     <app-bloque-butacas
       [filas]="3"
       [butacas]="11"
       [margenDerecho]="92"
       [reverse]="1"
+      [indice]="1"
     ></app-bloque-butacas>
   </div>
 </div>

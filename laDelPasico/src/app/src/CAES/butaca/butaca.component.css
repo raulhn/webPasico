@@ -1,1 +1,7 @@
+.seleccionado {
+  color: blue;
+}
 
+.no-seleccionado {
+  color: black;
+}
