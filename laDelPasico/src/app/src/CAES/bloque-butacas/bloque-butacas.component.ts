@@ -18,9 +18,25 @@ export class BloqueButacasComponent implements OnInit {
 
   arrayFilas: number[] = [];
   arrayButacas: number[] = [];
+
+  butacasSeleccionadas: any[] = [];
+
+  clickButaca(data: any) {
+    console.log(data);
+    if (data.seleccionado) {
+      this.butacasSeleccionadas.push(data.asiento);
+    } else {
+      const index = this.butacasSeleccionadas.indexOf(data.asiento);
+      this.butacasSeleccionadas.splice(index, 1);
+    }
+    console.log(this.butacasSeleccionadas);
+  }
+
   ngOnInit(): void {
+    console.log('indice', this.indice);
     for (let i = 0; i < this.filas; i++) {
-      this.arrayFilas[i] = i + 1;
+      this.arrayFilas[i] = this.filas - i + (this.indice - 1);
+      console.log(this.filas - i + (this.indice - 1));
     }
     for (let j = 0; j < this.butacas; j++) {
       this.arrayButacas[j] = j + 1;
