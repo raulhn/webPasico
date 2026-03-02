@@ -36,6 +36,7 @@ export default function Agenda({ mes_, anio_ }) {
   const { mesParametro, anioParametro, diaParametro } = useLocalSearchParams();
   const bottomTabBarHeight = useBottomTabBarHeight();
   const alturaMenu = bottomTabBarHeight * 2;
+  const [numSemanas, setNumSemanas] = useState(0);
 
   const tipos = [
     { etiqueta: "General", valor: 1 },
@@ -285,7 +286,7 @@ export default function Agenda({ mes_, anio_ }) {
 
   function MostrarSemanas() {
     var semanasCalendario = mostrarCalendario();
-
+    setNumSemanas(semanasCalendario.length);
     return semanasCalendario.map((semana, index) => (
       <View key={index} style={{ flexDirection: "row", height: 50 }}>
         {semana}
@@ -293,6 +294,9 @@ export default function Agenda({ mes_, anio_ }) {
     ));
   }
 
+  const margenBottom = (numSemanas % 4) * 50 + 300;
+  console.log("Semanas: " + numSemanas);
+  console.log(margenBottom);
   return (
     <>
       <View style={estilos.contenedor}>
@@ -328,7 +332,7 @@ export default function Agenda({ mes_, anio_ }) {
         <View
           style={{
             marginTop: 12,
-            marginBottom: 396,
+            marginBottom: margenBottom,
           }}
         >
           <ListaNavegable
