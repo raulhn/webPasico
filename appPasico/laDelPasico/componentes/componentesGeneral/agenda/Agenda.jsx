@@ -295,8 +295,6 @@ export default function Agenda({ mes_, anio_ }) {
   }
 
   const margenBottom = (numSemanas % 4) * 50 + 300;
-  console.log("Semanas: " + numSemanas);
-  console.log(margenBottom);
   return (
     <>
       <View style={estilos.contenedor}>
