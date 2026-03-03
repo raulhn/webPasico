@@ -200,7 +200,7 @@ export const useAgendaEvento = (nid_evento, tipo, cerrar_sesion) => {
 
   async function obtenerEventoConcierto(nid_evento_concierto) {
     try {
-      return await ServiceAgendaEventosConcierto.obtenerEventoConcierto(
+      return await ServiceAgendaEventosConcierto.obtenerEventoBanda(
         nid_evento_concierto,
         cerrar_sesion
       );

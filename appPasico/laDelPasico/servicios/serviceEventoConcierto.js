@@ -119,6 +119,27 @@ function obtenerEventoConcierto(nidEventoConcierto, cerrarSesion) {
   });
 }
 
+function obtenerEventoBanda(nidEventoConcierto, cerrarSesion) {
+  return new Promise((resolve, reject) => {
+    serviceComun
+      .peticionSesion(
+        "GET",
+        Constantes.URL_SERVICIO_MOVIL +
+          "obtener_evento_banda/" +
+          nidEventoConcierto,
+        null,
+        cerrarSesion
+      )
+      .then((response) => {
+        console.log("Respuesta del servicio obtenerEventoBanda:", response);
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+}
+
 function registrarPartituraEvento(
   nidPartitura,
   nidEventoConcierto,
@@ -175,6 +196,7 @@ module.exports.obtenerEventosConciertos = obtenerEventosConciertos;
 module.exports.registrarEventoConcierto = registrarEventoConcierto;
 module.exports.eliminarEventoConcierto = eliminarEventoConcierto;
 module.exports.obtenerEventoConcierto = obtenerEventoConcierto;
+module.exports.obtenerEventoBanda = obtenerEventoBanda;
 module.exports.registrarPartituraEvento = registrarPartituraEvento;
 module.exports.eliminarPartituraEvento = eliminarPartituraEvento;
 module.exports.actualizarEventoConcierto = actualizarEventoConcierto;

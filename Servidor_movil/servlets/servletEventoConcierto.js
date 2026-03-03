@@ -307,7 +307,7 @@ async function obtenerEvento(req, res) {
     } else {
       let nid_evento_concierto = req.params.nid_evento_concierto;
       let evento_concierto =
-        await gestorEventos.obtenerEventoConcierto(nid_evento_concierto);
+        await gestorEventos.obtenerEvento(nid_evento_concierto);
       if (evento_concierto) {
         res.status(200).send({
           error: false,
