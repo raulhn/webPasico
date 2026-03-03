@@ -39,7 +39,7 @@ export default function StackAgenda() {
       <Stack.Screen
         name="evento"
         options={({ route }) => ({
-          title: "Detalle de Evento",
+          title: "Evento",
           headerTitleAlign: "center", // Centra el título del encabezado
           headerStyle: {
             backgroundColor: Constantes.COLOR_AZUL, // Color de fondo del encabezado
