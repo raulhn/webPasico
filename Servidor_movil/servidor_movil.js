@@ -206,7 +206,7 @@ app.get(
   servletAgendaEvento.obtenerAgendaEvento,
 );
 app.get(
-  "/obtener_evento_concier/:nid_evento_concierto",
+  "/obtener_evento_banda/:nid_evento_concierto",
   servletEventoConcierto.obtenerEvento,
 );
 ///////////////////////////////////////////////
