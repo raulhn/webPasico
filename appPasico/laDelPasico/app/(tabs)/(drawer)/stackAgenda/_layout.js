@@ -36,6 +36,23 @@ export default function StackAgenda() {
           },
         })} // Oculta el encabezado para esta pantalla
       />
+      <Stack.Screen
+        name="evento"
+        options={({ route }) => ({
+          title: route.params.titulo,
+          headerTitleAlign: "center", // Centra el título del encabezado
+          headerStyle: {
+            backgroundColor: Constantes.COLOR_AZUL, // Color de fondo del encabezado
+          },
+          headerTintColor: "#fff", // Color del texto del encabezado
+          headerTitleStyle: {
+            fontWeight: "bold", // Estilo del título
+          },
+          headerShown: true,
+          headerLeft: () => null,
+          gestureEnabled: false,
+        })} // Oculta el encabezado para esta pantalla
+      />
     </Stack>
   );
 }

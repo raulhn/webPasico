@@ -33,7 +33,6 @@ export default function FormularioAgenda({
     evento.hora ? evento.hora.split(":")[1] : ""
   );
 
-  console.log("Evento recibido en el formulario:", evento);
   function formatearFecha(fecha) {
     const formattedDate = `${fecha.getFullYear()}-${String(
       fecha.getMonth() + 1

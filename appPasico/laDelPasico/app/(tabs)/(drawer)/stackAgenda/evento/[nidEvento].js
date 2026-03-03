@@ -2,24 +2,24 @@ import { useLocalSearchParams } from "expo-router";
 import { View, Text, StyleSheet, FlatList, RefreshControl } from "react-native";
 import { useEffect, useState, useContext } from "react";
 
-import CardPartitura from "../../../../componentes/componentesPartitura/CardPartitura";
-import ServiceEventoConcierto from "../../../../servicios/serviceEventoConcierto";
+import CardPartitura from "../../../../../componentes/componentesPartitura/CardPartitura";
+import ServiceEventoConcierto from "../../../../../servicios/serviceEventoConcierto";
 import { ActivityIndicator, Modal } from "react-native";
-import { AuthContext } from "../../../../providers/AuthContext";
-import Constantes from "../../../../config/constantes";
+import { AuthContext } from "../../../../../providers/AuthContext";
+import Constantes from "../../../../../config/constantes";
 
-import FormularioNotificacion from "../../../../componentes/notificaciones/FormularioNotificacion";
+import FormularioNotificacion from "../../../../../componentes/notificaciones/FormularioNotificacion";
 import {
   BotonFixed,
   ModalAviso,
   ModalConfirmacion,
-} from "../../../../componentes/componentesUI/ComponentesUI";
-import SelectorPartituras from "../../../../componentes/componentesPartitura/SelectorPartituras";
-import { useRol } from "../../../../hooks/useRol";
-import FormularioEvento from "../../../../componentes/componentesBanda/FormularioEvento";
+} from "../../../../../componentes/componentesUI/ComponentesUI";
+import SelectorPartituras from "../../../../../componentes/componentesPartitura/SelectorPartituras";
+import { useRol } from "../../../../../hooks/useRol";
+import FormularioEvento from "../../../../../componentes/componentesBanda/FormularioEvento";
 import { useRouter } from "expo-router";
 
-export default function EventoConcierto() {
+export default function DetalleEventoConcierto() {
   const router = useRouter();
   const { esRol } = useRol();
   const [evento, setEvento] = useState(null);
@@ -273,6 +273,7 @@ export default function EventoConcierto() {
       console.error("Error al eliminar el evento:", error);
     }
   }
+  console.log("EVENTO CONCIERTO:", evento);
   return (
     <>
       <View style={estilos.container}>

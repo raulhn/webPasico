@@ -49,16 +49,10 @@ export default function FormularioEvento({
 
   useEffect(() => {
     if (!nidEvento) return;
-    console.log("Nid evento", nidEvento);
     serviceEventoConcierto
       .obtenerEventoConcierto(nidEvento, cerrarSesion)
       .then((response) => {
         if (!response.error) {
-          console.log("Evento recuperado:", response.evento_concierto);
-          console.log(
-            "Fecha recuperado:",
-            new Date(response.evento_concierto.fecha_evento)
-          );
           const evento = response.evento_concierto;
           setNombreEvento(evento.nombre);
           setDescripcion(evento.descripcion);

@@ -36,7 +36,6 @@ function actualizarEvento(evento, cerrarSesion) {
       publicado: evento.publicado,
       hora: evento.hora,
     };
-    console.log("Evento", data);
     ServiceComun.peticionSesion(
       "POST",
       Constantes.URL_SERVICIO_MOVIL + "actualizar_agenda_evento",
@@ -57,7 +56,6 @@ function eliminarEvento(nid_evento, cerrarSesion) {
     const data = {
       nid_evento: nid_evento,
     };
-    console.log("eliminar evento servicio", nid_evento);
     ServiceComun.peticionSesion(
       "POST",
       Constantes.URL_SERVICIO_MOVIL + "eliminar_agenda_evento",
@@ -65,7 +63,6 @@ function eliminarEvento(nid_evento, cerrarSesion) {
       cerrarSesion
     )
       .then((response) => {
-        console.log(response);
         resolve(response);
       })
       .catch((error) => {
@@ -159,7 +156,11 @@ function obtenerAgendaEvento(nid_agenda_evento, cerrarSesion) {
       cerrarSesion
     )
       .then((response) => {
-        resolve(response);
+        if (response.error) {
+          reject("Error al obtener el evento");
+          return;
+        }
+        resolve(response.evento);
       })
       .catch((error) => {
         reject(error);

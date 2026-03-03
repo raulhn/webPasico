@@ -110,7 +110,6 @@ function obtenerEventoConcierto(nidEventoConcierto, cerrarSesion) {
         cerrarSesion
       )
       .then((response) => {
-        console.log("Respuesta del servicio obtenerEventoConcierto:", response);
         resolve(response);
       })
       .catch((error) => {
@@ -131,8 +130,11 @@ function obtenerEventoBanda(nidEventoConcierto, cerrarSesion) {
         cerrarSesion
       )
       .then((response) => {
-        console.log("Respuesta del servicio obtenerEventoBanda:", response);
-        resolve(response);
+        if (response.error) {
+          reject("Error al obtener el evento de banda");
+          return;
+        }
+        resolve(response.evento_concierto);
       })
       .catch((error) => {
         reject(error);

@@ -214,10 +214,10 @@ export const useAgendaEvento = (nid_evento, tipo, cerrar_sesion) => {
     try {
       if (tipo === "Concierto") {
         const eventoConcierto = await obtenerEventoConcierto(nid_evento);
-        setEvento(eventoConcierto);
+        return eventoConcierto;
       } else {
         const eventoAgenda = await obtenerAgendaEvento(nid_evento);
-        setEvento(eventoAgenda);
+        return eventoAgenda;
       }
     } catch (error) {
       console.log("Error al obtener el evento:", error);
