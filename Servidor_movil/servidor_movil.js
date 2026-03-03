@@ -205,6 +205,10 @@ app.get(
   "/obtener_agenda_evento/:nid_agenda_evento",
   servletAgendaEvento.obtenerAgendaEvento,
 );
+app.get(
+  "/obtener_evento_concier/:nid_evento_concierto",
+  servletEventoConcierto.obtenerEvento,
+);
 ///////////////////////////////////////////////
 // Peticiones que requieren inicio de sesión //
 ///////////////////////////////////////////////

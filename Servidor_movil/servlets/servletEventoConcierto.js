@@ -291,6 +291,45 @@ async function eliminar_partitura_evento(req, res) {
   }
 }
 
+async function obtenerEvento(req, res) {
+  try {
+    const rolesPermitidos = [constantes.DIRECTOR, constantes.ADMINISTRADOR];
+    let rolDirector = await servlet_comun.comprobarRol(
+      req,
+      res,
+      rolesPermitidos,
+    );
+    if (!rolDirector) {
+      res.status(403).send({
+        error: true,
+        mensaje: "No tienes permisos para obtener el evento de concierto",
+      });
+    } else {
+      let nid_evento_concierto = req.params.nid_evento_concierto;
+      let evento_concierto =
+        await gestorEventos.obtenerEventoConcierto(nid_evento_concierto);
+      if (evento_concierto) {
+        res.status(200).send({
+          error: false,
+          mensaje: "Evento de concierto obtenido correctamente",
+          evento_concierto: evento_concierto,
+        });
+      } else {
+        res.status(404).send({
+          error: true,
+          mensaje: "No se encontró el evento de concierto",
+        });
+      }
+    }
+  } catch (error) {
+    console.error("Error al obtener el evento de concierto:" + error.message);
+    res.status(400).send({
+      error: true,
+      mensaje: "Error al obtener el evento de concierto",
+    });
+  }
+}
+
 async function obtenerPartiturasEvento(req, res) {
   try {
     const rolesPermitidos = [
@@ -382,5 +421,6 @@ module.exports.actualizarEventoConcierto = actualizarEventoConcierto;
 module.exports.obtenerEventosConcierto = obtenerEventosConcierto;
 module.exports.registrar_partitura_evento = registrar_partitura_evento;
 module.exports.eliminar_partitura_evento = eliminar_partitura_evento;
+module.exports.obtenerEvento = obtenerEvento;
 module.exports.obtenerPartiturasEvento = obtenerPartiturasEvento;
 module.exports.eliminar_evento = eliminar_evento;

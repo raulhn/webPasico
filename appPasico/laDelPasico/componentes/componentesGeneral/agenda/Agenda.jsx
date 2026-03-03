@@ -342,7 +342,7 @@ export default function Agenda({ mes_, anio_ }) {
             dataLink={(item) => {
               return {
                 pathname: "/(tabs)/(drawer)/stackAgenda/[nidAgenda]",
-                params: { nidAgenda: item.nid_evento },
+                params: { nidAgenda: item.nid_evento, tipo: item.tipo },
               };
             }}
             renderItem={({ item }) => (

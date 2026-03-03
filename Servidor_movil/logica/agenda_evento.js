@@ -223,7 +223,7 @@ function eliminarAgendaEvento(nid_evento) {
 
 function obtenerAgendaEvento(nid_agenda_evento, bPublicos) {
   const sql =
-    "select nid_agenda_evento, nombre, descripcion, fecha, hora, publicado " +
+    "select nid_agenda_evento nid_evento, 'Agenda' tipo, nombre, descripcion, fecha, hora, publicado " +
     "from " +
     constantes.ESQUEMA +
     ".agenda_evento where nid_agenda_evento = " +

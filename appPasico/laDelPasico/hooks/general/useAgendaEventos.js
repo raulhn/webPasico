@@ -1,4 +1,6 @@
 import ServiceAgendaEventos from "../../servicios/serviceAgendaEventos";
+
+import ServiceAgendaEventosConcierto from "../../servicios/serviceEventoConcierto";
 import { useState, useEffect } from "react";
 
 export const useAgendaEventosFecha = (fecha, cerrar_sesion) => {
@@ -158,6 +160,32 @@ export const useAgendaEventos = (cerrar_sesion) => {
     }
   }
 
+  return {
+    registrarEvento,
+    actualizarEvento,
+    eliminarEvento,
+  };
+};
+
+export const useAgendaEvento = (nid_evento, tipo, cerrar_sesion) => {
+  const [evento, setEvento] = useState(null);
+  const [error, setError] = useState(false);
+  const [cargando, setCargando] = useState(true);
+
+  useEffect(() => {
+    obtenerEvento(tipo, nid_evento)
+      .then((eventoRecuperado) => {
+        setEvento(eventoRecuperado);
+        setCargando(false);
+        setError(false);
+      })
+      .catch((error) => {
+        setEvento(null);
+        setCargando(false);
+        setError(true);
+      });
+  }, [nid_evento, tipo, cerrar_sesion]);
+
   async function obtenerAgendaEvento(nid_agenda_evento) {
     try {
       return await ServiceAgendaEventos.obtenerAgendaEvento(
@@ -169,10 +197,36 @@ export const useAgendaEventos = (cerrar_sesion) => {
       throw new Error("Error al obtener el evento");
     }
   }
+
+  async function obtenerEventoConcierto(nid_evento_concierto) {
+    try {
+      return await ServiceAgendaEventosConcierto.obtenerEventoConcierto(
+        nid_evento_concierto,
+        cerrar_sesion
+      );
+    } catch (error) {
+      console.log("Error al obtener el evento de concierto:", error);
+      throw new Error("Error al obtener el evento de concierto");
+    }
+  }
+
+  async function obtenerEvento(tipo, nid_evento) {
+    try {
+      if (tipo === "Concierto") {
+        const eventoConcierto = await obtenerEventoConcierto(nid_evento);
+        setEvento(eventoConcierto);
+      } else {
+        const eventoAgenda = await obtenerAgendaEvento(nid_evento);
+        setEvento(eventoAgenda);
+      }
+    } catch (error) {
+      console.log("Error al obtener el evento:", error);
+      throw new Error("Error al obtener el evento");
+    }
+  }
   return {
-    registrarEvento,
-    actualizarEvento,
-    eliminarEvento,
-    obtenerAgendaEvento,
+    evento,
+    error,
+    cargando,
   };
 };

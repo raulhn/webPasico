@@ -169,6 +169,30 @@ function obtenerEventoConcierto(nid_evento_concierto) {
   });
 }
 
+function obtenerEvento(nid_evento_concierto, bPublico) {
+  const sql =
+    "select nid_evento_concierto nid_evento, nombre, descripcion, fecha_evento fecha, hora, publicado, 'Banda' tipo " +
+    "from " +
+    constantes.ESQUEMA +
+    ".evento_concierto where nid_evento_concierto = " +
+    conexion.dbConn.escape(nid_evento_concierto) +
+    (bPublico ? " and publicado = 'S' " : " ") +
+    " and borrado = 'N'";
+
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(sql, (err, result) => {
+      if (err) {
+        console.log("eventoConcierto.js - obtenerEvento -> Error: " + err);
+        reject("Error al obtener la información del evento de concierto");
+      } else if (result.length === 0) {
+        reject("Evento de concierto no encontrado");
+      } else {
+        resolve(result[0]);
+      }
+    });
+  });
+}
+
 function registrar_partitura_evento(nid_evento_concierto, nid_partitura) {
   return new Promise((resolve, reject) => {
     const sql =
@@ -301,6 +325,7 @@ module.exports.insertarEventoConcierto = insertarEventoConcierto;
 module.exports.actualizarEventoConcierto = actualizarEventoConcierto;
 module.exports.eliminarEvento = eliminarEvento;
 module.exports.obtenerEventosConcierto = obtenerEventosConcierto;
+module.exports.obtenerEvento = obtenerEvento;
 module.exports.obtenerEventoConcierto = obtenerEventoConcierto;
 
 module.exports.registrar_partitura_evento = registrar_partitura_evento;

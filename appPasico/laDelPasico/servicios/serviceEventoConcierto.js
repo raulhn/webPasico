@@ -110,6 +110,7 @@ function obtenerEventoConcierto(nidEventoConcierto, cerrarSesion) {
         cerrarSesion
       )
       .then((response) => {
+        console.log("Respuesta del servicio obtenerEventoConcierto:", response);
         resolve(response);
       })
       .catch((error) => {
