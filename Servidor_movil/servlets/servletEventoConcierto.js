@@ -299,27 +299,23 @@ async function obtenerEvento(req, res) {
       res,
       rolesPermitidos,
     );
-    if (!rolDirector) {
-      res.status(403).send({
-        error: true,
-        mensaje: "No tienes permisos para obtener el evento de concierto",
+    let bPublicos = !rolDirector;
+    let nid_evento_concierto = req.params.nid_evento_concierto;
+    let evento_concierto = await gestorEventos.obtenerEvento(
+      nid_evento_concierto,
+      bPublicos,
+    );
+    if (evento_concierto) {
+      res.status(200).send({
+        error: false,
+        mensaje: "Evento de concierto obtenido correctamente",
+        evento_concierto: evento_concierto,
       });
     } else {
-      let nid_evento_concierto = req.params.nid_evento_concierto;
-      let evento_concierto =
-        await gestorEventos.obtenerEvento(nid_evento_concierto);
-      if (evento_concierto) {
-        res.status(200).send({
-          error: false,
-          mensaje: "Evento de concierto obtenido correctamente",
-          evento_concierto: evento_concierto,
-        });
-      } else {
-        res.status(404).send({
-          error: true,
-          mensaje: "No se encontró el evento de concierto",
-        });
-      }
+      res.status(404).send({
+        error: true,
+        mensaje: "No se encontró el evento de concierto",
+      });
     }
   } catch (error) {
     console.error("Error al obtener el evento de concierto:" + error.message);
