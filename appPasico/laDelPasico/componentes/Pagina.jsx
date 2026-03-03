@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import serviceComponentes from "../servicios/serviceComponentes.js";
 import Componente from "./componentesPagina/componente.jsx";
 import { FlatList } from "react-native";
-import { View, Text, ActivityIndicator, StyleSheet } from "react-native";
+import { View, Text, ActivityIndicator, StyleSheet, Dimensions } from "react-native";
+
+const { width, height } = Dimensions.get('window');
 
 export default function Pagina(pagina) {
   const [componentes, setComponentes] = useState([]);
@@ -21,46 +23,130 @@ export default function Pagina(pagina) {
 
   if (cargando) {
     return (
-      <View>
-        <ActivityIndicator size="large" color="#0000ff" />
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#667eea" />
+        <Text style={styles.loadingText}>Cargando contenido...</Text>
       </View>
     );
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.container}>
       <FlatList
-        style={{ flexGrow: 1, backgroundColor: "white" }}
+        style={styles.flatList}
         data={componentes}
         keyExtractor={(item) => item.nid_Componente.toString()}
-        renderItem={({ item }) => <Componente componente={item} />}
+        renderItem={({ item }) => (
+          <View style={styles.componentWrapper}>
+            <Componente componente={item} />
+          </View>
+        )}
         contentContainerStyle={styles.flatListContent}
         keyboardShouldPersistTaps="handled"
-      ></FlatList>
+        showsVerticalScrollIndicator={false}
+        ItemSeparatorComponent={() => <View style={styles.separator} />}
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  imagen: {
-    width: "100%",
-    height: 400,
-    shadowRadius: 10,
+  // Contenedor principal
+  container: {
+    flex: 1,
+    backgroundColor: '#f8fafc',
+  
   },
-  imageContainer: {
-    width: "100%",
-    height: "auto",
-    backgroundColor: "white",
+  
+  // Loading styles
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f8fafc',
+    paddingHorizontal: 20,
   },
-  scrollContainer: {
-    padding: 10,
-    backgroundColor: "#f9f9f9",
+  
+  loadingText: {
+    marginTop: 16,
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#64748b',
+    textAlign: 'center',
   },
-  textoContainer: {
-    backgroundColor: "white",
-    borderRadius: 5,
+  
+  // FlatList styles
+  flatList: {
+    flex: 1,
+    backgroundColor: 'transparent',
   },
+  
   flatListContent: {
     flexGrow: 1,
+    paddingVertical: 16,
+    paddingHorizontal: 16,
+  },
+  
+  // Component wrapper
+  componentWrapper: {
+    backgroundColor: '#ffffff',
+    borderRadius: 12,
+    padding: 16,
+    marginVertical: 4,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 3, // Para Android
+    borderWidth: 1,
+    borderColor: '#e2e8f0',
+  },
+  
+  // Separator between components
+  separator: {
+    height: 8,
+  },
+  
+  // Imagen styles (mejorados)
+  imagen: {
+    width: '100%',
+    height: 240,
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
+  },
+  
+  imageContainer: {
+    width: '100%',
+    backgroundColor: '#ffffff',
+    borderRadius: 12,
+    overflow: 'hidden',
+  },
+  
+  // Contenedor de scroll (mejorado)
+  scrollContainer: {
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    backgroundColor: '#f8fafc',
+  },
+  
+  // Contenedor de texto (mejorado)
+  textoContainer: {
+    backgroundColor: '#ffffff',
+    borderRadius: 8,
+    padding: 16,
+    marginVertical: 8,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
+    borderWidth: 1,
+    borderColor: '#f1f5f9',
   },
 });
