@@ -79,7 +79,11 @@ async function registrarNotificacionTodos(req, res) {
       return;
     }
 
-    await gestorNotificaciones.enviarNotificacionesTodos(titulo, mensaje, data);
+    await gestorNotificaciones.registrarNotificacionesTodos(
+      titulo,
+      mensaje,
+      data,
+    );
 
     res.status(200).send({
       error: false,
