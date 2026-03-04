@@ -8,7 +8,12 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useEffect, useState } from "react";
 
-import { EntradaTexto, Boton, CheckBox } from "../componentesUI/ComponentesUI";
+import {
+  EntradaTexto,
+  Boton,
+  CheckBox,
+  ModalAviso,
+} from "../componentesUI/ComponentesUI";
 import ItemSelectorPersona from "../persona/ItemSelectorPersona";
 import ServiceNotificacion from "../../servicios/serviceNotificacion";
 import { AuthContext } from "../../providers/AuthContext";
@@ -30,6 +35,7 @@ export default function FormularioNotificacion({
 
   const [notificacionGeneral, setNotificacionGeneral] = useState("S");
   const [personasSeleccionadas, setPersonasSeleccionadas] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     if (valorTitulo) {
@@ -82,6 +88,7 @@ export default function FormularioNotificacion({
 
       callback(); // Llama al callback para refrescar la lista de notificaciones
     } catch (error) {
+      setModalVisible(true);
       console.log("Error al enviar la notificación:", error);
     }
   }
@@ -156,6 +163,12 @@ export default function FormularioNotificacion({
           />
         </View>
       </View>
+      <ModalAviso
+        visible={modalVisible}
+        setVisible={setModalVisible}
+        mensaje={"Se ha producido un error al enviar la notificación"}
+        textBoton={"Aceptar"}
+      />
     </SafeAreaView>
   );
 }
