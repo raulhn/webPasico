@@ -49,6 +49,7 @@ export default function FormularioNotificacion({
           data,
           cerrarSesion
         );
+        callback();
         return;
       }
       if (!personasSeleccionadas) {
