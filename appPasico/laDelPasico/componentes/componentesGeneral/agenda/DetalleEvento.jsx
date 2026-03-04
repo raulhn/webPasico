@@ -9,6 +9,7 @@ import { useAgendaEvento } from "../../../hooks/general/useAgendaEventos.js";
 import { useRol } from "../../../hooks/useRol.js";
 import { Boton } from "../../componentesUI/ComponentesUI.jsx";
 import { router } from "expo-router";
+import { obtenerFechaFormateadaSoloFecha } from "../../../comun/fechas.js";
 
 export default function DetalleEvento({ nid_evento, tipo, cerrar_sesion }) {
   const { evento, error, cargando } = useAgendaEvento(
@@ -106,7 +107,9 @@ export default function DetalleEvento({ nid_evento, tipo, cerrar_sesion }) {
           <View style={styles.infoContent}>
             <Text style={styles.infoLabel}>Fecha</Text>
             <Text style={styles.infoValue}>
-              {evento?.fecha || "No especificada"}
+              {evento.fecha
+                ? obtenerFechaFormateadaSoloFecha(evento.fecha)
+                : "No especificada"}
             </Text>
           </View>
         </View>

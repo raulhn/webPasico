@@ -33,7 +33,12 @@ export default function Partituras() {
     serviceEventoConcierto
       .obtenerEventosConciertos()
       .then((response) => {
-        setEventosConciertos(response.eventos);
+        const eventosOrdenados = response.eventos.sort((a, b) => {
+          const fechaA = new Date(a.fecha_evento);
+          const fechaB = new Date(b.fecha_evento);
+          return fechaA - fechaB; // Ordena de menor a mayor (más reciente primero)
+        });
+        setEventosConciertos(eventosOrdenados);
         setCargado(true);
       })
       .catch((error) => {

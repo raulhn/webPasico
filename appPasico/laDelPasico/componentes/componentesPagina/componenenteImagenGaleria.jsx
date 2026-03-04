@@ -21,6 +21,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 130,
     shadowRadius: 10,
+    borderRadius: 30,
   },
   imageContainer: {
     width: "100%",
@@ -28,6 +29,6 @@ const styles = StyleSheet.create({
     maxWidth: "100%",
     padding: 5,
     overflow: "hidden",
-    borderRadius: 30,
+    borderRadius: 50,
   },
 });
