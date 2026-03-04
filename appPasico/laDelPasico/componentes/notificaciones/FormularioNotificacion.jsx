@@ -8,7 +8,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useEffect, useState } from "react";
 
-import { EntradaTexto, Boton } from "../componentesUI/ComponentesUI";
+import { EntradaTexto, Boton, CheckBox } from "../componentesUI/ComponentesUI";
 import ItemSelectorPersona from "../persona/ItemSelectorPersona";
 import ServiceNotificacion from "../../servicios/serviceNotificacion";
 import { AuthContext } from "../../providers/AuthContext";
@@ -28,6 +28,7 @@ export default function FormularioNotificacion({
   const [mensaje, setMensaje] = useState(valorMensaje);
   const { cerrarSesion } = useContext(AuthContext);
 
+  const [notificacionGeneral, setNotificacionGeneral] = useState("S");
   const [personasSeleccionadas, setPersonasSeleccionadas] = useState(null);
 
   useEffect(() => {
@@ -41,6 +42,15 @@ export default function FormularioNotificacion({
 
   async function enviarNotificacion() {
     try {
+      if (notificacionGeneral === "S") {
+        await ServiceNotificacion.registrarNotificacionGeneral(
+          titulo,
+          mensaje,
+          data,
+          cerrarSesion
+        );
+        return;
+      }
       if (!personasSeleccionadas) {
         return;
       }
@@ -100,15 +110,28 @@ export default function FormularioNotificacion({
           alto={100}
           ancho={300}
         />
-
-        <Text>Destinatarios</Text>
-        <ItemSelectorPersona
-          tipo={tipo}
-          callback={(personasSeleccionadasRecuperadas) => {
-            setPersonasSeleccionadas(personasSeleccionadasRecuperadas);
+        <CheckBox
+          item={{
+            etiqueta: "Notificación General",
+            valor: notificacionGeneral,
           }}
-          nid_asignatura={nid_asignatura}
+          valorSeleccionado={notificacionGeneral == "S" ? true : false}
+          setValorSeleccionado={(item, seleccionado) => {
+            setNotificacionGeneral(seleccionado ? "S" : "N");
+          }}
         />
+        {notificacionGeneral == "N" && (
+          <>
+            <Text>Destinatarios</Text>
+            <ItemSelectorPersona
+              tipo={tipo}
+              callback={(personasSeleccionadasRecuperadas) => {
+                setPersonasSeleccionadas(personasSeleccionadasRecuperadas);
+              }}
+              nid_asignatura={nid_asignatura}
+            />
+          </>
+        )}
 
         <View
           style={{
