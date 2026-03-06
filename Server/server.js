@@ -176,10 +176,6 @@ app.get(
   "/obtener_componente_card/:id",
   servlet_componente_card.obtener_componente_card,
 );
-app.post(
-  "/add_componente_card",
-  servlet_componente_card.registrar_componente_card,
-);
 
 /*****************************
  **** Componente Galeria *****

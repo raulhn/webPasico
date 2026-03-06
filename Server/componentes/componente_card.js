@@ -51,11 +51,13 @@ async function registrar_componente_card(nid_componente_card, texto, color) {
   try {
     if (nid_componente_card) {
       await atualizar_componente_card(nid_componente_card, texto, color);
+      return nid_componente_card;
     } else {
       let id_componente = await componente.registrar_componente_comun(
         constantes.TIPO_COMPONENTE_CARD,
       );
       await insertar_componente_card(id_componente, texto, color);
+      return id_componente;
     }
   } catch (error) {
     console.log("Error en registrar_componente_card: " + error);

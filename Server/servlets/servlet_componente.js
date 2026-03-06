@@ -7,6 +7,7 @@ const componente_blog = require("../componentes/componente_blog.js");
 const servlet_componente = require("./servlet_componente.js");
 const servlet_componente_blog = require("./servlet_componente_blog.js");
 const servlet_usuarios = require("./servlet_usuarios.js");
+const servlet_componente_card = require("./servlet_componente_card.js");
 
 async function registrar_componente_carusel(req, res) {
   let id = req.body.id;
@@ -14,7 +15,7 @@ async function registrar_componente_carusel(req, res) {
   let elementos_simultaneos = req.body.elementos_simultaneos;
 
   let bEsAdministrador = await gestion_usuarios.esAdministrador(
-    req.session.nombre
+    req.session.nombre,
   );
   if (bEsAdministrador) {
     try {
@@ -22,7 +23,7 @@ async function registrar_componente_carusel(req, res) {
         await componente.registrar_componente_carusel(
           id,
           tipo_asociacion,
-          elementos_simultaneos
+          elementos_simultaneos,
         );
         return res
           .status(200)
@@ -33,7 +34,7 @@ async function registrar_componente_carusel(req, res) {
           id,
           tipo_asociacion,
           elementos_simultaneos,
-          nOrden
+          nOrden,
         );
         return res
           .status(200)
@@ -79,13 +80,13 @@ async function add_imagen_carusel(req, res) {
 
   try {
     let bEsAdministrador = await gestion_usuarios.esAdministrador(
-      req.session.nombre
+      req.session.nombre,
     );
     if (bEsAdministrador) {
       await componente_carusel.add_elemento_carusel(
         id_componente,
         titulo,
-        fichero
+        fichero,
       );
       return res
         .status(200)
@@ -109,12 +110,12 @@ async function eliminar_imagen_carusel(req, res) {
   let id_imagen = req.body.id_imagen;
   try {
     let bEsAdministrador = await gestion_usuarios.esAdministrador(
-      req.session.nombre
+      req.session.nombre,
     );
     if (bEsAdministrador) {
       await componente_carusel.eliminar_imagen_carusel(
         id_componente,
-        id_imagen
+        id_imagen,
       );
       return res
         .status(200)
@@ -137,12 +138,12 @@ async function actualizar_elementos_simultaneos(req, res) {
   let num_elementos = req.body.num_elementos;
   try {
     let bEsAdministrador = await gestion_usuarios.esAdministrador(
-      req.session.nombre
+      req.session.nombre,
     );
     if (bEsAdministrador) {
       await componente_carusel.actualiza_elementos_simultaneos(
         id_componente,
-        num_elementos
+        num_elementos,
       );
       return res
         .status(200)
@@ -181,7 +182,7 @@ function eliminar_componente(req, res) {
               .eliminar_componente_texto(
                 id_pagina,
                 id_componente,
-                tipo_asociacion
+                tipo_asociacion,
               )
               .then(() => {
                 console.log("Eliminado");
@@ -200,7 +201,7 @@ function eliminar_componente(req, res) {
               .eliminar_componente_imagen(
                 id_pagina,
                 id_componente,
-                tipo_asociacion
+                tipo_asociacion,
               )
               .then(() => {
                 console.log("Eliminado");
@@ -238,7 +239,7 @@ function eliminar_componente(req, res) {
               .eliminar_componente_video(
                 id_pagina,
                 id_componente,
-                tipo_asociacion
+                tipo_asociacion,
               )
               .then(() => {
                 console.log("Eliminado");
@@ -257,7 +258,7 @@ function eliminar_componente(req, res) {
               .eliminar_componente_galeria(
                 id_pagina,
                 id_componente,
-                tipo_asociacion
+                tipo_asociacion,
               )
               .then(() => {
                 console.log("Eliminado");
@@ -276,7 +277,7 @@ function eliminar_componente(req, res) {
               .eliminar_componente_paginas(
                 id_pagina,
                 id_componente,
-                tipo_asociacion
+                tipo_asociacion,
               )
               .then(() => {
                 console.log("Eliminado");
@@ -295,7 +296,7 @@ function eliminar_componente(req, res) {
               await componente.eliminar_componente_carusel(
                 id_pagina,
                 id_componente,
-                tipo_asociacion
+                tipo_asociacion,
               );
               return res
                 .status(200)
@@ -314,7 +315,7 @@ function eliminar_componente(req, res) {
               await componente_blog.eliminar_componente_blog(
                 id_pagina,
                 id_componente,
-                tipo_asociacion
+                tipo_asociacion,
               );
               return res
                 .status(200)
@@ -333,198 +334,254 @@ function eliminar_componente(req, res) {
   }
 }
 
-function registrar_componente(req, res) {
-  let id = req.body.id;
-  let tipo_componente = req.body.tipo_componente;
-  let tipo_asociacion = req.body.tipo_asociacion;
+async function registrar_componente(req, res) {
+  try {
+    let id = req.body.id;
+    let tipo_componente = req.body.tipo_componente;
+    let tipo_asociacion = req.body.tipo_asociacion;
 
-  if (servlet_usuarios.esLogueado(req.session.nombre)) {
-    let usuario = req.session.nombre;
-    gestion_usuarios.esAdministrador(usuario).then(function (bEsAdministrador) {
-      if (bEsAdministrador) {
-        if (tipo_componente == constantes.TIPO_COMPONENTE_TEXTO) {
-          if (tipo_asociacion == constantes.TIPO_ASOCIACION_PAGINA) {
-            console.log("-- registrar_componente_texto --");
-            componente
-              .registrar_componente_texto(id, tipo_asociacion)
-              .then(() => {
-                return res
-                  .status(200)
-                  .send({ error: false, message: "Componente creado" });
-              })
-              .catch(() => {
-                return res.status(400).send({ error: true, message: "Error" });
-              });
-          } else if (tipo_asociacion == constantes.TIPO_ASOCIACION_COMPONENTE) {
-            let nOrden = req.body.nOrden;
-            console.log("-- registrar_componente_texto_orden -- " + nOrden);
-            componente
-              .registrar_componente_texto_orden(id, tipo_asociacion, nOrden)
-              .then(() => {
-                return res
-                  .status(200)
-                  .send({ error: false, message: "Componente creado" });
-              })
-              .catch(() => {
-                return res.status(400).send({ error: true, message: "Error" });
-              });
-          }
-        } else if (tipo_componente == constantes.TIPO_COMPONENTE_IMAGEN) {
-          console.log("Registrar Imagen");
+    if (servlet_usuarios.esLogueado(req.session.nombre)) {
+      let usuario = req.session.nombre;
+      gestion_usuarios
+        .esAdministrador(usuario)
+        .then(async function (bEsAdministrador) {
+          if (bEsAdministrador) {
+            if (tipo_componente == constantes.TIPO_COMPONENTE_TEXTO) {
+              if (tipo_asociacion == constantes.TIPO_ASOCIACION_PAGINA) {
+                console.log("-- registrar_componente_texto --");
+                componente
+                  .registrar_componente_texto(id, tipo_asociacion)
+                  .then(() => {
+                    return res
+                      .status(200)
+                      .send({ error: false, message: "Componente creado" });
+                  })
+                  .catch(() => {
+                    return res
+                      .status(400)
+                      .send({ error: true, message: "Error" });
+                  });
+              } else if (
+                tipo_asociacion == constantes.TIPO_ASOCIACION_COMPONENTE
+              ) {
+                let nOrden = req.body.nOrden;
+                console.log("-- registrar_componente_texto_orden -- " + nOrden);
+                componente
+                  .registrar_componente_texto_orden(id, tipo_asociacion, nOrden)
+                  .then(() => {
+                    return res
+                      .status(200)
+                      .send({ error: false, message: "Componente creado" });
+                  })
+                  .catch(() => {
+                    return res
+                      .status(400)
+                      .send({ error: true, message: "Error" });
+                  });
+              }
+            } else if (tipo_componente == constantes.TIPO_COMPONENTE_IMAGEN) {
+              console.log("Registrar Imagen");
 
-          let titulo = req.body.titulo;
+              let titulo = req.body.titulo;
 
-          if (tipo_asociacion == constantes.TIPO_ASOCIACION_PAGINA) {
-            componente
-              .registrar_componente_imagen(id, titulo, tipo_asociacion)
-              .then(() => {
-                return res
-                  .status(200)
-                  .send({ error: false, message: "Componente creado" });
-              })
-              .catch(() => {
-                return res.status(400).send({ error: true, message: "Error" });
-              });
-          } else if (tipo_asociacion == constantes.TIPO_ASOCIACION_COMPONENTE) {
-            let nOrden = req.body.nOrden;
-            componente
-              .registrar_componente_imagen_orden(
+              if (tipo_asociacion == constantes.TIPO_ASOCIACION_PAGINA) {
+                componente
+                  .registrar_componente_imagen(id, titulo, tipo_asociacion)
+                  .then(() => {
+                    return res
+                      .status(200)
+                      .send({ error: false, message: "Componente creado" });
+                  })
+                  .catch(() => {
+                    return res
+                      .status(400)
+                      .send({ error: true, message: "Error" });
+                  });
+              } else if (
+                tipo_asociacion == constantes.TIPO_ASOCIACION_COMPONENTE
+              ) {
+                let nOrden = req.body.nOrden;
+                componente
+                  .registrar_componente_imagen_orden(
+                    id,
+                    titulo,
+                    tipo_asociacion,
+                    nOrden,
+                  )
+                  .then(() => {
+                    return res
+                      .status(200)
+                      .send({ error: false, message: "Componente creado" });
+                  })
+                  .catch(() => {
+                    return res
+                      .status(400)
+                      .send({ error: true, message: "Error" });
+                  });
+              }
+            } else if (tipo_componente == constantes.TIPO_COMPONENTE_CARD) {
+              const texto = req.body.texto;
+              const color = req.body.color;
+              const nOrden = req.body.nOrden ? req.body.nOrden : null;
+
+              await servlet_componente_card.registrar_componente_card(
+                null,
+                texto,
+                color,
+                tipo_componente,
                 id,
-                titulo,
-                tipo_asociacion,
-                nOrden
-              )
-              .then(() => {
-                return res
-                  .status(200)
-                  .send({ error: false, message: "Componente creado" });
-              })
-              .catch(() => {
-                return res.status(400).send({ error: true, message: "Error" });
-              });
-          }
-        } else if (tipo_componente == constantes.TIPO_COMPONENTE_VIDEO) {
-          console.log("Registrar Video");
+                nOrden,
+              );
+            } else if (tipo_componente == constantes.TIPO_COMPONENTE_VIDEO) {
+              console.log("Registrar Video");
 
-          let url = req.body.url;
+              let url = req.body.url;
 
-          if (tipo_asociacion == constantes.TIPO_ASOCIACION_PAGINA) {
-            componente
-              .registrar_componente_video(id, url, tipo_asociacion)
-              .then(() => {
-                return res
-                  .status(200)
-                  .send({ error: false, message: "Componente creado" });
-              })
-              .catch(() => {
-                return res.status(400).send({ error: true, message: "Error" });
-              });
-          } else if (tipo_asociacion == constantes.TIPO_ASOCIACION_COMPONENTE) {
-            let nOrden = req.body.nOrden;
-            componente
-              .registrar_componente_video_orden(
-                id,
-                url,
-                tipo_asociacion,
-                nOrden
-              )
-              .then(() => {
-                return res
-                  .status(200)
-                  .send({ error: false, message: "Componente creado" });
-              })
-              .catch(() => {
-                return res.status(400).send({ error: true, message: "Error" });
-              });
-          }
-        } else if (tipo_componente == constantes.TIPO_COMPONENTE_GALERIA) {
-          console.log("Registrar Galeria");
+              if (tipo_asociacion == constantes.TIPO_ASOCIACION_PAGINA) {
+                componente
+                  .registrar_componente_video(id, url, tipo_asociacion)
+                  .then(() => {
+                    return res
+                      .status(200)
+                      .send({ error: false, message: "Componente creado" });
+                  })
+                  .catch(() => {
+                    return res
+                      .status(400)
+                      .send({ error: true, message: "Error" });
+                  });
+              } else if (
+                tipo_asociacion == constantes.TIPO_ASOCIACION_COMPONENTE
+              ) {
+                let nOrden = req.body.nOrden;
+                componente
+                  .registrar_componente_video_orden(
+                    id,
+                    url,
+                    tipo_asociacion,
+                    nOrden,
+                  )
+                  .then(() => {
+                    return res
+                      .status(200)
+                      .send({ error: false, message: "Componente creado" });
+                  })
+                  .catch(() => {
+                    return res
+                      .status(400)
+                      .send({ error: true, message: "Error" });
+                  });
+              }
+            } else if (tipo_componente == constantes.TIPO_COMPONENTE_GALERIA) {
+              console.log("Registrar Galeria");
 
-          let titulo = req.body.titulo;
-          let descripcion = req.body.descripcion;
+              let titulo = req.body.titulo;
+              let descripcion = req.body.descripcion;
 
-          if (tipo_asociacion == constantes.TIPO_ASOCIACION_PAGINA) {
-            componente
-              .registrar_componente_galeria(
-                id,
-                titulo,
-                descripcion,
-                tipo_asociacion
-              )
-              .then(() => {
-                return res
-                  .status(200)
-                  .send({ error: false, message: "Componente creado" });
-              })
-              .catch(() => {
-                return res.status(400).send({ error: true, message: "Error" });
-              });
-          } else if (tipo_asociacion == constantes.TIPO_ASOCIACION_COMPONENTE) {
-            let nOrden = req.body.nOrden;
-            componente
-              .registrar_componente_galeria_orden(
-                id,
-                titulo,
-                descripcion,
-                tipo_asociacion,
-                nOrden
-              )
-              .then(() => {
-                return res
-                  .status(200)
-                  .send({ error: false, message: "Componente creado" });
-              })
-              .catch(() => {
-                return res.status(400).send({ error: true, message: "Error" });
-              });
-          }
-        } else if (tipo_componente == constantes.TIPO_COMPONENTE_COMPONENTES) {
-          console.log("Registrar Componente Componentes " + tipo_asociacion);
-          let nColumnas = req.body.nColumnas;
+              if (tipo_asociacion == constantes.TIPO_ASOCIACION_PAGINA) {
+                componente
+                  .registrar_componente_galeria(
+                    id,
+                    titulo,
+                    descripcion,
+                    tipo_asociacion,
+                  )
+                  .then(() => {
+                    return res
+                      .status(200)
+                      .send({ error: false, message: "Componente creado" });
+                  })
+                  .catch(() => {
+                    return res
+                      .status(400)
+                      .send({ error: true, message: "Error" });
+                  });
+              } else if (
+                tipo_asociacion == constantes.TIPO_ASOCIACION_COMPONENTE
+              ) {
+                let nOrden = req.body.nOrden;
+                componente
+                  .registrar_componente_galeria_orden(
+                    id,
+                    titulo,
+                    descripcion,
+                    tipo_asociacion,
+                    nOrden,
+                  )
+                  .then(() => {
+                    return res
+                      .status(200)
+                      .send({ error: false, message: "Componente creado" });
+                  })
+                  .catch(() => {
+                    return res
+                      .status(400)
+                      .send({ error: true, message: "Error" });
+                  });
+              }
+            } else if (
+              tipo_componente == constantes.TIPO_COMPONENTE_COMPONENTES
+            ) {
+              console.log(
+                "Registrar Componente Componentes " + tipo_asociacion,
+              );
+              let nColumnas = req.body.nColumnas;
 
-          if (tipo_asociacion == constantes.TIPO_ASOCIACION_PAGINA) {
-            componente_componentes
-              .insertar_componente_componentes(id, nColumnas, tipo_asociacion)
-              .then(() => {
+              if (tipo_asociacion == constantes.TIPO_ASOCIACION_PAGINA) {
+                componente_componentes
+                  .insertar_componente_componentes(
+                    id,
+                    nColumnas,
+                    tipo_asociacion,
+                  )
+                  .then(() => {
+                    return res
+                      .status(200)
+                      .send({ error: false, message: "Componente creado" });
+                  })
+                  .catch(() => {
+                    return res
+                      .status(400)
+                      .send({ error: true, message: "Error" });
+                  });
+              } else {
                 return res
-                  .status(200)
-                  .send({ error: false, message: "Componente creado" });
-              })
-              .catch(() => {
-                return res.status(400).send({ error: true, message: "Error" });
-              });
-          } else {
-            return res
-              .status(400)
-              .send({ error: true, message: "Operación no permitida" });
-          }
-        } else if (tipo_componente == constantes.TIPO_COMPONENTE_PAGINAS) {
-          if (tipo_asociacion == constantes.TIPO_ASOCIACION_PAGINA) {
-            console.log("Registrar componente páginas");
-            componente
-              .registrar_componente_paginas(id, tipo_asociacion)
-              .then(() => {
+                  .status(400)
+                  .send({ error: true, message: "Operación no permitida" });
+              }
+            } else if (tipo_componente == constantes.TIPO_COMPONENTE_PAGINAS) {
+              if (tipo_asociacion == constantes.TIPO_ASOCIACION_PAGINA) {
+                console.log("Registrar componente páginas");
+                componente
+                  .registrar_componente_paginas(id, tipo_asociacion)
+                  .then(() => {
+                    return res
+                      .status(200)
+                      .send({ error: false, message: "Componente creado" });
+                  })
+                  .catch(() => {
+                    return res
+                      .status(400)
+                      .send({ error: true, message: "Error" });
+                  });
+              } else {
                 return res
-                  .status(200)
-                  .send({ error: false, message: "Componente creado" });
-              })
-              .catch(() => {
-                return res.status(400).send({ error: true, message: "Error" });
-              });
-          } else {
-            return res
-              .status(400)
-              .send({ error: true, message: "Operación no permitida" });
+                  .status(400)
+                  .send({ error: true, message: "Operación no permitida" });
+              }
+            } else if (tipo_componente == constantes.TIPO_COMPONENTE_CARUSEL) {
+              console.log("Registrar componente Carrusel");
+              servlet_componente.registrar_componente_carusel(req, res);
+            } else if (tipo_componente == constantes.TIPO_COMPONENTE_BLOG) {
+              console.log("Registrar componente blog");
+              servlet_componente_blog.registrar_componente_blog(req, res);
+            }
           }
-        } else if (tipo_componente == constantes.TIPO_COMPONENTE_CARUSEL) {
-          console.log("Registrar componente Carrusel");
-          servlet_componente.registrar_componente_carusel(req, res);
-        } else if (tipo_componente == constantes.TIPO_COMPONENTE_BLOG) {
-          console.log("Registrar componente blog");
-          servlet_componente_blog.registrar_componente_blog(req, res);
-        }
-      }
-    });
+        });
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(400).send({ error: true, message: "Error" });
   }
 }
 

@@ -1,26 +1,37 @@
-const componente_card = require("../components/componente_card");
+const componente_card = require("../componentes/componente_card.js");
 const servlet_comun = require("./servlet_comun");
 const gestor_usuarios = require("../logica/usuario.js");
+const gestor_componente = require("../componentes/componente.js");
 
-async function registrar_componente_card(req, res) {
+async function registrar_componente_card(
+  nid_componente_card,
+  texto,
+  color,
+  tipo_componente,
+  nid_padre,
+  orden,
+) {
   try {
-    const esAdministrador = await gestor_usuarios.esAdministrador(
-      req.session.nombre,
-    );
-    if (!esAdministrador) {
-      res.status(404).send({ error: true, message: "No autorizado" });
-      return;
+    let orden_componente = orden;
+    if (!orden_componente) {
+      orden_componente = await servlet_comun.obtener_orden_siguiente(nid_padre);
+    }
+    let nid_componente = nid_componente_card;
+    if (!nid_componente) {
+      nid_componente = await gestor_componente.registrar_componente_comun(
+        tipo_componente,
+        nid_padre,
+        tipo_asociacion,
+        orden_componente,
+      );
     }
 
-    let id_componente = req.body.id_componente;
-    let texto = req.body.texto;
-    let color = req.body.color;
-
     await componente_card.registrar_componente_card(
-      id_componente,
+      nid_componente,
       texto,
       color,
     );
+
     return res
       .status(200)
       .send({ error: false, message: "Componente registrado" });
