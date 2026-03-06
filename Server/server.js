@@ -22,6 +22,7 @@ const servlet_imagen = require("./servlets/servlet_imagen.js");
 const servlet_video = require("./servlets/servlet_video.js");
 const servlet_galeria = require("./servlets/servlet_galeria.js");
 const servler_solicitud_eliminacion_usuario = require("./servlets/servlet_solicitud_eliminacion_usuario.js");
+const servlet_componente_card = require("./servlets/servlet_componente_card.js");
 
 var sesion_config = require("./config/sesion.json");
 
@@ -167,6 +168,18 @@ app.get("/imagen_url/:id", servlet_imagen.obtener_url_imagen);
 app.get("/obtiene_url_video/:id", servlet_video.obtener_url_video);
 
 app.get("/obtiene_url/:id", servlet_menu.obtener_url);
+
+/************************
+ **** Componente Card *****
+ ************************/
+app.get(
+  "/obtener_componente_card/:id",
+  servlet_componente_card.obtener_componente_card,
+);
+app.post(
+  "/add_componente_card",
+  servlet_componente_card.registrar_componente_card,
+);
 
 /*****************************
  **** Componente Galeria *****

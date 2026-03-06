@@ -57,6 +57,8 @@ export default function Tablon() {
         style={{ flex: 1 }}
         data={tablonAnuncios}
         keyExtractor={(item) => item.nid_tablon_anuncio.toString()}
+        refreshing={refrescarAnuncios}
+        onRefresh={lanzarRefrescoAnuncios}
         renderItem={({ item }) => (
           <Link
             href={{
