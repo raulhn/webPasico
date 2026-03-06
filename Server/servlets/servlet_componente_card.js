@@ -41,6 +41,32 @@ async function registrar_componente_card(
   }
 }
 
+async function actualizar_componente_card(req, res) {
+  try {
+    let id_componente = req.params.id;
+    let texto = req.body.texto;
+    let color = req.body.color;
+
+    const bEsAdministrador = await gestor_usuarios.esAdministrador(
+      req.session.usuario_id,
+    );
+    if (!bEsAdministrador) {
+      return res.status(403).send({ error: true, message: "Acceso denegado" });
+    }
+    await componente_card.actualizar_componente_card(
+      id_componente,
+      texto,
+      color,
+    );
+
+    return res
+      .status(200)
+      .send({ error: false, message: "Componente actualizado" });
+  } catch (error) {
+    console.log("Error en actualizar_componente_card: ", error);
+    return res.status(400).send({ error: true, message: "Error" });
+  }
+}
 async function obtener_componente_card(req, res) {
   try {
     let id_componente = req.params.id;
@@ -60,4 +86,5 @@ async function obtener_componente_card(req, res) {
 }
 
 module.exports.registrar_componente_card = registrar_componente_card;
+module.exports.actualizar_componente_card = actualizar_componente_card;
 module.exports.obtener_componente_card = obtener_componente_card;
