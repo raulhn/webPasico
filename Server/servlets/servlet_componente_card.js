@@ -89,13 +89,6 @@ async function obtener_componente_card(req, res) {
   }
 }
 
-async function eliminar_componente_card(nid_componente_card) {
-  try {
-  } catch {
-    throw new Error("Error al eliminar el componente card");
-  }
-}
-
 module.exports.registrar_componente_card = registrar_componente_card;
 module.exports.actualizar_componente_card = actualizar_componente_card;
 module.exports.obtener_componente_card = obtener_componente_card;

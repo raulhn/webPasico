@@ -1402,11 +1402,11 @@ async function async_eliminar_componente_comun(
       await eliminar_componente_componentes(id_componente);
     }
     conexion.dbConn.commit();
-    resolve();
+    return;
   } catch (e) {
     console.log(e);
     conexion.dbConn.rollback();
-    reject();
+    throw new Error("Error al eliminar componente ");
   }
 }
 
