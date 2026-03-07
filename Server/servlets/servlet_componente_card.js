@@ -46,7 +46,7 @@ async function registrar_componente_card(
 
 async function actualizar_componente_card(req, res) {
   try {
-    let id_componente = req.params.id;
+    let id_componente = req.body.id;
     let texto = req.body.texto;
     let color = req.body.color;
 
