@@ -3,6 +3,7 @@ const constantes = require("../constantes.js");
 const componente_carusel = require("../componentes/componente_carusel.js");
 const gestion_usuarios = require("../logica/usuario.js");
 const componente_componentes = require("../componentes/componente_componentes.js");
+const componente_card = require("../componentes/componente_card.js");
 const componente_blog = require("../componentes/componente_blog.js");
 const servlet_componente = require("./servlet_componente.js");
 const servlet_componente_blog = require("./servlet_componente_blog.js");
@@ -162,63 +163,29 @@ async function actualizar_elementos_simultaneos(req, res) {
   }
 }
 
-function eliminar_componente(req, res) {
-  let id_componente = req.body.id_componente;
-  let tipo_asociacion = req.body.tipo_asociacion;
-  let id_pagina;
+async function eliminar_componente(req, res) {
+  try {
+    let id_componente = req.body.id_componente;
+    let tipo_asociacion = req.body.tipo_asociacion;
+    let id_pagina;
 
-  if (tipo_asociacion == constantes.TIPO_ASOCIACION_PAGINA) {
-    id_pagina = req.body.id_pagina;
-  }
-  if (servlet_usuarios.esLogueado(req.session.nombre)) {
-    let usuario = req.session.nombre;
-    gestion_usuarios.esAdministrador(usuario).then((bEsAdministrador) => {
-      if (bEsAdministrador) {
-        // Obtiene el tipo de componente
-        componente.tipo_componente(id_componente).then(async (tipo) => {
-          if (tipo == constantes.TIPO_COMPONENTE_TEXTO) {
-            console.log("Eliminar componente texto");
-            componente
-              .eliminar_componente_texto(
-                id_pagina,
-                id_componente,
-                tipo_asociacion,
-              )
-              .then(() => {
-                console.log("Eliminado");
-                return res
-                  .status(200)
-                  .send({ error: false, message: "Componente eliminado" });
-              })
-              .catch(() => {
-                console.log("Error");
-                return res.status(400).send({ error: true, message: "Error" });
-              });
-          }
-          if (tipo == constantes.TIPO_COMPONENTE_IMAGEN) {
-            console.log("Eliminar componente imagen");
-            componente
-              .eliminar_componente_imagen(
-                id_pagina,
-                id_componente,
-                tipo_asociacion,
-              )
-              .then(() => {
-                console.log("Eliminado");
-                return res
-                  .status(200)
-                  .send({ error: false, message: "Componente eliminado" });
-              })
-              .catch(() => {
-                console.log("Error");
-                return res.status(400).send({ error: true, message: "Error" });
-              });
-          }
-          if (tipo == constantes.TIPO_COMPONENTE_COMPONENTES) {
-            console.log("Eliminar componente componentes");
-            {
-              componente_componentes
-                .eliminar_componente_componentes(id_pagina, id_componente)
+    if (tipo_asociacion == constantes.TIPO_ASOCIACION_PAGINA) {
+      id_pagina = req.body.id_pagina;
+    }
+    if (servlet_usuarios.esLogueado(req.session.nombre)) {
+      let usuario = req.session.nombre;
+      gestion_usuarios.esAdministrador(usuario).then((bEsAdministrador) => {
+        if (bEsAdministrador) {
+          // Obtiene el tipo de componente
+          componente.tipo_componente(id_componente).then(async (tipo) => {
+            if (tipo == constantes.TIPO_COMPONENTE_TEXTO) {
+              console.log("Eliminar componente texto");
+              componente
+                .eliminar_componente_texto(
+                  id_pagina,
+                  id_componente,
+                  tipo_asociacion,
+                )
                 .then(() => {
                   console.log("Eliminado");
                   return res
@@ -232,105 +199,162 @@ function eliminar_componente(req, res) {
                     .send({ error: true, message: "Error" });
                 });
             }
-          }
-          if (tipo == constantes.TIPO_COMPONENTE_VIDEO) {
-            console.log("Eliminar componente VIDEO");
-            componente
-              .eliminar_componente_video(
-                id_pagina,
-                id_componente,
-                tipo_asociacion,
-              )
-              .then(() => {
-                console.log("Eliminado");
-                return res
-                  .status(200)
-                  .send({ error: false, message: "Componente eliminado" });
-              })
-              .catch(() => {
-                console.log("Error");
-                return res.status(400).send({ error: true, message: "Error" });
-              });
-          }
-          if (tipo == constantes.TIPO_COMPONENTE_GALERIA) {
-            console.log("Eliminar componente Galeria");
-            componente
-              .eliminar_componente_galeria(
-                id_pagina,
-                id_componente,
-                tipo_asociacion,
-              )
-              .then(() => {
-                console.log("Eliminado");
-                return res
-                  .status(200)
-                  .send({ error: false, message: "Componente eliminado" });
-              })
-              .catch(() => {
-                console.log("Error");
-                return res.status(400).send({ error: true, message: "Error" });
-              });
-          }
-          if (tipo == constantes.TIPO_COMPONENTE_PAGINAS) {
-            console.log("Eliminar componente Paginas");
-            componente
-              .eliminar_componente_paginas(
-                id_pagina,
-                id_componente,
-                tipo_asociacion,
-              )
-              .then(() => {
-                console.log("Eliminado");
-                return res
-                  .status(200)
-                  .send({ error: false, message: "Componente eliminado" });
-              })
-              .catch(() => {
-                console.log("Error");
-                return res.status(400).send({ error: true, message: "Error" });
-              });
-          }
-          if (tipo == constantes.TIPO_COMPONENTE_CARUSEL) {
-            console.log("Eliminar componente Carusel");
-            try {
-              await componente.eliminar_componente_carusel(
-                id_pagina,
-                id_componente,
-                tipo_asociacion,
-              );
-              return res
-                .status(200)
-                .send({ error: false, message: "Componente eliminado" });
-            } catch (error) {
-              console.log("Error eliminar componente carusel");
-              return res.status(400).send({
-                error: true,
-                message: "Error al eliminar el componente",
-              });
+            if (tipo == constantes.TIPO_COMPONENTE_IMAGEN) {
+              console.log("Eliminar componente imagen");
+              componente
+                .eliminar_componente_imagen(
+                  id_pagina,
+                  id_componente,
+                  tipo_asociacion,
+                )
+                .then(() => {
+                  console.log("Eliminado");
+                  return res
+                    .status(200)
+                    .send({ error: false, message: "Componente eliminado" });
+                })
+                .catch(() => {
+                  console.log("Error");
+                  return res
+                    .status(400)
+                    .send({ error: true, message: "Error" });
+                });
             }
-          }
-          if (tipo == constantes.TIPO_COMPONENTE_BLOG) {
-            console.log("Eliminar componente Blog");
-            try {
-              await componente_blog.eliminar_componente_blog(
-                id_pagina,
-                id_componente,
-                tipo_asociacion,
-              );
-              return res
-                .status(200)
-                .send({ error: false, message: "Componente eliminado" });
-            } catch (error) {
-              console.log(error);
-              return res.status(400).send({
-                error: true,
-                message: "Error al eliminar el componente",
-              });
+            if (tipo == constantes.TIPO_COMPONENTE_COMPONENTES) {
+              console.log("Eliminar componente componentes");
+              {
+                componente_componentes
+                  .eliminar_componente_componentes(id_pagina, id_componente)
+                  .then(() => {
+                    console.log("Eliminado");
+                    return res
+                      .status(200)
+                      .send({ error: false, message: "Componente eliminado" });
+                  })
+                  .catch(() => {
+                    console.log("Error");
+                    return res
+                      .status(400)
+                      .send({ error: true, message: "Error" });
+                  });
+              }
             }
-          }
-        });
-      }
-    });
+            if (tipo == constantes.TIPO_COMPONENTE_VIDEO) {
+              console.log("Eliminar componente VIDEO");
+              componente
+                .eliminar_componente_video(
+                  id_pagina,
+                  id_componente,
+                  tipo_asociacion,
+                )
+                .then(() => {
+                  console.log("Eliminado");
+                  return res
+                    .status(200)
+                    .send({ error: false, message: "Componente eliminado" });
+                })
+                .catch(() => {
+                  console.log("Error");
+                  return res
+                    .status(400)
+                    .send({ error: true, message: "Error" });
+                });
+            }
+            if (tipo == constantes.TIPO_COMPONENTE_GALERIA) {
+              console.log("Eliminar componente Galeria");
+              componente
+                .eliminar_componente_galeria(
+                  id_pagina,
+                  id_componente,
+                  tipo_asociacion,
+                )
+                .then(() => {
+                  console.log("Eliminado");
+                  return res
+                    .status(200)
+                    .send({ error: false, message: "Componente eliminado" });
+                })
+                .catch(() => {
+                  console.log("Error");
+                  return res
+                    .status(400)
+                    .send({ error: true, message: "Error" });
+                });
+            }
+            if (tipo == constantes.TIPO_COMPONENTE_PAGINAS) {
+              console.log("Eliminar componente Paginas");
+              componente
+                .eliminar_componente_paginas(
+                  id_pagina,
+                  id_componente,
+                  tipo_asociacion,
+                )
+                .then(() => {
+                  console.log("Eliminado");
+                  return res
+                    .status(200)
+                    .send({ error: false, message: "Componente eliminado" });
+                })
+                .catch(() => {
+                  console.log("Error");
+                  return res
+                    .status(400)
+                    .send({ error: true, message: "Error" });
+                });
+            }
+            if (tipo == constantes.TIPO_COMPONENTE_CARUSEL) {
+              console.log("Eliminar componente Carusel");
+              try {
+                await componente.eliminar_componente_carusel(
+                  id_pagina,
+                  id_componente,
+                  tipo_asociacion,
+                );
+                return res
+                  .status(200)
+                  .send({ error: false, message: "Componente eliminado" });
+              } catch (error) {
+                console.log("Error eliminar componente carusel");
+                return res.status(400).send({
+                  error: true,
+                  message: "Error al eliminar el componente",
+                });
+              }
+            }
+            if (tipo == constantes.TIPO_COMPONENTE_BLOG) {
+              console.log("Eliminar componente Blog");
+              try {
+                await componente_blog.eliminar_componente_blog(
+                  id_pagina,
+                  id_componente,
+                  tipo_asociacion,
+                );
+                return res
+                  .status(200)
+                  .send({ error: false, message: "Componente eliminado" });
+              } catch (error) {
+                console.log(error);
+                return res.status(400).send({
+                  error: true,
+                  message: "Error al eliminar el componente",
+                });
+              }
+            }
+            if (tipo == constantes.TIPO_COMPONENTE_CARD) {
+              console.log("Eliminar componenete card");
+              await componente.eliminar_componente_comun(
+                id_componente,
+                id_pagina,
+                tipo,
+              );
+              await componente_card.eliminar_componente_card(id_componente);
+            }
+          });
+        }
+      });
+    }
+  } catch (error) {
+    console.log("servlet_componente -> eliminar_componente: ", error);
   }
 }
 

@@ -15,7 +15,7 @@ function existe_componente(nid_componente) {
           resolve(false);
         }
         resolve(true);
-      }
+      },
     );
   });
 }
@@ -40,7 +40,7 @@ function obtener_pagina_de_componente(nid_componente) {
         } else {
           resolve(results[0]["pagina"]);
         }
-      }
+      },
     );
   });
 }
@@ -60,7 +60,7 @@ function tipo_componente(nid_componente) {
           console.log(results);
           resolve(results[0]["nTipo"]);
         }
-      }
+      },
     );
   });
 }
@@ -99,7 +99,7 @@ function actualizar_texto(texto_html, nid_componente) {
                   conexion.dbConn.commit();
                   resolve(true);
                 }
-              }
+              },
             );
           }
         })
@@ -126,7 +126,7 @@ function obtener_ultimo_orden(id_pagina) {
         } else {
           resolve(results[0]["orden"]);
         }
-      }
+      },
     );
   });
 }
@@ -147,7 +147,7 @@ function registrar_c_texto(nid_componente) {
         }
 
         resolve();
-      }
+      },
     );
   });
 }
@@ -168,7 +168,7 @@ function registrar_imagen(titulo) {
         }
         let id_imagen = results.insertId;
         resolve(id_imagen);
-      }
+      },
     );
   });
 }
@@ -191,7 +191,7 @@ function registrar_c_imagen(nid_componente, titulo) {
             reject();
           }
           resolve();
-        }
+        },
       );
     });
   });
@@ -216,7 +216,7 @@ function registrar_componente(tipo_componente) {
           let id_componente = results.insertId;
           resolve(id_componente);
         }
-      }
+      },
     );
     //  reject();
   });
@@ -241,7 +241,7 @@ function registrar_componente_pagina(id_componente, id_pagina, nOrden) {
           reject();
         }
         resolve();
-      }
+      },
     );
   });
 }
@@ -249,7 +249,7 @@ function registrar_componente_pagina(id_componente, id_pagina, nOrden) {
 function registrar_componente_componentes(
   id_componente,
   id_componente_padre,
-  nOrden
+  nOrden,
 ) {
   return new Promise((resolve, reject) => {
     // Asocia el componente a la página
@@ -267,7 +267,7 @@ function registrar_componente_componentes(
       (error, results, fields) => {
         if (error) reject();
         resolve();
-      }
+      },
     );
   });
 }
@@ -276,7 +276,7 @@ function registrar_componente_comun(
   tipo_componente,
   id,
   tipo_asociacion,
-  nOrden
+  nOrden,
 ) {
   return new Promise((resolve, reject) => {
     conexion.dbConn.beginTransaction(() => {
@@ -284,7 +284,7 @@ function registrar_componente_comun(
       registrar_componente(tipo_componente)
         .then((id_componente) => {
           console.log(
-            "componente->registrar_componente_comun " + id_componente
+            "componente->registrar_componente_comun " + id_componente,
           );
           if (tipo_asociacion == constantes.TIPO_ASOCIACION_PAGINA) {
             console.log("componente->registrar_componente_comun-> pagina ");
@@ -298,7 +298,7 @@ function registrar_componente_comun(
               });
           } else if (tipo_asociacion == constantes.TIPO_ASOCIACION_COMPONENTE) {
             console.log(
-              "componente->registrar_componente_comun-> componentes "
+              "componente->registrar_componente_comun-> componentes ",
             );
             registrar_componente_componentes(id_componente, id, nOrden)
               .then(() => {
@@ -317,7 +317,7 @@ function registrar_componente_comun(
           },
           () => {
             console.log("Se ha producido un error");
-          }
+          },
         );
     });
   });
@@ -330,7 +330,7 @@ function registrar_componente_texto_orden(id, tipo_asociacion, nOrden) {
       constantes.TIPO_COMPONENTE_TEXTO,
       id,
       tipo_asociacion,
-      nOrden
+      nOrden,
     )
       .then((nid_componente) => {
         console.log("registrar_componente_texto -> 1");
@@ -353,7 +353,7 @@ function registrar_componente_texto(id, tipo_asociacion) {
         registrar_componente_texto_orden(id, tipo_asociacion, max_orden).then(
           () => {
             resolve();
-          }
+          },
         );
       })
       .catch(() => {
@@ -366,14 +366,14 @@ function registrar_componente_imagen_orden(
   id,
   titulo,
   tipo_asociacion,
-  nOrden
+  nOrden,
 ) {
   return new Promise((resolve, reject) => {
     registrar_componente_comun(
       constantes.TIPO_COMPONENTE_IMAGEN,
       id,
       tipo_asociacion,
-      nOrden
+      nOrden,
     )
       .then((nid_componente) => {
         registrar_c_imagen(nid_componente, titulo).then(() => {
@@ -397,7 +397,7 @@ function registrar_componente_imagen(id, titulo, tipo_asociacion) {
           id,
           titulo,
           tipo_asociacion,
-          max_orden
+          max_orden,
         )
           .then(() => {
             conexion.dbConn.commit();
@@ -431,7 +431,7 @@ function registrar_c_video(nid_componente, url) {
           reject();
         }
         resolve();
-      }
+      },
     );
   });
 }
@@ -442,7 +442,7 @@ function registrar_componente_video_orden(id, url, tipo_asociacion, nOrden) {
       constantes.TIPO_COMPONENTE_VIDEO,
       id,
       tipo_asociacion,
-      nOrden
+      nOrden,
     )
       .then((nid_componente) => {
         registrar_c_video(nid_componente, url).then(() => {
@@ -498,7 +498,7 @@ function registrar_c_galeria(nid_componente, titulo, descripcion) {
           reject();
         }
         resolve();
-      }
+      },
     );
   });
 }
@@ -508,14 +508,14 @@ function registrar_componente_galeria_orden(
   titulo,
   descripcion,
   tipo_asociacion,
-  nOrden
+  nOrden,
 ) {
   return new Promise((resolve, reject) => {
     registrar_componente_comun(
       constantes.TIPO_COMPONENTE_GALERIA,
       id,
       tipo_asociacion,
-      nOrden
+      nOrden,
     )
       .then((nid_componente) => {
         registrar_c_galeria(nid_componente, titulo, descripcion).then(() => {
@@ -534,7 +534,7 @@ function registrar_componente_galeria(
   id,
   titulo,
   descripcion,
-  tipo_asociacion
+  tipo_asociacion,
 ) {
   return new Promise((resolve, reject) => {
     console.log("Registrar componente_galeria");
@@ -545,7 +545,7 @@ function registrar_componente_galeria(
           titulo,
           descripcion,
           tipo_asociacion,
-          max_orden
+          max_orden,
         )
           .then(() => {
             conexion.dbConn.commit();
@@ -576,7 +576,7 @@ function registrar_componente_paginas_orden(id, tipo_asociacion, nOrden) {
       constantes.TIPO_COMPONENTE_PAGINAS,
       id,
       tipo_asociacion,
-      nOrden
+      nOrden,
     )
       .then((nid_componente) => {
         console.log("Nuevo componente " + nid_componente);
@@ -622,7 +622,7 @@ function registrar_componente_carusel_orden(
   id,
   tipo_asociacion,
   elementos_simultaneos,
-  nOrden
+  nOrden,
 ) {
   return new Promise((resolve, reject) => {
     console.log("Tipo de asociacion " + tipo_asociacion);
@@ -630,7 +630,7 @@ function registrar_componente_carusel_orden(
       constantes.TIPO_COMPONENTE_CARUSEL,
       id,
       tipo_asociacion,
-      nOrden
+      nOrden,
     )
       .then((nid_componente) => {
         console.log("Nuevo componente " + nid_componente);
@@ -651,7 +651,7 @@ function registrar_componente_carusel_orden(
               conexion.dbConn.commit();
               resolve();
             }
-          }
+          },
         );
       })
       .catch(() => {
@@ -663,7 +663,7 @@ function registrar_componente_carusel_orden(
 function registrar_componente_carusel(
   id,
   tipo_asociacion,
-  elementos_simultaneos
+  elementos_simultaneos,
 ) {
   return new Promise((resolve, reject) => {
     console.log("4");
@@ -672,7 +672,7 @@ function registrar_componente_carusel(
         id,
         tipo_asociacion,
         elementos_simultaneos,
-        max_orden
+        max_orden,
       )
         .then(() => {
           conexion.dbConn.commit();
@@ -703,7 +703,7 @@ function obtiene_componente_texto(id_componente) {
           reject();
         }
         resolve(results[0]);
-      }
+      },
     );
   });
 }
@@ -722,7 +722,7 @@ function eliminar_componente(id_componente) {
         } else {
           resolve();
         }
-      }
+      },
     );
   });
 }
@@ -763,9 +763,9 @@ function eliminar_pagina_componente(id_pagina, id_componente) {
                   })
                   .catch(() => reject());
               }
-            }
+            },
           );
-        }
+        },
       );
     });
   });
@@ -784,7 +784,7 @@ function eliminar_componente_componentes(id_componente) {
           reject();
         }
         resolve();
-      }
+      },
     );
   });
 }
@@ -802,7 +802,7 @@ function eliminar_componente_texto(id_pagina, id_componente, tipo_asociacion) {
             reject();
           }
           console.log(
-            "eliminar_componente_texto-> Eliminar " + tipo_asociacion
+            "eliminar_componente_texto-> Eliminar " + tipo_asociacion,
           );
           if (tipo_asociacion == constantes.TIPO_ASOCIACION_PAGINA) {
             eliminar_pagina_componente(id_pagina, id_componente)
@@ -825,7 +825,7 @@ function eliminar_componente_texto(id_pagina, id_componente, tipo_asociacion) {
                 reject();
               });
           }
-        }
+        },
       );
     });
   });
@@ -867,7 +867,7 @@ function eliminar_componente_imagen(id_pagina, id_componente, tipo_asociacion) {
                 reject();
               });
           }
-        }
+        },
       );
     });
   });
@@ -909,7 +909,7 @@ function eliminar_componente_video(id_pagina, id_componente, tipo_asociacion) {
                 reject();
               });
           }
-        }
+        },
       );
     });
   });
@@ -918,7 +918,7 @@ function eliminar_componente_video(id_pagina, id_componente, tipo_asociacion) {
 function eliminar_componente_galeria(
   id_pagina,
   id_componente,
-  tipo_asociacion
+  tipo_asociacion,
 ) {
   return new Promise(function (resolve, reject) {
     conexion.dbConn.beginTransaction(function () {
@@ -954,7 +954,7 @@ function eliminar_componente_galeria(
                 reject();
               });
           }
-        }
+        },
       );
     });
   });
@@ -963,7 +963,7 @@ function eliminar_componente_galeria(
 function eliminar_componente_paginas(
   id_pagina,
   id_componente,
-  tipo_asociacion
+  tipo_asociacion,
 ) {
   return new Promise(function (resolve, reject) {
     conexion.dbConn.beginTransaction(function () {
@@ -981,7 +981,7 @@ function eliminar_componente_paginas(
           }
           if (tipo_asociacion == constantes.TIPO_ASOCIACION_PAGINA) {
             console.log(
-              "eliminar_componente_paginas -> Eliminar pagina componente"
+              "eliminar_componente_paginas -> Eliminar pagina componente",
             );
             eliminar_pagina_componente(id_pagina, id_componente)
               .then(() => {
@@ -1005,7 +1005,7 @@ function eliminar_componente_paginas(
                 reject();
               });
           }
-        }
+        },
       );
     });
   });
@@ -1014,7 +1014,7 @@ function eliminar_componente_paginas(
 async function async_eliminar_componente_carusel(
   id_pagina,
   id_componente,
-  tipo_asociacion
+  tipo_asociacion,
 ) {
   if (tipo_asociacion == constantes.TIPO_ASOCIACION_PAGINA) {
     console.log("eliminar_componente_carusel -> Eliminar carusel componente");
@@ -1038,13 +1038,13 @@ async function async_eliminar_componente_carusel(
 async function eliminar_componente_carusel(
   id_pagina,
   id_componente,
-  tipo_asociacion
+  tipo_asociacion,
 ) {
   try {
     await async_eliminar_componente_carusel(
       id_pagina,
       id_componente,
-      tipo_asociacion
+      tipo_asociacion,
     );
 
     return new Promise((resolve, reject) => {
@@ -1073,7 +1073,7 @@ function obtiene_url_video(id_componente) {
         } else {
           resolve(results[0]["url"]);
         }
-      }
+      },
     );
   });
 }
@@ -1095,7 +1095,7 @@ function obtiene_componentes(id_pagina) {
           reject();
         }
         resolve(results);
-      }
+      },
     );
   });
 }
@@ -1132,10 +1132,10 @@ function decrementa_orden(id_pagina, id_componente) {
                     conexion.dbConn.commit();
                     resolve();
                   }
-                }
+                },
               );
             }
-          }
+          },
         );
       });
     });
@@ -1174,10 +1174,10 @@ function incrementa_orden(id_pagina, id_componente) {
                     conexion.dbConn.commit();
                     resolve();
                   }
-                }
+                },
               );
             }
-          }
+          },
         );
       });
     });
@@ -1197,7 +1197,7 @@ function obtiene_numero_componente(id_pagina) {
           reject();
         }
         resolve(results[0]["numero"]);
-      }
+      },
     );
   });
 }
@@ -1223,7 +1223,7 @@ function obtiene_orden(id_pagina, id_componente) {
             conexion.dbConn.commit();
             resolve(results[0]["nOrden"]);
           }
-        }
+        },
       );
     });
   });
@@ -1251,7 +1251,7 @@ function actualiza_orden(nOrden, bAumento) {
         } else {
           resolve();
         }
-      }
+      },
     );
   });
 }
@@ -1275,7 +1275,7 @@ function get_orden_pagina(nid_componente, nid_pagina) {
         } else {
           resolve(results[0]["orden"]);
         }
-      }
+      },
     );
   });
 }
@@ -1309,7 +1309,7 @@ function add_pagina_componente(nid_componente, padre, titulo, descripcion) {
                     console.log("INSERTADO");
                     resolve();
                   }
-                }
+                },
               );
             })
             .catch(() => {
@@ -1354,7 +1354,7 @@ function remove_pagina_componente(nid_componente, nid_pagina) {
                     reject();
                   });
               }
-            }
+            },
           );
         })
         .catch(() => {
@@ -1385,7 +1385,7 @@ function obtener_paginas_componente(nid_componente) {
         } else {
           resolve(results);
         }
-      }
+      },
     );
   });
 }
@@ -1393,7 +1393,7 @@ function obtener_paginas_componente(nid_componente) {
 async function async_eliminar_componente_comun(
   id_componente,
   id_pagina,
-  tipo_asociacion
+  tipo_asociacion,
 ) {
   try {
     if (tipo_asociacion == constantes.TIPO_ASOCIACION_PAGINA) {
@@ -1413,13 +1413,13 @@ async function async_eliminar_componente_comun(
 async function eliminar_componente_comun(
   id_componente,
   id_pagina,
-  tipo_asociacion
+  tipo_asociacion,
 ) {
   try {
     await async_eliminar_componente_comun(
       id_componente,
       id_pagina,
-      tipo_asociacion
+      tipo_asociacion,
     );
     return new Promise((resolve, reject) => {
       resolve();
