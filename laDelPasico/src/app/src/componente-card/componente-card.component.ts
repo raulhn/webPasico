@@ -18,6 +18,13 @@ export class ComponenteCardComponent implements OnInit {
       this.cargado = true;
     },
     next: (respuesta: any) => {
+      console.log(
+        '--------------------------------------------------------------------------',
+      );
+      console.log(respuesta);
+      console.log(
+        '--------------------------------------------------------------------------',
+      );
       this.componente_card = respuesta.componente;
       this.cargado = true;
     },
