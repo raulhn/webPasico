@@ -342,12 +342,12 @@ async function eliminar_componente(req, res) {
             }
             if (tipo == constantes.TIPO_COMPONENTE_CARD) {
               console.log("Eliminar componenete card");
+              await componente_card.eliminar_componente_card(id_componente);
               await componente.eliminar_componente_comun(
                 id_componente,
                 id_pagina,
                 tipo,
               );
-              await componente_card.eliminar_componente_card(id_componente);
             }
           });
         }
