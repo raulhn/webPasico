@@ -141,11 +141,13 @@ export class NuevoComponenteComponent implements OnInit {
           window.location.reload();
         });
     } else if (this.desplegable == Constantes.TipoComponente.CARD) {
+      console.log('Registrar componente card');
       const data = {
         id: this.id_pagina,
         tipo_componente: this.desplegable,
         tipo_asociacion: Constantes.TipoAsociacion.pagina,
       };
+      console.log('Datos', data);
       this.componenteService.crear_componente_general(data);
     }
   }
