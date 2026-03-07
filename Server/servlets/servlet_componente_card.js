@@ -14,7 +14,8 @@ async function registrar_componente_card(
   try {
     let orden_componente = orden;
     if (!orden_componente) {
-      orden_componente = await servlet_comun.obtener_orden_siguiente(nid_padre);
+      orden_componente =
+        await gestor_componente.obtener_ultimo_orden(nid_padre);
     }
     let nid_componente = nid_componente_card;
     if (!nid_componente) {
