@@ -1,9 +1,6 @@
 const constantes = require("../constantes.js");
 const conexion = require("../conexion.js");
 const componente = require("./componente.js");
-const {
-  actualizar_componente_card,
-} = require("../servlets/servlet_componente_card.js");
 
 function insertar_componente_card(nid_componente_card, texto, color) {
   const sql =
@@ -28,7 +25,7 @@ function insertar_componente_card(nid_componente_card, texto, color) {
   });
 }
 
-function atualizar_componente_card(nid_componente_card, texto, color) {
+function actualizar_componente_card(nid_componente_card, texto, color) {
   const sql =
     "update " +
     constantes.ESQUEMA_BD +
