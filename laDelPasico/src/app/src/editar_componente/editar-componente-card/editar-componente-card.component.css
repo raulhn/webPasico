@@ -8,12 +8,8 @@
   border-radius: 20px;
   padding: 20px;
   overflow: hidden;
-  border-width: 1px;
-  border-color: "black";
-  shadow-color: "black";
-  shadow-offset: 0px 4px;
-  shadow-opacity: 0.25;
-  shadow-radius: 4px;
+  border: 1px solid black;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
 .entrada_texto {
