@@ -1,20 +1,23 @@
-import { Component,  Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
-import { faCirclePlus, faFloppyDisk, faX } from '@fortawesome/free-solid-svg-icons';
+import {
+  faCirclePlus,
+  faFloppyDisk,
+  faX,
+} from '@fortawesome/free-solid-svg-icons';
 import { ComponenteService } from 'src/app/servicios/componente.service';
 import { UsuariosService } from 'src/app/servicios/usuarios.service';
 import { Constantes } from '../../logica/constantes';
 
 @Component({
-    selector: 'app-nuevo-componente-componentes',
-    templateUrl: './nuevo-componente-componentes.component.html',
-    styleUrls: ['./nuevo-componente-componentes.component.css'],
-    standalone: false
+  selector: 'app-nuevo-componente-componentes',
+  templateUrl: './nuevo-componente-componentes.component.html',
+  styleUrls: ['./nuevo-componente-componentes.component.css'],
+  standalone: false,
 })
 export class NuevoComponenteComponentesComponent implements OnInit {
-
-  @Input() id_componente: string="";
-  @Input() nOrden: string="";
+  @Input() id_componente: string = '';
+  @Input() nOrden: string = '';
 
   faAdd = faCirclePlus;
   faXmark = faX;
@@ -24,73 +27,89 @@ export class NuevoComponenteComponentesComponent implements OnInit {
 
   esAdministrador: boolean = false;
 
-  desplegable: string = "";
+  desplegable: string = '';
 
   // Componente imagen
-  titulo_imagen: string = "";
+  titulo_imagen: string = '';
 
   // Componente de componentes
-  num_columnas: string = "";
+  num_columnas: string = '';
 
   // Componente de video
-  url: string = "";
+  url: string = '';
 
-  constructor(private usuarioService: UsuariosService, private componenteService: ComponenteService) { }
+  constructor(
+    private usuarioService: UsuariosService,
+    private componenteService: ComponenteService,
+  ) {}
 
   ngOnInit(): void {
-    this.usuarioService.logueado_administrador().subscribe((res) =>{
-
+    this.usuarioService.logueado_administrador().subscribe((res) => {
       this.esAdministrador = res.administrador;
     });
   }
 
-  add()
-  {
+  add() {
     this.insert = true;
   }
 
-  cancelar()
-  {
+  cancelar() {
     this.insert = false;
   }
 
-  guardar()
-  {
-
-    if (this.desplegable == Constantes.TipoComponente.TEXTO)
-    {
-      this.componenteService.crear_componente_componentes_texto(this.id_componente, this.desplegable, this.nOrden).subscribe((res) =>
-      {
+  guardar() {
+    if (this.desplegable == Constantes.TipoComponente.TEXTO) {
+      this.componenteService
+        .crear_componente_componentes_texto(
+          this.id_componente,
+          this.desplegable,
+          this.nOrden,
+        )
+        .subscribe((res) => {
+          window.location.reload();
+        });
+    } else if (this.desplegable == Constantes.TipoComponente.IMAGEN) {
+      this.componenteService
+        .crear_componente_componentes_imagen(
+          this.id_componente,
+          this.desplegable,
+          this.titulo_imagen,
+          this.nOrden,
+        )
+        .subscribe((res) => {
+          window.location.reload();
+        });
+    } else if (this.desplegable == Constantes.TipoComponente.COMPONENTES) {
+      this.componenteService
+        .crear_componente_componentes_componentes(
+          this.id_componente,
+          this.desplegable,
+          this.num_columnas,
+          this.nOrden,
+        )
+        .subscribe((res) => {
+          window.location.reload();
+        });
+    } else if (this.desplegable == Constantes.TipoComponente.VIDEO) {
+      this.componenteService
+        .crear_componente_componentes_video(
+          this.id_componente,
+          this.desplegable,
+          this.url,
+          this.nOrden,
+        )
+        .subscribe((res) => {
+          window.location.reload();
+        });
+    } else if (this.desplegable == Constantes.TipoComponente.CARD) {
+      const data = {
+        id: this.id_componente,
+        tipo_componente: this.desplegable,
+        tipo_asociacion: Constantes.TipoAsociacion.componente,
+      };
+      this.componenteService.crear_componente_general(data).subscribe((res) => {
         window.location.reload();
       });
     }
-    else if(this.desplegable == Constantes.TipoComponente.IMAGEN)
-    {
-      this.componenteService.crear_componente_componentes_imagen(this.id_componente, this.desplegable, this.titulo_imagen, this.nOrden).subscribe(
-        (res) =>
-        {
-          window.location.reload();
-        }
-      )
-    }
-    else if(this.desplegable == Constantes.TipoComponente.COMPONENTES)
-    {
-      this.componenteService.crear_componente_componentes_componentes(this.id_componente, this.desplegable, this.num_columnas, this.nOrden).subscribe(
-        (res) =>
-        {
-          window.location.reload();
-        }
-      )
-    }
-    else if(this.desplegable == Constantes.TipoComponente.VIDEO)
-    {
-      this.componenteService.crear_componente_componentes_video(this.id_componente, this.desplegable, this.url, this.nOrden).subscribe(
-        (res) =>
-        {
-          window.location.reload();
-        }
-      )
-    }
   }
-
 }

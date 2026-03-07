@@ -477,6 +477,11 @@ export class ComponenteService {
     return this.http.post(API_URL, data, { withCredentials: true });
   }
 
+  crear_componente_componentes_general(data: any) {
+    let API_URL = this.url + '/registrar_componente';
+    return this.http.post(API_URL, data, { withCredentials: true });
+  }
+
   /** Componente Card **/
   actualizar_componente_card(
     nid_componente_card: string,
