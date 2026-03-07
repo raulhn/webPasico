@@ -983,6 +983,7 @@ function eliminar_componente_paginas(
             console.log(
               "eliminar_componente_paginas -> Eliminar pagina componente",
             );
+
             eliminar_pagina_componente(id_pagina, id_componente)
               .then(() => {
                 conexion.dbConn.commit();
@@ -1396,8 +1397,15 @@ async function async_eliminar_componente_comun(
   tipo_asociacion,
 ) {
   try {
+    console.log("Tipo asociacion", tipo_asociacion);
+    console.log("Pagina id", id_pagina);
+    console.log("Componente id", id_componente);
     if (tipo_asociacion == constantes.TIPO_ASOCIACION_PAGINA) {
-      await eliminar_componente_paginas(id_pagina, id_componente);
+      await eliminar_componente_paginas(
+        id_pagina,
+        id_componente,
+        tipo_asociacion,
+      );
     } else if ((tipo_asociacion = constantes.TIPO_ASOCIACION_COMPONENTE)) {
       await eliminar_componente_componentes(id_componente);
     }
