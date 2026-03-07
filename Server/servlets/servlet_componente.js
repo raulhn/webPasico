@@ -466,6 +466,10 @@ async function registrar_componente(req, res) {
                   id,
                   nOrden,
                 );
+                res
+                  .status(200)
+                  .send({ error: false, message: "Componente creado" });
+                return;
               } else if (tipo_componente == constantes.TIPO_COMPONENTE_VIDEO) {
                 console.log("Registrar Video");
 
