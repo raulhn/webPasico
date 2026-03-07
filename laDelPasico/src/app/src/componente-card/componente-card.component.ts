@@ -14,7 +14,9 @@ export class ComponenteCardComponent implements OnInit {
   @Input() nid_componente_card: string = '';
 
   peticion_obtiene_componente = {
-    error: (respuesta: any) => {},
+    error: (respuesta: any) => {
+      this.cargado = true;
+    },
     next: (respuesta: any) => {
       this.componente_card = respuesta.componente;
       this.cargado = true;
