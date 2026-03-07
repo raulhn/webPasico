@@ -115,6 +115,7 @@
         </div>
         <div *ngIf="modo_edicion">
           <app-editar-componente-card
+            #instancia_card
             nid_componente_card="{{ id_componente }}"
           ></app-editar-componente-card>
         </div>
