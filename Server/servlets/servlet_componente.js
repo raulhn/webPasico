@@ -369,237 +369,256 @@ async function registrar_componente(req, res) {
       gestion_usuarios
         .esAdministrador(usuario)
         .then(async function (bEsAdministrador) {
-          if (bEsAdministrador) {
-            if (tipo_componente == constantes.TIPO_COMPONENTE_TEXTO) {
-              if (tipo_asociacion == constantes.TIPO_ASOCIACION_PAGINA) {
-                console.log("-- registrar_componente_texto --");
-                componente
-                  .registrar_componente_texto(id, tipo_asociacion)
-                  .then(() => {
-                    return res
-                      .status(200)
-                      .send({ error: false, message: "Componente creado" });
-                  })
-                  .catch(() => {
-                    return res
-                      .status(400)
-                      .send({ error: true, message: "Error" });
-                  });
+          try {
+            if (bEsAdministrador) {
+              if (tipo_componente == constantes.TIPO_COMPONENTE_TEXTO) {
+                if (tipo_asociacion == constantes.TIPO_ASOCIACION_PAGINA) {
+                  console.log("-- registrar_componente_texto --");
+                  componente
+                    .registrar_componente_texto(id, tipo_asociacion)
+                    .then(() => {
+                      return res
+                        .status(200)
+                        .send({ error: false, message: "Componente creado" });
+                    })
+                    .catch(() => {
+                      return res
+                        .status(400)
+                        .send({ error: true, message: "Error" });
+                    });
+                } else if (
+                  tipo_asociacion == constantes.TIPO_ASOCIACION_COMPONENTE
+                ) {
+                  let nOrden = req.body.nOrden;
+                  console.log(
+                    "-- registrar_componente_texto_orden -- " + nOrden,
+                  );
+                  componente
+                    .registrar_componente_texto_orden(
+                      id,
+                      tipo_asociacion,
+                      nOrden,
+                    )
+                    .then(() => {
+                      return res
+                        .status(200)
+                        .send({ error: false, message: "Componente creado" });
+                    })
+                    .catch(() => {
+                      return res
+                        .status(400)
+                        .send({ error: true, message: "Error" });
+                    });
+                }
+              } else if (tipo_componente == constantes.TIPO_COMPONENTE_IMAGEN) {
+                console.log("Registrar Imagen");
+
+                let titulo = req.body.titulo;
+
+                if (tipo_asociacion == constantes.TIPO_ASOCIACION_PAGINA) {
+                  componente
+                    .registrar_componente_imagen(id, titulo, tipo_asociacion)
+                    .then(() => {
+                      return res
+                        .status(200)
+                        .send({ error: false, message: "Componente creado" });
+                    })
+                    .catch(() => {
+                      return res
+                        .status(400)
+                        .send({ error: true, message: "Error" });
+                    });
+                } else if (
+                  tipo_asociacion == constantes.TIPO_ASOCIACION_COMPONENTE
+                ) {
+                  let nOrden = req.body.nOrden;
+                  componente
+                    .registrar_componente_imagen_orden(
+                      id,
+                      titulo,
+                      tipo_asociacion,
+                      nOrden,
+                    )
+                    .then(() => {
+                      return res
+                        .status(200)
+                        .send({ error: false, message: "Componente creado" });
+                    })
+                    .catch(() => {
+                      return res
+                        .status(400)
+                        .send({ error: true, message: "Error" });
+                    });
+                }
+              } else if (tipo_componente == constantes.TIPO_COMPONENTE_CARD) {
+                const texto = req.body.texto;
+                const color = req.body.color;
+                const nOrden = req.body.nOrden ? req.body.nOrden : null;
+
+                await servlet_componente_card.registrar_componente_card(
+                  null,
+                  texto,
+                  color,
+                  tipo_asociacion,
+                  id,
+                  nOrden,
+                );
+              } else if (tipo_componente == constantes.TIPO_COMPONENTE_VIDEO) {
+                console.log("Registrar Video");
+
+                let url = req.body.url;
+
+                if (tipo_asociacion == constantes.TIPO_ASOCIACION_PAGINA) {
+                  componente
+                    .registrar_componente_video(id, url, tipo_asociacion)
+                    .then(() => {
+                      return res
+                        .status(200)
+                        .send({ error: false, message: "Componente creado" });
+                    })
+                    .catch(() => {
+                      return res
+                        .status(400)
+                        .send({ error: true, message: "Error" });
+                    });
+                } else if (
+                  tipo_asociacion == constantes.TIPO_ASOCIACION_COMPONENTE
+                ) {
+                  let nOrden = req.body.nOrden;
+                  componente
+                    .registrar_componente_video_orden(
+                      id,
+                      url,
+                      tipo_asociacion,
+                      nOrden,
+                    )
+                    .then(() => {
+                      return res
+                        .status(200)
+                        .send({ error: false, message: "Componente creado" });
+                    })
+                    .catch(() => {
+                      return res
+                        .status(400)
+                        .send({ error: true, message: "Error" });
+                    });
+                }
               } else if (
-                tipo_asociacion == constantes.TIPO_ASOCIACION_COMPONENTE
+                tipo_componente == constantes.TIPO_COMPONENTE_GALERIA
               ) {
-                let nOrden = req.body.nOrden;
-                console.log("-- registrar_componente_texto_orden -- " + nOrden);
-                componente
-                  .registrar_componente_texto_orden(id, tipo_asociacion, nOrden)
-                  .then(() => {
-                    return res
-                      .status(200)
-                      .send({ error: false, message: "Componente creado" });
-                  })
-                  .catch(() => {
-                    return res
-                      .status(400)
-                      .send({ error: true, message: "Error" });
-                  });
-              }
-            } else if (tipo_componente == constantes.TIPO_COMPONENTE_IMAGEN) {
-              console.log("Registrar Imagen");
+                console.log("Registrar Galeria");
 
-              let titulo = req.body.titulo;
+                let titulo = req.body.titulo;
+                let descripcion = req.body.descripcion;
 
-              if (tipo_asociacion == constantes.TIPO_ASOCIACION_PAGINA) {
-                componente
-                  .registrar_componente_imagen(id, titulo, tipo_asociacion)
-                  .then(() => {
-                    return res
-                      .status(200)
-                      .send({ error: false, message: "Componente creado" });
-                  })
-                  .catch(() => {
-                    return res
-                      .status(400)
-                      .send({ error: true, message: "Error" });
-                  });
+                if (tipo_asociacion == constantes.TIPO_ASOCIACION_PAGINA) {
+                  componente
+                    .registrar_componente_galeria(
+                      id,
+                      titulo,
+                      descripcion,
+                      tipo_asociacion,
+                    )
+                    .then(() => {
+                      return res
+                        .status(200)
+                        .send({ error: false, message: "Componente creado" });
+                    })
+                    .catch(() => {
+                      return res
+                        .status(400)
+                        .send({ error: true, message: "Error" });
+                    });
+                } else if (
+                  tipo_asociacion == constantes.TIPO_ASOCIACION_COMPONENTE
+                ) {
+                  let nOrden = req.body.nOrden;
+                  componente
+                    .registrar_componente_galeria_orden(
+                      id,
+                      titulo,
+                      descripcion,
+                      tipo_asociacion,
+                      nOrden,
+                    )
+                    .then(() => {
+                      return res
+                        .status(200)
+                        .send({ error: false, message: "Componente creado" });
+                    })
+                    .catch(() => {
+                      return res
+                        .status(400)
+                        .send({ error: true, message: "Error" });
+                    });
+                }
               } else if (
-                tipo_asociacion == constantes.TIPO_ASOCIACION_COMPONENTE
+                tipo_componente == constantes.TIPO_COMPONENTE_COMPONENTES
               ) {
-                let nOrden = req.body.nOrden;
-                componente
-                  .registrar_componente_imagen_orden(
-                    id,
-                    titulo,
-                    tipo_asociacion,
-                    nOrden,
-                  )
-                  .then(() => {
-                    return res
-                      .status(200)
-                      .send({ error: false, message: "Componente creado" });
-                  })
-                  .catch(() => {
-                    return res
-                      .status(400)
-                      .send({ error: true, message: "Error" });
-                  });
-              }
-            } else if (tipo_componente == constantes.TIPO_COMPONENTE_CARD) {
-              const texto = req.body.texto;
-              const color = req.body.color;
-              const nOrden = req.body.nOrden ? req.body.nOrden : null;
+                console.log(
+                  "Registrar Componente Componentes " + tipo_asociacion,
+                );
+                let nColumnas = req.body.nColumnas;
 
-              await servlet_componente_card.registrar_componente_card(
-                null,
-                texto,
-                color,
-                tipo_asociacion,
-                id,
-                nOrden,
-              );
-            } else if (tipo_componente == constantes.TIPO_COMPONENTE_VIDEO) {
-              console.log("Registrar Video");
-
-              let url = req.body.url;
-
-              if (tipo_asociacion == constantes.TIPO_ASOCIACION_PAGINA) {
-                componente
-                  .registrar_componente_video(id, url, tipo_asociacion)
-                  .then(() => {
-                    return res
-                      .status(200)
-                      .send({ error: false, message: "Componente creado" });
-                  })
-                  .catch(() => {
-                    return res
-                      .status(400)
-                      .send({ error: true, message: "Error" });
-                  });
+                if (tipo_asociacion == constantes.TIPO_ASOCIACION_PAGINA) {
+                  componente_componentes
+                    .insertar_componente_componentes(
+                      id,
+                      nColumnas,
+                      tipo_asociacion,
+                    )
+                    .then(() => {
+                      return res
+                        .status(200)
+                        .send({ error: false, message: "Componente creado" });
+                    })
+                    .catch(() => {
+                      return res
+                        .status(400)
+                        .send({ error: true, message: "Error" });
+                    });
+                } else {
+                  return res
+                    .status(400)
+                    .send({ error: true, message: "Operación no permitida" });
+                }
               } else if (
-                tipo_asociacion == constantes.TIPO_ASOCIACION_COMPONENTE
+                tipo_componente == constantes.TIPO_COMPONENTE_PAGINAS
               ) {
-                let nOrden = req.body.nOrden;
-                componente
-                  .registrar_componente_video_orden(
-                    id,
-                    url,
-                    tipo_asociacion,
-                    nOrden,
-                  )
-                  .then(() => {
-                    return res
-                      .status(200)
-                      .send({ error: false, message: "Componente creado" });
-                  })
-                  .catch(() => {
-                    return res
-                      .status(400)
-                      .send({ error: true, message: "Error" });
-                  });
-              }
-            } else if (tipo_componente == constantes.TIPO_COMPONENTE_GALERIA) {
-              console.log("Registrar Galeria");
-
-              let titulo = req.body.titulo;
-              let descripcion = req.body.descripcion;
-
-              if (tipo_asociacion == constantes.TIPO_ASOCIACION_PAGINA) {
-                componente
-                  .registrar_componente_galeria(
-                    id,
-                    titulo,
-                    descripcion,
-                    tipo_asociacion,
-                  )
-                  .then(() => {
-                    return res
-                      .status(200)
-                      .send({ error: false, message: "Componente creado" });
-                  })
-                  .catch(() => {
-                    return res
-                      .status(400)
-                      .send({ error: true, message: "Error" });
-                  });
+                if (tipo_asociacion == constantes.TIPO_ASOCIACION_PAGINA) {
+                  console.log("Registrar componente páginas");
+                  componente
+                    .registrar_componente_paginas(id, tipo_asociacion)
+                    .then(() => {
+                      return res
+                        .status(200)
+                        .send({ error: false, message: "Componente creado" });
+                    })
+                    .catch(() => {
+                      return res
+                        .status(400)
+                        .send({ error: true, message: "Error" });
+                    });
+                } else {
+                  return res
+                    .status(400)
+                    .send({ error: true, message: "Operación no permitida" });
+                }
               } else if (
-                tipo_asociacion == constantes.TIPO_ASOCIACION_COMPONENTE
+                tipo_componente == constantes.TIPO_COMPONENTE_CARUSEL
               ) {
-                let nOrden = req.body.nOrden;
-                componente
-                  .registrar_componente_galeria_orden(
-                    id,
-                    titulo,
-                    descripcion,
-                    tipo_asociacion,
-                    nOrden,
-                  )
-                  .then(() => {
-                    return res
-                      .status(200)
-                      .send({ error: false, message: "Componente creado" });
-                  })
-                  .catch(() => {
-                    return res
-                      .status(400)
-                      .send({ error: true, message: "Error" });
-                  });
+                console.log("Registrar componente Carrusel");
+                servlet_componente.registrar_componente_carusel(req, res);
+              } else if (tipo_componente == constantes.TIPO_COMPONENTE_BLOG) {
+                console.log("Registrar componente blog");
+                servlet_componente_blog.registrar_componente_blog(req, res);
               }
-            } else if (
-              tipo_componente == constantes.TIPO_COMPONENTE_COMPONENTES
-            ) {
-              console.log(
-                "Registrar Componente Componentes " + tipo_asociacion,
-              );
-              let nColumnas = req.body.nColumnas;
-
-              if (tipo_asociacion == constantes.TIPO_ASOCIACION_PAGINA) {
-                componente_componentes
-                  .insertar_componente_componentes(
-                    id,
-                    nColumnas,
-                    tipo_asociacion,
-                  )
-                  .then(() => {
-                    return res
-                      .status(200)
-                      .send({ error: false, message: "Componente creado" });
-                  })
-                  .catch(() => {
-                    return res
-                      .status(400)
-                      .send({ error: true, message: "Error" });
-                  });
-              } else {
-                return res
-                  .status(400)
-                  .send({ error: true, message: "Operación no permitida" });
-              }
-            } else if (tipo_componente == constantes.TIPO_COMPONENTE_PAGINAS) {
-              if (tipo_asociacion == constantes.TIPO_ASOCIACION_PAGINA) {
-                console.log("Registrar componente páginas");
-                componente
-                  .registrar_componente_paginas(id, tipo_asociacion)
-                  .then(() => {
-                    return res
-                      .status(200)
-                      .send({ error: false, message: "Componente creado" });
-                  })
-                  .catch(() => {
-                    return res
-                      .status(400)
-                      .send({ error: true, message: "Error" });
-                  });
-              } else {
-                return res
-                  .status(400)
-                  .send({ error: true, message: "Operación no permitida" });
-              }
-            } else if (tipo_componente == constantes.TIPO_COMPONENTE_CARUSEL) {
-              console.log("Registrar componente Carrusel");
-              servlet_componente.registrar_componente_carusel(req, res);
-            } else if (tipo_componente == constantes.TIPO_COMPONENTE_BLOG) {
-              console.log("Registrar componente blog");
-              servlet_componente_blog.registrar_componente_blog(req, res);
             }
+          } catch (error) {
+            console.log("Error al registrar el coponente");
+            res
+              .status(400)
+              .send({ error: true, message: "Se ha producido un error" });
           }
         });
     }
