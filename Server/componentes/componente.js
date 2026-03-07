@@ -1401,11 +1401,9 @@ async function async_eliminar_componente_comun(
     } else if ((tipo_asociacion = constantes.TIPO_ASOCIACION_COMPONENTE)) {
       await eliminar_componente_componentes(id_componente);
     }
-    conexion.dbConn.commit();
     return;
   } catch (e) {
     console.log(e);
-    conexion.dbConn.rollback();
     throw new Error("Error al eliminar componente ");
   }
 }
@@ -1421,14 +1419,10 @@ async function eliminar_componente_comun(
       id_pagina,
       tipo_asociacion,
     );
-    return new Promise((resolve, reject) => {
-      resolve();
-    });
+    return;
   } catch (error) {
     console.log(error);
-    return new Promise((resolve, reject) => {
-      reject();
-    });
+    throw new Error("Error al eliminar componente");
   }
 }
 
