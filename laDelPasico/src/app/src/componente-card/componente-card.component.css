@@ -7,8 +7,8 @@
   padding: 20px;
   overflow: hidden;
   border-width: 1px;
-  border-color: #000000;
-  shadow-color: #000000;
+  border-color: "black";
+  shadow-color: "black";
   shadow-offset: 0px 4px;
   shadow-opacity: 0.25;
   shadow-radius: 4px;
