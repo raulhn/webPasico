@@ -106,6 +106,7 @@ export class NuevoComponenteComponentesComponent implements OnInit {
         id: this.id_componente,
         tipo_componente: this.desplegable,
         tipo_asociacion: Constantes.TipoAsociacion.componente,
+        nOrden: this.nOrden,
       };
       this.componenteService.crear_componente_general(data).subscribe((res) => {
         window.location.reload();
