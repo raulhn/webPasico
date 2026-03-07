@@ -487,7 +487,7 @@ export class ComponenteService {
     return this.http.post(
       API_URL,
       {
-        id: nid_componente_card,
+        nid_componente_card: nid_componente_card,
         texto: texto,
         color: color,
       },
