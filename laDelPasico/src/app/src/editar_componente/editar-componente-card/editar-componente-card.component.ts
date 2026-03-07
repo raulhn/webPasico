@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ComponenteService } from 'src/app/servicios/componente.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-editar-componente-card',
@@ -39,6 +40,7 @@ export class EditarComponenteCardComponent implements OnInit {
         },
         next: (respuesta: any) => {
           console.log(respuesta);
+          window.location.reload();
         },
       });
   }
