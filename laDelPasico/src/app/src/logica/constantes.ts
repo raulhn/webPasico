@@ -38,6 +38,7 @@ export namespace Constantes {
     public static readonly PAGINAS = '6';
     public static readonly CARUSEL = '7';
     public static readonly BLOG = '8';
+    public static readonly CARD = '9';
   }
 
   export class TipoAsociacion {

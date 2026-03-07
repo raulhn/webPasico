@@ -1,271 +1,502 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpResponse,
+} from '@angular/common/http';
 import { Componente_texto } from '../src/logica/componentes/componente_texto';
 import { catchError, map } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 
 import { Constantes } from '../src/logica/constantes';
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ComponenteService {
-
-  constructor(private http: HttpClient) { 
- 
-  }
+  constructor(private http: HttpClient) {}
   private url: string = Constantes.General.URL_BACKED;
 
-  tipo_componente(id: string)
-  {
+  tipo_componente(id: string) {
     return this.http.get(this.url + '/tipo_componente/' + id);
   }
 
-  componente_texto(id: string)
-  {
+  componente_texto(id: string) {
     return this.http.get(this.url + '/componente_texto/' + id);
   }
 
-  actualizar_texto(data: Componente_texto)
-  {
+  actualizar_texto(data: Componente_texto) {
     let API_URL = this.url + '/guardar_texto';
-    return this.http.post(API_URL, data,{ withCredentials:true }).pipe(catchError(err => { 
-        return throwError(() => new Error(err.status))}))
+    return this.http.post(API_URL, data, { withCredentials: true }).pipe(
+      catchError((err) => {
+        return throwError(() => new Error(err.status));
+      }),
+    );
   }
 
   /** CREAR COMPONENTES **/
 
-  crear_componente(id_pagina: string, tipo_componente: string)
-  {
+  crear_componente(id_pagina: string, tipo_componente: string) {
     let API_URL = this.url + '/registrar_componente';
-    return this.http.post(API_URL, {id: id_pagina, tipo_componente: tipo_componente, tipo_asociacion: Constantes.TipoAsociacion.pagina}, { withCredentials:true });
+    return this.http.post(
+      API_URL,
+      {
+        id: id_pagina,
+        tipo_componente: tipo_componente,
+        tipo_asociacion: Constantes.TipoAsociacion.pagina,
+      },
+      { withCredentials: true },
+    );
   }
 
-  crear_componente_imagen(id_pagina: string, tipo_componente: string, titulo: string)
-  {
+  crear_componente_imagen(
+    id_pagina: string,
+    tipo_componente: string,
+    titulo: string,
+  ) {
     let API_URL = this.url + '/registrar_componente';
-    return this.http.post(API_URL, {id: id_pagina, tipo_componente: tipo_componente, titulo: titulo, tipo_asociacion: Constantes.TipoAsociacion.pagina}, { withCredentials:true });
-  }
-  
-  crear_componente_video(id_pagina: string, tipo_componente: string, url:string)
-  {
-    let API_URL = this.url + '/registrar_componente';
-    return this.http.post(API_URL, {id: id_pagina, tipo_componente: tipo_componente, url: url, tipo_asociacion: Constantes.TipoAsociacion.pagina}, { withCredentials:true })
-  }
-
-  crear_componente_galeria(id_pagina: string, tipo_componente: string, titulo: string, descripcion: string)
-  {
-    let API_URL = this.url + '/registrar_componente';
-    return this.http.post(API_URL, {id: id_pagina, tipo_componente: tipo_componente, titulo: titulo, descripcion: descripcion, tipo_asociacion: Constantes.TipoAsociacion.pagina}, { withCredentials:true })
-  }
-
-
-  crear_componente_componentes(id_pagina: string, tipo_componente: string, nColumnas: string)
-  {
-    let API_URL = this.url + '/registrar_componente';
-    return this.http.post(API_URL, {id: id_pagina, tipo_componente: tipo_componente, nColumnas: nColumnas, tipo_asociacion: Constantes.TipoAsociacion.pagina}, {withCredentials: true});
+    return this.http.post(
+      API_URL,
+      {
+        id: id_pagina,
+        tipo_componente: tipo_componente,
+        titulo: titulo,
+        tipo_asociacion: Constantes.TipoAsociacion.pagina,
+      },
+      { withCredentials: true },
+    );
   }
 
-  crear_componente_paginas(id_pagina: string, tipo_componente: string, titulo: string)
-  {
+  crear_componente_video(
+    id_pagina: string,
+    tipo_componente: string,
+    url: string,
+  ) {
     let API_URL = this.url + '/registrar_componente';
-    return this.http.post(API_URL, {id: id_pagina, tipo_componente:tipo_componente, titulo: titulo, tipo_asociacion: Constantes.TipoAsociacion.pagina}, { withCredentials:true});
+    return this.http.post(
+      API_URL,
+      {
+        id: id_pagina,
+        tipo_componente: tipo_componente,
+        url: url,
+        tipo_asociacion: Constantes.TipoAsociacion.pagina,
+      },
+      { withCredentials: true },
+    );
   }
 
-  crear_componente_carusel(id_pagina: string, tipo_componente: string, elementos_simultaneos: string)
-  {
+  crear_componente_galeria(
+    id_pagina: string,
+    tipo_componente: string,
+    titulo: string,
+    descripcion: string,
+  ) {
     let API_URL = this.url + '/registrar_componente';
-    return this.http.post(API_URL, {id: id_pagina, tipo_componente: tipo_componente, elementos_simultaneos: elementos_simultaneos, tipo_asociacion: Constantes.TipoAsociacion.pagina}, { withCredentials: true});
+    return this.http.post(
+      API_URL,
+      {
+        id: id_pagina,
+        tipo_componente: tipo_componente,
+        titulo: titulo,
+        descripcion: descripcion,
+        tipo_asociacion: Constantes.TipoAsociacion.pagina,
+      },
+      { withCredentials: true },
+    );
   }
 
-  crear_componente_blog(id_pagina: string, tipo_componente: string)
-  {
+  crear_componente_componentes(
+    id_pagina: string,
+    tipo_componente: string,
+    nColumnas: string,
+  ) {
     let API_URL = this.url + '/registrar_componente';
-    return this.http.post(API_URL, {id: id_pagina, tipo_componente: tipo_componente, tipo_asociacion: Constantes.TipoAsociacion.pagina}, {withCredentials: true});
+    return this.http.post(
+      API_URL,
+      {
+        id: id_pagina,
+        tipo_componente: tipo_componente,
+        nColumnas: nColumnas,
+        tipo_asociacion: Constantes.TipoAsociacion.pagina,
+      },
+      { withCredentials: true },
+    );
+  }
+
+  crear_componente_paginas(
+    id_pagina: string,
+    tipo_componente: string,
+    titulo: string,
+  ) {
+    let API_URL = this.url + '/registrar_componente';
+    return this.http.post(
+      API_URL,
+      {
+        id: id_pagina,
+        tipo_componente: tipo_componente,
+        titulo: titulo,
+        tipo_asociacion: Constantes.TipoAsociacion.pagina,
+      },
+      { withCredentials: true },
+    );
+  }
+
+  crear_componente_carusel(
+    id_pagina: string,
+    tipo_componente: string,
+    elementos_simultaneos: string,
+  ) {
+    let API_URL = this.url + '/registrar_componente';
+    return this.http.post(
+      API_URL,
+      {
+        id: id_pagina,
+        tipo_componente: tipo_componente,
+        elementos_simultaneos: elementos_simultaneos,
+        tipo_asociacion: Constantes.TipoAsociacion.pagina,
+      },
+      { withCredentials: true },
+    );
+  }
+
+  crear_componente_blog(id_pagina: string, tipo_componente: string) {
+    let API_URL = this.url + '/registrar_componente';
+    return this.http.post(
+      API_URL,
+      {
+        id: id_pagina,
+        tipo_componente: tipo_componente,
+        tipo_asociacion: Constantes.TipoAsociacion.pagina,
+      },
+      { withCredentials: true },
+    );
   }
 
   /** CREAR COMPONENTES DE COMPONENTE**/
 
-  crear_componente_componentes_texto(id_componente: string, tipo_componente: string, nOrden: string)
-  {
+  crear_componente_componentes_texto(
+    id_componente: string,
+    tipo_componente: string,
+    nOrden: string,
+  ) {
     let API_URL = this.url + '/registrar_componente';
-    return this.http.post(API_URL, {id: id_componente, tipo_componente: tipo_componente, tipo_asociacion: Constantes.TipoAsociacion.componente, nOrden: nOrden}, { withCredentials:true });
+    return this.http.post(
+      API_URL,
+      {
+        id: id_componente,
+        tipo_componente: tipo_componente,
+        tipo_asociacion: Constantes.TipoAsociacion.componente,
+        nOrden: nOrden,
+      },
+      { withCredentials: true },
+    );
   }
 
-  crear_componente_componentes_imagen(id_componente: string, tipo_componente: string, titulo: string, nOrden: string)
-  {
+  crear_componente_componentes_imagen(
+    id_componente: string,
+    tipo_componente: string,
+    titulo: string,
+    nOrden: string,
+  ) {
     let API_URL = this.url + '/registrar_componente';
-    return this.http.post(API_URL, {id: id_componente, tipo_componente: tipo_componente, titulo: titulo, tipo_asociacion: Constantes.TipoAsociacion.componente, nOrden: nOrden}, { withCredentials:true });
-  }
-  
-  crear_componente_componentes_video(id_componente: string, tipo_componente: string, url: string, nOrden: string)
-  {
-    let API_URL = this.url + '/registrar_componente';
-    return this.http.post(API_URL, {id: id_componente, tipo_componente: tipo_componente, url: url, tipo_asociacion: Constantes.TipoAsociacion.componente, nOrden: nOrden}, { withCredentials:true });
-
-  }
-
-  crear_componente_componentes_galeria(id_componente: string, tipo_componente: string, titulo: string, descripcion: string, nOrden: string)
-  {
-    let API_URL = this.url + '/registrar_componente';
-    return this.http.post(API_URL, {id: id_componente, tipo_componente: tipo_componente, titulo: titulo, descripcion: descripcion, tipo_asociacion: Constantes.TipoAsociacion.componente, nOrden: nOrden}, { withCredentials:true });
-  }
-
-  crear_componente_componentes_componentes(id_componente: string, tipo_componente: string, nColumnas: string, nOrden: string)
-  {
-    let API_URL = this.url + '/registrar_componente';
-    return this.http.post(API_URL, {id: id_componente, tipo_componente: tipo_componente, nColumnas: nColumnas, tipo_asociacion: Constantes.TipoAsociacion.componente, nOrden: nOrden}, {withCredentials: true});
+    return this.http.post(
+      API_URL,
+      {
+        id: id_componente,
+        tipo_componente: tipo_componente,
+        titulo: titulo,
+        tipo_asociacion: Constantes.TipoAsociacion.componente,
+        nOrden: nOrden,
+      },
+      { withCredentials: true },
+    );
   }
 
-  crear_componente_componentes_carusel(id_compoonente: string, tipo_componente: string, nColumnas: string, nOrden: string)
-  {
+  crear_componente_componentes_video(
+    id_componente: string,
+    tipo_componente: string,
+    url: string,
+    nOrden: string,
+  ) {
     let API_URL = this.url + '/registrar_componente';
-    return this.http.post(API_URL, {id: id_compoonente, tipo_componente: tipo_componente, tipo_asociacion: Constantes.TipoAsociacion.componente, nOrden: nOrden})
+    return this.http.post(
+      API_URL,
+      {
+        id: id_componente,
+        tipo_componente: tipo_componente,
+        url: url,
+        tipo_asociacion: Constantes.TipoAsociacion.componente,
+        nOrden: nOrden,
+      },
+      { withCredentials: true },
+    );
+  }
+
+  crear_componente_componentes_galeria(
+    id_componente: string,
+    tipo_componente: string,
+    titulo: string,
+    descripcion: string,
+    nOrden: string,
+  ) {
+    let API_URL = this.url + '/registrar_componente';
+    return this.http.post(
+      API_URL,
+      {
+        id: id_componente,
+        tipo_componente: tipo_componente,
+        titulo: titulo,
+        descripcion: descripcion,
+        tipo_asociacion: Constantes.TipoAsociacion.componente,
+        nOrden: nOrden,
+      },
+      { withCredentials: true },
+    );
+  }
+
+  crear_componente_componentes_componentes(
+    id_componente: string,
+    tipo_componente: string,
+    nColumnas: string,
+    nOrden: string,
+  ) {
+    let API_URL = this.url + '/registrar_componente';
+    return this.http.post(
+      API_URL,
+      {
+        id: id_componente,
+        tipo_componente: tipo_componente,
+        nColumnas: nColumnas,
+        tipo_asociacion: Constantes.TipoAsociacion.componente,
+        nOrden: nOrden,
+      },
+      { withCredentials: true },
+    );
+  }
+
+  crear_componente_componentes_carusel(
+    id_compoonente: string,
+    tipo_componente: string,
+    nColumnas: string,
+    nOrden: string,
+  ) {
+    let API_URL = this.url + '/registrar_componente';
+    return this.http.post(API_URL, {
+      id: id_compoonente,
+      tipo_componente: tipo_componente,
+      tipo_asociacion: Constantes.TipoAsociacion.componente,
+      nOrden: nOrden,
+    });
   }
 
   /** OPERACIONES SOBRE IMAGENES **/
-  actualizar_imagen(fichero: any)
-  {
+  actualizar_imagen(fichero: any) {
     let API_URL = this.url + '/actualizar_imagen';
-    return this.http.post(API_URL, fichero, { withCredentials:true, });
+    return this.http.post(API_URL, fichero, { withCredentials: true });
   }
 
-  obtiene_ruta_imagen(id_componente_imagen: string)
-  {
+  obtiene_ruta_imagen(id_componente_imagen: string) {
     let API_URL = this.url + '/ruta_imagen/' + id_componente_imagen;
     return this.http.get(API_URL);
   }
 
-  obtener_componentes(id_pagina: string)
-  {
+  obtener_componentes(id_pagina: string) {
     let API_URL = this.url + '/obtener_componentes/' + id_pagina;
     return this.http.get(API_URL);
   }
 
-  eliminar_componente(id_pagina:string, id_componente_: string)
-  {
+  eliminar_componente(id_pagina: string, id_componente_: string) {
     let API_URL = this.url + '/eliminar_componente';
-    return this.http.post(API_URL, {id_pagina: id_pagina, id_componente: id_componente_, tipo_asociacion: Constantes.TipoAsociacion.pagina}, {withCredentials:true});
+    return this.http.post(
+      API_URL,
+      {
+        id_pagina: id_pagina,
+        id_componente: id_componente_,
+        tipo_asociacion: Constantes.TipoAsociacion.pagina,
+      },
+      { withCredentials: true },
+    );
   }
 
-  eliminar_componente_componentes(id_componente_: string)
-  {
+  eliminar_componente_componentes(id_componente_: string) {
     let API_URL = this.url + '/eliminar_componente';
-    return this.http.post(API_URL, {id_componente: id_componente_, tipo_asociacion: Constantes.TipoAsociacion.componente}, {withCredentials:true});
+    return this.http.post(
+      API_URL,
+      {
+        id_componente: id_componente_,
+        tipo_asociacion: Constantes.TipoAsociacion.componente,
+      },
+      { withCredentials: true },
+    );
   }
 
-  incrementa_orden(id_pagina: string, id_componente: string)
-  {
+  incrementa_orden(id_pagina: string, id_componente: string) {
     let API_URL = this.url + '/incrementa_orden';
-    return this.http.post(API_URL, {id_pagina: id_pagina, id_componente: id_componente}, {withCredentials:true});
+    return this.http.post(
+      API_URL,
+      { id_pagina: id_pagina, id_componente: id_componente },
+      { withCredentials: true },
+    );
   }
-  decrementa_orden(id_pagina: string, id_componente: string)
-  {
+  decrementa_orden(id_pagina: string, id_componente: string) {
     let API_URL = this.url + '/decrementa_orden';
-    return this.http.post(API_URL, {id_pagina: id_pagina, id_componente: id_componente}, {withCredentials:true});
+    return this.http.post(
+      API_URL,
+      { id_pagina: id_pagina, id_componente: id_componente },
+      { withCredentials: true },
+    );
   }
 
-  obtiene_numero_componentes(id_pagina: string)
-  {
+  obtiene_numero_componentes(id_pagina: string) {
     let API_URL = this.url + '/numero_componentes/' + id_pagina;
     return this.http.get(API_URL);
   }
 
-  obtiene_orden(id_pagina: string, id_componente: string)
-  {
-    let API_URL = this.url + '/obtiene_orden/' + id_pagina + "/" + id_componente;
+  obtiene_orden(id_pagina: string, id_componente: string) {
+    let API_URL =
+      this.url + '/obtiene_orden/' + id_pagina + '/' + id_componente;
     return this.http.get(API_URL);
   }
 
-  obtiene_url_video(id_componente: string)
-  {
+  obtiene_url_video(id_componente: string) {
     let API_URL = this.url + '/obtiene_url_video/' + id_componente;
     return this.http.get(API_URL);
   }
 
   /** Componente galeria **/
-  add_imagen_galeria(fichero:any)
-  {
+  add_imagen_galeria(fichero: any) {
     let API_URL = this.url + '/add_imagen_galeria';
-    return this.http.post(API_URL, fichero, {withCredentials: true});
-
+    return this.http.post(API_URL, fichero, { withCredentials: true });
   }
 
-  eliminar_imagen_galeria(id_componente: string, id_imagen: string)
-  {
+  eliminar_imagen_galeria(id_componente: string, id_imagen: string) {
     let API_URL = this.url + '/eliminar_imagen_galeria';
-    return this.http.post(API_URL, {id_componente: id_componente, id_imagen: id_imagen}, {withCredentials: true});
+    return this.http.post(
+      API_URL,
+      { id_componente: id_componente, id_imagen: id_imagen },
+      { withCredentials: true },
+    );
   }
 
-  obtiene_imagenes_galeria(id_componente: string)
-  {
+  obtiene_imagenes_galeria(id_componente: string) {
     let API_URL = this.url + '/obtiene_imagenes_galeria/' + id_componente;
     return this.http.get(API_URL);
   }
 
   /** Componente páginas **/
-  add_pagina_componente(id_componente: string, titulo: string, descripcion: string, padre: string)
-  {
-    let API_URL = this.url  + '/add_pagina_componente';
-    return this.http.post(API_URL, {id_componente: id_componente, titulo: titulo, descripcion: descripcion, padre: padre}, {withCredentials: true});
+  add_pagina_componente(
+    id_componente: string,
+    titulo: string,
+    descripcion: string,
+    padre: string,
+  ) {
+    let API_URL = this.url + '/add_pagina_componente';
+    return this.http.post(
+      API_URL,
+      {
+        id_componente: id_componente,
+        titulo: titulo,
+        descripcion: descripcion,
+        padre: padre,
+      },
+      { withCredentials: true },
+    );
   }
 
-  remove_pagina_componente(id_componente: string, id_pagina: number)
-  {
+  remove_pagina_componente(id_componente: string, id_pagina: number) {
     let API_URL = this.url + '/remove_pagina_componente';
-    return this.http.post(API_URL, {id_componente: id_componente, id_pagina: id_pagina}, {withCredentials: true});
+    return this.http.post(
+      API_URL,
+      { id_componente: id_componente, id_pagina: id_pagina },
+      { withCredentials: true },
+    );
   }
 
-  obtener_paginas_componente(id_componente: string)
-  {
+  obtener_paginas_componente(id_componente: string) {
     let API_URL = this.url + '/obtener_paginas_componente/' + id_componente;
     return this.http.get(API_URL);
   }
 
   /** Componente Carrusel **/
-  obtener_carrusel(id_componente: string)
-  {
+  obtener_carrusel(id_componente: string) {
     let API_URL = this.url + '/obtener_carusel/' + id_componente;
-    return this.http.get(API_URL)
+    return this.http.get(API_URL);
   }
 
-  add_elemento_carrusel(fichero:any)
-  {
+  add_elemento_carrusel(fichero: any) {
     let API_URL = this.url + '/add_imagen_carusel';
-    return this.http.post(API_URL, fichero, {withCredentials: true});
+    return this.http.post(API_URL, fichero, { withCredentials: true });
   }
 
-  eliminar_elemento_carrusel(nid_componente: string, nid_imagen: string)
-  {
+  eliminar_elemento_carrusel(nid_componente: string, nid_imagen: string) {
     let API_URL = this.url + '/eliminar_imagen_carusel';
-    return this.http.post(API_URL, {id_componente: nid_componente, id_imagen: nid_imagen}, {withCredentials:true});
+    return this.http.post(
+      API_URL,
+      { id_componente: nid_componente, id_imagen: nid_imagen },
+      { withCredentials: true },
+    );
   }
 
-  actualizar_elementos_simultaneos(nid_componente: string, elementos_carusel: number)
-  {
+  actualizar_elementos_simultaneos(
+    nid_componente: string,
+    elementos_carusel: number,
+  ) {
     let API_URL = this.url + '/actualizar_elementos_simultaneos';
-    return this.http.post(API_URL, {id_componente: nid_componente, num_elementos: elementos_carusel}, {withCredentials: true});
+    return this.http.post(
+      API_URL,
+      { id_componente: nid_componente, num_elementos: elementos_carusel },
+      { withCredentials: true },
+    );
   }
 
   /** Componente Blog **/
-  add_elemento_blog(data:any)
-  {
+  add_elemento_blog(data: any) {
     let API_URL = this.url + '/add_componente_blog';
-    return this.http.post(API_URL, data, {withCredentials: true});
+    return this.http.post(API_URL, data, { withCredentials: true });
   }
 
-  obtener_elemento_blog(id_componente: string)
-  {
+  obtener_elemento_blog(id_componente: string) {
     let API_URL = this.url + '/obtener_componente_blog/' + id_componente;
-    return this.http.get(API_URL)
+    return this.http.get(API_URL);
   }
 
-  eliminar_elemento_blog(id_componente: string, id_imagen: string, id_menu: string)
-  {
+  eliminar_elemento_blog(
+    id_componente: string,
+    id_imagen: string,
+    id_menu: string,
+  ) {
     let API_URL = this.url + '/eliminar_elemento_blog';
-    return this.http.post(API_URL, {id_componente: id_componente, id_imagen: id_imagen, id_menu: id_menu}, {withCredentials:true});
+    return this.http.post(
+      API_URL,
+      { id_componente: id_componente, id_imagen: id_imagen, id_menu: id_menu },
+      { withCredentials: true },
+    );
   }
-  
-  
+
+  crear_componente_general(data: any) {
+    let API_URL = this.url + '/registrar_componente';
+    return this.http.post(API_URL, data, { withCredentials: true });
+  }
+
+  /** Componente Card **/
+  actualizar_componente_card(
+    nid_componente_card: string,
+    texto: string,
+    color: string,
+  ) {
+    let API_URL = this.url + '/actualizar_componente_card';
+    return this.http.post(
+      API_URL,
+      {
+        id: nid_componente_card,
+        texto: texto,
+        color: color,
+      },
+      { withCredentials: true },
+    );
+  }
+
+  obtener_componente_card(nid_componente_card: string) {
+    let API_URL = this.url + '/obtener_componente_card/' + nid_componente_card;
+    return this.http.get(API_URL);
+  }
 }
-
-
