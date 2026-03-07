@@ -26,6 +26,7 @@ export class EditarComponenteCardComponent implements OnInit {
   }
 
   guardar() {
+    console.log('Guardando componente card...');
     this.serviceComponente
       .actualizar_componente_card(
         this.componente_card.nid_componente_card,
