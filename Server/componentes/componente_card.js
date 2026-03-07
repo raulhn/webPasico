@@ -1,6 +1,9 @@
 const constantes = require("../constantes.js");
 const conexion = require("../conexion.js");
 const componente = require("./componente.js");
+const {
+  actualizar_componente_card,
+} = require("../servlets/servlet_componente_card.js");
 
 function insertar_componente_card(nid_componente_card, texto, color) {
   const sql =
@@ -19,7 +22,7 @@ function insertar_componente_card(nid_componente_card, texto, color) {
         console.log("componente_card.js -> insertar_componente_card: ", error);
         reject();
       } else {
-        resolve(results.insertId);
+        resolve();
       }
     });
   });
@@ -66,4 +69,5 @@ function obtener_componente_card(id_componente) {
 }
 
 module.exports.insertar_componente_card = insertar_componente_card;
+module.exports.actualizar_componente_card = actualizar_componente_card;
 module.exports.obtener_componente_card = obtener_componente_card;
