@@ -47,24 +47,6 @@ function atualizar_componente_card(nid_componente_card, texto, color) {
   });
 }
 
-async function registrar_componente_card(nid_componente_card, texto, color) {
-  try {
-    if (nid_componente_card) {
-      await atualizar_componente_card(nid_componente_card, texto, color);
-      return nid_componente_card;
-    } else {
-      let id_componente = await componente.registrar_componente_comun(
-        constantes.TIPO_COMPONENTE_CARD,
-      );
-      await insertar_componente_card(id_componente, texto, color);
-      return id_componente;
-    }
-  } catch (error) {
-    console.log("Error en registrar_componente_card: " + error);
-    throw new Error("Error en registrar_componente_card: " + error);
-  }
-}
-
 function obtener_componente_card(id_componente) {
   const sql =
     "select nid_componente_card, texto, color from " +
@@ -83,5 +65,5 @@ function obtener_componente_card(id_componente) {
   });
 }
 
-module.exports.registrar_componente_card = registrar_componente_card;
+module.exports.insertar_componente_card = insertar_componente_card;
 module.exports.obtener_componente_card = obtener_componente_card;

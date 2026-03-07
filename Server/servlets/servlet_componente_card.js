@@ -26,18 +26,18 @@ async function registrar_componente_card(
       );
     }
 
-    await componente_card.registrar_componente_card(
+    await componente_card.insertar_componente_card(
       nid_componente,
       texto,
       color,
     );
 
-    return res
-      .status(200)
-      .send({ error: false, message: "Componente registrado" });
+    res.status(200).send({ error: false, message: "Componente registrado" });
+    return;
   } catch (error) {
     console.log("Error en registrar_componente_card: ", error);
-    return res.status(400).send({ error: true, message: "Error" });
+    res.status(400).send({ error: true, message: "Error" });
+    return;
   }
 }
 
@@ -51,7 +51,8 @@ async function actualizar_componente_card(req, res) {
       req.session.usuario_id,
     );
     if (!bEsAdministrador) {
-      return res.status(403).send({ error: true, message: "Acceso denegado" });
+      res.status(403).send({ error: true, message: "Acceso denegado" });
+      return;
     }
     await componente_card.actualizar_componente_card(
       id_componente,
@@ -59,12 +60,12 @@ async function actualizar_componente_card(req, res) {
       color,
     );
 
-    return res
-      .status(200)
-      .send({ error: false, message: "Componente actualizado" });
+    res.status(200).send({ error: false, message: "Componente actualizado" });
+    return;
   } catch (error) {
     console.log("Error en actualizar_componente_card: ", error);
-    return res.status(400).send({ error: true, message: "Error" });
+    res.status(400).send({ error: true, message: "Error" });
+    return;
   }
 }
 async function obtener_componente_card(req, res) {
