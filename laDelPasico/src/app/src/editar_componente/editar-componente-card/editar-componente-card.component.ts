@@ -24,4 +24,21 @@ export class EditarComponenteCardComponent implements OnInit {
       .obtener_componente_card(this.nid_componente_card)
       .subscribe(this.peticion_obtiene_componente);
   }
+
+  guardar() {
+    this.serviceComponente
+      .actualizar_componente_card(
+        this.componente_card.nid_componente_card,
+        this.componente_card.texto,
+        this.componente_card.color,
+      )
+      .subscribe({
+        error: (respuesta: any) => {
+          console.log(respuesta);
+        },
+        next: (respuesta: any) => {
+          console.log(respuesta);
+        },
+      });
+  }
 }

@@ -27,6 +27,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { EditarComponenteGaleriaComponent } from '../editar_componente/editar-componente-galeria/editar-componente-galeria.component';
 import { EditarComponentePaginasComponent } from '../editar_componente/editar-componente-paginas/editar-componente-paginas.component';
 import { EditarComponenteCaruselComponent } from '../editar_componente/editar-componente-carusel/editar-componente-carusel.component';
+import { EditarComponenteCardComponent } from '../editar_componente/editar-componente-card/editar-componente-card.component';
 
 import { ComponenteCardComponent } from '../componente-card/componente-card.component';
 
@@ -54,6 +55,9 @@ export class ComponenteComponent implements OnInit {
 
   @ViewChild('instancia_carusel')
   instancia_carusel!: EditarComponenteCaruselComponent;
+
+  @ViewChild('instancia_card')
+  instancia_card!: EditarComponenteCardComponent;
 
   faPen = faPen;
   faXmark = faX;
@@ -166,6 +170,8 @@ export class ComponenteComponent implements OnInit {
       this.instancia_paginas.guardar(this.id_pagina);
     } else if (this.tipo == Constantes.TipoComponente.CARUSEL) {
       this.instancia_carusel.guardar();
+    } else if (this.tipo == Constantes.TipoComponente.CARD) {
+      this.instancia_card.guardar();
     }
   }
 
