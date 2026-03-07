@@ -15,7 +15,7 @@ export class EditarComponenteCardComponent implements OnInit {
   peticion_obtiene_componente = {
     error: (respuesta: any) => {},
     next: (respuesta: any) => {
-      this.componente_card = respuesta.componente_card;
+      this.componente_card = respuesta.componente;
     },
   };
 
@@ -26,7 +26,7 @@ export class EditarComponenteCardComponent implements OnInit {
   }
 
   guardar() {
-    console.log('Guardando componente card...');
+    console.log('Guardando componente card...', this.componente_card);
     this.serviceComponente
       .actualizar_componente_card(
         this.componente_card.nid_componente_card,
