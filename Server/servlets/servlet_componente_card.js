@@ -2,25 +2,29 @@ const componente_card = require("../componentes/componente_card.js");
 const servlet_comun = require("./servlet_comun");
 const gestor_usuarios = require("../logica/usuario.js");
 const gestor_componente = require("../componentes/componente.js");
+const constantes = require("../constantes.js");
 
 async function registrar_componente_card(
   nid_componente_card,
   texto,
   color,
-  tipo_componente,
+  tipo_asociacion,
   nid_padre,
   orden,
 ) {
   try {
     let orden_componente = orden;
-    if (!orden_componente) {
+    if (
+      !orden_componente &&
+      tipo_asociacion == constantes.TIPO_ASOCIACION_PAGINA
+    ) {
       orden_componente =
         await gestor_componente.obtener_ultimo_orden(nid_padre);
     }
     let nid_componente = nid_componente_card;
     if (!nid_componente) {
       nid_componente = await gestor_componente.registrar_componente_comun(
-        tipo_componente,
+        constantes.TIPO_COMPONENTE_CARD,
         nid_padre,
         tipo_asociacion,
         orden_componente,

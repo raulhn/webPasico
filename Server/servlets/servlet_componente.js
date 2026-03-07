@@ -452,7 +452,7 @@ async function registrar_componente(req, res) {
                 null,
                 texto,
                 color,
-                tipo_componente,
+                tipo_asociacion,
                 id,
                 nOrden,
               );
