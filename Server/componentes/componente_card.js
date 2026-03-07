@@ -61,8 +61,10 @@ function obtener_componente_card(id_componente) {
       if (error) {
         console.log("componente_card.js -> obtener_componente_card: ", error);
         reject();
+      } else if (results.length < 1) {
+        reject("No se ha encontrado el componente card");
       } else {
-        resolve(results);
+        resolve(results[0]);
       }
     });
   });
