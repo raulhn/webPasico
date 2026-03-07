@@ -21,15 +21,20 @@ async function registrar_componente_card(
       orden_componente =
         await gestor_componente.obtener_ultimo_orden(nid_padre);
     }
-    let nid_componente = nid_componente_card;
-    if (!nid_componente) {
-      nid_componente = await gestor_componente.registrar_componente_comun(
-        constantes.TIPO_COMPONENTE_CARD,
-        nid_padre,
-        tipo_asociacion,
-        orden_componente,
-      );
-    }
+    const nid_componente = nid_componente_card;
+    console.log(
+      "Se crea el componente",
+      tipo_asociacion,
+      nid_padre,
+      orden_componente,
+    );
+    nid_componente = await gestor_componente.registrar_componente_comun(
+      constantes.TIPO_COMPONENTE_CARD,
+      nid_padre,
+      tipo_asociacion,
+      orden_componente,
+    );
+    console.log("Componente creado con id: ", nid_componente);
 
     await componente_card.insertar_componente_card(
       nid_componente,
