@@ -346,7 +346,7 @@ async function eliminar_componente(req, res) {
               await componente.eliminar_componente_comun(
                 id_componente,
                 id_pagina,
-                tipo,
+                tipo_asociacion,
               );
             }
           });
