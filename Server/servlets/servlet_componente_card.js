@@ -21,7 +21,6 @@ async function registrar_componente_card(
       orden_componente =
         await gestor_componente.obtener_ultimo_orden(nid_padre);
     }
-    const nid_componente = nid_componente_card;
     console.log(
       "Se crea el componente",
       tipo_asociacion,
