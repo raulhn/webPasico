@@ -37,12 +37,10 @@ async function registrar_componente_card(
       color,
     );
 
-    res.status(200).send({ error: false, message: "Componente registrado" });
     return;
   } catch (error) {
     console.log("Error en registrar_componente_card: ", error);
-    res.status(400).send({ error: true, message: "Error" });
-    return;
+    throw new Error("Error al registrar el componente card");
   }
 }
 
