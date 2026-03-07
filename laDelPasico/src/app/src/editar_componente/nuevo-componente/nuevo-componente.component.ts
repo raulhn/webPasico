@@ -148,7 +148,11 @@ export class NuevoComponenteComponent implements OnInit {
         tipo_asociacion: Constantes.TipoAsociacion.pagina,
       };
       console.log('Datos', data);
-      this.componenteService.crear_componente_general(data);
+      this.componenteService
+        .crear_componente_general(data)
+        .subscribe((res: any) => {
+          window.location.reload();
+        });
     }
   }
 }
