@@ -3,9 +3,9 @@ import { ComponenteService } from 'src/app/servicios/componente.service';
 
 @Component({
   selector: 'app-editar-componente-card',
-  imports: [],
   templateUrl: './editar-componente-card.component.html',
   styleUrl: './editar-componente-card.component.css',
+  standalone: false,
 })
 export class EditarComponenteCardComponent implements OnInit {
   componente_card: any = null;

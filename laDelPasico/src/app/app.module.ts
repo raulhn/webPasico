@@ -1,6 +1,9 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -49,68 +52,72 @@ import { FormularioPreinscripcionTorrePachecoComponent } from './src/formulario-
 import { ListadoPreinscripcionesComponent } from './src/listado-preinscripciones/listado-preinscripciones.component';
 import { ListadoPreinscripcionesCompletoComponent } from './src/listado-preinscripciones-completo/listado-preinscripciones-completo.component';
 import { ListaOrdenadaComponent } from './src/lista-ordenada/lista-ordenada.component';
+import { ComponenteCardComponent } from './src/componente-card/componente-card.component';
 import { RouterModule } from '@angular/router';
 import { NgxCaptchaModule } from 'ngx-captcha';
+import { EditarComponenteCardComponent } from './src/editar_componente/editar-componente-card/editar-componente-card.component';
 
+@NgModule({
+  declarations: [
+    AppComponent,
+    FormularioLoginComponent,
+    ComponenteMenuComponent,
+    HomeComponent,
+    GaleriaComponent,
+    ComponenteComponent,
+    EditarComponenteTextoComponent,
+    NuevoComponenteComponent,
+    PaginaComponent,
+    EditarComponenteImagenComponent,
+    ComponenteImagenComponent,
+    ComponenteComponentesComponent,
+    EditarCompomenteComponentesComponent,
+    NuevoComponenteComponentesComponent,
+    ComponenteComponenteComponent,
+    ComponenteVideoComponent,
+    EditarComponenteVideoComponent,
+    PieComponent,
+    ComponenteGaleriaComponent,
+    EditarComponenteGaleriaComponent,
+    EditarComponentePaginasComponent,
+    ComponentePaginasComponent,
+    ComponenteCaruselComponent,
+    EditarComponenteCaruselComponent,
+    ComponenteBlogComponent,
+    EditarComponenteBlogComponent,
+    ComponenteBlogReducidoComponent,
+    FormularioPreinscripcionComponent,
+    FormularioPreinscripcionPedaniaComponent,
+    FormularioPreinscripcionTorrePachecoComponent,
+    ListadoPreinscripcionesComponent,
+    ListadoPreinscripcionesCompletoComponent,
+    ListaOrdenadaComponent,
+    ComponenteCardComponent,
+    EditarComponenteCardComponent,
+  ],
+  bootstrap: [AppComponent],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule,
+    FontAwesomeModule,
+    AngularEditorModule,
+    CarouselModule,
+    NgxCaptchaModule,
+    ReactiveFormsModule,
+    QuillModule.forRoot(),
+    NgxCaptchaModule,
+    ReactiveFormsModule,
+    RouterModule,
+    // RecaptchaV3Module,
 
-@NgModule({ declarations: [
-        AppComponent,
-        FormularioLoginComponent,
-        ComponenteMenuComponent,
-        HomeComponent,
-        GaleriaComponent,
-        ComponenteComponent,
-        EditarComponenteTextoComponent,
-        NuevoComponenteComponent,
-        PaginaComponent,
-        EditarComponenteImagenComponent,
-        ComponenteImagenComponent,
-        ComponenteComponentesComponent,
-        EditarCompomenteComponentesComponent,
-        NuevoComponenteComponentesComponent,
-        ComponenteComponenteComponent,
-        ComponenteVideoComponent,
-        EditarComponenteVideoComponent,
-        PieComponent,
-        ComponenteGaleriaComponent,
-        EditarComponenteGaleriaComponent,
-        EditarComponentePaginasComponent,
-        ComponentePaginasComponent,
-        ComponenteCaruselComponent,
-        EditarComponenteCaruselComponent,
-        ComponenteBlogComponent,
-        EditarComponenteBlogComponent,
-        ComponenteBlogReducidoComponent,
-        FormularioPreinscripcionComponent,
-        FormularioPreinscripcionPedaniaComponent,
-        FormularioPreinscripcionTorrePachecoComponent,
-        ListadoPreinscripcionesComponent,
-        ListadoPreinscripcionesCompletoComponent,
-        ListaOrdenadaComponent
-    ],
-    bootstrap: [AppComponent], 
-    imports: [BrowserModule,
-        AppRoutingModule,
-        FormsModule,
-        FontAwesomeModule,
-        AngularEditorModule,
-        CarouselModule,
-        NgxCaptchaModule, ReactiveFormsModule,
-        QuillModule.forRoot(),
-        NgxCaptchaModule,
-        ReactiveFormsModule,
-        RouterModule,
-       // RecaptchaV3Module,
-
-        DataTablesModule], 
-        providers: [Usuario, provideHttpClient(withInterceptorsFromDi())] 
-        /*
+    DataTablesModule,
+  ],
+  providers: [Usuario, provideHttpClient(withInterceptorsFromDi())],
+  /*
         {
             provide: RECAPTCHA_V3_SITE_KEY,
             useValue: environment.recaptcha.siteKey
         },*/
-        })
-export class AppModule {
-
-
- }
+})
+export class AppModule {}

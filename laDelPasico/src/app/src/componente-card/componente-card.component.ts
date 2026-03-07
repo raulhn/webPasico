@@ -3,9 +3,9 @@ import { ComponenteService } from 'src/app/servicios/componente.service';
 
 @Component({
   selector: 'app-componente-card',
-  imports: [],
   templateUrl: './componente-card.component.html',
   styleUrl: './componente-card.component.css',
+  standalone: false,
 })
 export class ComponenteCardComponent implements OnInit {
   componente_card: any = null;

@@ -1,8 +1,21 @@
-import { Component, Input, OnInit, ViewChild, Pipe, PipeTransform } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  ViewChild,
+  Pipe,
+  PipeTransform,
+} from '@angular/core';
 import { ComponenteService } from 'src/app/servicios/componente.service';
 import { UsuariosService } from 'src/app/servicios/usuarios.service';
 import { Componente_texto } from '../logica/componentes/componente_texto';
-import { faFloppyDisk, faPen, faX, faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons';
+import {
+  faFloppyDisk,
+  faPen,
+  faX,
+  faArrowDown,
+  faArrowUp,
+} from '@fortawesome/free-solid-svg-icons';
 import { EditarComponenteTextoComponent } from '../editar_componente/editar-componente-texto/editar-componente-texto.component';
 
 //https://sweetalert2.github.io/#declarative-templates
@@ -10,33 +23,38 @@ import Swal from 'sweetalert2';
 import { EditarComponenteImagenComponent } from '../editar_componente/editar-componente-imagen/editar-componente-imagen.component';
 import { Constantes } from '../logica/constantes';
 
-import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { EditarComponenteGaleriaComponent } from '../editar_componente/editar-componente-galeria/editar-componente-galeria.component';
 import { EditarComponentePaginasComponent } from '../editar_componente/editar-componente-paginas/editar-componente-paginas.component';
 import { EditarComponenteCaruselComponent } from '../editar_componente/editar-componente-carusel/editar-componente-carusel.component';
 
+import { ComponenteCardComponent } from '../componente-card/componente-card.component';
+
 @Component({
-    selector: 'app-componente',
-    templateUrl: './componente.component.html',
-    styleUrls: ['./componente.component.css'],
-    standalone: false
+  selector: 'app-componente',
+  templateUrl: './componente.component.html',
+  styleUrls: ['./componente.component.css'],
+  standalone: false,
 })
-
 export class ComponenteComponent implements OnInit {
-  @Input() id: string="";
-  @Input() id_pagina: string="";
+  @Input() id: string = '';
+  @Input() id_pagina: string = '';
 
-  @ViewChild('instancia_texto') instancia_texto!: EditarComponenteTextoComponent;
+  @ViewChild('instancia_texto')
+  instancia_texto!: EditarComponenteTextoComponent;
 
-  @ViewChild('instancia_imagen') instancia_imagen!: EditarComponenteImagenComponent;
+  @ViewChild('instancia_imagen')
+  instancia_imagen!: EditarComponenteImagenComponent;
 
-  @ViewChild('instancia_galeria') instancia_galeria!: EditarComponenteGaleriaComponent;
+  @ViewChild('instancia_galeria')
+  instancia_galeria!: EditarComponenteGaleriaComponent;
 
-  @ViewChild('instancia_paginas') instancia_paginas!: EditarComponentePaginasComponent;
+  @ViewChild('instancia_paginas')
+  instancia_paginas!: EditarComponentePaginasComponent;
 
-  @ViewChild('instancia_carusel') instancia_carusel!: EditarComponenteCaruselComponent;
+  @ViewChild('instancia_carusel')
+  instancia_carusel!: EditarComponenteCaruselComponent;
 
- 
   faPen = faPen;
   faXmark = faX;
   faSave = faFloppyDisk;
@@ -47,169 +65,144 @@ export class ComponenteComponent implements OnInit {
   esLogueado: boolean = false;
   esAdministrador: boolean = false;
 
-  tipo: string = "-1";
-  modo_edicion: boolean = false; 
+  tipo: string = '-1';
+  modo_edicion: boolean = false;
   componente_texto: Componente_texto = new Componente_texto();
 
   numero_componentes_pagina: number = -1;
   orden: number = 0;
 
-  bCargadoTexto: Promise<boolean>|null = null;
+  bCargadoTexto: Promise<boolean> | null = null;
 
-
-  constructor(private componenteService: ComponenteService, private usuarioService: UsuariosService, private sanitizer: DomSanitizer) {
-      this.componente_texto.nid = -1;
-      this.componente_texto.cTexto = '';
-
-     
-   }
-
-
+  constructor(
+    private componenteService: ComponenteService,
+    private usuarioService: UsuariosService,
+    private sanitizer: DomSanitizer,
+  ) {
+    this.componente_texto.nid = -1;
+    this.componente_texto.cTexto = '';
+  }
 
   observer_texto = {
-    next: (res:any) =>
-    {
-      if(!res.error)
-      {
-     
-        this.componente_texto = res.componente;  
-
-     
-       
+    next: (res: any) => {
+      if (!res.error) {
+        this.componente_texto = res.componente;
       }
-    }
-  }
+    },
+  };
 
   observer_eliminar = {
-    next: (res:any) =>
-    {
-
-      if(!res.error)
-      {
-
+    next: (res: any) => {
+      if (!res.error) {
         window.location.reload();
       }
-    }
-  }
+    },
+  };
 
-  obtiene_componente_texto()
-  {
-    this.componenteService.componente_texto(this.id).subscribe(this.observer_texto);
+  obtiene_componente_texto() {
+    this.componenteService
+      .componente_texto(this.id)
+      .subscribe(this.observer_texto);
 
     this.bCargadoTexto = Promise.resolve(true);
   }
-  
+
   observer = {
-    complete: ()=>{},
-    error: (err : Error)=>{ },
+    complete: () => {},
+    error: (err: Error) => {},
     next: (res: any) => {
-      
-                        if (!res['error'])
-                        {
-                          this.tipo = res['nTipo'];
-                          if (this.tipo == Constantes.TipoComponente.TEXTO)
-                          {
-                            this.obtiene_componente_texto();
-                            
-                          }
-                        }
-                       }
+      if (!res['error']) {
+        this.tipo = res['nTipo'];
+        if (this.tipo == Constantes.TipoComponente.TEXTO) {
+          this.obtiene_componente_texto();
+        }
+      }
+    },
   };
 
-
-  activa_edicion(): void
-  {
+  activa_edicion(): void {
     this.modo_edicion = true;
   }
 
-  cancelar_edicion()
-  {
+  cancelar_edicion() {
     this.modo_edicion = false;
   }
 
   ngOnInit(): void {
-    this.componenteService.obtiene_numero_componentes(this.id_pagina).subscribe((res:any) => {this.numero_componentes_pagina = res.numero});
-    this.componenteService.obtiene_orden(this.id_pagina, this.id).subscribe((res:any) => { this.orden = res.orden});
+    this.componenteService
+      .obtiene_numero_componentes(this.id_pagina)
+      .subscribe((res: any) => {
+        this.numero_componentes_pagina = res.numero;
+      });
+    this.componenteService
+      .obtiene_orden(this.id_pagina, this.id)
+      .subscribe((res: any) => {
+        this.orden = res.orden;
+      });
 
     this.componenteService.tipo_componente(this.id).subscribe(this.observer);
 
-    this.usuarioService.logueado().subscribe(respuesta => {
-      
-      if (respuesta.logueado)
-      {
+    this.usuarioService.logueado().subscribe((respuesta) => {
+      if (respuesta.logueado) {
         this.esLogueado = true;
-
       }
-     });
-
-    
-     this.usuarioService.logueado_administrador().subscribe((res) =>{
-
-
-      this.esAdministrador = res.administrador;
     });
 
-    
+    this.usuarioService.logueado_administrador().subscribe((res) => {
+      this.esAdministrador = res.administrador;
+    });
   }
 
-  guardar()
-  {
-
-    if(this.tipo == Constantes.TipoComponente.TEXTO)
-    {
+  guardar() {
+    if (this.tipo == Constantes.TipoComponente.TEXTO) {
       this.instancia_texto.guardar();
       this.componente_texto.cTexto = this.instancia_texto.htmlContent;
       this.modo_edicion = false;
-    }
-    else if(this.tipo == Constantes.TipoComponente.IMAGEN)
-    {
+    } else if (this.tipo == Constantes.TipoComponente.IMAGEN) {
       this.instancia_imagen.guardar();
-    }
-    else if(this.tipo == Constantes.TipoComponente.GALERIA)
-    {
+    } else if (this.tipo == Constantes.TipoComponente.GALERIA) {
       this.instancia_galeria.guardar();
-    }
-    else if(this.tipo == Constantes.TipoComponente.PAGINAS)
-    {
+    } else if (this.tipo == Constantes.TipoComponente.PAGINAS) {
       this.instancia_paginas.guardar(this.id_pagina);
-    }
-    else if(this.tipo == Constantes.TipoComponente.CARUSEL)
-    {
+    } else if (this.tipo == Constantes.TipoComponente.CARUSEL) {
       this.instancia_carusel.guardar();
     }
   }
 
-  eliminar()
-  {
+  eliminar() {
     Swal.fire({
       title: 'Aviso',
       text: '¿Esta seguro de eliminar el componente?',
       showDenyButton: true,
       confirmButtonText: 'Si',
-      denyButtonText: 'No'
+      denyButtonText: 'No',
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
-
-
-        this.componenteService.eliminar_componente(this.id_pagina, this.id).subscribe(this.observer_eliminar);
-       
-      } 
-    })
+        this.componenteService
+          .eliminar_componente(this.id_pagina, this.id)
+          .subscribe(this.observer_eliminar);
+      }
+    });
   }
 
-  incrementa_orden()
-  {
-    this.componenteService.incrementa_orden(this.id_pagina, this.id).subscribe(() => {window.location.reload();});
+  incrementa_orden() {
+    this.componenteService
+      .incrementa_orden(this.id_pagina, this.id)
+      .subscribe(() => {
+        window.location.reload();
+      });
   }
 
-  decrementa_orden()
-  {
-    this.componenteService.decrementa_orden(this.id_pagina, this.id).subscribe(() => {window.location.reload();});
+  decrementa_orden() {
+    this.componenteService
+      .decrementa_orden(this.id_pagina, this.id)
+      .subscribe(() => {
+        window.location.reload();
+      });
   }
 
-  transform()
-  {
+  transform() {
     return this.sanitizer.bypassSecurityTrustHtml(this.componente_texto.cTexto);
   }
 }
