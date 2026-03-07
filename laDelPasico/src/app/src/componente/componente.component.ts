@@ -172,6 +172,7 @@ export class ComponenteComponent implements OnInit {
       this.instancia_carusel.guardar();
     } else if (this.tipo == Constantes.TipoComponente.CARD) {
       this.instancia_card.guardar();
+      this.modo_edicion = false;
     }
   }
 

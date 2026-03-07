@@ -348,6 +348,9 @@ async function eliminar_componente(req, res) {
                 id_pagina,
                 tipo_asociacion,
               );
+              res
+                .status(200)
+                .send({ error: false, message: "Componente eliminado" });
             }
           });
         }
