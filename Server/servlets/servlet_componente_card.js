@@ -51,7 +51,7 @@ async function actualizar_componente_card(req, res) {
     let color = req.body.color;
 
     const bEsAdministrador = await gestor_usuarios.esAdministrador(
-      req.session.usuario_id,
+      req.session.nombre,
     );
     if (!bEsAdministrador) {
       res.status(403).send({ error: true, message: "Acceso denegado" });
