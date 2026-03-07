@@ -8,6 +8,12 @@
   border-radius: 20px;
   padding: 20px;
   overflow: hidden;
+  border-width: 1px;
+  border-color: #000000;
+  shadow-color: #000000;
+  shadow-offset: 0px 4px;
+  shadow-opacity: 0.25;
+  shadow-radius: 4px;
 }
 
 .entrada_texto {
