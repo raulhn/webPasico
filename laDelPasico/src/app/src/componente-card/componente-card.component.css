@@ -3,6 +3,7 @@
   flex-wrap: wrap;
   justify-content: flex-start;
   gap: 20px;
-  border-raidius: 10px;
+  border-radius: 20px;
   padding: 20px;
+  overflow: hidden;
 }
