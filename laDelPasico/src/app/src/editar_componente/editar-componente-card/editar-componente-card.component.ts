@@ -8,7 +8,7 @@ import { ComponenteService } from 'src/app/servicios/componente.service';
   standalone: false,
 })
 export class EditarComponenteCardComponent implements OnInit {
-  componente_card: any = null;
+  componente_card: any = { nid_componente_card: '', texto: '', color: '' };
   constructor(private serviceComponente: ComponenteService) {}
   @Input() nid_componente_card: string = '';
 
