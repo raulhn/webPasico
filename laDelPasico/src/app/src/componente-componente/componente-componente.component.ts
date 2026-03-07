@@ -117,13 +117,14 @@ export class ComponenteComponenteComponent implements OnInit {
 
   guardar() {
     console.log('tipo: ' + this.tipo);
+    console.log('guardando componente...');
     if (this.tipo == Constantes.TipoComponente.TEXTO) {
       this.instancia_texto.guardar();
       this.componente_texto.cTexto = this.instancia_texto.htmlContent;
       this.modo_edicion = false;
-    } else if ((this.tipo = Constantes.TipoComponente.IMAGEN)) {
+    } else if (this.tipo == Constantes.TipoComponente.IMAGEN) {
       this.instancia_imagen.guardar();
-    } else if ((this.tipo = Constantes.TipoComponente.CARD)) {
+    } else if (this.tipo == Constantes.TipoComponente.CARD) {
       this.instancia_card.guardar();
     }
   }
