@@ -10,6 +10,8 @@ import Swal from 'sweetalert2';
 })
 export class EditarComponenteCardComponent implements OnInit {
   componente_card: any = { nid_componente_card: '', texto: '', color: '' };
+  cargado: boolean = false;
+
   constructor(private serviceComponente: ComponenteService) {}
   @Input() nid_componente_card: string = '';
 
@@ -17,6 +19,7 @@ export class EditarComponenteCardComponent implements OnInit {
     error: (respuesta: any) => {},
     next: (respuesta: any) => {
       this.componente_card = respuesta.componente;
+      this.cargado = true;
     },
   };
 
