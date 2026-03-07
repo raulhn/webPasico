@@ -15,7 +15,7 @@ export class ComponenteCardComponent implements OnInit {
   peticion_obtiene_componente = {
     error: (respuesta: any) => {},
     next: (respuesta: any) => {
-      this.componente_card = respuesta.componente_card;
+      this.componente_card = respuesta.componente;
     },
   };
 
