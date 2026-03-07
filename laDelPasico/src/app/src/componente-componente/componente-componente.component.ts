@@ -116,6 +116,7 @@ export class ComponenteComponenteComponent implements OnInit {
   }
 
   guardar() {
+    console.log('tipo: ' + this.tipo);
     if (this.tipo == Constantes.TipoComponente.TEXTO) {
       this.instancia_texto.guardar();
       this.componente_texto.cTexto = this.instancia_texto.htmlContent;
