@@ -22,6 +22,9 @@ export class EditarComponenteCardComponent implements OnInit {
     next: (respuesta: any) => {
       this.componente_card = respuesta.componente;
       this.cargado = true;
+      this.componente_card.texto = this.revertirRemplazoSaltosLinea(
+        this.componente_card.texto,
+      );
     },
   };
 
@@ -31,12 +34,20 @@ export class EditarComponenteCardComponent implements OnInit {
       .subscribe(this.peticion_obtiene_componente);
   }
 
+  remplazarSaltosLinea(texto: string): string {
+    return texto.replace(/\\n/g, '|p|');
+  }
+
+  revertirRemplazoSaltosLinea(texto: string): string {
+    return texto.replace(/\|p\|/g, '\\n');
+  }
+
   guardar() {
     console.log('Guardando componente card...', this.componente_card);
     this.serviceComponente
       .actualizar_componente_card(
         this.componente_card.nid_componente_card,
-        this.componente_card.texto,
+        this.remplazarSaltosLinea(this.componente_card.texto),
         this.componente_card.color,
       )
       .subscribe({
