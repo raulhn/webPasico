@@ -20,10 +20,8 @@ export class ComponenteCardComponent implements OnInit {
     next: (respuesta: any) => {
       this.componente_card = respuesta.componente;
       this.cargado = true;
-      this.componente_card.texto = this.componente_card.texto.replace(
-        '\n',
-        '<br>',
-      );
+      this.componente_card.texto =
+        '<p>' + this.componente_card.texto.replace('\n', '<br>') + '</p>';
     },
   };
 

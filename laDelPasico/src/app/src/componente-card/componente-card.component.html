@@ -2,6 +2,5 @@
   *ngIf="cargado"
   class="contenedor_card"
   [style.background-color]="componente_card.color"
->
-  <p>{{ componente_card.texto }}</p>
-</div>
+  [innerHTML]="componente_card.texto"
+></div>
