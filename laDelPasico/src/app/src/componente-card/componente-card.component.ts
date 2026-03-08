@@ -21,10 +21,9 @@ export class ComponenteCardComponent implements OnInit {
       this.componente_card = respuesta.componente;
       this.cargado = true;
       this.componente_card.texto =
-        '<p>' + this.componente_card.texto.replace('\n', '<br>') + '</p>';
+        '<p>' + this.componente_card.texto.replace(/\n/g, '<br>') + '</p>';
     },
   };
-
   ngOnInit(): void {
     this.serviceComponente
       .obtener_componente_card(this.nid_componente_card)
