@@ -48,6 +48,40 @@ function recuperarComponenteTexto(nidComponente) {
   });
 }
 
+function recuperarComponenteCard(nidComponente) {
+  return new Promise((resolve, reject) => {
+    fetch(
+      Constantes.URL_SERVICIO + "obtener_componente_card/" + nidComponente,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
+      .then((response) =>
+        response
+          .json()
+          .then((data) => {
+            if (data.error) {
+              console.log(
+                "Se ha producido un error al recuperar el componente card:"
+              );
+              reject("Error al recuperar el componente card");
+              return;
+            }
+            resolve(data.componente);
+          })
+          .catch((error) => {
+            reject(error);
+          })
+      )
+      .catch((error) => {
+        reject(error);
+      });
+  });
+}
+
 function recuperarImagenesGaleria(nidComponente) {
   return new Promise((resolve, reject) => {
     fetch(
@@ -77,4 +111,5 @@ function recuperarImagenesGaleria(nidComponente) {
 
 module.exports.recuperarComponentes = recuperarComponentes;
 module.exports.recuperarComponenteTexto = recuperarComponenteTexto;
+module.exports.recuperarComponenteCard = recuperarComponenteCard;
 module.exports.recuperarImagenesGaleria = recuperarImagenesGaleria;

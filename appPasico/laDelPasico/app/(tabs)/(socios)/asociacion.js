@@ -2,19 +2,12 @@ import React from "react";
 import { StyleSheet, View, Text } from "react-native";
 import AppBar from "../../../componentes/appBar.jsx"; // Adjust the path if necessary
 import { SafeAreaProvider } from "react-native-safe-area-context";
-
+import Pagina from "../../../componentes/Pagina.jsx";
 export default function Asociacion() {
   return (
-    <SafeAreaProvider>
-      <View style={estilos.principal}>
-        <Text style={estilos.titulo}>
-          Asociación Amigos de la Música de Torre Pacheco
-        </Text>
-        <Text style={estilos.texto}>
-          La Asociación de Amigos de la Música de Torre Pacheco
-        </Text>
-      </View>
-    </SafeAreaProvider>
+    <View style={estilos.principal}>
+      <Pagina nidPagina={12} />
+    </View>
   );
 }
 
