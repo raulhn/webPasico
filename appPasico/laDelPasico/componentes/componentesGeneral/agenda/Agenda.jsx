@@ -95,34 +95,45 @@ export default function Agenda({ mes_, anio_ }) {
   }, [eventos]);
 
   function formularioRegistro() {
+    console.log("Seleeccionado", tipoSeleccionado);
     if (!tipoSeleccionado) {
       return null;
     }
     const fechaRegistro = diaSelecionado
       ? new Date(diaSelecionado.año, diaSelecionado.mes - 1, diaSelecionado.dia)
       : diaHoy;
-
     if (tipoSeleccionado.valor === 2) {
       return (
-        <FormularioEvento
-          cancelar={() => setVisibleFormulario(false)}
-          callback={() => {
-            setVisibleFormulario(false);
-            lanzarRefresco();
+        <View
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%",
           }}
-          fechaDefecto={fechaRegistro}
-        />
+        >
+          <Text>Hola</Text>
+          <FormularioEvento
+            cancelar={() => setVisibleFormulario(false)}
+            callback={() => {
+              setVisibleFormulario(false);
+              lanzarRefresco();
+            }}
+            fechaDefecto={fechaRegistro}
+          />
+        </View>
       );
     } else if (tipoSeleccionado.valor === 1) {
       return (
-        <FormularioAgenda
-          cerrar_sesion={cerrarSesion}
-          volver={() => {
-            setVisibleFormulario(false);
-            lanzarRefresco();
-          }}
-          fechaDefecto={fechaRegistro}
-        />
+        <>
+          <FormularioAgenda
+            cerrar_sesion={cerrarSesion}
+            volver={() => {
+              setVisibleFormulario(false);
+              lanzarRefresco();
+            }}
+            fechaDefecto={fechaRegistro}
+          />
+        </>
       );
     } else {
       return null;

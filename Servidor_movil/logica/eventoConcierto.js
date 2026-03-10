@@ -131,7 +131,7 @@ function obtenerEventosConcierto() {
       "SELECT * FROM " +
       constantes.ESQUEMA +
       ".evento_concierto where borrado = 'N' " +
-      " and fecha_evento > now() " +
+      " and date(fecha_evento) >= date(now()) " +
       " ORDER BY fecha_evento DESC, nid_evento_concierto DESC";
 
     conexion.dbConn.query(sql, (err, result) => {
