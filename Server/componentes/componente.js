@@ -1082,13 +1082,16 @@ function obtiene_url_video(id_componente) {
 function obtiene_componentes(id_pagina) {
   return new Promise(function (resolve, reject) {
     conexion.dbConn.query(
-      "select pc.*, c.nTipo from " +
+      "select pc.*, c.nTipo, m.vTitulo titulo from " +
         constantes.ESQUEMA_BD +
         ".pagina_componente pc, " +
         constantes.ESQUEMA_BD +
-        ".componente c where nid_pagina = " +
+        ".componente c, " +
+        constantes.ESQUEMA_BD +
+        ".menu m  where nid_pagina = " +
         conexion.dbConn.escape(id_pagina) +
         " and pc.nid_componente = c.nid" +
+        " and nid_pagina = m.nid " +
         " order by nOrden",
       function (error, results, field) {
         if (error) {

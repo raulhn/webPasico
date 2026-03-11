@@ -23,18 +23,13 @@ export default function Index() {
 
   useEffect(() => {
     const subscription = Notifications.addNotificationReceivedListener(
-      (notification) => {
-        console.log("Notification received:", notification);
-        console.log("Notification data:", notification.request.content.data);
-      }
+      (notification) => {}
     );
 
     // 1. Solo usar getLastNotificationResponseAsync al montar, y solo si la app NO está en foreground
     Notifications.getLastNotificationResponseAsync().then((notificacion) => {
       if (notificacion) {
         if (notificacion.notification.request.content.data) {
-          console.log(notificacion.notification.request.content);
-          console.log(notificacion.notification.request.content.data.params);
           router.replace(notificacion.notification.request.content.data);
         }
       }
