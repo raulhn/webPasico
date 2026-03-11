@@ -185,8 +185,11 @@ function obtener_componente_componentes(id_componente) {
   const sql =
     "select * from " +
     constantes.ESQUEMA_BD +
-    ".componente_componentes where nid_componente = " +
+    ".componente_componentes cc, " +
+    constantes.ESQUEMA_BD +
+    ".componente c where cc.nid_componente = " +
     conexion.dbConn.escape(id_componente) +
+    " and cc.nid_componente_hijo = c.nid" +
     " order by nOrden";
   console.log(sql);
   return new Promise((resolve, reject) => {

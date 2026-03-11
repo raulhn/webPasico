@@ -1,4 +1,4 @@
-import { useComponenteComponentes } from "../../hooks/useComponenteComponentes";
+import { useComponenteComponentes } from "../../hooks/componentes/useComponenteComponentes";
 import { View, Text, ActivityIndicator, StyleSheet } from "react-native";
 import Componente from "./componente";
 
@@ -22,7 +22,10 @@ export default function ComponenteComponentes({ nidComponente }) {
   return (
     <View style={styles.container}>
       {componentes.map((componente) => (
-        <Componente key={componente.nid_Componente} componente={componente} />
+        <Componente
+          key={componente.nid_Componente_hijo}
+          componente={componente}
+        />
       ))}
     </View>
   );
