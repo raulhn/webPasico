@@ -6,7 +6,11 @@ import Pagina from "../../../componentes/Pagina.jsx";
 export default function Banda() {
   return (
     <View style={estilos.principal}>
-      <Pagina nidPagina={18} excepcionComponentes={["109"]} />
+      <Pagina
+        nidPagina={18}
+        excepcionComponentes={["109"]}
+        incluirTitulo={true}
+      />
     </View>
   );
 }

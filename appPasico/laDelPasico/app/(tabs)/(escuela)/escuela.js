@@ -5,7 +5,7 @@ import Pagina from "../../../componentes/Pagina.jsx";
 export default function Escuela() {
   return (
     <View style={estilos.principal}>
-      <Pagina nidPagina={16} />
+      <Pagina nidPagina={16} incluirTitulo={true} />
     </View>
   );
 }

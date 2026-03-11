@@ -9,20 +9,28 @@ import {
   StyleSheet,
   Dimensions,
 } from "react-native";
+import Constantes from "../config/constantes.js";
 
 const { width, height } = Dimensions.get("window");
 
-export default function Pagina({ nidPagina, excepcionComponentes = [] }) {
+export default function Pagina({
+  nidPagina,
+  excepcionComponentes = [],
+  incluirTitulo = false,
+}) {
   const [componentes, setComponentes] = useState([]);
   const [cargando, setCargando] = useState(true);
+  const [titulo, setTitulo] = useState("");
 
   useEffect(() => {
     serviceComponentes
       .recuperarComponentes(nidPagina)
       .then((data) => {
         setComponentes(data.data);
-
         setCargando(false); // Finaliza la carga
+        if (data.data.length > 0) {
+          setTitulo(data.data[0].titulo);
+        }
       })
       .catch((error) => {});
   }, [nidPagina]);
@@ -38,21 +46,20 @@ export default function Pagina({ nidPagina, excepcionComponentes = [] }) {
 
   function existeExcepcion(nid_componente) {
     for (let i = 0; i < excepcionComponentes.length; i++) {
-      console.log(
-        "componente en excepciones:",
-        excepcionComponentes[i],
-        "comparado con:",
-        nid_componente
-      );
       if (excepcionComponentes[i] == nid_componente) {
         return true;
       }
     }
     return false;
   }
-
+  console.log("Tiulo:", titulo);
   return (
     <View style={styles.container}>
+      {incluirTitulo && (
+        <View style={styles.containerTitulo}>
+          <Text style={styles.titulo}>{titulo}</Text>
+        </View>
+      )}
       <FlatList
         style={styles.flatList}
         data={componentes}
@@ -83,6 +90,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#f8fafc",
+    justifyContent: "center",
+    alignItems: "center",
   },
 
   // Loading styles
@@ -174,5 +183,29 @@ const styles = StyleSheet.create({
     elevation: 2,
     borderWidth: 1,
     borderColor: "#f1f5f9",
+  },
+  titulo: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 8,
+    color: "white",
+  },
+  containerTitulo: {
+    width: "90%",
+    backgroundColor: Constantes.COLOR_AZUL,
+
+    borderRadius: 12,
+    padding: 10,
+    marginHorizontal: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 3, // Para Android
+    borderWidth: 1,
+    borderColor: "#e2e8f0",
   },
 });
