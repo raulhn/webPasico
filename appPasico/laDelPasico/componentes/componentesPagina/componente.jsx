@@ -4,6 +4,7 @@ import ComponenteTexto from "./componenteTexto";
 import constantes from "../../config/constantes.js";
 import ComponenteGaleria from "./componenteGaleria.jsx";
 import ComponenteCard from "./componenteCard.jsx";
+import ComponenteComponentes from "./componenteComponentes.jsx";
 import { useEffect, useState } from "react";
 
 export default function Componente(pComponente) {
@@ -62,6 +63,8 @@ export default function Componente(pComponente) {
         <ComponenteCard nid_componente={componente.nid_Componente} />
       </View>
     );
+  } else if (componente.nTipo === 3) {
+    return <ComponenteComponentes nidComponente={componente.nid_Componente} />;
   }
 }
 
