@@ -38,6 +38,18 @@ export default function DrawerLayout() {
             title: "Escuela",
           }}
         />
+        <Drawer.Screen
+          name="profesores"
+          options={{
+            title: "Profesores",
+          }}
+        />
+        <Drawer.Screen
+          name="plan_estudios"
+          options={{
+            title: "Plan de Estudios",
+          }}
+        />
 
         <Drawer.Screen
           name="stackAlumnos"

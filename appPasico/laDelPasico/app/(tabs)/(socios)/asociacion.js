@@ -6,7 +6,7 @@ import Pagina from "../../../componentes/Pagina.jsx";
 export default function Asociacion() {
   return (
     <View style={estilos.principal}>
-      <Pagina nidPagina={12} />
+      <Pagina nidPagina={12} incluirTitulo={true} />
     </View>
   );
 }

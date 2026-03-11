@@ -52,7 +52,6 @@ export default function Pagina({
     }
     return false;
   }
-  console.log("Tiulo:", titulo);
   return (
     <View style={styles.container}>
       {incluirTitulo && (
@@ -185,27 +184,36 @@ const styles = StyleSheet.create({
     borderColor: "#f1f5f9",
   },
   titulo: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 8,
-    color: "white",
+    fontSize: 22,
+    fontWeight: "700",
+    color: "#ffffff",
+    textAlign: "center",
+    letterSpacing: 0.5,
+    lineHeight: 28,
+    textShadowColor: "rgba(0, 0, 0, 0.3)",
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 2,
   },
   containerTitulo: {
-    width: "90%",
+    width: "92%",
     backgroundColor: Constantes.COLOR_AZUL,
-
-    borderRadius: 12,
-    padding: 10,
-    marginHorizontal: 20,
+    borderRadius: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    marginHorizontal: "auto",
+    marginTop: 8,
+    marginBottom: 8,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 4,
     },
-    shadowOpacity: 0.08,
+    shadowOpacity: 0.15,
     shadowRadius: 8,
-    elevation: 3, // Para Android
-    borderWidth: 1,
-    borderColor: "#e2e8f0",
+    elevation: 8,
+    borderWidth: 0,
+    // Gradiente simulado con overlay
+    position: "relative",
+    overflow: "hidden",
   },
 });

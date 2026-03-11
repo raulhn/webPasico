@@ -23,7 +23,7 @@ export default function ComponenteComponentes({ nidComponente }) {
     <View style={styles.container}>
       {componentes.map((componente) => (
         <Componente
-          key={componente}
+          key={componente.nid_componente_hijo}
           componente={{
             nid_Componente: componente.nid_componente_hijo,
             nTipo: componente.nTipo,

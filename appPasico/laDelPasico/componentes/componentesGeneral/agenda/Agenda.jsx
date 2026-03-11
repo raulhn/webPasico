@@ -95,7 +95,6 @@ export default function Agenda({ mes_, anio_ }) {
   }, [eventos]);
 
   function formularioRegistro() {
-    console.log("Seleeccionado", tipoSeleccionado);
     if (!tipoSeleccionado) {
       return null;
     }

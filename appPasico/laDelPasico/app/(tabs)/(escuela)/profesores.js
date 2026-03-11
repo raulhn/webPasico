@@ -1,9 +1,9 @@
 import { StyleSheet, View, Text } from "react-native";
 import Pagina from "../../../componentes/Pagina.jsx";
-export default function Escuela() {
+export default function Horarios() {
   return (
     <View style={estilos.principal}>
-      <Pagina nidPagina={17} incluirTitulo={true} />
+      <Pagina nidPagina={8} incluirTitulo={true} />
     </View>
   );
 }

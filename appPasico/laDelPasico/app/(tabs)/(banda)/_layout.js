@@ -23,6 +23,13 @@ export default function DrawerLayout() {
         }}
       />
       <Drawer.Screen
+        name="director"
+        options={{
+          title: "Director",
+        }}
+      />
+
+      <Drawer.Screen
         name="stackEventos"
         options={{
           title: "Eventos",
