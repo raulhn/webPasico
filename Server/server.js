@@ -152,6 +152,10 @@ app.get(
   "/obtiene_componente_componentes/:id_componente/:nOrden",
   servlet_componente_componentes.obtiene_componente_componentes,
 );
+app.get(
+  "/obtener_componente_componentes/:id_componente",
+  servlet_componente_componentes.obtener_componente_componetes,
+);
 
 /**************************
  **** Imágenes  *****

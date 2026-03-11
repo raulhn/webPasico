@@ -75,7 +75,6 @@ export default function ComponenteTexto({ nid_componente = null }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
     backgroundColor: "white",
   },
   webView: {

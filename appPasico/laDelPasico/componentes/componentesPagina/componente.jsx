@@ -31,7 +31,7 @@ export default function Componente(pComponente) {
   let componente = pComponente.componente;
   if (componente.nTipo === 1) {
     return (
-      <View style={styles.textoContainer} key={componente.nid_Componente}>
+      <View key={componente.nid_Componente}>
         <ComponenteTexto nid_componente={componente.nid_Componente} />
       </View>
     );

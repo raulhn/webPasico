@@ -22,7 +22,7 @@ function registrar_c_componentes(nid_componente, nColumnas) {
         } else {
           resolve();
         }
-      }
+      },
     );
   });
 }
@@ -31,27 +31,27 @@ function insertar_componente_componentes_orden(
   id,
   nColumnas,
   tipo_asociacion,
-  nOrden
+  nOrden,
 ) {
   console.log(
-    "componente_componentes->insertar_componente_componentes-> entra"
+    "componente_componentes->insertar_componente_componentes-> entra",
   );
   return new Promise((resolve, reject) => {
     console.log(
       "componente_componentes->insertar_componente_componentes-> id_pagina " +
-        id
+        id,
     );
     componente
       .registrar_componente_comun(
         constantes.TIPO_COMPONENTE_COMPONENTES,
         id,
         tipo_asociacion,
-        nOrden
+        nOrden,
       )
       .then((nid_componente) => {
         console.log(
           "componente_componentes->insertar_componente_componentes-> " +
-            nid_componente
+            nid_componente,
         );
         registrar_c_componentes(nid_componente, nColumnas).then(() => {
           conexion.dbConn.commit();
@@ -72,7 +72,7 @@ function insertar_componente_componentes(id, nColumnas, tipo_asociacion) {
         id,
         nColumnas,
         tipo_asociacion,
-        max_orden
+        max_orden,
       )
         .then(() => {
           conexion.dbConn.commit();
@@ -96,13 +96,13 @@ function obtiene_num_componentes(id_componente) {
       (error, results, fields) => {
         if (error) {
           console.log(
-            "componente_componentes->obtiene_num_componentes " + error
+            "componente_componentes->obtiene_num_componentes " + error,
           );
           reject();
         } else {
           resolve(results[0]["num_componentes"]);
         }
-      }
+      },
     );
   });
 }
@@ -117,7 +117,7 @@ function obtiene_num_componentes_definidos(id_componente) {
       (error, results, fields) => {
         if (error) {
           console.log(
-            "componente_componentes->obtiene_num_componentes " + error
+            "componente_componentes->obtiene_num_componentes " + error,
           );
           reject();
         } else if (results.length < 1) {
@@ -125,7 +125,7 @@ function obtiene_num_componentes_definidos(id_componente) {
         } else {
           resolve(results[0]["nColumnas"]);
         }
-      }
+      },
     );
   });
 }
@@ -142,7 +142,7 @@ function existe_componente_componentes(id_componente, nOrden) {
       (error, results, fields) => {
         if (error) {
           console.log(
-            "componente_componentes->existe_componente_componentes " + error
+            "componente_componentes->existe_componente_componentes " + error,
           );
           reject();
         } else {
@@ -152,7 +152,7 @@ function existe_componente_componentes(id_componente, nOrden) {
             resolve(true);
           }
         }
-      }
+      },
     );
   });
 }
@@ -169,15 +169,37 @@ function obtiene_componente_componentes(id_componente, nOrden) {
       (error, results, fields) => {
         if (error) {
           console.log(
-            "componente_componentes->obtiene_componente_componentes " + error
+            "componente_componentes->obtiene_componente_componentes " + error,
           );
           reject();
         }
         if (results.length < 1) {
           reject();
         } else resolve(results[0]);
-      }
+      },
     );
+  });
+}
+
+function obtener_componente_componentes(id_componente) {
+  const sql =
+    "select * from " +
+    constantes.ESQUEMA_BD +
+    ".componente_componentes where nid_componente = " +
+    conexion.dbConn.escape(id_componente) +
+    " order by nOrden";
+  console.log(sql);
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(sql, (error, results, fields) => {
+      if (error) {
+        console.log(
+          "componente_componentes->obtiene_componente_componentes " + error,
+        );
+        reject();
+      } else {
+        resolve(results);
+      }
+    });
   });
 }
 
@@ -197,7 +219,7 @@ function eliminar_tabla_componentes(id_componente) {
           console.log("Eliminado de tabla componentes");
           resolve();
         }
-      }
+      },
     );
   });
 }
@@ -244,6 +266,6 @@ module.exports.obtiene_num_componentes_definidos =
 
 module.exports.existe_componente_componentes = existe_componente_componentes;
 module.exports.obtiene_componente_componentes = obtiene_componente_componentes;
-
+module.exports.obtener_componente_componentes = obtener_componente_componentes;
 module.exports.eliminar_componente_componentes =
   eliminar_componente_componentes;

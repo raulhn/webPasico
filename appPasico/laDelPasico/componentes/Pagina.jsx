@@ -51,7 +51,6 @@ export default function Pagina({ nidPagina, excepcionComponentes = [] }) {
     return false;
   }
 
-  console.log("Componentes recuperados:", componentes);
   return (
     <View style={styles.container}>
       <FlatList
@@ -119,7 +118,6 @@ const styles = StyleSheet.create({
   componentWrapper: {
     backgroundColor: "#ffffff",
     borderRadius: 12,
-    padding: 16,
     marginVertical: 4,
     shadowColor: "#000",
     shadowOffset: {

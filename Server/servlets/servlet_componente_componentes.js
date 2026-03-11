@@ -68,9 +68,25 @@ function obtiene_componente_componentes(req, res) {
     });
 }
 
+async function obtener_componente_componetes(req, res) {
+  try {
+    let id_componente = req.params.id_componente;
+
+    const componentes =
+      await componente_componentes.obtener_componente_componentes(
+        id_componente,
+      );
+
+    return res.status(200).send({ error: false, componentes: componentes });
+  } catch (error) {
+    return res.status(400).send({ error: true });
+  }
+}
+
 module.exports.obtener_num_componente_componentes =
   obtener_num_componente_componentes;
 
 module.exports.num_componente_componentes_definidos =
   num_componente_componentes_definidos;
 module.exports.obtiene_componente_componentes = obtiene_componente_componentes;
+module.exports.obtener_componente_componetes = obtener_componente_componetes;
