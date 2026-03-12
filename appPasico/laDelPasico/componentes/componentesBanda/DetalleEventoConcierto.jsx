@@ -442,7 +442,7 @@ export default function DetalleEventoConcierto({ nidEvento }) {
             valorTitulo={evento.nombre}
             tipo={Constantes.BANDA}
             data={{
-              pathname: "/stackEventos/[nidEvento]",
+              pathname: "/(tabs)/(banda)/stackEventos/[nidEvento]",
               params: { nidEvento: nidEvento },
             }}
           />
