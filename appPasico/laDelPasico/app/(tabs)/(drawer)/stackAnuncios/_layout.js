@@ -44,7 +44,7 @@ export default function PaginaLayout() {
               return (
                 <TouchableOpacity
                   onPress={() => {
-                    router.push("/(tabs)/(drawer)/stackAnuncios/");
+                    router.push("/(tabs)/(drawer)/stackAnuncios/tablon");
                   }}
                   style={{
                     flexDirection: "row",

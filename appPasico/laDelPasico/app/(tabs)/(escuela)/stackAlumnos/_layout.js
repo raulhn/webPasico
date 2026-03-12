@@ -37,7 +37,7 @@ export default function StackAlumnos() {
               return (
                 <TouchableOpacity
                   onPress={() => {
-                    router.push("/(tabs)/(escuela)/stackAlumnos/");
+                    router.push("/(tabs)/(escuela)/stackAlumnos/alumnos");
                   }}
                   style={{
                     flexDirection: "row",

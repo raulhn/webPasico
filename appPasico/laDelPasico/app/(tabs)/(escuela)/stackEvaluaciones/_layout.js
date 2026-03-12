@@ -34,7 +34,9 @@ export default function StackEvaluaciones() {
               return (
                 <TouchableOpacity
                   onPress={() => {
-                    router.push("/(tabs)/(escuela)/stackEvaluaciones/");
+                    router.push(
+                      "/(tabs)/(escuela)/stackEvaluaciones/selectorEvaluaciones"
+                    );
                   }}
                   style={{
                     flexDirection: "row",

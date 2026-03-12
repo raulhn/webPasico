@@ -15,7 +15,9 @@ export default function StackMatriculaLayout() {
               return (
                 <TouchableOpacity
                   onPress={() => {
-                    router.push("/(tabs)/(escuela)/stackEvaluaciones/");
+                    router.push(
+                      "/(tabs)/(escuela)/stackEvaluaciones/seleccionEvaluacion/"
+                    );
                   }}
                   style={{
                     flexDirection: "row",

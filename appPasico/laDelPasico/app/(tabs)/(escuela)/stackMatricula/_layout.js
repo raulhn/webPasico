@@ -39,7 +39,7 @@ export default function PaginaLayout() {
               return (
                 <TouchableOpacity
                   onPress={() => {
-                    router.push("/(tabs)/(escuela)/stackMatricula/");
+                    router.push("/(tabs)/(escuela)/stackMatricula/expediente");
                   }}
                   style={{
                     flexDirection: "row",
@@ -75,7 +75,7 @@ export default function PaginaLayout() {
               return (
                 <TouchableOpacity
                   onPress={() => {
-                    router.push("/(tabs)/(escuela)/stackMatricula/");
+                    router.push("/(tabs)/(escuela)/stackMatricula/expediente");
                   }}
                   style={{
                     flexDirection: "row",
