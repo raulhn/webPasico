@@ -38,7 +38,7 @@ export default function PaginaLayout() {
               return (
                 <TouchableOpacity
                   onPress={() => {
-                    router.push("/(tabs)/(banda)/stackEventos/banda");
+                    router.push("/(tabs)/(banda)/stackEventos/eventos");
                   }}
                   style={{
                     flexDirection: "row",

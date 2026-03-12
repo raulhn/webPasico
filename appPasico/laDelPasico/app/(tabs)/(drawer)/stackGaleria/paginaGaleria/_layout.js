@@ -15,7 +15,7 @@ export default function Layout() {
               return (
                 <TouchableOpacity
                   onPress={() => {
-                    router.push("/(tabs)/(drawer)/stackGaleria/");
+                    router.push("/(tabs)/(drawer)/stackGaleria/galeria");
                   }}
                   style={{
                     flexDirection: "row",
@@ -35,4 +35,3 @@ export default function Layout() {
     </Stack>
   );
 }
-
