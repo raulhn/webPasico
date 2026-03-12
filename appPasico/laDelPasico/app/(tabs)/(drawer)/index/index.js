@@ -30,7 +30,15 @@ export default function Index() {
     Notifications.getLastNotificationResponseAsync().then((notificacion) => {
       if (notificacion) {
         if (notificacion.notification.request.content.data) {
-          router.replace(notificacion.notification.request.content.data);
+          const path = notificacion.notification.request.content.data.pathname;
+          const arrayPath = path.split("/");
+          const primeraRuta = arrayPath[0];
+
+          router.push({ pathname: "/" + primeraRuta, params: {} });
+          // Paso 2: Espera un microsegundo, luego navega a detalle (apila encima)
+          setTimeout(() => {
+            router.push(notificacion.notification.request.content.data);
+          }, 10);
         }
       }
     });

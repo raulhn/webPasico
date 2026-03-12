@@ -293,10 +293,12 @@ export default function Agenda({ mes_, anio_ }) {
     }
     return semanasCalendario;
   }
+  const semanasCalendario = mostrarCalendario();
+  useEffect(() => {
+    setNumSemanas(semanasCalendario.length);
+  }, [mes, anio, eventos]);
 
   function MostrarSemanas() {
-    var semanasCalendario = mostrarCalendario();
-    setNumSemanas(semanasCalendario.length);
     return semanasCalendario.map((semana, index) => (
       <View key={index} style={{ flexDirection: "row", height: 50 }}>
         {semana}

@@ -4,14 +4,20 @@ import {
   Text,
   ActivityIndicator,
   StyleSheet,
+  Modal,
 } from "react-native";
 import { useAgendaEvento } from "../../../hooks/general/useAgendaEventos.js";
 import { useRol } from "../../../hooks/useRol.js";
-import { Boton } from "../../componentesUI/ComponentesUI.jsx";
+import { Boton, BotonFixed } from "../../componentesUI/ComponentesUI.jsx";
 import { router } from "expo-router";
 import { obtenerFechaFormateadaSoloFecha } from "../../../comun/fechas.js";
+import FormularioNotificacion from "../../notificaciones/FormularioNotificacion.jsx";
+import { useState } from "react";
+import Constantes from "../../../config/constantes.js";
 
 export default function DetalleEvento({ nid_evento, tipo, cerrar_sesion }) {
+  const [modalVisibleNotificacion, setModalVisibleNotificacion] =
+    useState(false);
   const { evento, error, cargando } = useAgendaEvento(
     nid_evento,
     tipo,
@@ -34,6 +40,24 @@ export default function DetalleEvento({ nid_evento, tipo, cerrar_sesion }) {
         <Text style={styles.errorIcon}>⚠️</Text>
         <Text style={styles.errorText}>Error al cargar el evento</Text>
         <Text style={styles.errorSubText}>Por favor, inténtalo de nuevo</Text>
+      </View>
+    );
+  }
+  function botonNotificar() {
+    let rol_director = esRol(["DIRECTOR", "ADMINISTRADOR"]);
+    if (!rol_director) {
+      return null; // No mostrar el botón si no es director o administrador
+    }
+    return (
+      <View style={styles.botonFixed}>
+        <BotonFixed
+          onPress={() => {
+            setModalVisibleNotificacion(true);
+          }}
+          size={45}
+          icon="notifications"
+          color={Constantes.COLOR_AZUL}
+        />
       </View>
     );
   }
@@ -140,6 +164,36 @@ export default function DetalleEvento({ nid_evento, tipo, cerrar_sesion }) {
         </View>
       )}
       {addBotonBanda()}
+      {botonNotificar()}
+      <Modal
+        animationType="slide"
+        visible={modalVisibleNotificacion}
+        onRequestClose={() => {
+          setModalVisibleNotificacion(false);
+        }}
+      >
+        <FormularioNotificacion
+          cancelar={() => {
+            setModalVisibleNotificacion(false);
+          }}
+          callback={() => {
+            setModalVisibleNotificacion(false);
+          }}
+          valorMensaje={
+            "Infomar sobre el evento: " +
+            (evento?.nombre || "Evento sin título")
+          }
+          valorTitulo={evento?.nombre || "Evento sin título"}
+          tipo={Constantes.GENERAL}
+          data={{
+            pathname: "/stackAgenda/[nidAgenda]",
+            params: {
+              nidAgenda: nid_evento,
+              tipo: tipo,
+            },
+          }}
+        />
+      </Modal>
     </ScrollView>
   );
 }
@@ -444,5 +498,11 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
     letterSpacing: 1,
     marginBottom: 15,
+  },
+  botonFixed: {
+    position: "absolute",
+    bottom: 20,
+    right: 20,
+    zIndex: 10,
   },
 });
