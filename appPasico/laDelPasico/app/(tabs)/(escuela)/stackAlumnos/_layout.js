@@ -2,6 +2,7 @@ import { Stack, router } from "expo-router";
 import * as Constantes from "../../../../config/constantes.js";
 import { CustomHeaderEscuela } from "../../../../componentes/cabecera.jsx";
 import { MaterialIcons } from "@expo/vector-icons";
+import { TouchableOpacity } from "react-native";
 
 export default function StackAlumnos() {
   return (
@@ -60,4 +61,3 @@ export default function StackAlumnos() {
     </Stack>
   );
 }
-

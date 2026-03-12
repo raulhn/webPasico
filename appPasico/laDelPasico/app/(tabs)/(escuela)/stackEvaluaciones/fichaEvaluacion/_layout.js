@@ -1,6 +1,6 @@
 import { Stack, router } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import * as Constantes from "../../../../../config/constantes.js";
+import { TouchableOpacity } from "react-native";
 
 export default function StackMatriculaLayout() {
   return (
@@ -39,4 +39,3 @@ export default function StackMatriculaLayout() {
     </Stack>
   );
 }
-

@@ -1,7 +1,7 @@
 import { View } from "react-native";
 import { StyleSheet } from "react-native";
 import { Stack, router } from "expo-router";
-import { Image } from "react-native";
+import { Image, TouchableOpacity } from "react-native";
 import Constantes from "../../../../config/constantes.js";
 import { CustomHeaderBanda } from "../../../../componentes/cabecera.jsx";
 import { MaterialIcons } from "@expo/vector-icons";

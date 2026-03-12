@@ -2,6 +2,7 @@ import { Stack, router } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import * as Constantes from "../../../../config/constantes.js";
 import { CustomHeaderEscuela } from "../../../../componentes/cabecera.jsx";
+import { TouchableOpacity } from "react-native";
 
 export default function StackEvaluaciones() {
   return (
