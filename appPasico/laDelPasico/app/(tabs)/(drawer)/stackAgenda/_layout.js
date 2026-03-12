@@ -50,10 +50,7 @@ export default function StackAgenda() {
                     paddingHorizontal: 10,
                   }}
                 >
-                  <MaterialIcons name="home" size={24} color="#fff" />
-                  <Text style={{ color: "#fff", marginLeft: 5, fontSize: 16 }}>
-                    Agenda
-                  </Text>
+                  <MaterialIcons name="arrow-back" size={24} color="#fff" />
                 </TouchableOpacity>
               );
             }
@@ -74,6 +71,28 @@ export default function StackAgenda() {
           headerTitleStyle: {
             fontWeight: "bold", // Estilo del título
           },
+          headerLeft: ({ canGoBack }) => {
+            // Si no se puede ir hacia atrás (navegación directa), mostrar botón personalizado
+            if (!canGoBack) {
+              return (
+                <TouchableOpacity
+                  onPress={() => {
+                    router.push("/(tabs)/(drawer)/stackAgenda/");
+                  }}
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    paddingHorizontal: 10,
+                  }}
+                >
+                  <MaterialIcons name="arrow-back" size={24} color="#fff" />
+                </TouchableOpacity>
+              );
+            }
+            // Si puede ir hacia atrás, usar el botón predeterminado
+            return null;
+          },
+
           headerShown: true,
           headerLeft: () => null,
           gestureEnabled: false,

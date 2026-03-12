@@ -1,13 +1,12 @@
 import { View } from "react-native";
 import { StyleSheet } from "react-native";
-import { Stack } from "expo-router";
+import { Stack, router } from "expo-router";
 import { Image } from "react-native";
 import Constantes from "../../../../config/constantes.js";
 import { CustomHeaderBanda } from "../../../../componentes/cabecera.jsx";
-
+import { MaterialIcons } from "@expo/vector-icons";
 export default function PaginaLayout() {
   return (
-
     <Stack
       screenOptions={{
         headerShown: true, // Muestra el encabezado del Stack
@@ -32,6 +31,27 @@ export default function PaginaLayout() {
           headerTintColor: "#fff", // Color del texto del encabezado
           headerTitleStyle: {
             fontWeight: "bold", // Estilo del título
+          },
+          headerLeft: ({ canGoBack }) => {
+            // Si no se puede ir hacia atrás (navegación directa), mostrar botón personalizado
+            if (!canGoBack) {
+              return (
+                <TouchableOpacity
+                  onPress={() => {
+                    router.push("/(tabs)/(drawer)/stackEventos/");
+                  }}
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    paddingHorizontal: 10,
+                  }}
+                >
+                  <MaterialIcons name="arrow-back" size={24} color="#fff" />
+                </TouchableOpacity>
+              );
+            }
+            // Si puede ir hacia atrás, usar el botón predeterminado
+            return null;
           },
         })} // Oculta el encabezado para esta pantalla
       />
