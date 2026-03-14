@@ -35,7 +35,7 @@ export default function Partituras() {
       .then((response) => {
         const eventosOrdenados = response.eventos.sort((a, b) => {
           const fechaA = new Date(a.fecha_evento);
-          const fechaB = new Date(b.fecha);
+          const fechaB = new Date(b.fecha_evento);
           return fechaA - fechaB; // Ordena de menor a mayor (más reciente primero)
         });
         setEventosConciertos(eventosOrdenados);

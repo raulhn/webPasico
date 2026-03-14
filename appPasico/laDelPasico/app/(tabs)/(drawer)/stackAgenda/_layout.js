@@ -94,7 +94,6 @@ export default function StackAgenda() {
           },
 
           headerShown: true,
-          headerLeft: () => null,
           gestureEnabled: false,
         })} // Oculta el encabezado para esta pantalla
       />

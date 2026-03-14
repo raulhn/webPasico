@@ -8,8 +8,12 @@ import {
   ActivityIndicator,
   StyleSheet,
   Dimensions,
+  Modal,
 } from "react-native";
 import Constantes from "../config/constantes.js";
+import FormularioNotificacion from "./notificaciones/FormularioNotificacion.jsx";
+import { useRol } from "../hooks/useRol.js";
+import { BotonFixed } from "./componentesUI/ComponentesUI.jsx";
 
 const { width, height } = Dimensions.get("window");
 
@@ -21,6 +25,28 @@ export default function Pagina({
   const [componentes, setComponentes] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [titulo, setTitulo] = useState("");
+  const [modalVisibleNotificacion, setModalVisibleNotificacion] =
+    useState(false);
+  const { esRol } = useRol();
+
+  function botonNotificar() {
+    let rol_director = esRol(["DIRECTOR", "ADMINISTRADOR"]);
+    if (!rol_director) {
+      return null; // No mostrar el botón si no es director o administrador
+    }
+    return (
+      <View style={styles.botonFixed}>
+        <BotonFixed
+          onPress={() => {
+            setModalVisibleNotificacion(true);
+          }}
+          size={45}
+          icon="notifications"
+          color={Constantes.COLOR_AZUL}
+        />
+      </View>
+    );
+  }
 
   useEffect(() => {
     serviceComponentes
@@ -80,6 +106,32 @@ export default function Pagina({
         showsVerticalScrollIndicator={false}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
       />
+      {botonNotificar()}
+      <Modal
+        animationType="slide"
+        visible={modalVisibleNotificacion}
+        onRequestClose={() => {
+          setModalVisibleNotificacion(false);
+        }}
+      >
+        <FormularioNotificacion
+          cancelar={() => {
+            setModalVisibleNotificacion(false);
+          }}
+          callback={() => {
+            setModalVisibleNotificacion(false);
+          }}
+          valorMensaje={titulo}
+          valorTitulo={titulo}
+          tipo={Constantes.GENERAL}
+          data={{
+            pathname: "/(drawer)/index/pagina/[nidPagina]",
+            params: {
+              nidPagina: nidPagina,
+            },
+          }}
+        />
+      </Modal>
     </View>
   );
 }
@@ -215,5 +267,11 @@ const styles = StyleSheet.create({
     // Gradiente simulado con overlay
     position: "relative",
     overflow: "hidden",
+  },
+  botonFixed: {
+    position: "absolute",
+    bottom: 20,
+    right: 20,
+    zIndex: 10,
   },
 });

@@ -54,7 +54,6 @@ export default function StackIndex() {
           },
 
           headerShown: true,
-          headerLeft: () => null,
           gestureEnabled: false,
         })} // Oculta el encabezado para esta pantalla
       />

@@ -30,6 +30,7 @@ export default function Index() {
     Notifications.getLastNotificationResponseAsync().then((notificacion) => {
       if (notificacion) {
         if (notificacion.notification.request.content.data) {
+          console.log("Data", notificacion.notification.request.content.data);
           router.replace(notificacion.notification.request.content.data);
         }
       }
