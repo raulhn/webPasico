@@ -38,7 +38,7 @@ export default function StackIndex() {
               return (
                 <TouchableOpacity
                   onPress={() => {
-                    router.push("/(tabs)/(drawer)/index/");
+                    router.replace("/");
                   }}
                   style={{
                     flexDirection: "row",

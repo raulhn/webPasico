@@ -15,7 +15,7 @@ export default function Layout() {
               return (
                 <TouchableOpacity
                   onPress={() => {
-                    router.push("/index/index");
+                    router.replace("/");
                   }}
                   style={{
                     flexDirection: "row",
