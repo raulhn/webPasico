@@ -19,6 +19,14 @@ export default function StackIndex() {
           header: (props) => <CustomHeaderInicio {...props} />,
         })}
       />
+      <Stack.Screen
+        name="Inicio" // Nombre de la pantalla principal
+        options={() => ({
+          headerShown: true,
+          title: "Inicio",
+          header: (props) => <CustomHeaderInicio {...props} />,
+        })}
+      />
 
       <Stack.Screen
         name="pagina"
@@ -38,7 +46,7 @@ export default function StackIndex() {
               return (
                 <TouchableOpacity
                   onPress={() => {
-                    router.replace("/");
+                    router.replace("Inicio");
                   }}
                   style={{
                     flexDirection: "row",

@@ -40,6 +40,7 @@ export default function Pagina({
         <BotonFixed
           onPress={() => {
             setModalVisibleNotificacion(true);
+            router.replace("/Inicio");
           }}
           size={45}
           icon="notifications"
