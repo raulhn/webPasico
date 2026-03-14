@@ -129,6 +129,7 @@ export default function Pagina({
             pathname: "/pagina/[nidPagina]",
             params: {
               nidPagina: nidPagina,
+              titulo: titulo,
             },
           }}
         />
