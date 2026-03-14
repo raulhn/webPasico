@@ -19,6 +19,14 @@ export default function StackIndex() {
           header: (props) => <CustomHeaderInicio {...props} />,
         })}
       />
+      <Stack.Screen
+        name="index" // Nombre de la pantalla principal
+        options={() => ({
+          headerShown: true,
+          title: "Inicio",
+          header: (props) => <CustomHeaderInicio {...props} />,
+        })}
+      />
 
       <Stack.Screen
         name="pagina"
