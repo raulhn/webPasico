@@ -14,6 +14,7 @@ import Constantes from "../config/constantes.js";
 import FormularioNotificacion from "./notificaciones/FormularioNotificacion.jsx";
 import { useRol } from "../hooks/useRol.js";
 import { BotonFixed } from "./componentesUI/ComponentesUI.jsx";
+import { router } from "expo-router";
 
 const { width, height } = Dimensions.get("window");
 
@@ -125,7 +126,7 @@ export default function Pagina({
           valorTitulo={titulo}
           tipo={Constantes.GENERAL}
           data={{
-            pathname: "/(drawer)/index/pagina/[nidPagina]",
+            pathname: "/pagina/[nidPagina]",
             params: {
               nidPagina: nidPagina,
             },
