@@ -133,6 +133,13 @@ export default function SelectorPersona({
         }}
       >
         <TextInput
+          style={{
+            color: "#000",
+            borderWidth: 1,
+            borderColor: "#ccc",
+            padding: 5,
+            borderRadius: 5,
+          }}
           placeholder="Buscar persona..."
           onChangeText={(text) => {
             setFiltro(text);

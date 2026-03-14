@@ -39,8 +39,7 @@ export default function Pagina({
       <View style={styles.botonFixed}>
         <BotonFixed
           onPress={() => {
-              setModalVisibleNotificacion(true);
-            
+            setModalVisibleNotificacion(true);
           }}
           size={45}
           icon="notifications"
