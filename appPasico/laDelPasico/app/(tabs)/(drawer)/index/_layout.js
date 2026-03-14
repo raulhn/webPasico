@@ -12,14 +12,6 @@ export default function StackIndex() {
       }}
     >
       <Stack.Screen
-        name="index" // Nombre de la pantalla principal
-        options={() => ({
-          headerShown: true,
-          title: "Inicio",
-          header: (props) => <CustomHeaderInicio {...props} />,
-        })}
-      />
-      <Stack.Screen
         name="Inicio" // Nombre de la pantalla principal
         options={() => ({
           headerShown: true,
