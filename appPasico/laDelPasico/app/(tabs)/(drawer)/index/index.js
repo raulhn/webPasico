@@ -39,7 +39,7 @@ export default function Index() {
     const responseNotification =
       Notifications.addNotificationResponseReceivedListener((notificacion) => {
         if (notificacion.notification.request.content.data) {
-          router.push(notificacion.notification.request.content.data);
+          router.replace(notificacion.notification.request.content.data);
         }
       });
     return () => {

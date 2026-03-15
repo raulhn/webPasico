@@ -16,7 +16,7 @@ export default function PerfilUsuario() {
       console.log(
         "No hay usuario, redirigiendo a la pantalla de inicio de sesión"
       );
-      router.replace("/(tabs)/(drawer)"); // Redirige a la pantalla de inicio de sesión si no hay usuario}
+      router.replace("Inicio"); // Redirige a la pantalla de inicio de sesión si no hay usuario}
     }
   }, [usuario]);
 
@@ -31,7 +31,7 @@ export default function PerfilUsuario() {
           console.log("Error al cerrar sesión:", response.mensaje);
         } else {
           cerrarSesion(); // Llama a la función de cierre de sesión del contexto
-          router.replace("/(tabs)/(drawer)"); // Redirige a la pantalla de inicio de sesión
+          router.replace("Inicio");
         }
       });
     } catch (error) {

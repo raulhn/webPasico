@@ -41,7 +41,7 @@ export default function Login() {
           } else {
             iniciarSesion(response.usuario); // Guarda el usuario en el contexto
             guardarRoles(response.roles); // Guarda los roles en el contexto
-            router.replace("/(tabs)/(drawer)");
+            router.replace("Inicio");
           }
         })
         .catch((error) => {
