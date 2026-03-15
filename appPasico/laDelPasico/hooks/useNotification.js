@@ -80,4 +80,28 @@ const useNotification = () => {
   return expoPushToken;
 };
 
+export function useNotificationObserver() {
+  useEffect(() => {
+    function redirect(notification) {
+      const datos = notification.request.content.data;
+      router.push(datos);
+    }
+
+    const response = Notifications.getLastNotificationResponse();
+    if (response?.notification) {
+      redirect(response.notification);
+    }
+
+    const subscription = Notifications.addNotificationResponseReceivedListener(
+      (response) => {
+        redirect(response.notification);
+      }
+    );
+
+    return () => {
+      subscription.remove();
+    };
+  }, []);
+}
+
 export default useNotification;

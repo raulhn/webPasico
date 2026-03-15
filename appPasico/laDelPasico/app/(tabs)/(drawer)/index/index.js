@@ -9,11 +9,9 @@ import { useState } from "react";
 import Tunstile from "../../../../componentes/Turnstile";
 import { AuthContext } from "../../../../providers/AuthContext.js";
 
-import { router } from "expo-router";
-
-import * as Notifications from "expo-notifications";
-
 import Constantes from "../../../../config/constantes.js";
+
+import { useNotificationObserver } from "../../../../hooks/useNotification";
 
 export default function Index() {
   const expoPushToken = useNotification();
@@ -21,38 +19,7 @@ export default function Index() {
 
   const { guardarTokenNotificacion } = useContext(AuthContext);
 
-  useEffect(() => {
-    const subscription = Notifications.addNotificationReceivedListener(
-      (notification) => {}
-    );
-
-    // 1. Solo usar getLastNotificationResponseAsync al montar, y solo si la app NO está en foreground
-    Notifications.getLastNotificationResponseAsync().then((notificacion) => {
-      if (notificacion) {
-        if (notificacion.notification.request.content.data) {
-          subscription.remove();
-          responseNotification.remove();
-
-          router.replace(notificacion.notification.request.content.data);
-        }
-      }
-    });
-
-    // 2. Usar el listener para cuando la app está abierta o background
-    const responseNotification =
-      Notifications.addNotificationResponseReceivedListener((notificacion) => {
-        if (notificacion.notification.request.content.data) {
-          subscription.remove();
-          responseNotification.remove();
-
-          router.replace(notificacion.notification.request.content.data);
-        }
-      });
-    return () => {
-      subscription.remove();
-      responseNotification.remove();
-    };
-  }, []);
+  useNotificationObserver();
 
   useEffect(() => {
     if (expoPushToken && recaptchaToken) {
