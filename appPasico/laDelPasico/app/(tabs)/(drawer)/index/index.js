@@ -30,6 +30,9 @@ export default function Index() {
     Notifications.getLastNotificationResponseAsync().then((notificacion) => {
       if (notificacion) {
         if (notificacion.notification.request.content.data) {
+          subscription.remove();
+          responseNotification.remove();
+
           router.replace(notificacion.notification.request.content.data);
         }
       }
@@ -39,6 +42,9 @@ export default function Index() {
     const responseNotification =
       Notifications.addNotificationResponseReceivedListener((notificacion) => {
         if (notificacion.notification.request.content.data) {
+          subscription.remove();
+          responseNotification.remove();
+
           router.replace(notificacion.notification.request.content.data);
         }
       });
