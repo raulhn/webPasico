@@ -20,7 +20,6 @@ export default function Inicio() {
   const [recaptchaToken, setRecaptchaToken] = useState(null);
 
   const { guardarTokenNotificacion } = useContext(AuthContext);
-  useNotificationObserver();
   useEffect(() => {
     if (expoPushToken && recaptchaToken) {
       guardarTokenNotificacion(expoPushToken); // Guarda el token de notificación en el contexto
@@ -34,6 +33,8 @@ export default function Inicio() {
       setRecaptchaToken(null);
     }
   }, [expoPushToken, recaptchaToken]);
+
+  useNotificationObserver();
 
   // Envía el token al servidor backend
   const handleVerify = (event) => {

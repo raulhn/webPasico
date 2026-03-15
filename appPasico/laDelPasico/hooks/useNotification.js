@@ -4,6 +4,8 @@ import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 import Constants from "expo-constants";
 
+import { useRouter, useRootNavigationState } from "expo-router";
+
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
@@ -81,27 +83,45 @@ const useNotification = () => {
 };
 
 export function useNotificationObserver() {
+  const router = useRouter();
+  const navigationState = useRootNavigationState();
+
   useEffect(() => {
+    // No hagas nada hasta que la navegación esté lista
+    if (!navigationState?.key) return;
+
     function redirect(notification) {
       const datos = notification.request.content.data;
-      router.push(datos);
+      console.log("Datos de la notificación:", datos);
+      if (datos?.pathname) {
+        router.push({
+          pathname: datos.pathname,
+          params: datos.params ?? {},
+        });
+      } else {
+        console.warn("No hay pathname en datos de notificación");
+      }
     }
 
-    const response = Notifications.getLastNotificationResponse();
-    if (response?.notification) {
-      redirect(response.notification);
-    }
+    // Revisa si hay una notificación pendiente (app abierta mediante push)
+    const responsePromise = Notifications.getLastNotificationResponseAsync
+      ? Notifications.getLastNotificationResponseAsync()
+      : Promise.resolve(Notifications.getLastNotificationResponse());
 
+    responsePromise.then((response) => {
+      if (response?.notification) {
+        redirect(response.notification);
+      }
+    });
+
+    // Listener en tiempo real
     const subscription = Notifications.addNotificationResponseReceivedListener(
       (response) => {
         redirect(response.notification);
       }
     );
-
-    return () => {
-      subscription.remove();
-    };
-  }, []);
+    return () => subscription.remove();
+  }, [navigationState?.key]);
 }
 
 export default useNotification;
