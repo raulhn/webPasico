@@ -11,6 +11,7 @@ import {
   faTwitter,
   faInstagram,
   faFacebook,
+  faWhatsapp,
 } from '@fortawesome/free-brands-svg-icons';
 import {
   faFloppyDisk,
@@ -43,6 +44,7 @@ export class ComponenteMenuComponent implements OnInit {
   faTwitter = faTwitter;
   faFacebook = faFacebook;
   faInstagram = faInstagram;
+  faWhatsapp = faWhatsapp;
 
   faArrowDown = faArrowDown;
   faArrowUp = faArrowUp;
