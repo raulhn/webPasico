@@ -1,0 +1,23 @@
+create table pasico_gestor.carga_datos (
+    nid_carga_datos int not null auto_increment,
+    dni varchar(20),
+    nombre varchar(50),
+    primer_apellido varchar(50),
+    segundo_apellido varchar(50),
+    email varchar(100),
+    telefono varchar(20),
+    fecha_nacimiento date,
+    dni_socio varchar(20),
+    nombre_socio varchar(100),
+    primer_apellido_socio varchar(50),
+    segundo_apellido_socio varchar(50),
+    fecha_nacimiento_socio date,
+    iban varchar(34),
+    lenguaje_musical varchar(50),
+    instrumento1 varchar(50),
+    instrumento2 varchar(50),
+    instrumento3 varchar(50),
+    instrumento4 varchar(50),
+    instrumento5 varchar(50),
+    primary key (id_persona)
+);

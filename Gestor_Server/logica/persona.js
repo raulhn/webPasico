@@ -126,7 +126,7 @@ async function existe_nif(nif) {
           } else {
             resolve(results[0]["cont"] > 0);
           }
-        }
+        },
       );
     }
   });
@@ -153,7 +153,7 @@ async function valida_nif(nif) {
                 reject("NIF/NIE no válido");
               }
             }
-          }
+          },
         );
       });
     } else {
@@ -179,7 +179,7 @@ async function existe_nid(nid_persona) {
         } else {
           resolve(results[0]["cont"] > 0);
         }
-      }
+      },
     );
   });
 }
@@ -202,7 +202,7 @@ async function obtener_persona_apellidos(primer_apellido, segundo_apellido) {
         } else {
           resolve(results);
         }
-      }
+      },
     );
   });
 }
@@ -211,7 +211,7 @@ async function existe_persona(
   nombre,
   primer_apellido,
   segundo_apellido,
-  fecha_nacimiento
+  fecha_nacimiento,
 ) {
   await actualizar_personas_sucias();
   return new Promise((resolve, reject) => {
@@ -251,7 +251,7 @@ async function existe_persona(
         } else {
           resolve(results[0]["cont"] > 0);
         }
-      }
+      },
     );
   });
 }
@@ -264,7 +264,7 @@ async function registrar_persona(
   fecha_nacimiento,
   nif,
   correo_electronico,
-  codigo
+  codigo,
 ) {
   try {
     let bExiste_nif = await existe_nif(nif);
@@ -272,7 +272,7 @@ async function registrar_persona(
       nombre,
       primer_apellido,
       segundo_apellido,
-      fecha_nacimiento
+      fecha_nacimiento,
     );
     if (!bExiste_nif && !bExiste_persona) {
       return new Promise((resolve, reject) => {
@@ -321,7 +321,7 @@ async function registrar_persona(
                 console.log("Usuario registrado");
                 resolve(results.insertId);
               }
-            }
+            },
           );
         });
       });
@@ -329,7 +329,7 @@ async function registrar_persona(
       throw new Error("Ya existe un nif registrado para esa persona");
     } else {
       throw new Error(
-        "Existe una persona con mismo nombre, apellidos y fecha de nacimiento"
+        "Existe una persona con mismo nombre, apellidos y fecha de nacimiento",
       );
     }
   } catch (error) {
@@ -357,7 +357,7 @@ async function obtener_nid_persona(nif) {
             } else {
               resolve(results[0]["nid"]);
             }
-          }
+          },
         );
       });
     } else {
@@ -388,7 +388,7 @@ async function obtener_padre(nid_persona) {
             } else {
               resolve(results[0]["nid_padre"]);
             }
-          }
+          },
         );
       });
     } else {
@@ -419,7 +419,7 @@ async function obtener_madre(nid_persona) {
             } else {
               resolve(results[0]["nid_madre"]);
             }
-          }
+          },
         );
       });
     } else {
@@ -451,7 +451,7 @@ async function obtener_hijos(nid_persona) {
             } else {
               resolve(results);
             }
-          }
+          },
         );
       });
     }
@@ -486,7 +486,7 @@ async function registrar_padre(nid_persona, nid_padre) {
                 conexion.dbConn.commit();
                 resolve();
               }
-            }
+            },
           );
         });
       });
@@ -524,7 +524,7 @@ async function registrar_madre(nid_persona, nid_madre) {
                 conexion.dbConn.commit();
                 resolve();
               }
-            }
+            },
           );
         });
       });
@@ -554,7 +554,7 @@ async function obtener_personas() {
         } else {
           resolve(results);
         }
-      }
+      },
     );
   });
 }
@@ -573,7 +573,7 @@ async function obtener_todas_personas() {
         } else {
           resolve(results);
         }
-      }
+      },
     );
   });
 }
@@ -596,7 +596,7 @@ async function obtener_persona(nid) {
         } else {
           resolve(results[0]);
         }
-      }
+      },
     );
   });
 }
@@ -619,7 +619,7 @@ async function obtener_objeto_persona(nid) {
         } else {
           resolve(results[0]);
         }
-      }
+      },
     );
   });
 }
@@ -634,7 +634,7 @@ function actualizar_persona(
   fecha_nacimiento,
   correo_electronico,
   codigo,
-  nid_socio
+  nid_socio,
 ) {
   return new Promise((resolve, reject) => {
     conexion.dbConn.beginTransaction(async () => {
@@ -692,7 +692,7 @@ function actualizar_persona(
                 conexion.dbConn.commit();
                 resolve(true);
               }
-            }
+            },
           );
         } else {
           resolve(false);
@@ -719,7 +719,7 @@ function valida_iban(iban) {
         } else {
           resolve(results[0]["valido"] == "S");
         }
-      }
+      },
     );
   });
 }
@@ -749,7 +749,7 @@ function registrar_forma_pago(nid_titular, iban) {
               conexion.dbConn.commit();
               resolve();
             }
-          }
+          },
         );
       }
     });
@@ -772,7 +772,7 @@ function obtener_forma_pago(nid_titular) {
         } else {
           resolve(results);
         }
-      }
+      },
     );
   });
 }
@@ -790,7 +790,7 @@ function tiene_forma_pago(nid_titular) {
         } else {
           resolve(results[0]["cont"]);
         }
-      }
+      },
     );
   });
 }
@@ -809,7 +809,7 @@ function obtener_pago_persona(nid_persona) {
         } else {
           resolve(results[0]);
         }
-      }
+      },
     );
   });
 }
@@ -829,7 +829,7 @@ function obtener_formas_pago_persona(nid_persona) {
         } else {
           resolve(results);
         }
-      }
+      },
     );
   });
 }
@@ -854,7 +854,7 @@ function obtener_forma_pago_nid(nid_forma_pago) {
         } else {
           resolve(results[0]);
         }
-      }
+      },
     );
   });
 }
@@ -875,7 +875,7 @@ function obtener_formas_pago() {
         } else {
           resolve(results);
         }
-      }
+      },
     );
   });
 }
@@ -899,7 +899,7 @@ function asociar_pago_persona(nid_persona, nid_forma_pago) {
             conexion.dbConn.commit();
             resolve();
           }
-        }
+        },
       );
     });
   });
@@ -924,7 +924,7 @@ function actualizar_user_pasarela_pago(nid_persona, nid_user_pasarela) {
             conexion.dbConn.commit();
             resolve();
           }
-        }
+        },
       );
     });
   });
@@ -932,7 +932,7 @@ function actualizar_user_pasarela_pago(nid_persona, nid_user_pasarela) {
 
 function actualizar_metodo_pasarela_pago(
   nid_forma_pago,
-  nid_metodo_pasarela_pago
+  nid_metodo_pasarela_pago,
 ) {
   return new Promise((resolve, reject) => {
     conexion.dbConn.beginTransaction(() => {
@@ -952,7 +952,7 @@ function actualizar_metodo_pasarela_pago(
             conexion.dbConn.commit();
             resolve();
           }
-        }
+        },
       );
     });
   });
@@ -977,7 +977,7 @@ function actualizar_forma_pago(nid_forma_pago, activo) {
             conexion.dbConn.commit();
             resolve();
           }
-        }
+        },
       );
     });
   });
@@ -997,7 +997,7 @@ function existe_forma_pago(nid_forma_pago) {
         } else {
           resolve(Number(results[0]["num"]) > 0);
         }
-      }
+      },
     );
   });
 }
@@ -1021,7 +1021,7 @@ function actualizar_sucio(nid_persona, sucio) {
             conexion.dbConn.commit();
             resolve();
           }
-        }
+        },
       );
     });
   });
@@ -1040,8 +1040,76 @@ function obtener_personas_sucias() {
         } else {
           resolve(results);
         }
-      }
+      },
     );
+  });
+}
+
+function obtener_persona_nif(nif) {
+  const sql =
+    "select * from " +
+    constantes.ESQUEMA_BD +
+    ".persona where nif = " +
+    conexion.dbConn.escape(nif);
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(sql, (error, results, fields) => {
+      if (error) {
+        console.log(error);
+        reject("Error al obtener la persona por nif");
+      } else if (results.length < 1) {
+        resolve(null);
+      } else {
+        resolve(results[0]);
+      }
+    });
+  });
+}
+
+function obtener_personas_nombre(nombre, primer_apellido, segundo_apellido) {
+  const sql =
+    "select * from " +
+    constantes.ESQUEMA_BD +
+    ".persona where upper(nombre) = upper(" +
+    conexion.dbConn.escape(nombre) +
+    ") and upper(primer_apellido) = upper(" +
+    conexion.dbConn.escape(primer_apellido) +
+    ") and ifnull(upper(segundo_apellido), '') = ifnull(upper(" +
+    conexion.dbConn.escape(segundo_apellido) +
+    "), '')";
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(sql, (error, results, fields) => {
+      if (error) {
+        console.log(error);
+        reject("Error al obtener la persona por nombre");
+      } else if (results.length < 1) {
+        resolve(null);
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
+
+function obtener_personas_apellidos(primer_apellido, segundo_apellido) {
+  const sql =
+    "select * from " +
+    constantes.ESQUEMA_BD +
+    ".persona where upper(primer_apellido) = upper(" +
+    conexion.dbConn.escape(primer_apellido) +
+    ") and ifnull(upper(segundo_apellido), '') = ifnull(upper(" +
+    conexion.dbConn.escape(segundo_apellido) +
+    "), '')";
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(sql, (error, results, fields) => {
+      if (error) {
+        console.log(error);
+        reject("Error al obtener la persona por apellidos");
+      } else if (results.length < 1) {
+        resolve(null);
+      } else {
+        resolve(results);
+      }
+    });
   });
 }
 
@@ -1084,3 +1152,7 @@ module.exports.existe_forma_pago = existe_forma_pago;
 module.exports.actualizar_sucio = actualizar_sucio;
 
 module.exports.obtener_personas_sucias = obtener_personas_sucias;
+
+module.exports.obtener_persona_nif = obtener_persona_nif;
+module.exports.obtener_personas_nombre = obtener_personas_nombre;
+module.exports.obtener_personas_apellidos = obtener_personas_apellidos;
