@@ -14,7 +14,7 @@ function cargar_registro(cadena) {
     conexion.dbConn.escape(valores[0]) +
     "), trim(" +
     conexion.dbConn.escape(valores[1]) +
-    ", trim(" +
+    "), trim(" +
     conexion.dbConn.escape(valores[2]) +
     "), trim(" +
     conexion.dbConn.escape(valores[3]) +
