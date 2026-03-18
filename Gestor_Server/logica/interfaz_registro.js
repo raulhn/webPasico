@@ -263,6 +263,9 @@ async function cargar_datos_interfaz(lote) {
 
 async function inserta_interfaz_persona(persona, nid_interfaz_persona) {
   try {
+    if (!persona) {
+      return;
+    }
     if (persona.length == 0) {
       datos_persona.operacion = constantes.OPERACIONES_INTERFAZ.INSERTAR;
     } else if (persona.length == 1) {
