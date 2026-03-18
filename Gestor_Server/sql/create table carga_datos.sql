@@ -19,5 +19,6 @@ create table pasico_gestor.carga_datos (
     instrumento3 varchar(50),
     instrumento4 varchar(50),
     instrumento5 varchar(50),
+    lote int,
     primary key (nid_carga_datos)
 );

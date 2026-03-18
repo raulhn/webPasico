@@ -7,9 +7,10 @@ create table pasico_gestor.interfaz_usuario (
     email varchar(100),
     telefono varchar(20),
     fecha_nacimiento date,
-    operacion varchar2(20),
+    operacion varchar(20),
     nid_persona int,
-    estado varchar(20)
+    estado varchar(20),
+    lote int
 );
 
 

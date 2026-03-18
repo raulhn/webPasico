@@ -2,7 +2,25 @@ const conexion = require("../conexion.js");
 const constantes = require("../constantes.js");
 const gestor_personas = require("./persona.js");
 
-function cargar_registro(cadena) {
+function obtener_siguiente_lote() {
+  const sql =
+    "select ifnull(max(lote), 1) + 1 as lote from " +
+    constantes.ESQUEMA_BD +
+    ".carga_datos";
+
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(sql, (error, results, fields) => {
+      if (error) {
+        console.log(error);
+        reject(error);
+      } else {
+        resolve(results[0].lote);
+      }
+    });
+  });
+}
+
+function cargar_registro(cadena, lote) {
   const valores = cadena.split(";");
 
   const sql =
@@ -10,7 +28,7 @@ function cargar_registro(cadena) {
     constantes.ESQUEMA_BD +
     ".carga_datos( dni, nombre, primer_apellido, segundo_apellido, email, telefono, fecha_nacimiento," +
     "dni_socio, nombre_socio, primer_apellido_socio, segundo_apellido_socio, fecha_nacimiento_socio, iban, lenguaje_musical, " +
-    "instrumento1, instrumento2, instrumento3, instrumento4, instrumento5) values(trim(" +
+    "instrumento1, instrumento2, instrumento3, instrumento4, instrumento5, lote) values(trim(" +
     conexion.dbConn.escape(valores[0]) +
     "), trim(" +
     conexion.dbConn.escape(valores[1]) +
@@ -48,7 +66,9 @@ function cargar_registro(cadena) {
     conexion.dbConn.escape(valores[17]) +
     "), trim(" +
     conexion.dbConn.escape(valores[18]) +
-    "))";
+    "), " +
+    conexion.dbConn.escape(lote) +
+    ")";
 
   return new Promise((resolve, reject) => {
     conexion.dbConn.beginTransaction(() => {
@@ -66,11 +86,13 @@ function cargar_registro(cadena) {
   });
 }
 
-function registrar_interfaz_persona(persona) {
+function registrar_interfaz_persona(lote, persona) {
   const sql =
     "insert into " +
     constantes.ESQUEMA_BD +
-    ".persona(nif, nombre, primer_apellido, segundo_apellido, email, telefono, fecha_nacimiento, operacion) values(" +
+    ".persona(lote, nif, nombre, primer_apellido, segundo_apellido, email, telefono, fecha_nacimiento, operacion) values(" +
+    conexion.dbConn.escape(lote) +
+    ", " +
     conexion.dbConn.escape(persona.nif) +
     ", " +
     conexion.dbConn.escape(persona.nombre) +
@@ -198,7 +220,49 @@ function insertar_conflicto_persona(persona_interfaz, nid_persona_interfaz) {
     });
   });
 }
+
+function obtener_volcado_lote(lote) {
+  const sql =
+    "select * from " +
+    constantes.ESQUEMA_BD +
+    ".carga_datos where lote = " +
+    conexion.dbConn.escape(lote);
+
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(sql, (error, results, fields) => {
+      if (error) {
+        console.log(error);
+        reject(error);
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
+
+async function cargar_datos_interfaz(lote) {
+  try {
+    let datos_lote = await obtener_volcado_lote(lote);
+    for (let i = 0; i < datos_lote.length; i++) {
+      let dato = datos_lote[i];
+      await comprueba_persona(
+        lote,
+        dato.dni,
+        dato.nombre,
+        dato.primer_apellido,
+        dato.segundo_apellido,
+        dato.email,
+        dato.telefono,
+        dato.fecha_nacimiento,
+      );
+    }
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 async function comprueba_persona(
+  lote,
   nif,
   nombre,
   primer_apellido,
@@ -219,7 +283,10 @@ async function comprueba_persona(
       operacion: null,
       nid_persona: null,
     };
-    let nid_interfaz_persona = await registrar_interfaz_persona(datos_persona);
+    let nid_interfaz_persona = await registrar_interfaz_persona(
+      lote,
+      datos_persona,
+    );
 
     let persona = await gestor_personas.obtener_persona_nif(nif);
     if (persona) {
@@ -275,4 +342,6 @@ async function comprueba_persona(
   }
 }
 
+module.exports.obtener_siguiente_lote = obtener_siguiente_lote;
 module.exports.cargar_registro = cargar_registro;
+module.exports.cargar_datos_interfaz = cargar_datos_interfaz;
