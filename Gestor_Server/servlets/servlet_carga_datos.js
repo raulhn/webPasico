@@ -14,7 +14,7 @@ function carga_fichero(req, res) {
     console.log(req.files.datos.data.toString("utf-8"));
     const textoFichero = req.files.datos.data.toString("utf-8");
     const cadenas = textoFichero.split(/\r?\n/);
-    for (let i = 0; i < cadenas.length; i++) {
+    for (let i = 1; i < cadenas.length; i++) {
       await gestor_interfaz_registro.cargar_registro(cadenas[i]);
     }
     console.log("Cadenas", cadenas);

@@ -46,6 +46,8 @@ function cargar_registro(cadena) {
     conexion.dbConn.escape(valores[16]) +
     ", " +
     conexion.dbConn.escape(valores[17]) +
+    ", " +
+    conexion.dbConn.escape(valores[18]) +
     ")";
 
   return new Promise((resolve, reject) => {
