@@ -170,12 +170,19 @@ function actualizar_interfaz_persona(persona, nid_interfaz_persona) {
 function compara_persona_interfaz(persona, persona_interfaz) {
   if (
     persona.nif != persona_interfaz.nif ||
+    persona_interfaz.nif == null ||
     persona.nombre != persona_interfaz.nombre ||
+    persona_interfaz.nombre == null ||
     persona.primer_apellido != persona_interfaz.primer_apellido ||
+    persona_interfaz.primer_apellido == null ||
     persona.segundo_apellido != persona_interfaz.segundo_apellido ||
+    persona_interfaz.segundo_apellido == null ||
     persona.email != persona_interfaz.email ||
+    persona_interfaz.email == null ||
     persona.telefono != persona_interfaz.telefono ||
-    persona.fecha_nacimiento != persona_interfaz.fecha_nacimiento
+    persona_interfaz.telefono == null ||
+    persona.fecha_nacimiento != persona_interfaz.fecha_nacimiento ||
+    persona_interfaz.fecha_nacimiento == null
   ) {
     return true;
   } else {
