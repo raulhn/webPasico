@@ -1,5 +1,5 @@
-create table pasico_gestor.interfaz_usuario (
-    nid_interfaz_usuario int auto_increment primary key,
+create table pasico_gestor.interfaz_persona (
+    nid_interfaz_persona int auto_increment primary key,
     dni varchar(9),
     nombre varchar(50),
     primer_apellido varchar(50),
@@ -14,4 +14,4 @@ create table pasico_gestor.interfaz_usuario (
 );
 
 
-alter table pasico_gestor.interfaz_usuario add constraint fk_interfaz_usuario_persona foreign key (nid_persona) references pasico_gestor.persona(nid);
+alter table pasico_gestor.interfaz_persona add constraint fk_interfaz_persona foreign key (nid_persona) references pasico_gestor.persona(nid);

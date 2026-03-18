@@ -10,4 +10,4 @@ create table pasico_gestor.conflictos_persona_interfaz (
 );
 
 
-alter table pasico_gestor.conflictos_persona_interfaz add constraint fk_conflicto_persona_interfaz foreign key (nid_persona_interfaz) references pasico_gestor.interfaz_usuario(nid_interfaz_usuario);
+alter table pasico_gestor.conflictos_persona_interfaz add constraint fk_conflicto_persona_interfaz foreign key (nid_persona_interfaz) references pasico_gestor.interfaz_persona(nid_interfaz_persona);
