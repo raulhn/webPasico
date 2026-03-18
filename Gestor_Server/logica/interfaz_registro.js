@@ -346,7 +346,7 @@ async function comprueba_persona(
         segundo_apellido,
       );
       // No se ha encontrado por nombre, se busca solo por los apellidos
-      if (persona.length == 0) {
+      if (persona && persona.length == 0) {
         persona = await gestor_personas.obtener_persona_apellidos(
           primer_apellido,
           segundo_apellido,
