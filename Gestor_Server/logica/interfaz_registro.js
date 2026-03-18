@@ -10,45 +10,45 @@ function cargar_registro(cadena) {
     constantes.ESQUEMA_BD +
     ".carga_datos( dni, nombre, primer_apellido, segundo_apellido, email, telefono, fecha_nacimiento," +
     "dni_socio, nombre_socio, primer_apellido_socio, segundo_apellido_socio, fecha_nacimiento_socio, iban, lenguaje_musical, " +
-    "instrumento1, instrumento2, instrumento3, instrumento4, instrumento5) values(" +
+    "instrumento1, instrumento2, instrumento3, instrumento4, instrumento5) values(trim(" +
     conexion.dbConn.escape(valores[0]) +
-    ", " +
+    "), trim(" +
     conexion.dbConn.escape(valores[1]) +
-    ", " +
+    ", trim(" +
     conexion.dbConn.escape(valores[2]) +
-    ", " +
+    "), trim(" +
     conexion.dbConn.escape(valores[3]) +
-    ", " +
+    "), trim(" +
     conexion.dbConn.escape(valores[4]) +
-    ", " +
+    "), trim(" +
     conexion.dbConn.escape(valores[5]) +
-    ", " +
+    "), trim(" +
     conexion.dbConn.escape(valores[6]) +
-    ", " +
+    "), trim(" +
     conexion.dbConn.escape(valores[7]) +
-    ", " +
+    "), trim(" +
     conexion.dbConn.escape(valores[8]) +
-    ", " +
+    "), trim(" +
     conexion.dbConn.escape(valores[9]) +
-    ", " +
+    "), trim(" +
     conexion.dbConn.escape(valores[10]) +
-    ", " +
+    "), trim(" +
     conexion.dbConn.escape(valores[11]) +
-    ", " +
+    "), trim(" +
     conexion.dbConn.escape(valores[12]) +
-    ", " +
+    "), trim(" +
     conexion.dbConn.escape(valores[13]) +
-    ", " +
+    "), trim(" +
     conexion.dbConn.escape(valores[14]) +
-    ", " +
+    "), trim(" +
     conexion.dbConn.escape(valores[15]) +
-    ", " +
+    "), trim(" +
     conexion.dbConn.escape(valores[16]) +
-    ", " +
+    "), trim(" +
     conexion.dbConn.escape(valores[17]) +
-    ", " +
+    "), trim(" +
     conexion.dbConn.escape(valores[18]) +
-    ")";
+    "))";
 
   return new Promise((resolve, reject) => {
     conexion.dbConn.beginTransaction(() => {
