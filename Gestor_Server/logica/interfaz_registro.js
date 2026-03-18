@@ -126,7 +126,7 @@ function registrar_interfaz_persona(lote, persona) {
   });
 }
 
-function actualizar_interfaz_persona(persona, nid_persona_interfaz) {
+function actualizar_interfaz_persona(persona, nid_interfaz_persona) {
   const sql =
     "update " +
     constantes.ESQUEMA_BD +
@@ -148,8 +148,8 @@ function actualizar_interfaz_persona(persona, nid_persona_interfaz) {
     conexion.dbConn.escape(persona.operacion) +
     ", nid_persona = " +
     conexion.dbConn.escape(persona.nid_persona) +
-    " where nid_persona_interfaz = " +
-    conexion.dbConn.escape(nid_persona_interfaz);
+    " where nid_interfaz_persona = " +
+    conexion.dbConn.escape(nid_interfaz_persona);
 
   return new Promise((resolve, reject) => {
     conexion.dbConn.beginTransaction(() => {
@@ -183,12 +183,12 @@ function compara_persona_interfaz(persona, persona_interfaz) {
   }
 }
 
-function insertar_conflicto_persona(persona_interfaz, nid_persona_interfaz) {
+function insertar_conflicto_persona(persona_interfaz, nid_interfaz_persona) {
   const sql =
     "insert into " +
     constantes.ESQUEMA_BD +
-    ".interfaz_conflicto_persona(nid_persona_interfaz, nif, nombre, primer_apellido, segundo_apellido, email, telefono, fecha_nacimiento) values(" +
-    conexion.dbConn.escape(nid_persona_interfaz) +
+    ".interfaz_conflicto_persona(nid_interfaz_persona, nif, nombre, primer_apellido, segundo_apellido, email, telefono, fecha_nacimiento) values(" +
+    conexion.dbConn.escape(nid_interfaz_persona) +
     ", " +
     conexion.dbConn.escape(persona_interfaz.nif) +
     ", " +
