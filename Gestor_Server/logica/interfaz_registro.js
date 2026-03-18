@@ -90,7 +90,7 @@ function registrar_interfaz_persona(lote, persona) {
   const sql =
     "insert into " +
     constantes.ESQUEMA_BD +
-    ".interfaz_persona(lote, nif, nombre, primer_apellido, segundo_apellido, email, telefono, fecha_nacimiento, operacion) values(" +
+    ".interfaz_persona(lote, dni, nombre, primer_apellido, segundo_apellido, email, telefono, fecha_nacimiento, operacion) values(" +
     conexion.dbConn.escape(lote) +
     ", " +
     conexion.dbConn.escape(persona.nif) +
