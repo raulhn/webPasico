@@ -7,5 +7,10 @@ create table pasico_gestor.interfaz_usuario (
     email varchar(100),
     telefono varchar(20),
     fecha_nacimiento date,
-    operacion varchar2(20)
+    operacion varchar2(20),
+    nid_persona int,
+    estado varchar(20)
 );
+
+
+alter table pasico_gestor.interfaz_usuario add constraint fk_interfaz_usuario_persona foreign key (nid_persona) references pasico_gestor.persona(nid);

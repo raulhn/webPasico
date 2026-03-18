@@ -1,4 +1,5 @@
 const servlet_comun = require("./servlet_comun.js");
+const gestor_interfaz_registro = require("../logica/interfaz_registro.js");
 
 function carga_fichero(req, res) {
   servlet_comun.comprobaciones(req, res, async () => {
@@ -13,6 +14,9 @@ function carga_fichero(req, res) {
     console.log(req.files.datos.data.toString("utf-8"));
     const textoFichero = req.files.datos.data.toString("utf-8");
     const cadenas = textoFichero.split(/\r?\n/);
+    for (let i = 0; i < cadenas.length; i++) {
+      await gestor_interfaz_registro.cargar_registro(cadenas[i]);
+    }
     console.log("Cadenas", cadenas);
     res.status(200).send({ error: false, message: "Fichero recibido" });
   });
