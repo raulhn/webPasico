@@ -130,7 +130,7 @@ function actualizar_interfaz_persona(persona, nid_persona_interfaz) {
   const sql =
     "update " +
     constantes.ESQUEMA_BD +
-    ".persona set nif = " +
+    ".interfaz_persona set dni = " +
     conexion.dbConn.escape(persona.nif) +
     ", nombre = " +
     conexion.dbConn.escape(persona.nombre) +
@@ -261,6 +261,44 @@ async function cargar_datos_interfaz(lote) {
   }
 }
 
+async function inserta_interfaz_persona(persona, nid_interfaz_persona) {
+  try {
+    if (persona.length == 0) {
+      datos_persona.operacion = constantes.OPERACIONES_INTERFAZ.INSERTAR;
+    } else if (persona.length == 1) {
+      datos_persona.nid_persona = persona[0].nid;
+      // Se ha encontrado una única persona con el mismo nombre, se compara con la interfaz para determinar si se actualiza o no
+      if (compara_persona_interfaz(persona[0], datos_persona)) {
+        datos_persona.operacion = constantes.OPERACIONES_INTERFAZ.ACTUALIZAR;
+      } else {
+        datos_persona.operacion = constantes.OPERACIONES_INTERFAZ.SIN_CAMBIOS;
+      }
+      await actualizar_interfaz_persona(persona[0], nid_interfaz_persona);
+    } else {
+      // No se ha podido determinar una única persona, se registra como conflicto
+      datos_persona.operacion = constantes.OPERACIONES_INTERFAZ.CONFLICTO;
+      await insertar_conflicto_persona(datos_persona, nid_interfaz_persona);
+      for (let i = 0; i < persona.length; i++) {
+        let persona_conflicto = {
+          nif: persona[i].nif,
+          nombre: persona[i].nombre,
+          primer_apellido: persona[i].primer_apellido,
+          segundo_apellido: persona[i].segundo_apellido,
+          email: persona[i].email,
+          telefono: persona[i].telefono,
+          fecha_nacimiento: persona[i].fecha_nacimiento,
+        };
+        await insertar_conflicto_persona(
+          persona_conflicto,
+          nid_interfaz_persona,
+        );
+      }
+    }
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 async function comprueba_persona(
   lote,
   nif,
@@ -299,42 +337,20 @@ async function comprueba_persona(
       datos_persona.nid_persona = persona.nid;
       await actualizar_interfaz_persona(persona, nid_interfaz_persona);
     } else {
-      persona = await obtener_personas_nombre(
+      persona = await gestor_personas.obtener_personas_nombre(
         nombre,
         primer_apellido,
         segundo_apellido,
       );
-
+      // No se ha encontrado por nombre, se busca solo por los apellidos
       if (persona.length == 0) {
-        datos_persona.operacion = constantes.OPERACIONES_INTERFAZ.INSERTAR;
-      } else if (persona.length == 1) {
-        datos_persona.nid_persona = persona[0].nid;
-        // Se ha encontrado una única persona con el mismo nombre, se compara con la interfaz para determinar si se actualiza o no
-        if (compara_persona_interfaz(persona[0], datos_persona)) {
-          datos_persona.operacion = constantes.OPERACIONES_INTERFAZ.ACTUALIZAR;
-        } else {
-          datos_persona.operacion = constantes.OPERACIONES_INTERFAZ.SIN_CAMBIOS;
-        }
-        await actualizar_interfaz_persona(persona[0], nid_interfaz_persona);
+        persona = await gestor_personas.obtener_persona_apellidos(
+          primer_apellido,
+          segundo_apellido,
+        );
+        inserta_interfaz_persona(persona, nid_interfaz_persona);
       } else {
-        // No se ha podido determinar una única persona, se registra como conflicto
-        datos_persona.operacion = constantes.OPERACIONES_INTERFAZ.CONFLICTO;
-        await insertar_conflicto_persona(datos_persona, nid_interfaz_persona);
-        for (let i = 0; i < persona.length; i++) {
-          let persona_conflicto = {
-            nif: persona[i].nif,
-            nombre: persona[i].nombre,
-            primer_apellido: persona[i].primer_apellido,
-            segundo_apellido: persona[i].segundo_apellido,
-            email: persona[i].email,
-            telefono: persona[i].telefono,
-            fecha_nacimiento: persona[i].fecha_nacimiento,
-          };
-          await insertar_conflicto_persona(
-            persona_conflicto,
-            nid_interfaz_persona,
-          );
-        }
+        inserta_interfaz_persona(persona, nid_interfaz_persona);
       }
     }
   } catch (e) {
