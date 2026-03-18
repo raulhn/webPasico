@@ -261,7 +261,11 @@ async function cargar_datos_interfaz(lote) {
   }
 }
 
-async function inserta_interfaz_persona(persona, nid_interfaz_persona) {
+async function inserta_interfaz_persona(
+  persona,
+  datos_persona,
+  nid_interfaz_persona,
+) {
   try {
     if (!persona) {
       return;
@@ -276,7 +280,7 @@ async function inserta_interfaz_persona(persona, nid_interfaz_persona) {
       } else {
         datos_persona.operacion = constantes.OPERACIONES_INTERFAZ.SIN_CAMBIOS;
       }
-      await actualizar_interfaz_persona(persona[0], nid_interfaz_persona);
+      await actualizar_interfaz_persona(datos_persona, nid_interfaz_persona);
     } else {
       // No se ha podido determinar una única persona, se registra como conflicto
       datos_persona.operacion = constantes.OPERACIONES_INTERFAZ.CONFLICTO;
@@ -338,7 +342,7 @@ async function comprueba_persona(
         datos_persona.operacion = constantes.OPERACIONES_INTERFAZ.SIN_CAMBIOS;
       }
       datos_persona.nid_persona = persona.nid;
-      await actualizar_interfaz_persona(persona, nid_interfaz_persona);
+      await actualizar_interfaz_persona(datos_persona, nid_interfaz_persona);
     } else {
       persona = await gestor_personas.obtener_personas_nombre(
         nombre,
@@ -351,9 +355,9 @@ async function comprueba_persona(
           primer_apellido,
           segundo_apellido,
         );
-        inserta_interfaz_persona(persona, nid_interfaz_persona);
+        inserta_interfaz_persona(persona, datos_persona, nid_interfaz_persona);
       } else {
-        inserta_interfaz_persona(persona, nid_interfaz_persona);
+        inserta_interfaz_persona(persona, datos_persona, nid_interfaz_persona);
       }
     }
   } catch (e) {
