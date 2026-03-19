@@ -771,9 +771,6 @@ function obtenerEvaluacionesAsignaturas(
       "JOIN " +
       constantes.ESQUEMA +
       ".persona pa ON pa.nid_persona = m.nid_persona " +
-      "JOIN " +
-      constantes.ESQUEMA +
-      ".profesor_alumno_matricula pam on pam.nid_matricula_asignatura = em.nid_matricula_asignatura " +
       "WHERE e.nid_asignatura = " +
       conexion.dbConn.escape(nidAsignatura) +
       " AND e.nid_trimestre = " +
