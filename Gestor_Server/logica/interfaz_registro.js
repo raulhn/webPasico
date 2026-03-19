@@ -167,29 +167,44 @@ function actualizar_interfaz_persona(persona, nid_interfaz_persona) {
   });
 }
 
+function comparar_dato(dato_interfaz, dato) {
+  // Si no hay un dato nuevo cargado no se compara, se indica que es igual
+  if (
+    dato_interfaz === undefined ||
+    dato_interfaz === null ||
+    dato_interfaz.length === 0
+  ) {
+    return true;
+  }
+
+  // El dato de interfaz no es vacio, pero el dato registrado si
+  if (dato === undefined || dato === null || dato.toString().length === 0) {
+    return false;
+  }
+
+  return (
+    dato_interfaz.toString().toUpperCase() === dato.toString().toUpperCase()
+  );
+}
+
 function compara_persona_interfaz(persona, persona_interfaz) {
   if (
-    persona.nif != persona_interfaz.nif ||
-    persona_interfaz.nif == null ||
-    persona.nombre != persona_interfaz.nombre ||
-    persona_interfaz.nombre == null ||
-    persona.primer_apellido != persona_interfaz.primer_apellido ||
-    persona_interfaz.primer_apellido == null ||
-    persona.segundo_apellido != persona_interfaz.segundo_apellido ||
-    persona_interfaz.segundo_apellido == null ||
-    persona.email != persona_interfaz.email ||
-    persona_interfaz.email == null ||
-    persona.telefono != persona_interfaz.telefono ||
-    persona_interfaz.telefono == null ||
-    persona.fecha_nacimiento != persona_interfaz.fecha_nacimiento ||
-    persona_interfaz.fecha_nacimiento == null
+    comparar_dato(persona_interfaz.nif, persona.nif) &&
+    comparar_dato(persona_interfaz.nombre, persona.nombre) &&
+    comparar_dato(persona_interfaz.primer_apellido, persona.primer_apellido) &&
+    comparar_dato(
+      persona_interfaz.segundo_apellido,
+      persona.segundo_apellido,
+    ) &&
+    comparar_dato(persona_interfaz.email, persona.correo_electronico) &&
+    comparar_dato(persona_interfaz.telefono, persona.telefono) &&
+    comparar_dato(persona_interfaz.fecha_nacimiento, persona.fecha_nacimiento)
   ) {
     return true;
   } else {
     return false;
   }
 }
-
 function insertar_conflicto_persona(persona_interfaz, nid_interfaz_persona) {
   const sql =
     "insert into " +
@@ -283,9 +298,9 @@ async function inserta_interfaz_persona(
       datos_persona.nid_persona = persona[0].nid;
       // Se ha encontrado una única persona con el mismo nombre, se compara con la interfaz para determinar si se actualiza o no
       if (compara_persona_interfaz(persona[0], datos_persona)) {
-        datos_persona.operacion = constantes.OPERACIONES_INTERFAZ.ACTUALIZAR;
-      } else {
         datos_persona.operacion = constantes.OPERACIONES_INTERFAZ.SIN_CAMBIOS;
+      } else {
+        datos_persona.operacion = constantes.OPERACIONES_INTERFAZ.ACTUALIZAR;
       }
       await actualizar_interfaz_persona(datos_persona, nid_interfaz_persona);
     } else {
@@ -344,9 +359,9 @@ async function comprueba_persona(
     if (persona) {
       // Se ha encontrado una persona con el mismo NIF, se compara con la interfaz para determinar si se actualiza o no
       if (compara_persona_interfaz(persona, datos_persona)) {
-        datos_persona.operacion = constantes.OPERACIONES_INTERFAZ.ACTUALIZAR;
-      } else {
         datos_persona.operacion = constantes.OPERACIONES_INTERFAZ.SIN_CAMBIOS;
+      } else {
+        datos_persona.operacion = constantes.OPERACIONES_INTERFAZ.ACTUALIZAR;
       }
       datos_persona.nid_persona = persona.nid;
       await actualizar_interfaz_persona(datos_persona, nid_interfaz_persona);
