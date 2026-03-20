@@ -1,6 +1,7 @@
 const conexion = require("../conexion.js");
 const constantes = require("../constantes.js");
 const gestor_personas = require("./persona.js");
+const gestor_interfaz_persona = require("./interfaz_persona.js");
 
 function obtener_siguiente_lote() {
   const sql =
