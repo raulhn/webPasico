@@ -263,12 +263,40 @@ function obtener_volcado_lote(lote) {
   });
 }
 
+function actualizar_nid_persona_interfaz(
+  nid_carga_datos,
+  nid_interfaz_persona,
+) {
+  const sql =
+    "update " +
+    constantes.ESQUEMA_BD +
+    ".carga_datos set nid_interfaz_persona = " +
+    conexion.dbConn.escape(nid_interfaz_persona) +
+    " where nid_carga_datos = " +
+    conexion.dbConn.escape(nid_carga_datos);
+
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.beginTransaction(() => {
+      conexion.dbConn.query(sql, (error, results, fields) => {
+        if (error) {
+          console.log(error);
+          conexion.dbConn.rollback();
+          reject(error);
+        } else {
+          conexion.dbConn.commit();
+          resolve(results.insertId);
+        }
+      });
+    });
+  });
+}
+
 async function cargar_datos_interfaz(lote) {
   try {
     let datos_lote = await obtener_volcado_lote(lote);
     for (let i = 0; i < datos_lote.length; i++) {
       let dato = datos_lote[i];
-      await comprueba_persona(
+      let nid_interfaz_persona = await comprueba_persona(
         lote,
         dato.dni,
         dato.nombre,
@@ -278,6 +306,13 @@ async function cargar_datos_interfaz(lote) {
         dato.telefono,
         dato.fecha_nacimiento,
       );
+
+      if (nid_interfaz_persona) {
+        await actualizar_nid_persona_interfaz(
+          datos_lote.nid_carga_datos,
+          nid_interfaz_persona,
+        );
+      }
     }
   } catch (e) {
     console.log(e);
@@ -383,8 +418,10 @@ async function comprueba_persona(
         inserta_interfaz_persona(persona, datos_persona, nid_interfaz_persona);
       }
     }
+    return nid_interfaz_persona;
   } catch (e) {
     console.log(e);
+    throw new Error("Error al registrar la persona en la interfaz");
   }
 }
 

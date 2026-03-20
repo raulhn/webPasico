@@ -7,11 +7,19 @@ create table pasico_gestor.carga_datos (
     email varchar(100),
     telefono varchar(20),
     fecha_nacimiento date,
+    nid_interfaz_persona int,
+    dni_padre_madre varchar(20),
+    nombre_padre_madre varchar(100),
+    primer_apellido_padre_madre varchar(50),
+    segundo_apellido_padre_madre varchar(50),
+    fecha_nacimiento_padre_madre date,
+    nid_interfaz_persona_padre_madre int,
     dni_socio varchar(20),
     nombre_socio varchar(100),
     primer_apellido_socio varchar(50),
     segundo_apellido_socio varchar(50),
     fecha_nacimiento_socio date,
+    nid_interfaz_persona_socio int,
     iban varchar(34),
     lenguaje_musical varchar(50),
     instrumento1 varchar(50),
@@ -22,3 +30,9 @@ create table pasico_gestor.carga_datos (
     lote int,
     primary key (nid_carga_datos)
 );
+
+
+alter table pasico_gestor.carga_datos add constraint fk_carga_datos_interfaz_persona foreign key (nid_interfaz_persona) references pasico_gestor.interfaz_persona(nid_interfaz_persona);
+alter table pasico_gestor.carga_datos add constraint fk_carga_datos_interfaz_persona_padre_madre foreign key (nid_interfaz_persona_padre_madre) references pasico_gestor.interfaz_persona(nid_interfaz_persona);
+alter table pasico_gestor.carga_datos add constraint fk_carga_datos_interfaz_persona_socio foreign key (nid_interfaz_persona_socio) references pasico_gestor.interfaz_persona(nid_interfaz_persona);
+
