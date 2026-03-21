@@ -399,6 +399,20 @@ async function inserta_interfaz_persona(
       // Se ha encontrado una única persona con el mismo nombre, se compara con la interfaz para determinar si se actualiza o no
       if (persona[0].nombre != datos_persona.nombre) {
         datos_persona.operacion = constantes.OPERACIONES_INTERFAZ.CONFLICTO;
+        let persona_conflicto = {
+          nif: persona[0].nif,
+          nombre: persona[0].nombre,
+          primer_apellido: persona[0].primer_apellido,
+          segundo_apellido: persona[0].segundo_apellido,
+          email: persona[0].email,
+          telefono: persona[0].telefono,
+          fecha_nacimiento: persona[0].fecha_nacimiento,
+          nid_persona: persona[0].nid,
+        };
+        await insertar_conflicto_persona(
+          persona_conflicto,
+          nid_interfaz_persona,
+        );
       } else if (compara_persona_interfaz(persona[0], datos_persona)) {
         datos_persona.operacion = constantes.OPERACIONES_INTERFAZ.SIN_CAMBIOS;
       } else {
