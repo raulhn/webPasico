@@ -309,7 +309,7 @@ async function cargar_datos_interfaz(lote) {
 
       if (nid_interfaz_persona) {
         await actualizar_nid_persona_interfaz(
-          datos_lote.nid_carga_datos,
+          datos_lote[i].nid_carga_datos,
           nid_interfaz_persona,
         );
       }
@@ -318,6 +318,68 @@ async function cargar_datos_interfaz(lote) {
     console.log(e);
     throw new Error("Se ha producido un error al cargar los datos");
   }
+}
+
+async function comprueba_existe_persona_interfaz(datos_persona, lote) {
+  const persona = await gestor_interfaz_persona.obtener_persona_nif_insert(
+    datos_persona.nif,
+    lote,
+  );
+
+  // Existe persona con ese nif
+  if (persona.length > 0) {
+    return persona[0].nid_interfaz_persona;
+  }
+
+  const personas = await gestor_interfaz_persona.obtener_persona_nombre_insert(
+    datos_persona.nombre,
+    datos_persona.primer_apellido,
+    datos_persona.segundo_apellido,
+    lote,
+  );
+  // Coincide persona con nombre y apellidos en modo insert
+  if (personas.length > 0) {
+    return personas[0].nid_interfaz_persona;
+  }
+
+  const personas_apellido =
+    await gestor_interfaz_persona.obtener_persona_apellidos_insert(
+      datos_persona.primer_apellido,
+      datos_persona.segundo_apellido,
+      lote,
+    );
+
+  if (personas_apellido.length > 0) {
+    let datos = {
+      nif: datos_persona.dni,
+      nombre: datos_persona.nombre,
+      primer_apellido: datos_persona.primer_apellido,
+      segundo_apellido: datos_persona.segundo_apellido,
+      email: datos_persona.email,
+      telefono: datos_persona.telefono,
+      fecha_nacimiento: datos_persona.fecha_nacimiento,
+      operacion: null,
+      nid_persona: null,
+    };
+
+    let nid_interfaz_persona = await registrar_interfaz_persona(lote, datos);
+    datos_persona.operacion = constantes.OPERACIONES_INTERFAZ.CONFLICTO;
+    await insertar_conflicto_persona(datos_persona, nid_interfaz_persona);
+    for (let i = 0; i < personas_apellido.length; i++) {
+      let persona_conflicto = {
+        nif: personas_apellido[i].nif,
+        nombre: personas_apellido[i].nombre,
+        primer_apellido: personas_apellido[i].primer_apellido,
+        segundo_apellido: personas_apellido[i].segundo_apellido,
+        email: personas_apellido[i].email,
+        telefono: personas_apellido[i].telefono,
+        fecha_nacimiento: personas_apellido[i].fecha_nacimiento,
+      };
+      await insertar_conflicto_persona(persona_conflicto, nid_interfaz_persona);
+    }
+    return nid_interfaz_persona;
+  }
+  return null;
 }
 
 async function inserta_interfaz_persona(
@@ -387,7 +449,15 @@ async function comprueba_persona(
       operacion: null,
       nid_persona: null,
     };
-    let nid_interfaz_persona = await registrar_interfaz_persona(
+
+    let nid_interfaz_persona = await comprueba_existe_persona_interfaz(
+      datos_persona,
+      lote,
+    );
+    if (nid_interfaz_persona) {
+      return nid_interfaz_persona;
+    }
+    nid_interfaz_persona = await registrar_interfaz_persona(
       lote,
       datos_persona,
     );
