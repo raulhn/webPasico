@@ -397,7 +397,6 @@ async function inserta_interfaz_persona(
       datos_persona.operacion = constantes.OPERACIONES_INTERFAZ.INSERTAR;
       await actualizar_interfaz_persona(datos_persona, nid_interfaz_persona);
     } else if (persona.length == 1) {
-      datos_persona.nid_persona = persona[0].nid;
       // Se ha encontrado una única persona con el mismo nombre, se compara con la interfaz para determinar si se actualiza o no
       if (persona[0].nombre != datos_persona.nombre) {
         datos_persona.operacion = constantes.OPERACIONES_INTERFAZ.CONFLICTO;
@@ -416,8 +415,10 @@ async function inserta_interfaz_persona(
           nid_interfaz_persona,
         );
       } else if (compara_persona_interfaz(persona[0], datos_persona)) {
+        datos_persona.nid_persona = persona[0].nid;
         datos_persona.operacion = constantes.OPERACIONES_INTERFAZ.SIN_CAMBIOS;
       } else {
+        datos_persona.nid_persona = persona[0].nid;
         datos_persona.operacion = constantes.OPERACIONES_INTERFAZ.ACTUALIZAR;
       }
       await actualizar_interfaz_persona(datos_persona, nid_interfaz_persona);
