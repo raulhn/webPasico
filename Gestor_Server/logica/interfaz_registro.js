@@ -105,9 +105,9 @@ function registrar_interfaz_persona(lote, persona) {
     conexion.dbConn.escape(persona.email) +
     ", " +
     conexion.dbConn.escape(persona.telefono) +
-    ", " +
+    ", nullif(" +
     conexion.dbConn.escape(persona.fecha_nacimiento) +
-    ", " +
+    ", ''), " +
     conexion.dbConn.escape(persona.operacion) +
     ")";
 
