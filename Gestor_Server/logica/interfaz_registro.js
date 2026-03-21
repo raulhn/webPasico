@@ -131,9 +131,9 @@ function actualizar_interfaz_persona(persona, nid_interfaz_persona) {
   const sql =
     "update " +
     constantes.ESQUEMA_BD +
-    ".interfaz_persona set dni = " +
+    ".interfaz_persona set dni = nullif(" +
     conexion.dbConn.escape(persona.nif) +
-    ", nombre = " +
+    ", ''), nombre = " +
     conexion.dbConn.escape(persona.nombre) +
     ", primer_apellido = " +
     conexion.dbConn.escape(persona.primer_apellido) +
@@ -210,11 +210,11 @@ function insertar_conflicto_persona(persona_interfaz, nid_interfaz_persona) {
   const sql =
     "insert into " +
     constantes.ESQUEMA_BD +
-    ".interfaz_conflicto_persona(nid_interfaz_persona, nif, nombre, primer_apellido, segundo_apellido, email, telefono, fecha_nacimiento) values(" +
+    ".interfaz_conflictos_persona(nid_interfaz_persona, nif, nombre, primer_apellido, segundo_apellido, email, telefono, fecha_nacimiento) values(" +
     conexion.dbConn.escape(nid_interfaz_persona) +
-    ", " +
+    ", nullif(" +
     conexion.dbConn.escape(persona_interfaz.nif) +
-    ", " +
+    ", ''), " +
     conexion.dbConn.escape(persona_interfaz.nombre) +
     ", " +
     conexion.dbConn.escape(persona_interfaz.primer_apellido) +

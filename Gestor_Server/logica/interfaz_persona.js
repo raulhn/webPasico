@@ -10,7 +10,8 @@ function obtener_persona_nif_insert(nif, lote) {
     " and operacion = " +
     conexion.dbConn.escape(constantes.OPERACIONES_INTERFAZ.INSERTAR) +
     " and lote = " +
-    conexion.dbConn.escape(lote);
+    conexion.dbConn.escape(lote) +
+    " and dni <> ''";
 
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(sql, (error, results) => {
