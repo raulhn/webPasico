@@ -1104,8 +1104,6 @@ function obtener_personas_apellidos(primer_apellido, segundo_apellido) {
       if (error) {
         console.log(error);
         reject("Error al obtener la persona por apellidos");
-      } else if (results.length < 1) {
-        resolve(null);
       } else {
         resolve(results);
       }

@@ -397,7 +397,9 @@ async function inserta_interfaz_persona(
     } else if (persona.length == 1) {
       datos_persona.nid_persona = persona[0].nid;
       // Se ha encontrado una única persona con el mismo nombre, se compara con la interfaz para determinar si se actualiza o no
-      if (compara_persona_interfaz(persona[0], datos_persona)) {
+      if (persona[0].nombre != datos_persona.nombre) {
+        datos_persona.operacion = constantes.OPERACIONES_INTERFAZ.CONFLICTO;
+      } else if (compara_persona_interfaz(persona[0], datos_persona)) {
         datos_persona.operacion = constantes.OPERACIONES_INTERFAZ.SIN_CAMBIOS;
       } else {
         datos_persona.operacion = constantes.OPERACIONES_INTERFAZ.ACTUALIZAR;
@@ -406,7 +408,7 @@ async function inserta_interfaz_persona(
     } else {
       // No se ha podido determinar una única persona, se registra como conflicto
       datos_persona.operacion = constantes.OPERACIONES_INTERFAZ.CONFLICTO;
-      await insertar_conflicto_persona(datos_persona, nid_interfaz_persona);
+      await actualizar_interfaz_persona(datos_persona, nid_interfaz_persona);
       for (let i = 0; i < persona.length; i++) {
         let persona_conflicto = {
           nif: persona[i].nif,
@@ -416,6 +418,7 @@ async function inserta_interfaz_persona(
           email: persona[i].email,
           telefono: persona[i].telefono,
           fecha_nacimiento: persona[i].fecha_nacimiento,
+          nid_persona: persona[i].nid,
         };
         await insertar_conflicto_persona(
           persona_conflicto,
@@ -481,7 +484,7 @@ async function comprueba_persona(
       );
       // No se ha encontrado por nombre, se busca solo por los apellidos
       if (!persona || (persona && persona.length == 0)) {
-        persona = await gestor_personas.obtener_persona_apellidos(
+        persona = await gestor_personas.obtener_personas_apellidos(
           primer_apellido,
           segundo_apellido,
         );

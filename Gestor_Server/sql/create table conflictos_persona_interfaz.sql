@@ -7,7 +7,8 @@ create table pasico_gestor.interfaz_conflictos_persona (
     segundo_apellido varchar(50),
     email varchar(100),
     telefono varchar(20),
-    fecha_nacimiento date
+    fecha_nacimiento date,
+    nid_persona int
 );
 
 
