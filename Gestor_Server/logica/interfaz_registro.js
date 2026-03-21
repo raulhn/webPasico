@@ -316,6 +316,7 @@ async function cargar_datos_interfaz(lote) {
     }
   } catch (e) {
     console.log(e);
+    throw new Error("Se ha producido un error al cargar los datos");
   }
 }
 
