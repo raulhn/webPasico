@@ -364,7 +364,7 @@ async function comprueba_existe_persona_interfaz(datos_persona, lote) {
 
     let nid_interfaz_persona = await registrar_interfaz_persona(lote, datos);
     datos_persona.operacion = constantes.OPERACIONES_INTERFAZ.CONFLICTO;
-    await insertar_conflicto_persona(datos_persona, nid_interfaz_persona);
+    await actualizar_interfaz_persona(datos_persona, nid_interfaz_persona);
     for (let i = 0; i < personas_apellido.length; i++) {
       let persona_conflicto = {
         nif: personas_apellido[i].nif,

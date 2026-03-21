@@ -1,6 +1,7 @@
-create table pasico_gestor.conflictos_persona_interfaz (
+create table pasico_gestor.interfaz_conflictos_persona (
     nid_conflicto int auto_increment primary key,
-    nid_persona_interfaz int,
+    nid_interfaz_persona int,
+    nif varchar(20),
     nombre varchar(50),
     primer_apellido varchar(50),
     segundo_apellido varchar(50),
@@ -10,4 +11,4 @@ create table pasico_gestor.conflictos_persona_interfaz (
 );
 
 
-alter table pasico_gestor.conflictos_persona_interfaz add constraint fk_conflicto_persona_interfaz foreign key (nid_persona_interfaz) references pasico_gestor.interfaz_persona(nid_interfaz_persona);
+alter table pasico_gestor.interfaz_conflictos_persona add constraint fk_conflicto_persona_interfaz foreign key (nid_interfaz_persona) references pasico_gestor.interfaz_persona(nid_interfaz_persona);
