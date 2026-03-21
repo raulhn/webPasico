@@ -143,9 +143,9 @@ function actualizar_interfaz_persona(persona, nid_interfaz_persona) {
     conexion.dbConn.escape(persona.email) +
     ", telefono = " +
     conexion.dbConn.escape(persona.telefono) +
-    ", fecha_nacimiento = " +
+    ", fecha_nacimiento = nullif(" +
     conexion.dbConn.escape(persona.fecha_nacimiento) +
-    ", operacion = " +
+    ", ''), operacion = " +
     conexion.dbConn.escape(persona.operacion) +
     ", nid_persona = " +
     conexion.dbConn.escape(persona.nid_persona) +
