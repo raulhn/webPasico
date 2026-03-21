@@ -36,7 +36,7 @@ function obtener_persona_nombre_insert(
     conexion.dbConn.escape(nombre) +
     " and primer_apellido = " +
     conexion.dbConn.escape(primer_apellido) +
-    " and segundo_apellido = '" +
+    " and segundo_apellido = " +
     conexion.dbConn.escape(segundo_apellido) +
     " and estado = " +
     conexion.dbConn.escape(constantes.ESTADOS_INTERFAZ.INSERTAR) +
