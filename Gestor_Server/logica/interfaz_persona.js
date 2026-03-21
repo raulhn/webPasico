@@ -34,7 +34,7 @@ function obtener_persona_nombre_insert(
     constantes.ESQUEMA_BD +
     ".interfaz_persona where nombre = " +
     conexion.dbConn.escape(nombre) +
-    " and primer_apellido = '" +
+    " and primer_apellido = " +
     conexion.dbConn.escape(primer_apellido) +
     " and segundo_apellido = '" +
     conexion.dbConn.escape(segundo_apellido) +
