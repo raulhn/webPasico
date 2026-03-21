@@ -210,7 +210,7 @@ function insertar_conflicto_persona(persona_interfaz, nid_interfaz_persona) {
   const sql =
     "insert into " +
     constantes.ESQUEMA_BD +
-    ".interfaz_conflictos_persona(nid_interfaz_persona, nif, nombre, primer_apellido, segundo_apellido, email, telefono, fecha_nacimiento) values(" +
+    ".interfaz_conflictos_persona(nid_interfaz_persona, nif, nombre, primer_apellido, segundo_apellido, email, telefono, fecha_nacimiento, nid_persona) values(" +
     conexion.dbConn.escape(nid_interfaz_persona) +
     ", nullif(" +
     conexion.dbConn.escape(persona_interfaz.nif) +
@@ -226,6 +226,8 @@ function insertar_conflicto_persona(persona_interfaz, nid_interfaz_persona) {
     conexion.dbConn.escape(persona_interfaz.telefono) +
     ", " +
     conexion.dbConn.escape(persona_interfaz.fecha_nacimiento) +
+    ", " +
+    conexion.dbConn.escape(persona_interfaz.nid_persona) +
     ")";
 
   return new Promise((resolve, reject) => {
