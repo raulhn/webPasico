@@ -393,6 +393,7 @@ async function inserta_interfaz_persona(
     }
     if (persona.length == 0) {
       datos_persona.operacion = constantes.OPERACIONES_INTERFAZ.INSERTAR;
+      await actualizar_interfaz_persona(datos_persona, nid_interfaz_persona);
     } else if (persona.length == 1) {
       datos_persona.nid_persona = persona[0].nid;
       // Se ha encontrado una única persona con el mismo nombre, se compara con la interfaz para determinar si se actualiza o no
