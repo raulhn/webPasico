@@ -49,7 +49,6 @@ function obtener_persona_nombre_insert(
         console.log(err);
         reject("Error al recuperar la persona");
       } else {
-        console.log(result);
         resolve(result);
       }
     });
