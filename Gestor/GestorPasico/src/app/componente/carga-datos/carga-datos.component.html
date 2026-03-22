@@ -1,8 +1,88 @@
-<p>carga-datos works!</p>
-<div class="m-3">
-  <input type="file" class="form-control" (change)="onChange($event)" />
 
-  <button (click)="guardar()" class="btn btn-primary mb-3 mt-2 tp-3">
-    Guardar
-  </button>
+<app-menu class=""></app-menu>
+
+<div class="contenedor-carga">
+  <!-- Header del componente -->
+  <div class="header-carga">
+    <h1 class="titulo-principal">Carga de Datos</h1>
+    <p class="subtitulo">Sube tus archivos de datos de forma rápida y segura</p>
+  </div>
+
+  <!-- Card principal -->
+  <div class="card-carga">
+    <!-- Zona de carga de archivos -->
+    <div class="zona-carga">
+      <h2 class="titulo-seccion">
+        <span class="icono icono-archivo">📁</span>
+        Seleccionar Archivo
+      </h2>
+      
+      <div class="input-archivo-wrapper">
+        <input 
+          type="file" 
+          id="archivo-input"
+          class="input-archivo" 
+          (change)="onChange($event)"
+          accept=".csv,.xlsx,.xls,.json"
+        />
+        <label 
+          for="archivo-input" 
+          class="etiqueta-archivo"
+          [class.archivo-seleccionado]="archivoSeleccionado"
+        >
+          <span class="icono icono-subir">⬆️</span>
+          <span class="texto-principal" *ngIf="!archivoSeleccionado">
+            Arrastra y suelta tu archivo aquí
+          </span>
+          <span class="texto-principal" *ngIf="archivoSeleccionado">
+            ✅ Archivo seleccionado
+          </span>
+          <span class="texto-secundario" *ngIf="!archivoSeleccionado">
+            o haz clic para buscar en tu dispositivo
+          </span>
+          <span class="texto-secundario" *ngIf="archivoSeleccionado">
+            Haz clic para cambiar el archivo
+          </span>
+        </label>
+      </div>
+
+      <!-- Información del archivo seleccionado -->
+      <div class="info-archivo" *ngIf="archivoSeleccionado">
+        <span class="icono icono-info">📄</span>
+        <div class="detalles-archivo">
+          <div class="nombre-archivo">{{ nombreArchivo }}</div>
+          <div class="tamano-archivo">{{ tamanoArchivo }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Zona de acciones -->
+    <div class="zona-acciones">
+      <button 
+        (click)="guardar()" 
+        class="btn-guardar"
+        [disabled]="!archivoSeleccionado || cargando"
+        [class.cargando]="cargando"
+      >
+        <span *ngIf="!cargando">Guardar Datos</span>
+        <span *ngIf="cargando">Procesando...</span>
+      </button>
+    </div>
+
+    <!-- Mensajes de estado -->
+    <div class="mensaje-estado mensaje-exito" *ngIf="mensajeExito">
+      <span class="icono">✅</span>
+      <span>{{ mensajeExito }}</span>
+    </div>
+
+    <div class="mensaje-estado mensaje-error" *ngIf="mensajeError">
+      <span class="icono">❌</span>
+      <span>{{ mensajeError }}</span>
+    </div>
+
+    <div class="mensaje-estado mensaje-warning" *ngIf="mensajeWarning">
+      <span class="icono">⚠️</span>
+      <span>{{ mensajeWarning }}</span>
+    </div>
+  </div>
 </div>
