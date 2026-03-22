@@ -129,9 +129,56 @@ function obtener_interfaz_personas(lote) {
   });
 }
 
+function actualizar_operacion_conflicto(
+  nid_interfaz_persona,
+  operacion,
+  nid_persona,
+) {
+  const sql =
+    "update " +
+    constantes.ESQUEMA_BD +
+    ".interfaz_persona set operacion = " +
+    conexion.dbConn.escape(operacion) +
+    ", nid_persona = " +
+    conexion.dbConn.escape(nid_persona) +
+    " where nid_interfaz_persona = " +
+    conexion.dbConn.escape(nid_interfaz_persona);
+
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.beginTransaction((err) => {
+      if (err) {
+        console.log("Error al iniciar la transacción:", err);
+        reject("Error al iniciar la transacción");
+        return;
+      }
+
+      conexion.dbConn.query(sql, (error, results) => {
+        if (error) {
+          console.log(
+            "interfaz_persona -> actualizar_operacion_conflicto: Error al actualizar la operación del conflicto para ",
+            nid_interfaz_persona,
+            " a ",
+            operacion,
+            " con nid_persona ",
+            nid_persona,
+            ":",
+            error,
+          );
+          conexion.dbConn.rollback();
+          reject("Error al actualizar la operación del conflicto");
+        } else {
+          conexion.dbConn.commit();
+          resolve();
+        }
+      });
+    });
+  });
+}
+
 module.exports.obtener_persona_nif_insert = obtener_persona_nif_insert;
 module.exports.obtener_persona_nombre_insert = obtener_persona_nombre_insert;
 module.exports.obtener_persona_apellidos_insert =
   obtener_persona_apellidos_insert;
 module.exports.obtener_conflictos_personas = obtener_conflictos_personas;
 module.exports.obtener_interfaz_personas = obtener_interfaz_personas;
+module.exports.actualizar_operacion_conflicto = actualizar_operacion_conflicto;

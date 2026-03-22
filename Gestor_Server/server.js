@@ -503,6 +503,11 @@ app.get(
   servlet_interfaz_persona.obtener_interfaz_personas,
 );
 
+app.post(
+  "/actualizar_operacion_conflicto",
+  servlet_interfaz_persona.actualizar_operacion,
+);
+
 https
   .createServer(
     {

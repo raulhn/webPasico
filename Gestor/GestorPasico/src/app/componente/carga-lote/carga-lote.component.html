@@ -1,4 +1,3 @@
-
 <app-menu class=""></app-menu>
 <div class="contenedor-principal">
   <header class="header">
@@ -45,6 +44,19 @@
               {{ conflicto_persona.primer_apellido }}
               {{ conflicto_persona.segundo_apellido }}
             </span>
+            <input
+              [disabled]="conflicto_persona.nid_persona"
+              type="radio"
+              [name]="
+                interfaz_persona_conflicto.interfaz_persona.nid_interfaz_persona
+              "
+              (change)="
+                actualizarSeleccion(
+                  interfaz_persona_conflicto.interfaz_persona,
+                  conflicto_persona
+                )
+              "
+            />
           </div>
         </div>
       </div>

@@ -63,4 +63,13 @@ export class CargaLoteComponent implements OnInit {
       .obtener_interfaz_personas(this.lote)
       .subscribe(this.peticion_obtener_interfaz_personas);
   }
+
+  actualizarSeleccion(nid_interfaz_persona: string, conflicto: any) {
+    let persona = this.interfaz_personas.find(
+      (p) => p.nid_interfaz_persona === nid_interfaz_persona,
+    );
+    if (persona) {
+      persona.nid_persona = conflicto.nid_persona;
+    }
+  }
 }
