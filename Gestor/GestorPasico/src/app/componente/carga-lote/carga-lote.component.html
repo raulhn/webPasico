@@ -87,11 +87,11 @@
     </div>
 
     <details
-      class="card card-conflicto"
+      class="card card-actualizar"
       *ngFor="let interfaz_persona_actualizar of interfaz_personas_actualizar"
     >
       <summary class="card-summary">
-        <div class="operacion-badge badge-conflicto">
+        <div class="operacion-badge badge-actualizar">
           {{ interfaz_persona_actualizar.interfaz_persona.operacion }}
         </div>
         <div class="persona-info">
@@ -103,14 +103,14 @@
         </div>
       </summary>
 
-      <div class="conflictos-lista">
+      <div class="actualizaciones-lista">
         <div
-          class="conflicto-item"
+          class="actualizacion-item"
           *ngFor="
             let conflicto_persona of interfaz_persona_actualizar.conflictos_persona
           "
         >
-          <div class="persona-conflicto">
+          <div class="persona-actualizacion">
             <span class="etiqueta">Coincidencia encontrada:</span>
             <span class="nombre-completo">
               {{ conflicto_persona.nombre }}

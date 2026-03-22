@@ -263,6 +263,30 @@
   gap: 0.25rem;
 }
 
+/* Lista de actualizaciones */
+.actualizaciones-lista {
+  padding: 1.5rem;
+  background-color: #eff6ff;
+  border-top: 1px solid #3b82f6;
+}
+.actualizacion-item {
+  padding: 1rem;
+  background-color: white;
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+  border: 1px solid #dbeafe;
+  box-shadow: var(--shadow-sm);
+}
+.actualizacion-item:last-child {
+  margin-bottom: 0;
+}
+
+.persona-actualizacion {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
 /* Mensaje vacío */
 .mensaje-vacio {
   text-align: center;
