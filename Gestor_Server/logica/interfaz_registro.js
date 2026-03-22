@@ -420,6 +420,19 @@ async function inserta_interfaz_persona(
       } else {
         datos_persona.nid_persona = persona[0].nid;
         datos_persona.operacion = constantes.OPERACIONES_INTERFAZ.ACTUALIZAR;
+        await insertar_conflicto_persona(
+          {
+            nif: persona[0].nif,
+            nombre: persona[0].nombre,
+            primer_apellido: persona[0].primer_apellido,
+            segundo_apellido: persona[0].segundo_apellido,
+            email: persona[0].email,
+            telefono: persona[0].telefono,
+            fecha_nacimiento: persona[0].fecha_nacimiento,
+            nid_persona: persona[0].nid,
+          },
+          nid_interfaz_persona,
+        );
       }
       await actualizar_interfaz_persona(datos_persona, nid_interfaz_persona);
     } else {
@@ -490,6 +503,19 @@ async function comprueba_persona(
         datos_persona.operacion = constantes.OPERACIONES_INTERFAZ.SIN_CAMBIOS;
       } else {
         datos_persona.operacion = constantes.OPERACIONES_INTERFAZ.ACTUALIZAR;
+        await insertar_conflicto_persona(
+          {
+            nif: persona.nif,
+            nombre: persona.nombre,
+            primer_apellido: persona.primer_apellido,
+            segundo_apellido: persona.segundo_apellido,
+            email: persona.email,
+            telefono: persona.telefono,
+            fecha_nacimiento: persona.fecha_nacimiento,
+            nid_persona: persona.nid,
+          },
+          nid_interfaz_persona,
+        );
       }
       datos_persona.nid_persona = persona.nid;
       await actualizar_interfaz_persona(datos_persona, nid_interfaz_persona);
