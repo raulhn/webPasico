@@ -1,3 +1,15 @@
 <p>carga-lote works!</p>
 
-<div></div>
+<div>
+  <details *ngFor="let interfaz_persona of interfaz_personas">
+    <summary>
+      {{ interfaz_persona.operacion }} {{ interfaz_persona.nombre }}
+      {{ interfaz_persona.primer_apellido }}
+      {{ interfar_persona.segundo_apellido }}
+    </summary>
+    <div *nFor="let conflicto_persona of intefaz_persona.conflictos_persona">
+      {{ conflicto_persona.nombre }} {{ conflicto_persona.primer_apellido }}
+      {{ conflicto_persona.segundo_apellido }}
+    </div>
+  </details>
+</div>
