@@ -33,6 +33,7 @@ var servlet_matricula_asignatura = require("./servlets/servlet_matricula_asignat
 var servlet_profesor = require("./servlets/servlet_profesor.js");
 var servlet_profesor_alumno_matricula = require("./servlets/servlet_profesor_alumno_matricula.js");
 var servlet_carga_datos = require("./servlets/servlet_carga_datos.js");
+var servlet_interfaz_persona = require("./servlets/servlet_interfaz_persona.js");
 
 var fs = require("fs");
 
@@ -495,6 +496,12 @@ app.get(
 
 /** Carga de datos **/
 app.post("/cargar_datos", servlet_carga_datos.carga_fichero);
+
+/** Interfaz Persona **/
+app.get(
+  "/obtener_interfaz_personas/:lote",
+  servlet_interfaz_persona.obtener_interfaz_personas,
+);
 
 https
   .createServer(

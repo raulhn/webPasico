@@ -88,7 +88,27 @@ function obtener_persona_apellidos_insert(
   });
 }
 
+function obtener_interfaz_personas(lote) {
+  const sql =
+    "select * from " +
+    constantes.ESQUEMA_BD +
+    ".interfaz_persona where lote = " +
+    conexion.dbConn.escape(lote);
+
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(sql, (error, results) => {
+      if (error) {
+        console.log(error);
+        reject("Se ha producido un error al recuperar el interfaz de persona");
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
+
 module.exports.obtener_persona_nif_insert = obtener_persona_nif_insert;
 module.exports.obtener_persona_nombre_insert = obtener_persona_nombre_insert;
 module.exports.obtener_persona_apellidos_insert =
   obtener_persona_apellidos_insert;
+module.exports.obtener_interfaz_personas = obtener_interfaz_personas;

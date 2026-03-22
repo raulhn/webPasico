@@ -40,6 +40,7 @@ import { FichaMatriculaProfesorComponent } from './componente/ficha-matricula-pr
 import { ListaTipoMusicoComponent } from './componente/lista-tipo-musico/lista-tipo-musico.component';
 import { ListaInstrumentosComponent } from './componente/lista-instrumentos/lista-instrumentos.component';
 import { CargaDatosComponent } from './componente/carga-datos/carga-datos.component';
+import { CargaLoteComponent } from './componente/carga-lote/carga-lote.component';
 
 const routes: Routes = [
   {
@@ -197,6 +198,10 @@ const routes: Routes = [
   {
     path: 'carga_datos',
     component: CargaDatosComponent,
+  },
+  {
+    path: 'carga_lote',
+    component: CargaLoteComponent,
   },
 ];
 
