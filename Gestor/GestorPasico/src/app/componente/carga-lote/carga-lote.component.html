@@ -1,21 +1,19 @@
 <p>carga-lote works!</p>
 
 <div class="contenedor">
-  <details class="detalle" *ngFor="let interfaz_persona of interfaz_personas">
+  <details
+    class="detalle"
+    *ngFor="let interfaz_persona_conflicto of interfaz_personas_conflicto
+  >
     <summary>
-      {{ interfaz_persona.interfaz_persona.operacion }}
-      <b>Nombre: </b> {{ interfaz_persona.interfaz_persona.nombre }}
+      {{ interfaz_persona_conflicto.interfaz_persona.operacion }}
+      <b>Nombre: </b> {{ interfaz_persona_conflicto.interfaz_persona.nombre }}
       <b>Primer Apellido: </b>
-      {{ interfaz_persona.interfaz_persona.primer_apellido }}
+      {{ interfaz_persona.interfaz_persona_conflicto.primer_apellido }}
       <b>Segundo Apellido: </b>
-      {{ interfaz_persona.interfaz_persona.segundo_apellido }}
+      {{ interfaz_persona.interfaz_persona_conflicto.segundo_apellido }}
     </summary>
-    <div
-      *nFor="
-        let conflicto_persona of intefaz_persona.interfaz_persona
-          .conflictos_persona
-      "
-    >
+    <div *ngFor="let conflicto_persona of interfaz_persona_conflicto.conflictos_persona">
       <b>Nombre: </b> {{ conflicto_persona.nombre }} <b>Primer Apellido: </b
       >{{ conflicto_persona.primer_apellido }} <b>Segundo Apellido: </b
       >{{ conflicto_persona.segundo_apellido }}

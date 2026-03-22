@@ -13,6 +13,18 @@ export class CargaLoteComponent implements OnInit {
   lote: string = '';
   interfaz_personas: any[] = [];
 
+  operaciones: any = {
+    INSERTAR: 'INSERTAR',
+    ACTUALIZAR: 'ACTUALIZAR',
+    CONFLICTO: 'CONFLICTO',
+    SIN_CAMBIOS: 'SIN_CAMBIOS',
+  };
+
+  interfaz_personas_insertar: any[] = [];
+  interfaz_personas_actualizar: any[] = [];
+  interfaz_personas_conflicto: any[] = [];
+  interfaz_personas_sin_cambios: any[] = [];
+
   constructor(
     private ruta: ActivatedRoute,
     private interfazPersonaService: InterfazPersonaService,
@@ -23,6 +35,20 @@ export class CargaLoteComponent implements OnInit {
   peticion_obtener_interfaz_personas = {
     next: (respuesta: any) => {
       this.interfaz_personas = respuesta.interfaz_personas;
+      this.interfaz_personas_insertar = this.interfaz_personas.filter(
+        (persona) => persona.operacion === this.operaciones.INSERTAR,
+      );
+
+      this.interfaz_personas_actualizar = this.interfaz_personas.filter(
+        (persona) => persona.operacion === this.operaciones.ACTUALIZAR,
+      );
+
+      this.interfaz_personas_conflicto = this.interfaz_personas.filter(
+        (persona) => persona.operacion === this.operaciones.CONFLICTO,
+      );
+      this.interfaz_personas_sin_cambios = this.interfaz_personas.filter(
+        (persona) => persona.operacion === this.operaciones.SIN_CAMBIOS,
+      );
     },
   };
 
