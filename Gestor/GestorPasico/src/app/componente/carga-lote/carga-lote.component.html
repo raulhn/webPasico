@@ -21,3 +21,72 @@
     {{ conflicto_persona.segundo_apellido }}
   </div>
 </details>
+
+<details
+  class="detalle"
+  *ngFor="let interfaz_persona_insertar of interfaz_personas_insertar"
+>
+  <summary>
+    {{ interfaz_persona_insertar.interfaz_persona.operacion }}
+    <b>Nombre: </b> {{ interfaz_persona_insertar.interfaz_persona.nombre }}
+    <b>Primer Apellido: </b>
+    {{ interfaz_persona_insertar.interfaz_persona.primer_apellido }}
+    <b>Segundo Apellido: </b>
+    {{ interfaz_persona_insertar.interfaz_persona.segundo_apellido }}
+  </summary>
+  <div
+    *ngFor="
+      let conflicto_persona of interfaz_persona_insertar.conflictos_persona
+    "
+  >
+    <b>Nombre: </b> {{ conflicto_persona.nombre }} <b>Primer Apellido: </b>
+    {{ conflicto_persona.primer_apellido }} <b>Segundo Apellido: </b>
+    {{ conflicto_persona.segundo_apellido }}
+  </div>
+</details>
+
+<details
+  class="detalle"
+  *ngFor="let interfaz_persona_actualizar of interfaz_personas_actualizar"
+>
+  <summary>
+    {{ interfaz_persona_actualizar.interfaz_persona.operacion }}
+    <b>Nombre: </b> {{ interfaz_persona_actualizar.interfaz_persona.nombre }}
+    <b>Primer Apellido: </b>
+    {{ interfaz_persona_actualizar.interfaz_persona.primer_apellido }}
+    <b>Segundo Apellido: </b>
+    {{ interfaz_persona_actualizar.interfaz_persona.segundo_apellido }}
+  </summary>
+  <div
+    *ngFor="
+      let conflicto_persona of interfaz_persona_actualizar.conflictos_persona
+    "
+  >
+    <b>Nombre: </b> {{ conflicto_persona.nombre }} <b>Primer Apellido: </b>
+    {{ conflicto_persona.primer_apellido }} <b>Segundo Apellido: </b>
+    {{ conflicto_persona.segundo_apellido }}
+  </div>
+</details>
+
+<details
+  class="detalle"
+  *ngFor="let interfaz_persona_sin_cambios of interfaz_personas_sin_cambios"
+>
+  <summary>
+    {{ interfaz_persona_sin_cambios.interfaz_persona.operacion }}
+    <b>Nombre: </b> {{ interfaz_persona_sin_cambios.interfaz_persona.nombre }}
+    <b>Primer Apellido: </b>
+    {{ interfaz_persona_sin_cambios.interfaz_persona.primer_apellido }}
+    <b>Segundo Apellido: </b>
+    {{ interfaz_persona_sin_cambios.interfaz_persona.segundo_apellido }}
+  </summary>
+  <div
+    *ngFor="
+      let conflicto_persona of interfaz_persona_sin_cambios.conflictos_persona
+    "
+  >
+    <b>Nombre: </b> {{ conflicto_persona.nombre }} <b>Primer Apellido: </b>
+    {{ conflicto_persona.primer_apellido }} <b>Segundo Apellido: </b>
+    {{ conflicto_persona.segundo_apellido }}
+  </div>
+</details>

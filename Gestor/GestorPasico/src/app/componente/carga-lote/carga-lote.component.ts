@@ -35,19 +35,24 @@ export class CargaLoteComponent implements OnInit {
   peticion_obtener_interfaz_personas = {
     next: (respuesta: any) => {
       this.interfaz_personas = respuesta.interfaz_personas;
+
       this.interfaz_personas_insertar = this.interfaz_personas.filter(
-        (persona) => persona.operacion === this.operaciones.INSERTAR,
+        (persona) =>
+          persona.interfaz_persona.operacion === this.operaciones.INSERTAR,
       );
 
       this.interfaz_personas_actualizar = this.interfaz_personas.filter(
-        (persona) => persona.operacion === this.operaciones.ACTUALIZAR,
+        (persona) =>
+          persona.interfaz_persona.operacion === this.operaciones.ACTUALIZAR,
       );
 
       this.interfaz_personas_conflicto = this.interfaz_personas.filter(
-        (persona) => persona.operacion === this.operaciones.CONFLICTO,
+        (persona) =>
+          persona.interfaz_persona.operacion === this.operaciones.CONFLICTO,
       );
       this.interfaz_personas_sin_cambios = this.interfaz_personas.filter(
-        (persona) => persona.operacion === this.operaciones.SIN_CAMBIOS,
+        (persona) =>
+          persona.interfaz_persona.operacion === this.operaciones.SIN_CAMBIOS,
       );
     },
   };
