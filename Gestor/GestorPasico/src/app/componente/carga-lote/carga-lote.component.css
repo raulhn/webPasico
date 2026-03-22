@@ -628,7 +628,6 @@ input[type="radio"]:checked {
   background-color: #ffffff;
   border-color: #4b5563;
   box-shadow: 
-    0 2px 4px rgba(0, 0, 0, 0.1),
     inset 0 0 0 2px #ffffff,
     0 0 0 1px rgba(75, 85, 99, 0.3);
 }
