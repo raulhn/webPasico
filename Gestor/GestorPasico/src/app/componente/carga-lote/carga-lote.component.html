@@ -29,8 +29,8 @@
           </span>
           <select>
             <option value="" disabled selected>Seleccionar acción</option>
-            <option value="INSERTAR">Insertar como nueva persona</option>
-            <option value="ACTUALIZAR">Actualizar persona existente</option>
+            <option value="INSERTAR">Insertar</option>
+            <option value="ACTUALIZAR">Actualizar</option>
           </select>
         </div>
       </summary>
@@ -49,10 +49,9 @@
               {{ conflicto_persona.primer_apellido }}
               {{ conflicto_persona.segundo_apellido }}
             </span>
-            <label>{{ conflicto_persona.nid_persona }}</label>
             <div
               [ngClass]="{
-                desactivado: conflicto_persona.nid_persona === null,
+                "desactivado": conflicto_persona.nid_persona === null,
               }"
             >
               <input
