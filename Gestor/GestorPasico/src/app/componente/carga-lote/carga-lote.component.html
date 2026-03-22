@@ -27,6 +27,11 @@
             {{ interfaz_persona_conflicto.interfaz_persona.primer_apellido }}
             {{ interfaz_persona_conflicto.interfaz_persona.segundo_apellido }}
           </span>
+          <select>
+            <option value="" disabled selected>Seleccionar acción</option>
+            <option value="INSERTAR">Insertar como nueva persona</option>
+            <option value="ACTUALIZAR">Actualizar persona existente</option>
+          </select>
         </div>
       </summary>
 
@@ -44,19 +49,33 @@
               {{ conflicto_persona.primer_apellido }}
               {{ conflicto_persona.segundo_apellido }}
             </span>
-            <input
-              [disabled]="conflicto_persona.nid_persona"
-              type="radio"
-              [name]="
-                interfaz_persona_conflicto.interfaz_persona.nid_interfaz_persona
-              "
-              (change)="
-                actualizarSeleccion(
-                  interfaz_persona_conflicto.interfaz_persona,
-                  conflicto_persona
-                )
-              "
-            />
+            <label>{{ conflicto_persona.nid_persona }}</label>
+            <div
+              [ngClass]="{
+                desactivado: conflicto_persona.nid_persona === null,
+              }"
+            >
+              <input
+                type="radio"
+                [name]="
+                  interfaz_persona_conflicto.interfaz_persona
+                    .nid_interfaz_persona
+                "
+                (change)="
+                  actualizarSeleccion(
+                    interfaz_persona_conflicto.interfaz_persona,
+                    conflicto_persona
+                  )
+                "
+              />
+            </div>
+            <div
+              [ngClass]="{
+                desactivado: conflicto_persona.nid_persona !== null,
+              }"
+            >
+              <span>Persona pendiente de insertar</span>
+            </div>
           </div>
         </div>
       </div>
