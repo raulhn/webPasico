@@ -1,16 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { InterfazPersonaService } from 'src/app/servicios/interfaz-persona.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-carga-lote',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './carga-lote.component.html',
   styleUrl: './carga-lote.component.css',
 })
 export class CargaLoteComponent implements OnInit {
   lote: string = '';
-  interfaz_personas = [];
+  interfaz_personas: any[] = [];
 
   constructor(
     private ruta: ActivatedRoute,
