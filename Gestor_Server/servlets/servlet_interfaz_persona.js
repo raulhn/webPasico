@@ -8,9 +8,22 @@ function obtener_interfaz_personas(req, res) {
       const interfaz_personas =
         await gestor_interfaz_persona.obtener_interfaz_personas(lote);
 
+      let resultado_interfaz_personas = [];
+
+      for (let i = 0; i < interfaz_personas.length; i++) {
+        const conflictos =
+          await gestor_interfaz_persona.obtener_conflictos_personas(
+            interfaz_personas[i].nid_interfaz_persona,
+          );
+        resultado_interfaz_personas.push({
+          interfaz_persona: interfaz_personas[i],
+          conflictos_persona: conflictos,
+        });
+      }
+
       res
         .status(200)
-        .send({ error: false, interfaz_personas: interfaz_personas });
+        .send({ error: false, interfaz_personas: resultado_interfaz_personas });
     } catch (error) {
       console.log(
         "servlet_interfaz_persona -> obtener_interfaz_personas: Se ha producido un error al recuperar el interfaz de personas",

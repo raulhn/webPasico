@@ -88,6 +88,28 @@ function obtener_persona_apellidos_insert(
   });
 }
 
+function obtener_conflictos_personas(nid_interfaz_persona) {
+  const sql =
+    "select * from " +
+    constantes.ESQUEMA_BD +
+    ".interfaz_conflictos_persona where nid_interfaz_persona = " +
+    conexion.dbConn.escape(nid_interfaz_persona);
+
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(sql, (error, results) => {
+      if (error) {
+        console.log(
+          "interfaz_persona -> obtener_conflictos_personas: Error al obtener_conflictos_personas para ",
+          nid_interfaz_persona,
+        );
+        reject("Error al obtener los conflictos de personas");
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
+
 function obtener_interfaz_personas(lote) {
   const sql =
     "select * from " +
@@ -111,4 +133,5 @@ module.exports.obtener_persona_nif_insert = obtener_persona_nif_insert;
 module.exports.obtener_persona_nombre_insert = obtener_persona_nombre_insert;
 module.exports.obtener_persona_apellidos_insert =
   obtener_persona_apellidos_insert;
+module.exports.obtener_conflictos_personas = obtener_conflictos_personas;
 module.exports.obtener_interfaz_personas = obtener_interfaz_personas;
