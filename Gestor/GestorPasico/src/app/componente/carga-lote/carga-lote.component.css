@@ -602,7 +602,7 @@ input[type="radio"] {
 
 input[type="radio"]:hover {
   border-color: #4b5563;
-  background-color: #6b7280;
+  background-color: #f9fafb;
   box-shadow: none;
   transform: scale(1.1);
 }
@@ -615,7 +615,7 @@ input[type="radio"]:focus {
 }
 
 input[type="radio"]:checked {
-  background-color: white;
+  background-color: #4b5563;
   border-color: #4b5563;
   box-shadow: none;
 }
@@ -739,7 +739,7 @@ input[type="radio"]:disabled:checked::before {
 }
 
 .conflicto-item input[type="radio"] {
-  background-color: #f59e0b;
+  background-color: #ffffff;
   border-color: #f59e0b;
   box-shadow: none;
 }
@@ -747,7 +747,7 @@ input[type="radio"]:disabled:checked::before {
 .conflicto-item select:hover,
 .conflicto-item input[type="radio"]:hover {
   border-color: #f59e0b;
-  background-color: #fb923c;
+  background-color: #fef3c7;
   box-shadow: none;
 }
 
@@ -886,5 +886,15 @@ input[type="radio"]:disabled:checked::before {
   /* Optimizar gradientes para mejor legibilidad */
   .header {
     background: linear-gradient(135deg, var(--color-primary-dark) 0%, #1e40af 100%);
+  }
+
+  /* Conflicto radio buttons - estado desactivado en tema oscuro */
+  .conflicto-item input[type="radio"] {
+    background-color: var(--color-background);
+    border-color: #f59e0b;
+  }
+  
+  .conflicto-item input[type="radio"]:hover {
+    background-color: rgba(245, 158, 11, 0.1);
   }
 }
