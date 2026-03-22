@@ -200,7 +200,7 @@ const routes: Routes = [
     component: CargaDatosComponent,
   },
   {
-    path: 'carga_lote',
+    path: 'carga_lote/:lote',
     component: CargaLoteComponent,
   },
 ];
