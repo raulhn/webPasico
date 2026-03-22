@@ -590,42 +590,48 @@ input[type="radio"] {
   appearance: none;
   width: 24px;
   height: 24px;
-  border: 3px solid var(--color-border-dark);
+  border: 3px solid #4b5563; /* Color oscuro fijo para mejor contraste */
   border-radius: 50%;
   margin-right: 0.75rem;
   position: relative;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  background-color: var(--color-card);
-  box-shadow: var(--shadow-md), inset 0 0 0 2px var(--color-card);
-  /* Añadir un anillo interno para mejor definición */
+  background-color: #ffffff; /* Fondo blanco fijo */
+  box-shadow: 
+    0 2px 4px rgba(0, 0, 0, 0.1),
+    inset 0 0 0 2px #ffffff,
+    0 0 0 1px rgba(75, 85, 99, 0.3);
 }
 
 input[type="radio"]:hover {
-  border-color: var(--color-primary);
+  border-color: #3b82f6;
+  background-color: #f8fafc;
   box-shadow: 
-    0 4px 12px rgba(96, 165, 250, 0.25),
-    inset 0 0 0 2px var(--color-card),
-    0 0 0 2px var(--color-primary);
+    0 4px 12px rgba(59, 130, 246, 0.25),
+    inset 0 0 0 2px #ffffff,
+    0 0 0 2px #3b82f6;
   transform: scale(1.1);
 }
 
 input[type="radio"]:focus {
   outline: none;
-  border-color: var(--color-primary);
+  border-color: #3b82f6;
+  background-color: #ffffff;
   box-shadow: 
-    0 0 0 4px rgba(96, 165, 250, 0.2),
-    inset 0 0 0 2px var(--color-card),
-    0 2px 8px rgba(96, 165, 250, 0.3);
+    0 0 0 4px rgba(59, 130, 246, 0.2),
+    inset 0 0 0 2px #ffffff,
+    0 2px 8px rgba(59, 130, 246, 0.3),
+    0 0 0 1px #3b82f6;
 }
 
 input[type="radio"]:checked {
-  background-color: var(--color-primary);
-  border-color: var(--color-primary);
+  background-color: #3b82f6;
+  border-color: #1d4ed8;
   box-shadow: 
-    0 4px 16px rgba(96, 165, 250, 0.4),
-    inset 0 0 0 2px var(--color-primary),
-    0 0 0 2px rgba(96, 165, 250, 0.3);
+    0 4px 16px rgba(59, 130, 246, 0.4),
+    inset 0 0 0 2px #3b82f6,
+    0 0 0 2px rgba(59, 130, 246, 0.3),
+    0 0 0 1px #1d4ed8;
 }
 
 input[type="radio"]:checked::before {
@@ -636,10 +642,10 @@ input[type="radio"]:checked::before {
   transform: translate(-50%, -50%);
   width: 10px;
   height: 10px;
-  background-color: var(--color-text-inverse);
+  background-color: #ffffff;
   border-radius: 50%;
   animation: radioCheck 0.25s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 input[type="radio"]:disabled {
@@ -769,20 +775,22 @@ input[type="radio"]:disabled:checked::before {
 
 .conflicto-item select:hover,
 .conflicto-item input[type="radio"]:hover {
-  border-color: var(--color-warning);
+  border-color: #f59e0b;
+  background-color: #fef3c7;
   box-shadow: 
     0 4px 12px rgba(245, 158, 11, 0.25),
-    inset 0 0 0 2px var(--color-card),
-    0 0 0 2px var(--color-warning);
+    inset 0 0 0 2px #ffffff,
+    0 0 0 2px #f59e0b;
 }
 
 .conflicto-item input[type="radio"]:checked {
-  background-color: var(--color-warning);
-  border-color: var(--color-warning);
+  background-color: #f59e0b;
+  border-color: #d97706;
   box-shadow: 
     0 4px 16px rgba(245, 158, 11, 0.4),
-    inset 0 0 0 2px var(--color-warning),
-    0 0 0 2px rgba(245, 158, 11, 0.3);
+    inset 0 0 0 2px #f59e0b,
+    0 0 0 2px rgba(245, 158, 11, 0.3),
+    0 0 0 1px #d97706;
   animation: radioGlow 2s ease-in-out infinite;
 }
 
@@ -824,15 +832,31 @@ input[type="radio"]:disabled:checked::before {
   
   /* Radio buttons con mayor contraste en tema oscuro */
   input[type="radio"] {
-    border-color: var(--color-border-light);
-    box-shadow: var(--shadow-md), inset 0 0 0 2px var(--color-surface);
+    border-color: #cbd5e1;
+    background-color: #1e293b;
+    box-shadow: 
+      0 2px 4px rgba(0, 0, 0, 0.3),
+      inset 0 0 0 2px #1e293b,
+      0 0 0 1px rgba(203, 213, 225, 0.5);
+  }
+  
+  input[type="radio"]:hover {
+    border-color: #60a5fa;
+    background-color: #334155;
+    box-shadow: 
+      0 4px 12px rgba(96, 165, 250, 0.4),
+      inset 0 0 0 2px #1e293b,
+      0 0 0 2px #60a5fa;
   }
   
   input[type="radio"]:checked {
+    background-color: #60a5fa;
+    border-color: #3b82f6;
     box-shadow: 
       0 6px 20px rgba(96, 165, 250, 0.5),
-      inset 0 0 0 2px var(--color-primary),
-      0 0 0 3px rgba(96, 165, 250, 0.4);
+      inset 0 0 0 2px #60a5fa,
+      0 0 0 3px rgba(96, 165, 250, 0.4),
+      0 0 0 1px #3b82f6;
   }
   
   input[type="radio"]:focus {
