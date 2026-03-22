@@ -2,12 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { InterfazPersonaService } from 'src/app/servicios/interfaz-persona.service';
 import { CommonModule } from '@angular/common';
+import { MenuComponent } from '../menu/menu.component';
 
 @Component({
   selector: 'app-carga-lote',
-  imports: [CommonModule],
   templateUrl: './carga-lote.component.html',
   styleUrl: './carga-lote.component.css',
+  standalone: false,
 })
 export class CargaLoteComponent implements OnInit {
   lote: string = '';

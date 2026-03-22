@@ -6,14 +6,17 @@ import { AppRoutingModule } from './app-routing.module';
 import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './componente/login/login.component';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 import { HomeComponent } from './home/home.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { UsuarioComponent } from './componente/usuario/usuario.component';
 import { MenuComponent } from './componente/menu/menu.component';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { UsuariosComponent } from './componente/usuarios/usuarios.component';
 import { ListaPersonasComponent } from './componente/lista-personas/lista-personas.component';
@@ -70,74 +73,83 @@ import { RemesasComponent } from './componente/remesas/remesas.component';
 import { ListaTipoMusicoComponent } from './componente/lista-tipo-musico/lista-tipo-musico.component';
 import { ListaInstrumentosComponent } from './componente/lista-instrumentos/lista-instrumentos.component';
 
-@NgModule({ declarations: [
-        AppComponent,
-        LoginComponent,
-        HomeComponent,
-        UsuarioComponent,
-        MenuComponent,
-        UsuariosComponent,
-        ListaPersonasComponent,
-        FichaPersonaComponent,
-        RegistroPersonaComponent,
-        PersonaComponent,
-        PadresPersonaComponent,
-        MadresPersonaComponent,
-        RegistroSocioComponent,
-        SocioComponent,
-        ListaSociosComponent,
-        AsignaturasComponent,
-        RegistroMatriculaComponent,
-        RegistroCursoComponent,
-        MatriculasAlumnoComponent,
-        FichaMatriculaComponent,
-        FichaProfesorComponent,
-        CursosProfesorComponent,
-        ListadoPreinscripcionesComponent,
-        FormaPagoComponent,
-        FichaAsignaturaComponent,
-        DireccionComponent,
-        RemesasComponent,
-        DetalleRemesaComponent,
-        ParametrosComponent,
-        HijosPersonaComponent,
-        HorarioComponent,
-        HorariosProfesorComponent,
-        HorarioClaseComponent,
-        HorarioMatriculaComponent,
-        RegistroMusicoComponent,
-        BandaTitularComponent,
-        RegistrarAsistenciaComponent,
-        EvaluacionComponent,
-        CreaFichaAsistenciaComponent,
-        ListaFichasAsistenciasComponent,
-        FichaAsistenciaComponent,
-        FichaInventarioComponent,
-        CrearFichaInventarioComponent,
-        ListaInventariosComponent,
-        ListaFormaPagosComponent,
-        FichaFormaPagoComponent,
-        EvaluacionProfesorComponent,
-        RegistrarPrestamoComponent,
-        FichaPrestamoComponent,
-        ListaPrestamosComponent,
-        ListaAlumnosComponent,
-        FichaMatriculaProfesorComponent,
-        ListaTipoMusicoComponent,
-        ListaInstrumentosComponent
-    ],
-    exports: [MenuComponent],
-    bootstrap: [AppComponent], imports: [FormsModule,
-        BrowserModule,
-        DataTablesModule,
-        AppRoutingModule,
-        BrowserAnimationsModule,
-        TooltipModule,
-        FontAwesomeModule,
-        RouterModule,
-        NgbModule,
-        NgSelectModule,
-        FontAwesomeModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
-export class AppModule { 
+import { CargaDatosComponent } from './componente/carga-datos/carga-datos.component';
+import { CargaLoteComponent } from './componente/carga-lote/carga-lote.component';
 
-}
+@NgModule({
+  declarations: [
+    AppComponent,
+    LoginComponent,
+    HomeComponent,
+    UsuarioComponent,
+    MenuComponent,
+    UsuariosComponent,
+    ListaPersonasComponent,
+    FichaPersonaComponent,
+    RegistroPersonaComponent,
+    PersonaComponent,
+    PadresPersonaComponent,
+    MadresPersonaComponent,
+    RegistroSocioComponent,
+    SocioComponent,
+    ListaSociosComponent,
+    AsignaturasComponent,
+    RegistroMatriculaComponent,
+    RegistroCursoComponent,
+    MatriculasAlumnoComponent,
+    FichaMatriculaComponent,
+    FichaProfesorComponent,
+    CursosProfesorComponent,
+    ListadoPreinscripcionesComponent,
+    FormaPagoComponent,
+    FichaAsignaturaComponent,
+    DireccionComponent,
+    RemesasComponent,
+    DetalleRemesaComponent,
+    ParametrosComponent,
+    HijosPersonaComponent,
+    HorarioComponent,
+    HorariosProfesorComponent,
+    HorarioClaseComponent,
+    HorarioMatriculaComponent,
+    RegistroMusicoComponent,
+    BandaTitularComponent,
+    RegistrarAsistenciaComponent,
+    EvaluacionComponent,
+    CreaFichaAsistenciaComponent,
+    ListaFichasAsistenciasComponent,
+    FichaAsistenciaComponent,
+    FichaInventarioComponent,
+    CrearFichaInventarioComponent,
+    ListaInventariosComponent,
+    ListaFormaPagosComponent,
+    FichaFormaPagoComponent,
+    EvaluacionProfesorComponent,
+    RegistrarPrestamoComponent,
+    FichaPrestamoComponent,
+    ListaPrestamosComponent,
+    ListaAlumnosComponent,
+    FichaMatriculaProfesorComponent,
+    ListaTipoMusicoComponent,
+    ListaInstrumentosComponent,
+    CargaDatosComponent,
+    CargaLoteComponent,
+  ],
+  exports: [MenuComponent],
+  bootstrap: [AppComponent],
+  imports: [
+    FormsModule,
+    BrowserModule,
+    DataTablesModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    TooltipModule,
+    FontAwesomeModule,
+    RouterModule,
+    NgbModule,
+    NgSelectModule,
+    FontAwesomeModule,
+  ],
+  providers: [provideHttpClient(withInterceptorsFromDi())],
+})
+export class AppModule {}
