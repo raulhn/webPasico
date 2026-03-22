@@ -53,9 +53,7 @@
             </span>
             <div
               class="radio-container"
-              [ngClass]="{
-                desactivado: conflicto_persona.nid_persona === null
-              }"
+              *ngIf="conflicto_persona.nid_persona !== null"
             >
               <input
                 type="radio"
@@ -71,9 +69,16 @@
                   )
                 "
               />
-              <label 
-                [for]="'radio-' + interfaz_persona_conflicto.interfaz_persona.nid_interfaz_persona + '-' + conflicto_persona.nid_persona"
-                class="radio-label">
+              <label
+                [for]="
+                  'radio-' +
+                  interfaz_persona_conflicto.interfaz_persona
+                    .nid_interfaz_persona +
+                  '-' +
+                  conflicto_persona.nid_persona
+                "
+                class="radio-label"
+              >
                 Seleccionar esta persona
               </label>
             </div>
