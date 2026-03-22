@@ -27,11 +27,13 @@
             {{ interfaz_persona_conflicto.interfaz_persona.primer_apellido }}
             {{ interfaz_persona_conflicto.interfaz_persona.segundo_apellido }}
           </span>
-          <select>
-            <option value="" disabled selected>Seleccionar acción</option>
-            <option value="INSERTAR">Insertar</option>
-            <option value="ACTUALIZAR">Actualizar</option>
-          </select>
+          <div class="select-container">
+            <select title="Seleccionar acción para resolver el conflicto">
+              <option value="" disabled selected>Seleccionar acción</option>
+              <option value="INSERTAR">🆕 Insertar nueva persona</option>
+              <option value="ACTUALIZAR">🔄 Actualizar existente</option>
+            </select>
+          </div>
         </div>
       </summary>
 
@@ -50,8 +52,9 @@
               {{ conflicto_persona.segundo_apellido }}
             </span>
             <div
+              class="radio-container"
               [ngClass]="{
-                "desactivado": conflicto_persona.nid_persona === null,
+                desactivado: conflicto_persona.nid_persona === null
               }"
             >
               <input
@@ -60,6 +63,7 @@
                   interfaz_persona_conflicto.interfaz_persona
                     .nid_interfaz_persona
                 "
+                [id]="'radio-' + interfaz_persona_conflicto.interfaz_persona.nid_interfaz_persona + '-' + conflicto_persona.nid_persona"
                 (change)="
                   actualizarSeleccion(
                     interfaz_persona_conflicto.interfaz_persona,
@@ -67,6 +71,11 @@
                   )
                 "
               />
+              <label 
+                [for]="'radio-' + interfaz_persona_conflicto.interfaz_persona.nid_interfaz_persona + '-' + conflicto_persona.nid_persona"
+                class="radio-label">
+                Seleccionar esta persona
+              </label>
             </div>
             <div
               [ngClass]="{

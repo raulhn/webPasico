@@ -379,6 +379,236 @@ details[open] .card-summary {
   border-bottom: 1px solid var(--color-border);
 }
 
-.desactivado: {
+.desactivado {
   display: none;
+}
+
+/* Estilos mejorados para Select */
+select {
+  appearance: none;
+  background-color: var(--color-card);
+  border: 2px solid var(--color-border);
+  border-radius: 10px;
+  padding: 0.75rem 2.5rem 0.75rem 1rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  min-width: 200px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.75rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em;
+  box-shadow: var(--shadow-sm);
+}
+
+select:hover {
+  border-color: var(--color-primary);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+  transform: translateY(-1px);
+}
+
+select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  transform: translateY(-1px);
+}
+
+select:disabled {
+  background-color: #f9fafb;
+  border-color: #e5e7eb;
+  color: #9ca3af;
+  cursor: not-allowed;
+  transform: none;
+}
+
+select option {
+  background-color: var(--color-card);
+  color: var(--color-text-primary);
+  padding: 0.5rem;
+  border: none;
+}
+
+select option:hover {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+/* Contenedor para el select */
+.select-container {
+  position: relative;
+  display: inline-block;
+}
+
+.select-container::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  transform: translateY(-50%);
+  pointer-events: none;
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 6px solid var(--color-text-secondary);
+  transition: all 0.3s ease;
+}
+
+.select-container:hover::after {
+  border-top-color: var(--color-primary);
+}
+
+/* Estilos mejorados para Radio Buttons */
+input[type="radio"] {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--color-border);
+  border-radius: 50%;
+  margin-right: 0.75rem;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background-color: var(--color-card);
+  box-shadow: var(--shadow-sm);
+}
+
+input[type="radio"]:hover {
+  border-color: var(--color-primary);
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
+  transform: scale(1.05);
+}
+
+input[type="radio"]:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+input[type="radio"]:checked {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  box-shadow: 0 2px 12px rgba(59, 130, 246, 0.25);
+}
+
+input[type="radio"]:checked::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  background-color: white;
+  border-radius: 50%;
+  animation: radioCheck 0.2s ease-out;
+}
+
+input[type="radio"]:disabled {
+  background-color: #f9fafb;
+  border-color: #e5e7eb;
+  cursor: not-allowed;
+  transform: none;
+}
+
+input[type="radio"]:disabled:checked {
+  background-color: #9ca3af;
+  border-color: #9ca3af;
+}
+
+/* Contenedor para los radio buttons */
+.radio-container {
+  display: flex;
+  align-items: center;
+  margin: 0.5rem 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0.5rem;
+  border-radius: 8px;
+}
+
+.radio-container:hover {
+  background-color: rgba(59, 130, 246, 0.05);
+}
+
+.radio-container label {
+  cursor: pointer;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  user-select: none;
+  flex: 1;
+  margin: 0;
+}
+
+/* Grupo de radio buttons */
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin: 1rem 0;
+}
+
+.radio-group .radio-container {
+  margin: 0;
+}
+
+/* Animaciones */
+@keyframes radioCheck {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Estilos específicos para el contexto del componente */
+.persona-conflicto input[type="radio"] {
+  margin-right: 1rem;
+  margin-left: 0.5rem;
+}
+
+.persona-info select {
+  margin-left: auto;
+  min-width: 180px;
+}
+
+/* Estados adicionales para select y radio en conflictos */
+.conflicto-item select:focus,
+.conflicto-item input[type="radio"]:focus {
+  border-color: var(--color-warning);
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+}
+
+.conflicto-item select:hover,
+.conflicto-item input[type="radio"]:hover {
+  border-color: var(--color-warning);
+}
+
+/* Responsive para elementos de formulario */
+@media (max-width: 768px) {
+  select {
+    min-width: 150px;
+    font-size: 0.9rem;
+    padding: 0.625rem 2rem 0.625rem 0.875rem;
+  }
+  
+  input[type="radio"] {
+    width: 18px;
+    height: 18px;
+  }
+  
+  input[type="radio"]:checked::before {
+    width: 6px;
+    height: 6px;
+  }
 }
