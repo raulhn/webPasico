@@ -47,7 +47,11 @@
               <option value="" disabled selected>Seleccionar acción</option>
               <option value="INSERTAR">Insertar</option>
               <option
-                *ngIf="existe_conflicto_sin_seleccion(interfaz_persona_conflicto.conflicto.conflictos_persona)</option>"
+                *ngIf="
+                  existe_conflicto_sin_seleccion(
+                    interfaz_persona_conflicto.conflicto.conflictos_persona
+                  )
+                "
                 value="ACTUALIZAR"
               >
                 Actualizar
