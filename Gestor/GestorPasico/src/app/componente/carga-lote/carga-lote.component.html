@@ -5,10 +5,15 @@
   </header>
 
   <!-- Sección de Conflictos -->
-  <section class="data-section conflicts-section" *ngIf="interfaz_personas_conflicto.length > 0">
+  <section
+    class="data-section conflicts-section"
+    *ngIf="interfaz_personas_conflicto.length > 0"
+  >
     <div class="section-header warning-header">
       <h3 class="section-title">⚠️ Conflictos Encontrados</h3>
-      <span class="count-badge warning-badge">{{ interfaz_personas_conflicto.length }}</span>
+      <span class="count-badge warning-badge">{{
+        interfaz_personas_conflicto.length
+      }}</span>
     </div>
 
     <details
@@ -17,19 +22,32 @@
     >
       <summary class="card-summary">
         <div class="operation-tag conflict-tag">
-          {{ interfaz_persona_conflicto.interfaz_persona.operacion }}
+          {{ interfaz_persona_conflicto.conflicto.interfaz_persona.operacion }}
         </div>
         <div class="person-info">
           <span class="person-name">
-            {{ interfaz_persona_conflicto.interfaz_persona.nombre }}
-            {{ interfaz_persona_conflicto.interfaz_persona.primer_apellido }}
-            {{ interfaz_persona_conflicto.interfaz_persona.segundo_apellido }}
+            {{ interfaz_persona_conflicto.conflicto.interfaz_persona.nombre }}
+            {{
+              interfaz_persona_conflicto.conflicto.interfaz_persona
+                .primer_apellido
+            }}
+            {{
+              interfaz_persona_conflicto.conflicto.interfaz_persona
+                .segundo_apellido
+            }}
           </span>
           <div class="select-wrapper">
-            <select class="action-select" title="Seleccionar acción para resolver el conflicto">
+            <select
+              class="action-select"
+              [(ngModel)]="
+                interfaz_persona_conflicto.conflicto.accion_seleccionada
+              "
+              title="Seleccionar acción para resolver el conflicto"
+            >
               <option value="" disabled selected>Seleccionar acción</option>
-              <option value="INSERTAR">🆕 Insertar nueva persona</option>
-              <option value="ACTUALIZAR">🔄 Actualizar existente</option>
+              <option value="INSERTAR">Insertar</option>
+              <option value="ACTUALIZAR">Actualizar</option>
+              <option value="SIN_CAMBIOS">Sin cambios</option>
             </select>
           </div>
         </div>
@@ -49,10 +67,17 @@
               {{ conflicto_persona.primer_apellido }}
               {{ conflicto_persona.segundo_apellido }}
             </span>
-            <div class="radio-group" *ngIf="conflicto_persona.nid_persona !== null">
+            <div
+              class="radio-group"
+              *ngIf="conflicto_persona.nid_persona !== null"
+            >
               <input
                 class="radio-input"
                 type="radio"
+                [disabled]="
+                  interfaz_persona_conflicto.conflicto.accion_seleccionada !==
+                  'ACTUALIZAR'
+                "
                 [name]="
                   interfaz_persona_conflicto.interfaz_persona
                     .nid_interfaz_persona
@@ -87,7 +112,7 @@
             <div
               class="pending-insert"
               [ngClass]="{
-                'hidden': conflicto_persona.nid_persona !== null,
+                hidden: conflicto_persona.nid_persona !== null,
               }"
             >
               <span>Persona pendiente de insertar</span>
@@ -99,10 +124,15 @@
   </section>
 
   <!-- Sección de Nuevas Inserciones -->
-  <section class="data-section insert-section" *ngIf="interfaz_personas_insertar.length > 0">
+  <section
+    class="data-section insert-section"
+    *ngIf="interfaz_personas_insertar.length > 0"
+  >
     <div class="section-header success-header">
       <h3 class="section-title">➕ Nuevas Personas</h3>
-      <span class="count-badge success-badge">{{ interfaz_personas_insertar.length }}</span>
+      <span class="count-badge success-badge">{{
+        interfaz_personas_insertar.length
+      }}</span>
     </div>
 
     <div
@@ -125,10 +155,15 @@
   </section>
 
   <!-- Sección de Actualizaciones -->
-  <section class="data-section update-section" *ngIf="interfaz_personas_actualizar.length > 0">
+  <section
+    class="data-section update-section"
+    *ngIf="interfaz_personas_actualizar.length > 0"
+  >
     <div class="section-header info-header">
       <h3 class="section-title">🔄 Actualizaciones</h3>
-      <span class="count-badge info-badge">{{ interfaz_personas_actualizar.length }}</span>
+      <span class="count-badge info-badge">{{
+        interfaz_personas_actualizar.length
+      }}</span>
     </div>
 
     <details
@@ -169,10 +204,15 @@
   </section>
 
   <!-- Sección de Sin Cambios -->
-  <section class="data-section no-changes-section" *ngIf="interfaz_personas_sin_cambios.length > 0">
+  <section
+    class="data-section no-changes-section"
+    *ngIf="interfaz_personas_sin_cambios.length > 0"
+  >
     <div class="section-header neutral-header">
       <h3 class="section-title">✅ Sin Cambios</h3>
-      <span class="count-badge neutral-badge">{{ interfaz_personas_sin_cambios.length }}</span>
+      <span class="count-badge neutral-badge">{{
+        interfaz_personas_sin_cambios.length
+      }}</span>
     </div>
 
     <div
@@ -198,6 +238,8 @@
   <div class="empty-state" *ngIf="interfaz_personas.length === 0">
     <div class="empty-icon">📄</div>
     <h3 class="empty-title">No hay datos para procesar</h3>
-    <p class="empty-message">No se encontraron registros en el lote seleccionado.</p>
+    <p class="empty-message">
+      No se encontraron registros en el lote seleccionado.
+    </p>
   </div>
 </div>

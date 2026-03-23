@@ -47,10 +47,19 @@ export class CargaLoteComponent implements OnInit {
           persona.interfaz_persona.operacion === this.operaciones.ACTUALIZAR,
       );
 
-      this.interfaz_personas_conflicto = this.interfaz_personas.filter(
+      let lista_conflictos = this.interfaz_personas.filter(
         (persona) =>
           persona.interfaz_persona.operacion === this.operaciones.CONFLICTO,
       );
+
+      this.interfaz_personas_conflicto = lista_conflictos.map((conflicto) => {
+        return {
+          conflicto: conflicto,
+          accion_seleccionada: '',
+          nid_persona: null,
+        };
+      });
+
       this.interfaz_personas_sin_cambios = this.interfaz_personas.filter(
         (persona) =>
           persona.interfaz_persona.operacion === this.operaciones.SIN_CAMBIOS,
