@@ -633,3 +633,25 @@
     gap: 2px;
   }
 }
+
+/* Aplica estilos al label cuando el radio está desactivado */
+.radio-input:disabled + .radio-label {
+  opacity: 0.55;
+  cursor: not-allowed;
+  filter: grayscale(60%);
+}
+
+/* Si tienes un radio personalizado con ::before o ::after: */
+.radio-input:disabled + .radio-label::before {
+  border-color: #cccccc;
+  background: #f2f2f2;
+}
+
+.radio-input:disabled + .radio-label::after {
+  background: #cccccc;
+}
+
+/* Opcional: texto del label en gris */
+.radio-input:disabled + .radio-label {
+  color: #999;
+}
