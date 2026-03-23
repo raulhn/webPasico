@@ -80,19 +80,19 @@
                   'ACTUALIZAR'
                 "
                 [name]="
-                  interfaz_persona_conflicto.interfaz_persona
+                  interfaz_persona_conflicto.conflicto.interfaz_persona
                     .nid_interfaz_persona
                 "
                 [id]="
                   'radio-' +
-                  interfaz_persona_conflicto.interfaz_persona
+                  interfaz_persona_conflicto.conflicto.interfaz_persona
                     .nid_interfaz_persona +
                   '-' +
                   conflicto_persona.nid_persona
                 "
                 (change)="
                   actualizarSeleccion(
-                    interfaz_persona_conflicto.interfaz_persona,
+                    interfaz_persona_conflicto.conflicto.interfaz_persona,
                     conflicto_persona
                   )
                 "
@@ -101,7 +101,7 @@
                 class="radio-label"
                 [for]="
                   'radio-' +
-                  interfaz_persona_conflicto.interfaz_persona
+                  interfaz_persona_conflicto.conflicto.interfaz_persona
                     .nid_interfaz_persona +
                   '-' +
                   conflicto_persona.nid_persona
