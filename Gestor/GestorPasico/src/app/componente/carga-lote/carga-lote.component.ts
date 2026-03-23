@@ -33,6 +33,10 @@ export class CargaLoteComponent implements OnInit {
     this.lote = ruta.snapshot.params['lote'];
   }
 
+  existe_conflicto_sin_seleccion = (conflictos: any[]) => {
+    return conflictos.some((conflicto) => conflicto.nid_persona !== null);
+  };
+
   peticion_obtener_interfaz_personas = {
     next: (respuesta: any) => {
       this.interfaz_personas = respuesta.interfaz_personas;
