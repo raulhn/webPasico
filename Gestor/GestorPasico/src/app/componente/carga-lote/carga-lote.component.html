@@ -1,33 +1,30 @@
 <app-menu class=""></app-menu>
-<div class="contenedor-principal">
-  <header class="header">
-    <p class="subtitulo">Revisión y procesamiento de datos</p>
+<div>
+  <header>
+    <p>Revisión y procesamiento de datos</p>
   </header>
 
   <!-- Sección de Conflictos -->
-  <section class="seccion" *ngIf="interfaz_personas_conflicto.length > 0">
-    <div class="seccion-header conflicto-header">
-      <h3 class="seccion-titulo">⚠️ Conflictos Encontrados</h3>
-      <span class="badge badge-warning">{{
-        interfaz_personas_conflicto.length
-      }}</span>
+  <section *ngIf="interfaz_personas_conflicto.length > 0">
+    <div>
+      <h3>⚠️ Conflictos Encontrados</h3>
+      <span>{{ interfaz_personas_conflicto.length }}</span>
     </div>
 
     <details
-      class="card card-conflicto"
       *ngFor="let interfaz_persona_conflicto of interfaz_personas_conflicto"
     >
-      <summary class="card-summary">
-        <div class="operacion-badge badge-conflicto">
+      <summary>
+        <div>
           {{ interfaz_persona_conflicto.interfaz_persona.operacion }}
         </div>
-        <div class="persona-info">
-          <span class="nombre-completo">
+        <div>
+          <span>
             {{ interfaz_persona_conflicto.interfaz_persona.nombre }}
             {{ interfaz_persona_conflicto.interfaz_persona.primer_apellido }}
             {{ interfaz_persona_conflicto.interfaz_persona.segundo_apellido }}
           </span>
-          <div class="select-container">
+          <div>
             <select title="Seleccionar acción para resolver el conflicto">
               <option value="" disabled selected>Seleccionar acción</option>
               <option value="INSERTAR">🆕 Insertar nueva persona</option>
@@ -37,31 +34,33 @@
         </div>
       </summary>
 
-      <div class="conflictos-lista">
+      <div>
         <div
-          class="conflicto-item"
           *ngFor="
             let conflicto_persona of interfaz_persona_conflicto.conflictos_persona
           "
         >
-          <div class="persona-conflicto">
-            <span class="etiqueta">Coincidencia encontrada:</span>
-            <span class="nombre-completo">
+          <div>
+            <span>Coincidencia encontrada:</span>
+            <span>
               {{ conflicto_persona.nombre }}
               {{ conflicto_persona.primer_apellido }}
               {{ conflicto_persona.segundo_apellido }}
             </span>
-            <div
-              class="radio-container"
-              *ngIf="conflicto_persona.nid_persona !== null"
-            >
+            <div *ngIf="conflicto_persona.nid_persona !== null">
               <input
                 type="radio"
                 [name]="
                   interfaz_persona_conflicto.interfaz_persona
                     .nid_interfaz_persona
                 "
-                [id]="'radio-' + interfaz_persona_conflicto.interfaz_persona.nid_interfaz_persona + '-' + conflicto_persona.nid_persona"
+                [id]="
+                  'radio-' +
+                  interfaz_persona_conflicto.interfaz_persona
+                    .nid_interfaz_persona +
+                  '-' +
+                  conflicto_persona.nid_persona
+                "
                 (change)="
                   actualizarSeleccion(
                     interfaz_persona_conflicto.interfaz_persona,
@@ -77,7 +76,6 @@
                   '-' +
                   conflicto_persona.nid_persona
                 "
-                class="radio-label"
               >
                 Seleccionar esta persona
               </label>
@@ -96,24 +94,19 @@
   </section>
 
   <!-- Sección de Nuevas Inserciones -->
-  <section class="seccion" *ngIf="interfaz_personas_insertar.length > 0">
-    <div class="seccion-header insertar-header">
-      <h3 class="seccion-titulo">➕ Nuevas Personas</h3>
-      <span class="badge badge-success">{{
-        interfaz_personas_insertar.length
-      }}</span>
+  <section *ngIf="interfaz_personas_insertar.length > 0">
+    <div>
+      <h3>➕ Nuevas Personas</h3>
+      <span>{{ interfaz_personas_insertar.length }}</span>
     </div>
 
-    <div
-      class="card card-insertar"
-      *ngFor="let interfaz_persona_insertar of interfaz_personas_insertar"
-    >
-      <div class="card-content">
-        <div class="operacion-badge badge-insertar">
+    <div *ngFor="let interfaz_persona_insertar of interfaz_personas_insertar">
+      <div>
+        <div>
           {{ interfaz_persona_insertar.interfaz_persona.operacion }}
         </div>
-        <div class="persona-info">
-          <span class="nombre-completo">
+        <div>
+          <span>
             {{ interfaz_persona_insertar.interfaz_persona.nombre }}
             {{ interfaz_persona_insertar.interfaz_persona.primer_apellido }}
             {{ interfaz_persona_insertar.interfaz_persona.segundo_apellido }}
@@ -124,24 +117,21 @@
   </section>
 
   <!-- Sección de Actualizaciones -->
-  <section class="seccion" *ngIf="interfaz_personas_actualizar.length > 0">
-    <div class="seccion-header actualizar-header">
-      <h3 class="seccion-titulo">🔄 Actualizaciones</h3>
-      <span class="badge badge-info">{{
-        interfaz_personas_actualizar.length
-      }}</span>
+  <section *ngIf="interfaz_personas_actualizar.length > 0">
+    <div>
+      <h3>🔄 Actualizaciones</h3>
+      <span>{{ interfaz_personas_actualizar.length }}</span>
     </div>
 
     <details
-      class="card card-actualizar"
       *ngFor="let interfaz_persona_actualizar of interfaz_personas_actualizar"
     >
-      <summary class="card-summary">
-        <div class="operacion-badge badge-actualizar">
+      <summary>
+        <div>
           {{ interfaz_persona_actualizar.interfaz_persona.operacion }}
         </div>
-        <div class="persona-info">
-          <span class="nombre-completo">
+        <div>
+          <span>
             {{ interfaz_persona_actualizar.interfaz_persona.nombre }}
             {{ interfaz_persona_actualizar.interfaz_persona.primer_apellido }}
             {{ interfaz_persona_actualizar.interfaz_persona.segundo_apellido }}
@@ -149,16 +139,15 @@
         </div>
       </summary>
 
-      <div class="actualizaciones-lista">
+      <div>
         <div
-          class="actualizacion-item"
           *ngFor="
             let conflicto_persona of interfaz_persona_actualizar.conflictos_persona
           "
         >
-          <div class="persona-actualizacion">
-            <span class="etiqueta">Coincidencia encontrada:</span>
-            <span class="nombre-completo">
+          <div>
+            <span>Coincidencia encontrada:</span>
+            <span>
               {{ conflicto_persona.nombre }}
               {{ conflicto_persona.primer_apellido }}
               {{ conflicto_persona.segundo_apellido }}
@@ -170,24 +159,21 @@
   </section>
 
   <!-- Sección de Sin Cambios -->
-  <section class="seccion" *ngIf="interfaz_personas_sin_cambios.length > 0">
-    <div class="seccion-header sin-cambios-header">
-      <h3 class="seccion-titulo">✅ Sin Cambios</h3>
-      <span class="badge badge-neutral">{{
-        interfaz_personas_sin_cambios.length
-      }}</span>
+  <section *ngIf="interfaz_personas_sin_cambios.length > 0">
+    <div>
+      <h3>✅ Sin Cambios</h3>
+      <span>{{ interfaz_personas_sin_cambios.length }}</span>
     </div>
 
     <div
-      class="card card-sin-cambios"
       *ngFor="let interfaz_persona_sin_cambios of interfaz_personas_sin_cambios"
     >
-      <div class="card-content">
-        <div class="operacion-badge badge-sin-cambios">
+      <div>
+        <div>
           {{ interfaz_persona_sin_cambios.interfaz_persona.operacion }}
         </div>
-        <div class="persona-info">
-          <span class="nombre-completo">
+        <div>
+          <span>
             {{ interfaz_persona_sin_cambios.interfaz_persona.nombre }}
             {{ interfaz_persona_sin_cambios.interfaz_persona.primer_apellido }}
             {{ interfaz_persona_sin_cambios.interfaz_persona.segundo_apellido }}
@@ -198,8 +184,8 @@
   </section>
 
   <!-- Mensaje cuando no hay datos -->
-  <div class="mensaje-vacio" *ngIf="interfaz_personas.length === 0">
-    <div class="icono-vacio">📄</div>
+  <div *ngIf="interfaz_personas.length === 0">
+    <div>📄</div>
     <h3>No hay datos para procesar</h3>
     <p>No se encontraron registros en el lote seleccionado.</p>
   </div>
