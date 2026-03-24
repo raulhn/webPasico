@@ -508,6 +508,11 @@ app.post(
   servlet_interfaz_persona.actualizar_operacion,
 );
 
+app.post(
+  "/actualizar_operaciones_conflicto",
+  servlet_interfaz_persona.actualizar_operaciones,
+);
+
 https
   .createServer(
     {

@@ -62,5 +62,35 @@ function actualizar_operacion(req, res) {
   });
 }
 
+function actualizar_operaciones(req, res) {
+  servlet_comun.comprobaciones(req, res, async () => {
+    try {
+      const { operaciones } = req.body;
+      for (let i = 0; i < operaciones.length; i++) {
+        const { nid_interfaz_persona, operacion, nid_persona } = operaciones[i];
+        await gestor_interfaz_persona.actualizar_operacion_conflicto(
+          nid_interfaz_persona,
+          operacion,
+          nid_persona,
+        );
+      }
+      res.status(200).send({
+        error: false,
+        mensaje: "Operaciones actualizadas correctamente",
+      });
+    } catch (error) {
+      console.log(
+        "servlet_interfaz_persona -> actualizar_operaciones: Se ha producido un error al actualizar las operaciones de los conflictos",
+      );
+      res.status(400).send({
+        error: true,
+        mensaje:
+          "Se ha producido un error al actualizar las operaciones de los conflictos",
+      });
+    }
+  });
+}
+
 module.exports.obtener_interfaz_personas = obtener_interfaz_personas;
 module.exports.actualizar_operacion = actualizar_operacion;
+module.exports.actualizar_operaciones = actualizar_operaciones;

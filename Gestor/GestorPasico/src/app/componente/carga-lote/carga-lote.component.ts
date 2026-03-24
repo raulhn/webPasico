@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { InterfazPersonaService } from 'src/app/servicios/interfaz-persona.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-carga-lote',
@@ -29,8 +30,6 @@ export class CargaLoteComponent implements OnInit {
   interfaz_personas_actualizar: any[] = [];
   interfaz_personas_conflicto: any[] = [];
   interfaz_personas_sin_cambios: any[] = [];
-
-  cambios_actualizacion: any[] = [];
 
   constructor(
     private ruta: ActivatedRoute,
@@ -113,19 +112,53 @@ export class CargaLoteComponent implements OnInit {
     }
   }
 
+  peticion_actualizar_conflictos = {
+    next: (respuesta: any) => {
+      Swal.fire({
+        icon: 'success',
+        title: 'Actualización Exitosa',
+        text: 'Los conflictos han sido actualizados correctamente.',
+      }).then(() => {
+        // Recargar la página o redirigir a otra vista si es necesario
+        window.location.reload();
+      });
+    },
+    error: (error: any) => {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Hubo un error al actualizar los conflictos. Por favor, inténtelo de nuevo.',
+      });
+    },
+  };
+
   lanzar_actualizacion() {
     const cambios_conflictos = this.interfaz_personas_conflicto.map((p) => {
       return {
         nid_interfaz_persona: p.conflicto.interfaz_persona.nid_interfaz_persona,
-        accion_seleccionada: p.accion_seleccionada,
+        operacion: p.accion_seleccionada,
         nid_persona: p.nid_persona,
       };
     });
 
+    const actualizacionSinPersona = cambios_conflictos.some((p) => {
+      (p.operacion === 'ACTUALIZAR' || p.operacion === 'SIN_CAMBIOS') &&
+        p.nid_persona === null;
+    });
+
+    if (actualizacionSinPersona) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Hay conflictos marcados para actualizar sin una persona seleccionada. Por favor, revise los conflictos y seleccione una persona para cada uno de ellos.',
+      });
+      return;
+    }
+
     const cambios_insertar = this.interfaz_personas_insertar.map((p) => {
       return {
         nid_interfaz_persona: p.insertar.interfaz_persona.nid_interfaz_persona,
-        accion_seleccionada: p.accion_seleccionada,
+        operacion: p.accion_seleccionada,
         nid_persona: p.nid_persona,
       };
     });
@@ -134,7 +167,7 @@ export class CargaLoteComponent implements OnInit {
       return {
         nid_interfaz_persona:
           p.actualizar.interfaz_persona.nid_interfaz_persona,
-        accion_seleccionada: p.accion_seleccionada,
+        operacion: p.accion_seleccionada,
         nid_persona: p.nid_persona,
       };
     });
@@ -146,8 +179,12 @@ export class CargaLoteComponent implements OnInit {
     ];
 
     const cambios_filtrados = cambios.filter(
-      (cambio) => cambio.accion_seleccionada !== '',
+      (cambio) => cambio.operacion !== '',
     );
-    console.log(cambios);
+
+    console.log(cambios_filtrados);
+    this.interfazPersonaService
+      .actualizar_conflictos(cambios_filtrados)
+      .subscribe(this.peticion_actualizar_conflictos);
   }
 }

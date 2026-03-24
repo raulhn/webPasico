@@ -14,4 +14,9 @@ export class InterfazPersonaService {
     const API_URL = this.url + '/obtener_interfaz_personas/' + lote;
     return this.http.get(API_URL, { withCredentials: true });
   }
+
+  actualizar_conflictos(operaciones: any[]) {
+    const API_URL = this.url + '/actualizar_operaciones_conflicto';
+    return this.http.post(API_URL, { operaciones }, { withCredentials: true });
+  }
 }
