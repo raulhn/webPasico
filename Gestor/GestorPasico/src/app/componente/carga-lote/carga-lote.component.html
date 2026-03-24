@@ -98,7 +98,7 @@
                   conflicto_persona.nid_persona
                 "
                 (change)="
-                  actualizarSeleccion(
+                  actualizarSeleccionConflicto(
                     interfaz_persona_conflicto.conflicto,
                     conflicto_persona
                   )
@@ -166,7 +166,7 @@
           <div class="select-wrapper">
             <select
               class="action-select"
-              [(ngModel)]="interfaz_persona_conflicto.accion_seleccionada"
+              [(ngModel)]="interfaz_persona_insertar.accion_seleccionada"
               title="Seleccionar acción para resolver el conflicto"
             >
               <option value="INSERTAR" selected>Insertar</option>
@@ -215,7 +215,7 @@
           <div class="select-wrapper">
             <select
               class="action-select"
-              [(ngModel)]="interfaz_persona_conflicto.accion_seleccionada"
+              [(ngModel)]="interfaz_persona_actualizar.accion_seleccionada"
               title="Seleccionar acción para resolver el conflicto"
             >
               <option selected value="ACTUALIZAR">Actualizar</option>
@@ -275,7 +275,7 @@
       </div>
     </div>
   </section>
-  <button (click)="lanzarActualizacion()">Guardar</button>
+  <button (click)="lanzar_actualizacion()">Guardar</button>
   <!-- Mensaje cuando no hay d            <button (click)="lanzarActualizacion()">Guardar</button>atos -->
   <div class="empty-state" *ngIf="interfaz_personas.length === 0">
     <div class="empty-icon">📄</div>
