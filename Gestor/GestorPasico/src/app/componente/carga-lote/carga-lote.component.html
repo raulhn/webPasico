@@ -83,7 +83,7 @@
                 class="radio-input"
                 type="radio"
                 [disabled]="
-                  interfaz_persona_conflicto.conflicto.accion_seleccionada !==
+                  interfaz_persona_conflicto.accion_seleccionada !==
                   'ACTUALIZAR'
                 "
                 [name]="
@@ -99,7 +99,7 @@
                 "
                 (change)="
                   actualizarSeleccionConflicto(
-                    interfaz_persona_conflicto.conflicto,
+                    interfaz_persona_conflicto.conflicto.interfaz_persona,
                     conflicto_persona
                   )
                 "

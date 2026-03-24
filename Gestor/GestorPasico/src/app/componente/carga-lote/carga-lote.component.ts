@@ -107,9 +107,10 @@ export class CargaLoteComponent implements OnInit {
         p.conflicto.interfaz_persona.nid_interfaz_persona ===
         interfaz_persona.nid_interfaz_persona,
     );
+    console.log(persona)
     if (persona) {
       persona.nid_persona =
-        conflicto === 'INSERTAR' ? null : persona.conflicto.nid_persona;
+        persona.accion_seleccionada === 'INSERTAR' ? null : conflicto.nid_persona;
     }
   }
 
