@@ -227,12 +227,13 @@
 
       <div class="update-list">
         <div
-          class="update-item"
-          *ngFor="
-            let conflicto_persona of interfaz_persona_actualizar.conflictos_persona
+                    *ngFor="
+            let conflicto_persona of interfaz_persona_actualizar.actualizar.conflictos_persona
           "
         >
-          <div class="update-content">
+          <div class="update-item"
+ *ngIf="interfaz_persona_actualizar.actualizar.interfaz_persona.nid_persona === null ||
+            interfaz_persona_actualizar.actualizar.interfaz_persona.nid_persona == conflicto_persona.nid_persona" class="update-content">
             <span class="conflict-label">Coincidencia encontrada:</span>
             <span class="person-name">
               {{ conflicto_persona.nombre }}
