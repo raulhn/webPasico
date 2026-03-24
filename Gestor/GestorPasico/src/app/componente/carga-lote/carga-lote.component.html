@@ -39,9 +39,7 @@
           <div class="select-wrapper">
             <select
               class="action-select"
-              [(ngModel)]="
-                interfaz_persona_conflicto.conflicto.accion_seleccionada
-              "
+              [(ngModel)]="interfaz_persona_conflicto.accion_seleccionada"
               title="Seleccionar acción para resolver el conflicto"
             >
               <option value="" disabled selected>Seleccionar acción</option>
@@ -101,7 +99,7 @@
                 "
                 (change)="
                   actualizarSeleccion(
-                    interfaz_persona_conflicto.conflicto.interfaz_persona,
+                    interfaz_persona_conflicto.conflicto,
                     conflicto_persona
                   )
                 "
@@ -151,14 +149,30 @@
     >
       <div class="card-content">
         <div class="operation-tag insert-tag">
-          {{ interfaz_persona_insertar.interfaz_persona.operacion }}
+          {{ interfaz_persona_insertar.insertar.interfaz_persona.operacion }}
         </div>
         <div class="person-info">
           <span class="person-name">
-            {{ interfaz_persona_insertar.interfaz_persona.nombre }}
-            {{ interfaz_persona_insertar.interfaz_persona.primer_apellido }}
-            {{ interfaz_persona_insertar.interfaz_persona.segundo_apellido }}
+            {{ interfaz_persona_insertar.insertar.interfaz_persona.nombre }}
+            {{
+              interfaz_persona_insertar.insertar.interfaz_persona
+                .primer_apellido
+            }}
+            {{
+              interfaz_persona_insertar.insertar.interfaz_persona
+                .segundo_apellido
+            }}
           </span>
+          <div class="select-wrapper">
+            <select
+              class="action-select"
+              [(ngModel)]="interfaz_persona_conflicto.accion_seleccionada"
+              title="Seleccionar acción para resolver el conflicto"
+            >
+              <option value="INSERTAR" selected>Insertar</option>
+              <option value="SIN_CAMBIOS">Sin cambios</option>
+            </select>
+          </div>
         </div>
       </div>
     </div>
@@ -182,14 +196,32 @@
     >
       <summary class="card-summary">
         <div class="operation-tag update-tag">
-          {{ interfaz_persona_actualizar.interfaz_persona.operacion }}
+          {{
+            interfaz_persona_actualizar.actualizar.interfaz_persona.operacion
+          }}
         </div>
         <div class="person-info">
           <span class="person-name">
-            {{ interfaz_persona_actualizar.interfaz_persona.nombre }}
-            {{ interfaz_persona_actualizar.interfaz_persona.primer_apellido }}
-            {{ interfaz_persona_actualizar.interfaz_persona.segundo_apellido }}
+            {{ interfaz_persona_actualizar.actualizar.interfaz_persona.nombre }}
+            {{
+              interfaz_persona_actualizar.actualizar.interfaz_persona
+                .primer_apellido
+            }}
+            {{
+              interfaz_persona_actualizar.actualizar.interfaz_persona
+                .segundo_apellido
+            }}
           </span>
+          <div class="select-wrapper">
+            <select
+              class="action-select"
+              [(ngModel)]="interfaz_persona_conflicto.accion_seleccionada"
+              title="Seleccionar acción para resolver el conflicto"
+            >
+              <option selected value="ACTUALIZAR">Actualizar</option>
+              <option value="SIN_CAMBIOS">Sin cambios</option>
+            </select>
+          </div>
         </div>
       </summary>
 
@@ -243,8 +275,8 @@
       </div>
     </div>
   </section>
-
-  <!-- Mensaje cuando no hay datos -->
+  <button (click)="lanzarActualizacion()">Guardar</button>
+  <!-- Mensaje cuando no hay d            <button (click)="lanzarActualizacion()">Guardar</button>atos -->
   <div class="empty-state" *ngIf="interfaz_personas.length === 0">
     <div class="empty-icon">📄</div>
     <h3 class="empty-title">No hay datos para procesar</h3>

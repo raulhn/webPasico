@@ -21,10 +21,18 @@ export class CargaLoteComponent implements OnInit {
     SIN_CAMBIOS: 'SIN_CAMBIOS',
   };
 
+  operciones_seleccionables: any[] = [
+    { valor: 'INSERTAR', etiqueta: 'Insertar' },
+    { valor: 'ACTUALIZAR', etiqueta: 'Actualizar' },
+    { valor: 'SIN_CAMBIOS', etiqueta: 'Sin Cambios' },
+  ];
+
   interfaz_personas_insertar: any[] = [];
   interfaz_personas_actualizar: any[] = [];
   interfaz_personas_conflicto: any[] = [];
   interfaz_personas_sin_cambios: any[] = [];
+
+  cambios_actualizacion: any[] = [];
 
   constructor(
     private ruta: ActivatedRoute,
@@ -41,15 +49,31 @@ export class CargaLoteComponent implements OnInit {
     next: (respuesta: any) => {
       this.interfaz_personas = respuesta.interfaz_personas;
 
-      this.interfaz_personas_insertar = this.interfaz_personas.filter(
+      let lista_insertar = this.interfaz_personas.filter(
         (persona) =>
           persona.interfaz_persona.operacion === this.operaciones.INSERTAR,
       );
 
-      this.interfaz_personas_actualizar = this.interfaz_personas.filter(
+      this.interfaz_personas_insertar = lista_insertar.map((insertar) => {
+        return {
+          insertar: insertar,
+          accion_seleccionada: '',
+          nid_persona: null,
+        };
+      });
+
+      let lista_actualizar = this.interfaz_personas.filter(
         (persona) =>
           persona.interfaz_persona.operacion === this.operaciones.ACTUALIZAR,
       );
+
+      this.interfaz_personas_actualizar = lista_actualizar.map((actualizar) => {
+        return {
+          actualizar: actualizar,
+          accion_seleccionada: '',
+          nid_persona: null,
+        };
+      });
 
       let lista_conflictos = this.interfaz_personas.filter(
         (persona) =>
@@ -77,12 +101,50 @@ export class CargaLoteComponent implements OnInit {
       .subscribe(this.peticion_obtener_interfaz_personas);
   }
 
-  actualizarSeleccion(nid_interfaz_persona: string, conflicto: any) {
-    let persona = this.interfaz_personas.find(
-      (p) => p.nid_interfaz_persona === nid_interfaz_persona,
+  actualizarSeleccionConflicto(interfaz_persona: any, conflicto: any) {
+    let persona = this.interfaz_personas_conflicto.find(
+      (p) =>
+        p.conflicto.interfaz_persona.nid_interfaz_persona ===
+        interfaz_persona.nid_interfaz_persona,
     );
     if (persona) {
-      persona.nid_persona = conflicto.nid_persona;
+      persona.nid_persona =
+        conflicto === 'INSERTAR' ? null : persona.conflicto.nid_persona;
     }
+  }
+
+  lanzar_actualizacion() {
+    const cambios_conflictos = this.interfaz_personas_conflicto.map((p) => {
+      return {
+        nid_interfaz_persona: p.conflicto.interfaz_persona.nid_interfaz_persona,
+        accion_seleccionada: p.accion_seleccionada,
+        nid_persona: p.nid_persona,
+      };
+    });
+
+    const cambios_insertar = this.interfaz_personas_insertar.map((p) => {
+      return {
+        nid_interfaz_persona: p.insertar.interfaz_persona.nid_interfaz_persona,
+        accion_seleccionada: p.accion_seleccionada,
+        nid_persona: p.nid_persona,
+      };
+    });
+
+    const cambios_actualizar = this.interfaz_personas_actualizar.map((p) => {
+      return {
+        nid_interfaz_persona:
+          p.actualizar.interfaz_persona.nid_interfaz_persona,
+        accion_seleccionada: p.accion_seleccionada,
+        nid_persona: p.nid_persona,
+      };
+    });
+
+    const cambios = [
+      ...cambios_conflictos,
+      ...cambios_insertar,
+      ...cambios_actualizar,
+    ];
+
+    console.log(cambios);
   }
 }
