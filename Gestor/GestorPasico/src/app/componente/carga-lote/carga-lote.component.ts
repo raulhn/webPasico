@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { InterfazPersonaService } from 'src/app/servicios/interfaz-persona.service';
-import { CommonModule } from '@angular/common';
-import { MenuComponent } from '../menu/menu.component';
 
 @Component({
   selector: 'app-carga-lote',
@@ -107,10 +105,11 @@ export class CargaLoteComponent implements OnInit {
         p.conflicto.interfaz_persona.nid_interfaz_persona ===
         interfaz_persona.nid_interfaz_persona,
     );
-    console.log(persona)
     if (persona) {
       persona.nid_persona =
-        persona.accion_seleccionada === 'INSERTAR' ? null : conflicto.nid_persona;
+        persona.accion_seleccionada === 'INSERTAR'
+          ? null
+          : conflicto.nid_persona;
     }
   }
 
@@ -146,6 +145,9 @@ export class CargaLoteComponent implements OnInit {
       ...cambios_actualizar,
     ];
 
+    const cambios_filtrados = cambios.filter(
+      (cambio) => cambio.accion_seleccionada !== '',
+    );
     console.log(cambios);
   }
 }
