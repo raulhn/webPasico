@@ -129,6 +129,29 @@ function obtener_interfaz_personas(lote) {
   });
 }
 
+function obtener_interfaz_personas_pendiente(lote) {
+  const sql =
+    "select * from " +
+    constantes.ESQUEMA_BD +
+    ".interfaz_persona where lote = " +
+    conexion.dbConn.escape(lote) +
+    " and estado = " +
+    conexion.dbConn.escape(constantes.ESTADOS_INTERFAZ.PENDIENTE);
+
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(sql, (error, results) => {
+      if (error) {
+        console.log(error);
+        reject(
+          "Se ha producido un error al recuperar el interfaz de persona pendiente",
+        );
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
+
 function actualizar_operacion_conflicto(
   nid_interfaz_persona,
   operacion,
@@ -175,6 +198,44 @@ function actualizar_operacion_conflicto(
   });
 }
 
+function actualizar_estado(nid_interfaz_persona, estado) {
+  const sql =
+    "update " +
+    constantes.ESQUEMA_BD +
+    ".interfaz_persona set estado = " +
+    conexion.dbConn.escape(estado) +
+    " where nid_interfaz_persona = " +
+    conexion.dbConn.escape(nid_interfaz_persona);
+
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.beginTransaction((err) => {
+      if (err) {
+        console.log("Error al iniciar la transacción:", err);
+        reject("Error al iniciar la transacción");
+        return;
+      }
+
+      conexion.dbConn.query(sql, (error, results) => {
+        if (error) {
+          console.log(
+            "interfaz_persona -> actualizar_estado: Error al actualizar el estado para ",
+            nid_interfaz_persona,
+            " a ",
+            estado,
+            ":",
+            error,
+          );
+          conexion.dbConn.rollback();
+          reject("Error al actualizar el estado");
+        } else {
+          conexion.dbConn.commit();
+          resolve();
+        }
+      });
+    });
+  });
+}
+
 module.exports.obtener_persona_nif_insert = obtener_persona_nif_insert;
 module.exports.obtener_persona_nombre_insert = obtener_persona_nombre_insert;
 module.exports.obtener_persona_apellidos_insert =
@@ -182,3 +243,6 @@ module.exports.obtener_persona_apellidos_insert =
 module.exports.obtener_conflictos_personas = obtener_conflictos_personas;
 module.exports.obtener_interfaz_personas = obtener_interfaz_personas;
 module.exports.actualizar_operacion_conflicto = actualizar_operacion_conflicto;
+module.exports.actualizar_estado = actualizar_estado;
+module.exports.obtener_interfaz_personas_pendiente =
+  obtener_interfaz_personas_pendiente;

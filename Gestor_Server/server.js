@@ -513,6 +513,8 @@ app.post(
   servlet_interfaz_persona.actualizar_operaciones,
 );
 
+app.post("/lanzar_proceso_carga", servlet_carga_datos.lanzar_proceso);
+
 https
   .createServer(
     {

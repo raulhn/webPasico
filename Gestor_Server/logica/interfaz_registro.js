@@ -91,7 +91,7 @@ function registrar_interfaz_persona(lote, persona) {
   const sql =
     "insert into " +
     constantes.ESQUEMA_BD +
-    ".interfaz_persona(lote, dni, nombre, primer_apellido, segundo_apellido, email, telefono, fecha_nacimiento, operacion) values(" +
+    ".interfaz_persona(lote, dni, nombre, primer_apellido, segundo_apellido, email, telefono, fecha_nacimiento, operacion, estado) values(" +
     conexion.dbConn.escape(lote) +
     ", " +
     conexion.dbConn.escape(persona.nif) +
@@ -109,6 +109,8 @@ function registrar_interfaz_persona(lote, persona) {
     conexion.dbConn.escape(persona.fecha_nacimiento) +
     ", ''), " +
     conexion.dbConn.escape(persona.operacion) +
+    ", " +
+    conexion.dbConn.escape(constantes.ESTADOS_INTERFAZ.PENDIENTE) +
     ")";
 
   return new Promise((resolve, reject) => {
@@ -206,6 +208,7 @@ function compara_persona_interfaz(persona, persona_interfaz) {
     return false;
   }
 }
+
 function insertar_conflicto_persona(persona_interfaz, nid_interfaz_persona) {
   const sql =
     "insert into " +
