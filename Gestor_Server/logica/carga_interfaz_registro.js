@@ -40,17 +40,16 @@ async function cargar_personas(lote) {
         constantes.OPERACIONES_INTERFAZ.ACTUALIZAR
       ) {
         try {
-          await gestor_personas.actualizar_persona(
-            interfaz_persona.nid_persona,
-            interfaz_persona.nombre,
-            interfaz_persona.primer_apellido,
-            interfaz_persona.segundo_apellido,
-            interfaz_persona.telefono,
-            interfaz_persona.fecha_nacimiento,
-            interfaz_persona.dni,
-            interfaz_persona.email,
-            null,
-          );
+          const persona = {
+            nombre: interfaz_persona.nombre,
+            primer_apellido: interfaz_persona.primer_apellido,
+            segundo_apellido: interfaz_persona.segundo_apellido,
+            telefono: interfaz_persona.telefono,
+            fecha_nacimiento: interfaz_persona.fecha_nacimiento,
+            nif: interfaz_persona.dni,
+            correo_electronico: interfaz_persona.email,
+          };
+          await gestor_personas.actualizar_persona_interfaz(persona);
           gestor_interfaz_persona.actualizar_estado(
             interfaz_persona.nid_interfaz_persona,
             constantes.ESTADOS_INTERFAZ.PROCESADO,

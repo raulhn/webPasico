@@ -624,6 +624,52 @@ async function obtener_objeto_persona(nid) {
   });
 }
 
+function actualizar_persona_interfaz(persona) {
+  const sql =
+    "update " +
+    constantes.ESQUEMA_BD +
+    ".persona set " +
+    "nombre = " +
+    conexion.dbConn.escape(persona.nombre) +
+    ", " +
+    "primer_apellido = " +
+    conexion.dbConn.escape(persona.primer_apellido) +
+    ", " +
+    "segundo_apellido = " +
+    conexion.dbConn.escape(persona.segundo_apellido) +
+    ", " +
+    "correo_electronico = ifnull(nullif(" +
+    conexion.dbConn.escape(persona.correo_electronico) +
+    ", ''), correo_electronico), " +
+    "fecha_nacimiento = ifnull(nullif(" +
+    conexion.dbConn.escape(formatearFecha(persona.fecha_nacimiento)) +
+    ", ''), fecha_nacimiento), " +
+    "nif = ifnull(nullif(" +
+    conexion.dbConn.escape(persona.nif) +
+    ", ''), nif), " +
+    "telefono = ifnull(nullif(" +
+    conexion.dbConn.escape(persona.telefono) +
+    ", ''), telefono)";
+
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.beginTransaction(() => {
+      conexion.dbConn.query(
+        sql + " where nid = " + conexion.dbConn.escape(persona.nid_persona),
+        (error, results, fields) => {
+          if (error) {
+            console.log(error);
+            conexion.dbConn.rollback();
+            reject("Error al actualizar la persona del servicio movil");
+          } else {
+            conexion.dbConn.commit();
+            resolve();
+          }
+        },
+      );
+    });
+  });
+}
+
 function actualizar_persona(
   nid,
   nif,
@@ -1113,6 +1159,7 @@ function obtener_personas_apellidos(primer_apellido, segundo_apellido) {
 
 module.exports.registrar_persona = registrar_persona;
 module.exports.actualizar_persona = actualizar_persona;
+module.exports.actualizar_persona_interfaz = actualizar_persona_interfaz;
 
 module.exports.existe_nif = existe_nif;
 module.exports.valida_nif = valida_nif;
