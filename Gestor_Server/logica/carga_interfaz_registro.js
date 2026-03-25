@@ -1,4 +1,4 @@
-const conexion = require("../conexion/conexion");
+const conexion = require("../conexion");
 const constantes = require("../constantes");
 const gestor_interfaz_persona = require("./interfaz_persona");
 const gestor_personas = require("./persona.js");
