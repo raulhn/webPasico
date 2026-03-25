@@ -48,6 +48,7 @@ async function cargar_personas(lote) {
             fecha_nacimiento: interfaz_persona.fecha_nacimiento,
             nif: interfaz_persona.dni,
             correo_electronico: interfaz_persona.email,
+            nid_persona: interfaz_persona.nid_persona,
           };
           await gestor_personas.actualizar_persona_interfaz(persona);
           gestor_interfaz_persona.actualizar_estado(

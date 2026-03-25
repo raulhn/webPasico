@@ -649,7 +649,9 @@ function actualizar_persona_interfaz(persona) {
     ", ''), nif), " +
     "telefono = ifnull(nullif(" +
     conexion.dbConn.escape(persona.telefono) +
-    ", ''), telefono)";
+    ", ''), telefono)" +
+    " where nid_persona = " +
+    conexion.dbConn.escape(persona.nid_persona);
 
   return new Promise((resolve, reject) => {
     conexion.dbConn.beginTransaction(() => {
