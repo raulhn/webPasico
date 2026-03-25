@@ -132,6 +132,26 @@ export class CargaLoteComponent implements OnInit {
     },
   };
 
+  peticion_lanzar_proceso_carga = {
+    next: (respuesta: any) => {
+      Swal.fire({
+        icon: 'success',
+        title: 'Proceso de Carga Iniciado',
+        text: 'El proceso de carga ha sido iniciado correctamente.',
+      }).then(() => {
+        // Recargar la página o redirigir a otra vista si es necesario
+        window.location.reload();
+      });
+    },
+    error: (error: any) => {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Hubo un error al iniciar el proceso de carga. Por favor, inténtelo de nuevo.',
+      });
+    },
+  };
+
   lanzar_actualizacion() {
     const cambios_conflictos = this.interfaz_personas_conflicto.map((p) => {
       return {
@@ -182,9 +202,14 @@ export class CargaLoteComponent implements OnInit {
       (cambio) => cambio.operacion !== '',
     );
 
-    console.log(cambios_filtrados);
     this.interfazPersonaService
       .actualizar_conflictos(cambios_filtrados)
       .subscribe(this.peticion_actualizar_conflictos);
+  }
+
+  lanzar_proceso_carga() {
+    this.interfazPersonaService
+      .lanzar_proceso_carga(this.lote)
+      .subscribe(this.peticion_lanzar_proceso_carga);
   }
 }

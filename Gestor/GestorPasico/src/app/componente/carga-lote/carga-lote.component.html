@@ -35,6 +35,10 @@
               interfaz_persona_conflicto.conflicto.interfaz_persona
                 .segundo_apellido
             }}
+
+            -
+            {{ interfaz_persona_conflicto.email }}
+            {{ interfaz_personas_conflicto.telefono }}
           </span>
           <div class="select-wrapper">
             <select
@@ -74,6 +78,8 @@
               {{ conflicto_persona.nombre }}
               {{ conflicto_persona.primer_apellido }}
               {{ conflicto_persona.segundo_apellido }}
+
+              {{ conflicto_persona.email }} {{ conflicto_persona.telefono }}
             </span>
             <div
               class="radio-group"
@@ -162,6 +168,8 @@
               interfaz_persona_insertar.insertar.interfaz_persona
                 .segundo_apellido
             }}
+            - {{ interfaz_persona_insertar.email }}
+            {{ interfaz_persona_insertar.telefono }}
           </span>
           <div class="select-wrapper">
             <select
@@ -211,6 +219,8 @@
               interfaz_persona_actualizar.actualizar.interfaz_persona
                 .segundo_apellido
             }}
+            - {{ interfaz_persona_actualizar.email }}
+            {{ interfaz_persona_actualizar.telefono }}
           </span>
           <div class="select-wrapper">
             <select
@@ -227,18 +237,28 @@
 
       <div class="update-list">
         <div
-                    *ngFor="
-            let conflicto_persona of interfaz_persona_actualizar.actualizar.conflictos_persona
+          *ngFor="
+            let conflicto_persona of interfaz_persona_actualizar.actualizar
+              .conflictos_persona
           "
         >
-          <div class="update-item"
- *ngIf="interfaz_persona_actualizar.actualizar.interfaz_persona.nid_persona === null ||
-            interfaz_persona_actualizar.actualizar.interfaz_persona.nid_persona == conflicto_persona.nid_persona" class="update-content">
+          <div
+            class="update-item"
+            *ngIf="
+              interfaz_persona_actualizar.actualizar.interfaz_persona
+                .nid_persona === null ||
+              interfaz_persona_actualizar.actualizar.interfaz_persona
+                .nid_persona == conflicto_persona.nid_persona
+            "
+            class="update-content"
+          >
             <span class="conflict-label">Coincidencia encontrada:</span>
             <span class="person-name">
               {{ conflicto_persona.nombre }}
               {{ conflicto_persona.primer_apellido }}
               {{ conflicto_persona.segundo_apellido }}
+
+              {{ conflicto_persona.email }} {{ conflicto_persona.telefono }}
             </span>
           </div>
         </div>
@@ -276,7 +296,13 @@
       </div>
     </div>
   </section>
-  <button (click)="lanzar_actualizacion()">Guardar</button>
+  <button (click)="lanzar_actualizacion()">Resolver Conflictos</button>
+  <button
+    *ngIf="interfaz_personas_conflicto.length == 0"
+    (click)="lanzar_proceso_carga()"
+  >
+    Procesar Carga
+  </button>
   <!-- Mensaje cuando no hay d            <button (click)="lanzarActualizacion()">Guardar</button>atos -->
   <div class="empty-state" *ngIf="interfaz_personas.length === 0">
     <div class="empty-icon">📄</div>

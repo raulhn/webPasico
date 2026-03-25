@@ -19,4 +19,9 @@ export class InterfazPersonaService {
     const API_URL = this.url + '/actualizar_operaciones_conflicto';
     return this.http.post(API_URL, { operaciones }, { withCredentials: true });
   }
+
+  lanzar_proceso_carga(lote: string) {
+    const API_URL = this.url + '/lanzar_proceso_carga';
+    return this.http.post(API_URL, { lote }, { withCredentials: true });
+  }
 }
