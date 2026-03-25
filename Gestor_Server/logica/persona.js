@@ -112,7 +112,7 @@ async function actualizar_personas_sucias() {
 async function existe_nif(nif) {
   await actualizar_personas_sucias();
   return new Promise((resolve, reject) => {
-    if (nif.length === 0) {
+    if (!nif || nif.length === 0) {
       resolve(false);
     } else {
       conexion.dbConn.query(
