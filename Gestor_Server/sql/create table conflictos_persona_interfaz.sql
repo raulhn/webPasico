@@ -8,7 +8,8 @@ create table pasico_gestor.interfaz_conflictos_persona (
     email varchar(100),
     telefono varchar(20),
     fecha_nacimiento date,
-    nid_persona int
+    nid_persona int,
+    fecha_creacion datetime default current_timestamp
 );
 
 

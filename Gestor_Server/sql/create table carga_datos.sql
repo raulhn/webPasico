@@ -28,6 +28,7 @@ create table pasico_gestor.carga_datos (
     instrumento4 varchar(50),
     instrumento5 varchar(50),
     lote int,
+    fecha_creacion datetime default current_timestamp,
     primary key (nid_carga_datos)
 );
 
