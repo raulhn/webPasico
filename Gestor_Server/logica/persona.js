@@ -650,24 +650,23 @@ function actualizar_persona_interfaz(persona) {
     "telefono = ifnull(nullif(" +
     conexion.dbConn.escape(persona.telefono) +
     ", ''), telefono)" +
-    " where nid_persona = " +
+    ", sucio = 'S', fecha_actualizacion = now() " +
+    "where nid = " +
     conexion.dbConn.escape(persona.nid_persona);
 
   return new Promise((resolve, reject) => {
     conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(
-        sql + " where nid = " + conexion.dbConn.escape(persona.nid_persona),
-        (error, results, fields) => {
-          if (error) {
-            console.log(error);
-            conexion.dbConn.rollback();
-            reject("Error al actualizar la persona del servicio movil");
-          } else {
-            conexion.dbConn.commit();
-            resolve();
-          }
-        },
-      );
+      conexion.dbConn.query(sql, (error, results, fields) => {
+        if (error) {
+          console.log(error);
+          conexion.dbConn.rollback();
+          reject("Error al actualizar la persona del servicio movil");
+        } else {
+          console.log("Actualizacion realizada");
+          conexion.dbConn.commit();
+          resolve();
+        }
+      });
     });
   });
 }
