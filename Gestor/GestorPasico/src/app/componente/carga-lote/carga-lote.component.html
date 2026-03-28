@@ -35,11 +35,19 @@
               interfaz_persona_conflicto.conflicto.interfaz_persona
                 .segundo_apellido
             }}
-
-            -
-            {{ interfaz_persona_conflicto.email }}
-            {{ interfaz_persona_conflicto.telefono }}
           </span>
+          <div style="display: flex; flex-direction: column">
+            <span>
+              <b>Correo electrónico: </b>
+              {{ interfaz_persona_conflicto.conflicto.interfaz_persona.email }}
+            </span>
+            <span
+              ><b>Teléfono: </b>
+              {{
+                interfaz_persona_conflicto.conflicto.interfaz_persona.telefono
+              }}
+            </span>
+          </div>
           <div class="select-wrapper">
             <select
               class="action-select"
@@ -78,9 +86,15 @@
               {{ conflicto_persona.nombre }}
               {{ conflicto_persona.primer_apellido }}
               {{ conflicto_persona.segundo_apellido }}
-
-              {{ conflicto_persona.email }} {{ conflicto_persona.telefono }}
             </span>
+            <div style="display: flex; flex-direction: column">
+              <span *ngIf="interfaz_persona_conflicto.conflicto.email">
+                <b>Correo electrónico: </b>{{ conflicto_persona.email }}
+              </span>
+              <span *ngIf="interfaz_persona_conflicto.conflicto.telefono">
+                <b>Teléfono: </b> {{ conflicto_persona.telefono }}
+              </span>
+            </div>
             <div
               class="radio-group"
               *ngIf="conflicto_persona.nid_persona !== null"
@@ -168,9 +182,20 @@
               interfaz_persona_insertar.insertar.interfaz_persona
                 .segundo_apellido
             }}
-            - {{ interfaz_persona_insertar.email }}
-            {{ interfaz_persona_insertar.telefono }}
           </span>
+          <div style="display: flex; flex-direction: column">
+            <span>
+              <b>Correo eletrónico: </b>
+              {{ interfaz_persona_insertar.insertar.interfaz_persona.email }}
+            </span>
+            <span
+              ><b>Teléfono: </b
+              >{{
+                interfaz_persona_insertar.insertar.interfaz_persona.telefono
+              }}
+            </span>
+          </div>
+
           <div class="select-wrapper">
             <select
               class="action-select"
@@ -219,9 +244,22 @@
               interfaz_persona_actualizar.actualizar.interfaz_persona
                 .segundo_apellido
             }}
-            - {{ interfaz_persona_actualizar.email }}
-            {{ interfaz_persona_actualizar.telefono }}
           </span>
+          <div style="display: flex; flex-direction: column">
+            <span>
+              <b>Correo electrónico: </b>
+              {{
+                interfaz_persona_actualizar.actualizar.interfaz_persona.email
+              }}</span
+            >
+            <span
+              ><b>Teléfono: </b
+              >{{
+                interfaz_persona_actualizar.actualizar.interfaz_persona.telefono
+              }}</span
+            >
+          </div>
+
           <div class="select-wrapper">
             <select
               class="action-select"
@@ -257,9 +295,19 @@
               {{ conflicto_persona.nombre }}
               {{ conflicto_persona.primer_apellido }}
               {{ conflicto_persona.segundo_apellido }}
-
-              {{ conflicto_persona.email }} {{ conflicto_persona.telefono }}
             </span>
+            <div style="display:flex, flex-direction:column">
+              <span
+                *ngIf="
+                  interfaz_persona_actualizar.actualizar.interfaz_persona.email
+                "
+              >
+                <b>Correo electrónico: </b>{{ conflicto_persona.email }}
+              </span>
+              <span *ngIf="interfaz_persona_actualizar.actualizar.telefono">
+                <b>Teléfono: </b>{{ conflicto_persona.telefono }}
+              </span>
+            </div>
           </div>
         </div>
       </div>
