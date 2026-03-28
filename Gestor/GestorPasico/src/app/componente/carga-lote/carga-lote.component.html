@@ -88,10 +88,10 @@
               {{ conflicto_persona.segundo_apellido }}
             </span>
             <div style="display: flex; flex-direction: column">
-              <span *ngIf="interfaz_persona_conflicto.conflicto.email">
+              <span *ngIf="conflicto_persona.email">
                 <b>Correo electrónico: </b>{{ conflicto_persona.email }}
               </span>
-              <span *ngIf="interfaz_persona_conflicto.conflicto.telefono">
+              <span *ngIf="conflicto_persona.telefono">
                 <b>Teléfono: </b> {{ conflicto_persona.telefono }}
               </span>
             </div>
@@ -297,14 +297,10 @@
               {{ conflicto_persona.segundo_apellido }}
             </span>
             <div style="display:flex, flex-direction:column">
-              <span
-                *ngIf="
-                  interfaz_persona_actualizar.actualizar.interfaz_persona.email
-                "
-              >
+              <span *ngIf="conflicto_persona.interfaz_persona.email">
                 <b>Correo electrónico: </b>{{ conflicto_persona.email }}
               </span>
-              <span *ngIf="interfaz_persona_actualizar.actualizar.telefono">
+              <span *ngIf="conflicto_persona.telefono">
                 <b>Teléfono: </b>{{ conflicto_persona.telefono }}
               </span>
             </div>
