@@ -512,7 +512,7 @@ async function comprueba_persona(
             nombre: persona.nombre,
             primer_apellido: persona.primer_apellido,
             segundo_apellido: persona.segundo_apellido,
-            email: persona.email,
+            email: persona.correo_electronico,
             telefono: persona.telefono,
             fecha_nacimiento: persona.fecha_nacimiento,
             nid_persona: persona.nid,
