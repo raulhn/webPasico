@@ -655,3 +655,59 @@
 .radio-input:disabled + .radio-label {
   color: #999;
 }
+
+/* Elemento de estado */
+.estado-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 80px;
+}
+
+.estado-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  font-size: 0.85em;
+  font-weight: 600;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  text-align: center;
+  min-width: 70px;
+}
+
+.estado-activo {
+  background: #e8f5e8;
+  color: #2e7d32;
+  border: 1px solid #c8e6c9;
+}
+
+.estado-inactivo {
+  background: #ffebee;
+  color: #c62828;
+  border: 1px solid #ffcdd2;
+}
+
+.estado-pendiente {
+  background: #fff3e0;
+  color: #f57c00;
+  border: 1px solid #ffcc02;
+}
+
+.estado-procesado {
+  background: #e3f2fd;
+  color: #1976d2;
+  border: 1px solid #bbdefb;
+}
+
+.estado-error {
+  background: #fce4ec;
+  color: #ad1457;
+  border: 1px solid #f8bbd9;
+}
+
+.estado-default {
+  background: #f5f5f5;
+  color: #616161;
+  border: 1px solid #e0e0e0;
+}

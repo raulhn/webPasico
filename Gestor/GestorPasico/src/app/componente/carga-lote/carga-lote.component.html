@@ -88,6 +88,19 @@
             </select>
           </div>
         </div>
+        <div class="estado-container">
+          <span class="estado-badge" 
+                [ngClass]="{
+                  'estado-activo': interfaz_persona_conflicto.conflicto.interfaz_persona.estado === 'ACTIVO',
+                  'estado-inactivo': interfaz_persona_conflicto.conflicto.interfaz_persona.estado === 'INACTIVO', 
+                  'estado-pendiente': interfaz_persona_conflicto.conflicto.interfaz_persona.estado === 'PENDIENTE',
+                  'estado-procesado': interfaz_persona_conflicto.conflicto.interfaz_persona.estado === 'PROCESADO',
+                  'estado-error': interfaz_persona_conflicto.conflicto.interfaz_persona.estado === 'ERROR',
+                  'estado-default': !['ACTIVO', 'INACTIVO', 'PENDIENTE', 'PROCESADO', 'ERROR'].includes(interfaz_persona_conflicto.conflicto.interfaz_persona.estado)
+                }">
+            {{interfaz_persona_conflicto.conflicto.interfaz_persona.estado}}
+          </span>
+        </div>
       </summary>
 
       <div class="conflict-list">
@@ -258,6 +271,20 @@
             </select>
           </div>
         </div>
+        <div class="estado-container">
+          <span class="estado-badge" 
+                [ngClass]="{
+                  'estado-activo': interfaz_persona_insertar.insertar.interfaz_persona.estado === 'ACTIVO',
+                  'estado-inactivo': interfaz_persona_insertar.insertar.interfaz_persona.estado === 'INACTIVO', 
+                  'estado-pendiente': interfaz_persona_insertar.insertar.interfaz_persona.estado === 'PENDIENTE',
+                  'estado-procesado': interfaz_persona_insertar.insertar.interfaz_persona.estado === 'PROCESADO',
+                  'estado-error': interfaz_persona_insertar.insertar.interfaz_persona.estado === 'ERROR',
+                  'estado-default': !['ACTIVO', 'INACTIVO', 'PENDIENTE', 'PROCESADO', 'ERROR'].includes(interfaz_persona_insertar.insertar.interfaz_persona.estado)
+                }">
+            {{interfaz_persona_insertar.insertar.interfaz_persona.estado}}
+          </span>
+        </div>
+
       </div>
     </div>
   </section>
@@ -339,6 +366,20 @@
               <option value="SIN_CAMBIOS">Sin cambios</option>
             </select>
           </div>
+
+        </div>
+        <div class="estado-container">
+          <span class="estado-badge" 
+                [ngClass]="{
+                  'estado-activo': interfaz_persona_actualizar.actualizar.interfaz_persona.estado === 'ACTIVO',
+                  'estado-inactivo': interfaz_persona_actualizar.actualizar.interfaz_persona.estado === 'INACTIVO', 
+                  'estado-pendiente': interfaz_persona_actualizar.actualizar.interfaz_persona.estado === 'PENDIENTE',
+                  'estado-procesado': interfaz_persona_actualizar.actualizar.interfaz_persona.estado === 'PROCESADO',
+                  'estado-error': interfaz_persona_actualizar.actualizar.interfaz_persona.estado === 'ERROR',
+                  'estado-default': !['ACTIVO', 'INACTIVO', 'PENDIENTE', 'PROCESADO', 'ERROR'].includes(interfaz_persona_actualizar.actualizar.interfaz_persona.estado)
+                }">
+            {{interfaz_persona_actualizar.actualizar.interfaz_persona.estado}}
+          </span>
         </div>
       </summary>
 
@@ -445,6 +486,19 @@
               }}
             </span>
           </div>
+        </div>
+        <div class="estado-container">
+          <span class="estado-badge" 
+                [ngClass]="{
+                  'estado-activo': interfaz_persona_sin_cambios.interfaz_persona.estado === 'ACTIVO',
+                  'estado-inactivo': interfaz_persona_sin_cambios.interfaz_persona.estado === 'INACTIVO', 
+                  'estado-pendiente': interfaz_persona_sin_cambios.interfaz_persona.estado === 'PENDIENTE',
+                  'estado-procesado': interfaz_persona_sin_cambios.interfaz_persona.estado === 'PROCESADO',
+                  'estado-error': interfaz_persona_sin_cambios.interfaz_persona.estado === 'ERROR',
+                  'estado-default': !['ACTIVO', 'INACTIVO', 'PENDIENTE', 'PROCESADO', 'ERROR'].includes(interfaz_persona_sin_cambios.interfaz_persona.estado)
+                }">
+            {{interfaz_persona_sin_cambios.interfaz_persona.estado}}
+          </span>
         </div>
       </div>
     </div>
