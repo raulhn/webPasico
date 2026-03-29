@@ -87,6 +87,18 @@ function cargar_registro(cadena, lote) {
   });
 }
 
+function formatearFecha(fechaISO) {
+  const fecha = new Date(fechaISO); // Crear un objeto Date a partir de la fecha ISO
+  const dia = fecha.getDate(); // Obtener el día
+  const mes = fecha.getMonth() + 1; // Obtener el mes (0-11, por eso sumamos 1)
+  const anio = fecha.getFullYear(); // Obtener el año
+
+  // Formatear la fecha como "DD/MM/YYYY"
+  return `${anio}-${mes.toString().padStart(2, "0")}-${dia
+    .toString()
+    .padStart(2, "0")}`;
+}
+
 function registrar_interfaz_persona(lote, persona) {
   const sql =
     "insert into " +
@@ -106,7 +118,7 @@ function registrar_interfaz_persona(lote, persona) {
     ", " +
     conexion.dbConn.escape(persona.telefono) +
     ", nullif(" +
-    conexion.dbConn.escape(persona.fecha_nacimiento) +
+    conexion.dbConn.escape(formatearFecha(persona.fecha_nacimiento)) +
     ", ''), " +
     conexion.dbConn.escape(persona.operacion) +
     ", " +
@@ -146,7 +158,7 @@ function actualizar_interfaz_persona(persona, nid_interfaz_persona) {
     ", telefono = " +
     conexion.dbConn.escape(persona.telefono) +
     ", fecha_nacimiento = nullif(" +
-    conexion.dbConn.escape(persona.fecha_nacimiento) +
+    conexion.dbConn.escape(formatearFecha(persona.fecha_nacimiento)) +
     ", ''), operacion = " +
     conexion.dbConn.escape(persona.operacion) +
     ", nid_persona = " +
@@ -228,7 +240,7 @@ function insertar_conflicto_persona(persona_interfaz, nid_interfaz_persona) {
     ", " +
     conexion.dbConn.escape(persona_interfaz.telefono) +
     ", " +
-    conexion.dbConn.escape(persona_interfaz.fecha_nacimiento) +
+    conexion.dbConn.escape(formatearFecha(persona_interfaz.fecha_nacimiento)) +
     ", " +
     conexion.dbConn.escape(persona_interfaz.nid_persona) +
     ")";
