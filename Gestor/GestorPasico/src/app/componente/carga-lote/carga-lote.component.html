@@ -449,13 +449,15 @@
       </div>
     </div>
   </section>
-  <button (click)="lanzar_actualizacion()">Resolver Conflictos</button>
-  <button
+  <div style="display: flex; width:100%;  justify-content: space-around;">
+  <button class="btn btn-primary" (click)="lanzar_actualizacion()">Resolver Conflictos</button>
+  <button class="btn btn-primary"
     *ngIf="interfaz_personas_conflicto.length == 0"
     (click)="lanzar_proceso_carga()"
   >
     Procesar Carga
   </button>
+</div>
   <!-- Mensaje cuando no hay d            <button (click)="lanzarActualizacion()">Guardar</button>atos -->
   <div class="empty-state" *ngIf="interfaz_personas.length === 0">
     <div class="empty-icon">📄</div>
