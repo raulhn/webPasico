@@ -37,11 +37,11 @@
             }}
           </span>
           <div style="display: flex; flex-direction: column">
-            <span>
+            <span *ngIf="interfaz_persona_conflicto.conflicto.interfaz_persona.email">
               <b>Correo electrónico: </b>
               {{ interfaz_persona_conflicto.conflicto.interfaz_persona.email }}
             </span>
-            <span
+            <span *ngIf="interfaz_persona_conflicto.conflicto.interfaz_persona.telefono"
               ><b>Teléfono: </b>
               {{
                 interfaz_persona_conflicto.conflicto.interfaz_persona.telefono
@@ -88,10 +88,10 @@
               {{ conflicto_persona.segundo_apellido }}
             </span>
             <div style="display: flex; flex-direction: column">
-              <span *ngIf="conflicto_persona.email">
+              <span *ngIf="interfaz_persona_conflicto.conflicto.interfaz_persona.email">
                 <b>Correo electrónico: </b>{{ conflicto_persona.email }}
               </span>
-              <span *ngIf="conflicto_persona.telefono">
+              <span *ngIf="interfaz_persona_conflicto.conflicto.interfaz_persona.telefono">
                 <b>Teléfono: </b> {{ conflicto_persona.telefono }}
               </span>
             </div>
@@ -184,11 +184,11 @@
             }}
           </span>
           <div style="display: flex; flex-direction: column">
-            <span>
+            <span *ngIf="interfaz_persona_insertar.insertar.interfaz_persona.email">
               <b>Correo eletrónico: </b>
               {{ interfaz_persona_insertar.insertar.interfaz_persona.email }}
             </span>
-            <span
+            <span *ngIf="interfaz_persona_insertar.insertar.interfaz_persona.telefono"
               ><b>Teléfono: </b
               >{{
                 interfaz_persona_insertar.insertar.interfaz_persona.telefono
@@ -246,13 +246,13 @@
             }}
           </span>
           <div style="display: flex; flex-direction: column">
-            <span>
+            <span *ngIf="interfaz_persona_actualizar.actualizar.interfaz_persona.email">
               <b>Correo electrónico: </b>
               {{
                 interfaz_persona_actualizar.actualizar.interfaz_persona.email
               }}</span
             >
-            <span
+            <span *ngIf="interfaz_persona_actualizar.actualizar.interfaz_persona.telefono"
               ><b>Teléfono: </b
               >{{
                 interfaz_persona_actualizar.actualizar.interfaz_persona.telefono
@@ -296,12 +296,12 @@
               {{ conflicto_persona.primer_apellido }}
               {{ conflicto_persona.segundo_apellido }}
             </span>
-            <div style="display:flex, flex-direction:column">
-              <span *ngIf="conflicto_persona.email">
+            <div style="display:flex; flex-direction:column">
+              <span *ngIf="interfaz_persona_actualizar.actualizar.interfaz_persona.email">
                 <b>Correo electrónico: </b>{{ conflicto_persona.email }}
               </span>
               <span *ngIf="conflicto_persona.telefono">
-                <b>Teléfono: </b>{{ conflicto_persona.telefono }}
+                <b>Teléfono: </b>{{ interfaz_persona_actualizar.actualizar.interfaz_persona.telefono }}
               </span>
             </div>
           </div>
@@ -336,7 +336,17 @@
             {{ interfaz_persona_sin_cambios.interfaz_persona.primer_apellido }}
             {{ interfaz_persona_sin_cambios.interfaz_persona.segundo_apellido }}
           </span>
+ <div style="display:flex; flex-direction:column">
+              <span *ngIf="interfaz_persona_sin_cambios.interfaz_persona.email">
+                <b>Correo electrónico: </b>{{ interfaz_persona_sin_cambios.interfaz_persona.email }}
+              </span>
+              <span *ngIf="interfaz_persona_sin_cambios.interfaz_persona.telefono">
+                <b>Teléfono: </b>{{ interfaz_persona_sin_cambios.interfaz_persona.telefono }}
+              </span>
+            </div>
+
         </div>
+
       </div>
     </div>
   </section>
