@@ -42,6 +42,20 @@ export class CargaLoteComponent implements OnInit {
     return conflictos.some((conflicto) => conflicto.nid_persona !== null);
   };
 
+  formatearFecha(fechaISO: string) {
+    if (fechaISO) {
+      const fecha = new Date(fechaISO); // Crear un objeto Date a partir de la fecha ISO
+      const dia = fecha.getDate(); // Obtener el día
+      const mes = fecha.getMonth() + 1; // Obtener el mes (0-11, por eso sumamos 1)
+      const anio = fecha.getFullYear(); // Obtener el año
+
+      // Formatear la fecha como "DD/MM/YYYY"
+      return `${dia
+        .toString()
+        .padStart(2, "0")}-${mes.toString().padStart(2, "0")}-${anio}`;
+    }
+    return null;
+  }
   peticion_obtener_interfaz_personas = {
     next: (respuesta: any) => {
       this.interfaz_personas = respuesta.interfaz_personas;
