@@ -103,6 +103,7 @@ function formatearFecha(fechaISO) {
 }
 
 function registrar_interfaz_persona(lote, persona) {
+  console.log("Interfaz Persona", persona)
   const sql =
     "insert into " +
     constantes.ESQUEMA_BD +
@@ -120,9 +121,9 @@ function registrar_interfaz_persona(lote, persona) {
     conexion.dbConn.escape(persona.email) +
     ", " +
     conexion.dbConn.escape(persona.telefono) +
-    ", nullif(" +
-    conexion.dbConn.escape(formatearFecha(persona.fecha_nacimiento)) +
-    ", ''), " +
+    ", str_to_date(substr(nullif(" +
+    conexion.dbConn.escape(persona.fecha_nacimiento) +
+    ", ''), 1, 10), '%d-%m-%Y'), " +
     conexion.dbConn.escape(persona.operacion) +
     ", " +
     conexion.dbConn.escape(constantes.ESTADOS_INTERFAZ.PENDIENTE) +
@@ -160,9 +161,9 @@ function actualizar_interfaz_persona(persona, nid_interfaz_persona) {
     conexion.dbConn.escape(persona.email) +
     ", telefono = " +
     conexion.dbConn.escape(persona.telefono) +
-    ", fecha_nacimiento = nullif(" +
-    conexion.dbConn.escape(formatearFecha(persona.fecha_nacimiento)) +
-    ", ''), operacion = " +
+    ", fecha_nacimiento = str_to_date(substr(nullif(" +
+    conexion.dbConn.escape(persona.fecha_nacimiento) +
+    ", ''), 1, 10), '%d-%m-%Y'), operacion = " +
     conexion.dbConn.escape(persona.operacion) +
     ", nid_persona = " +
     conexion.dbConn.escape(persona.nid_persona) +
@@ -242,9 +243,9 @@ function insertar_conflicto_persona(persona_interfaz, nid_interfaz_persona) {
     conexion.dbConn.escape(persona_interfaz.email) +
     ", " +
     conexion.dbConn.escape(persona_interfaz.telefono) +
-    ", " +
-    conexion.dbConn.escape(formatearFecha(persona_interfaz.fecha_nacimiento)) +
-    ", " +
+    ", str_to_date(substr(nullif(" +
+    conexion.dbConn.escape(persona_interfaz.fecha_nacimiento) +
+    ", ''), 1, 10), '%Y-%m-%d'), " +
     conexion.dbConn.escape(persona_interfaz.nid_persona) +
     ")";
 
