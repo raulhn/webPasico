@@ -88,15 +88,18 @@ function cargar_registro(cadena, lote) {
 }
 
 function formatearFecha(fechaISO) {
-  const fecha = new Date(fechaISO); // Crear un objeto Date a partir de la fecha ISO
-  const dia = fecha.getDate(); // Obtener el día
-  const mes = fecha.getMonth() + 1; // Obtener el mes (0-11, por eso sumamos 1)
-  const anio = fecha.getFullYear(); // Obtener el año
+  if (fechaISO) {
+    const fecha = new Date(fechaISO); // Crear un objeto Date a partir de la fecha ISO
+    const dia = fecha.getDate(); // Obtener el día
+    const mes = fecha.getMonth() + 1; // Obtener el mes (0-11, por eso sumamos 1)
+    const anio = fecha.getFullYear(); // Obtener el año
 
-  // Formatear la fecha como "DD/MM/YYYY"
-  return `${anio}-${mes.toString().padStart(2, "0")}-${dia
-    .toString()
-    .padStart(2, "0")}`;
+    // Formatear la fecha como "DD/MM/YYYY"
+    return `${anio}-${mes.toString().padStart(2, "0")}-${dia
+      .toString()
+      .padStart(2, "0")}`;
+  }
+  return null;
 }
 
 function registrar_interfaz_persona(lote, persona) {
