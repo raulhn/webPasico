@@ -103,7 +103,7 @@ function formatearFecha(fechaISO) {
 }
 
 function registrar_interfaz_persona(lote, persona) {
-  console.log("Interfaz Persona", persona)
+  console.log("Interfaz Persona", persona);
   const sql =
     "insert into " +
     constantes.ESQUEMA_BD +
@@ -312,6 +312,39 @@ function actualizar_nid_persona_interfaz(
   });
 }
 
+function actualizar_nid_persona_socio_interfaz(
+  nid_carga_datos,
+  nid_interfaz_persona_socio,
+) {
+  const sql =
+    "update " +
+    constantes.ESQUEMA_BD +
+    ".carga_datos set nid_interfaz_persona_socio = " +
+    conexion.dbConn.escape(nid_interfaz_persona_socio) +
+    " where nid_carga_datos = " +
+    conexion.dbConn.escape(nid_carga_datos);
+
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.beginTransaction(() => {
+      conexion.dbConn.query(sql, (error, results) => {
+        if (error) {
+          console.log(
+            "interfaz_registro -> actualizar_nid_persona_socio_interfaz: ",
+            error,
+          );
+          conexion.dbConn.rollback();
+          reject(
+            "Se ha producido un error al registrar en la interfaz el socio",
+          );
+        } else {
+          conexion.dbConn.commit();
+          resolve(results.insertId);
+        }
+      });
+    });
+  });
+}
+
 async function cargar_datos_interfaz(lote) {
   try {
     let datos_lote = await obtener_volcado_lote(lote);
@@ -332,6 +365,24 @@ async function cargar_datos_interfaz(lote) {
         await actualizar_nid_persona_interfaz(
           datos_lote[i].nid_carga_datos,
           nid_interfaz_persona,
+        );
+      }
+
+      let nid_interfaz_persona_socio = await comprueba_persona(
+        lote,
+        dato.dni_socio,
+        dato.nombre_socio,
+        dato.primer_apellido_socio,
+        dato.segundo_apellido_socio,
+        dato.email_socio,
+        dato.telefono_socio,
+        dato.fecha_nacimiento_socio,
+      );
+
+      if (nid_interfaz_persona_socio) {
+        await actualizar_nid_persona_socio_interfaz(
+          nid_carga_datos,
+          nid_interfaz_persona_socio,
         );
       }
     }
