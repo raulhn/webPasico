@@ -28,7 +28,7 @@ function cargar_registro(cadena, lote) {
     "insert into " +
     constantes.ESQUEMA_BD +
     ".carga_datos( dni, nombre, primer_apellido, segundo_apellido, email, telefono, fecha_nacimiento," +
-    "dni_socio, nombre_socio, primer_apellido_socio, segundo_apellido_socio, fecha_nacimiento_socio, iban, lenguaje_musical, " +
+    "dni_socio, nombre_socio, primer_apellido_socio, segundo_apellido_socio, email_socio, telefono_socio, fecha_nacimiento_socio, iban, lenguaje_musical, " +
     "instrumento1, instrumento2, instrumento3, instrumento4, instrumento5, lote) values(trim(" +
     conexion.dbConn.escape(valores[0]) +
     "), trim(" +
@@ -67,7 +67,13 @@ function cargar_registro(cadena, lote) {
     conexion.dbConn.escape(valores[17]) +
     "), trim(" +
     conexion.dbConn.escape(valores[18]) +
+    "), trim(" +
+    conexion.dbConn.escape(valores[19]) +
+    "), trim(" +
+    conexion.dbConn.escape(valores[20]) +
     "), " +
+
+
     conexion.dbConn.escape(lote) +
     ")";
 
@@ -379,9 +385,11 @@ async function cargar_datos_interfaz(lote) {
         dato.fecha_nacimiento_socio,
       );
 
+      console.log("socio: ", { dni_socio: dato.dni_socio, nombre_socio: dato.nombre_socio, primer_apellido: dato.primer_apellido_socio })
+
       if (nid_interfaz_persona_socio) {
         await actualizar_nid_persona_socio_interfaz(
-          nid_carga_datos,
+          datos_lote[i].nid_carga_datos,
           nid_interfaz_persona_socio,
         );
       }

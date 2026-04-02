@@ -18,6 +18,8 @@ create table pasico_gestor.carga_datos (
     nombre_socio varchar(100),
     primer_apellido_socio varchar(50),
     segundo_apellido_socio varchar(50),
+    email_socio varchar(300),
+    telefono_socio varchar(30),
     fecha_nacimiento_socio varchar(30),
     nid_interfaz_persona_socio int,
     iban varchar(34),
