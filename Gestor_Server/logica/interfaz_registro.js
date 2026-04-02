@@ -72,8 +72,6 @@ function cargar_registro(cadena, lote) {
     "), trim(" +
     conexion.dbConn.escape(valores[20]) +
     "), " +
-
-
     conexion.dbConn.escape(lote) +
     ")";
 
@@ -374,24 +372,30 @@ async function cargar_datos_interfaz(lote) {
         );
       }
 
-      let nid_interfaz_persona_socio = await comprueba_persona(
-        lote,
-        dato.dni_socio,
-        dato.nombre_socio,
-        dato.primer_apellido_socio,
-        dato.segundo_apellido_socio,
-        dato.email_socio,
-        dato.telefono_socio,
-        dato.fecha_nacimiento_socio,
-      );
-
-      console.log("socio: ", { dni_socio: dato.dni_socio, nombre_socio: dato.nombre_socio, primer_apellido: dato.primer_apellido_socio })
-
-      if (nid_interfaz_persona_socio) {
-        await actualizar_nid_persona_socio_interfaz(
-          datos_lote[i].nid_carga_datos,
-          nid_interfaz_persona_socio,
+      if (dato.nombre_socio) {
+        let nid_interfaz_persona_socio = await comprueba_persona(
+          lote,
+          dato.dni_socio,
+          dato.nombre_socio,
+          dato.primer_apellido_socio,
+          dato.segundo_apellido_socio,
+          dato.email_socio,
+          dato.telefono_socio,
+          dato.fecha_nacimiento_socio,
         );
+
+        console.log("socio: ", {
+          dni_socio: dato.dni_socio,
+          nombre_socio: dato.nombre_socio,
+          primer_apellido: dato.primer_apellido_socio,
+        });
+
+        if (nid_interfaz_persona_socio) {
+          await actualizar_nid_persona_socio_interfaz(
+            datos_lote[i].nid_carga_datos,
+            nid_interfaz_persona_socio,
+          );
+        }
       }
     }
   } catch (e) {
