@@ -1,14 +1,17 @@
 <app-menu class=""></app-menu>
 
 <div class="container">
-    <legend>Lista de fichas de asistencias</legend>
-<div *ngIf="bCargadas_fichas_asistencias">
-    <table datatable [dtOptions]="dtOptions_fichas_asistencias" id="tabla_ficha_asistencias" class="row-border hover"></table>
-
-    <div *ngIf="ficha_seleccionada != ''">
-        <a [href]="obtener_url_ficha()"> <button class="btn btn-primary"> Ver Ficha</button></a>
-        <button class="btn btn-danger ms-3" (click)="cancelar_ficha_asistencia()"> Eliminar Ficha</button>
+  <legend>Lista de fichas de asistencias</legend>
+  @if (bCargadas_fichas_asistencias) {
+    <div>
+      <table datatable [dtOptions]="dtOptions_fichas_asistencias" id="tabla_ficha_asistencias" class="row-border hover"></table>
+      @if (ficha_seleccionada != '') {
+        <div>
+          <a [href]="obtener_url_ficha()"> <button class="btn btn-primary"> Ver Ficha</button></a>
+          <button class="btn btn-danger ms-3" (click)="cancelar_ficha_asistencia()"> Eliminar Ficha</button>
+        </div>
+      }
     </div>
-</div>
+  }
 
 </div>

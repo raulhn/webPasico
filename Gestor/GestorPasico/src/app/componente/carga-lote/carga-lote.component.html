@@ -5,91 +5,94 @@
   </header>
 
   <!-- Sección de Conflictos -->
-  <section
-    class="data-section conflicts-section"
-    *ngIf="interfaz_personas_conflicto.length > 0"
-  >
-    <div class="section-header warning-header">
-      <h3 class="section-title">⚠️ Conflictos Encontrados</h3>
-      <span class="count-badge warning-badge">{{
-        interfaz_personas_conflicto.length
-      }}</span>
-    </div>
-
-    <details
-      class="data-card conflict-card"
-      *ngFor="let interfaz_persona_conflicto of interfaz_personas_conflicto"
-    >
-      <summary class="card-summary">
-        <div class="operation-tag conflict-tag">
-          {{ interfaz_persona_conflicto.conflicto.interfaz_persona.operacion }}
-        </div>
-        <div class="person-info">
-          <span class="person-name">
-            {{ interfaz_persona_conflicto.conflicto.interfaz_persona.nombre }}
-            {{
-              interfaz_persona_conflicto.conflicto.interfaz_persona
-                .primer_apellido
-            }}
-            {{
-              interfaz_persona_conflicto.conflicto.interfaz_persona
-                .segundo_apellido
-            }}
-          </span>
-          <div style="display: flex; flex-direction: column">
-            <span
-              *ngIf="
-                interfaz_persona_conflicto.conflicto.interfaz_persona.email
-              "
-            >
-              <b>Correo electrónico: </b>
-              {{ interfaz_persona_conflicto.conflicto.interfaz_persona.email }}
-            </span>
-            <span
-              *ngIf="
-                interfaz_persona_conflicto.conflicto.interfaz_persona.telefono
-              "
-              ><b>Teléfono: </b>
-              {{
-                interfaz_persona_conflicto.conflicto.interfaz_persona.telefono
-              }}
-            </span>
-            <span
-              *ngIf="
+  @if (interfaz_personas_conflicto.length > 0) {
+    <section
+      class="data-section conflicts-section"
+      >
+      <div class="section-header warning-header">
+        <h3 class="section-title">⚠️ Conflictos Encontrados</h3>
+        <span class="count-badge warning-badge">{{
+          interfaz_personas_conflicto.length
+        }}</span>
+      </div>
+      @for (interfaz_persona_conflicto of interfaz_personas_conflicto; track interfaz_persona_conflicto) {
+        <details
+          class="data-card conflict-card"
+          >
+          <summary class="card-summary">
+            <div class="operation-tag conflict-tag">
+              {{ interfaz_persona_conflicto.conflicto.interfaz_persona.operacion }}
+            </div>
+            <div class="person-info">
+              <span class="person-name">
+                {{ interfaz_persona_conflicto.conflicto.interfaz_persona.nombre }}
+                {{
                 interfaz_persona_conflicto.conflicto.interfaz_persona
+                .primer_apellido
+                }}
+                {{
+                interfaz_persona_conflicto.conflicto.interfaz_persona
+                .segundo_apellido
+                }}
+              </span>
+              <div style="display: flex; flex-direction: column">
+                @if (
+                  interfaz_persona_conflicto.conflicto.interfaz_persona.email
+                  ) {
+                  <span
+                    >
+                    <b>Correo electrónico: </b>
+                    {{ interfaz_persona_conflicto.conflicto.interfaz_persona.email }}
+                  </span>
+                }
+                @if (
+                  interfaz_persona_conflicto.conflicto.interfaz_persona.telefono
+                  ) {
+                  <span
+                    ><b>Teléfono: </b>
+                    {{
+                    interfaz_persona_conflicto.conflicto.interfaz_persona.telefono
+                    }}
+                  </span>
+                }
+                @if (
+                  interfaz_persona_conflicto.conflicto.interfaz_persona
                   .fecha_nacimiento
-              "
-              ><b>Fecha de Nacimiento: </b>
-              {{
-                formatearFecha(interfaz_persona_conflicto.conflicto.interfaz_persona
-                  .fecha_nacimiento)
-              }}
-            </span>
-          </div>
-          <div class="select-wrapper">
-            <select
-              class="action-select"
-              [(ngModel)]="interfaz_persona_conflicto.accion_seleccionada"
-              title="Seleccionar acción para resolver el conflicto"
-            >
-              <option value="" disabled selected>Seleccionar acción</option>
-              <option value="INSERTAR">Insertar</option>
-              <option
-                *ngIf="
-                  existe_conflicto_sin_seleccion(
+                  ) {
+                  <span
+                    ><b>Fecha de Nacimiento: </b>
+                    {{
+                    formatearFecha(interfaz_persona_conflicto.conflicto.interfaz_persona
+                    .fecha_nacimiento)
+                    }}
+                  </span>
+                }
+              </div>
+              <div class="select-wrapper">
+                <select
+                  class="action-select"
+                  [(ngModel)]="interfaz_persona_conflicto.accion_seleccionada"
+                  title="Seleccionar acción para resolver el conflicto"
+                  >
+                  <option value="" disabled selected>Seleccionar acción</option>
+                  <option value="INSERTAR">Insertar</option>
+                  @if (
+                    existe_conflicto_sin_seleccion(
                     interfaz_persona_conflicto.conflicto.conflictos_persona
-                  )
-                "
-                value="ACTUALIZAR"
-              >
-                Actualizar
-              </option>
-              <option value="SIN_CAMBIOS">Sin cambios</option>
-            </select>
-          </div>
-        </div>
-        <div class="estado-container">
-          <span class="estado-badge"
+                    )
+                    ) {
+                    <option
+                      value="ACTUALIZAR"
+                      >
+                      Actualizar
+                    </option>
+                  }
+                  <option value="SIN_CAMBIOS">Sin cambios</option>
+                </select>
+              </div>
+            </div>
+            <div class="estado-container">
+              <span class="estado-badge"
                 [ngClass]="{
                   'estado-activo': interfaz_persona_conflicto.conflicto.interfaz_persona.estado === 'ACTIVO',
                   'estado-inactivo': interfaz_persona_conflicto.conflicto.interfaz_persona.estado === 'INACTIVO',
@@ -98,58 +101,61 @@
                   'estado-error': interfaz_persona_conflicto.conflicto.interfaz_persona.estado === 'ERROR',
                   'estado-default': !['ACTIVO', 'INACTIVO', 'PENDIENTE', 'PROCESADO', 'ERROR'].includes(interfaz_persona_conflicto.conflicto.interfaz_persona.estado)
                 }">
-            {{interfaz_persona_conflicto.conflicto.interfaz_persona.estado}}
-          </span>
-        </div>
-      </summary>
-
-      <div class="conflict-list">
-        <div
-          class="conflict-item"
-          *ngFor="
-            let conflicto_persona of interfaz_persona_conflicto.conflicto
-              .conflictos_persona
-          "
-        >
-          <div class="conflict-content">
-            <span class="conflict-label">Coincidencia encontrada:</span>
-            <span class="person-name">
-              {{ conflicto_persona.nombre }}
-              {{ conflicto_persona.primer_apellido }}
-              {{ conflicto_persona.segundo_apellido }}
-            </span>
-            <div style="display: flex; flex-direction: column">
-              <span
-                *ngIf="
-                  interfaz_persona_conflicto.conflicto.interfaz_persona.email
-                "
-              >
-                <b>Correo electrónico: </b>{{ conflicto_persona.email }}
-              </span>
-              <span
-                *ngIf="
-                  interfaz_persona_conflicto.conflicto.interfaz_persona.telefono
-                "
-              >
-                <b>Teléfono: </b> {{ conflicto_persona.telefono }}
-              </span>
-              <span
-                *ngIf="
-                  interfaz_persona_conflicto.conflicto.interfaz_persona
-                    .fecha_nacimiento
-                "
-              >
-                <b>Fecha de Nacimiento: </b>
-                {{ formatearFecha(conflicto_persona.fecha_nacimiento) }}
+                {{interfaz_persona_conflicto.conflicto.interfaz_persona.estado}}
               </span>
             </div>
-            <div
-              class="radio-group"
-              *ngIf="conflicto_persona.nid_persona !== null"
-            >
-              <input
-                class="radio-input"
-                type="radio"
+          </summary>
+          <div class="conflict-list">
+            @for (
+              conflicto_persona of interfaz_persona_conflicto.conflicto
+              .conflictos_persona
+              ; track
+              conflicto_persona) {
+              <div
+                class="conflict-item"
+                >
+                <div class="conflict-content">
+                  <span class="conflict-label">Coincidencia encontrada:</span>
+                  <span class="person-name">
+                    {{ conflicto_persona.nombre }}
+                    {{ conflicto_persona.primer_apellido }}
+                    {{ conflicto_persona.segundo_apellido }}
+                  </span>
+                  <div style="display: flex; flex-direction: column">
+                    @if (
+                      interfaz_persona_conflicto.conflicto.interfaz_persona.email
+                      ) {
+                      <span
+                        >
+                        <b>Correo electrónico: </b>{{ conflicto_persona.email }}
+                      </span>
+                    }
+                    @if (
+                      interfaz_persona_conflicto.conflicto.interfaz_persona.telefono
+                      ) {
+                      <span
+                        >
+                        <b>Teléfono: </b> {{ conflicto_persona.telefono }}
+                      </span>
+                    }
+                    @if (
+                      interfaz_persona_conflicto.conflicto.interfaz_persona
+                      .fecha_nacimiento
+                      ) {
+                      <span
+                        >
+                        <b>Fecha de Nacimiento: </b>
+                        {{ formatearFecha(conflicto_persona.fecha_nacimiento) }}
+                      </span>
+                    }
+                  </div>
+                  @if (conflicto_persona.nid_persona !== null) {
+                    <div
+                      class="radio-group"
+                      >
+                      <input
+                        class="radio-input"
+                        type="radio"
                 [disabled]="
                   interfaz_persona_conflicto.accion_seleccionada !==
                   'ACTUALIZAR'
@@ -171,9 +177,9 @@
                     conflicto_persona
                   )
                 "
-              />
-              <label
-                class="radio-label"
+                        />
+                      <label
+                        class="radio-label"
                 [for]="
                   'radio-' +
                   interfaz_persona_conflicto.conflicto.interfaz_persona
@@ -181,98 +187,103 @@
                   '-' +
                   conflicto_persona.nid_persona
                 "
-              >
-                Seleccionar esta persona
-              </label>
-            </div>
-            <div
-              class="pending-insert"
+                        >
+                        Seleccionar esta persona
+                      </label>
+                    </div>
+                  }
+                  <div
+                    class="pending-insert"
               [ngClass]="{
                 hidden: conflicto_persona.nid_persona !== null,
               }"
-            >
-              <span>Persona pendiente de insertar</span>
-            </div>
+                    >
+                    <span>Persona pendiente de insertar</span>
+                  </div>
+                </div>
+              </div>
+            }
           </div>
-        </div>
-      </div>
-    </details>
-  </section>
+        </details>
+      }
+    </section>
+  }
 
   <!-- Sección de Nuevas Inserciones -->
-  <section
-    class="data-section insert-section"
-    *ngIf="interfaz_personas_insertar.length > 0"
-  >
-    <div class="section-header success-header">
-      <h3 class="section-title">➕ Nuevas Personas</h3>
-      <span class="count-badge success-badge">{{
-        interfaz_personas_insertar.length
-      }}</span>
-    </div>
-
-    <div
-      class="data-card insert-card"
-      *ngFor="let interfaz_persona_insertar of interfaz_personas_insertar"
-    >
-      <div class="card-content">
-        <div class="operation-tag insert-tag">
-          {{ interfaz_persona_insertar.insertar.interfaz_persona.operacion }}
-        </div>
-        <div class="person-info">
-          <span class="person-name">
-            {{ interfaz_persona_insertar.insertar.interfaz_persona.nombre }}
-            {{
-              interfaz_persona_insertar.insertar.interfaz_persona
-                .primer_apellido
-            }}
-            {{
-              interfaz_persona_insertar.insertar.interfaz_persona
-                .segundo_apellido
-            }}
-          </span>
-          <div style="display: flex; flex-direction: column">
-            <span
-              *ngIf="interfaz_persona_insertar.insertar.interfaz_persona.email"
-            >
-              <b>Correo eletrónico: </b>
-              {{ interfaz_persona_insertar.insertar.interfaz_persona.email }}
-            </span>
-            <span
-              *ngIf="
-                interfaz_persona_insertar.insertar.interfaz_persona.telefono
-              "
-              ><b>Teléfono: </b
-              >{{
-                interfaz_persona_insertar.insertar.interfaz_persona.telefono
-              }}
-            </span>
-            <span
-              *ngIf="
+  @if (interfaz_personas_insertar.length > 0) {
+    <section
+      class="data-section insert-section"
+      >
+      <div class="section-header success-header">
+        <h3 class="section-title">➕ Nuevas Personas</h3>
+        <span class="count-badge success-badge">{{
+          interfaz_personas_insertar.length
+        }}</span>
+      </div>
+      @for (interfaz_persona_insertar of interfaz_personas_insertar; track interfaz_persona_insertar) {
+        <div
+          class="data-card insert-card"
+          >
+          <div class="card-content">
+            <div class="operation-tag insert-tag">
+              {{ interfaz_persona_insertar.insertar.interfaz_persona.operacion }}
+            </div>
+            <div class="person-info">
+              <span class="person-name">
+                {{ interfaz_persona_insertar.insertar.interfaz_persona.nombre }}
+                {{
                 interfaz_persona_insertar.insertar.interfaz_persona
+                .primer_apellido
+                }}
+                {{
+                interfaz_persona_insertar.insertar.interfaz_persona
+                .segundo_apellido
+                }}
+              </span>
+              <div style="display: flex; flex-direction: column">
+                @if (interfaz_persona_insertar.insertar.interfaz_persona.email) {
+                  <span
+                    >
+                    <b>Correo eletrónico: </b>
+                    {{ interfaz_persona_insertar.insertar.interfaz_persona.email }}
+                  </span>
+                }
+                @if (
+                  interfaz_persona_insertar.insertar.interfaz_persona.telefono
+                  ) {
+                  <span
+                    ><b>Teléfono: </b
+                    >{{
+                    interfaz_persona_insertar.insertar.interfaz_persona.telefono
+                    }}
+                  </span>
+                }
+                @if (
+                  interfaz_persona_insertar.insertar.interfaz_persona
                   .fecha_nacimiento
-              "
-              ><b>Fecha de Nacimiento: </b
-              >{{
-                formatearFecha(interfaz_persona_insertar.insertar.interfaz_persona
-                  .fecha_nacimiento)
-              }}
-            </span>
-          </div>
-
-          <div class="select-wrapper">
-            <select
-              class="action-select"
-              [(ngModel)]="interfaz_persona_insertar.accion_seleccionada"
-              title="Seleccionar acción para resolver el conflicto"
-            >
-              <option value="INSERTAR" selected>Insertar</option>
-              <option value="SIN_CAMBIOS">Sin cambios</option>
-            </select>
-          </div>
-        </div>
-        <div class="estado-container">
-          <span class="estado-badge"
+                  ) {
+                  <span
+                    ><b>Fecha de Nacimiento: </b
+                    >{{
+                    formatearFecha(interfaz_persona_insertar.insertar.interfaz_persona
+                    .fecha_nacimiento)
+                    }}
+                  </span>
+                }
+              </div>
+              <div class="select-wrapper">
+                <select
+                  class="action-select"
+                  [(ngModel)]="interfaz_persona_insertar.accion_seleccionada"
+                  title="Seleccionar acción para resolver el conflicto"
+                  >
+                  <option value="INSERTAR" selected>Insertar</option>
+                  <option value="SIN_CAMBIOS">Sin cambios</option>
+                </select>
+              </div>
+            </div>
+            <div class="estado-container">
+              <span class="estado-badge"
                 [ngClass]="{
                   'estado-activo': interfaz_persona_insertar.insertar.interfaz_persona.estado === 'ACTIVO',
                   'estado-inactivo': interfaz_persona_insertar.insertar.interfaz_persona.estado === 'INACTIVO',
@@ -281,95 +292,96 @@
                   'estado-error': interfaz_persona_insertar.insertar.interfaz_persona.estado === 'ERROR',
                   'estado-default': !['ACTIVO', 'INACTIVO', 'PENDIENTE', 'PROCESADO', 'ERROR'].includes(interfaz_persona_insertar.insertar.interfaz_persona.estado)
                 }">
-            {{interfaz_persona_insertar.insertar.interfaz_persona.estado}}
-          </span>
+                {{interfaz_persona_insertar.insertar.interfaz_persona.estado}}
+              </span>
+            </div>
+          </div>
         </div>
-
-      </div>
-    </div>
-  </section>
+      }
+    </section>
+  }
 
   <!-- Sección de Actualizaciones -->
-  <section
-    class="data-section update-section"
-    *ngIf="interfaz_personas_actualizar.length > 0"
-  >
-    <div class="section-header info-header">
-      <h3 class="section-title">🔄 Actualizaciones</h3>
-      <span class="count-badge info-badge">{{
-        interfaz_personas_actualizar.length
-      }}</span>
-    </div>
-
-    <details
-      class="data-card update-card"
-      *ngFor="let interfaz_persona_actualizar of interfaz_personas_actualizar"
-    >
-      <summary class="card-summary">
-        <div class="operation-tag update-tag">
-          {{
-            interfaz_persona_actualizar.actualizar.interfaz_persona.operacion
-          }}
-        </div>
-        <div class="person-info">
-          <span class="person-name">
-            {{ interfaz_persona_actualizar.actualizar.interfaz_persona.nombre }}
-            {{
-              interfaz_persona_actualizar.actualizar.interfaz_persona
-                .primer_apellido
-            }}
-            {{
-              interfaz_persona_actualizar.actualizar.interfaz_persona
-                .segundo_apellido
-            }}
-          </span>
-          <div style="display: flex; flex-direction: column">
-            <span
-              *ngIf="
-                interfaz_persona_actualizar.actualizar.interfaz_persona.email
-              "
-            >
-              <b>Correo electrónico: </b>
+  @if (interfaz_personas_actualizar.length > 0) {
+    <section
+      class="data-section update-section"
+      >
+      <div class="section-header info-header">
+        <h3 class="section-title">🔄 Actualizaciones</h3>
+        <span class="count-badge info-badge">{{
+          interfaz_personas_actualizar.length
+        }}</span>
+      </div>
+      @for (interfaz_persona_actualizar of interfaz_personas_actualizar; track interfaz_persona_actualizar) {
+        <details
+          class="data-card update-card"
+          >
+          <summary class="card-summary">
+            <div class="operation-tag update-tag">
               {{
-                interfaz_persona_actualizar.actualizar.interfaz_persona.email
-              }}</span
-            >
-            <span
-              *ngIf="
-                interfaz_persona_actualizar.actualizar.interfaz_persona.telefono
-              "
-              ><b>Teléfono: </b
-              >{{
-                interfaz_persona_actualizar.actualizar.interfaz_persona.telefono
-              }}</span
-            >
-            <span
-              *ngIf="
+              interfaz_persona_actualizar.actualizar.interfaz_persona.operacion
+              }}
+            </div>
+            <div class="person-info">
+              <span class="person-name">
+                {{ interfaz_persona_actualizar.actualizar.interfaz_persona.nombre }}
+                {{
                 interfaz_persona_actualizar.actualizar.interfaz_persona
-                  .fecha_nacimiento
-              "
-              ><b>Fecha de Nacimiento: </b
-              >{{
-                formatearFecha(interfaz_persona_actualizar.actualizar.interfaz_persona
-                  .fecha_nacimiento)
-              }}</span
-            >
-          </div>
-
-          <div class="select-wrapper">
-            <select
-              class="action-select"
-              [(ngModel)]="interfaz_persona_actualizar.accion_seleccionada"
-              title="Seleccionar acción para resolver el conflicto"
-            >
-              <option selected value="ACTUALIZAR">Actualizar</option>
-              <option value="SIN_CAMBIOS">Sin cambios</option>
-            </select>
-          </div>
-
-        </div>
-        <div class="estado-container">
-          <span class="estado-badge"
+                .primer_apellido
+                }}
+                {{
+                interfaz_persona_actualizar.actualizar.interfaz_persona
+                .segundo_apellido
+                }}
+              </span>
+              <div style="display: flex; flex-direction: column">
+                @if (
+                  interfaz_persona_actualizar.actualizar.interfaz_persona.email
+                  ) {
+                  <span
+                    >
+                    <b>Correo electrónico: </b>
+                    {{
+                    interfaz_persona_actualizar.actualizar.interfaz_persona.email
+                    }}</span
+                    >
+                  }
+                  @if (
+                    interfaz_persona_actualizar.actualizar.interfaz_persona.telefono
+                    ) {
+                    <span
+                      ><b>Teléfono: </b
+                      >{{
+                      interfaz_persona_actualizar.actualizar.interfaz_persona.telefono
+                      }}</span
+                      >
+                    }
+                    @if (
+                      interfaz_persona_actualizar.actualizar.interfaz_persona
+                      .fecha_nacimiento
+                      ) {
+                      <span
+                        ><b>Fecha de Nacimiento: </b
+                        >{{
+                        formatearFecha(interfaz_persona_actualizar.actualizar.interfaz_persona
+                        .fecha_nacimiento)
+                        }}</span
+                        >
+                      }
+                    </div>
+                    <div class="select-wrapper">
+                      <select
+                        class="action-select"
+                        [(ngModel)]="interfaz_persona_actualizar.accion_seleccionada"
+                        title="Seleccionar acción para resolver el conflicto"
+                        >
+                        <option selected value="ACTUALIZAR">Actualizar</option>
+                        <option value="SIN_CAMBIOS">Sin cambios</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="estado-container">
+                    <span class="estado-badge"
                 [ngClass]="{
                   'estado-activo': interfaz_persona_actualizar.actualizar.interfaz_persona.estado === 'ACTIVO',
                   'estado-inactivo': interfaz_persona_actualizar.actualizar.interfaz_persona.estado === 'INACTIVO',
@@ -378,117 +390,127 @@
                   'estado-error': interfaz_persona_actualizar.actualizar.interfaz_persona.estado === 'ERROR',
                   'estado-default': !['ACTIVO', 'INACTIVO', 'PENDIENTE', 'PROCESADO', 'ERROR'].includes(interfaz_persona_actualizar.actualizar.interfaz_persona.estado)
                 }">
-            {{interfaz_persona_actualizar.actualizar.interfaz_persona.estado}}
-          </span>
-        </div>
-      </summary>
+                      {{interfaz_persona_actualizar.actualizar.interfaz_persona.estado}}
+                    </span>
+                  </div>
+                </summary>
+                <div class="update-list">
+                  @for (
+                    conflicto_persona of interfaz_persona_actualizar.actualizar
+                    .conflictos_persona
+                    ; track
+                    conflicto_persona) {
+                    <div
+                      >
+                      @if (
+                        interfaz_persona_actualizar.actualizar.interfaz_persona
+                        .nid_persona === null ||
+                        interfaz_persona_actualizar.actualizar.interfaz_persona
+                        .nid_persona == conflicto_persona.nid_persona
+                        ) {
+                        <div
+                          class="update-item"
+                          class="update-content"
+                          >
+                          <span class="conflict-label">Coincidencia encontrada:</span>
+                          <span class="person-name">
+                            {{ conflicto_persona.nombre }}
+                            {{ conflicto_persona.primer_apellido }}
+                            {{ conflicto_persona.segundo_apellido }}
+                          </span>
+                          <div style="display: flex; flex-direction: column">
+                            @if (
+                              interfaz_persona_actualizar.actualizar.interfaz_persona.email
+                              ) {
+                              <span
+                                >
+                                <b>Correo electrónico: </b>{{ conflicto_persona.email }}
+                              </span>
+                            }
+                            @if (
+                              interfaz_persona_actualizar.actualizar.interfaz_persona
+                              .telefono
+                              ) {
+                              <span
+                                >
+                                <b>Teléfono: </b>{{ conflicto_persona.telefono }}
+                              </span>
+                            }
+                            @if (
+                              interfaz_persona_actualizar.actualizar.interfaz_persona
+                              .fecha_nacimiento
+                              ) {
+                              <span
+                                >
+                                <b>Fecha de Nacimiento: </b
+                                  >{{ formatearFecha(conflicto_persona.fecha_nacimiento) }}
+                                </span>
+                              }
+                            </div>
+                          </div>
+                        }
+                      </div>
+                    }
+                  </div>
+                </details>
+              }
+            </section>
+          }
 
-      <div class="update-list">
-        <div
-          *ngFor="
-            let conflicto_persona of interfaz_persona_actualizar.actualizar
-              .conflictos_persona
-          "
-        >
-          <div
-            class="update-item"
-            *ngIf="
-              interfaz_persona_actualizar.actualizar.interfaz_persona
-                .nid_persona === null ||
-              interfaz_persona_actualizar.actualizar.interfaz_persona
-                .nid_persona == conflicto_persona.nid_persona
-            "
-            class="update-content"
-          >
-            <span class="conflict-label">Coincidencia encontrada:</span>
-            <span class="person-name">
-              {{ conflicto_persona.nombre }}
-              {{ conflicto_persona.primer_apellido }}
-              {{ conflicto_persona.segundo_apellido }}
-            </span>
-            <div style="display: flex; flex-direction: column">
-              <span
-                *ngIf="
-                  interfaz_persona_actualizar.actualizar.interfaz_persona.email
-                "
+          <!-- Sección de Sin Cambios -->
+          @if (interfaz_personas_sin_cambios.length > 0) {
+            <section
+              class="data-section no-changes-section"
               >
-                <b>Correo electrónico: </b>{{ conflicto_persona.email }}
-              </span>
-              <span
-                *ngIf="
-                  interfaz_persona_actualizar.actualizar.interfaz_persona
-                    .telefono
-                "
-              >
-                <b>Teléfono: </b>{{ conflicto_persona.telefono }}
-              </span>
-              <span
-                *ngIf="
-                  interfaz_persona_actualizar.actualizar.interfaz_persona
-                    .fecha_nacimiento
-                "
-              >
-                <b>Fecha de Nacimiento: </b
-                >{{ formatearFecha(conflicto_persona.fecha_nacimiento) }}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </details>
-  </section>
-
-  <!-- Sección de Sin Cambios -->
-  <section
-    class="data-section no-changes-section"
-    *ngIf="interfaz_personas_sin_cambios.length > 0"
-  >
-    <div class="section-header neutral-header">
-      <h3 class="section-title">✅ Sin Cambios</h3>
-      <span class="count-badge neutral-badge">{{
-        interfaz_personas_sin_cambios.length
-      }}</span>
-    </div>
-
-    <div
-      class="data-card no-changes-card"
-      *ngFor="let interfaz_persona_sin_cambios of interfaz_personas_sin_cambios"
-    >
-      <div class="card-content">
-        <div class="operation-tag no-changes-tag">
-          {{ interfaz_persona_sin_cambios.interfaz_persona.operacion }}
-        </div>
-        <div class="person-info">
-          <span class="person-name">
-            {{ interfaz_persona_sin_cambios.interfaz_persona.nombre }}
-            {{ interfaz_persona_sin_cambios.interfaz_persona.primer_apellido }}
-            {{ interfaz_persona_sin_cambios.interfaz_persona.segundo_apellido }}
-          </span>
-          <div style="display: flex; flex-direction: column">
-            <span *ngIf="interfaz_persona_sin_cambios.interfaz_persona.email">
-              <b>Correo electrónico: </b
-              >{{ interfaz_persona_sin_cambios.interfaz_persona.email }}
-            </span>
-            <span
-              *ngIf="interfaz_persona_sin_cambios.interfaz_persona.telefono"
-            >
-              <b>Teléfono: </b
-              >{{ interfaz_persona_sin_cambios.interfaz_persona.telefono }}
-            </span>
-            <span
-              *ngIf="
-                interfaz_persona_sin_cambios.interfaz_persona.fecha_nacimiento
-              "
-            >
-              <b>Fecha de Nacimiento: </b
-              >{{
-                formatearFecha(interfaz_persona_sin_cambios.interfaz_persona.fecha_nacimiento)
-              }}
-            </span>
-          </div>
-        </div>
-        <div class="estado-container">
-          <span class="estado-badge"
+              <div class="section-header neutral-header">
+                <h3 class="section-title">✅ Sin Cambios</h3>
+                <span class="count-badge neutral-badge">{{
+                  interfaz_personas_sin_cambios.length
+                }}</span>
+              </div>
+              @for (interfaz_persona_sin_cambios of interfaz_personas_sin_cambios; track interfaz_persona_sin_cambios) {
+                <div
+                  class="data-card no-changes-card"
+                  >
+                  <div class="card-content">
+                    <div class="operation-tag no-changes-tag">
+                      {{ interfaz_persona_sin_cambios.interfaz_persona.operacion }}
+                    </div>
+                    <div class="person-info">
+                      <span class="person-name">
+                        {{ interfaz_persona_sin_cambios.interfaz_persona.nombre }}
+                        {{ interfaz_persona_sin_cambios.interfaz_persona.primer_apellido }}
+                        {{ interfaz_persona_sin_cambios.interfaz_persona.segundo_apellido }}
+                      </span>
+                      <div style="display: flex; flex-direction: column">
+                        @if (interfaz_persona_sin_cambios.interfaz_persona.email) {
+                          <span>
+                            <b>Correo electrónico: </b
+                              >{{ interfaz_persona_sin_cambios.interfaz_persona.email }}
+                            </span>
+                          }
+                          @if (interfaz_persona_sin_cambios.interfaz_persona.telefono) {
+                            <span
+                              >
+                              <b>Teléfono: </b
+                                >{{ interfaz_persona_sin_cambios.interfaz_persona.telefono }}
+                              </span>
+                            }
+                            @if (
+                              interfaz_persona_sin_cambios.interfaz_persona.fecha_nacimiento
+                              ) {
+                              <span
+                                >
+                                <b>Fecha de Nacimiento: </b
+                                  >{{
+                                  formatearFecha(interfaz_persona_sin_cambios.interfaz_persona.fecha_nacimiento)
+                                  }}
+                                </span>
+                              }
+                            </div>
+                          </div>
+                          <div class="estado-container">
+                            <span class="estado-badge"
                 [ngClass]="{
                   'estado-activo': interfaz_persona_sin_cambios.interfaz_persona.estado === 'ACTIVO',
                   'estado-inactivo': interfaz_persona_sin_cambios.interfaz_persona.estado === 'INACTIVO',
@@ -497,27 +519,32 @@
                   'estado-error': interfaz_persona_sin_cambios.interfaz_persona.estado === 'ERROR',
                   'estado-default': !['ACTIVO', 'INACTIVO', 'PENDIENTE', 'PROCESADO', 'ERROR'].includes(interfaz_persona_sin_cambios.interfaz_persona.estado)
                 }">
-            {{interfaz_persona_sin_cambios.interfaz_persona.estado}}
-          </span>
-        </div>
-      </div>
-    </div>
-  </section>
-  <div style="display: flex; width:100%;  justify-content: space-around;">
-  <button class="btn btn-primary" (click)="lanzar_actualizacion()">Resolver Conflictos</button>
-  <button class="btn btn-primary"
-    *ngIf="interfaz_personas_conflicto.length == 0"
-    (click)="lanzar_proceso_carga()"
-  >
-    Procesar Carga
-  </button>
-</div>
-  <!-- Mensaje cuando no hay d            <button (click)="lanzarActualizacion()">Guardar</button>atos -->
-  <div class="empty-state" *ngIf="interfaz_personas.length === 0">
-    <div class="empty-icon">📄</div>
-    <h3 class="empty-title">No hay datos para procesar</h3>
-    <p class="empty-message">
-      No se encontraron registros en el lote seleccionado.
-    </p>
-  </div>
-</div>
+                              {{interfaz_persona_sin_cambios.interfaz_persona.estado}}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    }
+                  </section>
+                }
+                <div style="display: flex; width:100%;  justify-content: space-around;">
+                  <button class="btn btn-primary" (click)="lanzar_actualizacion()">Resolver Conflictos</button>
+                  @if (interfaz_personas_conflicto.length == 0) {
+                    <button class="btn btn-primary"
+                      (click)="lanzar_proceso_carga()"
+                      >
+                      Procesar Carga
+                    </button>
+                  }
+                </div>
+                <!-- Mensaje cuando no hay d            <button (click)="lanzarActualizacion()">Guardar</button>atos -->
+                @if (interfaz_personas.length === 0) {
+                  <div class="empty-state">
+                    <div class="empty-icon">📄</div>
+                    <h3 class="empty-title">No hay datos para procesar</h3>
+                    <p class="empty-message">
+                      No se encontraron registros en el lote seleccionado.
+                    </p>
+                  </div>
+                }
+              </div>

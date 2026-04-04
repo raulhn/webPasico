@@ -1,15 +1,19 @@
-<div class="mb-1 mt-1" *ngIf="bCargado && matriculas.length > 0">
-  <div class="card p-3">
-    <legend>Matriculas realizadas</legend>
-    <div class="card p-3" *ngFor="let matricula of matriculas">
-      <div class="row">
-        <div class="col-9">
-          {{matricula.descripcion_curso}}
+@if (bCargado && matriculas.length > 0) {
+  <div class="mb-1 mt-1">
+    <div class="card p-3">
+      <legend>Matriculas realizadas</legend>
+      @for (matricula of matriculas; track matricula) {
+        <div class="card p-3">
+          <div class="row">
+            <div class="col-9">
+              {{matricula.descripcion_curso}}
+            </div>
+            <div class="col-3">
+              <a [href]="obtener_url(matricula.nid)"> <button class="btn btn-primary"> Ver Ficha</button></a>
+            </div>
+          </div>
         </div>
-        <div class="col-3">
-          <a [href]="obtener_url(matricula.nid)"> <button class="btn btn-primary"> Ver Ficha</button></a>
-        </div>
-      </div>
+      }
     </div>
   </div>
-</div>
+}

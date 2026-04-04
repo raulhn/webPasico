@@ -1,127 +1,134 @@
-<nav  *ngIf="nid_rol == nid_administrador" class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="/">Gestor Pasico</a>
-      <button *ngIf="logueado" class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarGestor" aria-controls="navbarGestor" aria-expanded="true" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div *ngIf="logueado" class="navbar-collapse collapse show" id="navbarGestor">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarPersonas" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Personas
-            </a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="/personas">Listado Personas</a></li>
-              <li><a class="dropdown-item" href="/registrar-persona">Registrar Persona</a></li>
-              <li><a class="dropdown-item" href="/registrar-socio">Registrar Socio</a></li>
-         
-            </ul>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/asignaturas">Asignaturas</a>
-          </li>
-           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarBanda" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Banda
-            </a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="/lista_tipo_musico">Tipos de músicos</a></li>
-              <li><a class="dropdown-item" href="/lista_instrumentos">Instrumentos</a></li>
-              <li><a class="dropdown-item" href="/musicos">Musicos</a></li>
-            </ul> 
+@if (nid_rol == nid_administrador) {
+  <nav  class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">Gestor Pasico</a>
+      @if (logueado) {
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarGestor" aria-controls="navbarGestor" aria-expanded="true" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      }
+      @if (logueado) {
+        <div class="navbar-collapse collapse show" id="navbarGestor">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarPersonas" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Personas
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="/personas">Listado Personas</a></li>
+                <li><a class="dropdown-item" href="/registrar-persona">Registrar Persona</a></li>
+                <li><a class="dropdown-item" href="/registrar-socio">Registrar Socio</a></li>
+              </ul>
             </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/listado_preinscripciones">Preinscripciones</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/parametros">Parámetros</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/registrar_remesa">Remesas</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/evaluacion">Evaluación</a>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarPersonas" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Inventario
-            </a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="/registro_inventario">Crear Inventario</a></li>
-              <li><a class="dropdown-item" href="/lista_inventario">Lista Inventario</a></li>
-            </ul>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarPersonas" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Préstamos
-            </a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="/registrar_prestamo">Crear Préstamo</a></li>
-              <li><a class="dropdown-item" href="/lista_prestamos">Lista Préstamos</a></li>
-            </ul> 
-          </li>
-        </ul>
+            <li class="nav-item">
+              <a class="nav-link" href="/asignaturas">Asignaturas</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarBanda" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Banda
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="/lista_tipo_musico">Tipos de músicos</a></li>
+                <li><a class="dropdown-item" href="/lista_instrumentos">Instrumentos</a></li>
+                <li><a class="dropdown-item" href="/musicos">Musicos</a></li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/listado_preinscripciones">Preinscripciones</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/parametros">Parámetros</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/registrar_remesa">Remesas</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/evaluacion">Evaluación</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarPersonas" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Inventario
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="/registro_inventario">Crear Inventario</a></li>
+                <li><a class="dropdown-item" href="/lista_inventario">Lista Inventario</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarPersonas" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Préstamos
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="/registrar_prestamo">Crear Préstamo</a></li>
+                <li><a class="dropdown-item" href="/lista_prestamos">Lista Préstamos</a></li>
+              </ul>
+            </li>
+          </ul>
+          @if (logueado) {
+            <span>
+              <div class="float-end p-3 text-light">
+                <b>Usuario:</b> {{this.usuario}}
+                <span class="p-1"></span>
+                <button (click) ="cambiar_password()" class="btn btn-dark btn-outline-light">Cambiar contraseña</button>
+                <span class="p-1"></span>
+                <button (click)="[logout()]" type="button" class="btn btn-dark btn-outline-light">
+                  Logout
+                </button>
+              </div>
+            </span>
+          }
+        </div>
+      }
+    </div>
+  </nav>
+}
 
-        <span *ngIf="logueado">
-          <div class="float-end p-3 text-light">
-
-              <b>Usuario:</b> {{this.usuario}}
-              <span class="p-1"></span>
-              <button (click) ="cambiar_password()" class="btn btn-dark btn-outline-light">Cambiar contraseña</button>
-              <span class="p-1"></span>
-              <button (click)="[logout()]" type="button" class="btn btn-dark btn-outline-light">
-                Logout
-              </button>
-
-          </div>
-        </span>
-      </div>
-  </div>
-</nav>
-
-<nav  *ngIf="nid_rol == nid_profesor" class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="/">Gestor Pasico</a>
-      <button *ngIf="logueado" class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarGestor" aria-controls="navbarGestor" aria-expanded="true" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div *ngIf="logueado" class="navbar-collapse collapse show" id="navbarGestor">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-         
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarPersonas" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Asistencias
-            </a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="/crea_ficha_asistencia">Crear Ficha Asitencia </a></li>
-              <li><a class="dropdown-item" href="/lista_ficha_asistencias">Lista Fichas Asistencia</a></li>
-            </ul>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/evaluacion_profesor">Evaluación</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/lista_alumnos">Alumnos</a>
-          </li>
-         
-        </ul>
-
-        <span *ngIf="logueado">
-          <div class="float-end p-3 text-light">
-
-              <b>Usuario:</b> {{this.usuario}}
-              <span class="p-1"></span>
-              <button (click) ="cambiar_password()" class="btn btn-dark btn-outline-light">Cambiar contraseña</button>
-              <span class="p-1"></span>
-              <button (click)="[logout()]" type="button" class="btn btn-dark btn-outline-light">
-                Logout
-              </button>
-
-          </div>
-        </span>
-      </div>
-  </div>
-</nav>
+@if (nid_rol == nid_profesor) {
+  <nav  class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">Gestor Pasico</a>
+      @if (logueado) {
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarGestor" aria-controls="navbarGestor" aria-expanded="true" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      }
+      @if (logueado) {
+        <div class="navbar-collapse collapse show" id="navbarGestor">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarPersonas" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Asistencias
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="/crea_ficha_asistencia">Crear Ficha Asitencia </a></li>
+                <li><a class="dropdown-item" href="/lista_ficha_asistencias">Lista Fichas Asistencia</a></li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/evaluacion_profesor">Evaluación</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/lista_alumnos">Alumnos</a>
+            </li>
+          </ul>
+          @if (logueado) {
+            <span>
+              <div class="float-end p-3 text-light">
+                <b>Usuario:</b> {{this.usuario}}
+                <span class="p-1"></span>
+                <button (click) ="cambiar_password()" class="btn btn-dark btn-outline-light">Cambiar contraseña</button>
+                <span class="p-1"></span>
+                <button (click)="[logout()]" type="button" class="btn btn-dark btn-outline-light">
+                  Logout
+                </button>
+              </div>
+            </span>
+          }
+        </div>
+      }
+    </div>
+  </nav>
+}
 <div style="display: none;">
   <div #instancia_cambio_password>
     <div style="min-height: 100px;">

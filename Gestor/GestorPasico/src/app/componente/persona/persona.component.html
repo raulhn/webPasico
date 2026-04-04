@@ -1,69 +1,69 @@
-<div class="mb-1 mt-1" *ngIf="bRecuperado_persona">
+@if (bRecuperado_persona) {
+  <div class="mb-1 mt-1">
     <form class="form-control">
-        <legend>Datos Personales</legend>
-        <div class="row form-row">
-            <div class="col">
-                <label > DNI: </label>
-                <input type="text" [(ngModel)] = "persona['nif']" name="nif" onkeyup="this.value = this.value.toUpperCase();" class="form-control"/>
-            </div>
-            <div class="col">
-                <label> Codigo:</label>
-                <input type="text" [(ngModel)] = "persona['codigo']" name="codigo" class="form-control"/>
-            </div>
+      <legend>Datos Personales</legend>
+      <div class="row form-row">
+        <div class="col">
+          <label > DNI: </label>
+          <input type="text" [(ngModel)] = "persona['nif']" name="nif" onkeyup="this.value = this.value.toUpperCase();" class="form-control"/>
         </div>
-        <div class="row form-row">
-            <div class="col">
-                <label> Nombre: </label>
-                <input class="form-control" [(ngModel)]= "persona['nombre']" name="nombre" type="text" required/> 
-                <label> Primer apellido: </label>
-                <input class="form-control" [(ngModel)]= "persona['primer_apellido']" name="Primer apellido" type="text" required/>
-            </div>
+        <div class="col">
+          <label> Codigo:</label>
+          <input type="text" [(ngModel)] = "persona['codigo']" name="codigo" class="form-control"/>
         </div>
-        <div class="row form-row">
-            <div class="col">
-                <label> Segundo apellido: </label>
-                <input class="form-control" [(ngModel)]= "persona['segundo_apellido']" name="Segundo apellido" type="test"/>
-            </div>
+      </div>
+      <div class="row form-row">
+        <div class="col">
+          <label> Nombre: </label>
+          <input class="form-control" [(ngModel)]= "persona['nombre']" name="nombre" type="text" required/>
+          <label> Primer apellido: </label>
+          <input class="form-control" [(ngModel)]= "persona['primer_apellido']" name="Primer apellido" type="text" required/>
         </div>
-        <div class="row form-row">
-            <div class="col">
-                <label> Fecha nacimiento: </label>
-                <input class="form-control" name ="Fecha nacimiento" [(ngModel)] = "persona['fecha_nacimiento']" type="date" required/>
-            </div>
+      </div>
+      <div class="row form-row">
+        <div class="col">
+          <label> Segundo apellido: </label>
+          <input class="form-control" [(ngModel)]= "persona['segundo_apellido']" name="Segundo apellido" type="test"/>
         </div>
-
-        <div class="row form-row">
-            <div class="col-6">
-                <label> Telefono: </label>
-                <input class="form-control" name="Teléfono" [(ngModel)] = "persona['telefono']" type="text" />
-            </div>
-            <div class="col-6">
-                <label> Usuario Pasarela de Pago</label>
-                <input disabled class="form-control" [(ngModel)]="persona['nid_pasarela_pago']" name="Usuario de Pasarela de Pago">
-
-                <div *ngIf="existe_usuario_pasarela_pago()">
-                    <button  class="btn btn-primary mb-3 mt-2 tp-3" (click)="registrar_usuario_pasarela_pago()"> Crear Usuario Pago</button>
-                </div>
-            </div>
+      </div>
+      <div class="row form-row">
+        <div class="col">
+          <label> Fecha nacimiento: </label>
+          <input class="form-control" name ="Fecha nacimiento" [(ngModel)] = "persona['fecha_nacimiento']" type="date" required/>
         </div>
-
-        <div class="row form-row">
-            <div class="col">
-                <label> Correo electrónico: </label>
-                <input class="form-control" name="Correo electrónico" [(ngModel)] = "persona['correo_electronico']" type="text" />
+      </div>
+      <div class="row form-row">
+        <div class="col-6">
+          <label> Telefono: </label>
+          <input class="form-control" name="Teléfono" [(ngModel)] = "persona['telefono']" type="text" />
+        </div>
+        <div class="col-6">
+          <label> Usuario Pasarela de Pago</label>
+          <input disabled class="form-control" [(ngModel)]="persona['nid_pasarela_pago']" name="Usuario de Pasarela de Pago">
+          @if (existe_usuario_pasarela_pago()) {
+            <div>
+              <button  class="btn btn-primary mb-3 mt-2 tp-3" (click)="registrar_usuario_pasarela_pago()"> Crear Usuario Pago</button>
             </div>
+          }
         </div>
-
-        <div *ngIf="!bRecuperadoSocio">
-            <label>Socio asociado:</label>
-            <ng-select [items]="lista_socios"
-                    bindLabel="etiqueta" 
-                    bindValue="nid"
-                    [(ngModel)]="persona.nid_socio"
-                    [compareWith]="comparePersona_socio">
-            </ng-select>
+      </div>
+      <div class="row form-row">
+        <div class="col">
+          <label> Correo electrónico: </label>
+          <input class="form-control" name="Correo electrónico" [(ngModel)] = "persona['correo_electronico']" type="text" />
         </div>
-
-        
+      </div>
+      @if (!bRecuperadoSocio) {
+        <div>
+          <label>Socio asociado:</label>
+          <ng-select [items]="lista_socios"
+            bindLabel="etiqueta"
+            bindValue="nid"
+            [(ngModel)]="persona.nid_socio"
+            [compareWith]="comparePersona_socio">
+          </ng-select>
+        </div>
+      }
     </form>
-</div> 
+  </div>
+}

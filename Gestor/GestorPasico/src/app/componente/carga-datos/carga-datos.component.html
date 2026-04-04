@@ -16,73 +16,93 @@
         <span class="icono icono-archivo">📁</span>
         Seleccionar Archivo
       </h2>
-      
+
       <div class="input-archivo-wrapper">
-        <input 
-          type="file" 
+        <input
+          type="file"
           id="archivo-input"
-          class="input-archivo" 
+          class="input-archivo"
           (change)="onChange($event)"
           accept=".csv,.xlsx,.xls,.json"
-        />
-        <label 
-          for="archivo-input" 
+          />
+        <label
+          for="archivo-input"
           class="etiqueta-archivo"
           [class.archivo-seleccionado]="archivoSeleccionado"
-        >
+          >
           <span class="icono icono-subir">⬆️</span>
-          <span class="texto-principal" *ngIf="!archivoSeleccionado">
-            Arrastra y suelta tu archivo aquí
-          </span>
-          <span class="texto-principal" *ngIf="archivoSeleccionado">
-            ✅ Archivo seleccionado
-          </span>
-          <span class="texto-secundario" *ngIf="!archivoSeleccionado">
-            o haz clic para buscar en tu dispositivo
-          </span>
-          <span class="texto-secundario" *ngIf="archivoSeleccionado">
-            Haz clic para cambiar el archivo
-          </span>
+          @if (!archivoSeleccionado) {
+            <span class="texto-principal">
+              Arrastra y suelta tu archivo aquí
+            </span>
+          }
+          @if (archivoSeleccionado) {
+            <span class="texto-principal">
+              ✅ Archivo seleccionado
+            </span>
+          }
+          @if (!archivoSeleccionado) {
+            <span class="texto-secundario">
+              o haz clic para buscar en tu dispositivo
+            </span>
+          }
+          @if (archivoSeleccionado) {
+            <span class="texto-secundario">
+              Haz clic para cambiar el archivo
+            </span>
+          }
         </label>
       </div>
 
       <!-- Información del archivo seleccionado -->
-      <div class="info-archivo" *ngIf="archivoSeleccionado">
-        <span class="icono icono-info">📄</span>
-        <div class="detalles-archivo">
-          <div class="nombre-archivo">{{ nombreArchivo }}</div>
-          <div class="tamano-archivo">{{ tamanoArchivo }}</div>
+      @if (archivoSeleccionado) {
+        <div class="info-archivo">
+          <span class="icono icono-info">📄</span>
+          <div class="detalles-archivo">
+            <div class="nombre-archivo">{{ nombreArchivo }}</div>
+            <div class="tamano-archivo">{{ tamanoArchivo }}</div>
+          </div>
         </div>
-      </div>
+      }
     </div>
 
     <!-- Zona de acciones -->
     <div class="zona-acciones">
-      <button 
-        (click)="guardar()" 
+      <button
+        (click)="guardar()"
         class="btn-guardar"
         [disabled]="!archivoSeleccionado || cargando"
         [class.cargando]="cargando"
-      >
-        <span *ngIf="!cargando">Guardar Datos</span>
-        <span *ngIf="cargando">Procesando...</span>
+        >
+        @if (!cargando) {
+          <span>Guardar Datos</span>
+        }
+        @if (cargando) {
+          <span>Procesando...</span>
+        }
       </button>
     </div>
 
     <!-- Mensajes de estado -->
-    <div class="mensaje-estado mensaje-exito" *ngIf="mensajeExito">
-      <span class="icono">✅</span>
-      <span>{{ mensajeExito }}</span>
-    </div>
+    @if (mensajeExito) {
+      <div class="mensaje-estado mensaje-exito">
+        <span class="icono">✅</span>
+        <span>{{ mensajeExito }}</span>
+      </div>
+    }
 
-    <div class="mensaje-estado mensaje-error" *ngIf="mensajeError">
-      <span class="icono">❌</span>
-      <span>{{ mensajeError }}</span>
-    </div>
+    @if (mensajeError) {
+      <div class="mensaje-estado mensaje-error">
+        <span class="icono">❌</span>
+        <span>{{ mensajeError }}</span>
+      </div>
+    }
 
-    <div class="mensaje-estado mensaje-warning" *ngIf="mensajeWarning">
-      <span class="icono">⚠️</span>
-      <span>{{ mensajeWarning }}</span>
-    </div>
+    @if (mensajeWarning) {
+      <div class="mensaje-estado mensaje-warning">
+        <span class="icono">⚠️</span>
+        <span>{{ mensajeWarning }}</span>
+      </div>
+    }
   </div>
 </div>

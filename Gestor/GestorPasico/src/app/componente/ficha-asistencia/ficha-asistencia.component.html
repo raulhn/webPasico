@@ -1,66 +1,72 @@
 <app-menu></app-menu>
 <div class="container">
-<div class="card p-3 m-3"  >
-    <div *ngIf="bCargada_ficha">
+  <div class="card p-3 m-3"  >
+    @if (bCargada_ficha) {
+      <div>
         <legend> {{ficha_asistencia.etiqueta}} </legend>
-    </div>
-<label>Alumno:</label>
-<ng-select [items]="lista_alumnos"
-        bindLabel="etiqueta" 
-        bindValue="nid"
-        [(ngModel)]="alumno_seleccionado"
-        [compareWith]="compare_alumno">
-</ng-select>
+      </div>
+    }
+    <label>Alumno:</label>
+    <ng-select [items]="lista_alumnos"
+      bindLabel="etiqueta"
+      bindValue="nid"
+      [(ngModel)]="alumno_seleccionado"
+      [compareWith]="compare_alumno">
+    </ng-select>
 
-<div *ngIf="alumno_seleccionado != ''">
-<button class="btn btn-primary mb-3 mt-2" (click)="registrar_ficha_alumno()"> Registrar </button>
-</div>
-</div>
-<div class="card p-3 m-3"  >
-<div *ngIf="bCargadas_fichas && lista_ficha_asistencia_alumno.length > 0">
-    <table class="table">
-        <thead>
+    @if (alumno_seleccionado != '') {
+      <div>
+        <button class="btn btn-primary mb-3 mt-2" (click)="registrar_ficha_alumno()"> Registrar </button>
+      </div>
+    }
+  </div>
+  <div class="card p-3 m-3"  >
+    @if (bCargadas_fichas && lista_ficha_asistencia_alumno.length > 0) {
+      <div>
+        <table class="table">
+          <thead>
             <tr class="d-flex">
-                <th class="col-3">
-                    Nombre
-                </th>
-                <th class="col-2">
-                   Asistencia
-                </th>
-                <th class="col-5">
-                    Comentario
-                </th>
-                <th class="col-2"></th>
+              <th class="col-3">
+                Nombre
+              </th>
+              <th class="col-2">
+                Asistencia
+              </th>
+              <th class="col-5">
+                Comentario
+              </th>
+              <th class="col-2"></th>
             </tr>
-        </thead>
-        <tr *ngFor="let ficha_asistencia_alumno of lista_ficha_asistencia_alumno" class="d-flex">
-            <td class="col-3"> {{ficha_asistencia_alumno['etiqueta']}} </td>
-            <td class="col-2">
+          </thead>
+          @for (ficha_asistencia_alumno of lista_ficha_asistencia_alumno; track ficha_asistencia_alumno) {
+            <tr class="d-flex">
+              <td class="col-3"> {{ficha_asistencia_alumno['etiqueta']}} </td>
+              <td class="col-2">
                 <select class="form-select" [(ngModel)]="ficha_asistencia_alumno['asistencia']" >
-                    <option selected value="S">Sí</option>
-                    <option value="N">No</option>
+                  <option selected value="S">Sí</option>
+                  <option value="N">No</option>
                 </select>
-            </td>
-            <td class="col-5">
-                    
+              </td>
+              <td class="col-5">
                 <textarea class="form-control" [(ngModel)]="ficha_asistencia_alumno['comentario']" rows="4" cols="50"> </textarea>
-            </td>
-           <td class="col-2" style="text-align: center">
+              </td>
+              <td class="col-2" style="text-align: center">
                 <div class="visible-movil">
-                    <button class="btn" style=" color:white; background-color:rgb(229, 15, 8);  border-color:rgb(229, 15, 8);" (click)="eliminar_ficha_asistencia_alumno(ficha_asistencia_alumno['nid_ficha_asistencia_alumno'])"> 
-                        <fa-icon [icon]="faXmark"/> 
-                    </button>
+                  <button class="btn" style=" color:white; background-color:rgb(229, 15, 8);  border-color:rgb(229, 15, 8);" (click)="eliminar_ficha_asistencia_alumno(ficha_asistencia_alumno['nid_ficha_asistencia_alumno'])">
+                    <fa-icon [icon]="faXmark"/>
+                  </button>
                 </div>
                 <div class="oculta-movil">
-                    <button class="btn" style=" color:white; background-color:rgb(229, 15, 8);  border-color:rgb(229, 15, 8);" (click)="eliminar_ficha_asistencia_alumno(ficha_asistencia_alumno['nid_ficha_asistencia_alumno'])"> 
-                       Eliminar
-                    </button>
+                  <button class="btn" style=" color:white; background-color:rgb(229, 15, 8);  border-color:rgb(229, 15, 8);" (click)="eliminar_ficha_asistencia_alumno(ficha_asistencia_alumno['nid_ficha_asistencia_alumno'])">
+                    Eliminar
+                  </button>
                 </div>
-           </td>
-        </tr>
-    </table>
-
-    <button class="btn btn-primary mb-3 mt-2 tp-3" (click)="actualizar_ficha_asistencia_alumno()"> Guardar </button>
-</div>
-</div>
+              </td>
+            </tr>
+          }
+        </table>
+        <button class="btn btn-primary mb-3 mt-2 tp-3" (click)="actualizar_ficha_asistencia_alumno()"> Guardar </button>
+      </div>
+    }
+  </div>
 </div>

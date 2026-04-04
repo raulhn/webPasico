@@ -1,70 +1,72 @@
 <app-menu></app-menu>
 <div class="container pt-4">
-    <form ngNativeValidate class="form-control">
-        <div class="row form-row">
-            <div class="col">
-                <label > DNI: </label>
-                <input type="text" [(ngModel)] = "nif" name="nif" onkeyup="this.value = this.value.toUpperCase();" class="form-control"/>
-            </div>
-            <div class="col">
-                <label>Código:</label>
-                <input type="text" [(ngModel)] = "codigo" name="codigo" class="form-control"/>
-            </div>
-        </div>
-        <div class="row form-row">
-            <div class="col">
-                <label> Nombre: </label>
-                <input class="form-control" [(ngModel)]= "nombre" name="nombre" type="text" required/> 
-                <label> Primer apellido: </label>
-                <input class="form-control" [(ngModel)]= "primer_apellido" name="Primer apellido" type="text" required/>
-            </div>
-        </div>
-        <div class="row form-row">
-            <div class="col">
-                <label> Segundo apellido: </label>
-                <input class="form-control" [(ngModel)]= "segundo_apellido" name="Segundo apellido" type="test"/>
-            </div>
-        </div>
-        <div class="row form-row">
-            <div class="col">
-                <label> Fecha nacimiento: </label>
-                <input class="form-control" name ="Fecha nacimiento" [(ngModel)] = "fecha_nacimiento" type="date"/>
-            </div>
-        </div>
-
-        <div class="row form-row">
-            <div class="col">
-                <label> Telefono: </label>
-                <input class="form-control" name="Teléfono" [(ngModel)] = "telefono" type="text" />
-            </div>
-        </div>
-
-        <div class="row form-row">
-            <div class="col">
-                <label> Correo electrónico: </label>
-                <input class="form-control" name="Correo electrónico" [(ngModel)] = "correo_electronico" type="text"/>
-            </div>
-        </div>
-
-        <div class="row form-row pt-3">
-            <div class="col">
-                <button (click) = "registrar_persona()"  class="btn btn-primary mb-3 "> Registrar </button>
-            </div>
-        </div>
-
-    </form>
-
-
-    <div class="mb-1 mt-1" style="display: none;">
-
-        <div #instancia_personas_repetidas>
-            <div *ngIf="bPersonasRepetidas" style="min-height: 300px;" >
-                <table datatable [dtOptions]="dtOptions_personas" id="tabla_persona_repetidas" class="row-border hover">
-                </table>
-            </div>
-        </div>
+  <form ngNativeValidate class="form-control">
+    <div class="row form-row">
+      <div class="col">
+        <label > DNI: </label>
+        <input type="text" [(ngModel)] = "nif" name="nif" onkeyup="this.value = this.value.toUpperCase();" class="form-control"/>
+      </div>
+      <div class="col">
+        <label>Código:</label>
+        <input type="text" [(ngModel)] = "codigo" name="codigo" class="form-control"/>
+      </div>
     </div>
-    
-   
-      
+    <div class="row form-row">
+      <div class="col">
+        <label> Nombre: </label>
+        <input class="form-control" [(ngModel)]= "nombre" name="nombre" type="text" required/>
+        <label> Primer apellido: </label>
+        <input class="form-control" [(ngModel)]= "primer_apellido" name="Primer apellido" type="text" required/>
+      </div>
+    </div>
+    <div class="row form-row">
+      <div class="col">
+        <label> Segundo apellido: </label>
+        <input class="form-control" [(ngModel)]= "segundo_apellido" name="Segundo apellido" type="test"/>
+      </div>
+    </div>
+    <div class="row form-row">
+      <div class="col">
+        <label> Fecha nacimiento: </label>
+        <input class="form-control" name ="Fecha nacimiento" [(ngModel)] = "fecha_nacimiento" type="date"/>
+      </div>
+    </div>
+
+    <div class="row form-row">
+      <div class="col">
+        <label> Telefono: </label>
+        <input class="form-control" name="Teléfono" [(ngModel)] = "telefono" type="text" />
+      </div>
+    </div>
+
+    <div class="row form-row">
+      <div class="col">
+        <label> Correo electrónico: </label>
+        <input class="form-control" name="Correo electrónico" [(ngModel)] = "correo_electronico" type="text"/>
+      </div>
+    </div>
+
+    <div class="row form-row pt-3">
+      <div class="col">
+        <button (click) = "registrar_persona()"  class="btn btn-primary mb-3 "> Registrar </button>
+      </div>
+    </div>
+
+  </form>
+
+
+  <div class="mb-1 mt-1" style="display: none;">
+
+    <div #instancia_personas_repetidas>
+      @if (bPersonasRepetidas) {
+        <div style="min-height: 300px;" >
+          <table datatable [dtOptions]="dtOptions_personas" id="tabla_persona_repetidas" class="row-border hover">
+          </table>
+        </div>
+      }
+    </div>
+  </div>
+
+
+
 </div>

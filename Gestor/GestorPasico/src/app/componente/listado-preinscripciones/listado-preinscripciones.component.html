@@ -1,9 +1,13 @@
 <app-menu class=""></app-menu>
 <div class="container pt-4">
-<div *ngIf="bCargadoPreinscripciones">
-<table datatable [dtOptions]="dtOptions" class="row-border hover" id="tabla_preinscripciones"></table>
-    <div *ngIf="bCargadoPreinscripciones2">
-        <table datatable [dtOptions]="dtOptions_2" class="row-border hover" id="tabla_preinscripciones_2"></table>
+  @if (bCargadoPreinscripciones) {
+    <div>
+      <table datatable [dtOptions]="dtOptions" class="row-border hover" id="tabla_preinscripciones"></table>
+      @if (bCargadoPreinscripciones2) {
+        <div>
+          <table datatable [dtOptions]="dtOptions_2" class="row-border hover" id="tabla_preinscripciones_2"></table>
+        </div>
+      }
     </div>
-</div>
+  }
 </div>

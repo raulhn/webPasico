@@ -1,29 +1,35 @@
 
 <div class="mb-1 mt-1">
-<form  ngNativeValidate class="form-control">
+  <form  ngNativeValidate class="form-control">
     <legend>Padre</legend>
     <div class="row form-row">
-        <div class="col">
-            <ng-select [items]="lista_personas"
-                    bindLabel="etiqueta" 
-                    bindValue="nid"
-                    [(ngModel)]="padre"
-                    [compareWith]="comparePersona_padre">
-            </ng-select>
-        </div>
+      <div class="col">
+        <ng-select [items]="lista_personas"
+          bindLabel="etiqueta"
+          bindValue="nid"
+          [(ngModel)]="padre"
+          [compareWith]="comparePersona_padre">
+        </ng-select>
+      </div>
     </div>
-    <div *ngIf="existePadre()" class="row form-row">
+    @if (existePadre()) {
+      <div class="row form-row">
         <div class="col">
-            <a class="btn btn-primary" [href]="obtenerEnlaceFicha()" role="button"> Ver Ficha</a>
+          <a class="btn btn-primary" [href]="obtenerEnlaceFicha()" role="button"> Ver Ficha</a>
         </div>
-    </div>
+      </div>
+    }
 
-</form>
-<div *ngIf="bError" class="alert alert-danger" role="alert">
-    {{mensaje_error}}
- </div>
- <div *ngIf="bRegistrado" class="alert alert-success" role="alert">
-    {{mensaje_registro}}
- </div>
+  </form>
+  @if (bError) {
+    <div class="alert alert-danger" role="alert">
+      {{mensaje_error}}
+    </div>
+  }
+  @if (bRegistrado) {
+    <div class="alert alert-success" role="alert">
+      {{mensaje_registro}}
+    </div>
+  }
 
 </div>

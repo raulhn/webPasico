@@ -1,101 +1,105 @@
 <div class="card p-3 mb-1">
-    <div class="row">
-        <div class="col-4">
-            <label>
-                Asignatura
-            </label>
-            <input type="text" class="form-control" [(ngModel)] = "descripcion"/> 
-        </div>
-        <div class="col-4"></div>
-        <div class="col-4" *ngIf="bCargadaAsignatura">
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="tipoAsignatura" id="tipoLenguaje" [(ngModel)]="tipo_asignatura" [value]="0" [checked]="tipo_asignatura === '0'">
-                <label class="form-check-label" for="tipoLenguaje">
-                  Lenguaje Musical
-                </label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" name="tipoAsignatura" id="tipoInstrumentoBanda" [(ngModel)]="tipo_asignatura" [value]="1" [checked]="tipo_asignatura === '1'">
-                <label class="form-check-label" for="tipoInstrumentoBanda">
-                  Instrumento Banda
-                </label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" name="tipoAsignatura" id="tipoInstrumentoNoBanda" [(ngModel)]="tipo_asignatura" [value]="2" [checked]="tipo_asignatura === '2'">
-                <label class="form-check-label" for="tipoInstrumentoNoBanda">
-                 Instrumento No Banda
-                </label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" name="tipoAsignatura" id="tipoBanda" [(ngModel)]="tipo_asignatura" [value]="3" [checked]="tipo_asignatura === '3'">
-                <label class="form-check-label" for="tipoBanda">
-                 Banda
-                </label>
-              </div>
-        </div>
+  <div class="row">
+    <div class="col-4">
+      <label>
+        Asignatura
+      </label>
+      <input type="text" class="form-control" [(ngModel)] = "descripcion"/>
     </div>
-    
-    <div class="row mt-3">
-        <div class="col">
-            <button  class="btn btn-primary mb-3 tp-3" (click)="guardar()"> Guardar </button>
+    <div class="col-4"></div>
+    @if (bCargadaAsignatura) {
+      <div class="col-4">
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="tipoAsignatura" id="tipoLenguaje" [(ngModel)]="tipo_asignatura" [value]="0" [checked]="tipo_asignatura === '0'">
+          <label class="form-check-label" for="tipoLenguaje">
+            Lenguaje Musical
+          </label>
         </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="tipoAsignatura" id="tipoInstrumentoBanda" [(ngModel)]="tipo_asignatura" [value]="1" [checked]="tipo_asignatura === '1'">
+          <label class="form-check-label" for="tipoInstrumentoBanda">
+            Instrumento Banda
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="tipoAsignatura" id="tipoInstrumentoNoBanda" [(ngModel)]="tipo_asignatura" [value]="2" [checked]="tipo_asignatura === '2'">
+          <label class="form-check-label" for="tipoInstrumentoNoBanda">
+            Instrumento No Banda
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="tipoAsignatura" id="tipoBanda" [(ngModel)]="tipo_asignatura" [value]="3" [checked]="tipo_asignatura === '3'">
+          <label class="form-check-label" for="tipoBanda">
+            Banda
+          </label>
+        </div>
+      </div>
+    }
+  </div>
+
+  <div class="row mt-3">
+    <div class="col">
+      <button  class="btn btn-primary mb-3 tp-3" (click)="guardar()"> Guardar </button>
     </div>
+  </div>
 </div>
 
 <div class="card p-3 mb-1 mt-1">
-    <legend> Profesores </legend>
-    <div class="row form-row pt-3">
+  <legend> Profesores </legend>
+  <div class="row form-row pt-3">
     <div class="col-2">
-        <button class="btn btn-primary mb-3 "  (click) = "addProfesor()"> Añadir Profesor </button>
+      <button class="btn btn-primary mb-3 "  (click) = "addProfesor()"> Añadir Profesor </button>
     </div>
     <div class="col-2">
       <button class="btn btn-primary mb-3 "  (click) = "sustituir_profesor()"> Sustituir Profesor </button>
     </div>
 
+  </div>
+  @if (profesores.length > 0) {
+    <div>
+      <table datatable [dtOptions]="dtOptions_profesor" id="tabla_profesor" class="row-border hover"></table>
     </div>
-    <div *ngIf="profesores.length > 0">
-    <table datatable [dtOptions]="dtOptions_profesor" id="tabla_profesor" class="row-border hover"></table>
-    </div>
+  }
 </div>
 
 <div class="mb-1 mt-1" style="display: none;">
 
-    <div #instancia_asignatura>
-        <div style="min-height: 300px;" >
-          <input class="mb-2 mt-2" type="text" id="descripcion_asignatura" class="swal2-input" placeholder="" disabled [value]="descripcion"/>
-          <ng-select  [items]="lista_personas"
-          bindLabel="etiqueta" 
-          bindValue="nid"
-          [(ngModel)]="profesor_nuevo"
-          [compareWith]="comparePersona_profesor">
-          </ng-select>
-        </div>
+  <div #instancia_asignatura>
+    <div style="min-height: 300px;" >
+      <input class="mb-2 mt-2" type="text" id="descripcion_asignatura" class="swal2-input" placeholder="" disabled [value]="descripcion"/>
+      <ng-select  [items]="lista_personas"
+        bindLabel="etiqueta"
+        bindValue="nid"
+        [(ngModel)]="profesor_nuevo"
+        [compareWith]="comparePersona_profesor">
+      </ng-select>
     </div>
+  </div>
 </div>
 
 
 <div class="mb-1 mt-1" style="display: none;">
 
   <div #instancia_sustituir>
-      <div style="min-height: 300px;" >
-        <div class="m-2">
-          <label>Profesor a sustituir</label>
-          <ng-select  [items]="profesores"
-          bindLabel="etiqueta" 
+    <div style="min-height: 300px;" >
+      <div class="m-2">
+        <label>Profesor a sustituir</label>
+        <ng-select  [items]="profesores"
+          bindLabel="etiqueta"
           bindValue="nid"
           [(ngModel)]="profesor_a_sustituir"
           [compareWith]="comparePersona_profesor">
-          </ng-select>
-        </div>
-        <div class="m-2">
-          <label>Profesor sustituto</label>
-          <ng-select  [items]="profesores"
-          bindLabel="etiqueta" 
+        </ng-select>
+      </div>
+      <div class="m-2">
+        <label>Profesor sustituto</label>
+        <ng-select  [items]="profesores"
+          bindLabel="etiqueta"
           bindValue="nid"
           [(ngModel)]="profesor_sustituto"
           [compareWith]="comparePersona_profesor">
-          </ng-select>
-        </div>
+        </ng-select>
       </div>
+    </div>
   </div>
 </div>

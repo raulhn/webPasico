@@ -2,42 +2,46 @@
 
 <div class="container mt-3">
 
-    <div class="card">
-        <div class="card-header">
-            <legend>Registrar préstamo</legend>
-        </div>
-<label>Prestamo a:</label>
-<div *ngIf="bCargadasPersonas">
-    <ng-select [items]="lista_personas"
-    bindLabel="etiqueta" 
-    bindValue="nid"
-    [(ngModel)]="persona_seleccionada"
-    [compareWith]="comparePersona">
-    </ng-select>
-</div>
+  <div class="card">
+    <div class="card-header">
+      <legend>Registrar préstamo</legend>
+    </div>
+    <label>Prestamo a:</label>
+    @if (bCargadasPersonas) {
+      <div>
+        <ng-select [items]="lista_personas"
+          bindLabel="etiqueta"
+          bindValue="nid"
+          [(ngModel)]="persona_seleccionada"
+          [compareWith]="comparePersona">
+        </ng-select>
+      </div>
+    }
 
-<label>Instrumento:</label>
-<div *ngIf="bCargadoInventario">
-    <ng-select [items]="lista_inventario"
-    bindLabel="descripcion" 
-    bindValue="nid_inventario"
-    [(ngModel)]="inventario_seleccionado"
-    [compareWith]="compareInventario">
-    </ng-select>
-</div>
+    <label>Instrumento:</label>
+    @if (bCargadoInventario) {
+      <div>
+        <ng-select [items]="lista_inventario"
+          bindLabel="descripcion"
+          bindValue="nid_inventario"
+          [(ngModel)]="inventario_seleccionado"
+          [compareWith]="compareInventario">
+        </ng-select>
+      </div>
+    }
 
-<label>Fecha de préstamo:</label>
-<div class="row form-row">
-    <div class="col-4">
+    <label>Fecha de préstamo:</label>
+    <div class="row form-row">
+      <div class="col-4">
         <input class="form-control" type="date" [(ngModel)]="fecha_inicio"/>
+      </div>
     </div>
-</div>
-<div class="row form-row">
-    <div class="col-4">
+    <div class="row form-row">
+      <div class="col-4">
         <button class="btn btn-primary mb-3 mt-2 tp-3"  (click)="registrar_inventario()">Registrar</button>
+      </div>
     </div>
-</div>
 
 
-</div>
+  </div>
 </div>

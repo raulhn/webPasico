@@ -1,19 +1,21 @@
-<div class="mb-1 mt-1" *ngIf = "bRecuperadoSocio">
+@if (bRecuperadoSocio) {
+  <div class="mb-1 mt-1">
     <form class="form-control">
-        <legend>Socio</legend>
-        <div class="row form-row">
-            <div class="col">
-                <label>Número de socio:</label>
-                <input  class="form-control" name="Número de socio" [(ngModel)] = "socio_recuperado['num_socio']" type="text"/>
-            </div>
-            <div class="col">
-                <label>Fecha de alta:</label>
-                <input class="form-control" name="Fecha alta" [(ngModel)] = "socio_recuperado['fecha_alta']" type="date"/>
-            </div>
-            <div class="col">
-                <label>Fecha de baja:</label>
-                <input class="form-control" name="Fecha baja" [(ngModel)] = "socio_recuperado['fecha_baja']" type="date"/>
-            </div>
+      <legend>Socio</legend>
+      <div class="row form-row">
+        <div class="col">
+          <label>Número de socio:</label>
+          <input  class="form-control" name="Número de socio" [(ngModel)] = "socio_recuperado['num_socio']" type="text"/>
         </div>
+        <div class="col">
+          <label>Fecha de alta:</label>
+          <input class="form-control" name="Fecha alta" [(ngModel)] = "socio_recuperado['fecha_alta']" type="date"/>
+        </div>
+        <div class="col">
+          <label>Fecha de baja:</label>
+          <input class="form-control" name="Fecha baja" [(ngModel)] = "socio_recuperado['fecha_baja']" type="date"/>
+        </div>
+      </div>
     </form>
-</div>
+  </div>
+}

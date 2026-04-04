@@ -1,68 +1,82 @@
 <app-menu></app-menu>
 <div class="container p-3">
-    <legend><b>Profesor: </b> {{nombre_profesor}}</legend>
+  <legend><b>Profesor: </b> {{nombre_profesor}}</legend>
+  <div class="p-2">
+    <label>Curso</label>
+    <select class="form-select" [(ngModel)]="curso_seleccionado" (change)="cambia_seleccion()" >
+      @for (curso_actual of lista_cursos; track curso_actual) {
+        <option [value]="curso_actual.nid">
+          {{curso_actual.descripcion}}
+        </option>
+      }
+    </select>
+  </div>
+
+  <div class="p-2">
+    <label>Estado</label>
+    <select class="form-select" [(ngModel)]="activo" (change)="cambia_seleccion()">
+      <option value="3"> Todos </option>
+      <option value="2"> Dados de baja </option>
+      <option value="1"> Dados de alta </option>
+    </select>
+  </div>
+
+  @if (bCargadasAsignaturas) {
     <div class="p-2">
-        <label>Curso</label>
-        <select class="form-select" [(ngModel)]="curso_seleccionado" (change)="cambia_seleccion()" >
-            <option *ngFor="let curso_actual of lista_cursos" [value]="curso_actual.nid">
-                {{curso_actual.descripcion}}
-            </option>
-        </select>
+      <label>Asignatura</label>
+      <select class="form-select" [(ngModel)]="asignatura_seleccionada" (change)="cambia_seleccion()">
+        @for (asignatura_actual of lista_asignaturas; track asignatura_actual) {
+          <option [value]="asignatura_actual.nid">
+            {{asignatura_actual.descripcion}}
+          </option>
+        }
+      </select>
     </div>
+  }
 
-    <div class="p-2">
-        <label>Estado</label>
-        <select class="form-select" [(ngModel)]="activo" (change)="cambia_seleccion()">
-            <option value="3"> Todos </option>
-            <option value="2"> Dados de baja </option>
-            <option value="1"> Dados de alta </option>
-        </select>
-    </div>
-
-    <div *ngIf="bCargadasAsignaturas" class="p-2">
-        <label>Asignatura</label>
-        <select class="form-select" [(ngModel)]="asignatura_seleccionada" (change)="cambia_seleccion()">
-            <option *ngFor="let asignatura_actual of lista_asignaturas" [value]="asignatura_actual.nid">
-                {{asignatura_actual.descripcion}}
-            </option>
-        </select>
-    </div>
-
-    <div class="p-3" *ngIf="bCargadoAlumnos">
-        <table datatable [dtOptions]="dtOptions_alumnos" id="tabla_alumnos" class="row-border hover"></table>
-        <div *ngIf="alumno_seleccionado !== undefined" class="float-end p-3">
-            <a [href]="obtiene_url_ficha()"> <button class="btn btn-primary"> Ver Ficha</button></a>
+  @if (bCargadoAlumnos) {
+    <div class="p-3">
+      <table datatable [dtOptions]="dtOptions_alumnos" id="tabla_alumnos" class="row-border hover"></table>
+      @if (alumno_seleccionado !== undefined) {
+        <div class="float-end p-3">
+          <a [href]="obtiene_url_ficha()"> <button class="btn btn-primary"> Ver Ficha</button></a>
         </div>
+      }
     </div>
+  }
 
-    <div *ngIf="bhorario_asignatura_recuperado">
-        <a [href]="obtiene_url_horario()"> <button class="btn btn-primary"> Ver Horario</button></a>
+  @if (bhorario_asignatura_recuperado) {
+    <div>
+      <a [href]="obtiene_url_horario()"> <button class="btn btn-primary"> Ver Horario</button></a>
     </div>
+  }
 
-    <div *ngIf="!bhorario_asignatura_recuperado">
-     <button class="btn btn-primary" (click)="add_horario()"> Registrar Horario</button>
+  @if (!bhorario_asignatura_recuperado) {
+    <div>
+      <button class="btn btn-primary" (click)="add_horario()"> Registrar Horario</button>
     </div>
+  }
 
-    <div  style="display: none;">
-        <div #instancia_sustituir>
-            <label>Día</label>
-            <select class="form-select" [(ngModel)]="formulario_dia" name="Día" id="dia">
-                <option value="1">Lunes</option>
-                <option value="2">Martes</option>
-                <option value="3">Miércoles</option>
-                <option value="4">Jueves</option>
-                <option value="5">Viernes</option>
-                <option value="6">Sábado</option>
-                <option value="7">Domingo</option>
-            </select>
-            <label>Hora Inicio:</label>
-            <input class="form-control" type="time" [(ngModel)]="formulario_hora_inicio" id="hora_inicio" name="hora_inicio" />
-            <label>Hora Fin:</label>
-            <input class="form-control" type="time" [(ngModel)]="formulario_hora_fin" id="hora_fin" name="hora_fin" />
-            <label>Duración (Minutos)</label>
-            <input class="form-control" type="number" [(ngModel)]="duracion_clase"/>
+  <div  style="display: none;">
+    <div #instancia_sustituir>
+      <label>Día</label>
+      <select class="form-select" [(ngModel)]="formulario_dia" name="Día" id="dia">
+        <option value="1">Lunes</option>
+        <option value="2">Martes</option>
+        <option value="3">Miércoles</option>
+        <option value="4">Jueves</option>
+        <option value="5">Viernes</option>
+        <option value="6">Sábado</option>
+        <option value="7">Domingo</option>
+      </select>
+      <label>Hora Inicio:</label>
+      <input class="form-control" type="time" [(ngModel)]="formulario_hora_inicio" id="hora_inicio" name="hora_inicio" />
+      <label>Hora Fin:</label>
+      <input class="form-control" type="time" [(ngModel)]="formulario_hora_fin" id="hora_fin" name="hora_fin" />
+      <label>Duración (Minutos)</label>
+      <input class="form-control" type="number" [(ngModel)]="duracion_clase"/>
 
-       
-        </div>
+
     </div>
+  </div>
 </div>

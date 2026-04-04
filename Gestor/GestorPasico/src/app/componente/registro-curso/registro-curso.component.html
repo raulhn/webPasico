@@ -1,6 +1,8 @@
 <button (click) = "addCurso()">Añadir Curso</button>
 
-<div *ngIf="bCargado">
+@if (bCargado) {
+  <div>
     <table datatable [dtOptions]="dtOptions" id="tabla_cursos" class="row-border hover">
     </table>
-</div>
+  </div>
+}

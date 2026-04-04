@@ -1,60 +1,67 @@
 <app-menu class=""></app-menu>
 <!-- https://www.bootdey.com/snippets/view/calendar-schedule-table -->
 <div class="container">
-    <div class="row">
+  <div class="row">
 
-        <div class="col-md-12">
-            <div class="schedule-table" *ngIf="bCargado_horario">
-                <table class="table bg-white">
-                <thead>
+    <div class="col-md-12">
+      @if (bCargado_horario) {
+        <div class="schedule-table">
+          <table class="table bg-white">
+            <thead>
+              <tr>
+                <th>Horario</th>
+                <th>Lunes </th>
+                <th>Martes</th>
+                <th>Miércoles</th>
+                <th>Jueves</th>
+                <th>Viernes</th>
+                <th>Sábado</th>
+                <th class="last">Domingo</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (hora_actual of horas; track hora_actual) {
                 <tr>
-                    <th>Horario</th>
-                    <th>Lunes </th>
-                    <th>Martes</th>
-                    <th>Miércoles</th>
-                    <th>Jueves</th>
-                    <th>Viernes</th>
-                    <th>Sábado</th>
-                    <th class="last">Domingo</th>
-                </tr>
-                </thead>
-                <tbody>
-                
-                    <tr *ngFor="let hora_actual of horas">
-                        <ng-container *ngFor="let dia_actual of dias">
-                            <td *ngIf="obtener_valor(dia_actual, hora_actual) > 0" [attr.rowspan]="obtener_valor(dia_actual, hora_actual)" 
-                                [ngClass]="{'bg-light': obtener_valor(dia_actual, hora_actual) === 1, 'active': obtener_valor(dia_actual, hora_actual) > 1}">
-                            <div *ngIf="dia_actual == 0"> {{(horas[hora_actual] / 4) + hora_minima}} </div>
-                            <div *ngIf="obtener_valor(dia_actual, hora_actual) > 1 && dia_actual != 0"> 
-                                <p> {{descripcion_clase(dia_actual, hora_actual)}} </p>
-                                <div class="hover align-middle">
-                                    <div class="container align-middle" style="margin: auto;  position: relative; top: 25%; left: 0;  right: 0; ">
-                                        <div class="row">
-                                            <div class="col">
-                                            <span>{{descripcion_clase(dia_actual, hora_actual)}} </span>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="row pt-3">
-                                            <div class="col">
-                                            <button  style=" color:rgb(23, 5, 126); border-color:rgb(23, 5, 126); background-color: white; border-style: solid; " 
-                                                type="button" class="btn" (click) ="eliminar_clase(dia_actual, hora_actual)" ><fa-icon [icon]="faXmark"></fa-icon></button>
-                                            </div>
-                                            <div class="col">
-                                                <a [href]="obtenerUrlHorario(dia_actual, hora_actual)"> <button  style=" color:rgb(23, 5, 126); border-color:rgb(23, 5, 126); background-color: white; border-style: solid; " 
-                                                type="button" class="btn"  ><fa-icon [icon]="faPen"></fa-icon></button> </a>
-                                            </div>
-                                        </div>
-                                    </div>
+                  @for (dia_actual of dias; track dia_actual) {
+                    @if (obtener_valor(dia_actual, hora_actual) > 0) {
+                      <td [attr.rowspan]="obtener_valor(dia_actual, hora_actual)"
+                        [ngClass]="{'bg-light': obtener_valor(dia_actual, hora_actual) === 1, 'active': obtener_valor(dia_actual, hora_actual) > 1}">
+                        @if (dia_actual == 0) {
+                          <div> {{(horas[hora_actual] / 4) + hora_minima}} </div>
+                        }
+                        @if (obtener_valor(dia_actual, hora_actual) > 1 && dia_actual != 0) {
+                          <div>
+                            <p> {{descripcion_clase(dia_actual, hora_actual)}} </p>
+                            <div class="hover align-middle">
+                              <div class="container align-middle" style="margin: auto;  position: relative; top: 25%; left: 0;  right: 0; ">
+                                <div class="row">
+                                  <div class="col">
+                                    <span>{{descripcion_clase(dia_actual, hora_actual)}} </span>
+                                  </div>
                                 </div>
-                            </div>
-
-                            </td>
-                        </ng-container>
+                                <div class="row pt-3">
+                                  <div class="col">
+                                    <button  style=" color:rgb(23, 5, 126); border-color:rgb(23, 5, 126); background-color: white; border-style: solid; "
+                                      type="button" class="btn" (click) ="eliminar_clase(dia_actual, hora_actual)" ><fa-icon [icon]="faXmark"></fa-icon></button>
+                                    </div>
+                                    <div class="col">
+                                      <a [href]="obtenerUrlHorario(dia_actual, hora_actual)"> <button  style=" color:rgb(23, 5, 126); border-color:rgb(23, 5, 126); background-color: white; border-style: solid; "
+                                        type="button" class="btn"  ><fa-icon [icon]="faPen"></fa-icon></button> </a>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            }
+                          </td>
+                        }
+                      }
                     </tr>
+                  }
                 </tbody>
-                </table>
+              </table>
             </div>
+          }
         </div>
 
         <div>
@@ -62,26 +69,26 @@
         </div>
 
         <div  style="display: none;">
-            <div #instancia_sustituir>
-                <label>Día</label>
-                <select class="form-select" [(ngModel)]="formulario_dia" name="Día" id="dia">
-                    <option value="1">Lunes</option>
-                    <option value="2">Martes</option>
-                    <option value="3">Miércoles</option>
-                    <option value="4">Jueves</option>
-                    <option value="5">Viernes</option>
-                    <option value="6">Sábado</option>
-                    <option value="7">Domingo</option>
-                </select>
-                <label>Hora Inicio:</label>
-                <input class="form-control" type="time" [(ngModel)]="formulario_hora_inicio" id="hora_inicio" name="hora_inicio" />
-                <label>Hora Fin:</label>
-                <input class="form-control" type="time" [(ngModel)]="formulario_hora_fin" id="hora_fin" name="hora_fin" />
-                <label>Duración (Minutos)</label>
-                <input class="form-control" type="number" [(ngModel)]="duracion_clase"/>
-    
-           
-            </div>
+          <div #instancia_sustituir>
+            <label>Día</label>
+            <select class="form-select" [(ngModel)]="formulario_dia" name="Día" id="dia">
+              <option value="1">Lunes</option>
+              <option value="2">Martes</option>
+              <option value="3">Miércoles</option>
+              <option value="4">Jueves</option>
+              <option value="5">Viernes</option>
+              <option value="6">Sábado</option>
+              <option value="7">Domingo</option>
+            </select>
+            <label>Hora Inicio:</label>
+            <input class="form-control" type="time" [(ngModel)]="formulario_hora_inicio" id="hora_inicio" name="hora_inicio" />
+            <label>Hora Fin:</label>
+            <input class="form-control" type="time" [(ngModel)]="formulario_hora_fin" id="hora_fin" name="hora_fin" />
+            <label>Duración (Minutos)</label>
+            <input class="form-control" type="number" [(ngModel)]="duracion_clase"/>
+
+
+          </div>
         </div>
+      </div>
     </div>
-</div>

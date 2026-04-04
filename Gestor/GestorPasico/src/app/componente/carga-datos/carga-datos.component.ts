@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CargaDatosService } from 'src/app/servicios/carga-datos.service';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
+
 import { MenuComponent } from '../menu/menu.component';
 
 @Component({
