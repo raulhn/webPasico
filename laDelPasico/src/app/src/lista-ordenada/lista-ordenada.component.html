@@ -2,31 +2,38 @@
 <div class="container">
 
 
-	<div *ngIf="bCargadas_canciones">
-		<div *ngFor="let cancion of canciones">
-			<div class="row">
-				<div class="col"  [id]="cancion[0]['nid_cancion_eu']"  [class]="obtener_clase(cancion[0]['nid_cancion_eu'])">
-					<div  class="card mt-3 p-1 " *ngIf="cancion[0]" >
-						{{cancion[0]['titulo']}}
-						<div [class]="obtener_clase_contador(cancion[0]['nid_cancion_eu'])" [id]="'contador_' + cancion[0]['nid_cancion_eu']" >
-							0
-						</div>
-	
-					</div>
-				</div>
-				<div class="col"   [id]="cancion[1]['nid_cancion_eu']"  [class]="obtener_clase(cancion[1]['nid_cancion_eu'])">
-					<div  class="card mt-3 p-1" *ngIf="cancion[1]"  >
-						{{cancion[1]['titulo']}}
-						<div [class]="obtener_clase_contador(cancion[1]['nid_cancion_eu'])" [id]="'contador_' + cancion[1]['nid_cancion_eu']">
-							0
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+  @if (bCargadas_canciones) {
+    <div>
+      @for (cancion of canciones; track cancion) {
+        <div>
+          <div class="row">
+            <div class="col"  [id]="cancion[0]['nid_cancion_eu']"  [class]="obtener_clase(cancion[0]['nid_cancion_eu'])">
+              @if (cancion[0]) {
+                <div  class="card mt-3 p-1 " >
+                  {{cancion[0]['titulo']}}
+                  <div [class]="obtener_clase_contador(cancion[0]['nid_cancion_eu'])" [id]="'contador_' + cancion[0]['nid_cancion_eu']" >
+                    0
+                  </div>
+                </div>
+              }
+            </div>
+            <div class="col"   [id]="cancion[1]['nid_cancion_eu']"  [class]="obtener_clase(cancion[1]['nid_cancion_eu'])">
+              @if (cancion[1]) {
+                <div  class="card mt-3 p-1"  >
+                  {{cancion[1]['titulo']}}
+                  <div [class]="obtener_clase_contador(cancion[1]['nid_cancion_eu'])" [id]="'contador_' + cancion[1]['nid_cancion_eu']">
+                    0
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
 
-	<div class="m-1 p-1">
-		<button (click)="actualizar_votos()"  class="btn btn-primary mb-3 " type="button"> Actualizar </button>
-	</div>
+  <div class="m-1 p-1">
+    <button (click)="actualizar_votos()"  class="btn btn-primary mb-3 " type="button"> Actualizar </button>
+  </div>
 </div>

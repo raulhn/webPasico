@@ -1,6 +1,7 @@
-<div
-  *ngIf="cargado"
-  class="contenedor_card"
-  [style.background-color]="componente_card.color"
-  [innerHTML]="componente_card.texto"
-></div>
+@if (cargado) {
+  <div
+    class="contenedor_card"
+    [style.background-color]="componente_card.color"
+    [innerHTML]="componente_card.texto"
+  ></div>
+}

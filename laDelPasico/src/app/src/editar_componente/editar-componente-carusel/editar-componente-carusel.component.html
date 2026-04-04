@@ -24,34 +24,36 @@
 </div>
 
 <owl-carousel-o [options]="customOptions">
-    <ng-template carouselSlide >        
-        <div class="item" >
-        <button  type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal" style="background-color:rgb(14, 49, 14); border-width: 2px; display:block; margin-left: auto; margin-right: auto;">
+  <ng-template carouselSlide >
+    <div class="item" >
+      <button  type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal" style="background-color:rgb(14, 49, 14); border-width: 2px; display:block; margin-left: auto; margin-right: auto;">
         <div class="row">
-            <div class="col" style="float:center; ">
-                <fa-icon style="color: white;" [icon] = faAdd></fa-icon>
-            </div>
+          <div class="col" style="float:center; ">
+            <fa-icon style="color: white;" [icon] = faAdd></fa-icon>
+          </div>
         </div>
         <div class="row">
-            <div class="col">
-                <span style="color: white">Añadir nueva imagen</span>
-            </div>
+          <div class="col">
+            <span style="color: white">Añadir nueva imagen</span>
+          </div>
         </div>
-        </button>
-      </div>
-    </ng-template>  
-  
-    <ng-template *ngFor="let imagen of imagenes" carouselSlide>
+      </button>
+    </div>
+  </ng-template>
+
+  @for (imagen of imagenes; track imagen) {
+    <ng-template carouselSlide>
       <div class="item" >
-        <button style="float: right; color:rgb(119, 23, 23); border-color:rgb(119, 23, 23); background-color: white; border-style: solid; " 
-        type="button" class="btn" (click)="eliminar(imagen['nid_imagen'])"><fa-icon [icon]="faXmark"></fa-icon></button>
-        <img  [src]="obtiene_url_imagen(imagen['nid_imagen'])"  class="d-block" alt="..." />
-      </div>
-    </ng-template>
+        <button style="float: right; color:rgb(119, 23, 23); border-color:rgb(119, 23, 23); background-color: white; border-style: solid; "
+          type="button" class="btn" (click)="eliminar(imagen['nid_imagen'])"><fa-icon [icon]="faXmark"></fa-icon></button>
+          <img  [src]="obtiene_url_imagen(imagen['nid_imagen'])"  class="d-block" alt="..." />
+        </div>
+      </ng-template>
+    }
 
   </owl-carousel-o>
 
   <form class="form-control">
     <label >Número de elementos: </label>
-    <input type="text" class="form-control" [(ngModel)] = "elementos_simultaneos"/> 
+    <input type="text" class="form-control" [(ngModel)] = "elementos_simultaneos"/>
   </form>

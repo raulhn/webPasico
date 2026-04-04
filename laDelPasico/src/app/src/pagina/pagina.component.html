@@ -1,11 +1,13 @@
 
 <app-componente-menu></app-componente-menu>
 <div class="container">
-<h4 class="bold titulo_pagina" style="color:blue"> {{titulo}} </h4>
-<hr class="separa-destacados">
-<div class="pt-3" *ngFor="let componente of pagina_componentes;">
-    <app-componente id={{componente.nid_Componente}} id_pagina={{id_pagina}}></app-componente>
-</div>
-<app-nuevo-componente id_pagina={{id_pagina}}></app-nuevo-componente>
+  <h4 class="bold titulo_pagina" style="color:blue"> {{titulo}} </h4>
+  <hr class="separa-destacados">
+  @for (componente of pagina_componentes; track componente) {
+    <div class="pt-3">
+      <app-componente id={{componente.nid_Componente}} id_pagina={{id_pagina}}></app-componente>
+    </div>
+  }
+  <app-nuevo-componente id_pagina={{id_pagina}}></app-nuevo-componente>
 </div>
 <app-pie></app-pie>
