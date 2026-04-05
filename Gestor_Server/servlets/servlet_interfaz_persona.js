@@ -1,5 +1,6 @@
 const servlet_comun = require("./servlet_comun.js");
 const gestor_interfaz_persona = require("../logica/interfaz_persona.js");
+const gestor_interfaz_socio = require("../logica/interfaz_socio.js");
 
 function obtener_interfaz_personas(req, res) {
   servlet_comun.comprobaciones(req, res, async () => {
@@ -46,6 +47,8 @@ function actualizar_operacion(req, res) {
         operacion,
         nid_persona,
       );
+      await gestor_interfaz_socio.actualizar_conflicto(nid_interfaz_persona);
+
       res
         .status(200)
         .send({ error: false, mensaje: "Operación actualizada correctamente" });
@@ -73,6 +76,7 @@ function actualizar_operaciones(req, res) {
           operacion,
           nid_persona,
         );
+        await gestor_interfaz_socio.actualizar_conflicto(nid_interfaz_persona);
       }
       res.status(200).send({
         error: false,

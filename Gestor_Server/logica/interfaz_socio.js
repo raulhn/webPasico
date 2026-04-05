@@ -183,6 +183,12 @@ async function registrar_interfaz_socio(
   fecha_baja,
 ) {
   try {
+    const comprueba_interfaz_socio =
+      await obtener_interfaz_socio(nid_interfaz_persona);
+    if (comprueba_interfaz_socio.legnth > 0) {
+      //El socio ya existe para el nid_interfaz_persona, no se registra el interfaz de socio
+      return comprueba_interfaz_socio[0].nid_interfaz_socio;
+    }
     const interfaz_persona =
       await gestor_interfaz_persona.obtener_interfaz_persona(
         nid_interfaz_persona,
@@ -253,7 +259,19 @@ async function registrar_interfaz_socio(
           return await insertar_interfaz_socio(interfaz_socio);
         }
       }
+    } else if (
+      interfaz_persona.operacion == constantes.OPERACIONES_INTERFAZ.CONFLICTO
+    ) {
+      const interfaz_socio = {
+        nid_interfaz_persona: interfaz_persona.nid_interfaz_persona,
+        fecha_alta: fecha_alta,
+        fecha_baja: fecha_baja,
+        operacion: constantes.OPERACIONES_INTERFAZ.CONFLICTO,
+        estado: constantes.ESTADOS_INTERFAZ.PENDIENTE,
+      };
+      return await insertar_interfaz_socio(interfaz_socio);
     }
+
     return null;
   } catch (error) {
     console.log("interfaz_socio -> registrar_socio", error);
@@ -261,7 +279,102 @@ async function registrar_interfaz_socio(
   }
 }
 
+function obtener_interfaz_socio(nid_interfaz_persona) {
+  const sql =
+    "select * from " +
+    constantes.ESQUEMA_BD +
+    ".socio where nid_persona = (select nid_persona from " +
+    constantes.ESQUEMA_BD +
+    ".interfaz_persona where nid_interfaz_persona = " +
+    conexion.dbConn.escape(nid_interfaz_persona) +
+    ")";
+
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(sql, (error, results) => {
+      if (error) {
+        console.log("interfaz_socio -> obtener_socio: ", error);
+        reject(
+          "Se ha producido un error al recuperar el socio para el nid_interfaz_persona " +
+            nid_interfaz_persona,
+        );
+      } else {
+        resolve(results[0]);
+      }
+    });
+  });
+}
+
+async function actualizar_conflicto(nid_interfaz_persona) {
+  try {
+    const interfaz_persona =
+      await gestor_interfaz_persona.obtener_interfaz_persona(
+        nid_interfaz_persona,
+      );
+    const interfaz_socio = await obtener_interfaz_socio(
+      interfaz_persona.nid_interfaz_persona,
+    );
+
+    if (interfaz_socio.length > 0) {
+      if (
+        interfaz_persona.operacion == constantes.OPERACIONES_INTERFAZ.ACTUALIZAR
+      ) {
+        const existe_socio = await gestor_socio(interfaz_persona.nid_persona);
+        if (!existe_socio) {
+          const interfaz_socio = {
+            nid_interfaz_persona: interfaz_persona.nid_interfaz_persona,
+            fecha_alta: fecha_alta,
+            fecha_baja: fecha_baja,
+            operacion: constantes.OPERACIONES_INTERFAZ.INSERTAR,
+            estado: constantes.ESTADOS_INTERFAZ.PENDIENTE,
+          };
+          return await insertar_interfaz_socio(interfaz_socio);
+        }
+        //Es una actualización y la persona ya es socia
+        const socio = await gestor_socio.obtener_socio(
+          interfaz_persona.nid_persona,
+        );
+        if (comparar_socio(interfaz_socio, socio)) {
+          return await actualizar_interfaz_socio({
+            nid_interfaz_socio: interfaz_socio.nid_interfaz_socio,
+            nid_interfaz_persona: interfaz_persona.nid_interfaz_persona,
+            fecha_alta: interfaz_socio.fecha_alta,
+            fecha_baja: interfaz_socio.fecha_baja,
+            operacion: constantes.OPERACIONES_INTERFAZ.SIN_CAMBIOS,
+            estado: constantes.ESTADOS_INTERFAZ.PENDIENTE,
+          });
+        } else {
+          return await actualizar_interfaz_socio({
+            nid_interfaz_socio: interfaz_socio.nid_interfaz_socio,
+            nid_interfaz_persona: interfaz_persona.nid_interfaz_persona,
+            fecha_alta: interfaz_socio.fecha_alta,
+            fecha_baja: interfaz_socio.fecha_baja,
+            operacion: constantes.OPERACIONES_INTERFAZ.ACTUALIZAR,
+            estado: constantes.ESTADOS_INTERFAZ.PENDIENTE,
+          });
+        }
+      } else if (
+        interfaz_persona.operacion == constantes.OPERACIONES_INTERFAZ.INSERTAR
+      ) {
+        return await actualizar_interfaz_socio({
+          nid_interfaz_socio: interfaz_socio.nid_interfaz_socio,
+          nid_interfaz_persona: interfaz_persona.nid_interfaz_persona,
+          fecha_alta: interfaz_socio.fecha_alta,
+          fecha_baja: interfaz_socio.fecha_baja,
+          operacion: constantes.OPERACIONES_INTERFAZ.INSERTAR,
+          estado: constantes.ESTADOS_INTERFAZ.PENDIENTE,
+        });
+      }
+    }
+    return null;
+  } catch (error) {
+    console.log("interfaz_socio -> actualizar_conflicto", error);
+    throw new Error(
+      "Se ha producido un error al actualizar el conflicto de socio",
+    );
+  }
+}
 module.exports.insertar_interfaz_socio = insertar_interfaz_socio;
 module.exports.actualizar_interfaz_socio = actualizar_interfaz_socio;
 module.exports.obtener_interfaz_socio_lote = obtener_interfaz_socio_lote;
 module.exports.registrar_interfaz_socio = registrar_interfaz_socio;
+module.exports.actualizar_conflicto = actualizar_conflicto;
