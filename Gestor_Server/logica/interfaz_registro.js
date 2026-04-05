@@ -29,7 +29,7 @@ function cargar_registro(cadena, lote) {
     "insert into " +
     constantes.ESQUEMA_BD +
     ".carga_datos( dni, nombre, primer_apellido, segundo_apellido, email, telefono, fecha_nacimiento," +
-    "dni_socio, nombre_socio, primer_apellido_socio, segundo_apellido_socio, email_socio, telefono_socio, fecha_nacimiento_socio, iban, lenguaje_musical, " +
+    "dni_socio, nombre_socio, primer_apellido_socio, segundo_apellido_socio, email_socio, telefono_socio, fecha_nacimiento_socio, fecha_alta_socio, fecha_baja_socio, iban, lenguaje_musical, " +
     "instrumento1, instrumento2, instrumento3, instrumento4, instrumento5, lote) values(trim(" +
     conexion.dbConn.escape(valores[0]) +
     "), trim(" +
@@ -72,6 +72,10 @@ function cargar_registro(cadena, lote) {
     conexion.dbConn.escape(valores[19]) +
     "), trim(" +
     conexion.dbConn.escape(valores[20]) +
+    "), trim(" +
+    conexion.dbConn.escape(valores[21]) +
+    "), trim(" +
+    conexion.dbConn.escape(valores[22]) +
     "), " +
     conexion.dbConn.escape(lote) +
     ")";
