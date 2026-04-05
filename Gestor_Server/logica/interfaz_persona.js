@@ -236,6 +236,34 @@ function actualizar_estado(nid_interfaz_persona, estado) {
   });
 }
 
+function obtener_interfaz_persona(nid_interfaz_persona) {
+  const sql =
+    "select * from " +
+    constantes.ESQUEMA_BD +
+    ".interfaz_persona where nid_interfaz_persona = " +
+    conexion.dbConn.escape(nid_interfaz_persona);
+
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(sql, (error, results) => {
+      if (error) {
+        console.log("interfaz_persona -> obtener_interfaz_persona: ", error);
+        reject(
+          "Se ha producido un error al recuperar la interfaz Persona con nid: ",
+          nid_interfaz_persona,
+        );
+      } else if (results.length == 0) {
+        console.log(
+          "interfaz_persona -> obtener_interfaz_persona: No se ha eencontrado la inteeerfaz_persona para el nid",
+          nid_interfaz_persona,
+        );
+        reject("No se ha encontrado el interfaz persona");
+      } else {
+        resolve(results[0]);
+      }
+    });
+  });
+}
+
 module.exports.obtener_persona_nif_insert = obtener_persona_nif_insert;
 module.exports.obtener_persona_nombre_insert = obtener_persona_nombre_insert;
 module.exports.obtener_persona_apellidos_insert =
@@ -246,3 +274,4 @@ module.exports.actualizar_operacion_conflicto = actualizar_operacion_conflicto;
 module.exports.actualizar_estado = actualizar_estado;
 module.exports.obtener_interfaz_personas_pendiente =
   obtener_interfaz_personas_pendiente;
+module.exports.obtener_interfaz_persona = obtener_interfaz_persona;

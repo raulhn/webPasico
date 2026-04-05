@@ -22,6 +22,8 @@ create table pasico_gestor.carga_datos (
     telefono_socio varchar(30),
     fecha_nacimiento_socio varchar(30),
     nid_interfaz_persona_socio int,
+    fecha_alta_socio varchar(30),
+    fecha_baja_socio varchar(30),
     iban varchar(34),
     lenguaje_musical varchar(50),
     instrumento1 varchar(50),

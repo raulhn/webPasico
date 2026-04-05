@@ -2,6 +2,7 @@ const conexion = require("../conexion.js");
 const constantes = require("../constantes.js");
 const gestor_personas = require("./persona.js");
 const gestor_interfaz_persona = require("./interfaz_persona.js");
+const gestor_interfaz_socio = require("./interfaz_socio.js");
 
 function obtener_siguiente_lote() {
   const sql =
@@ -395,6 +396,12 @@ async function cargar_datos_interfaz(lote) {
             datos_lote[i].nid_carga_datos,
             nid_interfaz_persona_socio,
           );
+
+          await gestor_interfaz_socio.registrar_interfaz_socio(
+            nid_interfaz_persona_socio,
+            dato.fecha_alta_socio,
+            dato.fecha_baja_socio,
+          );
         }
       }
     }
@@ -628,3 +635,4 @@ async function comprueba_persona(
 module.exports.obtener_siguiente_lote = obtener_siguiente_lote;
 module.exports.cargar_registro = cargar_registro;
 module.exports.cargar_datos_interfaz = cargar_datos_interfaz;
+module.exports.comparar_dato = comparar_dato;
