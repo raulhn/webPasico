@@ -198,6 +198,76 @@ function actualizar_operacion_conflicto(
   });
 }
 
+function actualizar_conflicto_persona(conflicto_persona) {
+  const sql =
+    "update " +
+    constantes.ESQUEMA_BD +
+    ".interfaz_conflictos_persona set operacion = " +
+    conexion.dbConn.escape(conflicto_persona.operacion) +
+    ", nid_persona = " +
+    conexion.dbConn.escape(conflicto_persona.nid_persona) +
+    ", nid_socio = ifnull(nullif(" +
+    conexion.dbConn.escape(conflicto_persona.nid_socio) +
+    ", ''), nid_socio)" +
+    " where nid_interfaz_conflicto_persona = " +
+    conexion.dbConn.escape(conflicto_persona.nid_interfaz_conflicto_persona);
+
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.beginTransaction((err) => {
+      if (err) {
+        console.log("Error al iniciar la transacción:", err);
+        reject("Error al iniciar la transacción");
+        return;
+      }
+
+      conexion.dbConn.query(sql, (error, results) => {
+        if (error) {
+          console.log(
+            "interfaz_persona -> actualizar_conflicto_persona: Error al actualizar el conflicto de persona para ",
+            conflicto_persona.nid_interfaz_conflicto_persona,
+            " a ",
+            conflicto_persona.operacion,
+            " con nid_persona ",
+            conflicto_persona.nid_persona,
+            ":",
+            error,
+          );
+          conexion.dbConn.rollback();
+          reject("Error al actualizar el conflicto de persona");
+        } else {
+          conexion.dbConn.commit();
+          resolve();
+        }
+      });
+    });
+  });
+}
+
+function obtener_conflicto_actualizacion(nid_interfaz_persona) {
+  const sql =
+    "select * from " +
+    constantes.ESQUEMA_BD +
+    ".interfaz_conflictos_persona where nid_interfaz_persona = " +
+    conexion.dbConn.escape(nid_interfaz_persona) +
+    " and nid_persona is not null";
+
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(sql, (error, results) => {
+      if (error) {
+        console.log(
+          "interfaz_persona -> obtener_conflicto_actualizacion: Error al obtener el conflicto de actualización para ",
+          nid_interfaz_persona,
+          ":",
+          error,
+        );
+        reject("Error al obtener el conflicto de actualización");
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
+
 function actualizar_estado(nid_interfaz_persona, estado) {
   const sql =
     "update " +
@@ -275,3 +345,6 @@ module.exports.actualizar_estado = actualizar_estado;
 module.exports.obtener_interfaz_personas_pendiente =
   obtener_interfaz_personas_pendiente;
 module.exports.obtener_interfaz_persona = obtener_interfaz_persona;
+module.exports.obtener_conflicto_actualizacion =
+  obtener_conflicto_actualizacion;
+module.exports.actualizar_conflicto_persona = actualizar_conflicto_persona;

@@ -9,6 +9,9 @@ create table pasico_gestor.interfaz_conflictos_persona (
     telefono varchar(20),
     fecha_nacimiento date,
     nid_persona int,
+    nid_socio int,
+    nid_padre int,
+    nid_madre int,
     fecha_creacion datetime default current_timestamp
 );
 

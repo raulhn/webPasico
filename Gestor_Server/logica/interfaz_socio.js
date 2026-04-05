@@ -56,6 +56,9 @@ function actualizar_interfaz_socio(interfaz_socio) {
     " str_to_date(substr(nullif(" +
     conexion.dbConn.escape(interfaz_socio.fecha_baja) +
     ", ''), 1, 10), '%d-%m-%Y'), " +
+    " nid_socio = ifnull(nullif(" +
+    conexion.dbConn.escape(interfaz_socio.nid_socio) +
+    ", ''), nid_socio), " +
     " operacion = " +
     conexion.dbConn.escape(interfaz_socio.operacion) +
     ", " +
@@ -246,6 +249,18 @@ async function registrar_interfaz_socio(
             fecha_baja: socio.fecha_baja,
           };
 
+          // Se recupera el conflicto de actulización, y se incluid el nid del socio
+          let conflicto_persona_actualizar =
+            await gestor_interfaz_persona.obtener_conflicto_actualizacion(
+              interfaz_persona.nid_interfaz_persona,
+            );
+          if (conflicto_persona_actualizar.length > 0) {
+            conflicto_persona_actualizar[0].nid_socio = socio.nid_persona;
+            await gestor_interfaz_persona.actualizar_conflicto_persona(
+              conflicto_persona_actualizar[0],
+            );
+          }
+
           await insertar_conflico_interfaz_socio(conflicto_interfaz_socio);
           return nid_interfaz_socio;
         } else {
@@ -269,6 +284,28 @@ async function registrar_interfaz_socio(
         operacion: constantes.OPERACIONES_INTERFAZ.CONFLICTO,
         estado: constantes.ESTADOS_INTERFAZ.PENDIENTE,
       };
+      return await insertar_interfaz_socio(interfaz_socio);
+    } else if (
+      interfaz_persona.operacion == constantes.OPERACIONES_INTERFAZ.SIN_CAMBIOS
+    ) {
+      const interfaz_socio = {
+        nid_interfaz_persona: interfaz_persona.nid_interfaz_persona,
+        fecha_alta: fecha_alta,
+        fecha_baja: fecha_baja,
+        nid_persona: interfaz_persona.nid_persona,
+        operacion: constantes.OPERACIONES_INTERFAZ.SIN_CAMBIOS,
+        estado: constantes.ESTADOS_INTERFAZ.PENDIENTE,
+      };
+
+      const socio = await gestor_socio.obtener_socio(
+        interfaz_persona.nid_persona,
+      );
+      const comparacion = comparar_socio(interfaz_socio, socio);
+
+      if (!comparacion) {
+        interfaz_socio.operacion = constantes.OPERACIONES_INTERFAZ.ACTUALIZAR;
+      }
+
       return await insertar_interfaz_socio(interfaz_socio);
     }
 
@@ -343,6 +380,18 @@ async function actualizar_conflicto(nid_interfaz_persona) {
             estado: constantes.ESTADOS_INTERFAZ.PENDIENTE,
           });
         } else {
+          // Se recupera el conflicto de actulización, y se incluid el nid del socio
+          let conflicto_persona_actualizar =
+            await gestor_interfaz_persona.obtener_conflicto_actualizacion(
+              interfaz_persona.nid_interfaz_persona,
+            );
+          if (conflicto_persona_actualizar.length > 0) {
+            conflicto_persona_actualizar[0].nid_socio = socio.nid_persona;
+            await gestor_interfaz_persona.actualizar_conflicto_persona(
+              conflicto_persona_actualizar[0],
+            );
+          }
+
           return await actualizar_interfaz_socio({
             nid_interfaz_socio: interfaz_socio.nid_interfaz_socio,
             nid_interfaz_persona: interfaz_persona.nid_interfaz_persona,
@@ -361,6 +410,18 @@ async function actualizar_conflicto(nid_interfaz_persona) {
           fecha_alta: interfaz_socio.fecha_alta,
           fecha_baja: interfaz_socio.fecha_baja,
           operacion: constantes.OPERACIONES_INTERFAZ.INSERTAR,
+          estado: constantes.ESTADOS_INTERFAZ.PENDIENTE,
+        });
+      } else if (
+        (interfaz_persona.operacion =
+          constantes.OPERACIONES_INTERFAZ.SIN_CAMBIOS)
+      ) {
+        return await actualizar_interfaz_socio({
+          nid_interfaz_socio: interfaz_socio.nid_interfaz_socio,
+          nid_interfaz_persona: interfaz_persona.nid_interfaz_persona,
+          fecha_alta: interfaz_socio.fecha_alta,
+          fecha_baja: interfaz_socio.fecha_baja,
+          operacion: constantes.OPERACIONES_INTERFAZ.SIN_CAMBIOS,
           estado: constantes.ESTADOS_INTERFAZ.PENDIENTE,
         });
       }
