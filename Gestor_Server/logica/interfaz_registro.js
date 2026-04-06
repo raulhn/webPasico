@@ -176,6 +176,8 @@ function actualizar_interfaz_persona(persona, nid_interfaz_persona) {
     conexion.dbConn.escape(persona.operacion) +
     ", nid_persona = " +
     conexion.dbConn.escape(persona.nid_persona) +
+    ", nid_iterfaz_socio = " +
+    conexion.dbConn.escape(persona.nid_interfaz_socio) +
     " where nid_interfaz_persona = " +
     conexion.dbConn.escape(nid_interfaz_persona);
 
@@ -401,10 +403,22 @@ async function cargar_datos_interfaz(lote) {
             nid_interfaz_persona_socio,
           );
 
-          await gestor_interfaz_socio.registrar_interfaz_socio(
-            nid_interfaz_persona_socio,
-            dato.fecha_alta_socio,
-            dato.fecha_baja_socio,
+          const nid_interfaz_socio =
+            await gestor_interfaz_socio.registrar_interfaz_socio(
+              nid_interfaz_persona_socio,
+              dato.fecha_alta_socio,
+              dato.fecha_baja_socio,
+            );
+
+          let interfaz_persona =
+            await gestor_interfaz_persona.obtener_interfaz_persona(
+              nid_interfaz_persona,
+            );
+
+          interfaz_persona.nid_interfaz_socio = nid_interfaz_socio;
+          await actualizar_interfaz_persona(
+            interfaz_persona,
+            nid_interfaz_persona,
           );
         }
       }

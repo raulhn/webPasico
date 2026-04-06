@@ -188,7 +188,7 @@ async function registrar_interfaz_socio(
   try {
     const comprueba_interfaz_socio =
       await obtener_interfaz_socio(nid_interfaz_persona);
-    if (comprueba_interfaz_socio.legnth > 0) {
+    if (comprueba_interfaz_socio.length > 0) {
       //El socio ya existe para el nid_interfaz_persona, no se registra el interfaz de socio
       return comprueba_interfaz_socio[0].nid_interfaz_socio;
     }
@@ -320,11 +320,9 @@ function obtener_interfaz_socio(nid_interfaz_persona) {
   const sql =
     "select * from " +
     constantes.ESQUEMA_BD +
-    ".socio where nid_persona = (select nid_persona from " +
-    constantes.ESQUEMA_BD +
-    ".interfaz_persona where nid_interfaz_persona = " +
-    conexion.dbConn.escape(nid_interfaz_persona) +
-    ")";
+    ".interfaz_socio where nid_interfaz_persona = " +
+    conexion.dbConn.escape(nid_interfaz_persona)
+    ;
 
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(sql, (error, results) => {
@@ -332,10 +330,10 @@ function obtener_interfaz_socio(nid_interfaz_persona) {
         console.log("interfaz_socio -> obtener_socio: ", error);
         reject(
           "Se ha producido un error al recuperar el socio para el nid_interfaz_persona " +
-            nid_interfaz_persona,
+          nid_interfaz_persona,
         );
       } else {
-        resolve(results[0]);
+        resolve(results);
       }
     });
   });

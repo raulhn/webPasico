@@ -10,6 +10,9 @@ create table pasico_gestor.interfaz_persona (
     operacion varchar(20),
     nid_persona int,
     estado varchar(20),
+    nid_interfaz_socio integer,
+    nid_interfaz_padre integer,
+    nid_interfaz_madre integer,
     lote int,
     fecha_creacion datetime default current_timestamp
 );
