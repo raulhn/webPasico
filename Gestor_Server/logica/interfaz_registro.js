@@ -111,6 +111,21 @@ function formatearFecha(fechaISO) {
   return null;
 }
 
+function formatearFechaRevert(fechaISO) {
+  if (fechaISO) {
+    const fecha = new Date(fechaISO); // Crear un objeto Date a partir de la fecha ISO
+    const dia = fecha.getDate(); // Obtener el día
+    const mes = fecha.getMonth() + 1; // Obtener el mes (0-11, por eso sumamos 1)
+    const anio = fecha.getFullYear(); // Obtener el año
+
+    // Formatear la fecha como "DD/MM/YYYY"
+    return `${dia
+      .toString()
+      .padStart(2, "0")}-${mes.toString().padStart(2, "0")}-${anio}`;
+  }
+  return null;
+}
+
 function registrar_interfaz_persona(lote, persona) {
   console.log("Interfaz Persona", persona);
   const sql =
@@ -176,7 +191,7 @@ function actualizar_interfaz_persona(persona, nid_interfaz_persona) {
     conexion.dbConn.escape(persona.operacion) +
     ", nid_persona = " +
     conexion.dbConn.escape(persona.nid_persona) +
-    ", nid_iterfaz_socio = " +
+    ", nid_interfaz_socio = " +
     conexion.dbConn.escape(persona.nid_interfaz_socio) +
     " where nid_interfaz_persona = " +
     conexion.dbConn.escape(nid_interfaz_persona);
@@ -361,65 +376,69 @@ async function cargar_datos_interfaz(lote) {
     let datos_lote = await obtener_volcado_lote(lote);
     for (let i = 0; i < datos_lote.length; i++) {
       let dato = datos_lote[i];
-      let nid_interfaz_persona = await comprueba_persona(
-        lote,
-        dato.dni,
-        dato.nombre,
-        dato.primer_apellido,
-        dato.segundo_apellido,
-        dato.email,
-        dato.telefono,
-        dato.fecha_nacimiento,
-      );
 
-      if (nid_interfaz_persona) {
-        await actualizar_nid_persona_interfaz(
-          datos_lote[i].nid_carga_datos,
-          nid_interfaz_persona,
-        );
-      }
-
-      if (dato.nombre_socio) {
-        let nid_interfaz_persona_socio = await comprueba_persona(
+      if (dato.nombre) {
+        let nid_interfaz_persona = await comprueba_persona(
           lote,
-          dato.dni_socio,
-          dato.nombre_socio,
-          dato.primer_apellido_socio,
-          dato.segundo_apellido_socio,
-          dato.email_socio,
-          dato.telefono_socio,
-          dato.fecha_nacimiento_socio,
+          dato.dni,
+          dato.nombre,
+          dato.primer_apellido,
+          dato.segundo_apellido,
+          dato.email,
+          dato.telefono,
+          dato.fecha_nacimiento,
         );
 
-        console.log("socio: ", {
-          dni_socio: dato.dni_socio,
-          nombre_socio: dato.nombre_socio,
-          primer_apellido: dato.primer_apellido_socio,
-        });
-
-        if (nid_interfaz_persona_socio) {
-          await actualizar_nid_persona_socio_interfaz(
+        if (nid_interfaz_persona) {
+          await actualizar_nid_persona_interfaz(
             datos_lote[i].nid_carga_datos,
-            nid_interfaz_persona_socio,
-          );
-
-          const nid_interfaz_socio =
-            await gestor_interfaz_socio.registrar_interfaz_socio(
-              nid_interfaz_persona_socio,
-              dato.fecha_alta_socio,
-              dato.fecha_baja_socio,
-            );
-
-          let interfaz_persona =
-            await gestor_interfaz_persona.obtener_interfaz_persona(
-              nid_interfaz_persona,
-            );
-
-          interfaz_persona.nid_interfaz_socio = nid_interfaz_socio;
-          await actualizar_interfaz_persona(
-            interfaz_persona,
             nid_interfaz_persona,
           );
+        }
+
+        if (dato.nombre_socio) {
+          let nid_interfaz_persona_socio = await comprueba_persona(
+            lote,
+            dato.dni_socio,
+            dato.nombre_socio,
+            dato.primer_apellido_socio,
+            dato.segundo_apellido_socio,
+            dato.email_socio,
+            dato.telefono_socio,
+            dato.fecha_nacimiento_socio,
+          );
+
+          console.log("socio: ", {
+            dni_socio: dato.dni_socio,
+            nombre_socio: dato.nombre_socio,
+            primer_apellido: dato.primer_apellido_socio,
+          });
+
+          if (nid_interfaz_persona_socio) {
+            await actualizar_nid_persona_socio_interfaz(
+              datos_lote[i].nid_carga_datos,
+              nid_interfaz_persona_socio,
+            );
+
+            const nid_interfaz_socio =
+              await gestor_interfaz_socio.registrar_interfaz_socio(
+                nid_interfaz_persona_socio,
+                dato.fecha_alta_socio,
+                dato.fecha_baja_socio,
+              );
+
+            let interfaz_persona =
+              await gestor_interfaz_persona.obtener_interfaz_persona(
+                nid_interfaz_persona,
+              );
+
+            interfaz_persona.fecha_nacimiento = formatearFechaRevert(interfaz_persona.fecha_nacimiento)
+            interfaz_persona.nid_interfaz_socio = nid_interfaz_socio;
+            await actualizar_interfaz_persona(
+              interfaz_persona,
+              nid_interfaz_persona,
+            );
+          }
         }
       }
     }
