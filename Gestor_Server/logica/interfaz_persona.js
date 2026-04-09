@@ -202,15 +202,13 @@ function actualizar_conflicto_persona(conflicto_persona) {
   const sql =
     "update " +
     constantes.ESQUEMA_BD +
-    ".interfaz_conflictos_persona set operacion = " +
-    conexion.dbConn.escape(conflicto_persona.operacion) +
-    ", nid_persona = " +
+    ".interfaz_conflictos_persona set nid_persona = " +
     conexion.dbConn.escape(conflicto_persona.nid_persona) +
-    ", nid_socio = ifnull(nullif(" +
+    ", nid_socio = ifnull(" +
     conexion.dbConn.escape(conflicto_persona.nid_socio) +
-    ", ''), nid_socio)" +
-    " where nid_interfaz_conflicto_persona = " +
-    conexion.dbConn.escape(conflicto_persona.nid_interfaz_conflicto_persona);
+    ", nid_socio)" +
+    " where nid_conflicto = " +
+    conexion.dbConn.escape(conflicto_persona.nid_conflicto);
 
   return new Promise((resolve, reject) => {
     conexion.dbConn.beginTransaction((err) => {

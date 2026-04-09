@@ -148,7 +148,7 @@ function insertar_conflico_interfaz_socio(conflicto_interfaz_socio) {
   const sql =
     "insert into " +
     constantes.ESQUEMA_BD +
-    ".conflicto_interfaz_socio(nid_interfaz_socio, nid_persona, fecha_alta, fecha_baja)" +
+    ".conflictos_interfaz_socio(nid_interfaz_socio, nid_persona, fecha_alta, fecha_baja)" +
     " values(" +
     conexion.dbConn.escape(conflicto_interfaz_socio.nid_interfaz_socio) +
     ", " +
@@ -158,7 +158,7 @@ function insertar_conflico_interfaz_socio(conflicto_interfaz_socio) {
     conexion.dbConn.escape(conflicto_interfaz_socio.fecha_alta) +
     ", ''), 1, 10), '%d-%m-%Y'), " +
     " str_to_date(substr(nullif(" +
-    conexion.dbConn.escape(interfaz_socio.fecha_baja) +
+    conexion.dbConn.escape(conflicto_interfaz_socio.fecha_baja) +
     ", ''), 1, 10), '%d-%m-%Y') )";
 
   return new Promise((resolve, reject) => {
@@ -210,7 +210,7 @@ async function registrar_interfaz_socio(
     } else if (
       interfaz_persona.operacion == constantes.OPERACIONES_INTERFAZ.ACTUALIZAR
     ) {
-      const existe_socio = await gestor_socio(interfaz_persona.nid_persona);
+      const existe_socio = await gestor_socio.obtener_socio(interfaz_persona.nid_persona);
       if (!existe_socio) {
         const interfaz_socio = {
           nid_interfaz_persona: interfaz_persona.nid_interfaz_persona,
@@ -255,7 +255,8 @@ async function registrar_interfaz_socio(
               interfaz_persona.nid_interfaz_persona,
             );
           if (conflicto_persona_actualizar.length > 0) {
-            conflicto_persona_actualizar[0].nid_socio = socio.nid_persona;
+            conflicto_persona_actualizar[0].nid_socio = socio[0].nid_persona;
+            console.log("interfaz_socio -> registrar_interfaz_socio:", socio, conflicto_persona_actualizar[0]);
             await gestor_interfaz_persona.actualizar_conflicto_persona(
               conflicto_persona_actualizar[0],
             );
@@ -383,6 +384,7 @@ async function actualizar_conflicto(nid_interfaz_persona) {
             await gestor_interfaz_persona.obtener_conflicto_actualizacion(
               interfaz_persona.nid_interfaz_persona,
             );
+          console.log("interfaz_socio -> actualizar_conflicto_persona:", socio)
           if (conflicto_persona_actualizar.length > 0) {
             conflicto_persona_actualizar[0].nid_socio = socio.nid_persona;
             await gestor_interfaz_persona.actualizar_conflicto_persona(
