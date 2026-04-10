@@ -213,7 +213,7 @@ function actualizar_interfaz_persona(persona, nid_interfaz_persona) {
 }
 
 function comparar_dato(dato_interfaz, dato) {
-  console.log("Comparar dato: ", dato_interfaz, dato)
+  console.log("Comparar dato: ", dato_interfaz, dato);
   // Si no hay un dato nuevo cargado no se compara, se indica que es igual
   if (
     dato_interfaz === undefined ||
@@ -426,7 +426,7 @@ async function cargar_datos_interfaz(lote) {
                 nid_interfaz_persona_socio,
                 dato.fecha_alta_socio,
                 dato.fecha_baja_socio,
-                lote
+                lote,
               );
 
             let interfaz_persona =
@@ -434,7 +434,24 @@ async function cargar_datos_interfaz(lote) {
                 nid_interfaz_persona,
               );
 
-            interfaz_persona.fecha_nacimiento = formatearFechaRevert(interfaz_persona.fecha_nacimiento)
+            if (interfaz_persona.nid_persona && nid_interfaz_socio) {
+              let persona = await gestor_personas.obtener_persona(
+                interfaz_persona.nid_persona,
+              );
+              if (persona) {
+                let interfaz_persona_socio =
+                  await gestor_interfaz_persona.obtener_interfaz_persona(
+                    nid_interfaz_persona_socio,
+                  );
+                if (persona.nid_socio != interfaz_persona_socio.nid_persona) {
+                  interfaz_persona.operacion =
+                    constantes.OPERACIONES_INTERFAZ.ACTUALIZAR;
+                }
+              }
+            }
+            interfaz_persona.fecha_nacimiento = formatearFechaRevert(
+              interfaz_persona.fecha_nacimiento,
+            );
             interfaz_persona.nid_interfaz_socio = nid_interfaz_socio;
             await actualizar_interfaz_persona(
               interfaz_persona,
