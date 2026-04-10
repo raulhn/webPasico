@@ -1,7 +1,7 @@
 const servlet_comun = require("./servlet_comun.js");
 const gestor_interfaz_registro = require("../logica/interfaz_registro.js");
 const gestor_carga_interfaz_registro = require("../logica/carga_interfaz_registro.js");
-import iconv from "iconv-lite";
+const iconv = require("iconv-lite");
 
 function carga_fichero(req, res) {
   servlet_comun.comprobaciones(req, res, async () => {
