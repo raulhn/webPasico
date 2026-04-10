@@ -443,7 +443,10 @@ async function cargar_datos_interfaz(lote) {
                   await gestor_interfaz_persona.obtener_interfaz_persona(
                     nid_interfaz_persona_socio,
                   );
-                if (persona.nid_socio != interfaz_persona_socio.nid_persona) {
+                if (
+                  persona.nid_socio != interfaz_persona_socio.nid_persona &&
+                  persona.nid != interfaz_persona_socio.nid_persona
+                ) {
                   interfaz_persona.operacion =
                     constantes.OPERACIONES_INTERFAZ.ACTUALIZAR;
                 }
