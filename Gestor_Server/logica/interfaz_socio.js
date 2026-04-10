@@ -125,7 +125,7 @@ function comparar_dato(dato_interfaz, dato) {
   );
 }
 
-function comparar_socio(socio, interfaz_socio) {
+function comparar_socio(interfaz_socio, socio) {
   try {
     if (
       comparar_dato(interfaz_socio.nid_persona, socio.nid_persona) &&
@@ -184,6 +184,7 @@ async function registrar_interfaz_socio(
   nid_interfaz_persona,
   fecha_alta,
   fecha_baja,
+  lote
 ) {
   try {
     const comprueba_interfaz_socio =
@@ -203,6 +204,7 @@ async function registrar_interfaz_socio(
         nid_interfaz_persona: interfaz_persona.nid_interfaz_persona,
         fecha_alta: fecha_alta,
         fecha_baja: fecha_baja,
+        lote: lote,
         operacion: constantes.OPERACIONES_INTERFAZ.INSERTAR,
         estado: constantes.ESTADOS_INTERFAZ.PENDIENTE,
       };
@@ -218,6 +220,7 @@ async function registrar_interfaz_socio(
           fecha_baja: fecha_baja,
           operacion: constantes.OPERACIONES_INTERFAZ.INSERTAR,
           estado: constantes.ESTADOS_INTERFAZ.PENDIENTE,
+          lote: lote
         };
         return await insertar_interfaz_socio(interfaz_socio);
       }
@@ -231,13 +234,14 @@ async function registrar_interfaz_socio(
           fecha_alta: fecha_alta,
           fecha_baja: fecha_baja,
         };
-        if (!comparar_socio(socio, interfaz_compara_socio)) {
+        if (!comparar_socio(interfaz_compara_socio, socio)) {
           const interfaz_socio = {
             nid_interfaz_persona: interfaz_persona.nid_interfaz_persona,
             fecha_alta: fecha_alta,
             fecha_baja: fecha_baja,
             operacion: constantes.OPERACIONES_INTERFAZ.ACTUALIZAR,
             estado: constantes.ESTADOS_INTERFAZ.PENDIENTE,
+            lote: lote
           };
           const nid_interfaz_socio =
             await insertar_interfaz_socio(interfaz_socio);
@@ -271,6 +275,7 @@ async function registrar_interfaz_socio(
             fecha_baja: fecha_baja,
             operacion: constantes.OPERACIONES_INTERFAZ.SIN_CAMBIOS,
             estado: constantes.ESTADOS_INTERFAZ.PENDIENTE,
+            lote: lote
           };
           return await insertar_interfaz_socio(interfaz_socio);
         }
@@ -284,6 +289,7 @@ async function registrar_interfaz_socio(
         fecha_baja: fecha_baja,
         operacion: constantes.OPERACIONES_INTERFAZ.CONFLICTO,
         estado: constantes.ESTADOS_INTERFAZ.PENDIENTE,
+        lote: lote
       };
       return await insertar_interfaz_socio(interfaz_socio);
     } else if (
@@ -296,6 +302,7 @@ async function registrar_interfaz_socio(
         nid_persona: interfaz_persona.nid_persona,
         operacion: constantes.OPERACIONES_INTERFAZ.SIN_CAMBIOS,
         estado: constantes.ESTADOS_INTERFAZ.PENDIENTE,
+        lote: lote
       };
 
       const socio = await gestor_socio.obtener_socio(
@@ -362,6 +369,7 @@ async function actualizar_conflicto(nid_interfaz_persona) {
             fecha_baja: fecha_baja,
             operacion: constantes.OPERACIONES_INTERFAZ.INSERTAR,
             estado: constantes.ESTADOS_INTERFAZ.PENDIENTE,
+            lote: interfaz_persona.lote
           };
           return await insertar_interfaz_socio(interfaz_socio);
         }
