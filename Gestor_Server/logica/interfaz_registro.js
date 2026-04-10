@@ -450,6 +450,9 @@ async function cargar_datos_interfaz(lote) {
                   interfaz_persona.operacion =
                     constantes.OPERACIONES_INTERFAZ.ACTUALIZAR;
                 }
+                else if (interfaz_persona_socio.operacion == constantes.OPERACIONES_INTERFAZ.INSERTAR) {
+                  interfaz_persona.operacion = constantes.OPERACIONES_INTERFAZ.ACTUALIZAR
+                }
               }
             }
             interfaz_persona.fecha_nacimiento = formatearFechaRevert(
