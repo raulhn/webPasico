@@ -449,9 +449,53 @@ async function cargar_datos_interfaz(lote) {
                 ) {
                   interfaz_persona.operacion =
                     constantes.OPERACIONES_INTERFAZ.ACTUALIZAR;
-                }
-                else if (interfaz_persona_socio.operacion == constantes.OPERACIONES_INTERFAZ.INSERTAR) {
-                  interfaz_persona.operacion = constantes.OPERACIONES_INTERFAZ.ACTUALIZAR
+
+                  const conflicto_persona =
+                    await gestor_interfaz_persona.obtener_conflicto_actualizacion(
+                      nid_interfaz_persona,
+                    );
+
+                  if (conflicto_persona && conflicto_persona.length > 0) {
+                    conflicto_persona[0].nid_socio = persona.nid_socio;
+                    await gestor_interfaz_persona.actualizar_conflicto_persona(
+                      conflicto_persona[0],
+                    );
+                  } else {
+                    await insertar_conflicto_persona(
+                      {
+                        nif: persona.nif,
+                        nombre: persona.nombre,
+                        primer_apellido: persona.primer_apellido,
+                        segundo_apellido: persona.segundo_apellido,
+                        email: persona.correo_electronico,
+                        telefono: persona.telefono,
+                        fecha_nacimiento: persona.fecha_nacimiento,
+                        nid_persona: persona.nid,
+                        nid_socio: persona.nid_socio,
+                      },
+                      nid_interfaz_persona,
+                    );
+                  }
+                } else if (
+                  interfaz_persona_socio.operacion ==
+                  constantes.OPERACIONES_INTERFAZ.INSERTAR
+                ) {
+                  interfaz_persona.operacion =
+                    constantes.OPERACIONES_INTERFAZ.ACTUALIZAR;
+                  await insertar_conflicto_persona(
+                    {
+                      nif: persona.nif,
+                      nombre: persona.nombre,
+                      primer_apellido: persona.primer_apellido,
+                      segundo_apellido: persona.segundo_apellido,
+                      email: persona.correo_electronico,
+                      telefono: persona.telefono,
+                      fecha_nacimiento: persona.fecha_nacimiento,
+                      nid_persona: persona.nid,
+                      nid_socio: persona.nid_socio,
+                    },
+                    nid_interfaz_persona,
+                  );
                 }
               }
             }
