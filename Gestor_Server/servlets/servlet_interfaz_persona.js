@@ -2,8 +2,8 @@ const servlet_comun = require("./servlet_comun.js");
 const gestor_interfaz_persona = require("../logica/interfaz_persona.js");
 const gestor_interfaz_socio = require("../logica/interfaz_socio.js");
 const gestor_persona = require("../logica/persona.js");
-const gestor_socio = require("../logica/socio.js")
-const constantes = require("../constantes.js")
+const gestor_socio = require("../logica/socio.js");
+const constantes = require("../constantes.js");
 
 function obtener_interfaz_personas(req, res) {
   servlet_comun.comprobaciones(req, res, async () => {
@@ -25,7 +25,8 @@ function obtener_interfaz_personas(req, res) {
         };
         let nid_socio = null;
         if (
-          interfaz_personas[i].operacion === constantes.OPERACIONES_INTERFAZ.ACTUALIZAR &&
+          interfaz_personas[i].operacion ===
+            constantes.OPERACIONES_INTERFAZ.ACTUALIZAR &&
           conflictos.length > 0
         ) {
           nid_socio = conflictos[0].nid_socio;
@@ -43,8 +44,7 @@ function obtener_interfaz_personas(req, res) {
           interfaz_personas[i].nid_interfaz_persona,
         );
 
-
-        console.log("Socios:", nid_socio, nid_socio_nuevo)
+        console.log("Socios:", nid_socio, nid_socio_nuevo);
         if (nid_socio && nid_socio_nuevo && nid_socio != nid_socio_nuevo) {
           const socio = await gestor_persona.obtener_persona(nid_socio);
           const socio_nuevo =
@@ -52,17 +52,26 @@ function obtener_interfaz_personas(req, res) {
           resultado.socio = socio;
           resultado.socio_nuevo = socio_nuevo;
         } else if (nid_socio_nuevo) {
-          const socio_nuevo = await gestor_persona.obtener_persona(nid_socio_nuevo);
-          resultado.socio_nuevo = socio_nuevo
-        }
-        else if (interfaz_personas[i].nid_interfaz_socio) {
-          const interfaz_socio = await gestor_interfaz_socio.obtener_interfaz_socio_nid(
-            interfaz_personas[i].nid_interfaz_socio
-          );
-          if (interfaz_socio.operacion == constantes.OPERACIONES_INTERFAZ.INSERTAR) {
-            resultado.socio_nuevo = { nombre: interfaz_socio.nombre, primer_apellido: interfaz_socio.primer_apellido, segundo_apellido: interfaz_socio.segundo_apellido }
+          const socio_nuevo =
+            await gestor_persona.obtener_persona(nid_socio_nuevo);
+          resultado.socio_nuevo = socio_nuevo;
+        } else if (interfaz_personas[i].nid_interfaz_socio) {
+          const interfaz_socio =
+            await gestor_interfaz_socio.obtener_interfaz_socio_nid(
+              interfaz_personas[i].nid_interfaz_socio,
+            );
+          if (
+            interfaz_socio.operacion == constantes.OPERACIONES_INTERFAZ.INSERTAR
+          ) {
+            const interfaz_persona_socio = await gestor_interfaz_persona(
+              interfaz_socio.nid_interfaz_persona,
+            );
+            resultado.socio_nuevo = {
+              nombre: interfaz_persona_socio.nombre,
+              primer_apellido: interfaz_persona_socio.primer_apellido,
+              segundo_apellido: interfaz_persona_socio.segundo_apellido,
+            };
           }
-
         }
         resultado_interfaz_personas.push(resultado);
       }
@@ -72,7 +81,8 @@ function obtener_interfaz_personas(req, res) {
         .send({ error: false, interfaz_personas: resultado_interfaz_personas });
     } catch (error) {
       console.log(
-        "servlet_interfaz_persona -> obtener_interfaz_personas: Se ha producido un error al recuperar el interfaz de personas", error
+        "servlet_interfaz_persona -> obtener_interfaz_personas: Se ha producido un error al recuperar el interfaz de personas",
+        error,
       );
       res.status(400).send({
         error: true,
