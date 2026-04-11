@@ -204,15 +204,16 @@ async function obtener_socio_nuevo(nid_interfaz_persona) {
   try {
     const interfaz_persona =
       await obtener_interfaz_persona(nid_interfaz_persona);
-
-    const interfaz_socio = await gestor_interfaz_socio.obtener_interfaz_socio(
+    console.log("interfaz_persona -> obtener_socio_nuevo:", interfaz_persona)
+    if (!interfaz_persona.nid_interfaz_socio) { return null }
+    const interfaz_socio = await gestor_interfaz_socio.obtener_interfaz_socio_nid(
       interfaz_persona.nid_interfaz_socio,
     );
-
-    if (interfaz_socio && interfaz_socio.length > 0) {
-      const nid_interfaz_persona_socio = interfaz_socio[0].nid_interfaz_persona;
+    console.log("interfaz_persona -> obtener_socio_nuevo:", interfaz_socio)
+    if (interfaz_socio) {
+      const nid_interfaz_persona_socio = interfaz_socio.nid_interfaz_persona;
       const interfaz_persona_socio = await obtener_interfaz_persona(
-        nid_interfaz_persona_socio,
+        nid_interfaz_persona_socio
       );
       return interfaz_persona_socio.nid_persona;
     }

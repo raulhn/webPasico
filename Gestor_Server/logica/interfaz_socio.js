@@ -342,13 +342,32 @@ function obtener_interfaz_socio(nid_interfaz_persona) {
         console.log("interfaz_socio -> obtener_socio: ", error);
         reject(
           "Se ha producido un error al recuperar el socio para el nid_interfaz_persona " +
-            nid_interfaz_persona,
+          nid_interfaz_persona,
         );
       } else {
         resolve(results);
       }
     });
   });
+}
+
+function obtener_interfaz_socio_nid(nid_interfaz_socio) {
+  const sql = "select * from " + constantes.ESQUEMA_BD + ".interfaz_socio where nid_interfaz_socio = " + conexion.dbConn.escape(nid_interfaz_socio);
+
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(sql, (error, results) => {
+      if (error) {
+        console.log("interfaz_socio -> obtener_interfaz_socio_nid", error);
+        reject("Se ha producido un error al intentar recuperar la interfaz de gestor_socio")
+      } else if (results.length == 0) {
+        console.log("interfaz_socion -> obtener_interfaz_socio_nid: No se ha encontrado la interfaz de socio")
+        reject("No se ha encontrado la interfaz de socio")
+      }
+      else {
+        resolve(results[0])
+      }
+    })
+  })
 }
 
 async function actualizar_conflicto(nid_interfaz_persona) {
@@ -452,3 +471,4 @@ module.exports.obtener_interfaz_socio_lote = obtener_interfaz_socio_lote;
 module.exports.obtener_interfaz_socio = obtener_interfaz_socio;
 module.exports.registrar_interfaz_socio = registrar_interfaz_socio;
 module.exports.actualizar_conflicto = actualizar_conflicto;
+module.exports.obtener_interfaz_socio_nid = obtener_interfaz_socio_nid
