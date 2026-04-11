@@ -26,7 +26,7 @@ function obtener_interfaz_personas(req, res) {
         let nid_socio = null;
         if (
           interfaz_personas[i].operacion ===
-          constantes.OPERACIONES_INTERFAZ.ACTUALIZAR &&
+            constantes.OPERACIONES_INTERFAZ.ACTUALIZAR &&
           conflictos.length > 0
         ) {
           nid_socio = conflictos[0].nid_socio;
@@ -63,13 +63,17 @@ function obtener_interfaz_personas(req, res) {
           if (
             interfaz_socio.operacion == constantes.OPERACIONES_INTERFAZ.INSERTAR
           ) {
-            const interfaz_persona_socio = await gestor_interfaz_persona.obtener_interfaz_persona(
-              interfaz_socio.nid_interfaz_persona,
-            );
+            const interfaz_persona_socio =
+              await gestor_interfaz_persona.obtener_interfaz_persona(
+                interfaz_socio.nid_interfaz_persona,
+              );
             resultado.socio_nuevo = {
+              dni: interfaz_persona_socio.nif,
               nombre: interfaz_persona_socio.nombre,
               primer_apellido: interfaz_persona_socio.primer_apellido,
               segundo_apellido: interfaz_persona_socio.segundo_apellido,
+              correo_electronico: interfaz_persona_socio.correo_electronico,
+              telefono: interfaz_persona_socio.telefono,
             };
           }
         }
