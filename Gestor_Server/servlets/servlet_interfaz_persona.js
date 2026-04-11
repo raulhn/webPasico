@@ -26,7 +26,7 @@ function obtener_interfaz_personas(req, res) {
         let nid_socio = null;
         if (
           interfaz_personas[i].operacion ===
-            constantes.OPERACIONES_INTERFAZ.ACTUALIZAR &&
+          constantes.OPERACIONES_INTERFAZ.ACTUALIZAR &&
           conflictos.length > 0
         ) {
           nid_socio = conflictos[0].nid_socio;
@@ -72,7 +72,7 @@ function obtener_interfaz_personas(req, res) {
               nombre: interfaz_persona_socio.nombre,
               primer_apellido: interfaz_persona_socio.primer_apellido,
               segundo_apellido: interfaz_persona_socio.segundo_apellido,
-              correo_electronico: interfaz_persona_socio.correo_electronico,
+              correo_electronico: interfaz_persona_socio.email,
               telefono: interfaz_persona_socio.telefono,
             };
           }
