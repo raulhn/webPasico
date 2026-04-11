@@ -1,5 +1,6 @@
 const conexion = require("../conexion.js");
 const constantes = require("../constantes.js");
+const gestor_interfaz_socio = require("./interfaz_socio.js");
 
 function obtener_persona_nif_insert(nif, lote) {
   const sql =
@@ -198,6 +199,29 @@ function actualizar_operacion_conflicto(
   });
 }
 
+//  Función para obtener el socio nuevo asociado a una interfaz_persona, en caso de que exista un conflicto de actualización
+async function obtener_socio_nuevo(nid_interfaz_persona) {
+  try {
+    const interfaz_persona =
+      await obtener_interfaz_persona(nid_interfaz_persona);
+
+    const interfaz_socio = await gestor_interfaz_socio.obtener_interfaz_socio(
+      interfaz_persona.nid_interfaz_socio,
+    );
+
+    if (interfaz_socio && interfaz_socio.length > 0) {
+      const nid_interfaz_persona_socio = interfaz_socio[0].nid_interfaz_persona;
+      const interfaz_persona_socio = await obtener_interfaz_persona(
+        nid_interfaz_persona_socio,
+      );
+      return interfaz_persona_socio.nid_persona;
+    }
+    return null;
+  } catch (error) {
+    throw new Error("Error al obtener el conflicto de socio");
+  }
+}
+
 function actualizar_conflicto_persona(conflicto_persona) {
   const sql =
     "update " +
@@ -346,3 +370,4 @@ module.exports.obtener_interfaz_persona = obtener_interfaz_persona;
 module.exports.obtener_conflicto_actualizacion =
   obtener_conflicto_actualizacion;
 module.exports.actualizar_conflicto_persona = actualizar_conflicto_persona;
+module.exports.obtener_socio_nuevo = obtener_socio_nuevo;

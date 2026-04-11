@@ -184,7 +184,7 @@ async function registrar_interfaz_socio(
   nid_interfaz_persona,
   fecha_alta,
   fecha_baja,
-  lote
+  lote,
 ) {
   try {
     const comprueba_interfaz_socio =
@@ -212,7 +212,9 @@ async function registrar_interfaz_socio(
     } else if (
       interfaz_persona.operacion == constantes.OPERACIONES_INTERFAZ.ACTUALIZAR
     ) {
-      const existe_socio = await gestor_socio.obtener_socio(interfaz_persona.nid_persona);
+      const existe_socio = await gestor_socio.obtener_socio(
+        interfaz_persona.nid_persona,
+      );
       if (!existe_socio) {
         const interfaz_socio = {
           nid_interfaz_persona: interfaz_persona.nid_interfaz_persona,
@@ -220,7 +222,7 @@ async function registrar_interfaz_socio(
           fecha_baja: fecha_baja,
           operacion: constantes.OPERACIONES_INTERFAZ.INSERTAR,
           estado: constantes.ESTADOS_INTERFAZ.PENDIENTE,
-          lote: lote
+          lote: lote,
         };
         return await insertar_interfaz_socio(interfaz_socio);
       }
@@ -241,7 +243,7 @@ async function registrar_interfaz_socio(
             fecha_baja: fecha_baja,
             operacion: constantes.OPERACIONES_INTERFAZ.ACTUALIZAR,
             estado: constantes.ESTADOS_INTERFAZ.PENDIENTE,
-            lote: lote
+            lote: lote,
           };
           const nid_interfaz_socio =
             await insertar_interfaz_socio(interfaz_socio);
@@ -260,7 +262,11 @@ async function registrar_interfaz_socio(
             );
           if (conflicto_persona_actualizar.length > 0) {
             conflicto_persona_actualizar[0].nid_socio = socio[0].nid_persona;
-            console.log("interfaz_socio -> registrar_interfaz_socio:", socio, conflicto_persona_actualizar[0]);
+            console.log(
+              "interfaz_socio -> registrar_interfaz_socio:",
+              socio,
+              conflicto_persona_actualizar[0],
+            );
             await gestor_interfaz_persona.actualizar_conflicto_persona(
               conflicto_persona_actualizar[0],
             );
@@ -275,7 +281,7 @@ async function registrar_interfaz_socio(
             fecha_baja: fecha_baja,
             operacion: constantes.OPERACIONES_INTERFAZ.SIN_CAMBIOS,
             estado: constantes.ESTADOS_INTERFAZ.PENDIENTE,
-            lote: lote
+            lote: lote,
           };
           return await insertar_interfaz_socio(interfaz_socio);
         }
@@ -289,7 +295,7 @@ async function registrar_interfaz_socio(
         fecha_baja: fecha_baja,
         operacion: constantes.OPERACIONES_INTERFAZ.CONFLICTO,
         estado: constantes.ESTADOS_INTERFAZ.PENDIENTE,
-        lote: lote
+        lote: lote,
       };
       return await insertar_interfaz_socio(interfaz_socio);
     } else if (
@@ -302,7 +308,7 @@ async function registrar_interfaz_socio(
         nid_persona: interfaz_persona.nid_persona,
         operacion: constantes.OPERACIONES_INTERFAZ.SIN_CAMBIOS,
         estado: constantes.ESTADOS_INTERFAZ.PENDIENTE,
-        lote: lote
+        lote: lote,
       };
 
       const socio = await gestor_socio.obtener_socio(
@@ -329,16 +335,14 @@ function obtener_interfaz_socio(nid_interfaz_persona) {
     "select * from " +
     constantes.ESQUEMA_BD +
     ".interfaz_socio where nid_interfaz_persona = " +
-    conexion.dbConn.escape(nid_interfaz_persona)
-    ;
-
+    conexion.dbConn.escape(nid_interfaz_persona);
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(sql, (error, results) => {
       if (error) {
         console.log("interfaz_socio -> obtener_socio: ", error);
         reject(
           "Se ha producido un error al recuperar el socio para el nid_interfaz_persona " +
-          nid_interfaz_persona,
+            nid_interfaz_persona,
         );
       } else {
         resolve(results);
@@ -369,7 +373,7 @@ async function actualizar_conflicto(nid_interfaz_persona) {
             fecha_baja: fecha_baja,
             operacion: constantes.OPERACIONES_INTERFAZ.INSERTAR,
             estado: constantes.ESTADOS_INTERFAZ.PENDIENTE,
-            lote: interfaz_persona.lote
+            lote: interfaz_persona.lote,
           };
           return await insertar_interfaz_socio(interfaz_socio);
         }
@@ -392,7 +396,7 @@ async function actualizar_conflicto(nid_interfaz_persona) {
             await gestor_interfaz_persona.obtener_conflicto_actualizacion(
               interfaz_persona.nid_interfaz_persona,
             );
-          console.log("interfaz_socio -> actualizar_conflicto_persona:", socio)
+          console.log("interfaz_socio -> actualizar_conflicto_persona:", socio);
           if (conflicto_persona_actualizar.length > 0) {
             conflicto_persona_actualizar[0].nid_socio = socio.nid_persona;
             await gestor_interfaz_persona.actualizar_conflicto_persona(
@@ -445,5 +449,6 @@ async function actualizar_conflicto(nid_interfaz_persona) {
 module.exports.insertar_interfaz_socio = insertar_interfaz_socio;
 module.exports.actualizar_interfaz_socio = actualizar_interfaz_socio;
 module.exports.obtener_interfaz_socio_lote = obtener_interfaz_socio_lote;
+module.exports.obtener_interfaz_socio = obtener_interfaz_socio;
 module.exports.registrar_interfaz_socio = registrar_interfaz_socio;
 module.exports.actualizar_conflicto = actualizar_conflicto;
