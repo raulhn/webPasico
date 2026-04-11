@@ -1,6 +1,7 @@
 const conexion = require("../conexion.js");
 const constantes = require("../constantes.js");
 const gestor_personas = require("./persona.js");
+const gestor_socios = require("./socio.js")
 const gestor_interfaz_persona = require("./interfaz_persona.js");
 const gestor_interfaz_socio = require("./interfaz_socio.js");
 
@@ -256,7 +257,7 @@ function insertar_conflicto_persona(persona_interfaz, nid_interfaz_persona) {
   const sql =
     "insert into " +
     constantes.ESQUEMA_BD +
-    ".interfaz_conflictos_persona(nid_interfaz_persona, nif, nombre, primer_apellido, segundo_apellido, email, telefono, fecha_nacimiento, nid_persona) values(" +
+    ".interfaz_conflictos_persona(nid_interfaz_persona, nif, nombre, primer_apellido, segundo_apellido, email, telefono, fecha_nacimiento, nid_persona, nid_socio) values(" +
     conexion.dbConn.escape(nid_interfaz_persona) +
     ", nullif(" +
     conexion.dbConn.escape(persona_interfaz.nif) +
@@ -274,6 +275,8 @@ function insertar_conflicto_persona(persona_interfaz, nid_interfaz_persona) {
     conexion.dbConn.escape(persona_interfaz.fecha_nacimiento) +
     ", ''), 1, 10), '%Y-%m-%d'), " +
     conexion.dbConn.escape(persona_interfaz.nid_persona) +
+    ", " +
+    conexion.dbConn.escape(persona_interfaz.nid_socio) +
     ")";
 
   return new Promise((resolve, reject) => {
@@ -456,11 +459,18 @@ async function cargar_datos_interfaz(lote) {
                     );
 
                   if (conflicto_persona && conflicto_persona.length > 0) {
-                    conflicto_persona[0].nid_socio = persona.nid_socio;
+                    let bExiste_socio = await gestor_socios.existe_socio(persona.nid);
+                    console.log("Existe socio: ", bExiste_socio, bExiste_socio > 0 ? persona.nid : persona.nid_socio
+                    )
+                    conflicto_persona[0].nid_socio = bExiste_socio > 0 ? persona.nid : persona.nid_socio;
                     await gestor_interfaz_persona.actualizar_conflicto_persona(
                       conflicto_persona[0],
                     );
                   } else {
+                    let bExiste_socio = await gestor_socios.existe_socio(persona.nid);
+                    console.log("Existe socio: ", bExiste_socio, bExiste_socio > 0 ? persona.nid : persona.nid_socio
+                    )
+
                     await insertar_conflicto_persona(
                       {
                         nif: persona.nif,
@@ -471,7 +481,7 @@ async function cargar_datos_interfaz(lote) {
                         telefono: persona.telefono,
                         fecha_nacimiento: persona.fecha_nacimiento,
                         nid_persona: persona.nid,
-                        nid_socio: persona.nid_socio,
+                        nid_socio: bExiste_socio > 0 ? persona.nid : persona.nid_socio,
                       },
                       nid_interfaz_persona,
                     );
@@ -482,6 +492,9 @@ async function cargar_datos_interfaz(lote) {
                 ) {
                   interfaz_persona.operacion =
                     constantes.OPERACIONES_INTERFAZ.ACTUALIZAR;
+                  let bExiste_socio = await gestor_socios.existe_socio(persona.nid);
+                  console.log("Existe socio: ", bExiste_socio, bExiste_socio > 0 ? persona.nid : persona.nid_socio
+                  )
                   await insertar_conflicto_persona(
                     {
                       nif: persona.nif,
@@ -492,7 +505,7 @@ async function cargar_datos_interfaz(lote) {
                       telefono: persona.telefono,
                       fecha_nacimiento: persona.fecha_nacimiento,
                       nid_persona: persona.nid,
-                      nid_socio: persona.nid_socio,
+                      nid_socio: bExiste_socio > 0 ? persona.nid : persona.nid_socio,
                     },
                     nid_interfaz_persona,
                   );
