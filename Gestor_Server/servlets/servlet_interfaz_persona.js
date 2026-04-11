@@ -26,7 +26,7 @@ function obtener_interfaz_personas(req, res) {
         let nid_socio = null;
         if (
           interfaz_personas[i].operacion ===
-            constantes.OPERACIONES_INTERFAZ.ACTUALIZAR &&
+          constantes.OPERACIONES_INTERFAZ.ACTUALIZAR &&
           conflictos.length > 0
         ) {
           nid_socio = conflictos[0].nid_socio;
@@ -63,7 +63,7 @@ function obtener_interfaz_personas(req, res) {
           if (
             interfaz_socio.operacion == constantes.OPERACIONES_INTERFAZ.INSERTAR
           ) {
-            const interfaz_persona_socio = await gestor_interfaz_persona(
+            const interfaz_persona_socio = await gestor_interfaz_persona.obtener_interfaz_persona(
               interfaz_socio.nid_interfaz_persona,
             );
             resultado.socio_nuevo = {
