@@ -146,6 +146,31 @@ async function cargar_interfaz_socios(lote) {
         }
       }
     }
+
+    const interfaz_personas =
+      await gestor_interfaz_persona.obtener_interfaz_personas(lote);
+
+    for (const interfaz_persona of interfaz_personas) {
+      if (interfaz_persona.nid_interfaz_socio) {
+        const nid_socio = await gestor_interfaz_socio.obtener_nid_socio(
+          interfaz_persona.nid_interfaz_socio,
+        );
+
+        // Si la persona ya es socio no le asocia otro socio
+        const bExisteSocio = await gestor_socios.existe_socio(
+          interfaz_persona.nid_persona,
+        );
+
+        if (nid_socio && bExisteSocio == 0) {
+          if (interfaz_persona.nid_persona !== nid_socio) {
+            await gestor_socios.actualizar_nid_persona_socio(
+              nid_socio,
+              interfaz_persona.nid_persona,
+            );
+          }
+        }
+      }
+    }
   } catch (error) {
     console.log(
       "carga_interfaz_registro -> carga_interfaz_socio: Error al cargar socios: ",
@@ -156,3 +181,4 @@ async function cargar_interfaz_socios(lote) {
 }
 
 module.exports.cargar_personas = cargar_personas;
+module.exports.cargar_interfaz_socios = cargar_interfaz_socios;

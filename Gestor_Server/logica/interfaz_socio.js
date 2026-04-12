@@ -504,4 +504,4 @@ module.exports.obtener_interfaz_socio = obtener_interfaz_socio;
 module.exports.registrar_interfaz_socio = registrar_interfaz_socio;
 module.exports.actualizar_conflicto = actualizar_conflicto;
 module.exports.obtener_interfaz_socio_nid = obtener_interfaz_socio_nid;
-module.exports.obtener_nid_soico = obtener_nid_socio;
+module.exports.obtener_nid_socio = obtener_nid_socio;

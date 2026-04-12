@@ -34,6 +34,7 @@ function lanzar_proceso(req, res) {
     try {
       const lote = req.body.lote;
       await gestor_carga_interfaz_registro.cargar_personas(lote);
+      await gestor_carga_interfaz_registro.cargar_interfaz_socios(lote);
       res.status(200).send({ error: false, message: "Proceso lanzado" });
     } catch (error) {
       console.log(
