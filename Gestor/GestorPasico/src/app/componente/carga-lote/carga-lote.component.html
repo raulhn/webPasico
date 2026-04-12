@@ -344,17 +344,17 @@
                 {{ interfaz_persona_insertar.insertar.interfaz_persona.estado }}
               </span>
             </div>
-            @if (interfaz_persona_insertar.insertar.nuevo_socio) {
+            @if (interfaz_persona_insertar.insertar.socio_nuevo) {
               <div class="pending-insert">
                 <span>Socio a asignar</span>
                 <span>
-                  {{ interfaz_persona_insertar.insertar.nuevo_socio.nombre }}
+                  {{ interfaz_persona_insertar.insertar.socio_nuevo.nombre }}
                   {{
-                    interfaz_persona_insertar.insertar.nuevo_socio
+                    interfaz_persona_insertar.insertar.socio_nuevo
                       .primer_apellido
                   }}
                   {{
-                    interfaz_persona_insertar.insertar.nuevo_socio
+                    interfaz_persona_insertar.insertar.socio_nuevo
                       .segundo_apellido
                   }}</span
                 >
@@ -543,17 +543,17 @@
               </div>
             }
           </div>
-          @if (interfaz_persona_actualizar.actualizar.nuevo_socio) {
+          @if (interfaz_persona_actualizar.actualizar.socio_nuevo) {
             <div class="pending-insert">
               <span>Socio a asignar</span>
               <span>
-                {{ interfaz_persona_actualizar.actualizar.nuevo_socio.nombre }}
+                {{ interfaz_persona_actualizar.actualizar.socio_nuevo.nombre }}
                 {{
-                  interfaz_persona_actualizar.actualizar.nuevo_socio
+                  interfaz_persona_actualizar.actualizar.socio_nuevo
                     .primer_apellido
                 }}
                 {{
-                  interfaz_persona_actualizar.actualizar.nuevo_socio
+                  interfaz_persona_actualizar.actualizar.socio_nuevo
                     .segundo_apellido
                 }}</span
               >
