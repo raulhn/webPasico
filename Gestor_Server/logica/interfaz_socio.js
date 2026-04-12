@@ -342,7 +342,7 @@ function obtener_interfaz_socio(nid_interfaz_persona) {
         console.log("interfaz_socio -> obtener_socio: ", error);
         reject(
           "Se ha producido un error al recuperar el socio para el nid_interfaz_persona " +
-          nid_interfaz_persona,
+            nid_interfaz_persona,
         );
       } else {
         resolve(results);
@@ -352,22 +352,29 @@ function obtener_interfaz_socio(nid_interfaz_persona) {
 }
 
 function obtener_interfaz_socio_nid(nid_interfaz_socio) {
-  const sql = "select * from " + constantes.ESQUEMA_BD + ".interfaz_socio where nid_interfaz_socio = " + conexion.dbConn.escape(nid_interfaz_socio);
+  const sql =
+    "select * from " +
+    constantes.ESQUEMA_BD +
+    ".interfaz_socio where nid_interfaz_socio = " +
+    conexion.dbConn.escape(nid_interfaz_socio);
 
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(sql, (error, results) => {
       if (error) {
         console.log("interfaz_socio -> obtener_interfaz_socio_nid", error);
-        reject("Se ha producido un error al intentar recuperar la interfaz de gestor_socio")
+        reject(
+          "Se ha producido un error al intentar recuperar la interfaz de gestor_socio",
+        );
       } else if (results.length == 0) {
-        console.log("interfaz_socion -> obtener_interfaz_socio_nid: No se ha encontrado la interfaz de socio")
-        reject("No se ha encontrado la interfaz de socio")
+        console.log(
+          "interfaz_socion -> obtener_interfaz_socio_nid: No se ha encontrado la interfaz de socio",
+        );
+        reject("No se ha encontrado la interfaz de socio");
+      } else {
+        resolve(results[0]);
       }
-      else {
-        resolve(results[0])
-      }
-    })
-  })
+    });
+  });
 }
 
 async function actualizar_conflicto(nid_interfaz_persona) {
@@ -465,10 +472,36 @@ async function actualizar_conflicto(nid_interfaz_persona) {
     );
   }
 }
+
+async function obtener_nid_socio(nid_interfaz_socio) {
+  try {
+    const interfaz_socio = await obtener_interfaz_socio_nid(nid_interfaz_socio);
+    if (interfaz_socio) {
+      const interfaz_persona =
+        await gestor_interfaz_persona.obtener_interfaz_persona(
+          interfaz_socio.nid_interfaz_persona,
+        );
+      if (interfaz_persona) {
+        return interfaz_persona.nid_persona;
+      } else {
+        return null;
+      }
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.log("interfaz_socio -> obtener_nid_socio", error);
+    throw new Error(
+      "Se ha producido un error al obtener el nid del socio a partir del nid de la interfaz de socio",
+    );
+  }
+}
+
 module.exports.insertar_interfaz_socio = insertar_interfaz_socio;
 module.exports.actualizar_interfaz_socio = actualizar_interfaz_socio;
 module.exports.obtener_interfaz_socio_lote = obtener_interfaz_socio_lote;
 module.exports.obtener_interfaz_socio = obtener_interfaz_socio;
 module.exports.registrar_interfaz_socio = registrar_interfaz_socio;
 module.exports.actualizar_conflicto = actualizar_conflicto;
-module.exports.obtener_interfaz_socio_nid = obtener_interfaz_socio_nid
+module.exports.obtener_interfaz_socio_nid = obtener_interfaz_socio_nid;
+module.exports.obtener_nid_soico = obtener_nid_socio;

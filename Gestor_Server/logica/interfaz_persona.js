@@ -153,6 +153,57 @@ function obtener_interfaz_personas_pendiente(lote) {
   });
 }
 
+function actualizar_interfaz_persona(interfaz_persona) {
+  const sql =
+    "update " +
+    constantes.ESQUEMA_BD +
+    ".interfaz_persona set dni = " +
+    conexion.dbConn.escape(interfaz_persona.dni) +
+    ", nombre = " +
+    conexion.dbConn.escape(interfaz_persona.nombre) +
+    ", primer_apellido = " +
+    conexion.dbConn.escape(interfaz_persona.primer_apellido) +
+    ", segundo_apellido = " +
+    conexion.dbConn.escape(interfaz_persona.segundo_apellido) +
+    ", fecha_nacimiento = " +
+    conexion.dbConn.escape(interfaz_persona.fecha_nacimiento) +
+    ", operacion = " +
+    conexion.dbConn.escape(interfaz_persona.operacion) +
+    ", lote = " +
+    conexion.dbConn.escape(interfaz_persona.lote) +
+    " where nid_interfaz_persona = " +
+    conexion.dbConn.escape(interfaz_persona.nid_interfaz_persona);
+
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.beginTransaction((err) => {
+      if (err) {
+        console.log(
+          "interfaz_persona -> actualizar_interfaz_persona: Error al iniciar la transacción:",
+          err,
+        );
+        reject("Error al iniciar la transacción");
+        return;
+      }
+
+      conexion.dbConn.query(sql, (error, results) => {
+        if (error) {
+          console.log(
+            "interfaz_persona -> actualizar_interfaz_persona: Error al actualizar la interfaz persona para ",
+            interfaz_persona.nid_interfaz_persona,
+            ":",
+            error,
+          );
+          conexion.dbConn.rollback();
+          reject("Error al actualizar la interfaz persona");
+        } else {
+          conexion.dbConn.commit();
+          resolve();
+        }
+      });
+    });
+  });
+}
+
 function actualizar_operacion_conflicto(
   nid_interfaz_persona,
   operacion,
@@ -204,16 +255,19 @@ async function obtener_socio_nuevo(nid_interfaz_persona) {
   try {
     const interfaz_persona =
       await obtener_interfaz_persona(nid_interfaz_persona);
-    console.log("interfaz_persona -> obtener_socio_nuevo:", interfaz_persona)
-    if (!interfaz_persona.nid_interfaz_socio) { return null }
-    const interfaz_socio = await gestor_interfaz_socio.obtener_interfaz_socio_nid(
-      interfaz_persona.nid_interfaz_socio,
-    );
-    console.log("interfaz_persona -> obtener_socio_nuevo:", interfaz_socio)
+    console.log("interfaz_persona -> obtener_socio_nuevo:", interfaz_persona);
+    if (!interfaz_persona.nid_interfaz_socio) {
+      return null;
+    }
+    const interfaz_socio =
+      await gestor_interfaz_socio.obtener_interfaz_socio_nid(
+        interfaz_persona.nid_interfaz_socio,
+      );
+    console.log("interfaz_persona -> obtener_socio_nuevo:", interfaz_socio);
     if (interfaz_socio) {
       const nid_interfaz_persona_socio = interfaz_socio.nid_interfaz_persona;
       const interfaz_persona_socio = await obtener_interfaz_persona(
-        nid_interfaz_persona_socio
+        nid_interfaz_persona_socio,
       );
       return interfaz_persona_socio.nid_persona;
     }
@@ -372,3 +426,4 @@ module.exports.obtener_conflicto_actualizacion =
   obtener_conflicto_actualizacion;
 module.exports.actualizar_conflicto_persona = actualizar_conflicto_persona;
 module.exports.obtener_socio_nuevo = obtener_socio_nuevo;
+module.exports.actualizar_interfaz_persona = actualizar_interfaz_persona;

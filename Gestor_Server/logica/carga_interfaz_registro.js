@@ -2,6 +2,8 @@ const conexion = require("../conexion");
 const constantes = require("../constantes");
 const gestor_interfaz_persona = require("./interfaz_persona");
 const gestor_personas = require("./persona.js");
+const gestor_socios = require("./socio.js");
+const gestor_interfaz_socio = require("./interfaz_socio.js");
 
 async function cargar_personas(lote) {
   try {
@@ -13,7 +15,7 @@ async function cargar_personas(lote) {
         interfaz_persona.operacion === constantes.OPERACIONES_INTERFAZ.INSERTAR
       ) {
         try {
-          await gestor_personas.registrar_persona(
+          const nid_persona = await gestor_personas.registrar_persona(
             interfaz_persona.nombre,
             interfaz_persona.primer_apellido,
             interfaz_persona.segundo_apellido,
@@ -23,13 +25,16 @@ async function cargar_personas(lote) {
             interfaz_persona.email,
             null,
           );
-          gestor_interfaz_persona.actualizar_estado(
-            interfaz_persona.nid_interfaz_persona,
-            constantes.ESTADOS_INTERFAZ.PROCESADO,
+
+          interfaz_persona.estado = constantes.ESTADOS_INTERFAZ.PROCESADO;
+          interfaz_persona.nid_persona = nid_persona;
+
+          await gestor_interfaz_persona.actualizar_interfaz_persona(
+            interfaz_persona,
           );
         } catch (error) {
           console.log("Error al registrar persona: ", error);
-          gestor_interfaz_persona.actualizar_estado(
+          await gestor_interfaz_persona.actualizar_estado(
             interfaz_persona.nid_interfaz_persona,
             constantes.ESTADOS_INTERFAZ.ERROR,
           );
@@ -81,6 +86,72 @@ async function cargar_personas(lote) {
   } catch (error) {
     console.log("Error al cargar personas: ", error);
     throw new Error("Error al cargar personas");
+  }
+}
+
+async function cargar_interfaz_socios(lote) {
+  try {
+    const interfaz_socios =
+      await gestor_interfaz_socio.obtener_interfaz_socio_lote(lote);
+
+    for (const interfaz_socio of interfaz_socios) {
+      if (interfaz_socio.estado === constantes.ESTADOS_INTERFAZ.PENDIENTE) {
+        const interfaz_persona =
+          await gestor_interfaz_persona.obtener_interfaz_persona(
+            interfaz_socio.nid_interfaz_persona,
+          );
+        const nid_socio = interfaz_persona.nid_persona;
+        const bExisteSocio = await gestor_socios.existe_socio(nid_socio);
+
+        if (bExisteSocio > 0) {
+          // Se actualizan las fechas de alta y baja del socio
+          const socio = await gestor_socios.obtener_socio(nid_socio);
+          socio.fecha_alta = interfaz_socio.fecha_alta;
+          socio.fecha_baja = interfaz_socio.fecha_baja;
+          try {
+            await gestor_socios.actualizar_socio(
+              socio.nid_persona,
+              socio.num_socio,
+              socio.fecha_alta,
+              socio.fecha_baja,
+            );
+
+            interfaz_socio.estado = constantes.ESTADOS_INTERFAZ.PROCESADO;
+            await gestor_interfaz_socio.actualizar_interfaz_socio(
+              interfaz_socio,
+            );
+          } catch (error) {
+            console.log("Error al actualizar socio: ", error);
+            interfaz_socio.estado = constantes.ESTADOS_INTERFAZ.ERROR;
+            gestor_interfaz_socio.actualizar_interfaz_socio(interfaz_socio);
+          }
+          console.log("La persona con ID " + nid_socio + " ya es socio");
+        } else {
+          try {
+            await gestor_socios.registrar_socio(
+              nid_socio,
+              "",
+              interfaz_socio.fecha_alta,
+            );
+
+            interfaz_socio.estado = constantes.ESTADOS_INTERFAZ.PROCESADO;
+            await gestor_interfaz_socio.actualizar_interfaz_socio(
+              interfaz_socio,
+            );
+          } catch (error) {
+            console.log("Error al registrar socio: ", error);
+            interfaz_socio.estado = constantes.ESTADOS_INTERFAZ.ERROR;
+            gestor_interfaz_socio.actualizar_interfaz_socio(interfaz_socio);
+          }
+        }
+      }
+    }
+  } catch (error) {
+    console.log(
+      "carga_interfaz_registro -> carga_interfaz_socio: Error al cargar socios: ",
+      error,
+    );
+    throw new Error("Error al cargar socios");
   }
 }
 

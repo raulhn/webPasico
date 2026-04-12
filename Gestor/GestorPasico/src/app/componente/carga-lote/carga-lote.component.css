@@ -714,7 +714,7 @@
 
 /* Estilos mejorados para información de socios */
 .socio-info {
-  margin: 12px 0;
+  margin: 12px;
   border-radius: 8px;
   border: 1px solid;
   overflow: hidden;
