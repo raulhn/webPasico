@@ -345,25 +345,29 @@
               </span>
             </div>
             @if (interfaz_persona_insertar.insertar.socio_nuevo) {
-              <div class="pending-insert">
-                <span>Socio a asignar</span>
-                <span>
-                  {{ interfaz_persona_insertar.insertar.socio_nuevo.nombre }}
-                  {{
-                    interfaz_persona_insertar.insertar.socio_nuevo
-                      .primer_apellido
-                  }}
-                  {{
-                    interfaz_persona_insertar.insertar.socio_nuevo
-                      .segundo_apellido
-                  }}</span
-                >
-                <span>
-                  {{ interfaz_persona_insertar.insertar.socio_nuevo.email }}
-                </span>
-                <span>
-                  {{ interfaz_persona_insertar.insertar.socio_nuevo.telefono }}
-                </span>
+              <div class="socio-info socio-nuevo">
+                <div class="socio-header">
+                  <span class="socio-badge socio-nuevo-badge">👤 Socio a asignar</span>
+                </div>
+                <div class="socio-details">
+                  <div class="socio-name">
+                    {{ interfaz_persona_insertar.insertar.socio_nuevo.nombre }}
+                    {{ interfaz_persona_insertar.insertar.socio_nuevo.primer_apellido }}
+                    {{ interfaz_persona_insertar.insertar.socio_nuevo.segundo_apellido }}
+                  </div>
+                  @if (interfaz_persona_insertar.insertar.socio_nuevo.email) {
+                    <div class="socio-contact">
+                      <span class="contact-icon">📧</span>
+                      <span class="contact-info">{{ interfaz_persona_insertar.insertar.socio_nuevo.email }}</span>
+                    </div>
+                  }
+                  @if (interfaz_persona_insertar.insertar.socio_nuevo.telefono) {
+                    <div class="socio-contact">
+                      <span class="contact-icon">📞</span>
+                      <span class="contact-info">{{ interfaz_persona_insertar.insertar.socio_nuevo.telefono }}</span>
+                    </div>
+                  }
+                </div>
               </div>
             }
           </div>
@@ -550,41 +554,43 @@
             }
           </div>
           @if (interfaz_persona_actualizar.actualizar.socio_nuevo) {
-            <div class="pending-insert">
-              <span>Socio a asignar</span>
-              <span>
-                {{ interfaz_persona_actualizar.actualizar.socio_nuevo.nombre }}
-                {{
-                  interfaz_persona_actualizar.actualizar.socio_nuevo
-                    .primer_apellido
-                }}
-                {{
-                  interfaz_persona_actualizar.actualizar.socio_nuevo
-                    .segundo_apellido
-                }}</span
-              >
-              <span>
-                {{ interfaz_persona_actualizar.actualizar.socio_nuevo.email }}
-              </span>
-              <span>
-                {{
-                  interfaz_persona_actualizar.actualizar.socio_nuevo.telefono
-                }}
-              </span>
+            <div class="socio-info socio-nuevo">
+              <div class="socio-header">
+                <span class="socio-badge socio-nuevo-badge">👤 Socio a asignar</span>
+              </div>
+              <div class="socio-details">
+                <div class="socio-name">
+                  {{ interfaz_persona_actualizar.actualizar.socio_nuevo.nombre }}
+                  {{ interfaz_persona_actualizar.actualizar.socio_nuevo.primer_apellido }}
+                  {{ interfaz_persona_actualizar.actualizar.socio_nuevo.segundo_apellido }}
+                </div>
+                @if (interfaz_persona_actualizar.actualizar.socio_nuevo.email) {
+                  <div class="socio-contact">
+                    <span class="contact-icon">📧</span>
+                    <span class="contact-info">{{ interfaz_persona_actualizar.actualizar.socio_nuevo.email }}</span>
+                  </div>
+                }
+                @if (interfaz_persona_actualizar.actualizar.socio_nuevo.telefono) {
+                  <div class="socio-contact">
+                    <span class="contact-icon">📞</span>
+                    <span class="contact-info">{{ interfaz_persona_actualizar.actualizar.socio_nuevo.telefono }}</span>
+                  </div>
+                }
+              </div>
             </div>
           }
           @if (interfaz_persona_actualizar.actualizar.socio) {
-            <div class="pending-insert">
-              <span>Socio actual</span>
-              <span>
-                {{ interfaz_persona_actualizar.actualizar.socio.nombre }}
-                {{
-                  interfaz_persona_actualizar.actualizar.socio.primer_apellido
-                }}
-                {{
-                  interfaz_persona_actualizar.actualizar.socio.segundo_apellido
-                }}</span
-              >
+            <div class="socio-info socio-actual">
+              <div class="socio-header">
+                <span class="socio-badge socio-actual-badge">🏅 Socio actual</span>
+              </div>
+              <div class="socio-details">
+                <div class="socio-name">
+                  {{ interfaz_persona_actualizar.actualizar.socio.nombre }}
+                  {{ interfaz_persona_actualizar.actualizar.socio.primer_apellido }}
+                  {{ interfaz_persona_actualizar.actualizar.socio.segundo_apellido }}
+                </div>
+              </div>
             </div>
           }
         </details>
