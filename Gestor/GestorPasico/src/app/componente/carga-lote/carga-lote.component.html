@@ -358,6 +358,12 @@
                       .segundo_apellido
                   }}</span
                 >
+                <span>
+                  {{ interfaz_persona_insertar.insrtar.socio_nuevo.email }}
+                </span>
+                <span>
+                  {{ interfaz_persona_insertar.insertar.socio_nuevo.telefono }}
+                </span>
               </div>
             }
           </div>
@@ -557,6 +563,14 @@
                     .segundo_apellido
                 }}</span
               >
+              <span>
+                {{ interfaz_persona_actualizar.actualizar.socio_nuevo.email }}
+              </span>
+              <span>
+                {{
+                  interfaz_persona_actualizar.actualizar.socio_nuevo.telefono
+                }}
+              </span>
             </div>
           }
           @if (interfaz_persona_actualizar.actualizar.socio) {
