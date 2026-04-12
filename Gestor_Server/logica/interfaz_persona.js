@@ -171,6 +171,9 @@ function actualizar_interfaz_persona(interfaz_persona) {
     conexion.dbConn.escape(interfaz_persona.operacion) +
     ", lote = " +
     conexion.dbConn.escape(interfaz_persona.lote) +
+    ", nid_persona = " +
+    conexion.dbConn.escape(interfaz_persona.nid_persona) +
+    ", estado = " + conexion.dbConn.escape(interfaz_persona.estado) +
     " where nid_interfaz_persona = " +
     conexion.dbConn.escape(interfaz_persona.nid_interfaz_persona);
 

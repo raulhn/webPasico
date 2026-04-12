@@ -51,14 +51,11 @@ function actualizar_interfaz_socio(interfaz_socio) {
     " fecha_alta = " +
     " str_to_date(substr(nullif(" +
     conexion.dbConn.escape(interfaz_socio.fecha_alta) +
-    ", ''), 1, 10), '%d-%m-%Y'), " +
+    ", ''), 1, 10), '%Y-%m-%d'), " +
     " fecha_baja = " +
     " str_to_date(substr(nullif(" +
     conexion.dbConn.escape(interfaz_socio.fecha_baja) +
-    ", ''), 1, 10), '%d-%m-%Y'), " +
-    " nid_socio = ifnull(nullif(" +
-    conexion.dbConn.escape(interfaz_socio.nid_socio) +
-    ", ''), nid_socio), " +
+    ", ''), 1, 10), '%Y-%m-%d'), " +
     " operacion = " +
     conexion.dbConn.escape(interfaz_socio.operacion) +
     ", " +
@@ -90,7 +87,7 @@ function obtener_interfaz_socio_lote(lote) {
     ".interfaz_socio where lote = " +
     conexion.dbConn.escape(lote);
 
-  return new Promies((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     conexion.dbConn.query(sql, (error, results) => {
       if (error) {
         console.log("interfaz_socio -> obtener_interfaz_socio_lote: ", error);
@@ -342,7 +339,7 @@ function obtener_interfaz_socio(nid_interfaz_persona) {
         console.log("interfaz_socio -> obtener_socio: ", error);
         reject(
           "Se ha producido un error al recuperar el socio para el nid_interfaz_persona " +
-            nid_interfaz_persona,
+          nid_interfaz_persona,
         );
       } else {
         resolve(results);

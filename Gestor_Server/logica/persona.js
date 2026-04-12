@@ -728,6 +728,7 @@ function actualizar_persona(
             "nullif(cast(" +
             conexion.dbConn.escape(nid_socio) +
             " as char), '')" +
+            " fecha_actualizacion = now(), sucio = 'S' " +
             " where nid = " +
             conexion.dbConn.escape(nid),
             (error, results, fields) => {

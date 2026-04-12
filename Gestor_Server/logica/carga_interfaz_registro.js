@@ -32,13 +32,13 @@ async function cargar_personas(lote) {
           await gestor_interfaz_persona.actualizar_interfaz_persona(
             interfaz_persona,
           );
+
         } catch (error) {
           console.log("Error al registrar persona: ", error);
           await gestor_interfaz_persona.actualizar_estado(
             interfaz_persona.nid_interfaz_persona,
             constantes.ESTADOS_INTERFAZ.ERROR,
           );
-          continue; // Continuar con la siguiente persona
         }
       } else if (
         interfaz_persona.operacion ===
@@ -105,10 +105,12 @@ async function cargar_interfaz_socios(lote) {
 
         if (bExisteSocio > 0) {
           // Se actualizan las fechas de alta y baja del socio
-          const socio = await gestor_socios.obtener_socio(nid_socio);
+          const socios = await gestor_socios.obtener_socio(nid_socio);
+          const socio = socios[0];
           socio.fecha_alta = interfaz_socio.fecha_alta;
           socio.fecha_baja = interfaz_socio.fecha_baja;
           try {
+            console.log("Socio: ", socio)
             await gestor_socios.actualizar_socio(
               socio.nid_persona,
               socio.num_socio,
@@ -163,9 +165,9 @@ async function cargar_interfaz_socios(lote) {
 
         if (nid_socio && bExisteSocio == 0) {
           if (interfaz_persona.nid_persona !== nid_socio) {
-            await gestor_socios.actualizar_nid_persona_socio(
-              nid_socio,
+            await gestor_socios.actualizar_socio_persona(
               interfaz_persona.nid_persona,
+              nid_socio,
             );
           }
         }
