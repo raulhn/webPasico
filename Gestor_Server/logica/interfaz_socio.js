@@ -339,7 +339,7 @@ function obtener_interfaz_socio(nid_interfaz_persona) {
         console.log("interfaz_socio -> obtener_socio: ", error);
         reject(
           "Se ha producido un error al recuperar el socio para el nid_interfaz_persona " +
-          nid_interfaz_persona,
+            nid_interfaz_persona,
         );
       } else {
         resolve(results);

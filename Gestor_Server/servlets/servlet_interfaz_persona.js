@@ -26,7 +26,7 @@ function obtener_interfaz_personas(req, res) {
         let nid_socio = null;
         if (
           interfaz_personas[i].operacion ===
-          constantes.OPERACIONES_INTERFAZ.ACTUALIZAR &&
+            constantes.OPERACIONES_INTERFAZ.ACTUALIZAR &&
           conflictos.length > 0
         ) {
           nid_socio = conflictos[0].nid_socio;
@@ -80,9 +80,16 @@ function obtener_interfaz_personas(req, res) {
         resultado_interfaz_personas.push(resultado);
       }
 
+      const interfaz_socios =
+        await gestor_interfaz_socio.obtener_interfaz_socio_lote(lote);
+
       res
         .status(200)
-        .send({ error: false, interfaz_personas: resultado_interfaz_personas });
+        .send({
+          error: false,
+          interfaz_personas: resultado_interfaz_personas,
+          interfaz_socios: interfaz_socios,
+        });
     } catch (error) {
       console.log(
         "servlet_interfaz_persona -> obtener_interfaz_personas: Se ha producido un error al recuperar el interfaz de personas",
