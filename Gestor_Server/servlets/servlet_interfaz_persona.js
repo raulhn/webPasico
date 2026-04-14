@@ -89,9 +89,17 @@ function obtener_interfaz_personas(req, res) {
             await gestor_interfaz_persona.obtener_interfaz_persona(
               interfaz_socio.nid_interfaz_persona,
             );
+
+          let socio_info = null;
+          if (interfaz_persona_socio.nid_persona) {
+            socio_info = await gestor_persona.obtener_persona(
+              interfaz_persona_socio.nid_persona,
+            );
+          }
           return {
             interfaz_socio: interfaz_socio,
             interfaz_persona_socio: interfaz_persona_socio,
+            socio: socio_info,
           };
         },
       );
