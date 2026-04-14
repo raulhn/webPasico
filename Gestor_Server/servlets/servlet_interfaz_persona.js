@@ -83,26 +83,27 @@ function obtener_interfaz_personas(req, res) {
       const interfaz_socios =
         await gestor_interfaz_socio.obtener_interfaz_socio_lote(lote);
 
-      const interfaz_socios_info = interfaz_socios.map(
-        async (interfaz_socio) => {
-          const interfaz_persona_socio =
-            await gestor_interfaz_persona.obtener_interfaz_persona(
-              interfaz_socio.nid_interfaz_persona,
-            );
+      let interfaz_socios_info = [];
 
-          let socio_info = null;
-          if (interfaz_persona_socio.nid_persona) {
-            socio_info = await gestor_persona.obtener_persona(
-              interfaz_persona_socio.nid_persona,
-            );
-          }
-          return {
-            interfaz_socio: interfaz_socio,
-            interfaz_persona_socio: interfaz_persona_socio,
-            socio: socio_info,
-          };
-        },
-      );
+      for (let i = 0; i < interfaz_socios.length; i++) {
+        const interfaz_persona_socio =
+          await gestor_interfaz_persona.obtener_interfaz_persona(
+            interfaz_socios[i].nid_interfaz_persona,
+          );
+
+        let socio_info = null;
+        if (interfaz_persona_socio.nid_persona) {
+          socio_info = await gestor_persona.obtener_persona(
+            interfaz_persona_socio.nid_persona,
+          );
+        }
+        interfaz_socios_info.push({
+          interfaz_socio: interfaz_socios[i],
+          interfaz_persona_socio: interfaz_persona_socio,
+          socio: socio_info,
+        });
+      }
+
       res.status(200).send({
         error: false,
         interfaz_personas: resultado_interfaz_personas,
