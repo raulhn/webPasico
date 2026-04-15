@@ -2,6 +2,7 @@ const conexion = require("../conexion.js");
 const constantes = require("../constantes.js");
 const gestor_interfaz_persona = require("./interfaz_persona.js");
 const gestor_socio = require("./socio.js");
+const gestor_interfa_registro = require("./interfaz_registro.js")
 
 function insertar_interfaz_socio(interfaz_socio) {
   const sql =
@@ -114,20 +115,23 @@ function comparar_dato(dato_interfaz, dato) {
 
   // El dato de interfaz no es vacio, pero el dato registrado si
   if (dato === undefined || dato === null || dato.toString().length === 0) {
+
     return false;
   }
-
   return (
     dato_interfaz.toString().toUpperCase() === dato.toString().toUpperCase()
   );
 }
 
-function comparar_socio(interfaz_socio, socio) {
+function comparar_socio(interfaz_socio, socios) {
   try {
+    const socio = socios[0];
+
+
     if (
       comparar_dato(interfaz_socio.nid_persona, socio.nid_persona) &&
-      comparar_dato(interfaz_socio.fecha_alta, socio.fecha_alta) &&
-      comparar_dato(interfaz_socio.fecha_baja, socio.fecha_baja)
+      comparar_dato(gestor_interfa_registro.formatearFechaRevert(interfaz_socio.fecha_alta), gestor_interfa_registro.formatearFechaRevert(socio.fecha_alta)) &&
+      comparar_dato(gestor_interfa_registro.formatearFechaRevert(interfaz_socio.fecha_baja), gestor_interfa_registro.formatearFechaRevert(socio.fecha_baja))
     ) {
       return true;
     } else {
@@ -252,18 +256,14 @@ async function registrar_interfaz_socio(
             fecha_baja: socio.fecha_baja,
           };
 
-          // Se recupera el conflicto de actulización, y se incluid el nid del socio
+          // Se recupera el conflicto de actualización, y se incluid el nid del socio
           let conflicto_persona_actualizar =
             await gestor_interfaz_persona.obtener_conflicto_actualizacion(
               interfaz_persona.nid_interfaz_persona,
             );
           if (conflicto_persona_actualizar.length > 0) {
             conflicto_persona_actualizar[0].nid_socio = socio[0].nid_persona;
-            console.log(
-              "interfaz_socio -> registrar_interfaz_socio:",
-              socio,
-              conflicto_persona_actualizar[0],
-            );
+
             await gestor_interfaz_persona.actualizar_conflicto_persona(
               conflicto_persona_actualizar[0],
             );
@@ -339,7 +339,7 @@ function obtener_interfaz_socio(nid_interfaz_persona) {
         console.log("interfaz_socio -> obtener_socio: ", error);
         reject(
           "Se ha producido un error al recuperar el socio para el nid_interfaz_persona " +
-            nid_interfaz_persona,
+          nid_interfaz_persona,
         );
       } else {
         resolve(results);
@@ -419,7 +419,6 @@ async function actualizar_conflicto(nid_interfaz_persona) {
             await gestor_interfaz_persona.obtener_conflicto_actualizacion(
               interfaz_persona.nid_interfaz_persona,
             );
-          console.log("interfaz_socio -> actualizar_conflicto_persona:", socio);
           if (conflicto_persona_actualizar.length > 0) {
             conflicto_persona_actualizar[0].nid_socio = socio.nid_persona;
             await gestor_interfaz_persona.actualizar_conflicto_persona(

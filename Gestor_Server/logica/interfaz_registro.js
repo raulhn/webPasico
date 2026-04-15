@@ -755,3 +755,4 @@ module.exports.obtener_siguiente_lote = obtener_siguiente_lote;
 module.exports.cargar_registro = cargar_registro;
 module.exports.cargar_datos_interfaz = cargar_datos_interfaz;
 module.exports.comparar_dato = comparar_dato;
+module.exports.formatearFechaRevert = formatearFechaRevert
