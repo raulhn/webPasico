@@ -347,24 +347,38 @@
             @if (interfaz_persona_insertar.insertar.socio_nuevo) {
               <div class="socio-info socio-nuevo">
                 <div class="socio-header">
-                  <span class="socio-badge socio-nuevo-badge">👤 Socio a asignar</span>
+                  <span class="socio-badge socio-nuevo-badge"
+                    >👤 Socio a asignar</span
+                  >
                 </div>
                 <div class="socio-details">
                   <div class="socio-name">
                     {{ interfaz_persona_insertar.insertar.socio_nuevo.nombre }}
-                    {{ interfaz_persona_insertar.insertar.socio_nuevo.primer_apellido }}
-                    {{ interfaz_persona_insertar.insertar.socio_nuevo.segundo_apellido }}
+                    {{
+                      interfaz_persona_insertar.insertar.socio_nuevo
+                        .primer_apellido
+                    }}
+                    {{
+                      interfaz_persona_insertar.insertar.socio_nuevo
+                        .segundo_apellido
+                    }}
                   </div>
                   @if (interfaz_persona_insertar.insertar.socio_nuevo.email) {
                     <div class="socio-contact">
                       <span class="contact-icon">📧</span>
-                      <span class="contact-info">{{ interfaz_persona_insertar.insertar.socio_nuevo.email }}</span>
+                      <span class="contact-info">{{
+                        interfaz_persona_insertar.insertar.socio_nuevo.email
+                      }}</span>
                     </div>
                   }
-                  @if (interfaz_persona_insertar.insertar.socio_nuevo.telefono) {
+                  @if (
+                    interfaz_persona_insertar.insertar.socio_nuevo.telefono
+                  ) {
                     <div class="socio-contact">
                       <span class="contact-icon">📞</span>
-                      <span class="contact-info">{{ interfaz_persona_insertar.insertar.socio_nuevo.telefono }}</span>
+                      <span class="contact-info">{{
+                        interfaz_persona_insertar.insertar.socio_nuevo.telefono
+                      }}</span>
                     </div>
                   }
                 </div>
@@ -556,24 +570,41 @@
           @if (interfaz_persona_actualizar.actualizar.socio_nuevo) {
             <div class="socio-info socio-nuevo">
               <div class="socio-header">
-                <span class="socio-badge socio-nuevo-badge">👤 Socio a asignar</span>
+                <span class="socio-badge socio-nuevo-badge"
+                  >👤 Socio a asignar</span
+                >
               </div>
               <div class="socio-details">
                 <div class="socio-name">
-                  {{ interfaz_persona_actualizar.actualizar.socio_nuevo.nombre }}
-                  {{ interfaz_persona_actualizar.actualizar.socio_nuevo.primer_apellido }}
-                  {{ interfaz_persona_actualizar.actualizar.socio_nuevo.segundo_apellido }}
+                  {{
+                    interfaz_persona_actualizar.actualizar.socio_nuevo.nombre
+                  }}
+                  {{
+                    interfaz_persona_actualizar.actualizar.socio_nuevo
+                      .primer_apellido
+                  }}
+                  {{
+                    interfaz_persona_actualizar.actualizar.socio_nuevo
+                      .segundo_apellido
+                  }}
                 </div>
                 @if (interfaz_persona_actualizar.actualizar.socio_nuevo.email) {
                   <div class="socio-contact">
                     <span class="contact-icon">📧</span>
-                    <span class="contact-info">{{ interfaz_persona_actualizar.actualizar.socio_nuevo.email }}</span>
+                    <span class="contact-info">{{
+                      interfaz_persona_actualizar.actualizar.socio_nuevo.email
+                    }}</span>
                   </div>
                 }
-                @if (interfaz_persona_actualizar.actualizar.socio_nuevo.telefono) {
+                @if (
+                  interfaz_persona_actualizar.actualizar.socio_nuevo.telefono
+                ) {
                   <div class="socio-contact">
                     <span class="contact-icon">📞</span>
-                    <span class="contact-info">{{ interfaz_persona_actualizar.actualizar.socio_nuevo.telefono }}</span>
+                    <span class="contact-info">{{
+                      interfaz_persona_actualizar.actualizar.socio_nuevo
+                        .telefono
+                    }}</span>
                   </div>
                 }
               </div>
@@ -582,18 +613,367 @@
           @if (interfaz_persona_actualizar.actualizar.socio) {
             <div class="socio-info socio-actual">
               <div class="socio-header">
-                <span class="socio-badge socio-actual-badge">🏅 Socio actual</span>
+                <span class="socio-badge socio-actual-badge"
+                  >🏅 Socio actual</span
+                >
               </div>
               <div class="socio-details">
                 <div class="socio-name">
                   {{ interfaz_persona_actualizar.actualizar.socio.nombre }}
-                  {{ interfaz_persona_actualizar.actualizar.socio.primer_apellido }}
-                  {{ interfaz_persona_actualizar.actualizar.socio.segundo_apellido }}
+                  {{
+                    interfaz_persona_actualizar.actualizar.socio.primer_apellido
+                  }}
+                  {{
+                    interfaz_persona_actualizar.actualizar.socio
+                      .segundo_apellido
+                  }}
                 </div>
               </div>
             </div>
           }
         </details>
+      }
+    </section>
+  }
+
+  <!-- Sección de Nuevas Inserciones de Socios -->
+  @if (interfaz_socios_insertar.length > 0) {
+    <section>
+      <div class="section-header success-header">
+        <h3 class="section-title">➕ Nuevos Socios</h3>
+        <span class="count-badge success-badge">{{
+          interfaz_socios_insertar.length
+        }}</span>
+      </div>
+      @for (
+        interfaz_socio_insertar of interfaz_socios_insertar;
+        track interfaz_socio_insertar
+      ) {
+        <div class="data-card insert-card">
+          <div class="card-content">
+            <div class="operation-tag insert-tag">
+              {{ interfaz_socio_insertar.interfaz_socio.operacion }}
+            </div>
+            <div class="person-info">
+              <span class="person-name">
+                {{ interfaz_socio_insertar.interfaz_persona_socio.nombre }}
+                {{
+                  interfaz_socio_insertar.interfaz_persona_socio.primer_apellido
+                }}
+                {{
+                  interfaz_socio_insertar.interfaz_persona_socio
+                    .segundo_apellido
+                }}
+              </span>
+              <div style="display: flex; flex-direction: column">
+                @if (interfaz_socio_insertar.interfaz_persona_socio.email) {
+                  <span>
+                    <b>Correo eletrónico: </b
+                    >{{ interfaz_socio_insertar.interfaz_persona_socio.email }}
+                  </span>
+                }
+                @if (interfaz_socio_insertar.interfaz_persona_socio.telefono) {
+                  <span
+                    ><b>Teléfono: </b
+                    >{{
+                      interfaz_socio_insertar.interfaz_persona_socio.telefono
+                    }}
+                  </span>
+                }
+                @if (
+                  interfaz_socio_insertar.interfaz_persona_socio
+                    .fecha_nacimiento
+                ) {
+                  <span
+                    ><b>Fecha de Nacimiento: </b
+                    >{{
+                      formatearFecha(
+                        interfaz_socio_insertar.interfaz_persona_socio
+                          .fecha_nacimiento
+                      )
+                    }}</span
+                  >
+                }
+              </div>
+            </div>
+            <div class="estado-container">
+              <span
+                class="estado-badge"
+                [ngClass]="{
+                  'estado-activo':
+                    interfaz_socio_insertar.interfaz_socio.estado === 'ACTIVO',
+                  'estado-inactivo':
+                    interfaz_socio_insertar.interfaz_socio.estado ===
+                    'INACTIVO',
+                  'estado-pendiente':
+                    interfaz_socio_insertar.interfaz_socio.estado ===
+                    'PENDIENTE',
+                  'estado-procesado':
+                    interfaz_socio_insertar.interfaz_socio.estado ===
+                    'PROCESADO',
+                  'estado-error':
+                    interfaz_socio_insertar.interfaz_socio.estado === 'ERROR',
+                  'estado-default': ![
+                    'ACTIVO',
+                    'INACTIVO',
+                    'PENDIENTE',
+                    'PROCESADO',
+                    'ERROR',
+                  ].includes(interfaz_socio_insertar.interfaz_socio.estado),
+                }"
+              >
+                {{ interfaz_socio_insertar.interfaz_socio.estado }}
+              </span>
+            </div>
+          </div>
+        </div>
+      }
+    </section>
+  }
+
+  @if (interfaz_socios_actualizar.length > 0) {
+    <section>
+      <div class="section-header info-header">
+        <h3 class="section-title">🔄 Actualizaciones de Socios</h3>
+        <span class="count-badge info-badge">{{
+          interfaz_socios_actualizar.length
+        }}</span>
+      </div>
+      @for (
+        interfaz_socio_actualizar of interfaz_socios_actualizar;
+        track interfaz_socio_actualizar
+      ) {
+        <details class="data-card update-card">
+          <summary class="card-summary">
+            <div class="data-card update-card">
+              <div class="card-content">
+                <div class="operation-tag update-tag">
+                  {{ interfaz_socio_actualizar.interfaz_socio.operacion }}
+                </div>
+                <div class="person-info">
+                  <span class="person-name">
+                    {{
+                      interfaz_socio_actualizar.interfaz_persona_socio.nombre
+                    }}
+                    {{
+                      interfaz_socio_actualizar.interfaz_persona_socio
+                        .primer_apellido
+                    }}
+                    {{
+                      interfaz_socio_actualizar.interfaz_persona_socio
+                        .segundo_apellido
+                    }}
+                  </span>
+                  <div style="display: flex; flex-direction: column">
+                    @if (
+                      interfaz_socio_actualizar.interfaz_persona_socio.email
+                    ) {
+                      <span>
+                        <b>Correo electrónico: </b
+                        >{{
+                          interfaz_socio_actualizar.interfaz_persona_socio.email
+                        }}
+                      </span>
+                    }
+                    @if (
+                      interfaz_socio_actualizar.interfaz_persona_socio.telefono
+                    ) {
+                      <span
+                        ><b>Teléfono: </b
+                        >{{
+                          interfaz_socio_actualizar.interfaz_persona_socio
+                            .telefono
+                        }}
+                      </span>
+                    }
+                    @if (
+                      interfaz_socio_actualizar.interfaz_persona_socio
+                        .fecha_nacimiento
+                    ) {
+                      <span
+                        ><b>Fecha de Nacimiento: </b
+                        >{{
+                          formatearFecha(
+                            interfaz_socio_actualizar.interfaz_persona_socio
+                              .fecha_nacimiento
+                          )
+                        }}</span
+                      >
+                    }
+                  </div>
+                </div>
+                <div class="estado-container">
+                  <span
+                    class="estado-badge"
+                    [ngClass]="{
+                      'estado-activo':
+                        interfaz_socio_actualizar.interfaz_socio.estado ===
+                        'ACTIVO',
+                      'estado-inactivo':
+                        interfaz_socio_actualizar.interfaz_socio.estado ===
+                        'INACTIVO',
+                      'estado-pendiente':
+                        interfaz_socio_actualizar.interfaz_socio.estado ===
+                        'PENDIENTE',
+                      'estado-procesado':
+                        interfaz_socio_actualizar.interfaz_socio.estado ===
+                        'PROCESADO',
+                      'estado-error':
+                        interfaz_socio_actualizar.interfaz_socio.estado ===
+                        'ERROR',
+                      'estado-default': ![
+                        'ACTIVO',
+                        'INACTIVO',
+                        'PENDIENTE',
+                        'PROCESADO',
+                        'ERROR',
+                      ].includes(
+                        interfaz_socio_actualizar.interfaz_socio.estado
+                      ),
+                    }"
+                  >
+                    {{ interfaz_socio_actualizar.interfaz_socio.estado }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </summary>
+          <div class="update-list">
+            <div class="update-item" class="update-content">
+              <span class="conflict-label">Coincidencia encontrada:</span>
+              <span class="person-name">
+                {{ interfaz_socio_actualizar.socio.nombre }}
+                {{ interfaz_socio_actualizar.socio.primer_apellido }}
+                {{ interfaz_socio_actualizar.socio.segundo_apellido }}
+              </span>
+              <div style="display: flex; flex-direction: column">
+                @if (interfaz_socio_actualizar.socio.email) {
+                  <span>
+                    <b>Correo electrónico: </b
+                    >{{ interfaz_socio_actualizar.socio.email }}
+                  </span>
+                }
+                @if (interfaz_socio_actualizar.socio.telefono) {
+                  <span>
+                    <b>Teléfono: </b>
+                    {{ interfaz_socio_actualizar.socio.telefono }}
+                  </span>
+                }
+                @if (interfaz_socio_actualizar.socio.fecha_nacimiento) {
+                  <span>
+                    <b>Fecha de Nacimiento: </b
+                    >{{
+                      formatearFecha(
+                        interfaz_socio_actualizar.socio.fecha_nacimiento
+                      )
+                    }}
+                  </span>
+                }
+              </div>
+            </div>
+          </div>
+        </details>
+      }
+    </section>
+  }
+
+  @if (interfaz_socios_sin_cambios.length > 0) {
+    <section>
+      <div class="section-header neutral-header">
+        <h3 class="section-title">✅ Socios Sin Cambios</h3>
+        <span class="count-badge neutral-badge">{{
+          interfaz_socios_sin_cambios.length
+        }}</span>
+      </div>
+      @for (
+        interfaz_socio_sin_cambios of interfaz_socios_sin_cambios;
+        track interfaz_socio_sin_cambios
+      ) {
+        <div class="data-card no-changes-card">
+          <div class="card-content">
+            <div class="operation-tag no-changes-tag">
+              {{ interfaz_socio_sin_cambios.interfaz_socio.operacion }}
+            </div>
+            <div class="person-info">
+              <span class="person-name">
+                {{ interfaz_socio_sin_cambios.interfaz_persona_socio.nombre }}
+                {{
+                  interfaz_socio_sin_cambios.interfaz_persona_socio
+                    .primer_apellido
+                }}
+                {{
+                  interfaz_socio_sin_cambios.interfaz_persona_socio
+                    .segundo_apellido
+                }}
+              </span>
+              <div style="display: flex; flex-direction: column">
+                @if (interfaz_socio_sin_cambios.interfaz_persona_socio.email) {
+                  <span>
+                    <b>Correo electrónico: </b
+                    >{{
+                      interfaz_socio_sin_cambios.interfaz_persona_socio.email
+                    }}
+                  </span>
+                }
+                @if (
+                  interfaz_socio_sin_cambios.interfaz_persona_socio.telefono
+                ) {
+                  <span
+                    ><b>Teléfono: </b
+                    >{{
+                      interfaz_socio_sin_cambios.interfaz_persona_socio.telefono
+                    }}
+                  </span>
+                }
+                @if (
+                  interfaz_socio_sin_cambios.interfaz_persona_socio
+                    .fecha_nacimiento
+                ) {
+                  <span
+                    ><b>Fecha de Nacimiento: </b
+                    >{{
+                      formatearFecha(
+                        interfaz_socio_sin_cambios.interfaz_persona_socio
+                          .fecha_nacimiento
+                      )
+                    }}</span
+                  >
+                }
+              </div>
+            </div>
+            <div class="estado-container">
+              <span
+                class="estado-badge"
+                [ngClass]="{
+                  'estado-activo':
+                    interfaz_socio_sin_cambios.interfaz_socio.estado ===
+                    'ACTIVO',
+                  'estado-inactivo':
+                    interfaz_socio_sin_cambios.interfaz_socio.estado ===
+                    'INACTIVO',
+                  'estado-pendiente':
+                    interfaz_socio_sin_cambios.interfaz_socio.estado ===
+                    'PENDIENTE',
+                  'estado-procesado':
+                    interfaz_socio_sin_cambios.interfaz_socio.estado ===
+                    'PROCESADO',
+                  'estado-error':
+                    interfaz_socio_sin_cambios.interfaz_socio.estado ===
+                    'ERROR',
+                  'estado-default': ![
+                    'ACTIVO',
+                    'INACTIVO',
+                    'PENDIENTE',
+                    'PROCESADO',
+                    'ERROR',
+                  ].includes(interfaz_socio_sin_cambios.interfaz_socio.estado),
+                }"
+              >
+                {{ interfaz_socio_sin_cambios.interfaz_socio.estado }}
+              </span>
+            </div>
+          </div>
+        </div>
       }
     </section>
   }

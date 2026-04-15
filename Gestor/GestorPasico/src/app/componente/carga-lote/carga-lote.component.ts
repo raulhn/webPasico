@@ -31,6 +31,10 @@ export class CargaLoteComponent implements OnInit {
   interfaz_personas_conflicto: any[] = [];
   interfaz_personas_sin_cambios: any[] = [];
 
+  interfaz_socios_insertar: any[] = [];
+  interfaz_socios_actualizar: any[] = [];
+  interfaz_socios_sin_cambios: any[] = [];
+
   constructor(
     private ruta: ActivatedRoute,
     private interfazPersonaService: InterfazPersonaService,
@@ -52,7 +56,7 @@ export class CargaLoteComponent implements OnInit {
       // Formatear la fecha como "DD/MM/YYYY"
       return `${dia
         .toString()
-        .padStart(2, "0")}-${mes.toString().padStart(2, "0")}-${anio}`;
+        .padStart(2, '0')}-${mes.toString().padStart(2, '0')}-${anio}`;
     }
     return null;
   }
@@ -102,6 +106,21 @@ export class CargaLoteComponent implements OnInit {
       this.interfaz_personas_sin_cambios = this.interfaz_personas.filter(
         (persona) =>
           persona.interfaz_persona.operacion === this.operaciones.SIN_CAMBIOS,
+      );
+
+      this.interfaz_socios_insertar = respuesta.interfaz_socios.filter(
+        (socio: any) =>
+          socio.interfaz_socio.operacion === this.operaciones.INSERTAR,
+      );
+
+      this.interfaz_socios_actualizar = respuesta.interfaz_socios.filter(
+        (socio: any) =>
+          socio.interfaz_socio.operacion === this.operaciones.ACTUALIZAR,
+      );
+
+      this.interfaz_socios_sin_cambios = respuesta.interfaz_socios.filter(
+        (socio: any) =>
+          socio.interfaz_socio.operacion === this.operaciones.SIN_CAMBIOS,
       );
     },
   };
