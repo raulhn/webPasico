@@ -665,6 +665,14 @@
                     .segundo_apellido
                 }}
               </span>
+              <div>
+                {{ interfaz_socio_insertar.interfaz_socio.fecha_alta }}
+              </div>
+              @if (interfaz_socio_insertar.interfaz_socio.fecha_baja) {
+                <div>
+                  {{ interfaz_socio_insertar.interfaz_socio.fecha_baja }}
+                </div>
+              }
               <div style="display: flex; flex-direction: column">
                 @if (interfaz_socio_insertar.interfaz_persona_socio.email) {
                   <span>
@@ -764,6 +772,14 @@
                         .segundo_apellido
                     }}
                   </span>
+                  <div>
+                    {{ interfaz_socio_actualizar.interfaz_socio.fecha_alta }}
+                  </div>
+                  @if (interfaz_socio_actualizar.interfaz_socio.fecha_baja) {
+                    <div>
+                      {{ interfaz_socio_actualizar.interfaz_socio.fecha_baja }}
+                    </div>
+                  }
                   <div style="display: flex; flex-direction: column">
                     @if (
                       interfaz_socio_actualizar.interfaz_persona_socio.email
@@ -876,6 +892,102 @@
       }
     </section>
   }
+  <!-- Sección de Sin Cambios -->
+  @if (interfaz_personas_sin_cambios.length > 0) {
+    <section class="data-section no-changes-section">
+      <div class="section-header neutral-header">
+        <h3 class="section-title">✅ Sin Cambios</h3>
+        <span class="count-badge neutral-badge">{{
+          interfaz_personas_sin_cambios.length
+        }}</span>
+      </div>
+      @for (
+        interfaz_persona_sin_cambios of interfaz_personas_sin_cambios;
+        track interfaz_persona_sin_cambios
+      ) {
+        <div class="data-card no-changes-card">
+          <div class="card-content">
+            <div class="operation-tag no-changes-tag">
+              {{ interfaz_persona_sin_cambios.interfaz_persona.operacion }}
+            </div>
+            <div class="person-info">
+              <span class="person-name">
+                {{ interfaz_persona_sin_cambios.interfaz_persona.nombre }}
+                {{
+                  interfaz_persona_sin_cambios.interfaz_persona.primer_apellido
+                }}
+                {{
+                  interfaz_persona_sin_cambios.interfaz_persona.segundo_apellido
+                }}
+              </span>
+              <div style="display: flex; flex-direction: column">
+                @if (interfaz_persona_sin_cambios.interfaz_persona.email) {
+                  <span>
+                    <b>Correo electrónico: </b
+                    >{{ interfaz_persona_sin_cambios.interfaz_persona.email }}
+                  </span>
+                }
+                @if (interfaz_persona_sin_cambios.interfaz_persona.telefono) {
+                  <span>
+                    <b>Teléfono: </b
+                    >{{
+                      interfaz_persona_sin_cambios.interfaz_persona.telefono
+                    }}
+                  </span>
+                }
+                @if (
+                  interfaz_persona_sin_cambios.interfaz_persona.fecha_nacimiento
+                ) {
+                  <span>
+                    <b>Fecha de Nacimiento: </b
+                    >{{
+                      formatearFecha(
+                        interfaz_persona_sin_cambios.interfaz_persona
+                          .fecha_nacimiento
+                      )
+                    }}
+                  </span>
+                }
+              </div>
+            </div>
+            <div class="estado-container">
+              <span
+                class="estado-badge"
+                [ngClass]="{
+                  'estado-activo':
+                    interfaz_persona_sin_cambios.interfaz_persona.estado ===
+                    'ACTIVO',
+                  'estado-inactivo':
+                    interfaz_persona_sin_cambios.interfaz_persona.estado ===
+                    'INACTIVO',
+                  'estado-pendiente':
+                    interfaz_persona_sin_cambios.interfaz_persona.estado ===
+                    'PENDIENTE',
+                  'estado-procesado':
+                    interfaz_persona_sin_cambios.interfaz_persona.estado ===
+                    'PROCESADO',
+                  'estado-error':
+                    interfaz_persona_sin_cambios.interfaz_persona.estado ===
+                    'ERROR',
+                  'estado-default': ![
+                    'ACTIVO',
+                    'INACTIVO',
+                    'PENDIENTE',
+                    'PROCESADO',
+                    'ERROR',
+                  ].includes(
+                    interfaz_persona_sin_cambios.interfaz_persona.estado
+                  ),
+                }"
+              >
+                {{ interfaz_persona_sin_cambios.interfaz_persona.estado }}
+              </span>
+            </div>
+          </div>
+        </div>
+      }
+    </section>
+  }
 
   @if (interfaz_socios_sin_cambios.length > 0) {
     <section>
@@ -978,102 +1090,6 @@
     </section>
   }
 
-  <!-- Sección de Sin Cambios -->
-  @if (interfaz_personas_sin_cambios.length > 0) {
-    <section class="data-section no-changes-section">
-      <div class="section-header neutral-header">
-        <h3 class="section-title">✅ Sin Cambios</h3>
-        <span class="count-badge neutral-badge">{{
-          interfaz_personas_sin_cambios.length
-        }}</span>
-      </div>
-      @for (
-        interfaz_persona_sin_cambios of interfaz_personas_sin_cambios;
-        track interfaz_persona_sin_cambios
-      ) {
-        <div class="data-card no-changes-card">
-          <div class="card-content">
-            <div class="operation-tag no-changes-tag">
-              {{ interfaz_persona_sin_cambios.interfaz_persona.operacion }}
-            </div>
-            <div class="person-info">
-              <span class="person-name">
-                {{ interfaz_persona_sin_cambios.interfaz_persona.nombre }}
-                {{
-                  interfaz_persona_sin_cambios.interfaz_persona.primer_apellido
-                }}
-                {{
-                  interfaz_persona_sin_cambios.interfaz_persona.segundo_apellido
-                }}
-              </span>
-              <div style="display: flex; flex-direction: column">
-                @if (interfaz_persona_sin_cambios.interfaz_persona.email) {
-                  <span>
-                    <b>Correo electrónico: </b
-                    >{{ interfaz_persona_sin_cambios.interfaz_persona.email }}
-                  </span>
-                }
-                @if (interfaz_persona_sin_cambios.interfaz_persona.telefono) {
-                  <span>
-                    <b>Teléfono: </b
-                    >{{
-                      interfaz_persona_sin_cambios.interfaz_persona.telefono
-                    }}
-                  </span>
-                }
-                @if (
-                  interfaz_persona_sin_cambios.interfaz_persona.fecha_nacimiento
-                ) {
-                  <span>
-                    <b>Fecha de Nacimiento: </b
-                    >{{
-                      formatearFecha(
-                        interfaz_persona_sin_cambios.interfaz_persona
-                          .fecha_nacimiento
-                      )
-                    }}
-                  </span>
-                }
-              </div>
-            </div>
-            <div class="estado-container">
-              <span
-                class="estado-badge"
-                [ngClass]="{
-                  'estado-activo':
-                    interfaz_persona_sin_cambios.interfaz_persona.estado ===
-                    'ACTIVO',
-                  'estado-inactivo':
-                    interfaz_persona_sin_cambios.interfaz_persona.estado ===
-                    'INACTIVO',
-                  'estado-pendiente':
-                    interfaz_persona_sin_cambios.interfaz_persona.estado ===
-                    'PENDIENTE',
-                  'estado-procesado':
-                    interfaz_persona_sin_cambios.interfaz_persona.estado ===
-                    'PROCESADO',
-                  'estado-error':
-                    interfaz_persona_sin_cambios.interfaz_persona.estado ===
-                    'ERROR',
-                  'estado-default': ![
-                    'ACTIVO',
-                    'INACTIVO',
-                    'PENDIENTE',
-                    'PROCESADO',
-                    'ERROR',
-                  ].includes(
-                    interfaz_persona_sin_cambios.interfaz_persona.estado
-                  ),
-                }"
-              >
-                {{ interfaz_persona_sin_cambios.interfaz_persona.estado }}
-              </span>
-            </div>
-          </div>
-        </div>
-      }
-    </section>
-  }
   <div style="display: flex; width: 100%; justify-content: space-around">
     <button class="btn btn-primary" (click)="lanzar_actualizacion()">
       Resolver Conflictos
