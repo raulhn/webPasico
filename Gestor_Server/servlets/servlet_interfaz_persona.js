@@ -4,6 +4,7 @@ const gestor_interfaz_socio = require("../logica/interfaz_socio.js");
 const gestor_persona = require("../logica/persona.js");
 const gestor_socio = require("../logica/socio.js");
 const constantes = require("../constantes.js");
+const { formatearFecha } = require("../logica/fechas.js");
 
 function obtener_interfaz_personas(req, res) {
   servlet_comun.comprobaciones(req, res, async () => {
@@ -97,8 +98,18 @@ function obtener_interfaz_personas(req, res) {
             interfaz_persona_socio.nid_persona,
           );
         }
+
+        let interfaz_socio_recuperado = interfaz_socios[i];
+
+        // Formatear las fechas antes de enviarlas al cliente
+        interfaz_socio_recuperado.fecha_alta = formatearFecha(
+          interfaz_socio_recuperado.fecha_alta,
+        );
+        interfaz_socio_recuperado.fecha_baja = formatearFecha(
+          interfaz_socio_recuperado.fecha_baja,
+        );
         interfaz_socios_info.push({
-          interfaz_socio: interfaz_socios[i],
+          interfaz_socio: interfaz_socio_recuperado,
           interfaz_persona_socio: interfaz_persona_socio,
           socio: socio_info,
         });

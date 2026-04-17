@@ -4,11 +4,6 @@ const persona = require("./persona.js");
 const gestor_matricula = require("./matricula.js");
 const parametros = require("./parametros.js");
 
-const {
-  obtener_instrumentos,
-  registrar_instrumento_persona,
-} = require("./musico.js");
-
 function existe_persona_sin_foma_pago() {
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(
@@ -28,7 +23,7 @@ function existe_persona_sin_foma_pago() {
         } else {
           resolve(results[0]["num"] > 0);
         }
-      }
+      },
     );
   });
 }
@@ -52,7 +47,7 @@ function existe_socio(nid_forma_pago) {
         } else {
           resolve(results[0]["cont"] > 0);
         }
-      }
+      },
     );
   });
 }
@@ -84,7 +79,7 @@ function obtener_matricula_asignatura_activa(v_persona) {
         } else {
           resolve(results);
         }
-      }
+      },
     );
   });
 }
@@ -111,7 +106,7 @@ function obtener_matricula_asignatura(nid_matricula) {
         } else {
           resolve(results);
         }
-      }
+      },
     );
   });
 }
@@ -127,7 +122,7 @@ function obtener_siguiente_lote() {
         } else {
           resolve(results[0]["lote"]);
         }
-      }
+      },
     );
   });
 }
@@ -137,7 +132,7 @@ function registrar_remesa(
   v_concepto,
   v_siguiente_lote,
   v_precio,
-  v_nid_forma_pago
+  v_nid_forma_pago,
 ) {
   return new Promise((resolve, reject) => {
     conexion.dbConn.beginTransaction(async () => {
@@ -169,7 +164,7 @@ function registrar_remesa(
             conexion.dbConn.commit();
             resolve(results.insertId);
           }
-        }
+        },
       );
     });
   });
@@ -198,7 +193,7 @@ function registrar_linea_remesa(v_remesa, v_precio, v_concepto) {
             conexion.dbConn.commit();
             resolve(results.insertId);
           }
-        }
+        },
       );
     });
   });
@@ -223,7 +218,7 @@ function registrar_descuento(nid_remesa, concepto) {
           conexion.dbConn.commit();
           resolve();
         }
-      }
+      },
     );
   });
 }
@@ -259,7 +254,7 @@ function obtener_matriculas_activas(nid_socio) {
         } else {
           resolve(results);
         }
-      }
+      },
     );
   });
 }
@@ -303,7 +298,7 @@ function obtener_matriculas_activas_fecha(nid_socio, fecha_desde, fecha_hasta) {
         } else {
           resolve(results);
         }
-      }
+      },
     );
   });
 }
@@ -331,7 +326,7 @@ function comprueba_es_socio(nid_persona) {
         } else {
           resolve(results.length > 0);
         }
-      }
+      },
     );
   });
 }
@@ -363,11 +358,11 @@ function obtener_nid_socio(nid_persona) {
                 } else {
                   resolve(results[0]["nid_socio"]);
                 }
-              }
+              },
             );
           }
         }
-      }
+      },
     );
   });
 }
@@ -375,7 +370,7 @@ function obtener_nid_socio(nid_persona) {
 async function precio_matricula(nid_matricula, num_familiar) {
   try {
     var valor_recuperado = await parametros.obtener_valor(
-      "REBAJA_VIENTO_CUERDA"
+      "REBAJA_VIENTO_CUERDA",
     );
     const REBAJA_VIENTO_CUERDA = valor_recuperado["valor"];
 
@@ -383,12 +378,12 @@ async function precio_matricula(nid_matricula, num_familiar) {
     const SUMA_PRECIO_NO_SOCIO = valor_recuperado["valor"];
 
     valor_recuperado = await parametros.obtener_valor(
-      "PRECIO_INSTRUMENTO_BANDA"
+      "PRECIO_INSTRUMENTO_BANDA",
     );
     const PRECIO_INSTRUMENTO_BANDA = valor_recuperado["valor"];
 
     valor_recuperado = await parametros.obtener_valor(
-      "PRECIO_INSTRUMENTO_NO_BANDA"
+      "PRECIO_INSTRUMENTO_NO_BANDA",
     );
     const PRECIO_INSTRUMENTO_NO_BANDA = valor_recuperado["valor"];
 
@@ -396,7 +391,7 @@ async function precio_matricula(nid_matricula, num_familiar) {
     const PRECIO_LENGUAJE = valor_recuperado["valor"];
 
     valor_recuperado = await parametros.obtener_valor(
-      "PORCENTAJE_DESCUENTO_FAMILIA"
+      "PORCENTAJE_DESCUENTO_FAMILIA",
     );
     const PORCENTAJE_FAMILIA = valor_recuperado["valor"];
 
@@ -412,11 +407,10 @@ async function precio_matricula(nid_matricula, num_familiar) {
 
     let asignaturas_precio =
       await gestor_matricula.obtener_asignaturas_matricula_activas(
-        nid_matricula
+        nid_matricula,
       );
-    let datos_matricula = await gestor_matricula.obtener_matricula(
-      nid_matricula
-    );
+    let datos_matricula =
+      await gestor_matricula.obtener_matricula(nid_matricula);
 
     var resumen_matricula = new Object();
     resumen_matricula.precio = 0;
@@ -514,7 +508,7 @@ async function precio_matricula(nid_matricula, num_familiar) {
             descuento_familiar +
             "% " +
             num_miembro +
-            "º miembro"
+            "º miembro",
         );
       }
 
@@ -524,7 +518,7 @@ async function precio_matricula(nid_matricula, num_familiar) {
           parseFloat(resumen_matricula.precio) +
           parseFloat(SUMA_PRECIO_NO_SOCIO);
         descuentos.push(
-          SUMA_PRECIO_NO_SOCIO + "€ - Precio extra por no ser socio "
+          SUMA_PRECIO_NO_SOCIO + "€ - Precio extra por no ser socio ",
         );
       }
 
@@ -536,7 +530,7 @@ async function precio_matricula(nid_matricula, num_familiar) {
         descuentos.push(
           "-" +
             REBAJA_VIENTO_CUERDA +
-            "€ - Descuento por instrumento de banda y cuerda"
+            "€ - Descuento por instrumento de banda y cuerda",
         );
       }
     }
@@ -555,7 +549,7 @@ async function precio_matricula_fecha(
   nid_matricula,
   num_familiar,
   fecha_desde,
-  fecha_hasta
+  fecha_hasta,
 ) {
   try {
     var v_fecha_desde_original = new Date(fecha_desde);
@@ -574,11 +568,11 @@ async function precio_matricula_fecha(
     var diasMes = new Date(
       v_fecha_desde.getFullYear(),
       Number(v_fecha_desde.getMonth()) + 1,
-      0
+      0,
     ).getDate();
 
     var valor_recuperado = await parametros.obtener_valor(
-      "REBAJA_VIENTO_CUERDA"
+      "REBAJA_VIENTO_CUERDA",
     );
     const REBAJA_VIENTO_CUERDA = valor_recuperado["valor"];
 
@@ -586,12 +580,12 @@ async function precio_matricula_fecha(
     const SUMA_PRECIO_NO_SOCIO = valor_recuperado["valor"];
 
     valor_recuperado = await parametros.obtener_valor(
-      "PRECIO_INSTRUMENTO_BANDA"
+      "PRECIO_INSTRUMENTO_BANDA",
     );
     const PRECIO_INSTRUMENTO_BANDA = valor_recuperado["valor"];
 
     valor_recuperado = await parametros.obtener_valor(
-      "PRECIO_INSTRUMENTO_NO_BANDA"
+      "PRECIO_INSTRUMENTO_NO_BANDA",
     );
     const PRECIO_INSTRUMENTO_NO_BANDA = valor_recuperado["valor"];
 
@@ -599,7 +593,7 @@ async function precio_matricula_fecha(
     const PRECIO_LENGUAJE = valor_recuperado["valor"];
 
     valor_recuperado = await parametros.obtener_valor(
-      "PORCENTAJE_DESCUENTO_FAMILIA"
+      "PORCENTAJE_DESCUENTO_FAMILIA",
     );
     const PORCENTAJE_FAMILIA = valor_recuperado["valor"];
 
@@ -617,11 +611,10 @@ async function precio_matricula_fecha(
       await gestor_matricula.obtener_asignaturas_matricula_activas_fecha(
         nid_matricula,
         fecha_desde,
-        fecha_hasta
+        fecha_hasta,
       );
-    let datos_matricula = await gestor_matricula.obtener_matricula(
-      nid_matricula
-    );
+    let datos_matricula =
+      await gestor_matricula.obtener_matricula(nid_matricula);
 
     var resumen_matricula = new Object();
     resumen_matricula.precio = 0;
@@ -644,7 +637,7 @@ async function precio_matricula_fecha(
       linea_remesa.precio = datos_matricula["precio_manual"];
 
       var diferencia_dias = Math.round(
-        (v_fecha_hasta - v_fecha_desde) / (24 * 3600 * 1000)
+        (v_fecha_hasta - v_fecha_desde) / (24 * 3600 * 1000),
       );
 
       let proporcion = Math.round(Number(diasMes) / 3);
@@ -740,7 +733,7 @@ async function precio_matricula_fecha(
         }
 
         var diferencia_dias = Math.round(
-          (v_fecha_hasta - v_fecha_desde) / (24 * 3600 * 1000)
+          (v_fecha_hasta - v_fecha_desde) / (24 * 3600 * 1000),
         );
 
         let proporcion = Math.round(Number(diasMes) / 3);
@@ -782,7 +775,7 @@ async function precio_matricula_fecha(
             descuento_familiar +
             "% " +
             num_miembro +
-            "º miembro"
+            "º miembro",
         );
       }
 
@@ -792,7 +785,7 @@ async function precio_matricula_fecha(
           parseFloat(resumen_matricula.precio) +
           parseFloat(SUMA_PRECIO_NO_SOCIO);
         descuentos.push(
-          SUMA_PRECIO_NO_SOCIO + "€ - Precio extra por no ser socio "
+          SUMA_PRECIO_NO_SOCIO + "€ - Precio extra por no ser socio ",
         );
       }
 
@@ -804,7 +797,7 @@ async function precio_matricula_fecha(
         descuentos.push(
           "-" +
             REBAJA_VIENTO_CUERDA +
-            "€ - Descuento por instrumento de banda y cuerda"
+            "€ - Descuento por instrumento de banda y cuerda",
         );
       }
     }
@@ -837,7 +830,7 @@ function eliminar_descuento_lote(v_lote) {
         } else {
           resolve();
         }
-      }
+      },
     );
   });
 }
@@ -860,7 +853,7 @@ function eliminar_linea_remesa_lote(v_lote) {
         } else {
           resolve();
         }
-      }
+      },
     );
   });
 }
@@ -886,7 +879,7 @@ function limpiar_lote(v_lote) {
               conexion.dbConn.commit();
               resolve();
             }
-          }
+          },
         );
       } catch (error) {
         conexion.dbConn.rollback();
@@ -908,7 +901,7 @@ async function registrar_remesa_matriculas(v_concepto) {
       await registrar_remesa_persona(
         nid_matricula,
         v_concepto,
-        v_siguiente_lote
+        v_siguiente_lote,
       );
     }
 
@@ -922,13 +915,13 @@ async function registrar_remesa_matriculas(v_concepto) {
 async function registrar_remesa_matriculas_fecha(
   v_concepto,
   fecha_desde,
-  fecha_hasta
+  fecha_hasta,
 ) {
   try {
     let personas_matricula_activa =
       await gestor_matricula.obtener_personas_matricula_activa_fecha(
         fecha_desde,
-        fecha_hasta
+        fecha_hasta,
       );
     var v_siguiente_lote = await obtener_siguiente_lote();
     for (let i = 0; i < personas_matricula_activa.length; i++) {
@@ -939,7 +932,7 @@ async function registrar_remesa_matriculas_fecha(
         v_concepto,
         v_siguiente_lote,
         fecha_desde,
-        fecha_hasta
+        fecha_hasta,
       );
     }
 
@@ -974,21 +967,21 @@ async function registrar_remesa_persona(nid_matricula, v_concepto, lote) {
               v_concepto,
               lote,
               v_precio_remesa,
-              persona_recuperada["nid_forma_pago"]
+              persona_recuperada["nid_forma_pago"],
             );
 
             for (let z = 0; z < v_resumen_matricula.linea_remesas.length; z++) {
               await registrar_linea_remesa(
                 nid_remesa,
                 v_resumen_matricula.linea_remesas[z].precio,
-                v_resumen_matricula.linea_remesas[z].concepto
+                v_resumen_matricula.linea_remesas[z].concepto,
               );
             }
 
             for (let z = 0; z < v_resumen_matricula.descuentos.length; z++) {
               await registrar_descuento(
                 nid_remesa,
-                v_resumen_matricula.descuentos[z]
+                v_resumen_matricula.descuentos[z],
               );
             }
             return;
@@ -1003,21 +996,21 @@ async function registrar_remesa_persona(nid_matricula, v_concepto, lote) {
         v_concepto,
         lote,
         v_precio_remesa,
-        persona_recuperada["nid_forma_pago"]
+        persona_recuperada["nid_forma_pago"],
       );
 
       for (let z = 0; z < v_resumen_matricula.linea_remesas.length; z++) {
         await registrar_linea_remesa(
           nid_remesa,
           v_resumen_matricula.linea_remesas[z].precio,
-          v_resumen_matricula.linea_remesas[z].concepto
+          v_resumen_matricula.linea_remesas[z].concepto,
         );
       }
 
       for (let z = 0; z < v_resumen_matricula.descuentos.length; z++) {
         await registrar_descuento(
           nid_remesa,
-          v_resumen_matricula.descuentos[z]
+          v_resumen_matricula.descuentos[z],
         );
       }
       return;
@@ -1033,7 +1026,7 @@ async function registrar_remesa_persona_fecha(
   v_concepto,
   lote,
   fecha_desde,
-  fecha_hasta
+  fecha_hasta,
 ) {
   try {
     let v_matricula = await gestor_matricula.obtener_matricula(nid_matricula);
@@ -1047,7 +1040,7 @@ async function registrar_remesa_persona_fecha(
       let v_personas_activas = await obtener_matriculas_activas_fecha(
         nid_socio,
         fecha_desde,
-        fecha_hasta
+        fecha_hasta,
       );
 
       var v_resumen_matricula = null;
@@ -1060,7 +1053,7 @@ async function registrar_remesa_persona_fecha(
                 nid_matricula,
                 i,
                 fecha_desde,
-                fecha_hasta
+                fecha_hasta,
               );
               let v_precio_remesa = v_resumen_matricula.precio;
               let nid_remesa = await registrar_remesa(
@@ -1068,7 +1061,7 @@ async function registrar_remesa_persona_fecha(
                 v_concepto,
                 lote,
                 v_precio_remesa,
-                persona_recuperada["nid_forma_pago"]
+                persona_recuperada["nid_forma_pago"],
               );
 
               for (
@@ -1079,14 +1072,14 @@ async function registrar_remesa_persona_fecha(
                 await registrar_linea_remesa(
                   nid_remesa,
                   v_resumen_matricula.linea_remesas[z].precio,
-                  v_resumen_matricula.linea_remesas[z].concepto
+                  v_resumen_matricula.linea_remesas[z].concepto,
                 );
               }
 
               for (let z = 0; z < v_resumen_matricula.descuentos.length; z++) {
                 await registrar_descuento(
                   nid_remesa,
-                  v_resumen_matricula.descuentos[z]
+                  v_resumen_matricula.descuentos[z],
                 );
               }
               return;
@@ -1095,13 +1088,13 @@ async function registrar_remesa_persona_fecha(
         } else {
           console.log(
             "remesa.js - registrar_remesa_persona_fecha -> No se han encontrado personas activas para el socio " +
-              nid_socio
+              nid_socio,
           );
           throw new Error("No se ha podido registrar la remesa");
         }
       } else {
         console.log(
-          "remesa.js - registrar_remesa_persona_fecha -> No se han econtrado personas"
+          "remesa.js - registrar_remesa_persona_fecha -> No se han econtrado personas",
         );
         throw new Error("No se ha podido registrar la remesa");
       }
@@ -1110,7 +1103,7 @@ async function registrar_remesa_persona_fecha(
         nid_matricula,
         0,
         fecha_desde,
-        fecha_hasta
+        fecha_hasta,
       );
       let v_precio_remesa = v_resumen_matricula.precio;
       let nid_remesa = await registrar_remesa(
@@ -1118,21 +1111,21 @@ async function registrar_remesa_persona_fecha(
         v_concepto,
         lote,
         v_precio_remesa,
-        persona_recuperada["nid_forma_pago"]
+        persona_recuperada["nid_forma_pago"],
       );
 
       for (let z = 0; z < v_resumen_matricula.linea_remesas.length; z++) {
         await registrar_linea_remesa(
           nid_remesa,
           v_resumen_matricula.linea_remesas[z].precio,
-          v_resumen_matricula.linea_remesas[z].concepto
+          v_resumen_matricula.linea_remesas[z].concepto,
         );
       }
 
       for (let z = 0; z < v_resumen_matricula.descuentos.length; z++) {
         await registrar_descuento(
           nid_remesa,
-          v_resumen_matricula.descuentos[z]
+          v_resumen_matricula.descuentos[z],
         );
       }
       return;
@@ -1170,7 +1163,7 @@ function obtener_remesas(fecha_desde, fecha_hasta) {
         } else {
           resolve(results);
         }
-      }
+      },
     );
   });
 }
@@ -1197,7 +1190,7 @@ function obtener_remesa(lote) {
         } else {
           resolve(results);
         }
-      }
+      },
     );
   });
 }
@@ -1220,7 +1213,7 @@ function obtener_remesa_pendiente(lote) {
         } else {
           resolve(results);
         }
-      }
+      },
     );
   });
 }
@@ -1242,7 +1235,7 @@ function obtener_remesa_estado(lote, estado) {
         } else {
           resolve(results);
         }
-      }
+      },
     );
   });
 }
@@ -1261,7 +1254,7 @@ function obtener_lineas_remesa(nid_remesa) {
         } else {
           resolve(results);
         }
-      }
+      },
     );
   });
 }
@@ -1280,7 +1273,7 @@ function obtener_descuentos_remesa(nid_remesa) {
         } else {
           resolve(results);
         }
-      }
+      },
     );
   });
 }
@@ -1320,7 +1313,7 @@ async function obtener_precio_matricula(nid_matricula) {
 async function obtener_precio_matricula_fecha(
   nid_matricula,
   fecha_desde,
-  fecha_hasta
+  fecha_hasta,
 ) {
   try {
     let v_matricula = await gestor_matricula.obtener_matricula(nid_matricula);
@@ -1334,7 +1327,7 @@ async function obtener_precio_matricula_fecha(
       let v_personas_activas = await obtener_matriculas_activas_fecha(
         nid_socio,
         fecha_desde,
-        fecha_hasta
+        fecha_hasta,
       );
 
       var v_resumen_matricula = null;
@@ -1346,7 +1339,7 @@ async function obtener_precio_matricula_fecha(
               nid_matricula,
               i,
               fecha_desde,
-              fecha_hasta
+              fecha_hasta,
             );
             return v_resumen_matricula;
           }
@@ -1375,7 +1368,7 @@ function obtener_ultimo_lote() {
         } else {
           resolve(results[0]["ultimo_lote"]);
         }
-      }
+      },
     );
   });
 }
@@ -1402,7 +1395,7 @@ function obtener_remesa_nid(nid_remesa) {
             resolve(results[0]);
           }
         }
-      }
+      },
     );
   });
 }
@@ -1442,8 +1435,8 @@ function actualizar_estado(nid_remesa, estado, anotaciones) {
             conexion.dbConn.commit();
             resolve();
           }
-        }
-      )
+        },
+      ),
     );
   });
 }
@@ -1456,7 +1449,7 @@ async function aprobar_remesas(lote, anotaciones) {
       await actualizar_estado(
         remesas[i]["nid_remesa"],
         constantes.ESTADO_REMESA_PAGADO,
-        anotaciones
+        anotaciones,
       );
     }
     return;
@@ -1471,7 +1464,7 @@ async function rechazar_remesa(nid_remesa, anotaciones) {
     await actualizar_estado(
       nid_remesa,
       constantes.ESTADO_REMESA_RECHAZADO,
-      anotaciones
+      anotaciones,
     );
     return;
   } catch (error) {
@@ -1485,7 +1478,7 @@ async function aprobar_remesa(nid_remesa, anotaciones) {
     await actualizar_estado(
       nid_remesa,
       constantes.ESTADO_REMESA_PAGADO,
-      anotaciones
+      anotaciones,
     );
     return;
   } catch (error) {
@@ -1499,7 +1492,7 @@ async function remesa_erronea(nid_remesa, anotaciones) {
     await actualizar_estado(
       nid_remesa,
       constantes.ESTADO_REMESA_ERRONEO,
-      anotaciones
+      anotaciones,
     );
     return;
   } catch (error) {
@@ -1521,7 +1514,7 @@ function actualizar_id_cobro_pasarela_pago(nid_remesa, nid_cobro_pasarela) {
         (error, results, fields) => {
           if (error) {
             console.log(
-              "remesa.js - actualizar_id_cobro_pasarela_pago -> " + error
+              "remesa.js - actualizar_id_cobro_pasarela_pago -> " + error,
             );
             conexion.dbConn.rollback();
             reject("Error al actualizar el cobro");
@@ -1529,7 +1522,7 @@ function actualizar_id_cobro_pasarela_pago(nid_remesa, nid_cobro_pasarela) {
             conexion.dbConn.commit();
             resolve();
           }
-        }
+        },
       );
     });
   });
@@ -1555,7 +1548,7 @@ function actualizar_remesa(nid_remesa, precio, concepto, estado) {
         } else {
           resolve();
         }
-      }
+      },
     );
   });
 }
@@ -1578,7 +1571,7 @@ function actualizar_linea_remesa(nid_linea_remesa, concepto, precio) {
         } else {
           resolve();
         }
-      }
+      },
     );
   });
 }
@@ -1599,7 +1592,7 @@ function actualizar_remesa_descuento(nid_remesa_descuento, concepto) {
         } else {
           resolve();
         }
-      }
+      },
     );
   });
 }
@@ -1612,21 +1605,21 @@ function actualizacion_remesa(v_remesa, v_linea_remesa, v_descuento_remesa) {
           v_remesa.nid_remesa,
           v_remesa.precio,
           v_remesa.concepto,
-          v_remesa.estado
+          v_remesa.estado,
         );
 
         for (let i = 0; i < v_linea_remesa.length; i++) {
           await actualizar_linea_remesa(
             v_linea_remesa[i].nid_linea_remesa,
             v_linea_remesa[i].concepto,
-            v_linea_remesa[i].precio
+            v_linea_remesa[i].precio,
           );
         }
 
         for (let i = 0; i < v_descuento_remesa; i++) {
           await actualizar_remesa_descuento(
             v_descuento_remesa[i].nid_descuento_remesa,
-            v_descuento_remesa[i].concepto
+            v_descuento_remesa[i].concepto,
           );
         }
 
@@ -1663,7 +1656,7 @@ function nueva_linea_remesa(nid_remesa, concepto, precio) {
             conexion.dbConn.commit();
             resolve();
           }
-        }
+        },
       );
     });
   });
@@ -1689,7 +1682,7 @@ function nuevo_descuento_remesa(nid_remesa, concepto) {
             conexion.dbConn.commit();
             resolve();
           }
-        }
+        },
       );
     });
   });
@@ -1712,7 +1705,7 @@ function eliminar_linea_remesa(nid_linea_remesa) {
             conexion.dbConn.commit();
             resolve();
           }
-        }
+        },
       );
     });
   });
@@ -1735,7 +1728,7 @@ function eliminar_descuento_remesa(nid_descuento_remesa) {
             conexion.dbConn.commit();
             resolve();
           }
-        }
+        },
       );
     });
   });
