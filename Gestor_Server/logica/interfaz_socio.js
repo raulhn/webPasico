@@ -2,7 +2,7 @@ const conexion = require("../conexion.js");
 const constantes = require("../constantes.js");
 const gestor_interfaz_persona = require("./interfaz_persona.js");
 const gestor_socio = require("./socio.js");
-const gestor_interfa_registro = require("./interfaz_registro.js")
+const gestor_interfa_registro = require("./interfaz_registro.js");
 
 function insertar_interfaz_socio(interfaz_socio) {
   const sql =
@@ -115,7 +115,6 @@ function comparar_dato(dato_interfaz, dato) {
 
   // El dato de interfaz no es vacio, pero el dato registrado si
   if (dato === undefined || dato === null || dato.toString().length === 0) {
-
     return false;
   }
   return (
@@ -127,11 +126,16 @@ function comparar_socio(interfaz_socio, socios) {
   try {
     const socio = socios[0];
 
-
     if (
       comparar_dato(interfaz_socio.nid_persona, socio.nid_persona) &&
-      comparar_dato(gestor_interfa_registro.formatearFechaRevert(interfaz_socio.fecha_alta), gestor_interfa_registro.formatearFechaRevert(socio.fecha_alta)) &&
-      comparar_dato(gestor_interfa_registro.formatearFechaRevert(interfaz_socio.fecha_baja), gestor_interfa_registro.formatearFechaRevert(socio.fecha_baja))
+      comparar_dato(
+        gestor_interfa_registro.formatearFechaRevert(interfaz_socio.fecha_alta),
+        gestor_interfa_registro.formatearFechaRevert(socio.fecha_alta),
+      ) &&
+      comparar_dato(
+        gestor_interfa_registro.formatearFechaRevert(interfaz_socio.fecha_baja),
+        gestor_interfa_registro.formatearFechaRevert(socio.fecha_baja),
+      )
     ) {
       return true;
     } else {
@@ -339,7 +343,7 @@ function obtener_interfaz_socio(nid_interfaz_persona) {
         console.log("interfaz_socio -> obtener_socio: ", error);
         reject(
           "Se ha producido un error al recuperar el socio para el nid_interfaz_persona " +
-          nid_interfaz_persona,
+            nid_interfaz_persona,
         );
       } else {
         resolve(results);
@@ -380,36 +384,36 @@ async function actualizar_conflicto(nid_interfaz_persona) {
       await gestor_interfaz_persona.obtener_interfaz_persona(
         nid_interfaz_persona,
       );
-    const interfaz_socio = await obtener_interfaz_socio(
+    const interfaz_socios = await obtener_interfaz_socio(
       interfaz_persona.nid_interfaz_persona,
     );
 
-    if (interfaz_socio.length > 0) {
+    if (interfaz_socios.length > 0) {
       if (
         interfaz_persona.operacion == constantes.OPERACIONES_INTERFAZ.ACTUALIZAR
       ) {
         const existe_socio = await gestor_socio(interfaz_persona.nid_persona);
         if (!existe_socio) {
           const interfaz_socio = {
+            nid_interfaz_socio: interfaz_socios[0].nid_interfaz_socio,
             nid_interfaz_persona: interfaz_persona.nid_interfaz_persona,
             fecha_alta: fecha_alta,
             fecha_baja: fecha_baja,
             operacion: constantes.OPERACIONES_INTERFAZ.INSERTAR,
             estado: constantes.ESTADOS_INTERFAZ.PENDIENTE,
-            lote: interfaz_persona.lote,
           };
-          return await insertar_interfaz_socio(interfaz_socio);
+          return await actualizar_interfaz_socio(interfaz_socio);
         }
         //Es una actualización y la persona ya es socia
         const socio = await gestor_socio.obtener_socio(
           interfaz_persona.nid_persona,
         );
-        if (comparar_socio(interfaz_socio, socio)) {
+        if (comparar_socio(interfaz_socios[0], socio)) {
           return await actualizar_interfaz_socio({
-            nid_interfaz_socio: interfaz_socio.nid_interfaz_socio,
+            nid_interfaz_socio: interfaz_socios[0].nid_interfaz_socio,
             nid_interfaz_persona: interfaz_persona.nid_interfaz_persona,
-            fecha_alta: interfaz_socio.fecha_alta,
-            fecha_baja: interfaz_socio.fecha_baja,
+            fecha_alta: interfaz_socios[0].fecha_alta,
+            fecha_baja: interfaz_socios[0].fecha_baja,
             operacion: constantes.OPERACIONES_INTERFAZ.SIN_CAMBIOS,
             estado: constantes.ESTADOS_INTERFAZ.PENDIENTE,
           });
@@ -427,10 +431,10 @@ async function actualizar_conflicto(nid_interfaz_persona) {
           }
 
           return await actualizar_interfaz_socio({
-            nid_interfaz_socio: interfaz_socio.nid_interfaz_socio,
+            nid_interfaz_socio: interfaz_socios[0].nid_interfaz_socio,
             nid_interfaz_persona: interfaz_persona.nid_interfaz_persona,
-            fecha_alta: interfaz_socio.fecha_alta,
-            fecha_baja: interfaz_socio.fecha_baja,
+            fecha_alta: interfaz_socios[0].fecha_alta,
+            fecha_baja: interfaz_socios[0].fecha_baja,
             operacion: constantes.OPERACIONES_INTERFAZ.ACTUALIZAR,
             estado: constantes.ESTADOS_INTERFAZ.PENDIENTE,
           });
@@ -439,10 +443,10 @@ async function actualizar_conflicto(nid_interfaz_persona) {
         interfaz_persona.operacion == constantes.OPERACIONES_INTERFAZ.INSERTAR
       ) {
         return await actualizar_interfaz_socio({
-          nid_interfaz_socio: interfaz_socio.nid_interfaz_socio,
+          nid_interfaz_socio: interfaz_socios[0].nid_interfaz_socio,
           nid_interfaz_persona: interfaz_persona.nid_interfaz_persona,
-          fecha_alta: interfaz_socio.fecha_alta,
-          fecha_baja: interfaz_socio.fecha_baja,
+          fecha_alta: interfaz_socios[0].fecha_alta,
+          fecha_baja: interfaz_socios[0].fecha_baja,
           operacion: constantes.OPERACIONES_INTERFAZ.INSERTAR,
           estado: constantes.ESTADOS_INTERFAZ.PENDIENTE,
         });
@@ -451,10 +455,10 @@ async function actualizar_conflicto(nid_interfaz_persona) {
           constantes.OPERACIONES_INTERFAZ.SIN_CAMBIOS)
       ) {
         return await actualizar_interfaz_socio({
-          nid_interfaz_socio: interfaz_socio.nid_interfaz_socio,
+          nid_interfaz_socio: interfaz_socios[0].nid_interfaz_socio,
           nid_interfaz_persona: interfaz_persona.nid_interfaz_persona,
-          fecha_alta: interfaz_socio.fecha_alta,
-          fecha_baja: interfaz_socio.fecha_baja,
+          fecha_alta: interfaz_socios[0].fecha_alta,
+          fecha_baja: interfaz_socios[0].fecha_baja,
           operacion: constantes.OPERACIONES_INTERFAZ.SIN_CAMBIOS,
           estado: constantes.ESTADOS_INTERFAZ.PENDIENTE,
         });
