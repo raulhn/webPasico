@@ -888,13 +888,13 @@
                 @if (interfaz_socio_actualizar.socio.fecha_alta) {
                   <span>
                     <b>Fecha de Alta: </b
-                    >{{ interfaz_socio_actualizar.socio.fecha_alta }}
+                    >{{ formatearFecha(interfaz_socio_actualizar.socio.fecha_alta) }}
                   </span>
                 }
                 @if (interfaz_socio_actualizar.socio.fecha_baja) {
                   <span>
                     <b>Fecha de Baja: </b>
-                    {{ interfaz_socio_actualizar.socio.fecha_baja }}
+                    {{ formatearFecha(interfaz_socio_actualizar.socio.fecha_baja) }}
                   </span>
                 }
               </div>
