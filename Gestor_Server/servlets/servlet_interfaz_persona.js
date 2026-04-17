@@ -109,9 +109,11 @@ function obtener_interfaz_personas(req, res) {
           interfaz_socio_recuperado.fecha_baja,
         );
 
-        let info_socio = await gestor_socio.obtener_socio(
+        let info_socios = await gestor_socio.obtener_socio(
           interfaz_persona_socio.nid_persona,
         );
+
+        let info_socio = info_socios.length > 0 ? info_socios[0] : null;
 
         interfaz_socios_info.push({
           interfaz_socio: interfaz_socio_recuperado,
