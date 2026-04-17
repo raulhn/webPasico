@@ -34,12 +34,18 @@ function cargar_registro(cadena, lote) {
     "instrumento1, instrumento2, instrumento3, instrumento4, instrumento5, lote) values(trim(" +
     conexion.dbConn.escape(valores[0]) +
     "), trim(" +
+    constantes.ESQUEMA_BD +
+    ".initcap(" +
     conexion.dbConn.escape(valores[1]) +
-    "), trim(" +
+    ")), trim(" +
+    constantes.ESQUEMA_BD +
+    ".initcap(" +
     conexion.dbConn.escape(valores[2]) +
-    "), trim(" +
+    ")), trim(" +
+    constantes.ESQUEMA_BD +
+    ".initcap(" +
     conexion.dbConn.escape(valores[3]) +
-    "), trim(" +
+    ")), trim(" +
     conexion.dbConn.escape(valores[4]) +
     "), trim(" +
     conexion.dbConn.escape(valores[5]) +
@@ -48,12 +54,18 @@ function cargar_registro(cadena, lote) {
     "), trim(" +
     conexion.dbConn.escape(valores[7]) +
     "), trim(" +
+    constantes.ESQUEMA_BD +
+    ".initcap(" +
     conexion.dbConn.escape(valores[8]) +
-    "), trim(" +
+    ")), trim(" +
+    constantes.ESQUEMA_BD +
+    ".initcap(" +
     conexion.dbConn.escape(valores[9]) +
-    "), trim(" +
+    ")), trim(" +
+    constantes.ESQUEMA_BD +
+    ".initcap(" +
     conexion.dbConn.escape(valores[10]) +
-    "), trim(" +
+    ")), trim(" +
     conexion.dbConn.escape(valores[11]) +
     "), trim(" +
     conexion.dbConn.escape(valores[12]) +
