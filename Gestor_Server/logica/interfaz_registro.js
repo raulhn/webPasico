@@ -1,7 +1,7 @@
 const conexion = require("../conexion.js");
 const constantes = require("../constantes.js");
 const gestor_personas = require("./persona.js");
-const gestor_socios = require("./socio.js")
+const gestor_socios = require("./socio.js");
 const gestor_interfaz_persona = require("./interfaz_persona.js");
 const gestor_interfaz_socio = require("./interfaz_socio.js");
 
@@ -137,12 +137,18 @@ function registrar_interfaz_persona(lote, persona) {
     ", " +
     conexion.dbConn.escape(persona.nif) +
     ", " +
+    constantes.ESQUEMA_BD +
+    ".initcap(" +
     conexion.dbConn.escape(persona.nombre) +
-    ", " +
+    "), " +
+    constantes.ESQUEMA_BD +
+    ".initcap(" +
     conexion.dbConn.escape(persona.primer_apellido) +
-    ", " +
+    "), " +
+    constantes.ESQUEMA_BD +
+    ".initcap(" +
     conexion.dbConn.escape(persona.segundo_apellido) +
-    ", " +
+    "), " +
     conexion.dbConn.escape(persona.email) +
     ", " +
     conexion.dbConn.escape(persona.telefono) +
@@ -177,12 +183,18 @@ function actualizar_interfaz_persona(persona, nid_interfaz_persona) {
     ".interfaz_persona set dni = nullif(" +
     conexion.dbConn.escape(persona.nif) +
     ", ''), nombre = " +
+    constantes.ESQUEMA_BD +
+    ".initcap(" +
     conexion.dbConn.escape(persona.nombre) +
-    ", primer_apellido = " +
+    "), primer_apellido = " +
+    constantes.ESQUEMA_BD +
+    ".initcap(" +
     conexion.dbConn.escape(persona.primer_apellido) +
-    ", segundo_apellido = " +
+    "), segundo_apellido = " +
+    constantes.ESQUEMA_BD +
+    ".initcap(" +
     conexion.dbConn.escape(persona.segundo_apellido) +
-    ", email = " +
+    "), email = " +
     conexion.dbConn.escape(persona.email) +
     ", telefono = " +
     conexion.dbConn.escape(persona.telefono) +
@@ -262,12 +274,18 @@ function insertar_conflicto_persona(persona_interfaz, nid_interfaz_persona) {
     ", nullif(" +
     conexion.dbConn.escape(persona_interfaz.nif) +
     ", ''), " +
+    constantes.ESQUEMA_BD +
+    ".initcap(" +
     conexion.dbConn.escape(persona_interfaz.nombre) +
-    ", " +
+    "), " +
+    constantes.ESQUEMA_BD +
+    ".initcap(" +
     conexion.dbConn.escape(persona_interfaz.primer_apellido) +
-    ", " +
+    "), " +
+    constantes.ESQUEMA_BD +
+    ".initcap(" +
     conexion.dbConn.escape(persona_interfaz.segundo_apellido) +
-    ", " +
+    "), " +
     conexion.dbConn.escape(persona_interfaz.email) +
     ", " +
     conexion.dbConn.escape(persona_interfaz.telefono) +
@@ -459,17 +477,28 @@ async function cargar_datos_interfaz(lote) {
                     );
 
                   if (conflicto_persona && conflicto_persona.length > 0) {
-                    let bExiste_socio = await gestor_socios.existe_socio(persona.nid);
-                    console.log("Existe socio: ", bExiste_socio, bExiste_socio > 0 ? persona.nid : persona.nid_socio
-                    )
-                    conflicto_persona[0].nid_socio = bExiste_socio > 0 ? persona.nid : persona.nid_socio;
+                    let bExiste_socio = await gestor_socios.existe_socio(
+                      persona.nid,
+                    );
+                    console.log(
+                      "Existe socio: ",
+                      bExiste_socio,
+                      bExiste_socio > 0 ? persona.nid : persona.nid_socio,
+                    );
+                    conflicto_persona[0].nid_socio =
+                      bExiste_socio > 0 ? persona.nid : persona.nid_socio;
                     await gestor_interfaz_persona.actualizar_conflicto_persona(
                       conflicto_persona[0],
                     );
                   } else {
-                    let bExiste_socio = await gestor_socios.existe_socio(persona.nid);
-                    console.log("Existe socio: ", bExiste_socio, bExiste_socio > 0 ? persona.nid : persona.nid_socio
-                    )
+                    let bExiste_socio = await gestor_socios.existe_socio(
+                      persona.nid,
+                    );
+                    console.log(
+                      "Existe socio: ",
+                      bExiste_socio,
+                      bExiste_socio > 0 ? persona.nid : persona.nid_socio,
+                    );
 
                     await insertar_conflicto_persona(
                       {
@@ -481,7 +510,8 @@ async function cargar_datos_interfaz(lote) {
                         telefono: persona.telefono,
                         fecha_nacimiento: persona.fecha_nacimiento,
                         nid_persona: persona.nid,
-                        nid_socio: bExiste_socio > 0 ? persona.nid : persona.nid_socio,
+                        nid_socio:
+                          bExiste_socio > 0 ? persona.nid : persona.nid_socio,
                       },
                       nid_interfaz_persona,
                     );
@@ -492,9 +522,14 @@ async function cargar_datos_interfaz(lote) {
                 ) {
                   interfaz_persona.operacion =
                     constantes.OPERACIONES_INTERFAZ.ACTUALIZAR;
-                  let bExiste_socio = await gestor_socios.existe_socio(persona.nid);
-                  console.log("Existe socio: ", bExiste_socio, bExiste_socio > 0 ? persona.nid : persona.nid_socio
-                  )
+                  let bExiste_socio = await gestor_socios.existe_socio(
+                    persona.nid,
+                  );
+                  console.log(
+                    "Existe socio: ",
+                    bExiste_socio,
+                    bExiste_socio > 0 ? persona.nid : persona.nid_socio,
+                  );
                   await insertar_conflicto_persona(
                     {
                       nif: persona.nif,
@@ -505,7 +540,8 @@ async function cargar_datos_interfaz(lote) {
                       telefono: persona.telefono,
                       fecha_nacimiento: persona.fecha_nacimiento,
                       nid_persona: persona.nid,
-                      nid_socio: bExiste_socio > 0 ? persona.nid : persona.nid_socio,
+                      nid_socio:
+                        bExiste_socio > 0 ? persona.nid : persona.nid_socio,
                     },
                     nid_interfaz_persona,
                   );
@@ -755,4 +791,4 @@ module.exports.obtener_siguiente_lote = obtener_siguiente_lote;
 module.exports.cargar_registro = cargar_registro;
 module.exports.cargar_datos_interfaz = cargar_datos_interfaz;
 module.exports.comparar_dato = comparar_dato;
-module.exports.formatearFechaRevert = formatearFechaRevert
+module.exports.formatearFechaRevert = formatearFechaRevert;
