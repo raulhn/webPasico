@@ -237,6 +237,19 @@ function actualizar_interfaz_persona(persona, nid_interfaz_persona) {
   });
 }
 
+function compararSinAcentos(str1, str2) {
+  // Normalizar las cadenas y eliminar los diacríticos (acentos)
+  const sinAcentos1 = str1
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+  const sinAcentos2 = str2
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+  return sinAcentos1 === sinAcentos2;
+}
+
 function comparar_dato(dato_interfaz, dato) {
   console.log("Comparar dato: ", dato_interfaz, dato);
   // Si no hay un dato nuevo cargado no se compara, se indica que es igual
@@ -253,9 +266,7 @@ function comparar_dato(dato_interfaz, dato) {
     return false;
   }
 
-  return (
-    dato_interfaz.toString().toUpperCase() === dato.toString().toUpperCase()
-  );
+  return compararSinAcentos(dato_interfaz.toString(), dato.toString());
 }
 
 function compara_persona_interfaz(persona, persona_interfaz) {
