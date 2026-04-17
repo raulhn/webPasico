@@ -858,31 +858,43 @@
             <div class="update-item" class="update-content">
               <span class="conflict-label">Coincidencia encontrada:</span>
               <span class="person-name">
-                {{ interfaz_socio_actualizar.socio.nombre }}
-                {{ interfaz_socio_actualizar.socio.primer_apellido }}
-                {{ interfaz_socio_actualizar.socio.segundo_apellido }}
+                {{ interfaz_socio_actualizar.persona_socio.nombre }}
+                {{ interfaz_socio_actualizar.persona_socio.primer_apellido }}
+                {{ interfaz_socio_actualizar.persona_socio.segundo_apellido }}
               </span>
               <div style="display: flex; flex-direction: column">
-                @if (interfaz_socio_actualizar.socio.email) {
+                @if (interfaz_socio_actualizar.persona_socio.email) {
                   <span>
                     <b>Correo electrónico: </b
-                    >{{ interfaz_socio_actualizar.socio.email }}
+                    >{{ interfaz_socio_actualizar.persona_socio.email }}
                   </span>
                 }
-                @if (interfaz_socio_actualizar.socio.telefono) {
+                @if (interfaz_socio_actualizar.persona_socio.telefono) {
                   <span>
                     <b>Teléfono: </b>
-                    {{ interfaz_socio_actualizar.socio.telefono }}
+                    {{ interfaz_socio_actualizar.persona_socio.telefono }}
                   </span>
                 }
-                @if (interfaz_socio_actualizar.socio.fecha_nacimiento) {
+                @if (interfaz_socio_actualizar.persona_socio.fecha_nacimiento) {
                   <span>
                     <b>Fecha de Nacimiento: </b
                     >{{
                       formatearFecha(
-                        interfaz_socio_actualizar.socio.fecha_nacimiento
+                        interfaz_socio_actualizar.persona_socio.fecha_nacimiento
                       )
                     }}
+                  </span>
+                }
+                @if (interfaz_socio_actualizar.socio.fecha_alta) {
+                  <span>
+                    <b>Fecha de Alta: </b
+                    >{{ interfaz_socio_actualizar.socio.fecha_alta }}
+                  </span>
+                }
+                @if (interfaz_socio_actualizar.socio.fecha_baja) {
+                  <span>
+                    <b>Fecha de Baja: </b>
+                    {{ interfaz_socio_actualizar.socio.fecha_baja }}
                   </span>
                 }
               </div>
