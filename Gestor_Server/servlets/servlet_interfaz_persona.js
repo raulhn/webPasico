@@ -108,10 +108,16 @@ function obtener_interfaz_personas(req, res) {
         interfaz_socio_recuperado.fecha_baja = formatearFecha(
           interfaz_socio_recuperado.fecha_baja,
         );
+
+        let info_socio = await gestor_socio.obtener_socio(
+          interfaz_persona_socio.nid_persona,
+        );
+
         interfaz_socios_info.push({
           interfaz_socio: interfaz_socio_recuperado,
           interfaz_persona_socio: interfaz_persona_socio,
-          socio: socio_info,
+          persona_socio: socio_info,
+          socio: info_socio,
         });
       }
 
