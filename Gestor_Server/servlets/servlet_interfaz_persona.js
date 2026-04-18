@@ -45,7 +45,6 @@ function obtener_interfaz_personas(req, res) {
           interfaz_personas[i].nid_interfaz_persona,
         );
 
-        console.log("Socios:", nid_socio, nid_socio_nuevo);
         if (nid_socio && nid_socio_nuevo && nid_socio != nid_socio_nuevo) {
           const socio = await gestor_persona.obtener_persona(nid_socio);
           const socio_nuevo =

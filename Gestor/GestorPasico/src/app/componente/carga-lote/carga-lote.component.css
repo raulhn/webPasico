@@ -804,3 +804,33 @@
 .socio-actual:hover {
   border-color: #1976d2;
 }
+
+.botones-tab{
+  display:flex;
+  align-items: flex-start
+}
+
+.botones-tab button{
+  //Se elimina apariencia nativa //
+  appearance: none;
+  border: 0;
+
+  border-radius: 12px;
+  padding: 12px 16px;
+  min-height: 44px;
+  //Color blanco
+  color: #ffffff;
+
+  // Desplazamiento sombra a la derecha; Desplazamiento sombra a la izquierda; Difuminado; Color //
+  box-shadow: 5px 5px 10px blue;
+}
+
+.botones-tab button{
+  // Al estar pulsado se reduce la sombra //
+  box-shadow: 2px 2px 5px blue;
+}
+
+.botones-tab button:hover{
+  // Al poner el ratón sobre se resalta dando más profundidad a la sombra //
+  box-shadow: 7px 7px 12px blue;
+}

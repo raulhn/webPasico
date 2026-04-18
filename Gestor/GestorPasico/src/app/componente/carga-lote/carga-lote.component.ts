@@ -35,6 +35,8 @@ export class CargaLoteComponent implements OnInit {
   interfaz_socios_actualizar: any[] = [];
   interfaz_socios_sin_cambios: any[] = [];
 
+  tab_seleccionada: number = 1;
+
   constructor(
     private ruta: ActivatedRoute,
     private interfazPersonaService: InterfazPersonaService,
@@ -244,5 +246,9 @@ export class CargaLoteComponent implements OnInit {
     this.interfazPersonaService
       .lanzar_proceso_carga(this.lote)
       .subscribe(this.peticion_lanzar_proceso_carga);
+  }
+
+  cambiar_tab_seleccionada(nueva_tab: number) {
+    this.tab_seleccionada = nueva_tab;
   }
 }
