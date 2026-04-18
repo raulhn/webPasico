@@ -110,14 +110,32 @@ export class CargaLoteComponent implements OnInit {
           persona.interfaz_persona.operacion === this.operaciones.SIN_CAMBIOS,
       );
 
-      this.interfaz_socios_insertar = respuesta.interfaz_socios.filter(
+      let lista_socios_inserta = respuesta.interfaz_socios.filter(
         (socio: any) =>
           socio.interfaz_socio.operacion === this.operaciones.INSERTAR,
       );
 
-      this.interfaz_socios_actualizar = respuesta.interfaz_socios.filter(
+      this.interfaz_socios_insertar = lista_socios_inserta.map(
+        (insertar: any) => {
+          return {
+            insertar: insertar,
+            accion_seleccionada: '',
+          };
+        },
+      );
+
+      let lista_socios_actualizar = respuesta.interfaz_socios.filter(
         (socio: any) =>
           socio.interfaz_socio.operacion === this.operaciones.ACTUALIZAR,
+      );
+
+      this.interfaz_socios_actualizar = lista_socios_actualizar.map(
+        (actualizar: any) => {
+          return {
+            actualizar: actualizar,
+            accion_seleccionada: '',
+          };
+        },
       );
 
       this.interfaz_socios_sin_cambios = respuesta.interfaz_socios.filter(
@@ -237,8 +255,33 @@ export class CargaLoteComponent implements OnInit {
       (cambio) => cambio.operacion !== '',
     );
 
+    const cambios_socios_insertar = this.interfaz_socios_insertar.map((s) => {
+      return {
+        nid_interfaz_socio: s.insertar.interfaz_socio.nid_interfaz_socio,
+        operacion: s.accion_seleccionada,
+      };
+    });
+
+    const cambios_socios_actualizar = this.interfaz_socios_actualizar.map(
+      (s) => {
+        return {
+          nid_interfaz_socio: s.actualizar.interfaz_socio.nid_interfaz_socio,
+          operacion: s.accion_seleccionada,
+        };
+      },
+    );
+
+    const cambios_socios = [
+      ...cambios_socios_insertar,
+      ...cambios_socios_actualizar,
+    ];
+
+    const cambios_socios_filtrados = cambios_socios.filter(
+      (cambio) => cambio.operacion !== '',
+    );
+
     this.interfazPersonaService
-      .actualizar_conflictos(cambios_filtrados)
+      .actualizar_conflictos(cambios_filtrados, cambios_socios_filtrados)
       .subscribe(this.peticion_actualizar_conflictos);
   }
 

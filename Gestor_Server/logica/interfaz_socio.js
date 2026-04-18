@@ -523,22 +523,6 @@ function resolver_conflicto(nid_interfaz_socio, operacion) {
   });
 }
 
-async function resolver_conflictos(interfaz_socios) {
-  try {
-    for (const interfaz_socio of interfaz_socios) {
-      await resolver_conflicto(
-        interfaz_socio.nid_interfaz_socio,
-        interfaz_socio.operacion,
-      );
-    }
-  } catch (error) {
-    console.log("interfaz_socio -> resolver_conflictos", error);
-    throw new Error(
-      "Se ha producido un error al resolver los conflictos de socio",
-    );
-  }
-}
-
 module.exports.insertar_interfaz_socio = insertar_interfaz_socio;
 module.exports.actualizar_interfaz_socio = actualizar_interfaz_socio;
 module.exports.obtener_interfaz_socio_lote = obtener_interfaz_socio_lote;
@@ -547,4 +531,4 @@ module.exports.registrar_interfaz_socio = registrar_interfaz_socio;
 module.exports.actualizar_conflicto = actualizar_conflicto;
 module.exports.obtener_interfaz_socio_nid = obtener_interfaz_socio_nid;
 module.exports.obtener_nid_socio = obtener_nid_socio;
-module.exports.resolver_conflictos = resolver_conflictos;
+module.exports.resolver_conflicto = resolver_conflicto;

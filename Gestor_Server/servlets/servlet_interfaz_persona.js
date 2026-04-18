@@ -171,7 +171,7 @@ function actualizar_operacion(req, res) {
 function actualizar_operaciones(req, res) {
   servlet_comun.comprobaciones(req, res, async () => {
     try {
-      const { operaciones } = req.body;
+      const { operaciones, operaciones_socios } = req.body;
       for (let i = 0; i < operaciones.length; i++) {
         const { nid_interfaz_persona, operacion, nid_persona } = operaciones[i];
         await gestor_interfaz_persona.actualizar_operacion_conflicto(
@@ -180,6 +180,14 @@ function actualizar_operaciones(req, res) {
           nid_persona,
         );
         await gestor_interfaz_socio.actualizar_conflicto(nid_interfaz_persona);
+      }
+
+      for (let i = 0; i < operaciones_socios.length; i++) {
+        const { nid_interfaz_socio, operacion } = operaciones_socios[i];
+        await gestor_interfaz_socio.resolver_conflicto(
+          nid_interfaz_socio,
+          operacion,
+        );
       }
       res.status(200).send({
         error: false,

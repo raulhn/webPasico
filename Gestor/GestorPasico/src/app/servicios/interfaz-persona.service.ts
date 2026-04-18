@@ -15,9 +15,13 @@ export class InterfazPersonaService {
     return this.http.get(API_URL, { withCredentials: true });
   }
 
-  actualizar_conflictos(operaciones: any[]) {
+  actualizar_conflictos(operaciones: any[], operaciones_socios: any[]) {
     const API_URL = this.url + '/actualizar_operaciones_conflicto';
-    return this.http.post(API_URL, { operaciones }, { withCredentials: true });
+    return this.http.post(
+      API_URL,
+      { operaciones: operaciones, operaciones_socios: operaciones_socios },
+      { withCredentials: true },
+    );
   }
 
   lanzar_proceso_carga(lote: string) {
