@@ -5,8 +5,10 @@
   </header>
 
   <div class="botones-tab">
-    <button (onClick)="cambiar_tab_seleccionada(1)">Personas</button>
-    <button (onClick)="cambiar_tab_seleccionada(2)">Socios</button>
+    <button [ngClass]="tab_seleccionada == 1 ? 'boton-color-azul' : 'boton-color-azul-desactivado'"
+      (click)="cambiar_tab_seleccionada(1)">Personas</button>
+    <button [ngClass]="tab_seleccionada == 2 ? 'boton-color-azul' : 'boton-color-azul-desactivado'"
+       (click)="cambiar_tab_seleccionada(2)">Socios</button>
   </div>
   @if (tab_seleccionada == 1) {
     <!-- Sección de Conflictos -->
@@ -767,6 +769,8 @@
       </section>
     }
   }
+
+
   @if (tab_seleccionada == 2) {
     <!-- Sección de Nuevas Inserciones de Socios -->
     @if (interfaz_socios_insertar.length > 0) {
