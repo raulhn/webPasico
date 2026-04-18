@@ -32,7 +32,6 @@ async function cargar_personas(lote) {
           await gestor_interfaz_persona.actualizar_interfaz_persona(
             interfaz_persona,
           );
-
         } catch (error) {
           console.log("Error al registrar persona: ", error);
           await gestor_interfaz_persona.actualizar_estado(
@@ -96,54 +95,62 @@ async function cargar_interfaz_socios(lote) {
 
     for (const interfaz_socio of interfaz_socios) {
       if (interfaz_socio.estado === constantes.ESTADOS_INTERFAZ.PENDIENTE) {
-        const interfaz_persona =
-          await gestor_interfaz_persona.obtener_interfaz_persona(
-            interfaz_socio.nid_interfaz_persona,
-          );
-        const nid_socio = interfaz_persona.nid_persona;
-        const bExisteSocio = await gestor_socios.existe_socio(nid_socio);
-
-        if (bExisteSocio > 0) {
-          // Se actualizan las fechas de alta y baja del socio
-          const socios = await gestor_socios.obtener_socio(nid_socio);
-          const socio = socios[0];
-          socio.fecha_alta = interfaz_socio.fecha_alta;
-          socio.fecha_baja = interfaz_socio.fecha_baja;
-          try {
-            console.log("Socio: ", socio)
-            await gestor_socios.actualizar_socio(
-              socio.nid_persona,
-              socio.num_socio,
-              socio.fecha_alta,
-              socio.fecha_baja,
-            );
-
-            interfaz_socio.estado = constantes.ESTADOS_INTERFAZ.PROCESADO;
-            await gestor_interfaz_socio.actualizar_interfaz_socio(
-              interfaz_socio,
-            );
-          } catch (error) {
-            console.log("Error al actualizar socio: ", error);
-            interfaz_socio.estado = constantes.ESTADOS_INTERFAZ.ERROR;
-            gestor_interfaz_socio.actualizar_interfaz_socio(interfaz_socio);
-          }
-          console.log("La persona con ID " + nid_socio + " ya es socio");
+        if (
+          interfaz_socio.operacion ===
+          constantes.OPERACIONES_INTERFAZ.SIN_CAMBIOS
+        ) {
+          interfaz_socio.estado = constantes.ESTADOS_INTERFAZ.PROCESADO;
+          await gestor_interfaz_socio.actualizar_interfaz_socio(interfaz_socio);
         } else {
-          try {
-            await gestor_socios.registrar_socio(
-              nid_socio,
-              "",
-              interfaz_socio.fecha_alta,
+          const interfaz_persona =
+            await gestor_interfaz_persona.obtener_interfaz_persona(
+              interfaz_socio.nid_interfaz_persona,
             );
+          const nid_socio = interfaz_persona.nid_persona;
+          const bExisteSocio = await gestor_socios.existe_socio(nid_socio);
 
-            interfaz_socio.estado = constantes.ESTADOS_INTERFAZ.PROCESADO;
-            await gestor_interfaz_socio.actualizar_interfaz_socio(
-              interfaz_socio,
-            );
-          } catch (error) {
-            console.log("Error al registrar socio: ", error);
-            interfaz_socio.estado = constantes.ESTADOS_INTERFAZ.ERROR;
-            gestor_interfaz_socio.actualizar_interfaz_socio(interfaz_socio);
+          if (bExisteSocio > 0) {
+            // Se actualizan las fechas de alta y baja del socio
+            const socios = await gestor_socios.obtener_socio(nid_socio);
+            const socio = socios[0];
+            socio.fecha_alta = interfaz_socio.fecha_alta;
+            socio.fecha_baja = interfaz_socio.fecha_baja;
+            try {
+              console.log("Socio: ", socio);
+              await gestor_socios.actualizar_socio(
+                socio.nid_persona,
+                socio.num_socio,
+                socio.fecha_alta,
+                socio.fecha_baja,
+              );
+
+              interfaz_socio.estado = constantes.ESTADOS_INTERFAZ.PROCESADO;
+              await gestor_interfaz_socio.actualizar_interfaz_socio(
+                interfaz_socio,
+              );
+            } catch (error) {
+              console.log("Error al actualizar socio: ", error);
+              interfaz_socio.estado = constantes.ESTADOS_INTERFAZ.ERROR;
+              gestor_interfaz_socio.actualizar_interfaz_socio(interfaz_socio);
+            }
+            console.log("La persona con ID " + nid_socio + " ya es socio");
+          } else {
+            try {
+              await gestor_socios.registrar_socio(
+                nid_socio,
+                "",
+                interfaz_socio.fecha_alta,
+              );
+
+              interfaz_socio.estado = constantes.ESTADOS_INTERFAZ.PROCESADO;
+              await gestor_interfaz_socio.actualizar_interfaz_socio(
+                interfaz_socio,
+              );
+            } catch (error) {
+              console.log("Error al registrar socio: ", error);
+              interfaz_socio.estado = constantes.ESTADOS_INTERFAZ.ERROR;
+              gestor_interfaz_socio.actualizar_interfaz_socio(interfaz_socio);
+            }
           }
         }
       }
