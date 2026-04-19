@@ -2,14 +2,12 @@ const conexion = require("../conexion.js");
 const constantes = require("../constantes.js");
 const gestor_interfaz_socio = require("./interfaz_socio.js");
 
-function obtener_persona_nif_insert(nif, lote) {
+function obtener_persona_nif(nif, lote) {
   const sql =
     "select * from " +
     constantes.ESQUEMA_BD +
     ".interfaz_persona where dni = " +
     conexion.dbConn.escape(nif) +
-    " and operacion = " +
-    conexion.dbConn.escape(constantes.OPERACIONES_INTERFAZ.INSERTAR) +
     " and lote = " +
     conexion.dbConn.escape(lote) +
     " and dni <> ''";
@@ -25,7 +23,7 @@ function obtener_persona_nif_insert(nif, lote) {
     });
   });
 }
-function obtener_persona_nombre_insert(
+function obtener_persona_nombre(
   nombre,
   primer_apellido,
   segundo_apellido,
@@ -40,8 +38,6 @@ function obtener_persona_nombre_insert(
     conexion.dbConn.escape(primer_apellido) +
     " and segundo_apellido = " +
     conexion.dbConn.escape(segundo_apellido) +
-    " and operacion = " +
-    conexion.dbConn.escape(constantes.OPERACIONES_INTERFAZ.INSERTAR) +
     " and lote = " +
     conexion.dbConn.escape(lote);
 
@@ -57,7 +53,7 @@ function obtener_persona_nombre_insert(
   });
 }
 
-function obtener_persona_apellidos_insert(
+function obtener_persona_apellidos(
   primer_apellido,
   segundo_apellido,
   lote,
@@ -69,8 +65,6 @@ function obtener_persona_apellidos_insert(
     conexion.dbConn.escape(primer_apellido) +
     " and segundo_apellido = " +
     conexion.dbConn.escape(segundo_apellido) +
-    " and operacion = " +
-    conexion.dbConn.escape(constantes.OPERACIONES_INTERFAZ.INSERTAR) +
     " and lote = " +
     conexion.dbConn.escape(lote);
 
@@ -414,10 +408,10 @@ function obtener_interfaz_persona(nid_interfaz_persona) {
   });
 }
 
-module.exports.obtener_persona_nif_insert = obtener_persona_nif_insert;
-module.exports.obtener_persona_nombre_insert = obtener_persona_nombre_insert;
-module.exports.obtener_persona_apellidos_insert =
-  obtener_persona_apellidos_insert;
+module.exports.obtener_persona_nif = obtener_persona_nif;
+module.exports.obtener_persona_nombre = obtener_persona_nombre;
+module.exports.obtener_persona_apellidos =
+  obtener_persona_apellidos;
 module.exports.obtener_conflictos_personas = obtener_conflictos_personas;
 module.exports.obtener_interfaz_personas = obtener_interfaz_personas;
 module.exports.actualizar_operacion_conflicto = actualizar_operacion_conflicto;

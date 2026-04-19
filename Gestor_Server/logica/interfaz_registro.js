@@ -271,7 +271,7 @@ function comparar_dato(dato_interfaz, dato) {
 
 function compara_persona_interfaz(persona, persona_interfaz) {
   if (
-    comparar_dato(persona_interfaz.nif, persona.nif) &&
+    comparar_dato(persona_interfaz.dni, persona.nif) &&
     comparar_dato(persona_interfaz.nombre, persona.nombre) &&
     comparar_dato(persona_interfaz.primer_apellido, persona.primer_apellido) &&
     comparar_dato(
@@ -590,7 +590,7 @@ async function cargar_datos_interfaz(lote) {
 }
 
 async function comprueba_existe_persona_interfaz(datos_persona, lote) {
-  const persona = await gestor_interfaz_persona.obtener_persona_nif_insert(
+  const persona = await gestor_interfaz_persona.obtener_persona_nif(
     datos_persona.nif,
     lote,
   );
@@ -600,7 +600,7 @@ async function comprueba_existe_persona_interfaz(datos_persona, lote) {
     return persona[0].nid_interfaz_persona;
   }
 
-  const personas = await gestor_interfaz_persona.obtener_persona_nombre_insert(
+  const personas = await gestor_interfaz_persona.obtener_persona_nombre(
     datos_persona.nombre,
     datos_persona.primer_apellido,
     datos_persona.segundo_apellido,
@@ -612,7 +612,7 @@ async function comprueba_existe_persona_interfaz(datos_persona, lote) {
   }
 
   const personas_apellido =
-    await gestor_interfaz_persona.obtener_persona_apellidos_insert(
+    await gestor_interfaz_persona.obtener_persona_apellidos(
       datos_persona.primer_apellido,
       datos_persona.segundo_apellido,
       lote,
@@ -672,7 +672,7 @@ async function inserta_interfaz_persona(
           nombre: persona[0].nombre,
           primer_apellido: persona[0].primer_apellido,
           segundo_apellido: persona[0].segundo_apellido,
-          email: persona[0].email,
+          email: persona[0].correo_electronico,
           telefono: persona[0].telefono,
           fecha_nacimiento: persona[0].fecha_nacimiento,
           nid_persona: persona[0].nid,
@@ -693,7 +693,7 @@ async function inserta_interfaz_persona(
             nombre: persona[0].nombre,
             primer_apellido: persona[0].primer_apellido,
             segundo_apellido: persona[0].segundo_apellido,
-            email: persona[0].email,
+            email: persona[0].correo_electronico,
             telefono: persona[0].telefono,
             fecha_nacimiento: persona[0].fecha_nacimiento,
             nid_persona: persona[0].nid,
@@ -712,7 +712,7 @@ async function inserta_interfaz_persona(
           nombre: persona[i].nombre,
           primer_apellido: persona[i].primer_apellido,
           segundo_apellido: persona[i].segundo_apellido,
-          email: persona[i].email,
+          email: persona[i].correo_electronico,
           telefono: persona[i].telefono,
           fecha_nacimiento: persona[i].fecha_nacimiento,
           nid_persona: persona[i].nid,
