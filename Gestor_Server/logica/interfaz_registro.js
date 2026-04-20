@@ -236,6 +236,10 @@ function actualizar_interfaz_persona(persona, nid_interfaz_persona) {
     conexion.dbConn.escape(persona.nid_persona) +
     ", nid_interfaz_socio = " +
     conexion.dbConn.escape(persona.nid_interfaz_socio) +
+    ", nid_interfaz_padre = " +
+    conexion.dbConn.escape(persona.nid_interfaz_padre) +
+    ", nid_interfaz_madre = " +
+    conexion.dbConn.escape(persona.nid_interfaz_madre) +
     " where nid_interfaz_persona = " +
     conexion.dbConn.escape(nid_interfaz_persona);
 
@@ -513,6 +517,8 @@ async function cargar_datos_interfaz(lote) {
             await gestor_interfaz_persona.obtener_interfaz_persona(
               nid_interfaz_persona,
             );
+
+
           if (interfaz_persona && nid_interfaz_persona_padre_madre) {
             if (dato.padre_madre.toUpperCase() === "P") {
               interfaz_persona.nid_interfaz_padre =
