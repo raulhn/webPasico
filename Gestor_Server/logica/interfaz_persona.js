@@ -8,8 +8,8 @@ function obtener_persona_nif(nif, lote) {
     constantes.ESQUEMA_BD +
     ".interfaz_persona where dni = " +
     conexion.dbConn.escape(nif) +
-    "and operacion <> " +
-    conexion.dbConn.escape(constantes.OPERACIONES_INTERFAZ.SIN_CAMBIOS) +
+    "and operacion = " +
+    conexion.dbConn.escape(constantes.OPERACIONES_INTERFAZ.INSERTAR) +
     " and lote = " +
     conexion.dbConn.escape(lote) +
     " and dni <> ''";
@@ -40,8 +40,8 @@ function obtener_persona_nombre(
     conexion.dbConn.escape(primer_apellido) +
     " and segundo_apellido = " +
     conexion.dbConn.escape(segundo_apellido) +
-    "and operacion <> " +
-    conexion.dbConn.escape(constantes.OPERACIONES_INTERFAZ.SIN_CAMBIOS) +
+    "and operacion = " +
+    conexion.dbConn.escape(constantes.OPERACIONES_INTERFAZ.INSERTAR) +
     " and lote = " +
     conexion.dbConn.escape(lote);
 
@@ -65,8 +65,8 @@ function obtener_persona_apellidos(primer_apellido, segundo_apellido, lote) {
     conexion.dbConn.escape(primer_apellido) +
     " and segundo_apellido = " +
     conexion.dbConn.escape(segundo_apellido) +
-    "and operacion <> " +
-    conexion.dbConn.escape(constantes.OPERACIONES_INTERFAZ.SIN_CAMBIOS) +
+    "and operacion = " +
+    conexion.dbConn.escape(constantes.OPERACIONES_INTERFAZ.INSERTAR) +
     " and lote = " +
     conexion.dbConn.escape(lote);
 
