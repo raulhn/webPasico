@@ -30,7 +30,9 @@ function cargar_registro(cadena, lote) {
     "insert into " +
     constantes.ESQUEMA_BD +
     ".carga_datos( dni, nombre, primer_apellido, segundo_apellido, email, telefono, fecha_nacimiento," +
-    "dni_socio, nombre_socio, primer_apellido_socio, segundo_apellido_socio, email_socio, telefono_socio, fecha_nacimiento_socio, fecha_alta_socio, fecha_baja_socio, iban, lenguaje_musical, " +
+    "dni_socio, nombre_socio, primer_apellido_socio, segundo_apellido_socio, email_socio, telefono_socio, fecha_nacimiento_socio, fecha_alta_socio, fecha_baja_socio, " +
+    " padre_madre, dni_padre_madre, nombre_padre_madre, primer_apellido_padre_madre, segundo_apellido_padre_madre, email_padre_madre, telefono_padre_madre, fecha_nacimiento_padre_madre, " +
+    " iban, lenguaje_musical, " +
     "instrumento1, instrumento2, instrumento3, instrumento4, instrumento5, lote) values(trim(" +
     conexion.dbConn.escape(valores[0]) +
     "), trim(" +
@@ -89,6 +91,22 @@ function cargar_registro(cadena, lote) {
     conexion.dbConn.escape(valores[21]) +
     "), trim(" +
     conexion.dbConn.escape(valores[22]) +
+    "), trim(" +
+    conexion.dbConn.escape(valores[23]) +
+    "), trim(" +
+    conexion.dbConn.escape(valores[24]) +
+    "), trim(" +
+    conexion.dbConn.escape(valores[25]) +
+    "), trim(" +
+    conexion.dbConn.escape(valores[26]) +
+    "), trim(" +
+    conexion.dbConn.escape(valores[27]) +
+    "), trim(" +
+    conexion.dbConn.escape(valores[28]) +
+    "), trim(" +
+    conexion.dbConn.escape(valores[29]) +
+    "), trim(" +
+    conexion.dbConn.escape(valores[30]) +
     "), " +
     conexion.dbConn.escape(lote) +
     ")";
@@ -416,6 +434,39 @@ function actualizar_nid_persona_socio_interfaz(
   });
 }
 
+function actualizar_nid_persona_padre_madre_interfaz(
+  nid_carga_datos,
+  nid_interfaz_persona_padre_madre,
+) {
+  const sql =
+    "update " +
+    constantes.ESQUEMA_BD +
+    ".carga_datos set nid_interfaz_persona_padre_madre = " +
+    conexion.dbConn.escape(nid_interfaz_persona_padre_madre) +
+    " where nid_carga_datos = " +
+    conexion.dbConn.escape(nid_carga_datos);
+
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.beginTransaction(() => {
+      conexion.dbConn.query(sql, (error, results) => {
+        if (error) {
+          console.log(
+            "interfaz_registro -> actualizar_nid_persona_padre_madre_interfaz: ",
+            error,
+          );
+          conexion.dbConn.rollback();
+          reject(
+            "Se ha producido un error al registrar en la interfaz el padre/madre",
+          );
+        } else {
+          conexion.dbConn.commit();
+          resolve(results.insertId);
+        }
+      });
+    });
+  });
+}
+
 async function cargar_datos_interfaz(lote) {
   try {
     let datos_lote = await obtener_volcado_lote(lote);
@@ -441,6 +492,44 @@ async function cargar_datos_interfaz(lote) {
           );
         }
 
+        if (dato.nombre_padre_madre) {
+          let nid_interfaz_persona_padre_madre = await comprueba_persona(
+            lote,
+            dato.dni_padre_madre,
+            dato.nombre_padre_madre,
+            dato.primer_apellido_padre_madre,
+            dato.segundo_apellido_padre_madre,
+            dato.email_padre_madre,
+            dato.telefono_padre_madre,
+            dato.fecha_nacimiento_padre_madre,
+          );
+
+          await actualizar_nid_persona_padre_madre_interfaz(
+            datos_lote[i].nid_carga_datos,
+            nid_interfaz_persona_padre_madre,
+          );
+
+          const interfaz_persona =
+            await gestor_interfaz_persona.obtener_interfaz_persona(
+              nid_interfaz_persona,
+            );
+          if (
+            interfaz_persona.nid_persona &&
+            nid_interfaz_persona_padre_madre
+          ) {
+            if (dato.padre_madre.toUpperCase() === "P") {
+              interfaz_persona.nid_interfaz_padre =
+                nid_interfaz_persona_padre_madre;
+            } else {
+              interfaz_persona.nid_interfaz_madre =
+                nid_interfaz_persona_padre_madre;
+            }
+            await actualizar_interfaz_persona(
+              interfaz_persona,
+              nid_interfaz_persona,
+            );
+          }
+        }
         if (dato.nombre_socio) {
           let nid_interfaz_persona_socio = await comprueba_persona(
             lote,
