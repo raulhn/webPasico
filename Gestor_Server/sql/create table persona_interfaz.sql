@@ -19,3 +19,7 @@ create table pasico_gestor.interfaz_persona (
 
 
 alter table pasico_gestor.interfaz_persona add constraint fk_interfaz_persona foreign key (nid_persona) references pasico_gestor.persona(nid);
+
+
+alter table pasico_gestor.interfaz_persona add constraint fk_interfaz_padre foreign key(nid_interfaz_padre) references pasico_gestor.interfaz_persona(nid_interfaz_persona);
+alter table pasico_gestor.interfaz_persona add constraint fk_interfaz_madre foreign key(nid_interfaz_madre) references pasico_gestor.interfaz_persona(nid_interfaz_persona);

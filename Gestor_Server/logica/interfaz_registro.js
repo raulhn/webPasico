@@ -513,10 +513,7 @@ async function cargar_datos_interfaz(lote) {
             await gestor_interfaz_persona.obtener_interfaz_persona(
               nid_interfaz_persona,
             );
-          if (
-            interfaz_persona.nid_persona &&
-            nid_interfaz_persona_padre_madre
-          ) {
+          if (interfaz_persona && nid_interfaz_persona_padre_madre) {
             if (dato.padre_madre.toUpperCase() === "P") {
               interfaz_persona.nid_interfaz_padre =
                 nid_interfaz_persona_padre_madre;

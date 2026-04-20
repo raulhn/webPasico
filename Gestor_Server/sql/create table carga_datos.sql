@@ -14,6 +14,8 @@ create table pasico_gestor.carga_datos (
     primer_apellido_padre_madre varchar(50),
     segundo_apellido_padre_madre varchar(50),
     fecha_nacimiento_padre_madre varchar(30),
+    email_padre_madre varchar(300),
+    telefono_padre_madre varchar(30),
     nid_interfaz_persona_padre_madre int,
     dni_socio varchar(20),
     nombre_socio varchar(100),
