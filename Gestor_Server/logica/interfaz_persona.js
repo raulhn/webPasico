@@ -8,6 +8,8 @@ function obtener_persona_nif(nif, lote) {
     constantes.ESQUEMA_BD +
     ".interfaz_persona where dni = " +
     conexion.dbConn.escape(nif) +
+    "and operacion <> " +
+    constantes.OPERACIONES_INTERFAZ.SIN_CAMBIOS +
     " and lote = " +
     conexion.dbConn.escape(lote) +
     " and dni <> ''";
@@ -38,6 +40,8 @@ function obtener_persona_nombre(
     conexion.dbConn.escape(primer_apellido) +
     " and segundo_apellido = " +
     conexion.dbConn.escape(segundo_apellido) +
+    "and operacion <> " +
+    constantes.OPERACIONES_INTERFAZ.SIN_CAMBIOS +
     " and lote = " +
     conexion.dbConn.escape(lote);
 
@@ -53,11 +57,7 @@ function obtener_persona_nombre(
   });
 }
 
-function obtener_persona_apellidos(
-  primer_apellido,
-  segundo_apellido,
-  lote,
-) {
+function obtener_persona_apellidos(primer_apellido, segundo_apellido, lote) {
   const sql =
     "select * from " +
     constantes.ESQUEMA_BD +
@@ -65,6 +65,8 @@ function obtener_persona_apellidos(
     conexion.dbConn.escape(primer_apellido) +
     " and segundo_apellido = " +
     conexion.dbConn.escape(segundo_apellido) +
+    "and operacion <> " +
+    constantes.OPERACIONES_INTERFAZ.SIN_CAMBIOS +
     " and lote = " +
     conexion.dbConn.escape(lote);
 
@@ -167,7 +169,8 @@ function actualizar_interfaz_persona(interfaz_persona) {
     conexion.dbConn.escape(interfaz_persona.lote) +
     ", nid_persona = " +
     conexion.dbConn.escape(interfaz_persona.nid_persona) +
-    ", estado = " + conexion.dbConn.escape(interfaz_persona.estado) +
+    ", estado = " +
+    conexion.dbConn.escape(interfaz_persona.estado) +
     " where nid_interfaz_persona = " +
     conexion.dbConn.escape(interfaz_persona.nid_interfaz_persona);
 
@@ -410,8 +413,7 @@ function obtener_interfaz_persona(nid_interfaz_persona) {
 
 module.exports.obtener_persona_nif = obtener_persona_nif;
 module.exports.obtener_persona_nombre = obtener_persona_nombre;
-module.exports.obtener_persona_apellidos =
-  obtener_persona_apellidos;
+module.exports.obtener_persona_apellidos = obtener_persona_apellidos;
 module.exports.obtener_conflictos_personas = obtener_conflictos_personas;
 module.exports.obtener_interfaz_personas = obtener_interfaz_personas;
 module.exports.actualizar_operacion_conflicto = actualizar_operacion_conflicto;
