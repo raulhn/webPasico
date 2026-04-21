@@ -75,6 +75,7 @@ import { ListaInstrumentosComponent } from './componente/lista-instrumentos/list
 
 import { CargaDatosComponent } from './componente/carga-datos/carga-datos.component';
 import { CargaLoteComponent } from './componente/carga-lote/carga-lote.component';
+import { NgSelectorComponent } from './componente/componentes_ui/ng-selector/ng-selector.component';
 
 @NgModule({
   declarations: [
@@ -134,6 +135,7 @@ import { CargaLoteComponent } from './componente/carga-lote/carga-lote.component
     ListaInstrumentosComponent,
     CargaDatosComponent,
     CargaLoteComponent,
+    NgSelectorComponent,
   ],
   exports: [MenuComponent],
   bootstrap: [AppComponent],

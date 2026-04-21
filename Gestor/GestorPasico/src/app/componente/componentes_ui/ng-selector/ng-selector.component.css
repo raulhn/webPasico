@@ -1,0 +1,30 @@
+.selector {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 5px;
+}
+
+.selector select {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.opcion {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #fff;
+  padding: 5px;
+}
+
+.opcion:hover {
+  background-color: #f0f0f0;
+  cursor: pointer;
+}
+
+.opciones {
+  position: fixed;
+}
