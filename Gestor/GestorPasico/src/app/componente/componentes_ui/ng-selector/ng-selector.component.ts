@@ -58,6 +58,7 @@ export class NgSelectorComponent implements OnInit {
   }
 
   onDesactivar() {
+    // Da un margen en caso de seleccionar una opción
     setTimeout(() => {
       this.isFocus = false;
     }, 200);

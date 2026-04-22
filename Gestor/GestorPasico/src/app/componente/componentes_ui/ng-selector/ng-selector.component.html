@@ -1,23 +1,19 @@
-<div style="padding: 20px">
-  <h1>Selector</h1>
-  <div class="selector">
-    <input
-      [style.width]="width"
-      [(ngModel)]="entrada"
-      (input)="filtrarOpciones()"
-      (focus)="onActivar()"
-      (blur)="onDesactivar()"
-    />
+<div class="selector">
+  <input
+    [style.width]="width"
+    [(ngModel)]="entrada"
+    (input)="filtrarOpciones()"
+    (focus)="onActivar()"
+    (blur)="onDesactivar()"
+  />
 
-    <div class="opciones" [style.width]="width" *ngIf="isFocus">
-      @if (isFocus) {
-        @for (opcion of opcionesFiltradas; track opcion.etiqueta) {
-          <div class="opcion" (click)="seleccionarOpcion(opcion)">
-            {{ opcion.etiqueta }}
-          </div>
-        }
+  <div class="opciones" [style.width]="width" *ngIf="isFocus">
+    @if (isFocus) {
+      @for (opcion of opcionesFiltradas; track opcion.etiqueta) {
+        <div class="opcion" (click)="seleccionarOpcion(opcion)">
+          {{ opcion.etiqueta }}
+        </div>
       }
-    </div>
+    }
   </div>
-  <span> Texto </span>
 </div>
