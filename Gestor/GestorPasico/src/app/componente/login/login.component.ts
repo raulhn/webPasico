@@ -9,6 +9,8 @@ import { Router } from '@angular/router';
   standalone: false,
 })
 export class LoginComponent implements OnInit {
+  elemento: any = 1;
+
   opciones = [
     {
       etiqueta: 'Usuario',
@@ -17,6 +19,22 @@ export class LoginComponent implements OnInit {
     {
       etiqueta: 'Contraseña',
       valor: 2,
+    },
+    {
+      etiqueta: 'Iniciar sesión',
+      valor: 3,
+    },
+    {
+      etiqueta: 'Registrarse',
+      valor: 4,
+    },
+    {
+      etiqueta: 'Olvidé mi contraseña',
+      valor: 5,
+    },
+    {
+      etiqueta: 'Cerrar sesión',
+      valor: 6,
     },
   ];
   constructor(
