@@ -189,5 +189,43 @@ async function cargar_interfaz_socios(lote) {
   }
 }
 
+async function cargar_padres(lote) {
+  try {
+    const interfaz_personas =
+      await gestor_interfaz_persona.obtener_interfaz_personas(lote);
+    for (const interfaz_persona of interfaz_personas) {
+      const nid_padre = null;
+      const nid_madre = null;
+
+      const nid_persona = interfaz_persona.nid_persona;
+      const persona = await gestor_personas.obtener_persona(nid_persona);
+
+      // Solo se actualiza si la persona no tiene padre registrado
+      if (interfaz_persona.nid_interfaz_padre && !persona.nid_padre) {
+        const interfaz_padre =
+          await gestor_interfaz_persona.obtener_interfaz_persona(
+            interfaz_persona.nid_interfaz_padre,
+          );
+        nid_padre = interfaz_padre.nid_persona;
+        await gestor_personas.registrar_padre(nid_persona, nid_padre);
+      }
+
+      //Solo se actualiza si la persona no tiene madre registrada
+      if (interfaz_persona.nid_interfaz_madre && !persona.nid_madre) {
+        const interfaz_madre =
+          await gestor_interfaz_persona.obtener_interfaz_persona(
+            interfaz_persona.nid_interfaz_madre,
+          );
+        nid_madre = interfaz_madre.nid_persona;
+        await gestor_personas.registrar_madre(nid_persona, nid_madre);
+      }
+    }
+  } catch (error) {
+    console.log("carga_interfaz_registro -> carga_padres:", error);
+    throw new Error("Error al cargar padres");
+  }
+}
+
 module.exports.cargar_personas = cargar_personas;
 module.exports.cargar_interfaz_socios = cargar_interfaz_socios;
+module.exports.cargar_padres = cargar_padres;
