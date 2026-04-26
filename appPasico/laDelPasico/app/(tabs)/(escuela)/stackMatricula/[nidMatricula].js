@@ -16,6 +16,7 @@ import {
   MenuDesplegable,
 } from "../../../../componentes/componentesUI/ComponentesUI.jsx";
 import Constantes from "../../../../config/constantes.js";
+import { router } from "expo-router";
 
 export default function Matricula() {
   const { nidMatricula } = useLocalSearchParams();
@@ -57,12 +58,12 @@ export default function Matricula() {
     //  },
   ];
 
+  // Puedes agregar más opciones al menú desplegable según tus necesidades
+  //<View style={{ position: "absolute", top: 10, right: 15, zIndex: 1 }}>
+  //        <MenuDesplegable opciones={opcionesDesplegable} />
+  //      </View>
   return (
     <View style={estilos.container}>
-      <View style={{ position: "absolute", top: 10, right: 15, zIndex: 1 }}>
-        <MenuDesplegable opciones={opcionesDesplegable} />
-      </View>
-
       <Text style={estilos.title}>{matricula.curso}</Text>
 
       <FlatList
@@ -86,6 +87,19 @@ export default function Matricula() {
           />
         }
       />
+      <View style={{ position: "absolute", bottom: 20, right: 20 }}>
+        <Boton
+          nombre={"Evaluaciones"}
+          onPress={() => {
+            router.push({
+              pathname: "stackMatricula/evaluaciones/" + nidMatricula,
+              params: {
+                nidMatricula: nidMatricula,
+              },
+            });
+          }}
+        ></Boton>
+      </View>
     </View>
   );
 }
