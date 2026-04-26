@@ -1,6 +1,6 @@
 let servicioComun = require("./serviceComun.js");
-import * as secureStorage from "./secureStorage.js";
-import Constantes from "../config/constantes.js";
+let secureStorage = require("./secureStorage.js");
+let Constantes = require("../config/constantes.js");
 
 function registrarUsuario(
   nombre,

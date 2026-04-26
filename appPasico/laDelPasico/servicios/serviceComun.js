@@ -1,5 +1,5 @@
-import * as secureStorage from "./secureStorage.js";
-import Constantes from "../config/constantes.js";
+let secureStorage = require("./secureStorage.js");
+const Constantes = require("../config/constantes.js");
 
 function peticionServicio(metodo, url, body) {
   return new Promise((resolve, reject) => {
@@ -59,8 +59,15 @@ async function refrescarSesion() {
       .then((response) => {
         response
           .json()
-          .then((data) => {
-            resolve(data);
+          .then(async (data) => {
+            try {
+              const newToken = data.refreshToken;
+              await secureStorage.refrescarToken("refresh_token", newToken);
+              resolve(data);
+            } catch (error) {
+              console.log("serviceComun -> refrescarSesion:", error);
+              reject("Se ha producido un error al refrescar la sesión");
+            }
           })
           .catch((error) => {
             console.log("Error en el servicio refrescarSesion");

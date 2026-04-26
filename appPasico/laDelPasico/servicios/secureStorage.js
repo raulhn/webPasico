@@ -37,6 +37,16 @@ async function eliminarToken(key) {
   }
 }
 
+async function refrescarToken(key, value) {
+  try {
+    await eliminarToken(key);
+    await guardarToken(key, value);
+  } catch (error) {
+    console.log("secureStorage -> refrescarToken:", error);
+  }
+}
+
 module.exports.obtenerToken = obtenerToken;
 module.exports.guardarToken = guardarToken;
 module.exports.eliminarToken = eliminarToken;
+module.exports.refrescarToken = refrescarToken;

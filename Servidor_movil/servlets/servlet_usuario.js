@@ -251,6 +251,14 @@ function refreshToken(req, res) {
       { expiresIn: constantes.TIEMPO_ACCESS_TOKEN },
     );
 
+    const refreshToken = jwt.sign(
+      { nid_usuario: usuario.nid_usuario },
+      process.env.SESSION_SECRET,
+      {
+        expiresIn: constantes.TIEMPO_REFRESH_TOKEN,
+      },
+    );
+
     res.cookie(constantes.ACCESS_TOKEN, nuevoToken, {
       httpOnly: true,
       secure: true, // Asegúrate de que tu aplicación esté sirviendo a través de HTTPS
@@ -258,7 +266,11 @@ function refreshToken(req, res) {
       maxAge: constantes.TIEMPO_ACCESS_TOKEN * 1000,
     });
 
-    res.status(200).send({ error: false, mensaje: "Token actualizado" });
+    res.status(200).send({
+      error: false,
+      mensaje: "Token actualizado",
+      refreshToken: refreshToken,
+    });
   });
 }
 
