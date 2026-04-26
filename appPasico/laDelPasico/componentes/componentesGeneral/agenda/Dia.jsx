@@ -12,9 +12,8 @@ export default function Dia({
     <View style={estilos.contenedor}>
       <Pressable
         onPress={() => {
-          if (!disabled && typeof accion === "function") accion();
+          if (typeof accion === "function") accion();
         }}
-        disabled={disabled}
         android_ripple={{ color: "rgba(0,0,0,0.06)", radius: 24 }}
       >
         <View
