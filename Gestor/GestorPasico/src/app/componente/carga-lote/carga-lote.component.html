@@ -334,6 +334,42 @@
                     </span>
                   }
                 </div>
+                @if (interfaz_persona_insertar.insertar.interfaz_padre) {
+                  <div>
+                    <span
+                      ><b>Padre:</b>
+                      {{
+                        interfaz_persona_insertar.insertar.interfaz_padre.nombre
+                      }}
+                      {{
+                        interfaz_persona_insertar.insertar.interfaz_padre
+                          .primer_apellido
+                      }}
+                      {{
+                        interfaz_persona_insertar.insertar.interfaz_padre
+                          .segundo_apellido
+                      }}</span
+                    >
+                  </div>
+                }
+                @if (interfaz_persona_insertar.insertar.interfaz_madre) {
+                  <div>
+                    <span
+                      ><b>Madre:</b>
+                      {{
+                        interfaz_persona_insertar.insertar.interfaz_madre.nombre
+                      }}
+                      {{
+                        interfaz_persona_insertar.insertar.interfaz_madre
+                          .primer_apellido
+                      }}
+                      {{
+                        interfaz_persona_insertar.insertar.interfaz_madre
+                          .segundo_apellido
+                      }}</span
+                    >
+                  </div>
+                }
                 <div class="select-wrapper">
                   <select
                     class="action-select"
@@ -508,6 +544,44 @@
                     >
                   }
                 </div>
+                @if (interfaz_persona_actualizar.actualizar.interfaz_padre) {
+                  <div>
+                    <span
+                      ><b>Padre:</b>
+                      {{
+                        interfaz_persona_actualizar.actualizar.interfaz_padre
+                          .nombre
+                      }}
+                      {{
+                        interfaz_persona_actualizar.actualizar.interfaz_padre
+                          .primer_apellido
+                      }}
+                      {{
+                        interfaz_persona_actualizar.actualizar.interfaz_padre
+                          .segundo_apellido
+                      }}</span
+                    >
+                  </div>
+                }
+                @if (interfaz_persona_actualizar.actualizar.interfaz_madre) {
+                  <div>
+                    <span
+                      ><b>Madre:</b>
+                      {{
+                        interfaz_persona_actualizar.actualizar.interfaz_madre
+                          .nombre
+                      }}
+                      {{
+                        interfaz_persona_actualizar.actualizar.interfaz_madre
+                          .primer_apellido
+                      }}
+                      {{
+                        interfaz_persona_actualizar.actualizar.interfaz_madre
+                          .segundo_apellido
+                      }}</span
+                    >
+                  </div>
+                }
                 <div class="select-wrapper">
                   <select
                     class="action-select"
