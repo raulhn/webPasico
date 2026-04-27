@@ -915,7 +915,7 @@ function obtener_formas_pago() {
         ".forma_pago fp, " +
         constantes.ESQUEMA_BD +
         ".persona p " +
-        "where fp.nid_titular = p.nid",
+        "where fp.nid_titular = p.nid and fp.activo = 'S'",
       (error, results, fields) => {
         if (error) {
           console.log(error);
