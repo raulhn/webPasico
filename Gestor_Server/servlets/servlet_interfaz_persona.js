@@ -20,9 +20,31 @@ function obtener_interfaz_personas(req, res) {
           await gestor_interfaz_persona.obtener_conflictos_personas(
             interfaz_personas[i].nid_interfaz_persona,
           );
+
+        const interfaz_padre = null;
+        const interfaz_madre = null;
+
+        // Se recupera la interfaz del padre
+        if (interfaz_personas[i].nid_interfaz_padre) {
+          interfaz_padre =
+            await gestor_interfaz_persona.obtener_interfaz_persona(
+              interfaz_personas[i].nid_interfaz_padre,
+            );
+        }
+
+        // Se recupera la interfaz de la madre
+        if (interfaz_personas[i].nid_interfaz_madre) {
+          interfaz_madre =
+            await gestor_interfaz_persona.obtener_interfaz_persona(
+              interfaz_personas[i].nid_interfaz_madre,
+            );
+        }
+
         let resultado = {
           interfaz_persona: interfaz_personas[i],
           conflictos_persona: conflictos,
+          interfaz_padre: interfaz_padre,
+          interfaz_madre: interfaz_madre,
         };
         let nid_socio = null;
         if (
