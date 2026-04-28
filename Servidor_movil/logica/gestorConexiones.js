@@ -51,7 +51,7 @@ function eliminarConexionesAntiguas(nid_usuario) {
     constantes.ESQUEMA +
     ".conexiones where nid_usuario = " +
     conexion.dbConn.escape(nid_usuario) +
-    "and fecha < (select max(fecha) from " +
+    " and fecha < (select max(fecha) from " +
     constantes.ESQUEMA +
     ".conexiones where nid_usuario = " +
     conexion.dbConn.escape(nid_usuario) +
