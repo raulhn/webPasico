@@ -187,9 +187,107 @@ function obtenerConexiones() {
   });
 }
 
+function obtener_token_refresco(nid_usuario) {
+  const sql =
+    "select token_refresco from " +
+    constantes.ESQUEMA +
+    ".conexiones where nid_usuario = " +
+    conexion.dbConn.escape(nid_usuario);
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(sql, (error, results) => {
+      if (error) {
+        console.error("Error al obtener el token de refresco:", error);
+        reject(error);
+      } else if (results.length > 0) {
+        resolve(results[0].token_refresco);
+      } else {
+        resolve(null); // No se encontró el token de refresco
+      }
+    });
+  });
+}
+
+function insertar_token_refresco(token_refresco, nid_usuario) {
+  const sql =
+    "insert into " +
+    constantes.ESQUEMA +
+    ".conexiones (token_refresco, nid_usuario) values (" +
+    conexion.dbConn.escape(token_refresco) +
+    ", " +
+    conexion.dbConn.escape(nid_usuario) +
+    ")";
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(sql, (error, results) => {
+      if (error) {
+        console.error("Error al insertar el token de refresco:", error);
+        reject(error);
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
+
+function actualizar_token_refresco(token_refresco, nid_usuario) {
+  const sql =
+    "update " +
+    constantes.ESQUEMA +
+    ".conexiones set token_refresco = " +
+    conexion.dbConn.escape(token_refresco) +
+    " where nid_usuario = " +
+    conexion.dbConn.escape(nid_usuario);
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(sql, (error, results) => {
+      if (error) {
+        console.error("Error al actualizar el token de refresco:", error);
+        reject(error);
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
+
+async function registrar_token_refresco(token_refresco, nid_usuario) {
+  try {
+    const tokenExistente = await obtener_token_refresco(nid_usuario);
+    if (tokenExistente) {
+      return await actualizar_token_refresco(token_refresco, nid_usuario);
+    } else {
+      return await insertar_token_refresco(token_refresco, nid_usuario);
+    }
+  } catch (error) {
+    throw new Error(
+      "Error al registrar el token de refresco: " + error.message,
+    );
+  }
+}
+
+function existe_token_refresco(token_refresco) {
+  const sql =
+    "select * from " +
+    constantes.ESQUEMA +
+    ".conexiones where token_refresco = " +
+    conexion.dbConn.escape(token_refresco);
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(sql, (error, results) => {
+      if (error) {
+        console.error("Error al verificar el token de refresco:", error);
+        reject(error);
+      } else {
+        resolve(results.length > 0);
+      }
+    });
+  });
+}
+
 module.exports.registrarConexion = registrarConexion;
 module.exports.actualizarTokenUsuario = actualizarTokenUsuario;
 module.exports.limpiarToken = limpiarToken;
 module.exports.obtenerTokenUsuario = obtenerTokenUsuario;
 module.exports.eliminarToken = eliminarToken;
 module.exports.obtenerConexiones = obtenerConexiones;
+
+module.exports.obtener_token_refresco = obtener_token_refresco;
+module.exports.registrar_token_refresco = registrar_token_refresco;
+module.exports.existe_token_refresco = existe_token_refresco;
