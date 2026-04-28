@@ -41,6 +41,33 @@ function eliminarToken(token) {
   });
 }
 
+function eliminarConexionesAntiguas(nid_usuario) {
+  const sql =
+    "delete from " +
+    constantes.ESQUEMA +
+    ".conexiones where nid_usuario = " +
+    conexion.dbConn.escape(nid_usuario) +
+    " and fecha < (select max(fecha) from " +
+    constantes.ESQUEMA +
+    ".conexiones where nid_usuario = " +
+    conexion.dbConn.escape(nid_usuario) +
+    "and fecha < (select max(fecha) from " +
+    constantes.ESQUEMA +
+    ".conexiones where nid_usuario = " +
+    conexion.dbConn.escape(nid_usuario) +
+    " and token is not null))";
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(sql, (error, results) => {
+      if (error) {
+        console.error("Error al eliminar las conexiones antiguas:", error);
+        reject(error);
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
+
 function actualizarTokenUsuario(token, nidUsuario) {
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(
@@ -293,9 +320,10 @@ async function registrar_token_refresco(token_refresco, nid_usuario) {
   try {
     const bexiste_usuario = await existe_usuario(nid_usuario);
     if (bexiste_usuario) {
-      return await actualizar_token_refresco(token_refresco, nid_usuario);
+      await actualizar_token_refresco(token_refresco, nid_usuario);
+      await eliminarConexionesAntiguas(nid_usuario);
     } else {
-      return await insertar_token_refresco(token_refresco, nid_usuario);
+      await insertar_token_refresco(token_refresco, nid_usuario);
     }
   } catch (error) {
     throw new Error(
