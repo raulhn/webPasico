@@ -68,7 +68,12 @@ function obtenerTokenUsuario(nidUsuario) {
       "SELECT token FROM " +
         constantes.ESQUEMA +
         ".conexiones WHERE nid_usuario = " +
-        conexion.dbConn.escape(nidUsuario),
+        conexion.dbConn.escape(nidUsuario) +
+        " and token is not null and fecha = (select max(fecha) from " +
+        constantes.ESQUEMA +
+        ".conexiones where nid_usuario = " +
+        conexion.dbConn.escape(nidUsuario) +
+        " and token is not null)",
       (error, results) => {
         if (error) {
           console.error("Error al obtener el token del usuario:", error);
