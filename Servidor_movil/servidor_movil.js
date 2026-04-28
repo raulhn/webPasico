@@ -220,10 +220,12 @@ app.use((req, res, next) => {
         next();
       })
       .catch((error) => {
-        res.status(401).send({ error: true, mensaje: "No autenticado" });
+        res
+          .status(401)
+          .send({ error: true, mensaje: "No autenticado", codigo: 1 });
       });
   } catch (error) {
-    res.status(401).send({ error: true, mensaje: "No autenticado" });
+    res.status(401).send({ error: true, mensaje: "No autenticado", codigo: 1 });
   }
 });
 //

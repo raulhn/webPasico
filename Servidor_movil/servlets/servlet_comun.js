@@ -35,6 +35,7 @@ function obtenerTokenDecoded(req) {
     const token = req.cookies.access_token;
     if (!token) {
       reject({ error: true, mensaje: "No autenticado", codigo: 1 });
+      return;
     }
 
     jwt.verify(token, process.env.SESSION_SECRET, (err, decoded) => {

@@ -22,7 +22,6 @@ async function guardarToken(key, value) {
       await SecureStore.deleteItemAsync(key);
     }
     await SecureStore.setItemAsync(key, value);
-    console.log(`Token guardado con la clave: ${key}`);
   } catch (error) {
     console.log("Error al guardar el token:", error);
   }
@@ -31,7 +30,6 @@ async function guardarToken(key, value) {
 async function eliminarToken(key) {
   try {
     await SecureStore.deleteItemAsync(key);
-    console.log(`Token eliminado con la clave: ${key}`);
   } catch (error) {
     console.log("Error al eliminar el token:", error);
   }

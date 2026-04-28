@@ -39,11 +39,11 @@ function peticionServicio(metodo, url, body) {
 }
 
 async function refrescarSesion() {
-  console.log("Refrescando sesión...");
   const refreshToken = await secureStorage.obtenerToken("refresh_token");
   return new Promise((resolve, reject) => {
     if (!refreshToken) {
       reject(new Error("No hay refresh token disponible"));
+      return;
     }
 
     fetch(Constantes.URL_SERVICIO_MOVIL + "refresh_token", {
@@ -61,8 +61,10 @@ async function refrescarSesion() {
           .json()
           .then(async (data) => {
             try {
-              const newToken = data.refreshToken;
-              await secureStorage.refrescarToken("refresh_token", newToken);
+              if (!data.error) {
+                const newToken = data.refreshToken;
+                await secureStorage.refrescarToken("refresh_token", newToken);
+              }
               resolve(data);
             } catch (error) {
               console.log("serviceComun -> refrescarSesion:", error);
