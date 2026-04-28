@@ -266,10 +266,28 @@ function actualizar_token_refresco(token_refresco, nid_usuario) {
   });
 }
 
+function existe_usuario(nid_usuario) {
+  const sql =
+    "select * from " +
+    constantes.ESQUEMA +
+    ".conexiones where nid_usuario = " +
+    conexion.dbConn.escape(nid_usuario);
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(sql, (error, results) => {
+      if (error) {
+        console.error("Error al verificar el usuario:", error);
+        reject(error);
+      } else {
+        resolve(results.length > 0);
+      }
+    });
+  });
+}
+
 async function registrar_token_refresco(token_refresco, nid_usuario) {
   try {
-    const existe_usuario = await existe_usuario(nid_usuario);
-    if (existe_usuario) {
+    const bexiste_usuario = await existe_usuario(nid_usuario);
+    if (bexiste_usuario) {
       return await actualizar_token_refresco(token_refresco, nid_usuario);
     } else {
       return await insertar_token_refresco(token_refresco, nid_usuario);
@@ -291,24 +309,6 @@ function existe_token_refresco(token_refresco) {
     conexion.dbConn.query(sql, (error, results) => {
       if (error) {
         console.error("Error al verificar el token de refresco:", error);
-        reject(error);
-      } else {
-        resolve(results.length > 0);
-      }
-    });
-  });
-}
-
-function existe_usuario(nid_usuario) {
-  const sql =
-    "select * from " +
-    constantes.ESQUEMA +
-    ".conexiones where nid_usuario = " +
-    conexion.dbConn.escape(nid_usuario);
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(sql, (error, results) => {
-      if (error) {
-        console.error("Error al verificar el usuario:", error);
         reject(error);
       } else {
         resolve(results.length > 0);
