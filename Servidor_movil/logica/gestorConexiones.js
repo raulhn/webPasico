@@ -41,21 +41,14 @@ function eliminarToken(token) {
   });
 }
 
-function eliminarConexionesAntiguas(nid_usuario) {
+function eliminarConexionesAntiguas(nid_usuario, ultima_conexion) {
   const sql =
     "delete from " +
     constantes.ESQUEMA +
     ".conexiones where nid_usuario = " +
     conexion.dbConn.escape(nid_usuario) +
-    " and fecha < (select max(fecha) from " +
-    constantes.ESQUEMA +
-    ".conexiones where nid_usuario = " +
-    conexion.dbConn.escape(nid_usuario) +
-    " and fecha < (select max(fecha) from " +
-    constantes.ESQUEMA +
-    ".conexiones where nid_usuario = " +
-    conexion.dbConn.escape(nid_usuario) +
-    " and token is not null))";
+    " and nid_conexion < " +
+    conexion.dbConn.escape(ultima_conexion);
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(sql, (error, results) => {
       if (error) {
@@ -86,6 +79,29 @@ function actualizarTokenUsuario(token, nidUsuario) {
         }
       },
     );
+  });
+}
+
+function obtener_ultima_observacion(nid_usuario) {
+  const sql =
+    "SELECT max(nid_conexion) as ultima_conexion FROM " +
+    constantes.ESQUEMA +
+    ".conexiones WHERE nid_usuario = " +
+    conexion.dbConn.escape(nid_usuario);
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(sql, (error, results) => {
+      if (error) {
+        console.error(
+          "Error al obtener la última conexión del usuario:",
+          error,
+        );
+        reject(error);
+      } else if (results.length > 0) {
+        resolve(results[0].ultima_conexion);
+      } else {
+        resolve(null); // No se encontró la última conexión
+      }
+    });
   });
 }
 
@@ -321,7 +337,8 @@ async function registrar_token_refresco(token_refresco, nid_usuario) {
     const bexiste_usuario = await existe_usuario(nid_usuario);
     if (bexiste_usuario) {
       await actualizar_token_refresco(token_refresco, nid_usuario);
-      await eliminarConexionesAntiguas(nid_usuario);
+      const ultima_conexion = await obtener_ultima_observacion(nid_usuario);
+      await eliminarConexionesAntiguas(nid_usuario, ultima_conexion);
     } else {
       await insertar_token_refresco(token_refresco, nid_usuario);
     }
