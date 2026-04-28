@@ -268,8 +268,8 @@ function actualizar_token_refresco(token_refresco, nid_usuario) {
 
 async function registrar_token_refresco(token_refresco, nid_usuario) {
   try {
-    const tokenExistente = await obtener_token_refresco(nid_usuario);
-    if (tokenExistente) {
+    const existe_usuario = await existe_usuario(nid_usuario);
+    if (existe_usuario) {
       return await actualizar_token_refresco(token_refresco, nid_usuario);
     } else {
       return await insertar_token_refresco(token_refresco, nid_usuario);
@@ -299,6 +299,24 @@ function existe_token_refresco(token_refresco) {
   });
 }
 
+function existe_usuario(nid_usuario) {
+  const sql =
+    "select * from " +
+    constantes.ESQUEMA +
+    ".conexiones where nid_usuario = " +
+    conexion.dbConn.escape(nid_usuario);
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(sql, (error, results) => {
+      if (error) {
+        console.error("Error al verificar el usuario:", error);
+        reject(error);
+      } else {
+        resolve(results.length > 0);
+      }
+    });
+  });
+}
+
 module.exports.registrarConexion = registrarConexion;
 module.exports.actualizarTokenUsuario = actualizarTokenUsuario;
 module.exports.limpiarToken = limpiarToken;
@@ -309,3 +327,4 @@ module.exports.obtenerConexiones = obtenerConexiones;
 module.exports.obtener_token_refresco = obtener_token_refresco;
 module.exports.registrar_token_refresco = registrar_token_refresco;
 module.exports.existe_token_refresco = existe_token_refresco;
+module.exports.existe_usuario = existe_usuario;
