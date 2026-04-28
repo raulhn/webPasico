@@ -217,13 +217,22 @@ function insertar_token_refresco(token_refresco, nid_usuario) {
     conexion.dbConn.escape(nid_usuario) +
     ")";
   return new Promise((resolve, reject) => {
-    conexion.dbConn.query(sql, (error, results) => {
-      if (error) {
-        console.error("Error al insertar el token de refresco:", error);
-        reject(error);
-      } else {
-        resolve(results);
+    conexion.dbConn.beginTransaction((err) => {
+      if (err) {
+        console.error("Error al iniciar la transacción:", err);
+        reject(err);
+        return;
       }
+      conexion.dbConn.query(sql, (error, results) => {
+        if (error) {
+          console.error("Error al insertar el token de refresco:", error);
+          conexion.dbConn.rollback();
+          reject(error);
+        } else {
+          conexion.dbConn.commit();
+          resolve(results);
+        }
+      });
     });
   });
 }
@@ -237,13 +246,22 @@ function actualizar_token_refresco(token_refresco, nid_usuario) {
     " where nid_usuario = " +
     conexion.dbConn.escape(nid_usuario);
   return new Promise((resolve, reject) => {
-    conexion.dbConn.query(sql, (error, results) => {
-      if (error) {
-        console.error("Error al actualizar el token de refresco:", error);
-        reject(error);
-      } else {
-        resolve(results);
+    conexion.dbConn.beginTransaction((err) => {
+      if (err) {
+        console.error("Error al iniciar la transacción:", err);
+        reject(err);
+        return;
       }
+      conexion.dbConn.query(sql, (error, results) => {
+        if (error) {
+          console.error("Error al actualizar el token de refresco:", error);
+          conexion.dbConn.rollback();
+          reject(error);
+        } else {
+          conexion.dbConn.commit();
+          resolve(results);
+        }
+      });
     });
   });
 }
