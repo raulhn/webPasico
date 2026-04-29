@@ -89,7 +89,7 @@ async function verificarCorreo(req, res) {
 
 async function login(req, res) {
   const { correoElectronico, password, tokenNotificacion } = req.body;
-
+  const loginWeb = req.body.loginWeb || false; // Valor predeterminado a false si no se proporciona
   try {
     const tokens = await gestorUsuario.realizarLogin(
       correoElectronico,
@@ -115,10 +115,13 @@ async function login(req, res) {
       maxAge: constantes.TIEMPO_ACCESS_TOKEN * 1000, // 24 horas
     });
 
-    await gestorConexion.registrar_token_refresco(
-      tokens.refreshToken,
-      tokens.usuario.nid_usuario,
-    );
+    // Si es login a través de la web no se actualiza el token de refresco
+    if (!loginWeb) {
+      await gestorConexion.registrar_token_refresco(
+        tokens.refreshToken,
+        tokens.usuario.nid_usuario,
+      );
+    }
 
     res.status(200).send({
       error: false,

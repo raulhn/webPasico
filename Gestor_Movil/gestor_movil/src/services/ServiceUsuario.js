@@ -1,4 +1,4 @@
-import {URL_SERVICIO_MOVIL} from "../config/Constantes";
+import { URL_SERVICIO_MOVIL } from "../config/Constantes";
 import * as ServiceComun from "./ServiceComun";
 
 export function login(correoElectronico, password) {
@@ -10,11 +10,11 @@ export function login(correoElectronico, password) {
       },
       body: JSON.stringify({
         correoElectronico: correoElectronico,
-        password: password
+        password: password,
+        loginWeb: true,
       }),
     }).then(async (response) => {
-
-        console.log(response)
+      console.log(response);
       response
         .json()
         .then((data) => {
@@ -41,7 +41,7 @@ export function obtenerUsuario() {
   });
 }
 
-export  function logout() {
+export function logout() {
   return new Promise((resolve, reject) => {
     ServiceComun.peticionServicio("POST", URL_SERVICIO_MOVIL + "logout", {})
       .then((data) => {
@@ -56,15 +56,20 @@ export  function logout() {
 
 export function cambiarPassword(passwordActual, nuevoPassword) {
   return new Promise((resolve, reject) => {
-    ServiceComun.peticionServicio("POST", URL_SERVICIO_MOVIL + "cambiar_password", {
-      passwordActual: passwordActual,
-      nuevaPassword: nuevoPassword
-    }).then((data) => {
-      resolve(data);
-    }).catch((error) => {
-      console.log("Error en el servicio cambiarPassword");
-      reject(error);
-    });
+    ServiceComun.peticionServicio(
+      "POST",
+      URL_SERVICIO_MOVIL + "cambiar_password",
+      {
+        passwordActual: passwordActual,
+        nuevaPassword: nuevoPassword,
+      },
+    )
+      .then((data) => {
+        resolve(data);
+      })
+      .catch((error) => {
+        console.log("Error en el servicio cambiarPassword");
+        reject(error);
+      });
   });
 }
-
