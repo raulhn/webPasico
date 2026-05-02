@@ -455,4 +455,3 @@ module.exports.obtener_alumnos_sin_profesor_alta =
   obtener_alumnos_sin_profesor_alta;
 module.exports.obtener_alumnos_sin_profesor_baja =
   obtener_alumnos_sin_profesor_baja;
-
