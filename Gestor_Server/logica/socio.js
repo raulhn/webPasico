@@ -321,8 +321,10 @@ async function recuperar_socio(nid_persona) {
       return socio[0];
     } else {
       let persona_recuperada = await persona.obtener_persona(nid_persona);
+      console.log("socio.js -> recuperar_socio", persona_recuperada);
       if (persona_recuperada.nid_socio) {
         let socios_asociado = await obtener_socio(persona_recuperada.nid_socio);
+        console.log("socio.js -> recuperar_socio", socios_asociado);
         if (socios_asociado.length > 0) {
           return socios_asociado[0];
         } else {
