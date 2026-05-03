@@ -355,27 +355,54 @@ async function recuperar_socio_alta(nid_persona) {
   }
 }
 
-async function obtener_alumnos_sin_socio() {
-  try {
-    const alumnos_curso_actual =
-      await gestor_matricula.obtener_alumnos_curso_actual();
+function obtener_alumnos_sin_socio() {
+  const sql =
+    " select p.nid, p.nombre, p.primer_apellido, p.segundo_apellido, p.correo_electronico, p.telefono, p.nif " +
+    " from " +
+    constantes.ESQUEMA_BD +
+    ".matricula_asignatura ma,                                " +
+    +constantes.ESQUEMA_BD +
+    ".matricula m,                                            " +
+    +constantes.ESQUEMA_BD +
+    ".persona p                                               " +
+    " where ma.nid_matricula = m.nid                                             " +
+    "   and m.nid_persona = p.nid                                                " +
+    "   and (ma.fecha_baja is null or ma.fecha_baja > now())                     " +
+    "   and (                                                                    " +
+    "         (                                                                  " +
+    "          not exists (select 1                                              " +
+    "                   from " +
+    constantes.ESQUEMA_BD +
+    ".socios s                              " +
+    "                   where p.nid = s.nid_persona                              " +
+    "                     and (s.fecha_baja is null or s.fecha_baja > now())     " +
+    "                 )                                                          " +
+    "         )                                                                  " +
+    "         and                                                                " +
+    "         (                                                                  " +
+    "           not exists (select 1                                             " +
+    "                   from " +
+    constantes.ESQUEMA_BD +
+    ".socios s                              " +
+    "                   where p.nid_socio = s.nid_persona                        " +
+    "                     and (s.fecha_baja is null or s.fecha_baja > now())     " +
+    "           )                                                                " +
+    "                                                                            " +
+    "         )                                                                  " +
+    "                                                                            " +
+    "   )                                                                        " +
+    " group by p.nid, p.nombre, p.primer_apellido, p.segundo_apellido, p.correo_electronico, p.telefono, p.nif";
 
-    let lista_alumnos_sin_socio = [];
-    for (const alumno_curso_actual of alumnos_curso_actual) {
-      const socio_recuperado = await recuperar_socio_alta(
-        alumno_curso_actual.nid,
-      );
-
-      if (!socio_recuperado) {
-        lista_alumnos_sin_socio.push(alumno_curso_actual);
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(sql, (error, results, fields) => {
+      if (error) {
+        console.log("socio.js -> obtener_alumnos_sin_socio:", error);
+        reject("Se ha producido un error al obtener los alumnos sin socio");
+      } else {
+        resolve(results);
       }
-    }
-
-    return lista_alumnos_sin_socio;
-  } catch (error) {
-    console.log("socio.js -> obtener_alumnos_sin_socio", error);
-    throw new Error("Error al obtener los alumnos sin socio");
-  }
+    });
+  });
 }
 
 function obtener_socios_sin_forma_pago() {
