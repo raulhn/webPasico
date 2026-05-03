@@ -1,6 +1,6 @@
 <app-menu></app-menu>
 
-@if (bCargadosAlumnosSinProfesor) {
+@if (bCargadosAlumnosSinProfesor()) {
   <section class="alerta" *ngIf="alumnos_sin_profesor().length > 0">
     <alerta-general
       [infoAlerta]="{
@@ -12,7 +12,7 @@
   </section>
 }
 
-@if (bCargadosAlumnosSinPago) {
+@if (bCargadosAlumnosSinPago()) {
   <section class="alerta" *ngIf="alumnos_sin_pago().length > 0">
     <alerta-general
       [infoAlerta]="{
@@ -24,7 +24,7 @@
   </section>
 }
 
-@if (bCargadosAlumnosSinSocio) {
+@if (bCargadosAlumnosSinSocio()) {
   <section class="alerta" *ngIf="alumnos_sin_socios().length > 0">
     <alerta-general
       [infoAlerta]="{
@@ -36,7 +36,7 @@
   </section>
 }
 
-@if (bCargadosSociosSinPago) {
+@if (bCargadosSociosSinPago()) {
   <section class="alerta" *ngIf="socios_sin_pago().length > 0">
     <alerta-general
       [infoAlerta]="{
