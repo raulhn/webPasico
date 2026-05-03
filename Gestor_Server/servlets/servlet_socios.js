@@ -1,6 +1,7 @@
 const constantes = require("../constantes.js");
 const comun = require("./servlet_comun.js");
 const socios = require("../logica/socio.js");
+const gestorCurso = require("../logica/curso.js");
 
 function registrar_socio(req, res) {
   comun.comprobaciones(req, res, async () => {
@@ -108,7 +109,9 @@ function obtener_socio(req, res) {
 function obtener_alumnos_sin_socio(req, res) {
   comun.comprobaciones(req, res, async () => {
     try {
-      const alumnos_sin_socio = await socios.obtener_alumnos_sin_socio();
+      const ultimo_curso = await gestorCurso.obtener_ultimo_curso();
+      const alumnos_sin_socio =
+        await socios.obtener_alumnos_sin_socio(ultimo_curso);
       res
         .status(200)
         .send({ error: false, alumnos_sin_socio: alumnos_sin_socio });
