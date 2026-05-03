@@ -35,7 +35,7 @@ export class HomeComponent implements OnInit {
   peticion_alumnos_sin_pago = {
     next: (res: any) => {
       console.log(res);
-      this.alumnos_sin_pago.set(res.alumnos_sin_pago);
+      this.alumnos_sin_pago.set(res.alumnos_sin_forma_pago);
     },
     error: (err: any) => {
       console.log(err);
@@ -45,7 +45,7 @@ export class HomeComponent implements OnInit {
   peticion_alumnos_sin_socios = {
     next: (res: any) => {
       console.log(res);
-      this.alumnos_sin_socios.set(res.alumnos_sin_socios);
+      this.alumnos_sin_socios.set(res.alumnos_sin_socio);
     },
     error: (err: any) => {
       console.log(err);
@@ -55,7 +55,7 @@ export class HomeComponent implements OnInit {
   peticion_socios_sin_pago = {
     next: (res: any) => {
       console.log(res);
-      this.socios_sin_pago.set(res.socios_sin_pago);
+      this.socios_sin_pago.set(res.socios_sin_forma_pago);
     },
     error: (err: any) => {
       console.log(err);

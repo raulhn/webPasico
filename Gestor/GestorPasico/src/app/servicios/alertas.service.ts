@@ -9,7 +9,7 @@ export class AlertasService {
   constructor(private http: HttpClient) {}
 
   obtener_alumnos_sin_socios() {
-    let API_URL = URL.URL_SERVICIO + '/obtener_alumnos_sin_socios';
+    let API_URL = URL.URL_SERVICIO + '/obtener_alumnos_sin_socio';
     return this.http.get(API_URL, { withCredentials: true });
   }
 
