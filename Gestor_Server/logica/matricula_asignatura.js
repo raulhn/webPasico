@@ -431,7 +431,7 @@ function obtener_alumnos_sin_profesor_baja(nid_curso, nid_asignatura) {
 
 function obtener_alumnos_sin_pago(nid_curso) {
   const sql =
-    "select p.* from " +
+    "select p.nid, p.nombre, p.primer_apellido, p.segundo_apellido, p.correo_electronico, p.telefono, p.nif from " +
     constantes.ESQUEMA_BD +
     ".persona p, " +
     constantes.ESQUEMA_BD +
@@ -441,7 +441,8 @@ function obtener_alumnos_sin_pago(nid_curso) {
     "where m.nid_persona = p.nid " +
     " and ma.nid_matricula = m.nid " +
     " and ((ma.fecha_baja is null) or (ma.fecha_baja > now()))" +
-    " and p.nid_forma_pago is null";
+    " and p.nid_forma_pago is null" +
+    " group by p.nid, p.nombre, p.primer_apellido, p.segundo_apellido, p.correo_electronico, p.telefono, p.nif";
 
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(sql, (error, results, fields) => {
