@@ -1,10 +1,14 @@
 <app-menu></app-menu>
 
-@if (alumnos_sin_profesor.length > 0) {
+@if (alumnos_sin_profesor().length > 0) {
+  <section class="alerta" >
   <alerta-general
     [infoAlerta]="{
       titulo: 'Hay alumnos sin profesor asignado',
-      cantidad: alumnos_sin_profesor.length,
+      cantidad: alumnos_sin_profesor().length,
+      descripcion: 'Existen alumnos matriculados sin un profesor asignado',
     }"
   ></alerta-general>
+  </section>
 }
+

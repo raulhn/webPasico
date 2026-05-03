@@ -7,5 +7,5 @@ import { Component, Input } from '@angular/core';
   standalone: false,
 })
 export class AlertaGeneralComponent {
-  @Input() infoAlerta = { titulo: '', cantidad: 0 };
+  @Input() infoAlerta = { titulo: '', cantidad: 0, descripcion: '' };
 }

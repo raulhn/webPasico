@@ -1,8 +1,36 @@
 .alerta-general {
-  border-radius: 5px;
-  padding: 10px;
-  margin: 10px;
-  color: #fff;
+  border-radius: 15px;
+  display:flex;
+  justify-content: center;
   border-width: 1px;
   border-style: solid;
+  box-shadow: 5px 10px 5px black;
+  flex-direction: column;
+  border-color: black;
+  position: relative;
+  overflow: hidden;
 }
+
+.alerta-general-titulo{
+  background-color: #DC143C;
+  height: 100%;
+  width: 100%;
+  color: white;
+  padding: 10px;
+}
+
+.alerta-general-descripcion{
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.alerta-general:hover {
+  box-shadow: 3px 5px 3px black;
+}
+
+
+
+
+
+

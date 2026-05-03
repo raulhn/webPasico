@@ -1,6 +1,11 @@
 @if (infoAlerta.cantidad > 0) {
-  <article>
-    <span class="alerta-general">{{ infoAlerta.titulo }}</span>
-    <span class="cantidad">{{ infoAlerta.cantidad }}</span>
+  <article class="alerta-general">
+
+    <span class="alerta-general-titulo">{{ infoAlerta.titulo }}</span>
+    <div class="alerta-general-descripcion">
+      <span class="">Afectados: {{ infoAlerta.cantidad }}</span>
+   <span>{{infoAlerta.descripcion}}</span>
+</div>
+
   </article>
 }
