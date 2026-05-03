@@ -41,7 +41,7 @@ export class HomeComponent implements OnInit {
   peticion_alumnos_sin_pago = {
     next: (res: any) => {
       console.log(res);
-      this.alumnos_sin_pago.set(res.alumnos_sin_forma_pago);
+      this.alumnos_sin_pago.set(res.alumnos_sin_pago);
       this.bCargadosAlumnosSinPago.set(true);
     },
     error: (err: any) => {
