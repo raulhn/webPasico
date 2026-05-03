@@ -1,6 +1,6 @@
 .alerta-general {
   border-radius: 15px;
-  display:flex;
+  display: flex;
   justify-content: center;
   border-width: 1px;
   border-style: solid;
@@ -9,17 +9,18 @@
   border-color: black;
   position: relative;
   overflow: hidden;
+  cursor: pointer;
 }
 
-.alerta-general-titulo{
-  background-color: #DC143C;
+.alerta-general-titulo {
+  background-color: #dc143c;
   height: 100%;
   width: 100%;
   color: white;
   padding: 10px;
 }
 
-.alerta-general-descripcion{
+.alerta-general-descripcion {
   padding: 10px;
   display: flex;
   flex-direction: column;
@@ -28,9 +29,3 @@
 .alerta-general:hover {
   box-shadow: 3px 5px 3px black;
 }
-
-
-
-
-
-
