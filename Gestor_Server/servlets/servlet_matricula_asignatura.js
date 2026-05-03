@@ -3,6 +3,7 @@ const comun = require("../servlets/servlet_comun.js");
 const profesor = require("../logica/profesor.js");
 const gestion_usuarios = require("../logica/usuario.js");
 const gestorMatriculaAsignatura = require("../logica/matricula_asignatura.js");
+const gestorCurso = require("../logica/curso.js");
 
 function obtener_matriculas_asignaturas_alumno(req, res) {
   comun.comprobaciones_profesor(req, res, async () => {
@@ -133,6 +134,29 @@ function dar_baja_asignatura(req, res) {
   });
 }
 
+function obtener_alumnos_sin_pago(req, res) {
+  comun.comprobaciones(req, res, async () => {
+    try {
+      const ultimo_curso = await gestorCurso.obtener_ultimo_curso();
+      const alumnos_sin_pago =
+        await gestorMatriculaAsignatura.obtener_alumnos_sin_pago(ultimo_curso);
+
+      res
+        .status(200)
+        .send({ error: false, alumnos_sin_pago: alumnos_sin_pago });
+    } catch (error) {
+      console.log(
+        "servlet_matricula_asignatura.js -> obtener_alumnos_sin_pago:",
+        error,
+      );
+      res.status(400).send({
+        error: true,
+        message: "Se ha producido un error al recuperar los alumnos sin pago",
+      });
+    }
+  });
+}
+
 module.exports.obtener_matriculas_asignaturas_alumno =
   obtener_matriculas_asignaturas_alumno;
 module.exports.actualizar_fecha_alta_matricula_asignatura =
@@ -141,3 +165,4 @@ module.exports.actualizar_fecha_baja_matricula_asignatura =
   actualizar_fecha_baja_matricula_asignatura;
 
 module.exports.dar_baja_asignatura = dar_baja_asignatura;
+module.exports.obtener_alumnos_sin_pago = obtener_alumnos_sin_pago;

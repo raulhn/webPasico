@@ -429,6 +429,35 @@ function obtener_alumnos_sin_profesor_baja(nid_curso, nid_asignatura) {
   });
 }
 
+function obtener_alumnos_sin_pago(nid_curso) {
+  const sql =
+    "select p.* from " +
+    constantes.ESQUEMA_BD +
+    ".persona p, " +
+    constantes.ESQUEMA_BD +
+    ".matricula m " +
+    constantes.ESQUEMA_BD +
+    ".matricula_asignatura ma " +
+    "where m.nid_persona = p.nid " +
+    " and ma.nid_matricula = m.nid " +
+    " and ((ma.fecha_baja is null) or (ma.fecha_baja > now()))" +
+    " and p.nid_forma pago is null";
+
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(sql, (error, results, fields) => {
+      if (error) {
+        console.log(
+          "matricula_asignatura.js -> obtener_alumnos_sin_pago:",
+          error,
+        );
+        reject("Se ha producido un error al recuperar los alumnos sin pago");
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
+
 module.exports.obtener_matriculas_asignaturas_alumno =
   obtener_matriculas_asignaturas_alumno;
 
@@ -455,3 +484,4 @@ module.exports.obtener_alumnos_sin_profesor_alta =
   obtener_alumnos_sin_profesor_alta;
 module.exports.obtener_alumnos_sin_profesor_baja =
   obtener_alumnos_sin_profesor_baja;
+module.exports.obtener_alumnos_sin_pago = obtener_alumnos_sin_pago;

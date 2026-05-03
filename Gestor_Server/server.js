@@ -214,6 +214,11 @@ app.post(
   servlet_matricula_asignatura.dar_baja_asignatura,
 );
 
+app.get(
+  "/obtener_alumnos_sin_pago",
+  servlet_matricula_asignatura.obtener_alumnos_sin_pago,
+);
+
 app.post(
   "/actualizar_precio_manual",
   servlet_matricula.registrar_precio_manual,
