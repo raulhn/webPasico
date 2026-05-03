@@ -366,7 +366,7 @@ function obtener_alumnos_sin_socio(nid_curso) {
     constantes.ESQUEMA_BD +
     ".persona p                                               " +
     " where ma.nid_matricula = m.nid                                             " +
-    " and m.nid_curso " +
+    " and m.nid_curso  = " +
     conexion.dbConn.escape(nid_curso) +
     "   and m.nid_persona = p.nid                                                " +
     "   and (ma.fecha_baja is null or ma.fecha_baja > now())                     " +
