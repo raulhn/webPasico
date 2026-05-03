@@ -157,6 +157,33 @@ function obtener_alumnos_sin_pago(req, res) {
   });
 }
 
+function obtener_alumnos_sin_profesor_curso_actual() {
+  comun.comprobaciones(req, res, async () => {
+    try {
+      const ultimo_curso = await gestorCurso.obtener_ultimo_curso();
+      const alumnos_sin_profesor =
+        await gestorMatriculaAsignatura.obtener_alumnos_sin_profesor(
+          ultimo_curso,
+          0,
+        );
+
+      res
+        .status(200)
+        .send({ error: false, alumnos_sin_profesor: alumnos_sin_profesor });
+    } catch (error) {
+      console.log(
+        "servlet_matricula_asignatura.js -> obtener_alumnos_sin_profesor_curso_actual:",
+        error,
+      );
+      res.status(400).send({
+        error: true,
+        message:
+          "Se ha producido un error al recuperar los alumnos sin profesor",
+      });
+    }
+  });
+}
+
 module.exports.obtener_matriculas_asignaturas_alumno =
   obtener_matriculas_asignaturas_alumno;
 module.exports.actualizar_fecha_alta_matricula_asignatura =
@@ -166,3 +193,5 @@ module.exports.actualizar_fecha_baja_matricula_asignatura =
 
 module.exports.dar_baja_asignatura = dar_baja_asignatura;
 module.exports.obtener_alumnos_sin_pago = obtener_alumnos_sin_pago;
+module.exports.obtener_alumnos_sin_profesor_curso_actual =
+  obtener_alumnos_sin_profesor_curso_actual;

@@ -256,6 +256,11 @@ app.post(
   servlet_matricula_asignatura.actualizar_fecha_baja_matricula_asignatura,
 );
 
+app.get(
+  "/obtener_alumnos_sin_profesor",
+  servlet_matricula_asignatura.obtener_alumnos_sin_profesor_curso_actual,
+);
+
 /** Forma de pago **/
 app.post("/registrar_forma_pago", servlet_persona.registrar_forma_pago);
 app.get("/obtener_forma_pago/:nid_titular", servlet_persona.obtener_forma_pago);
