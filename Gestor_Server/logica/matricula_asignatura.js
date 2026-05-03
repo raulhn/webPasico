@@ -435,13 +435,13 @@ function obtener_alumnos_sin_pago(nid_curso) {
     constantes.ESQUEMA_BD +
     ".persona p, " +
     constantes.ESQUEMA_BD +
-    ".matricula m " +
+    ".matricula m, " +
     constantes.ESQUEMA_BD +
     ".matricula_asignatura ma " +
     "where m.nid_persona = p.nid " +
     " and ma.nid_matricula = m.nid " +
     " and ((ma.fecha_baja is null) or (ma.fecha_baja > now()))" +
-    " and p.nid_forma pago is null";
+    " and p.nid_forma_pago is null";
 
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(sql, (error, results, fields) => {
