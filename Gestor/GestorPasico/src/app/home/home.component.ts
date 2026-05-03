@@ -25,7 +25,7 @@ export class HomeComponent implements OnInit {
 
   bCargadosAlumnosSinProfesor = signal(false);
   bCargadosAlumnosSinPago = signal(false);
-  bCargadosAlumnosSinSocios = signal(false);
+  bCargadosAlumnosSinSocio = signal(false);
   bCargadosSociosSinPago = signal(false);
 
   peticion_alumnos_sin_profesor = {
@@ -56,7 +56,7 @@ export class HomeComponent implements OnInit {
     next: (res: any) => {
       console.log(res);
       this.alumnos_sin_socios.set(res.alumnos_sin_socio);
-      this.bCargadosAlumnosSinSocios.set(true);
+      this.bCargadosAlumnosSinSocio.set(true);
       this.cdr.detectChanges();
     },
     error: (err: any) => {
