@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, signal } from '@angular/core';
 import { UsuariosService } from '../servicios/usuarios.service';
 import { AlertasService } from '../servicios/alertas.service';
 import { Router } from '@angular/router';
@@ -14,6 +14,7 @@ export class HomeComponent implements OnInit {
     private usuariosService: UsuariosService,
     private router: Router,
     private alertasService: AlertasService,
+    private cdr: ChangeDetectorRef,
   ) {}
   usuario = '';
 
@@ -26,6 +27,7 @@ export class HomeComponent implements OnInit {
     next: (res: any) => {
       console.log(res);
       this.alumnos_sin_profesor.set(res.alumnos_sin_profesor);
+      this.cdr.detectChanges();
     },
     error: (err: any) => {
       console.log(err);
@@ -36,6 +38,7 @@ export class HomeComponent implements OnInit {
     next: (res: any) => {
       console.log(res);
       this.alumnos_sin_pago.set(res.alumnos_sin_forma_pago);
+      this.cdr.detectChanges();
     },
     error: (err: any) => {
       console.log(err);
@@ -46,6 +49,7 @@ export class HomeComponent implements OnInit {
     next: (res: any) => {
       console.log(res);
       this.alumnos_sin_socios.set(res.alumnos_sin_socio);
+      this.cdr.detectChanges();
     },
     error: (err: any) => {
       console.log(err);
@@ -56,6 +60,7 @@ export class HomeComponent implements OnInit {
     next: (res: any) => {
       console.log(res);
       this.socios_sin_pago.set(res.socios_sin_forma_pago);
+      this.cdr.detectChanges();
     },
     error: (err: any) => {
       console.log(err);
