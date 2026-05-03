@@ -23,10 +23,16 @@ export class HomeComponent implements OnInit {
   alumnos_sin_socios = signal<any[]>([]);
   socios_sin_pago = signal<any[]>([]);
 
+  bCargadosAlumnosSinProfesor = signal(false);
+  bCargadosAlumnosSinPago = signal(false);
+  bCargadosAlumnosSinSocios = signal(false);
+  bCargadosSociosSinPago = signal(false);
+
   peticion_alumnos_sin_profesor = {
     next: (res: any) => {
       console.log(res);
       this.alumnos_sin_profesor.set(res.alumnos_sin_profesor);
+      this.bCargadosAlumnosSinProfesor.set(true);
       this.cdr.detectChanges();
     },
     error: (err: any) => {
@@ -38,6 +44,7 @@ export class HomeComponent implements OnInit {
     next: (res: any) => {
       console.log(res);
       this.alumnos_sin_pago.set(res.alumnos_sin_forma_pago);
+      this.bCargadosAlumnosSinPago.set(true);
       this.cdr.detectChanges();
     },
     error: (err: any) => {
@@ -49,6 +56,7 @@ export class HomeComponent implements OnInit {
     next: (res: any) => {
       console.log(res);
       this.alumnos_sin_socios.set(res.alumnos_sin_socio);
+      this.bCargadosAlumnosSinSocios.set(true);
       this.cdr.detectChanges();
     },
     error: (err: any) => {
@@ -60,6 +68,7 @@ export class HomeComponent implements OnInit {
     next: (res: any) => {
       console.log(res);
       this.socios_sin_pago.set(res.socios_sin_forma_pago);
+      this.bCargadosSociosSinPago.set(true);
       this.cdr.detectChanges();
     },
     error: (err: any) => {
