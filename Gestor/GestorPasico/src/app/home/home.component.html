@@ -1,7 +1,7 @@
 <app-menu></app-menu>
 
-@if (bCargadosAlumnosSinProfesor()) {
-  <section class="alerta" *ngIf="alumnos_sin_profesor().length > 0">
+@if (bCargadosAlumnosSinProfesor() && alumnos_sin_profesor().length > 0) {
+  <section class="alerta">
     <alerta-general
       [infoAlerta]="{
         titulo: 'Hay alumnos sin profesor asignado',
@@ -11,9 +11,8 @@
     ></alerta-general>
   </section>
 }
-
-@if (bCargadosAlumnosSinPago()) {
-  <section class="alerta" *ngIf="alumnos_sin_pago().length > 0">
+@if (bCargadosAlumnosSinPago() && alumnos_sin_pago().length > 0) {
+  <section class="alerta">
     <alerta-general
       [infoAlerta]="{
         titulo: 'Hay alumnos sin pago registrado',
@@ -23,9 +22,8 @@
     ></alerta-general>
   </section>
 }
-
-@if (bCargadosAlumnosSinSocio()) {
-  <section class="alerta" *ngIf="alumnos_sin_socios().length > 0">
+@if (bCargadosAlumnosSinSocio() && alumnos_sin_socios().length > 0) {
+  <section class="alerta">
     <alerta-general
       [infoAlerta]="{
         titulo: 'Hay alumnos sin socio registrado',
@@ -35,9 +33,8 @@
     ></alerta-general>
   </section>
 }
-
-@if (bCargadosSociosSinPago()) {
-  <section class="alerta" *ngIf="socios_sin_pago().length > 0">
+@if (bCargadosSociosSinPago() && socios_sin_pago().length > 0) {
+  <section class="alerta">
     <alerta-general
       [infoAlerta]="{
         titulo: 'Hay socios sin pago registrado',
