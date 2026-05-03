@@ -157,7 +157,7 @@ function obtener_alumnos_sin_pago(req, res) {
   });
 }
 
-function obtener_alumnos_sin_profesor_curso_actual() {
+function obtener_alumnos_sin_profesor_curso_actual(req, res) {
   comun.comprobaciones(req, res, async () => {
     try {
       const ultimo_curso = await gestorCurso.obtener_ultimo_curso();
