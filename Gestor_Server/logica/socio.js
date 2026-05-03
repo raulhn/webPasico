@@ -7,9 +7,9 @@ function existe_socio(nid_persona) {
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(
       "select count(*) cont from " +
-      constantes.ESQUEMA_BD +
-      ".socios where nid_persona = " +
-      conexion.dbConn.escape(nid_persona),
+        constantes.ESQUEMA_BD +
+        ".socios where nid_persona = " +
+        conexion.dbConn.escape(nid_persona),
       (error, results, fields) => {
         if (error) {
           console.log(error);
@@ -26,8 +26,8 @@ function obtener_siguiente_num_socio() {
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(
       "select max(num_socio) + 1 siguiente_num from " +
-      constantes.ESQUEMA_BD +
-      ".socios",
+        constantes.ESQUEMA_BD +
+        ".socios",
       (error, results, fields) => {
         if (error) {
           console.log(error);
@@ -105,19 +105,19 @@ function realiza_actualizacion_socio(
     conexion.dbConn.beginTransaction(() => {
       conexion.dbConn.query(
         "update " +
-        constantes.ESQUEMA_BD +
-        ".socios set fecha_baja = str_to_date(substr(nullif(" +
-        conexion.dbConn.escape(fecha_baja) +
-        ", ''), 1, 10) , '%Y-%m-%d')," +
-        " fecha_alta =  str_to_date(substr(nullif(" +
-        conexion.dbConn.escape(fecha_alta) +
-        ", ''), 1, 10) , '%Y-%m-%d'), " +
-        " num_socio = " +
-        conexion.dbConn.escape(num_socio) +
-        ", fecha_actualizacion = sysdate()" +
-        ", sucio = 'S'" +
-        " where nid_persona = " +
-        conexion.dbConn.escape(nid_persona),
+          constantes.ESQUEMA_BD +
+          ".socios set fecha_baja = str_to_date(substr(nullif(" +
+          conexion.dbConn.escape(fecha_baja) +
+          ", ''), 1, 10) , '%Y-%m-%d')," +
+          " fecha_alta =  str_to_date(substr(nullif(" +
+          conexion.dbConn.escape(fecha_alta) +
+          ", ''), 1, 10) , '%Y-%m-%d'), " +
+          " num_socio = " +
+          conexion.dbConn.escape(num_socio) +
+          ", fecha_actualizacion = sysdate()" +
+          ", sucio = 'S'" +
+          " where nid_persona = " +
+          conexion.dbConn.escape(nid_persona),
         (error, results, fields) => {
           if (error) {
             console.log(error);
@@ -165,10 +165,10 @@ function obtener_socios() {
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(
       "select p.*, date_format(s.fecha_alta, '%Y-%m-%d') fecha_alta, date_format(s.fecha_baja, '%Y-%m-%d') fecha_baja from " +
-      constantes.ESQUEMA_BD +
-      ".socios s, " +
-      constantes.ESQUEMA_BD +
-      ".persona p where s.nid_persona = p.nid",
+        constantes.ESQUEMA_BD +
+        ".socios s, " +
+        constantes.ESQUEMA_BD +
+        ".persona p where s.nid_persona = p.nid",
       (error, results, fields) => {
         if (error) {
           console.log(error);
@@ -185,11 +185,11 @@ function obtener_socios_alta() {
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(
       "select concat(ifnull(p.nif, ''), ' ',  ifnull(p.nombre, ''), ' ', ifnull(p.primer_apellido, ''), ' ' , ifnull(p.segundo_apellido, '')) etiqueta, p.*, date_format(s.fecha_alta, '%Y-%m-%d') fecha_alta, date_format(s.fecha_baja, '%Y-%m-%d') fecha_baja from " +
-      constantes.ESQUEMA_BD +
-      ".socios s, " +
-      constantes.ESQUEMA_BD +
-      ".persona p " +
-      " where s.nid_persona = p.nid and (s.fecha_baja is null or s.fecha_baja > sysdate())",
+        constantes.ESQUEMA_BD +
+        ".socios s, " +
+        constantes.ESQUEMA_BD +
+        ".persona p " +
+        " where s.nid_persona = p.nid and (s.fecha_baja is null or s.fecha_baja > sysdate())",
       (error, results, fields) => {
         if (error) {
           console.log(error);
@@ -206,11 +206,11 @@ function obtener_socios_baja() {
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(
       "select *, date_format(s.fecha_alta, '%Y-%m-%d') fecha_alta, date_format(s.fecha_baja, '%Y-%m-%d') fecha_baja from " +
-      constantes.ESQUEMA_BD +
-      ".socios s, " +
-      constantes.ESQUEMA_BD +
-      ".persona p " +
-      " where s.nid_persona = p.nid and s.fecha_baja <= sysdate()",
+        constantes.ESQUEMA_BD +
+        ".socios s, " +
+        constantes.ESQUEMA_BD +
+        ".persona p " +
+        " where s.nid_persona = p.nid and s.fecha_baja <= sysdate()",
       (error, results, fields) => {
         if (error) {
           console.log(error);
@@ -227,11 +227,11 @@ function obtener_socio(nid_persona) {
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(
       "select s.nid_persona, s.num_socio, date_format(s.fecha_alta, '%Y-%m-%d') fecha_alta, date_format(s.fecha_baja, '%Y-%m-%d') fecha_baja, " +
-      " fecha_actualizacion " +
-      " from " +
-      constantes.ESQUEMA_BD +
-      ".socios s where nid_persona = " +
-      conexion.dbConn.escape(nid_persona),
+        " fecha_actualizacion " +
+        " from " +
+        constantes.ESQUEMA_BD +
+        ".socios s where nid_persona = " +
+        conexion.dbConn.escape(nid_persona),
       (error, results, fields) => {
         if (error) {
           console.log(error);
@@ -249,11 +249,11 @@ function actualizar_sucio(nid_persona, sucio) {
     conexion.dbConn.beginTransaction(() => {
       conexion.dbConn.query(
         "update " +
-        constantes.ESQUEMA_BD +
-        ".socios set sucio = " +
-        conexion.dbConn.escape(sucio) +
-        " where nid_persona = " +
-        conexion.dbConn.escape(nid_persona),
+          constantes.ESQUEMA_BD +
+          ".socios set sucio = " +
+          conexion.dbConn.escape(sucio) +
+          " where nid_persona = " +
+          conexion.dbConn.escape(nid_persona),
         (error, results, fields) => {
           if (error) {
             console.log(error);
@@ -273,8 +273,8 @@ function obtener_sucios() {
   return new Promise((resolve, reject) => {
     conexion.dbConn.query(
       "select s.* from " +
-      constantes.ESQUEMA_BD +
-      ".socios s where s.sucio = 'S'",
+        constantes.ESQUEMA_BD +
+        ".socios s where s.sucio = 'S'",
       (error, results, fields) => {
         if (error) {
           console.log(error);
@@ -341,7 +341,10 @@ async function recuperar_socio(nid_persona) {
 async function recuperar_socio_alta(nid_persona) {
   try {
     let socio = await recuperar_socio(nid_persona);
-    if (socio && (!socio.fecha_baja || new Date(socio.fecha_baja) > new Date())) {
+    if (
+      socio &&
+      (!socio.fecha_baja || new Date(socio.fecha_baja) > new Date())
+    ) {
       return socio;
     } else {
       return null;
@@ -370,9 +373,29 @@ async function obtener_alumnos_sin_socio() {
 
     return lista_alumnos_sin_socio;
   } catch (error) {
-    console.log("socio.js -> obtener_alumnos_sin_soico", error);
+    console.log("socio.js -> obtener_alumnos_sin_socio", error);
     throw new Error("Error al obtener los alumnos sin socio");
   }
+}
+
+function obtener_socios_sin_forma_pago() {
+  const sql =
+    "select p.* from " +
+    constantes.ESQUEMA_BD +
+    ".socios s, pasico_gestor.persona p " +
+    " where s.nid_persona = p.nid " +
+    " and s.fecha_baja is null " +
+    " and nid_forma_pago is null";
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(sql, (error, results, fields) => {
+      if (error) {
+        console.log(error);
+        reject(error);
+      } else {
+        resolve(results);
+      }
+    });
+  });
 }
 
 module.exports.existe_socio = existe_socio;
@@ -390,3 +413,4 @@ module.exports.actualizar_socio_persona = actualizar_socio_persona;
 module.exports.recuperar_socio = recuperar_socio;
 module.exports.recuperar_socio_alta = recuperar_socio_alta;
 module.exports.obtener_alumnos_sin_socio = obtener_alumnos_sin_socio;
+module.exports.obtener_socios_sin_forma_pago = obtener_socios_sin_forma_pago;

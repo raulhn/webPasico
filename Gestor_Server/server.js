@@ -143,6 +143,10 @@ app.get("/obtener_socios_alta", servlet_socio.obtener_socios_alta);
 app.get("/obtener_socios_baja", servlet_socio.obtener_socios_baja);
 app.get("/obtener_socio/:nid_persona", servlet_socio.obtener_socio);
 app.get("/obtener_alumnos_sin_socio", servlet_socio.obtener_alumnos_sin_socio);
+app.get(
+  "/obtener_socios_sin_forma_pago",
+  servlet_socio.obtener_socios_sin_forma_pago,
+);
 
 /** Asignaturas **/
 app.post("/registrar_asignatura", servlet_asignatura.registrar_asignatura);

@@ -121,6 +121,23 @@ function obtener_alumnos_sin_socio(req, res) {
   });
 }
 
+function obtener_socios_sin_forma_pago(req, res) {
+  comun.comprobaciones(req, res, async () => {
+    try {
+      const socios_sin_forma_pago =
+        await socios.obtener_socios_sin_forma_pago();
+      res
+        .status(200)
+        .send({ error: false, socios_sin_forma_pago: socios_sin_forma_pago });
+    } catch (error) {
+      console.log("servlet_socios.js -> obtener_socios_sin_forma_pago", error);
+      res
+        .status(400)
+        .send({ error: true, mensaje: "Se ha producido un error" });
+    }
+  });
+}
+
 module.exports.registrar_socio = registrar_socio;
 module.exports.actualizar_socio = actualizar_socio;
 module.exports.obtener_socios = obtener_socios;
@@ -128,3 +145,4 @@ module.exports.obtener_socios_alta = obtener_socios_alta;
 module.exports.obtener_socios_baja = obtener_socios_baja;
 module.exports.obtener_socio = obtener_socio;
 module.exports.obtener_alumnos_sin_socio = obtener_alumnos_sin_socio;
+module.exports.obtener_socios_sin_forma_pago = obtener_socios_sin_forma_pago;
