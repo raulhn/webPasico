@@ -1,5 +1,10 @@
 .alerta {
   padding: 20px;
-  display:flex;
-  justify-content:center;
+  display: flex;
+  justify-content: center;
+}
+
+.enlace-alerta {
+  color: inherit; /* Hereda el color del texto padre */
+  text-decoration: none;
 }

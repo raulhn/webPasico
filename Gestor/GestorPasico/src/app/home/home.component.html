@@ -1,55 +1,54 @@
 <app-menu></app-menu>
 
 @if (bCargadosAlumnosSinProfesor() && alumnos_sin_profesor().length > 0) {
- <a href="/alerta_alumnos_sin_profesor">
-  <section class="alerta">
-    <alerta-general
-      [infoAlerta]="{
-        titulo: 'Hay alumnos sin profesor asignado',
-        cantidad: alumnos_sin_profesor().length,
-        descripcion: 'Existen alumnos matriculados sin un profesor asignado',
-      }"
-    ></alerta-general>
-  </section>
-</a>
+  <a class="enlace-alerta" href="/alerta_alumnos_sin_profesor">
+    <section class="alerta">
+      <alerta-general
+        [infoAlerta]="{
+          titulo: 'Hay alumnos sin profesor asignado',
+          cantidad: alumnos_sin_profesor().length,
+          descripcion: 'Existen alumnos matriculados sin un profesor asignado',
+        }"
+      ></alerta-general>
+    </section>
+  </a>
 }
 @if (bCargadosAlumnosSinPago() && alumnos_sin_pago().length > 0) {
-  <a href="/alerta_alumnos_sin_pago">
-  <section class="alerta">
-    <alerta-general
-      [infoAlerta]="{
-        titulo: 'Hay alumnos sin pago registrado',
-        cantidad: alumnos_sin_pago().length,
-        descripcion: 'Existen alumnos matriculados sin un pago registrado',
-      }"
-    ></alerta-general>
-  </section>
-</a>
+  <a class="enlace-alerta" href="/alerta_alumnos_sin_pago">
+    <section class="alerta">
+      <alerta-general
+        [infoAlerta]="{
+          titulo: 'Hay alumnos sin pago registrado',
+          cantidad: alumnos_sin_pago().length,
+          descripcion: 'Existen alumnos matriculados sin un pago registrado',
+        }"
+      ></alerta-general>
+    </section>
+  </a>
 }
 @if (bCargadosAlumnosSinSocio() && alumnos_sin_socios().length > 0) {
-  <a href="/alerta_alumnos_sin_socio">
+  <a class="enlace-alerta" href="/alerta_alumnos_sin_socio">
     <section class="alerta">
-    <alerta-general
-      [infoAlerta]="{
-        titulo: 'Hay alumnos sin socio registrado',
-        cantidad: alumnos_sin_socios().length,
-        descripcion: 'Existen alumnos matriculados sin un socio registrado',
-      }"
-    ></alerta-general>
-  </section>
-</a>
-
+      <alerta-general
+        [infoAlerta]="{
+          titulo: 'Hay alumnos sin socio registrado',
+          cantidad: alumnos_sin_socios().length,
+          descripcion: 'Existen alumnos matriculados sin un socio registrado',
+        }"
+      ></alerta-general>
+    </section>
+  </a>
 }
 @if (bCargadosSociosSinPago() && socios_sin_pago().length > 0) {
-  <a href="/alerta_socios_sin_pago">
+  <a class="enlace-alerta" href="/alerta_socios_sin_pago">
     <section class="alerta">
-    <alerta-general
-      [infoAlerta]="{
-        titulo: 'Hay socios sin pago registrado',
-        cantidad: socios_sin_pago().length,
-        descripcion: 'Existen socios sin un pago registrado',
-      }"
-    ></alerta-general>
-  </section>
-</a>
+      <alerta-general
+        [infoAlerta]="{
+          titulo: 'Hay socios sin pago registrado',
+          cantidad: socios_sin_pago().length,
+          descripcion: 'Existen socios sin un pago registrado',
+        }"
+      ></alerta-general>
+    </section>
+  </a>
 }
