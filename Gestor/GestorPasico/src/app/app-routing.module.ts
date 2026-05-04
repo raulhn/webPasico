@@ -42,6 +42,11 @@ import { ListaInstrumentosComponent } from './componente/lista-instrumentos/list
 import { CargaDatosComponent } from './componente/carga-datos/carga-datos.component';
 import { CargaLoteComponent } from './componente/carga-lote/carga-lote.component';
 
+import { AlertaAlumnosSinProfesorComponent } from './componente/alertas/alerta-alumnos-sin-profesor/alerta-alumnos-sin-profesor.component';
+import { AlertaAlumnosSinSocioComponent } from './componente/alertas/alerta-alumnos-sin-socio/alerta-alumnos-sin-socio.component';
+import { AlertaAlumnosSinPagoComponent } from './componente/alertas/alerta-alumnos-sin-pago/alerta-alumnos-sin-pago.component';
+import { AlertaSociosSinPagoComponent } from './componente/alertas/alerta-socios-sin-pago/alerta-socios-sin-pago.component';
+
 const routes: Routes = [
   {
     path: 'login',
@@ -202,6 +207,22 @@ const routes: Routes = [
   {
     path: 'carga_lote/:lote',
     component: CargaLoteComponent,
+  },
+  {
+    path: 'alerta_alumnos_sin_profesor',
+    component: AlertaAlumnosSinProfesorComponent,
+  },
+  {
+    path: 'alerta_alumnos_sin_socio',
+    component: AlertaAlumnosSinSocioComponent,
+  },
+  {
+    path: 'alerta_alumnos_sin_pago',
+    component: AlertaAlumnosSinPagoComponent,
+  },
+  {
+    path: 'alerta_socios_sin_pago',
+    component: AlertaSociosSinPagoComponent,
   },
 ];
 

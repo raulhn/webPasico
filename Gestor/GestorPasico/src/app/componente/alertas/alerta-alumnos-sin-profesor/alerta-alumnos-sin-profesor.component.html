@@ -1,1 +1,18 @@
 <p>alerta-alumnos-sin-profesor works!</p>
+@if (bCargadoAlumnos) {
+  <div>
+    <table
+      datatable
+      [dtOptions]="dtOptions_alumnosSinProfesor"
+      id="tabla_personas"
+      class="row-border hover"
+    ></table>
+    @if (persona_seleccionada !== undefined) {
+      <div class="float-end p-3">
+        <a [href]="obtenerUrlFicha()">
+          <button class="btn btn-primary">Ver Ficha</button></a
+        >
+      </div>
+    }
+  </div>
+}

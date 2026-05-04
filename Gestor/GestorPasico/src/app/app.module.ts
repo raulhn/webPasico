@@ -78,6 +78,11 @@ import { CargaLoteComponent } from './componente/carga-lote/carga-lote.component
 import { NgSelectorComponent } from './componente/componentes_ui/ng-selector/ng-selector.component';
 import { AlertaGeneralComponent } from './componente/alertas/alerta-general/alerta-general.component';
 
+import { AlertaAlumnosSinPagoComponent } from './componente/alertas/alerta-alumnos-sin-pago/alerta-alumnos-sin-pago.component';
+import { AlertaAlumnosSinSocioComponent } from './componente/alertas/alerta-alumnos-sin-socio/alerta-alumnos-sin-socio.component';
+import { AlertaAlumnosSinProfesorComponent } from './componente/alertas/alerta-alumnos-sin-profesor/alerta-alumnos-sin-profesor.component';
+import { AlertaSociosSinPagoComponent } from './componente/alertas/alerta-socios-sin-pago/alerta-socios-sin-pago.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -138,6 +143,10 @@ import { AlertaGeneralComponent } from './componente/alertas/alerta-general/aler
     CargaLoteComponent,
     NgSelectorComponent,
     AlertaGeneralComponent,
+    AlertaAlumnosSinPagoComponent,
+    AlertaAlumnosSinSocioComponent,
+    AlertaAlumnosSinProfesorComponent,
+    AlertaSociosSinPagoComponent,
   ],
   exports: [MenuComponent],
   bootstrap: [AppComponent],
