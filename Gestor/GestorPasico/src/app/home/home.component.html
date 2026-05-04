@@ -1,6 +1,7 @@
 <app-menu></app-menu>
 
 @if (bCargadosAlumnosSinProfesor() && alumnos_sin_profesor().length > 0) {
+ <a href="/alerta_alumnos_sin_profesor">
   <section class="alerta">
     <alerta-general
       [infoAlerta]="{
@@ -10,8 +11,10 @@
       }"
     ></alerta-general>
   </section>
+</a>
 }
 @if (bCargadosAlumnosSinPago() && alumnos_sin_pago().length > 0) {
+  <a href="/alerta_alumnos_sin_pago">
   <section class="alerta">
     <alerta-general
       [infoAlerta]="{
@@ -21,9 +24,11 @@
       }"
     ></alerta-general>
   </section>
+</a>
 }
 @if (bCargadosAlumnosSinSocio() && alumnos_sin_socios().length > 0) {
-  <section class="alerta">
+  <a href="/alerta_alumnos_sin_socio">
+    <section class="alerta">
     <alerta-general
       [infoAlerta]="{
         titulo: 'Hay alumnos sin socio registrado',
@@ -32,9 +37,12 @@
       }"
     ></alerta-general>
   </section>
+</a>
+
 }
 @if (bCargadosSociosSinPago() && socios_sin_pago().length > 0) {
-  <section class="alerta">
+  <a href="/alerta_socios_sin_pago">
+    <section class="alerta">
     <alerta-general
       [infoAlerta]="{
         titulo: 'Hay socios sin pago registrado',
@@ -43,4 +51,5 @@
       }"
     ></alerta-general>
   </section>
+</a>
 }

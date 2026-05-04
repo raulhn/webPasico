@@ -1,5 +1,6 @@
-<p>alerta-alumnos-sin-profesor works!</p>
-@if (bCargadoAlumnos) {
+<app-menu class=""></app-menu>
+
+@if (bCargadosAlumnos) {
   <div>
     <table
       datatable
@@ -7,7 +8,7 @@
       id="tabla_personas"
       class="row-border hover"
     ></table>
-    @if (persona_seleccionada !== undefined) {
+    @if (alumnoSeleccionado !== undefined) {
       <div class="float-end p-3">
         <a [href]="obtenerUrlFicha()">
           <button class="btn btn-primary">Ver Ficha</button></a

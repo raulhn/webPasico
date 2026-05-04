@@ -14,7 +14,7 @@ export class HomeComponent implements OnInit {
     private usuariosService: UsuariosService,
     private router: Router,
     private alertasService: AlertasService,
-  ) {}
+  ) { }
   usuario = '';
 
   alumnos_sin_profesor = signal<any[]>([]);
@@ -97,4 +97,5 @@ export class HomeComponent implements OnInit {
       .obtener_socios_sin_pago()
       .subscribe(this.peticion_socios_sin_pago);
   }
+
 }

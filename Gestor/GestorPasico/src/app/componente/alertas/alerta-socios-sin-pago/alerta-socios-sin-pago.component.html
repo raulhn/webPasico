@@ -1,13 +1,14 @@
-<p>alerta-socios-sin-pago works!</p>
-@if (bCargadoSocios) {
+<app-menu class=""></app-menu>
+
+@if (bCargadosSocios) {
   <div>
     <table
       datatable
-      [dtOptions]="dtOptions_sociosSinPago"
+      [dtOptions]="dtOptions_socioSinPago"
       id="tabla_personas"
       class="row-border hover"
     ></table>
-    @if (persona_seleccionada !== undefined) {
+    @if (socioSeleccionado !== undefined) {
       <div class="float-end p-3">
         <a [href]="obtenerUrlFicha()">
           <button class="btn btn-primary">Ver Ficha</button></a

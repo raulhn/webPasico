@@ -17,12 +17,12 @@ export class AlertaSociosSinPagoComponent implements OnInit {
 
   bCargadosSocios: boolean = false;
 
-  constructor(private alertasService: AlertasService) {}
+  constructor(private alertasService: AlertasService) { }
 
   peticion_socios_sin_pago = {
     next: (res: any) => {
       console.log(res);
-      this.sociosSinPago.set(res.socios_sin_pago);
+      this.sociosSinPago.set(res.socios_sin_forma_pago);
       var datatable = $('#tabla_personas').DataTable();
       datatable.destroy();
 
