@@ -1,19 +1,23 @@
 <app-menu class=""></app-menu>
 
-@if (bCargadosAlumnos) {
-  <div>
-    <table
-      datatable
-      [dtOptions]="dtOptions_alumnosSinProfesor"
-      id="tabla_personas"
-      class="row-border hover"
-    ></table>
-    @if (alumnoSeleccionado !== undefined) {
-      <div class="float-end p-3">
-        <a [href]="obtenerUrlFicha()">
-          <button class="btn btn-primary">Ver Ficha</button></a
-        >
-      </div>
-    }
-  </div>
-}
+<div class="container mt-5">
+  <h2>Alumnos sin pago</h2>
+  <hr />
+  @if (bCargadosAlumnos) {
+    <div>
+      <table
+        datatable
+        [dtOptions]="dtOptions_alumnosSinProfesor"
+        id="tabla_personas"
+        class="row-border hover"
+      ></table>
+      @if (alumnoSeleccionado !== undefined) {
+        <div class="float-end p-3">
+          <a [href]="obtenerUrlFicha()">
+            <button class="btn btn-primary">Ver Ficha</button></a
+          >
+        </div>
+      }
+    </div>
+  }
+</div>

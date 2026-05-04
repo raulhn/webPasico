@@ -1,19 +1,23 @@
 <app-menu class=""></app-menu>
 
-@if (bCargadosSocios) {
-  <div>
-    <table
-      datatable
-      [dtOptions]="dtOptions_socioSinPago"
-      id="tabla_personas"
-      class="row-border hover"
-    ></table>
-    @if (socioSeleccionado !== undefined) {
-      <div class="float-end p-3">
-        <a [href]="obtenerUrlFicha()">
-          <button class="btn btn-primary">Ver Ficha</button></a
-        >
-      </div>
-    }
-  </div>
-}
+<div class="container mt-5">
+  <h2>Socios sin pago</h2>
+  <hr />
+  @if (bCargadosSocios) {
+    <div>
+      <table
+        datatable
+        [dtOptions]="dtOptions_socioSinPago"
+        id="tabla_personas"
+        class="row-border hover"
+      ></table>
+      @if (socioSeleccionado !== undefined) {
+        <div class="float-end p-3">
+          <a [href]="obtenerUrlFicha()">
+            <button class="btn btn-primary">Ver Ficha</button></a
+          >
+        </div>
+      }
+    </div>
+  }
+</div>
