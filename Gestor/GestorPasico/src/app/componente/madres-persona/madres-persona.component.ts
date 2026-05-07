@@ -40,7 +40,9 @@ export class MadresPersonaComponent {
       }
       this.bCargadoMadre = true;
     },
-    error: (respuesta: any) => {},
+    error: (respuesta: any) => {
+      this.bCargadoMadre = true;
+    },
   };
 
   ngOnInit(): void {

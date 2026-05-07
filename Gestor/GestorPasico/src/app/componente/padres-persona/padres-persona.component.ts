@@ -42,7 +42,9 @@ export class PadresPersonaComponent implements OnInit {
       }
       this.bCargadoPadre = true;
     },
-    error: (respuesta: any) => {},
+    error: (respuesta: any) => {
+      this.bCargadoPadre = true;
+    },
   };
 
   ngOnInit(): void {
