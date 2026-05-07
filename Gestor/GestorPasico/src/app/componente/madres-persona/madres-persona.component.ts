@@ -35,7 +35,9 @@ export class MadresPersonaComponent {
 
   obtener_madre = {
     next: (respuesta: any) => {
-      this.madre = respuesta.madre['nid'];
+      if (respuesta.madre) {
+        this.madre = respuesta.madre['nid'];
+      }
       this.bCargadoMadre = true;
     },
     error: (respuesta: any) => {},
