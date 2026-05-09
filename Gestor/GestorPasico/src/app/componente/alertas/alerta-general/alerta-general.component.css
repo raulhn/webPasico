@@ -10,6 +10,7 @@
   position: relative;
   overflow: hidden;
   cursor: pointer;
+  width: 500px;
 }
 
 .alerta-general-titulo {
@@ -28,4 +29,5 @@
 
 .alerta-general:hover {
   box-shadow: 3px 5px 3px black;
+  transform: scale(1.1);
 }

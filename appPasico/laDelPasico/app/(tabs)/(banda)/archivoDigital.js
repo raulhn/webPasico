@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Modal, RefreshControl } from "react-native";
+import { View, Text, StyleSheet, Modal } from "react-native";
 import SelectorPartituras from "../../../componentes/componentesPartitura/SelectorPartituras";
 import FormularioPartitura from "../../../componentes/componentesPartitura/FormularioPartitura";
 import { useState } from "react";
@@ -9,9 +9,9 @@ export default function ArchivoDigital() {
   const [refrescar, setRefrescar] = useState(false);
 
   function refrescarPartituras() {
-    console.log("archivoDigital.js -> " + "Se lanza callback")
+    console.log("archivoDigital.js -> " + "Se lanza callback");
     setRefrescar(!refrescar);
-    setModalVisible(false)
+    setModalVisible(false);
   }
 
   const edicion = {
@@ -28,17 +28,19 @@ export default function ArchivoDigital() {
     setModalVisible(false);
   };
 
-  function callbackRegistroPartitura(nid_partitura)
-  {
-    console.log("callbackRegistroPartitura -> Se lanza callback", nid_partitura);
-    refrescarPartituras()
+  function callbackRegistroPartitura(nid_partitura) {
+    console.log(
+      "callbackRegistroPartitura -> Se lanza callback",
+      nid_partitura
+    );
+    refrescarPartituras();
   }
 
   return (
     <View style={estilos.container}>
       <Text style={estilos.title}>Archivo Digital</Text>
 
-      <SelectorPartituras edicion={edicion}  refrescar={refrescar} />
+      <SelectorPartituras edicion={edicion} refrescar={refrescar} />
       <Modal
         animationType="slide"
         visible={modalVisible}
@@ -48,7 +50,7 @@ export default function ArchivoDigital() {
       >
         <FormularioPartitura
           accionCancelar={cancelar}
-          callback={callbackRegistroPartitura}   
+          callback={callbackRegistroPartitura}
           nidPartitura={nidPartituraSeleccionada}
         />
       </Modal>

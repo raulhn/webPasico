@@ -8,3 +8,11 @@
   color: inherit; /* Hereda el color del texto padre */
   text-decoration: none;
 }
+
+
+.contenedor-alertas{
+  display: flex;
+  flex-wrap: wrap;
+}
+
+

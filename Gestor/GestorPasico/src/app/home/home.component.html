@@ -1,6 +1,7 @@
 <app-menu></app-menu>
 
-@if (bCargadosAlumnosSinProfesor() && alumnos_sin_profesor().length > 0) {
+<div class="contenedor-alertas">
+  @if (bCargadosAlumnosSinProfesor() && alumnos_sin_profesor().length > 0) {
   <a class="enlace-alerta" href="/alerta_alumnos_sin_profesor">
     <section class="alerta">
       <alerta-general
@@ -52,3 +53,5 @@
     </section>
   </a>
 }
+</div>
+

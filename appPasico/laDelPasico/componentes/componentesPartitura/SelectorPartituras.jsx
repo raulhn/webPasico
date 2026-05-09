@@ -27,7 +27,10 @@ export default function SelectorPartituras({ callback, edicion, refrescar }) {
   const { categorias, lanzarRefresco } = useCategoriasPartitura(cerrarSesion);
 
   const { esRol } = useRol();
-  const [categoriaSeleccionada, setCategoriaSeleccionada] = useState(null);
+  const [categoriaSeleccionada, setCategoriaSeleccionada] = useState({
+    etiqueta: "",
+    valor: null,
+  });
 
   const [filtroTexto, setFiltroTexto] = useState("");
 
