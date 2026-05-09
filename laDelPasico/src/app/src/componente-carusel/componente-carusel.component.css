@@ -1,0 +1,10 @@
+.item {
+  height: 550px;
+  overflow: hidden;
+  border-radius: 20px;
+}
+
+.item:hover {
+  height: auto;
+  overflow: visible;
+}
