@@ -28,6 +28,25 @@ export default function SelectorPartituras({ callback, edicion, refrescar }) {
 
   const { esRol } = useRol();
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState(null);
+
+  const [filtroTexto, setFiltroTexto] = useState("");
+
+  useEffect(() => {
+    const resultado = partituras.filter(
+      (partitura) =>
+        (partitura.titulo.toLowerCase().includes(filtroTexto.toLowerCase()) ||
+          partitura.autor.toLowerCase().includes(filtroTexto.toLowerCase()) ||
+          partitura.nombre_categoria
+            .toLowerCase()
+            .includes(filtroTexto.toLowerCase())) &&
+        (categoriaSeleccionada ||
+          categoriaSeleccionada.etiqueta === "" ||
+          partitura.nombre_categoria === categoriaSeleccionada.etiqueta)
+    );
+
+    setPartiturasFiltradas(resultado);
+  }, [categoriaSeleccionada, filtroTexto]);
+
   useEffect(() => {
     ServicePartituras.obtenerPartituras()
       .then((response) => {
@@ -53,13 +72,6 @@ export default function SelectorPartituras({ callback, edicion, refrescar }) {
 
   const actualizarCategoria = (texto) => {
     setCategoriaSeleccionada(texto);
-    const resultado = partituras.filter((partitura) =>
-      partitura.nombre_categoria
-        .toLowerCase()
-        .includes(texto.etiqueta.toLowerCase())
-    );
-
-    setPartiturasFiltradas(resultado);
   };
 
   function botonAdd() {
@@ -110,17 +122,7 @@ export default function SelectorPartituras({ callback, edicion, refrescar }) {
           placeholderTextColor="#888"
           style={{ width: "50%", color: "black" }}
           onChangeText={(text) => {
-            const filteredPartituras = partituras.filter(
-              (partitura) =>
-                (partitura.titulo.toLowerCase().includes(text.toLowerCase()) ||
-                  partitura.autor.toLowerCase().includes(text.toLowerCase()) ||
-                  partitura.nombre_categoria
-                    .toLowerCase()
-                    .includes(text.toLowerCase())) &&
-                (categoriaSeleccionada === null ||
-                  partitura.nombre_categoria === categoriaSeleccionada.etiqueta)
-            );
-            setPartiturasFiltradas(filteredPartituras);
+            setFiltroTexto(text);
           }}
         />
 
