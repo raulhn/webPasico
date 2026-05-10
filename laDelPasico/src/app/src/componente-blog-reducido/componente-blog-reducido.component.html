@@ -6,10 +6,10 @@
           <div
             class="g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative"
           >
-            <div class="contenedor-blog">
+            <div class="contenedor-blog imagen">
               <img
                 [src]="obtiene_url_imagen(blog['nid_imagen'])"
-                class="img-fluid imagen"
+                class="img-fluid "
               />
             </div>
             <div class="row" style="height: 350px">
@@ -17,11 +17,13 @@
                 <strong class="d-inline-block mb-2 text-primary"
                   >Noticias</strong
                 >
+                <div class="contenedor-titulo-multi">
                 <h3 class="mb-0">{{ blog["titulo"] }}</h3>
+</div>
                 <div class="mb-1 text-muted">
                   {{ obtiene_fecha(blog["fecha"]) }}
                 </div>
-                <div class="contenedor-texto">
+                <div class="contenedor-texto-multi">
                   <p class="card-text mb-auto">
                     {{ blog["descripcion"] }}
                   </p>
