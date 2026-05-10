@@ -4,17 +4,15 @@
       @if (pagina_actual == obtiene_paginacion(i)) {
         <div>
           <div
-            class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative"
+            class="g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative"
           >
-            <div class="row">
-              <div class="col">
-                <img
-                  [src]="obtiene_url_imagen(blog['nid_imagen'])"
-                  class="img-fluid imagen"
-                />
-              </div>
+            <div class="contenedor-blog">
+              <img
+                [src]="obtiene_url_imagen(blog['nid_imagen'])"
+                class="img-fluid imagen"
+              />
             </div>
-            <div class="row">
+            <div class="row" style="height: 350px">
               <div class="col p-4 d-flex flex-column position-static">
                 <strong class="d-inline-block mb-2 text-primary"
                   >Noticias</strong
@@ -23,7 +21,11 @@
                 <div class="mb-1 text-muted">
                   {{ obtiene_fecha(blog["fecha"]) }}
                 </div>
-                <p class="card-text mb-auto">{{ blog["descripcion"] }}</p>
+                <div class="contenedor-texto">
+                  <p class="card-text mb-auto">
+                    {{ blog["descripcion"] }}
+                  </p>
+                </div>
                 <a
                   [href]="obtiene_url_pagina(blog['nid_menu'])"
                   class="stretched-link"

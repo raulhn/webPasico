@@ -1,4 +1,16 @@
 .imagen {
   border-radius: 20px;
-  margin-top: 20px;
+  padding: 10px;
+}
+
+.contenedor-blog {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.contenedor-texto {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: 100px;
 }
