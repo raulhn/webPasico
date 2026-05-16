@@ -27,7 +27,7 @@ export default function Registro() {
   const [modalConfirmacionVisible, setModalConfirmacionVisible] =
     useState(false);
 
-  const solicitudRegistro = async () => {
+  async function reigstrar_usuario() {
     try {
       // Comprobación contraseña
       if (usuario.password !== confirmarPassword) {
@@ -52,6 +52,18 @@ export default function Registro() {
         "Usuario registrado exitosamente, revise su correo para activar la cuenta.",
       );
       setModalConfirmacionVisible(true);
+    } catch (error) {
+      console.error("Error:", error);
+      setMensajeError(
+        "Error al registrar el usuario. Por favor, inténtalo de nuevo.",
+      );
+      setModalErrorVisible(true);
+    }
+  }
+
+  const solicitudRegistro = () => {
+    try {
+      reigstrar_usuario();
     } catch (error) {
       console.error("Error:", error);
       setMensajeError(
