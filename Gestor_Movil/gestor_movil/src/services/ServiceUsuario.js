@@ -73,3 +73,27 @@ export function cambiarPassword(passwordActual, nuevoPassword) {
       });
   });
 }
+
+export function registrarUsuario(usuario, token_captcha) {
+  return new Promise((resolve, reject) => {
+    ServiceComun.peticionServicio(
+      "POST",
+      URL_SERVICIO_MOVIL + "registrar_usario",
+      {
+        nombre: usuario.nombre,
+        primer_apellido: usuario.primer_apellido,
+        segundo_apellido: usuario.segundo_apellido,
+        correoElectronico: usuario.correoElectronico,
+        password: usuario.password,
+        recaptchaToken: token_captcha,
+      },
+    )
+      .then((data) => {
+        resolve(data);
+      })
+      .catch((error) => {
+        console.log("Error en el servicio registrarUsuario");
+        reject(error);
+      });
+  });
+}

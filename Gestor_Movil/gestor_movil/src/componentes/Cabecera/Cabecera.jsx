@@ -48,7 +48,7 @@ export default function Cabecera() {
         }}
       >
         <h1 style={{ margin: 0, fontSize: "1.5rem", fontWeight: 700 }}>
-          Gestor Móvil
+          Banda del Pasico
         </h1>
         <nav>
           <ul
