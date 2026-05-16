@@ -27,7 +27,7 @@ export default function Registro() {
   const [modalConfirmacionVisible, setModalConfirmacionVisible] =
     useState(false);
 
-  async function reigstrar_usuario() {
+  const solicitudRegistro = async () => {
     try {
       // Comprobación contraseña
       if (usuario.password !== confirmarPassword) {
@@ -59,18 +59,6 @@ export default function Registro() {
       );
       setModalErrorVisible(true);
     }
-  }
-
-  const solicitudRegistro = () => {
-    try {
-      reigstrar_usuario();
-    } catch (error) {
-      console.error("Error:", error);
-      setMensajeError(
-        "Error al registrar el usuario. Por favor, inténtalo de nuevo.",
-      );
-      setModalErrorVisible(true);
-    }
   };
 
   return (
@@ -91,10 +79,11 @@ export default function Registro() {
           }}
         />
         <div className="contenedor">
+          <label> Nombre </label>
+
           <div className="campo">
-            <label> Nombre </label>
             <EntradaTexto
-              label="Nombre"
+              width={"300px"}
               valorDefecto={usuario.nombre}
               setTexto={(nombre) => setUsuario({ ...usuario, nombre: nombre })}
             />
@@ -102,7 +91,7 @@ export default function Registro() {
           <label> Primer Apellido </label>
           <div className="campo">
             <EntradaTexto
-              label="Primer Apellido"
+              width={"300px"}
               valorDefecto={usuario.primer_apellido}
               setTexto={(primer_apellido) =>
                 setUsuario({ ...usuario, primer_apellido: primer_apellido })
@@ -112,7 +101,7 @@ export default function Registro() {
           <label> Segundo Apellido </label>
           <div className="campo">
             <EntradaTexto
-              label="Segundo Apellido"
+              width={"300px"}
               valorDefecto={usuario.segundo_apellido}
               setTexto={(segundo_apellido) =>
                 setUsuario({ ...usuario, segundo_apellido: segundo_apellido })
@@ -122,7 +111,7 @@ export default function Registro() {
           <label> Correo Electrónico </label>
           <div className="campo">
             <EntradaTexto
-              label="Correo Electrónico"
+              width={"500px"}
               valorDefecto={usuario.correoElectronico}
               setTexto={(correoElectronico) =>
                 setUsuario({ ...usuario, correoElectronico: correoElectronico })
@@ -132,8 +121,8 @@ export default function Registro() {
           <label> Contraseña </label>
           <div className="campo">
             <EntradaTexto
-              label="Contraseña"
-              type="password"
+              width={"300px"}
+              secuere={true}
               valorDefecto={usuario.password}
               setTexto={(password) =>
                 setUsuario({ ...usuario, password: password })
@@ -143,8 +132,8 @@ export default function Registro() {
           <label> Confirmar Contraseña </label>
           <div>
             <EntradaTexto
-              label="Confirmar Contraseña"
-              type="password"
+              secure={true}
+              width={"300px"}
               valorDefecto={confirmarPassword}
               setTexto={(confirmarPassword) =>
                 setConfirmarPassword(confirmarPassword)
