@@ -8,6 +8,7 @@ import {
 import "./Registro.css";
 import Turnstile from "react-turnstile";
 import { registrarUsuario } from "../../../services/ServiceUsuario.js";
+import { PUBLIC_KEY_TURNSTILE } from "../../../config/Constantes.js";
 
 export default function Registro() {
   const [usuario, setUsuario] = useState({
@@ -28,12 +29,25 @@ export default function Registro() {
 
   const solicitudRegistro = async () => {
     try {
+      // Comprobación contraseña
       if (usuario.password !== confirmarPassword) {
         setMensajeError("Las contraseñas no coinciden");
         setModalErrorVisible(true);
         return;
       }
+
+      if (
+        usuario.correoElectronico.trim() === "" ||
+        usuario.password.trim() === "" ||
+        usuario.nombre.trim() === "" ||
+        usuario.primer_apellido.trim() === ""
+      ) {
+        setMensajeError("Por favor, complete todos los campos obligatorios");
+        setModalErrorVisible(true);
+        return;
+      }
       await registrarUsuario(usuario, tokenTurnstile);
+
       setMensajeConfirmacion(
         "Usuario registrado exitosamente, revise su correo para activar la cuenta.",
       );
@@ -52,7 +66,7 @@ export default function Registro() {
       <h2>Registro</h2>
       <form>
         <Turnstile
-          sitekey="0x4AAAAAAACVqj8X9ZgL2e"
+          sitekey={PUBLIC_KEY_TURNSTILE}
           onVerify={(token) => {
             setTokenTurnstile(token);
             console.log("Token de verificación:", token);
@@ -66,12 +80,14 @@ export default function Registro() {
         />
         <div className="contenedor">
           <div className="campo">
+            <label> Nombre </label>
             <EntradaTexto
               label="Nombre"
               valorDefecto={usuario.nombre}
               setTexto={(nombre) => setUsuario({ ...usuario, nombre: nombre })}
             />
           </div>
+          <label> Primer Apellido </label>
           <div className="campo">
             <EntradaTexto
               label="Primer Apellido"
@@ -81,6 +97,7 @@ export default function Registro() {
               }
             />
           </div>
+          <label> Segundo Apellido </label>
           <div className="campo">
             <EntradaTexto
               label="Segundo Apellido"
@@ -90,6 +107,7 @@ export default function Registro() {
               }
             />
           </div>
+          <label> Correo Electrónico </label>
           <div className="campo">
             <EntradaTexto
               label="Correo Electrónico"
@@ -99,6 +117,7 @@ export default function Registro() {
               }
             />
           </div>
+          <label> Contraseña </label>
           <div className="campo">
             <EntradaTexto
               label="Contraseña"
@@ -109,6 +128,7 @@ export default function Registro() {
               }
             />
           </div>
+          <label> Confirmar Contraseña </label>
           <div>
             <EntradaTexto
               label="Confirmar Contraseña"
