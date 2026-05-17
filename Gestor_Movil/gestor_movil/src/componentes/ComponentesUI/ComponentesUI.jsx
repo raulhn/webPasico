@@ -33,9 +33,13 @@ export function EntradaTexto({
   );
 }
 
-export function Boton({ texto = "Botón", onClick = () => {} }) {
+export function Boton({
+  texto = "Botón",
+  type = "button",
+  onClick = () => {},
+}) {
   return (
-    <button className={"boton"} onClick={onClick}>
+    <button className={"boton"} onClick={onClick} type={type}>
       {texto}
     </button>
   );
