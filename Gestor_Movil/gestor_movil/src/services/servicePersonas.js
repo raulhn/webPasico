@@ -58,3 +58,20 @@ export async function obtenerPersonasAlumnosCurso(nidCurso, activo) {
     );
   }
 }
+
+export async function recuperarPassword(email) {
+  try {
+    const respuesta = await peticionServicio(
+      "POST",
+      Constantes.URL_SERVICIO_MOVIL + "recuperar_pasword",
+      {
+        correoElectronico: email,
+      },
+    );
+
+    return respuesta;
+  } catch (error) {
+    console.log("Se ha producido un error al recuperarr la contraseña");
+    throw new Error("Error al recuperar la contraseña: ", error);
+  }
+}

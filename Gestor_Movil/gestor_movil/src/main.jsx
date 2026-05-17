@@ -16,6 +16,7 @@ import FichaPersona from "./componentes/Personas/FichaPersona/FichaPersona.jsx";
 import SelectorEvaluacionesProfesor from "./componentes/Escuela/SelectorEvaluacionesProfesor/SelectorEvaluacionesProfesor.jsx";
 import EvaluacionesProfesor from "./componentes/Escuela/EvaluacionesProfesor/EvaluacionesProfesor.jsx";
 import Registro from "./componentes/Usuarios/Registro/Registro.jsx";
+import RecuperarPassword from "./componentes/Usuarios/RecuperaPassword/RecuperaPassword.jsx";
 
 createRoot(document.getElementById("root")).render(
   <UsuarioProvider>
@@ -59,6 +60,10 @@ createRoot(document.getElementById("root")).render(
           element={<EvaluacionesProfesor />}
         />
         <Route path="/gestion/registro" element={<Registro />} />
+        <Route
+          path="/gestion/recuperarPassword"
+          element={<RecuperarPassword />}
+        />
       </Routes>
     </BrowserRouter>
   </UsuarioProvider>,
