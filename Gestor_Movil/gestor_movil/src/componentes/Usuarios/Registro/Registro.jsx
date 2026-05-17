@@ -68,11 +68,8 @@ export default function Registro() {
         sitekey={PUBLIC_KEY_TURNSTILE}
         onVerify={(token) => {
           setTokenTurnstile(token);
-          console.log("Token de verificación:", token);
         }}
-        onExpire={() => {
-          console.log("El token ha expirado");
-        }}
+        onExpire={() => {}}
         onError={(err) => {
           console.error("Error en Turnstile:", err);
         }}

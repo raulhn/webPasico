@@ -76,6 +76,22 @@ export function cambiarPassword(passwordActual, nuevoPassword) {
 
 export function registrarUsuario(usuario, token_captcha) {
   return new Promise((resolve, reject) => {
+    fetch(URL_SERVICIO_MOVIL + "registrar_usario", {
+      nombre: usuario.nombre,
+      primer_apellido: usuario.primer_apellido,
+      segundo_apellido: usuario.segundo_apellido,
+      correoElectronico: usuario.correoElectronico,
+      password: usuario.password,
+      recaptchaToken: token_captcha,
+    })
+      .then((response) => {
+        resolve(response.json());
+      })
+      .catch((error) => {
+        reject(error);
+        console.log("Error en el servicio registrarUsuario");
+      });
+
     ServiceComun.peticionServicio(
       "POST",
       URL_SERVICIO_MOVIL + "registrar_usario",
