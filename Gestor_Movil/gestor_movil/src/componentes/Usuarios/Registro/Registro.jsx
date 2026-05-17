@@ -64,87 +64,85 @@ export default function Registro() {
   return (
     <div className="contenedor">
       <h2>Registro</h2>
-      <form>
-        <Turnstile
-          sitekey={PUBLIC_KEY_TURNSTILE}
-          onVerify={(token) => {
-            setTokenTurnstile(token);
-            console.log("Token de verificación:", token);
-          }}
-          onExpire={() => {
-            console.log("El token ha expirado");
-          }}
-          onError={(err) => {
-            console.error("Error en Turnstile:", err);
-          }}
-        />
-        <div className="contenedor">
-          <label> Nombre </label>
+      <Turnstile
+        sitekey={PUBLIC_KEY_TURNSTILE}
+        onVerify={(token) => {
+          setTokenTurnstile(token);
+          console.log("Token de verificación:", token);
+        }}
+        onExpire={() => {
+          console.log("El token ha expirado");
+        }}
+        onError={(err) => {
+          console.error("Error en Turnstile:", err);
+        }}
+      />
+      <div className="contenedor">
+        <label> Nombre </label>
 
-          <div className="campo">
-            <EntradaTexto
-              width={"300px"}
-              valorDefecto={usuario.nombre}
-              setTexto={(nombre) => setUsuario({ ...usuario, nombre: nombre })}
-            />
-          </div>
-          <label> Primer Apellido </label>
-          <div className="campo">
-            <EntradaTexto
-              width={"300px"}
-              valorDefecto={usuario.primer_apellido}
-              setTexto={(primer_apellido) =>
-                setUsuario({ ...usuario, primer_apellido: primer_apellido })
-              }
-            />
-          </div>
-          <label> Segundo Apellido </label>
-          <div className="campo">
-            <EntradaTexto
-              width={"300px"}
-              valorDefecto={usuario.segundo_apellido}
-              setTexto={(segundo_apellido) =>
-                setUsuario({ ...usuario, segundo_apellido: segundo_apellido })
-              }
-            />
-          </div>
-          <label> Correo Electrónico </label>
-          <div className="campo">
-            <EntradaTexto
-              width={"500px"}
-              valorDefecto={usuario.correoElectronico}
-              setTexto={(correoElectronico) =>
-                setUsuario({ ...usuario, correoElectronico: correoElectronico })
-              }
-            />
-          </div>
-          <label> Contraseña </label>
-          <div className="campo">
-            <EntradaTexto
-              width={"300px"}
-              secuere={true}
-              valorDefecto={usuario.password}
-              setTexto={(password) =>
-                setUsuario({ ...usuario, password: password })
-              }
-            />
-          </div>
-          <label> Confirmar Contraseña </label>
-          <div>
-            <EntradaTexto
-              secure={true}
-              width={"300px"}
-              valorDefecto={confirmarPassword}
-              setTexto={(confirmarPassword) =>
-                setConfirmarPassword(confirmarPassword)
-              }
-            />
-          </div>
-          <div className="campo">
-            <Boton texto="Registrar" onClick={solicitudRegistro}></Boton>
-          </div>
+        <div className="campo">
+          <EntradaTexto
+            width={"300px"}
+            valorDefecto={usuario.nombre}
+            setTexto={(nombre) => setUsuario({ ...usuario, nombre: nombre })}
+          />
         </div>
-      </form>
+        <label> Primer Apellido </label>
+        <div className="campo">
+          <EntradaTexto
+            width={"300px"}
+            valorDefecto={usuario.primer_apellido}
+            setTexto={(primer_apellido) =>
+              setUsuario({ ...usuario, primer_apellido: primer_apellido })
+            }
+          />
+        </div>
+        <label> Segundo Apellido </label>
+        <div className="campo">
+          <EntradaTexto
+            width={"300px"}
+            valorDefecto={usuario.segundo_apellido}
+            setTexto={(segundo_apellido) =>
+              setUsuario({ ...usuario, segundo_apellido: segundo_apellido })
+            }
+          />
+        </div>
+        <label> Correo Electrónico </label>
+        <div className="campo">
+          <EntradaTexto
+            width={"500px"}
+            valorDefecto={usuario.correoElectronico}
+            setTexto={(correoElectronico) =>
+              setUsuario({ ...usuario, correoElectronico: correoElectronico })
+            }
+          />
+        </div>
+        <label> Contraseña </label>
+        <div className="campo">
+          <EntradaTexto
+            width={"300px"}
+            secuere={true}
+            valorDefecto={usuario.password}
+            setTexto={(password) =>
+              setUsuario({ ...usuario, password: password })
+            }
+          />
+        </div>
+        <label> Confirmar Contraseña </label>
+        <div>
+          <EntradaTexto
+            secure={true}
+            width={"300px"}
+            valorDefecto={confirmarPassword}
+            setTexto={(confirmarPassword) =>
+              setConfirmarPassword(confirmarPassword)
+            }
+          />
+        </div>
+        <div className="campo">
+          <Boton texto="Registrar" onClick={solicitudRegistro}></Boton>
+        </div>
+      </div>
 
       <ModalAviso
         visible={modalErrorVisible}
