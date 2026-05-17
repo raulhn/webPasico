@@ -148,15 +148,15 @@ export default function Registro() {
         visible={modalErrorVisible}
         onClose={() => setModalErrorVisible(false)}
         mensaje={mensajeError}
-        textoBoton="Aceptar"
-        titulo="Error de Registro"
+        textBoton={"Aceptar"}
+        titulo={"Error de Registro"}
       />
       <ModalConfirmacion
         visible={modalConfirmacionVisible}
         onClose={() => setModalConfirmacionVisible(false)}
         mensaje={mensajeConfirmacion}
-        textoBoton="Aceptar"
-        titulo="Registro Correcto"
+        textBoton={"Aceptar"}
+        titulo={"Registro Correcto"}
       />
     </div>
   );
