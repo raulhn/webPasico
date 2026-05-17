@@ -27,7 +27,7 @@ export default function Registro() {
   const [modalConfirmacionVisible, setModalConfirmacionVisible] =
     useState(false);
 
-  const solicitudRegistro = async () => {
+  async function solicitudRegistro() {
     try {
       // Comprobación contraseña
       if (usuario.password !== confirmarPassword) {
@@ -59,7 +59,7 @@ export default function Registro() {
       );
       setModalErrorVisible(true);
     }
-  };
+  }
 
   return (
     <div className="contenedor">
