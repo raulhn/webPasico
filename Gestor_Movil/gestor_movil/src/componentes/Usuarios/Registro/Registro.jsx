@@ -3,7 +3,7 @@ import {
   EntradaTexto,
   Boton,
   ModalAviso,
-  ModalConfirmacion,
+  ModalExito,
 } from "../../ComponentesUI/ComponentesUI";
 import "./Registro.css";
 import Turnstile from "react-turnstile";
@@ -46,8 +46,12 @@ export default function Registro() {
         setModalErrorVisible(true);
         return;
       }
-      await registrarUsuario(usuario, tokenTurnstile);
+      const respuesta = await registrarUsuario(usuario, tokenTurnstile);
 
+      if (respuesta.error) {
+        setModalErrorVisible(true);
+        setMensajeError("Se ha producido un error durante el registro");
+      }
       setMensajeConfirmacion(
         "Usuario registrado exitosamente, revise su correo para activar la cuenta.",
       );
@@ -118,7 +122,7 @@ export default function Registro() {
         <div className="campo">
           <EntradaTexto
             width={"300px"}
-            secuere={true}
+            secure={true}
             valorDefecto={usuario.password}
             setTexto={(password) =>
               setUsuario({ ...usuario, password: password })
@@ -148,7 +152,7 @@ export default function Registro() {
         textBoton={"Aceptar"}
         titulo={"Error de Registro"}
       />
-      <ModalConfirmacion
+      <ModalExito
         visible={modalConfirmacionVisible}
         setVisible={setModalConfirmacionVisible}
         mensaje={mensajeConfirmacion}

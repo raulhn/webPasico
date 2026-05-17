@@ -81,8 +81,8 @@ export function registrarUsuario(usuario, token_captcha) {
       URL_SERVICIO_MOVIL + "registrar_usuario",
       {
         nombre: usuario.nombre,
-        primer_apellido: usuario.primer_apellido,
-        segundo_apellido: usuario.segundo_apellido,
+        primerApellido: usuario.primer_apellido,
+        segundoApellido: usuario.segundo_apellido,
         correoElectronico: usuario.correoElectronico,
         password: usuario.password,
         recaptchaToken: token_captcha,
