@@ -77,7 +77,7 @@ export function cambiarPassword(passwordActual, nuevoPassword) {
 export function registrarUsuario(usuario, token_captcha) {
   return new Promise((resolve, reject) => {
     ServiceComun.peticionServicio(
-      "POST",
+      "PUT",
       URL_SERVICIO_MOVIL + "registrar_usuario",
       {
         nombre: usuario.nombre,
