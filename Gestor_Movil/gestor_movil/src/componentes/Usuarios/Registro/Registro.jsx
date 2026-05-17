@@ -22,8 +22,8 @@ export default function Registro() {
   const [confirmarPassword, setConfirmarPassword] = useState("");
   const [modalErrorVisible, setModalErrorVisible] = useState(false);
   const [tokenTurnstile, setTokenTurnstile] = useState("");
-  const { mensajeError, setMensajeError } = useState("");
-  const { mensajeConfirmacion, setMensajeConfirmacion } = useState("");
+  const [mensajeError, setMensajeError] = useState("");
+  const [mensajeConfirmacion, setMensajeConfirmacion] = useState("");
   const [modalConfirmacionVisible, setModalConfirmacionVisible] =
     useState(false);
 
