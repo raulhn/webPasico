@@ -76,7 +76,7 @@ export function cambiarPassword(passwordActual, nuevoPassword) {
 
 export function registrarUsuario(usuario, token_captcha) {
   return new Promise((resolve, reject) => {
-    fetch(URL_SERVICIO_MOVIL + "registrar_usario", {
+    fetch(URL_SERVICIO_MOVIL + "registrar_usuario", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: {
