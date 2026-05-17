@@ -140,7 +140,7 @@ export default function Registro() {
           />
         </div>
         <div className="campo">
-          <Boton texto="Registrar" onClick={solicitudRegistro}></Boton>
+          <Boton texto={"Registrar"} onClick={solicitudRegistro}></Boton>
         </div>
       </div>
 
