@@ -5,7 +5,7 @@ import {
   ModalExito,
 } from "../../ComponentesUI/ComponentesUI.jsx";
 import { useState } from "react";
-import { recuperarPassword } from "../../../services/servicePersonas.js";
+import { recuperarPassword } from "../../../services/ServiceUsuario.js";
 
 export default function RecuperarPassword() {
   const [email, setEmail] = useState("");

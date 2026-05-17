@@ -97,3 +97,20 @@ export function registrarUsuario(usuario, token_captcha) {
       });
   });
 }
+
+export async function recuperarPassword(email) {
+  try {
+    const respuesta = await ServiceComun.peticionServicio(
+      "POST",
+      URL_SERVICIO_MOVIL + "recuperar_password",
+      {
+        correoElectronico: email,
+      },
+    );
+
+    return respuesta;
+  } catch (error) {
+    console.log("Se ha producido un error al recuperarr la contraseña");
+    throw new Error("Error al recuperar la contraseña: ", error);
+  }
+}
