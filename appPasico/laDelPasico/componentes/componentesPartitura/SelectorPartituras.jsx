@@ -42,9 +42,9 @@ export default function SelectorPartituras({ callback, edicion, refrescar }) {
           partitura.nombre_categoria
             .toLowerCase()
             .includes(filtroTexto.toLowerCase())) &&
-        (categoriaSeleccionada ||
-          categoriaSeleccionada.etiqueta === "" ||
-          partitura.nombre_categoria === categoriaSeleccionada.etiqueta)
+        categoriaSeleccionada &&
+        (categoriaSeleccionada.etiqueta === "" ||
+          partitura.nombre_categoria === categoriaSeleccionada.etiqueta),
     );
 
     setPartiturasFiltradas(resultado);
