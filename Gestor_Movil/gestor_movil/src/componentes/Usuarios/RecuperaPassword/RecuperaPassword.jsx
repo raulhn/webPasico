@@ -35,8 +35,9 @@ export default function RecuperarPassword() {
           setTexto={setEmail}
           width={"350px"}
         />
+        <Boton texto="Envia" onClick={solicitarRecuperarPassword}></Boton>
       </div>
-      <Boton texto="Envia" onClick={solicitarRecuperarPassword}></Boton>
+
       <ModalExito
         visible={visibleModalExito}
         setVisible={setVisibleModalExito}
