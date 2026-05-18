@@ -6,6 +6,7 @@ import {
 } from "../../ComponentesUI/ComponentesUI.jsx";
 import { useState } from "react";
 import { recuperarPassword } from "../../../services/ServiceUsuario.js";
+import "./RecuperaPassword.css";
 
 export default function RecuperarPassword() {
   const [email, setEmail] = useState("");
@@ -27,9 +28,14 @@ export default function RecuperarPassword() {
   }
   return (
     <div class="container">
-      <label>Email</label>
-      <EntradaTexto valorDefecto={email} setTexto={setEmail} width={"350px"} />
-
+      <div class="contenedor">
+        <label>Email</label>
+        <EntradaTexto
+          valorDefecto={email}
+          setTexto={setEmail}
+          width={"350px"}
+        />
+      </div>
       <Boton texto="Envia" onClick={solicitarRecuperarPassword}></Boton>
       <ModalExito
         visible={visibleModalExito}
