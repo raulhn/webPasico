@@ -29,6 +29,7 @@ export default function RecuperarPassword() {
   return (
     <div class="container">
       <div class="contenedor">
+        <h2>Recuperar contraseña</h2>
         <label>Email</label>
         <EntradaTexto
           valorDefecto={email}
