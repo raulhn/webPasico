@@ -7,7 +7,7 @@ function registrarEvaluacionMatriculaServicio(req, res) {
     try {
       const nid_matricula_asignatura = req.body.nid_matricula_asignatura;
       const fecha_actualizacion = req.body.fecha_actualizacion;
-      const nota = req.body.nota;
+      const nota = replace(req.body.nota, ",", ".");
       const nid_tipo_progreso = req.body.nid_tipo_progreso;
       const comentario = req.body.comentario;
 
@@ -16,11 +16,15 @@ function registrarEvaluacionMatriculaServicio(req, res) {
       const nid_curso = req.body.nid_curso;
       const nid_trimestre = req.body.nid_trimestre;
 
+      const evaluacion = await gestor_evaluacion.obtenerEvaluacion(
+        nid_curso,
+        nid_asignatura,
+        nid_trimestre,
+        nid_profesor,
+      );
 
-      const evaluacion = await gestor_evaluacion.obtenerEvaluacion(nid_curso, nid_asignatura, nid_trimestre, nid_profesor);
-
-      if(!evaluacion) {
-        console.log("No se ha encontrado evaluacion")
+      if (!evaluacion) {
+        console.log("No se ha encontrado evaluacion");
         return;
       }
 
@@ -30,7 +34,7 @@ function registrarEvaluacionMatriculaServicio(req, res) {
         nid_tipo_progreso,
         nid_matricula_asignatura,
         comentario,
-        fecha_actualizacion
+        fecha_actualizacion,
       );
       res.status(200).send({
         error: false,
@@ -39,7 +43,7 @@ function registrarEvaluacionMatriculaServicio(req, res) {
     } catch (error) {
       console.error(
         "servlet_evaluacion_matricula.js -> registrarEvaluacionMatricula: Error al registrar la evaluación matrícula:",
-        error
+        error,
       );
       res.status(400).send({
         error: true,
@@ -55,12 +59,13 @@ function obtenerEvaluacionesMatriculaSucias(req, res) {
       const evaluacionesMatricula =
         await gestor_evaluacion_matricula.obtenerEvaluacionMatriculaSucias();
 
-      
-      res.status(200).send({ error: false, evaluaciones: evaluacionesMatricula });
+      res
+        .status(200)
+        .send({ error: false, evaluaciones: evaluacionesMatricula });
     } catch (error) {
       console.error(
         "servlet_evaluacion_matricula.js -> obtenerEvaluacionesMatriculaSucicas: Error al obtener las evaluaciones matrícula sucias:",
-        error
+        error,
       );
       res.status(500).send({
         error: true,
@@ -75,7 +80,7 @@ async function actualizarEvaluacionMatriculaSucia(req, res) {
     try {
       const nidEvaluacionMatricula = req.body.nid_evaluacion_matricula;
       await gestor_evaluacion_matricula.actualizarEvaluacionMatriculaSucia(
-        nidEvaluacionMatricula
+        nidEvaluacionMatricula,
       );
       res.status(200).send({
         error: false,
@@ -84,7 +89,7 @@ async function actualizarEvaluacionMatriculaSucia(req, res) {
     } catch (error) {
       console.error(
         "servlet_evaluacion_matricula.js -> actualizarEvaluacionMatriculaSucia: Error al actualizar la evaluación matrícula sucia:",
-        error
+        error,
       );
       res.status(400).send({
         error: true,
@@ -94,7 +99,8 @@ async function actualizarEvaluacionMatriculaSucia(req, res) {
   });
 }
 
-module.exports.registrarEvaluacionMatriculaServicio = registrarEvaluacionMatriculaServicio;
+module.exports.registrarEvaluacionMatriculaServicio =
+  registrarEvaluacionMatriculaServicio;
 module.exports.obtenerEvaluacionesMatriculaSucias =
   obtenerEvaluacionesMatriculaSucias;
 module.exports.actualizarEvaluacionMatriculaSucia =
