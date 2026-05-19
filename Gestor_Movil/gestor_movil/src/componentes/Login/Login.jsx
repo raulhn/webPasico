@@ -8,6 +8,7 @@ import { useState, useContext, useEffect } from "react";
 import { useUsuario } from "../../hooks/useUsuario";
 import { UsuarioContext } from "../../contexto/UsuarioContext";
 import { useNavigate } from "react-router-dom";
+import { URL_SUBPATH } from "../../config/Constantes";
 
 export default function Login() {
   const [usuario, setUsuario] = useState("");
@@ -35,7 +36,7 @@ export default function Login() {
 
   useEffect(() => {
     if (usuarioSesion) {
-      navigate("/gestion/"); // Redirige a la raíz si ya hay usuario en sesión
+      navigate(URL_SUBPATH + "/"); // Redirige a la raíz si ya hay usuario en sesión
     }
   }, [usuarioSesion, navigate]);
 
@@ -93,7 +94,7 @@ export default function Login() {
         }}
       >
         <span> ¿No tienes cuenta?</span>
-        <a href="/gestion/registro" style={{ marginLeft: "5px" }}>
+        <a href={URL_SUBPATH + "/registro"} style={{ marginLeft: "5px" }}>
           Regístrate aquí
         </a>
       </div>
@@ -105,7 +106,10 @@ export default function Login() {
           paddingTop: "10px",
         }}
       >
-        <a href="/gestion/recuperarPassword" style={{ marginLeft: "5px" }}>
+        <a
+          href={URL_SUBPATH + "/recuperarPassword"}
+          style={{ marginLeft: "5px" }}
+        >
           ¿Olvidaste tu contraseña?
         </a>
       </div>

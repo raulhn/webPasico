@@ -7,6 +7,7 @@ import { Boton, ModalAviso, Selector } from "../../ComponentesUI/ComponentesUI";
 
 import { useNavigate } from "react-router";
 import Cabecera from "../../Cabecera/Cabecera";
+import { URL_SUBPATH } from "../../../config/Constantes";
 
 export default function Evaluaciones() {
   const { cursos } = useCursos();
@@ -23,7 +24,8 @@ export default function Evaluaciones() {
   function lanzaEvaluacion() {
     if (nidCurso && nidAsignatura && nidTrimestre) {
       navigate(
-        `/gestion/evaluacion/${nidCurso}/${nidAsignatura}/${nidTrimestre}`,
+        URL_SUBPATH +
+          `/evaluacion/${nidCurso}/${nidAsignatura}/${nidTrimestre}`,
       );
     } else {
       setVisibleError(true);

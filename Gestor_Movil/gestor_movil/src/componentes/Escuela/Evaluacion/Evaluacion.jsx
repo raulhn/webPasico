@@ -14,6 +14,7 @@ import { useNavigate } from "react-router";
 
 import "./Evaluacion.css";
 import Cabecera from "../../Cabecera/Cabecera";
+import { URL_SUBPATH } from "../../../config/Constantes";
 
 export default function Evaluacion() {
   const { nidCurso, nidAsignatura, nidTrimestre } = useParams();
@@ -125,7 +126,7 @@ export default function Evaluacion() {
 
   function mostrarEvaluaciones(nidMatricula) {
     navigate(
-      `/gestion/visualizar_evaluaciones/${nidMatricula}/${nidTrimestre}`,
+      URL_SUBPATH + `/visualizar_evaluaciones/${nidMatricula}/${nidTrimestre}`,
     );
   }
   console.log("Evaluaciones procesadas", evaluaciones);

@@ -17,51 +17,65 @@ import SelectorEvaluacionesProfesor from "./componentes/Escuela/SelectorEvaluaci
 import EvaluacionesProfesor from "./componentes/Escuela/EvaluacionesProfesor/EvaluacionesProfesor.jsx";
 import Registro from "./componentes/Usuarios/Registro/Registro.jsx";
 import RecuperarPassword from "./componentes/Usuarios/RecuperaPassword/RecuperaPassword.jsx";
+import { URL_SUBPATH } from "./config/Constantes";
 
 createRoot(document.getElementById("root")).render(
   <UsuarioProvider>
     <BrowserRouter>
       <Routes>
-        <Route path="/gestion/" element={<App />} />
-        <Route path="/gestion/login" element={<Login />} />
-        <Route path="/gestion/evaluaciones" element={<Evaluaciones />} />
+        <Route path={URL_SUBPATH + "/"} element={<App />} />
+        <Route path={URL_SUBPATH + "/login"} element={<Login />} />
         <Route
-          path="/gestion/evaluacion/:nidCurso/:nidAsignatura/:nidTrimestre"
+          path={URL_SUBPATH + "/evaluaciones"}
+          element={<Evaluaciones />}
+        />
+        <Route
+          path={
+            URL_SUBPATH + "/evaluacion/:nidCurso/:nidAsignatura/:nidTrimestre"
+          }
           element={<Evaluacion />}
         />
         <Route
-          path="/gestion/visualizar_evaluaciones/:nidMatricula/:nidTrimestre"
+          path={
+            URL_SUBPATH + "/visualizar_evaluaciones/:nidMatricula/:nidTrimestre"
+          }
           element={<VisualizarEvaluaciones />}
         />
         <Route
-          path="/gestion/ficha_persona/:nidPersona"
+          path={URL_SUBPATH + "/ficha_persona/:nidPersona"}
           element={<FichaPersona />}
         />
-        <Route path="/gestion/cambiar_password" element={<CambiarPassword />} />
-        <Route path="/gestion/partituras" element={<Partituras />} />
         <Route
-          path="/gestion/partitura/:nidPartitura"
+          path={URL_SUBPATH + "/cambiar_password"}
+          element={<CambiarPassword />}
+        />
+        <Route path={URL_SUBPATH + "/partituras"} element={<Partituras />} />
+        <Route
+          path={URL_SUBPATH + "/partitura/:nidPartitura"}
           element={<FichaPartitura />}
         ></Route>
         <Route
-          path="/gestion/nueva_partitura"
+          path={URL_SUBPATH + "/nueva_partitura"}
           element={<FichaPartitura />}
         ></Route>
         <Route
-          path="/gestion/lista_personas"
+          path={URL_SUBPATH + "/lista_personas"}
           element={<ListaPersonas />}
         ></Route>
         <Route
-          path="/gestion/selector_evaluacion_profesor"
+          path={URL_SUBPATH + "/selector_evaluacion_profesor"}
           element={<SelectorEvaluacionesProfesor />}
         />
         <Route
-          path="/gestion/evaluaciones_profesor/:nidCurso/:nidAsignatura/:nidProfesor/:nidTrimestre"
+          path={
+            URL_SUBPATH +
+            "/evaluaciones_profesor/:nidCurso/:nidAsignatura/:nidProfesor/:nidTrimestre"
+          }
           element={<EvaluacionesProfesor />}
         />
-        <Route path="/gestion/registro" element={<Registro />} />
+        <Route path={URL_SUBPATH + "/registro"} element={<Registro />} />
         <Route
-          path="/gestion/recuperarPassword"
+          path={URL_SUBPATH + "/recuperarPassword"}
           element={<RecuperarPassword />}
         />
       </Routes>

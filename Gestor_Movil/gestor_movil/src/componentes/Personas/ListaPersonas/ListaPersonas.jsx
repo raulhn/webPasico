@@ -6,6 +6,7 @@ import { useAlumnosAsignatura } from "../../../hooks/useAlumnos";
 import { usePersonas } from "../../../hooks/usePersonas";
 import { useState } from "react";
 import Cabecera from "../../Cabecera/Cabecera";
+import { URL_SUBPATH } from "../../../config/Constantes";
 
 export default function ListaPersonas() {
   const { cursos } = useCursos();
@@ -161,7 +162,10 @@ export default function ListaPersonas() {
           <Boton
             texto={"Ver Ficha"}
             onClick={() => {
-              window.open(`/gestion/ficha_persona/` + seleccionado, "_blank");
+              window.open(
+                URL_SUBPATH + `/ficha_persona/` + seleccionado,
+                "_blank",
+              );
             }}
           />
         </div>

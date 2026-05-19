@@ -3,6 +3,7 @@ import { UsuarioContext } from "../../contexto/UsuarioContext";
 import { Boton } from "../ComponentesUI/ComponentesUI";
 import { useUsuario } from "../../hooks/useUsuario";
 import { useNavigate, Link } from "react-router-dom";
+import { URL_SUBPATH } from "../../config/Constantes";
 
 import "./Cabecera.css";
 
@@ -20,7 +21,7 @@ export default function Cabecera() {
   useEffect(() => {
     refrescarUsuario().then(() => {
       if (!usuario) {
-        navigate("/gestion/login");
+        navigate(URL_SUBPATH + "/login");
       }
     });
   }, []);
@@ -34,7 +35,7 @@ export default function Cabecera() {
     await logout();
     actualizarUsuario(null);
     actualizarRoles([]);
-    navigate("/gestion/login");
+    navigate(URL_SUBPATH + "/login");
   }
 
   return (
@@ -62,7 +63,7 @@ export default function Cabecera() {
           >
             <li>
               <Link
-                to="/gestion/"
+                to={URL_SUBPATH + "/"}
                 style={{
                   color: "#fff",
                   textDecoration: "none",
@@ -75,7 +76,7 @@ export default function Cabecera() {
             {comprobarRoles(["PROFESOR"]) && (
               <li>
                 <Link
-                  to="/gestion/evaluaciones"
+                  to={URL_SUBPATH + "/evaluaciones"}
                   style={{
                     color: "#fff",
                     textDecoration: "none",
@@ -89,7 +90,7 @@ export default function Cabecera() {
             {comprobarRoles(["ADMINISTRADOR", "COMISION_EDUCATIVA"]) && (
               <li>
                 <Link
-                  to="/gestion/selector_evaluacion_profesor"
+                  to={URL_SUBPATH + "/selector_evaluacion_profesor"}
                   style={{
                     color: "#fff",
                     textDecoration: "none",
@@ -102,7 +103,7 @@ export default function Cabecera() {
             )}
             <li>
               <Link
-                to="/gestion/cambiar_password"
+                to={URL_SUBPATH + "/cambiar_password"}
                 style={{
                   color: "#fff",
                   textDecoration: "none",
@@ -115,7 +116,7 @@ export default function Cabecera() {
             {comprobarRoles(["ADMINISTRADOR", "MUSICO"]) && (
               <li>
                 <Link
-                  to="/gestion/partituras"
+                  to={URL_SUBPATH + "/partituras"}
                   style={{
                     color: "#fff",
                     textDecoration: "none",
@@ -129,7 +130,7 @@ export default function Cabecera() {
             {comprobarRoles(["ADMINISTRADOR"]) && (
               <li>
                 <Link
-                  to="/gestion/lista_personas"
+                  to={URL_SUBPATH + "/lista_personas"}
                   style={{
                     color: "#fff",
                     textDecoration: "none",
@@ -159,7 +160,7 @@ export default function Cabecera() {
           <Boton
             texto={"Login"}
             onClick={() => {
-              navigate("/gestion/login");
+              navigate(URL_SUBPATH + "/login");
             }}
           />
         )}

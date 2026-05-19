@@ -3,6 +3,7 @@ import { useContext } from "react";
 import { UsuarioContext } from "../../../contexto/UsuarioContext.js";
 import { Boton } from "../../ComponentesUI/ComponentesUI.jsx";
 import { useNavigate } from "react-router-dom";
+import { URL_SUBPATH } from "../../../config/Constantes.js";
 
 export default function CardPartitura({ partitura }) {
   const { comprobarRoles } = useContext(UsuarioContext);
@@ -15,7 +16,7 @@ export default function CardPartitura({ partitura }) {
         <Boton
           texto="Editar"
           onClick={() =>
-            navigate(`/gestion/partitura/${partitura.nid_partitura}`)
+            navigate(URL_SUBPATH + `/partitura/${partitura.nid_partitura}`)
           }
         ></Boton>
       );
@@ -41,4 +42,3 @@ export default function CardPartitura({ partitura }) {
     </div>
   );
 }
-
