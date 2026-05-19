@@ -93,7 +93,7 @@ export default function Login() {
         }}
       >
         <span> ¿No tienes cuenta?</span>
-        <a href="/registro" style={{ marginLeft: "5px" }}>
+        <a href="/gestion/registro" style={{ marginLeft: "5px" }}>
           Regístrate aquí
         </a>
       </div>
@@ -105,7 +105,7 @@ export default function Login() {
           paddingTop: "10px",
         }}
       >
-        <a href="/recuperarPassword" style={{ marginLeft: "5px" }}>
+        <a href="/gestion/recuperarPassword" style={{ marginLeft: "5px" }}>
           ¿Olvidaste tu contraseña?
         </a>
       </div>
@@ -122,4 +122,3 @@ export default function Login() {
     </div>
   );
 }
-
