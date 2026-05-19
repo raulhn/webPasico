@@ -518,7 +518,7 @@ async function registrarEvaluaciones(req, res) {
         if (!evaluacionMatricula) {
           await gestor_evaluacion.insertarEvaluacionMatricula(
             evaluacionRecuperada.nid_evaluacion,
-            evaluacion.nota,
+            replace(evaluacion.nota, ",", "."),
             evaluacion.progreso.valor,
             evaluacion.nid_matricula_asignatura,
             evaluacion.comentario,
@@ -527,7 +527,7 @@ async function registrarEvaluaciones(req, res) {
           await gestor_evaluacion.actualizarEvaluacionMatricula(
             evaluacionMatricula.nid_evaluacion_matricula,
             evaluacionRecuperada.nid_evaluacion,
-            evaluacion.nota,
+            replace(evaluacion.nota, ",", "."),
             evaluacion.progreso.valor,
             evaluacion.nid_matricula_asignatura,
             evaluacion.comentario,
