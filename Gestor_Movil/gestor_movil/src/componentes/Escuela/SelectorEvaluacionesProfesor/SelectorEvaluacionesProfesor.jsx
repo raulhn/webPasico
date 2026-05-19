@@ -30,7 +30,7 @@ export default function SelectorEvaluacionesProfesor() {
   function lanzaEvaluacion() {
     if (nidCurso && nidAsignatura && nidTrimestre && nidProfesor) {
       navigate(
-        { URL_SUBPATH } +
+        URL_SUBPATH +
           "/evaluaciones_profesor/" +
           nidCurso +
           "/" +
