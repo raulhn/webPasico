@@ -112,7 +112,7 @@ export default function Cabecera() {
                 Cambiar Contraseña
               </Link>
             </li>
-            {comprobarRoles(["ADMINISTRADOR"]) && (
+            {comprobarRoles(["ADMINISTRADOR", "MUSICO"]) && (
               <li>
                 <Link
                   to="/gestion/partituras"
