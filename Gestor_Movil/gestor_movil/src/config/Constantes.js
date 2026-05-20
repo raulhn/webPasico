@@ -6,4 +6,4 @@ export const COLOR_AZUL = "#007bff";
 
 export const PUBLIC_KEY_TURNSTILE = "0x4AAAAAABLQCI15qARYrCno";
 
-export const URL_SUBPATH = "/banda";
+export const URL_SUBPATH = "/app";
