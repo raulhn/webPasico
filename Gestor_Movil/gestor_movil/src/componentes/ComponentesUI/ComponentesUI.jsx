@@ -353,15 +353,13 @@ export function DataTable({ cabeceras, datos, accion = (e) => { } }) {
   const [seleccionado, setSeleccionado] = useState(null);
   const TAM_PAGINA = 10;
 
-  function obtiene_resultados() {
-
-    if (!datosFiltrados || datosFiltrados.length === 0) {
+  function obtiene_resultados(datos_filtrados) {
+    if (!datos_filtrados || datos_filtrados.length === 0) {
       return (<div>No hay datos para mostrar</div>
       )
     }
     else {
-      (<>
-
+      return (<>
         <table className="data-table">
           <thead>
             <tr>
@@ -371,7 +369,7 @@ export function DataTable({ cabeceras, datos, accion = (e) => { } }) {
             </tr>
           </thead>
           <tbody>
-            {datosFiltrados.map((fila, indexFila) => (
+            {datos_filtrados.map((fila, indexFila) => (
               <tr
                 key={indexFila}
                 style={{
@@ -426,7 +424,7 @@ export function DataTable({ cabeceras, datos, accion = (e) => { } }) {
         setPaginaActual(Math.ceil(nuevosDatosFiltrados.length / TAM_PAGINA));
       }
     }
-  }, [filtro]);
+  }, [filtro, datos]);
 
 
   return (
@@ -446,7 +444,7 @@ export function DataTable({ cabeceras, datos, accion = (e) => { } }) {
         />
         <p style={{ margin: 0 }}>Total: {datosFiltrados.length}</p>
       </div >
-      {obtiene_resultados()}
+      {obtiene_resultados(datosFiltrados)}
       <div className="paginacion">
         <button
           className="boton"
