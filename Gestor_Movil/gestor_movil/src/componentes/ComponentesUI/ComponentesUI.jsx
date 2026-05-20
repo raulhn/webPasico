@@ -36,7 +36,7 @@ export function EntradaTexto({
 export function Boton({
   texto = "Botón",
   type = "button",
-  onClick = () => {},
+  onClick = () => { },
 }) {
   return (
     <button className={"boton"} onClick={onClick} type={type}>
@@ -128,22 +128,22 @@ export function CustomTabs({ tabs, pestana = 0 }) {
             }}
             onClick={() => setPestanaSeleccionada(index)}
             onMouseDown={(e) =>
-              (e.currentTarget.style.background = obtenerBackGroundColor(
-                true,
-                index,
-              ))
+            (e.currentTarget.style.background = obtenerBackGroundColor(
+              true,
+              index,
+            ))
             }
             onMouseUp={(e) =>
-              (e.currentTarget.style.background = obtenerBackGroundColor(
-                false,
-                index,
-              ))
+            (e.currentTarget.style.background = obtenerBackGroundColor(
+              false,
+              index,
+            ))
             }
             onMouseLeave={(e) =>
-              (e.currentTarget.style.background = obtenerBackGroundColor(
-                false,
-                index,
-              ))
+            (e.currentTarget.style.background = obtenerBackGroundColor(
+              false,
+              index,
+            ))
             }
           >
             {tab.nombre}
@@ -346,12 +346,64 @@ function concatenarArray(array) {
   return array.join(" ");
 }
 
-export function DataTable({ cabeceras, datos, accion = (e) => {} }) {
+export function DataTable({ cabeceras, datos, accion = (e) => { } }) {
   const [filtro, setFiltro] = useState("");
   const [datosFiltrados, setDatosFiltrados] = useState(datos);
   const [paginaActual, setPaginaActual] = useState(1);
   const [seleccionado, setSeleccionado] = useState(null);
   const TAM_PAGINA = 10;
+
+  function obtiene_resultados() {
+
+    if (!datosFiltrados || datosFiltrados.length === 0) {
+      return (<div>No hay datos para mostrar</div>
+      )
+    }
+    else {
+      (<>
+
+        <table className="data-table">
+          <thead>
+            <tr>
+              {cabeceras.map((cabecera, index) => (
+                <th key={index}>{cabecera}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {datosFiltrados.map((fila, indexFila) => (
+              <tr
+                key={indexFila}
+                style={{
+                  ...(indexFila >= TAM_PAGINA * (paginaActual - 1) &&
+                    indexFila < TAM_PAGINA * paginaActual
+                    ? {}
+                    : { display: "none" }),
+                  ...(seleccionado === indexFila
+                    ? { backgroundColor: "#d3d3d3" }
+                    : {}),
+                }}
+                onClick={() => {
+                  setSeleccionado(indexFila);
+                  accion(fila[0]);
+                }}
+              >
+                {fila.map((celda, indexCelda) => (
+                  <td
+                    key={indexCelda}
+                    style={indexCelda === 0 ? { display: "none" } : {}}
+                  >
+                    {celda}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </>
+      )
+    }
+  }
 
   useEffect(() => {
     const nuevosDatosFiltrados = datos.filter((fila) => {
@@ -374,19 +426,8 @@ export function DataTable({ cabeceras, datos, accion = (e) => {} }) {
         setPaginaActual(Math.ceil(nuevosDatosFiltrados.length / TAM_PAGINA));
       }
     }
-  }, [filtro, datos]);
-  if (!datosFiltrados || datosFiltrados.length === 0) {
-    return (
-      <>
-        <EntradaTexto
-          setTexto={(texto) => {
-            setFiltro(texto);
-          }}
-        ></EntradaTexto>
-        <div>No hay datos para mostrar</div>
-      </>
-    );
-  }
+  }, [filtro]);
+
 
   return (
     <>
@@ -404,45 +445,8 @@ export function DataTable({ cabeceras, datos, accion = (e) => {} }) {
           }}
         />
         <p style={{ margin: 0 }}>Total: {datosFiltrados.length}</p>
-      </div>
-      <table className="data-table">
-        <thead>
-          <tr>
-            {cabeceras.map((cabecera, index) => (
-              <th key={index}>{cabecera}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {datosFiltrados.map((fila, indexFila) => (
-            <tr
-              key={indexFila}
-              style={{
-                ...(indexFila >= TAM_PAGINA * (paginaActual - 1) &&
-                indexFila < TAM_PAGINA * paginaActual
-                  ? {}
-                  : { display: "none" }),
-                ...(seleccionado === indexFila
-                  ? { backgroundColor: "#d3d3d3" }
-                  : {}),
-              }}
-              onClick={() => {
-                setSeleccionado(indexFila);
-                accion(fila[0]);
-              }}
-            >
-              {fila.map((celda, indexCelda) => (
-                <td
-                  key={indexCelda}
-                  style={indexCelda === 0 ? { display: "none" } : {}}
-                >
-                  {celda}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      </div >
+      {obtiene_resultados()}
       <div className="paginacion">
         <button
           className="boton"
