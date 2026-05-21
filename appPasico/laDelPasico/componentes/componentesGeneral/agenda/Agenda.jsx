@@ -110,7 +110,6 @@ export default function Agenda({ mes_, anio_ }) {
             height: "100%",
           }}
         >
-          <Text>Hola</Text>
           <FormularioEvento
             cancelar={() => setVisibleFormulario(false)}
             callback={() => {

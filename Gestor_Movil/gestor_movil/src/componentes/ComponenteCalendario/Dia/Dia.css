@@ -1,0 +1,26 @@
+.dia {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin: 5px;
+  cursor: pointer;
+}
+
+.seleccionado {
+  background-color: #007bff;
+  color: white;
+}
+
+.hoy {
+  font-weight: bold;
+  color: #007bff;
+}
+
+.tiene-eventos {
+  background-color: #ffc107;
+  color: white;
+}
