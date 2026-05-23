@@ -192,6 +192,6 @@ export default function Calendario({ mes_, anio_ }) {
 
 
   return (
-    <mostrarCalendario />
+    <mostrarSemanas />
   )
 }

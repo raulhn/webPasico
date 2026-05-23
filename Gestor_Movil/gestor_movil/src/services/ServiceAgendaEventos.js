@@ -10,12 +10,12 @@ export function obtenerEventosRangoFechas(fecha_inicio, fecha_fin) {
     peticionServicio(
       "GET",
       Constantes.URL_SERVICIO_MOVIL +
-        "obtener_agenda_eventos_rango_fecha" +
-        "/" +
-        fecha_inicio +
-        "/" +
-        fecha_fin,
-      data,
+      "obtener_agenda_eventos_rango_fecha" +
+      "/" +
+      fecha_inicio +
+      "/" +
+      fecha_fin,
+      null,
     )
       .then((response) => {
         resolve(response);

@@ -16,6 +16,19 @@ export const useAgendaEventosRangoFechas = (
     setRefrescar(true);
   }
 
+  function formatearFecha(fecha) {
+
+    let mes = fecha.getMonth() + 1;
+    if (mes < 10) {
+      mes = '0' + mes;
+    }
+    let dia = fecha.getDate();
+    if (dia < 10) {
+      dia = '0' + dia
+    }
+    return fecha.getFullYear() + "-" + mes + "-" + dia;
+  }
+
   useEffect(() => {
     if (fecha_inicio == null || fecha_fin == null) {
       setEventos([]);
@@ -24,9 +37,13 @@ export const useAgendaEventosRangoFechas = (
       setError(false);
       return;
     }
+    console.log("obtenerEventosRangoFechas", fecha_inicio, fecha_fin)
+    let fecha_inicio_formateada = formatearFecha(fecha_inicio)
+    let fecha_fin_formateada = formatearFecha(fecha_fin)
+    console.log("Obtener eventos", fecha_inicio_formateada, fecha_fin_formateada)
     obtenerEventosRangoFechas(
-      fecha_inicio,
-      fecha_fin,
+      fecha_inicio_formateada,
+      fecha_fin_formateada,
       cerrar_sesion,
     )
       .then((eventosRecuperados) => {
