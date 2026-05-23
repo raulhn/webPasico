@@ -18,19 +18,9 @@ export default function Calendario({ mes_, anio_ }) {
     useAgendaEventosRangoFechas(fechaInicio, fechaFin);
 
   useEffect(() => {
-    if (mesParametro && anioParametro && diaParametro) {
-      setMes(parseInt(mesParametro));
-      setAnio(parseInt(anioParametro));
-      setDiaSeleccionado({
-        dia: parseInt(diaParametro),
-        mes: parseInt(mesParametro),
-        año: parseInt(anioParametro),
-      });
-    } else {
-      setMes(mes_);
-      setAnio(anio_);
-    }
-  }, [mes_, anio_, mesParametro, anioParametro, diaParametro]);
+    setMes(mes_);
+    setAnio(anio_);
+  }, [mes_, anio_]);
 
   useEffect(() => {
     const arrayCalendario = getCalendarWeeks(anio, mes);
@@ -107,7 +97,7 @@ export default function Calendario({ mes_, anio_ }) {
             numDia={dia.day}
             disabled={mes != dia.month}
             accion={() => {
-              const diaFormateado = {
+  <            const diaFormateado = {
                 dia: dia.day,
                 mes: dia.month,
                 año: dia.year,
@@ -199,4 +189,9 @@ export default function Calendario({ mes_, anio_ }) {
 
     return weeks;
   }
+
+
+  return (
+    <mostrarCalendario/>
+  )
 }
