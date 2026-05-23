@@ -18,6 +18,7 @@ import EvaluacionesProfesor from "./componentes/Escuela/EvaluacionesProfesor/Eva
 import Registro from "./componentes/Usuarios/Registro/Registro.jsx";
 import RecuperarPassword from "./componentes/Usuarios/RecuperaPassword/RecuperaPassword.jsx";
 import { URL_SUBPATH } from "./config/Constantes";
+import Agenda from "./componentes/ComponenteCalendario/Agenda/Agenda.jsx"
 
 createRoot(document.getElementById("root")).render(
   <UsuarioProvider>
@@ -78,6 +79,7 @@ createRoot(document.getElementById("root")).render(
           path={URL_SUBPATH + "/recuperarPassword"}
           element={<RecuperarPassword />}
         />
+        <Route path={URL_SUBPATH + "/agenda"} element={<Agenda />} />
       </Routes>
     </BrowserRouter>
   </UsuarioProvider>,

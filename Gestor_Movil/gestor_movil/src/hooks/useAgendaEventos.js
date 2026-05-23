@@ -1,4 +1,4 @@
-import ServiceAgendaEventos from "../../servicios/serviceAgendaEventos";
+import { obtenerEventosRangoFechas } from "../services/ServiceAgendaEventos";
 
 import { useState, useEffect } from "react";
 
@@ -24,7 +24,7 @@ export const useAgendaEventosRangoFechas = (
       setError(false);
       return;
     }
-    ServiceAgendaEventos.obtenerEventosRangoFechas(
+    obtenerEventosRangoFechas(
       fecha_inicio,
       fecha_fin,
       cerrar_sesion,

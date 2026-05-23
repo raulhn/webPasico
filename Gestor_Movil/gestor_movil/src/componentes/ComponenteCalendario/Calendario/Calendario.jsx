@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Dia } from "../Dia/Dia";
+import Dia from "../Dia/Dia";
 import { useAgendaEventosRangoFechas } from "../../../hooks/useAgendaEventos";
 
 export default function Calendario({ mes_, anio_ }) {
@@ -97,7 +97,7 @@ export default function Calendario({ mes_, anio_ }) {
             numDia={dia.day}
             disabled={mes != dia.month}
             accion={() => {
-  <            const diaFormateado = {
+              const diaFormateado = {
                 dia: dia.day,
                 mes: dia.month,
                 año: dia.year,
@@ -192,6 +192,6 @@ export default function Calendario({ mes_, anio_ }) {
 
 
   return (
-    <mostrarCalendario/>
+    <mostrarCalendario />
   )
 }
