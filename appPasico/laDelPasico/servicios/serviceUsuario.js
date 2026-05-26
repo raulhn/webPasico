@@ -8,7 +8,7 @@ function registrarUsuario(
   segundoApellido,
   correo,
   password,
-  recaptchaToken
+  recaptchaToken,
 ) {
   return new Promise((resolve, reject) => {
     fetch(Constantes.URL_SERVICIO_MOVIL + "registrar_usuario", {
@@ -43,6 +43,36 @@ function registrarUsuario(
   });
 }
 
+function reenviarCorreoVerificacion(correoElectronico, password) {
+  return new Promise((resolve, reject) => {
+    fetch(Constantes.URL_SERVICIO_MOVIL + "reenviar_correo_verificacion", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        correoElectronico: correoElectronico,
+        password: password,
+      }),
+    })
+      .then((response) => {
+        response
+          .json()
+          .then((data) => {
+            resolve(data);
+          })
+          .catch((error) => {
+            console.log("Error en el servicio reenviarCorreoVerificacion");
+            reject(error);
+          });
+      })
+      .catch((error) => {
+        console.log("Error en el servicio reenviarCorreoVerificacion");
+        reject(error);
+      });
+  });
+}
+
 function login(correoElectronico, password, tokenNotificacion) {
   return new Promise((resolve, reject) => {
     fetch(Constantes.URL_SERVICIO_MOVIL + "login", {
@@ -62,7 +92,7 @@ function login(correoElectronico, password, tokenNotificacion) {
           .then(async (data) => {
             await secureStorage.guardarToken(
               "refresh_token",
-              data.refreshToken
+              data.refreshToken,
             );
             resolve(data);
           })
@@ -87,7 +117,7 @@ async function obtenerUsuario(cerrarSesion) {
       "GET",
       Constantes.URL_SERVICIO_MOVIL + "usuario",
       null,
-      cerrarSesion
+      cerrarSesion,
     );
     return data;
   } catch (error) {
@@ -133,7 +163,7 @@ function cambiarPassword(passwordActual, nuevaPassword, cerrarSesion) {
           passwordActual: passwordActual,
           nuevaPassword: nuevaPassword,
         },
-        cerrarSesion
+        cerrarSesion,
       );
 
       resolve(data);
@@ -169,6 +199,7 @@ function recuperarPassword(correoElectronico) {
 }
 
 module.exports.registrarUsuario = registrarUsuario;
+module.exports.reenviarCorreoVerificacion = reenviarCorreoVerificacion;
 module.exports.login = login;
 module.exports.obtenerUsuario = obtenerUsuario;
 module.exports.logout = logout;

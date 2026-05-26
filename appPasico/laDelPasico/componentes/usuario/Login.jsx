@@ -1,5 +1,6 @@
 import { Link, useRouter } from "expo-router";
 import React from "react";
+import { useState } from "react";
 import serviceUsuario from "../../servicios/serviceUsuario";
 import { useContext } from "react";
 
@@ -18,6 +19,7 @@ import {
   Boton,
   ModalAviso,
   BotonIcono,
+  ModalConfirmacion,
 } from "../componentesUI/ComponentesUI";
 
 export default function Login() {
@@ -30,6 +32,7 @@ export default function Login() {
   const logo = require("../../assets/logo.png");
   const router = useRouter();
   const [error, setError] = React.useState(null);
+  const [confirmacion, setConfirmacion] = useState(false);
 
   function realizarLogin() {
     {
@@ -38,6 +41,8 @@ export default function Login() {
         .then((response) => {
           if (response.error) {
             console.log("Error al iniciar sesión:", response);
+            if (response.codigo == 2) {
+            }
             setError(response.mensaje); // Muestra el error en el modal
           } else {
             iniciarSesion(response.usuario); // Guarda el usuario en el contexto
@@ -49,6 +54,24 @@ export default function Login() {
           console.log("Error al iniciar sesión:", error);
         });
     }
+  }
+
+  function reenviarCorreoVerificacion() {
+    serviceUsuario
+      .reenviarCorreoVerificacion(correo, contrasena)
+      .then((response) => {
+        if (response.error) {
+          console.log("Error al reenviar correo de verificación:", response);
+          setError(response.mensaje); // Muestra el error en el modal
+        } else {
+          setConfirmacion(false); // Cierra el modal de confirmación
+          setError("Correo de verificación reenviado exitosamente."); // Muestra un mensaje de éxito
+        }
+      })
+      .catch((error) => {
+        console.log("Error al reenviar correo de verificación:", error);
+        setError("Ocurrió un error al reenviar el correo de verificación."); // Muestra un mensaje de error genérico
+      });
   }
 
   return (
@@ -122,6 +145,18 @@ export default function Login() {
         setVisible={() => setError(null)}
         mensaje={error}
         textBoton="Aceptar"
+      />
+      <ModalConfirmacion
+        visible={confirmacion}
+        setVisible={() => setConfirmacion(false)}
+        mensaje="Usuario aún no verificado ¿Desea recibir de nuevo el correo de confirmación?"
+        textBotonCancelar="No"
+        textBoton="Sí"
+        accion={() => {
+          reenviarCorreoVerificacion();
+          setConfirmacion(false);
+        }}
+        accionCancelar={() => setConfirmacion(false)}
       />
     </View>
   );

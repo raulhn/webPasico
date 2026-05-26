@@ -70,6 +70,10 @@ app.put("/registrar_usuario", servletUsuario.registrarUsuario);
 app.put("/registrar_conexion", servletConexion.registrarConexion);
 app.get("/verificar_correo/:token", servletUsuario.verificarCorreo);
 app.post("/login", servletUsuario.login);
+app.post(
+  "/reenviar_correo_verificacion",
+  servletUsuario.reenviarCorreoVerificacion,
+);
 app.post("/refresh_token", servletUsuario.refreshToken);
 
 app.post("/logout", servletUsuario.logout);

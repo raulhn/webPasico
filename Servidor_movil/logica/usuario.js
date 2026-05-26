@@ -242,6 +242,38 @@ function obtenerUsuarioNoVerificado(correoElectronico) {
   });
 }
 
+async function reenviarCorreoVerificacion(correoElectronico, password) {
+  try {
+    const usuario = await login(correoElectronico, password);
+
+    if (usuario == null) {
+      const usuarioNoVerificado =
+        await obtenerUsuarioNoVerificado(correoElectronico);
+
+      if (usuarioNoVerificado) {
+        let compara = await comparaPasswords(
+          password,
+          usuarioNoVerificado.password,
+        );
+        if (compara) {
+          await validacionEmail.enviarEmailValidacion(
+            usuarioNoVerificado.nid_usuario,
+            correoElectronico,
+          );
+          return;
+        }
+      }
+    }
+    throw new Error("Error al reenviar el correo de verificación");
+  } catch (error) {
+    console.error(
+      "Error al reenviar el correo de verificación:",
+      error.message,
+    );
+    throw new Error("Error al reenviar el correo de verificación");
+  }
+}
+
 function login(correoElectronico, password) {
   return new Promise((resolve, reject) => {
     const query =
@@ -305,14 +337,17 @@ async function realizarLogin(correoElectronico, password) {
           usuarioNoVerificado.password,
         );
         if (compara) {
-          await validacionEmail.enviarEmailValidacion(
-            usuarioNoVerificado.nid_usuario,
-            correoElectronico,
-          );
+          // await validacionEmail.enviarEmailValidacion(
+          //   usuarioNoVerificado.nid_usuario,
+          //   correoElectronico,
+          // );
           console.error("El usuario no está verificado.");
-          throw new Error(
-            "El usuario no está verificado. Se ha enviado un correo de verificación. Compruebe su bandeja de entrada y la bandeja de correo no deseado.",
-          );
+          return {
+            usuario: null,
+            error: 1,
+            mensaje:
+              "El usuario no está verificado. Se ha enviado un correo de verificación. Compruebe su bandeja de entrada y la bandeja de correo no deseado.",
+          };
         }
         throw new Error("Error al realizar login");
       } else {
@@ -346,6 +381,7 @@ async function realizarLogin(correoElectronico, password) {
     );
 
     return {
+      error: 0,
       accessToken: sesion,
       refreshToken: refreshToken,
       usuario: {
@@ -488,6 +524,7 @@ function obtenerUsuarios() {
 module.exports.existeUsuario = existeUsuario;
 module.exports.existeUsuarioNid = existeUsuarioNid;
 module.exports.registrarUsuario = registrarUsuario;
+module.exports.reenviarCorreoVerificacion = reenviarCorreoVerificacion;
 module.exports.realizarLogin = realizarLogin;
 module.exports.construirRoles = construirRoles;
 module.exports.obtenerUsuario = obtenerUsuario;

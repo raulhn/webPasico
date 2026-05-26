@@ -87,6 +87,23 @@ async function verificarCorreo(req, res) {
   }
 }
 
+async function reenviarCorreoVerificacion(req, res) {
+  try {
+    const { correoElectronico, password } = req.body;
+    await gestorUsuario.reenviarCorreoVerificacion(correoElectronico, password);
+    res.status(200).send({
+      error: false,
+      mensaje: "Correo de verificación reenviado",
+    });
+  } catch (error) {
+    console.error("Error al reenviar el correo de verificación:", error);
+    res.status(400).send({
+      error: true,
+      mensaje: "Error al reenviar el correo de verificación",
+    });
+  }
+}
+
 async function login(req, res) {
   const { correoElectronico, password, tokenNotificacion } = req.body;
   const loginWeb = req.body.loginWeb || false; // Valor predeterminado a false si no se proporciona
@@ -96,6 +113,14 @@ async function login(req, res) {
       password,
     );
 
+    if (!tokens.usuario) {
+      res.status(400).send({
+        error: true,
+        codigo: 2,
+        mensaje: "Usuario no verificado",
+      });
+      return;
+    }
     if (tokenNotificacion) {
       await gestorConexion.limpiarToken(
         tokenNotificacion,
@@ -354,6 +379,7 @@ async function recuperarPassword(req, res) {
 
 module.exports.registrarUsuario = registrarUsuario;
 module.exports.verificarCorreo = verificarCorreo;
+module.exports.reenviarCorreoVerificacion = reenviarCorreoVerificacion;
 module.exports.login = login;
 module.exports.obtenerUsuario = obtenerUsuario;
 module.exports.refreshToken = refreshToken;
