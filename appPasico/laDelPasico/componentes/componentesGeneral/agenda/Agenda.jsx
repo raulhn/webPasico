@@ -21,7 +21,6 @@ import {
 import Constantes from "../../../config/constantes.js";
 import { useRol } from "../../../hooks/useRol.js";
 import FormularioNotificacion from "../../notificaciones/FormularioNotificacion.jsx";
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
 export default function Agenda({ mes_, anio_ }) {
   const [mes, setMes] = useState(mes_);
@@ -34,8 +33,6 @@ export default function Agenda({ mes_, anio_ }) {
     useState(false);
   const [tipoSeleccionado, setTipoSeleccionado] = useState(null);
   const { mesParametro, anioParametro, diaParametro } = useLocalSearchParams();
-  const bottomTabBarHeight = useBottomTabBarHeight();
-  const alturaMenu = bottomTabBarHeight * 2;
   const [numSemanas, setNumSemanas] = useState(0);
 
   const tipos = [
@@ -254,7 +251,7 @@ export default function Agenda({ mes_, anio_ }) {
     const fechaHoy = new Date();
     for (let i = 0; i < diasSemanas.length; i++) {
       componentesDiaSemana.push(
-        <Dia key={diasSemanas[i]} numDia={diasSemanas[i]} />
+        <Dia key={diasSemanas[i]} numDia={diasSemanas[i]} />,
       );
     }
     semanasCalendario.push(componentesDiaSemana);
@@ -287,7 +284,7 @@ export default function Agenda({ mes_, anio_ }) {
             }
             tieneEvento={existeAlgunEvento(dia)}
           />
-        ))
+        )),
       );
     }
     return semanasCalendario;
@@ -365,7 +362,6 @@ export default function Agenda({ mes_, anio_ }) {
               />
             )}
             contentContainerStyle={{
-              paddingBottom: alturaMenu + 10,
               paddingHorizontal: 8,
               paddingTop: 4,
             }}
@@ -374,7 +370,7 @@ export default function Agenda({ mes_, anio_ }) {
             refreshing={cargando}
           />
         </View>
-        <View style={[estilos.botonFix, { bottom: alturaMenu + 30 }]}>
+        <View style={[estilos.botonFix]}>
           <View style={{ flexDirection: "row", gap: 12 }}>
             <ButtonAdd />
             {botonNotificar()}

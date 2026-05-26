@@ -275,6 +275,7 @@ export function EntradaTexto({
         multiline={multiline}
         maxLength={maxLength}
         onChangeText={(text) => {
+          console.log("Texto", text);
           setValor(text);
         }}
         onFocus={() => setIsFocused(true)}
@@ -842,17 +843,17 @@ export function ListaSeleccionable({ data, renderItem, onSelect }) {
   );
 }
 
-export function ListaNavegable({ 
-  data, 
-  renderItem, 
-  onSelect, 
-  dataLink, 
+export function ListaNavegable({
+  data,
+  renderItem,
+  onSelect,
+  dataLink,
   style,
   contentContainerStyle,
   showsVerticalScrollIndicator,
   onRefresh,
   refreshing,
-  keyExtractor
+  keyExtractor,
 }) {
   const [presionado, setPresionado] = useState(null);
 

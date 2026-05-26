@@ -1,17 +1,6 @@
-import React from "react";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { PlatformPressable } from "@react-navigation/elements";
 
-import {
-  ViewPropTypes,
-  StyleSheet,
-  View,
-  StyledText,
-  Text,
-  TouchableOpacity,
-  Platform,
-} from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 
 import { Link } from "expo-router";
 
