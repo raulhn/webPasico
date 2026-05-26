@@ -15,6 +15,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
 import ServiceUsuario from "../../servicios/serviceUsuario.js";
 import Tunstile from "../../componentes/Turnstile.jsx";
+import { useRouter } from "expo-router";
 
 import { ActivityIndicator } from "react-native";
 
@@ -23,6 +24,7 @@ import {
   ModalExito,
   EntradaTexto,
   Boton,
+  BotonIcono,
 } from "../componentesUI/ComponentesUI.jsx";
 
 import Constantes from "../../config/constantes.js";
@@ -30,6 +32,7 @@ import Constantes from "../../config/constantes.js";
 export default function registrarUsuario(recaptchaToken) {
   const [inputActivo, setInputActivo] = React.useState(0);
   const logo = require("../../assets/logo.png");
+  const router = useRouter();
 
   const [errorValidacion, setErrorValidacion] = useState(false);
   const [exito, setExito] = useState(false);
@@ -106,7 +109,7 @@ export default function registrarUsuario(recaptchaToken) {
           segundoApellido,
           correo,
           password,
-          recaptchaToken
+          recaptchaToken,
         )
           .then((response) => {
             if (response.error) {
@@ -114,7 +117,7 @@ export default function registrarUsuario(recaptchaToken) {
               setErrorValidacion(true);
             } else {
               setMensajeExito(
-                "Usuario registrado correctamente. Se ha enviado un mensaje de verificación a su correo. Compruebe su bandeja de entrada y la bandeja de correo no deseado."
+                "Usuario registrado correctamente. Se ha enviado un mensaje de verificación a su correo. Compruebe su bandeja de entrada y la bandeja de correo no deseado.",
               );
               setExito(true);
             }
@@ -130,7 +133,7 @@ export default function registrarUsuario(recaptchaToken) {
     } catch (error) {
       console.log("Error en la petición:", error);
       setMensajeError(
-        "Se ha producido un error durante el registro de usuario"
+        "Se ha producido un error durante el registro de usuario",
       );
     }
   }
@@ -150,6 +153,11 @@ export default function registrarUsuario(recaptchaToken) {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0} // Ajusta según tu header
       >
+        <BotonIcono
+          nombre={"arrow-back"}
+          onPress={() => router.navigate("/PantallaLogin")}
+          size={30}
+        ></BotonIcono>
         <ScrollView>
           <View
             style={{ flex: 1, justifyContent: "center", alignItems: "center" }}

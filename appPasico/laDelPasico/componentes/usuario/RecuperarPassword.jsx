@@ -1,5 +1,6 @@
 import { StyleSheet, View, Image, Text } from "react-native";
 import { useState } from "react";
+import { useRouter } from "expo-router";
 
 import serviceUsuario from "../../servicios/serviceUsuario";
 
@@ -8,6 +9,7 @@ import {
   ModalExito,
   Boton,
   EntradaTexto,
+  BotonIcono,
 } from "../componentesUI/ComponentesUI";
 
 export default function RecuperarPassword() {
@@ -15,6 +17,7 @@ export default function RecuperarPassword() {
   const [correo, setCorreo] = useState("");
   const [error, setError] = useState(null);
   const [exito, setExito] = useState(null);
+  const router = useRouter();
 
   function peticionRecuperarPassword() {
     if (correo === "") {
@@ -38,6 +41,14 @@ export default function RecuperarPassword() {
 
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <View style={{ position: "absolute", top: 40, left: 20 }}>
+        <BotonIcono
+          nombre={"arrow-back"}
+          onPress={() => router.navigate("/PantallaLogin")}
+          size={30}
+        ></BotonIcono>
+      </View>
+
       <View style={{ paddingBottom: 30 }}>
         <Image source={logo} style={estilos.logo}></Image>
       </View>

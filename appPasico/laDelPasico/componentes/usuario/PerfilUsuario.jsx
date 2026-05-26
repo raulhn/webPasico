@@ -5,7 +5,7 @@ import serviceUsuario from "../../servicios/serviceUsuario"; // Ajusta la ruta s
 import { useRouter } from "expo-router"; // Asegúrate de tener instalado expo-router
 import { useEffect } from "react";
 
-import { Boton } from "../componentesUI/ComponentesUI"; // Asegúrate de que Boton esté correctamente importado
+import { Boton, BotonIcono } from "../componentesUI/ComponentesUI"; // Asegúrate de que Boton esté correctamente importado
 
 export default function PerfilUsuario() {
   const { usuario, cerrarSesion } = useContext(AuthContext);
@@ -14,7 +14,7 @@ export default function PerfilUsuario() {
   useEffect(() => {
     if (!usuario) {
       console.log(
-        "No hay usuario, redirigiendo a la pantalla de inicio de sesión"
+        "No hay usuario, redirigiendo a la pantalla de inicio de sesión",
       );
       router.replace("Inicio"); // Redirige a la pantalla de inicio de sesión si no hay usuario}
     }
@@ -41,6 +41,13 @@ export default function PerfilUsuario() {
 
   return (
     <>
+      <View style={{ position: "absolute", top: 40, left: 20 }}>
+        <BotonIcono
+          nombre={"arrow-back"}
+          onPress={() => router.navigate("/")}
+          size={30}
+        ></BotonIcono>
+      </View>
       <Text style={{ fontSize: 20, fontWeight: "bold" }}>
         Perfil de Usuario
       </Text>

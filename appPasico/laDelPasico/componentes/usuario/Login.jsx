@@ -17,6 +17,7 @@ import {
   EntradaTexto,
   Boton,
   ModalAviso,
+  BotonIcono,
 } from "../componentesUI/ComponentesUI";
 
 export default function Login() {
@@ -52,6 +53,13 @@ export default function Login() {
 
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <View style={{ position: "absolute", top: 40, left: 20 }}>
+        <BotonIcono
+          nombre={"arrow-back"}
+          onPress={() => router.navigate("/")}
+          size={30}
+        ></BotonIcono>
+      </View>
       <View style={estilos.container}>
         <View style={{ paddingBottom: 30 }}>
           <Image source={logo} style={estilos.logo}></Image>

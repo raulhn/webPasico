@@ -53,6 +53,7 @@ export function BotonIcono({
   onPress,
   color = "#007BFF",
   colorTexto = "#000",
+  size = 24,
 }) {
   const [presionado, setPresionado] = useState(false);
 
@@ -68,7 +69,7 @@ export function BotonIcono({
           presionado && { opacity: 0.5, transform: [{ scale: 0.95 }] },
         ]}
       >
-        <MaterialIcons name={nombre} size={24} color={colorTexto} />
+        <MaterialIcons name={nombre} size={size} color={colorTexto} />
       </View>
     </Pressable>
   );
