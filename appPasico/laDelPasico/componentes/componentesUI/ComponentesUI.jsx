@@ -248,7 +248,7 @@ export function EntradaTexto({
   editable = true,
   secureTextEntry = false,
   multiline = false,
-  maxLength = null,
+  maxLength = 500,
   ancho = 200,
   alto = 45,
 }) {
