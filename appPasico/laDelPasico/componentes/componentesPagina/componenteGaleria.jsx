@@ -43,7 +43,7 @@ export default function ComponenteGaleria(componente) {
     const subscription = ScreenOrientation.addOrientationChangeListener(
       (event) => {
         setOrientation(event.orientationInfo.orientation);
-      }
+      },
     );
 
     getOrientation();
@@ -60,7 +60,7 @@ export default function ComponenteGaleria(componente) {
 
     const subscription = Dimensions.addEventListener(
       "change",
-      handleDimensionsChange
+      handleDimensionsChange,
     );
 
     return () => subscription?.remove(); // Limpia el evento al desmontar el componente
@@ -99,14 +99,14 @@ export default function ComponenteGaleria(componente) {
   const lockToLandscape = async () => {
     await ScreenOrientation.unlockAsync();
     await ScreenOrientation.lockAsync(
-      ScreenOrientation.OrientationLock.LANDSCAPE
+      ScreenOrientation.OrientationLock.LANDSCAPE,
     );
   };
 
   const lockToPortrait = async () => {
     await ScreenOrientation.unlockAsync();
     await ScreenOrientation.lockAsync(
-      ScreenOrientation.OrientationLock.PORTRAIT_UP
+      ScreenOrientation.OrientationLock.PORTRAIT_UP,
     );
   };
 
@@ -171,7 +171,7 @@ export default function ComponenteGaleria(componente) {
             </Pressable>
           </View>
 
-          <View style={styles.rotateButton}>
+          {/*  <View style={styles.rotateButton}>
             <Pressable
               onPress={async () => {
                 await rotar();
@@ -181,7 +181,7 @@ export default function ComponenteGaleria(componente) {
                 <MaterialIcons name="rotate-right" size={24} color="white" />
               </View>
             </Pressable>
-          </View>
+          </View>*/}
           <View style={styles.modalContainer}>
             <Pressable style={styles.modalBackground}>
               <Image
@@ -282,4 +282,3 @@ const styles = StyleSheet.create({
     padding: 10,
   },
 });
-

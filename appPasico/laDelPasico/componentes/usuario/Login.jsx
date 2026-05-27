@@ -20,6 +20,7 @@ import {
   ModalAviso,
   BotonIcono,
   ModalConfirmacion,
+  ModalExito,
 } from "../componentesUI/ComponentesUI";
 
 export default function Login() {
@@ -33,6 +34,8 @@ export default function Login() {
   const router = useRouter();
   const [error, setError] = React.useState(null);
   const [confirmacion, setConfirmacion] = useState(false);
+  const [exito, setExito] = useState(false);
+  const [mensajeExito, setMensajeExito] = useState("");
 
   function realizarLogin() {
     {
@@ -42,8 +45,10 @@ export default function Login() {
           if (response.error) {
             console.log("Error al iniciar sesión:", response);
             if (response.codigo == 2) {
+              setConfirmacion(true); // Muestra el modal de confirmación
+            } else {
+              setError(response.mensaje); // Muestra el error en el modal
             }
-            setError(response.mensaje); // Muestra el error en el modal
           } else {
             iniciarSesion(response.usuario); // Guarda el usuario en el contexto
             guardarRoles(response.roles); // Guarda los roles en el contexto
@@ -65,7 +70,8 @@ export default function Login() {
           setError(response.mensaje); // Muestra el error en el modal
         } else {
           setConfirmacion(false); // Cierra el modal de confirmación
-          setError("Correo de verificación reenviado exitosamente."); // Muestra un mensaje de éxito
+          setExito(true); // Muestra el modal de éxito
+          setMensajeExito("Correo de verificación reenviado exitosamente."); // Establece el mensaje de éxito
         }
       })
       .catch((error) => {
@@ -150,13 +156,19 @@ export default function Login() {
         visible={confirmacion}
         setVisible={() => setConfirmacion(false)}
         mensaje="Usuario aún no verificado ¿Desea recibir de nuevo el correo de confirmación?"
-        textBotonCancelar="No"
-        textBoton="Sí"
+        textBotonCancelar="No Enviar"
+        textBoton="Enviar"
         accion={() => {
           reenviarCorreoVerificacion();
           setConfirmacion(false);
         }}
         accionCancelar={() => setConfirmacion(false)}
+      />
+      <ModalExito
+        visible={exito}
+        setVisible={() => setExito(false)}
+        mensaje={mensajeExito}
+        textBoton="Aceptar"
       />
     </View>
   );
