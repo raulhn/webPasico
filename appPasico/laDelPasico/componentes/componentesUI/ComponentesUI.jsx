@@ -276,7 +276,6 @@ export function EntradaTexto({
         multiline={multiline}
         maxLength={maxLength}
         onChangeText={(text) => {
-          console.log("Texto", text);
           setValor(text);
         }}
         onFocus={() => setIsFocused(true)}
