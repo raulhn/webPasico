@@ -34,7 +34,7 @@ export default function Index() {
     }
   }, [expoPushToken, recaptchaToken]);
 
-  useNotificationObserver();
+  //useNotificationObserver();
 
   // Envía el token al servidor backend
   const handleVerify = (event) => {
