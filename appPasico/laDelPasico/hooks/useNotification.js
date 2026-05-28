@@ -32,6 +32,15 @@ const useNotification = () => {
       });
     }
 
+    if (Platform.OS === "ios") {
+      try {
+        const nativeToken = await Notifications.getDevicePushTokenAsync();
+        console.log("PUSH APNS native token:", nativeToken);
+      } catch (e) {
+        console.log("PUSH APNS native token error:", e);
+        throw new Error(`Error obteniendo token nativo APNS: ${String(e)}`);
+      }
+    }
     //Pide los permisos para recibir notificaciones push
     if (Device.isDevice) {
       const { status: existingStatus } =
@@ -77,7 +86,7 @@ const useNotification = () => {
     registerForPushNotificationsAsync()
       .then((token) => setExpoPushToken(token ?? ""))
       .catch((error) => setExpoPushToken(`${error}`));
-  });
+  }, []);
 
   return expoPushToken;
 };
@@ -118,7 +127,7 @@ export function useNotificationObserver() {
     const subscription = Notifications.addNotificationResponseReceivedListener(
       (response) => {
         redirect(response.notification);
-      }
+      },
     );
     return () => subscription.remove();
   }, [navigationState?.key]);

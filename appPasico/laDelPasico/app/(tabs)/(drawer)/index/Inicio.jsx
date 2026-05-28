@@ -14,12 +14,14 @@ import { router } from "expo-router";
 import * as Notifications from "expo-notifications";
 import { useNotificationObserver } from "../../../../hooks/useNotification";
 import Constantes from "../../../../config/constantes.js";
+import { ModalAviso } from "../../../../componentes/componentesUI/ComponentesUI.jsx";
 
 export default function Inicio() {
   const expoPushToken = useNotification();
   const [recaptchaToken, setRecaptchaToken] = useState(null);
 
   const { guardarTokenNotificacion } = useContext(AuthContext);
+  const [error, setError] = useState(null);
   useEffect(() => {
     if (expoPushToken && recaptchaToken) {
       guardarTokenNotificacion(expoPushToken); // Guarda el token de notificación en el contexto
@@ -29,6 +31,10 @@ export default function Inicio() {
         })
         .catch((error) => {
           console.log("Error al registrar conexión:", error);
+          setError(
+            "Error al registrar conexión. Por favor, inténtalo de nuevo.",
+            error,
+          );
         });
       setRecaptchaToken(null);
     }
@@ -53,6 +59,12 @@ export default function Inicio() {
           onVerify={handleVerify}
         />
       </View>
+      <ModalAviso
+        visible={!!error}
+        setVisible={() => setError(null)}
+        mensaje={error}
+        textBoton={"Cerrar"}
+      />
     </View>
   );
 }
