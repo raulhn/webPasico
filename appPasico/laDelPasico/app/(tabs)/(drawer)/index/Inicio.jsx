@@ -17,7 +17,8 @@ import Constantes from "../../../../config/constantes.js";
 import { ModalAviso } from "../../../../componentes/componentesUI/ComponentesUI.jsx";
 
 export default function Inicio() {
-  const expoPushToken = useNotification();
+  console.log("Renderizando Inicio.jsx");
+  const { expoPushToken } = useNotification();
   const [recaptchaToken, setRecaptchaToken] = useState(null);
 
   const { guardarTokenNotificacion } = useContext(AuthContext);
@@ -45,15 +46,13 @@ export default function Inicio() {
   // Envía el token al servidor backend
   const handleVerify = (event) => {
     const token = event.nativeEvent.data;
-
     setRecaptchaToken(token); // Guarda el token en el estado
   };
 
   return (
     <View style={{ flex: 1 }}>
       <Main />
-
-      <View style={{ display: "none" }}>
+      <View style={{ height: 1, opacity: 0.01 }}>
         <Tunstile
           siteKey={Constantes.PUBLIC_KEY_TURNSTILE}
           onVerify={handleVerify}

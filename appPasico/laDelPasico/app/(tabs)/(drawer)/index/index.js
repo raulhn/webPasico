@@ -1,5 +1,6 @@
 import { useContext, useEffect } from "react";
 import Main from "../../../../componentes/Main";
+import Inicio from "./Inicio.jsx";
 
 import useNotification from "../../../../hooks/useNotification";
 import { registrarConexion } from "../../../../servicios/serviceConexion";
@@ -44,7 +45,7 @@ export default function Index() {
 
   return (
     <View style={{ flex: 1 }}>
-      <Main />
+      <Inicio></Inicio>
 
       <View style={{ display: "none" }}>
         <Tunstile
