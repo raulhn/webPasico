@@ -12,6 +12,7 @@ Notifications.setNotificationHandler({
     shouldPlaySound: true,
     shouldSetBadge: true,
     shouldShowBanner: true,
+    shouldShowList: true,
   }),
 });
 
@@ -126,6 +127,11 @@ export function useNotificationObserver() {
         redirect(response.notification);
       },
     );
+
+    // Imprime un log si se recibe la notificaicón
+    Notifications.addNotificationReceivedListener((notification) => {
+      console.log("[push] recibida:", JSON.stringify(notification, null, 2));
+    });
     return () => subscription.remove();
   }, [navigationState?.key]);
 }
