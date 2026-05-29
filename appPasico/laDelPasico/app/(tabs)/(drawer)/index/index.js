@@ -46,13 +46,6 @@ export default function Index() {
   return (
     <View style={{ flex: 1 }}>
       <Inicio></Inicio>
-
-      <View style={{ display: "none" }}>
-        <Tunstile
-          siteKey={Constantes.PUBLIC_KEY_TURNSTILE}
-          onVerify={handleVerify}
-        />
-      </View>
     </View>
   );
 }

@@ -12,7 +12,6 @@ import * as Notifications from "expo-notifications";
 
 import { useNotificationObserver } from "../../../../hooks/useNotification";
 import Constantes from "../../../../config/constantes.js";
-import { ModalAviso } from "../../../../componentes/componentesUI/ComponentesUI.jsx";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -65,12 +64,6 @@ export default function Inicio() {
           onVerify={handleVerify}
         />
       </View>
-      <ModalAviso
-        visible={!!error}
-        setVisible={() => setError(null)}
-        mensaje={error}
-        textBoton={"Cerrar"}
-      />
     </View>
   );
 }

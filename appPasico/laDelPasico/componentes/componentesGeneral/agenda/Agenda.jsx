@@ -302,7 +302,7 @@ export default function Agenda({ mes_, anio_ }) {
     ));
   }
 
-  const margenBottom = (numSemanas % 4) * 50 + 300;
+  const margenBottom = (numSemanas % 4) * 62 + 300;
   return (
     <>
       <View style={estilos.contenedor}>
@@ -444,7 +444,7 @@ const estilos = StyleSheet.create({
   botonFix: {
     position: "absolute",
     right: 20,
-    bottom: 160,
+    bottom: 190,
   },
   botonFixRight: {
     position: "absolute",
