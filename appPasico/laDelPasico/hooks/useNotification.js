@@ -6,16 +6,6 @@ import Constants from "expo-constants";
 
 import { useRouter, useRootNavigationState } from "expo-router";
 
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: true,
-    shouldShowBanner: true,
-    shouldShowList: true,
-  }),
-});
-
 const useNotification = () => {
   const [expoPushToken, setExpoPushToken] = useState("");
 

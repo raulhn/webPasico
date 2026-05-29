@@ -338,7 +338,7 @@ export default function Agenda({ mes_, anio_ }) {
         <View
           style={{
             marginTop: 12,
-            marginBottom: margenBottom,
+            marginBottom: margenBottom + 120,
           }}
         >
           <ListaNavegable
@@ -443,7 +443,8 @@ const estilos = StyleSheet.create({
 
   botonFix: {
     position: "absolute",
-    left: 20,
+    right: 20,
+    bottom: 160,
   },
   botonFixRight: {
     position: "absolute",

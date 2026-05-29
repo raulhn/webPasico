@@ -8,14 +8,21 @@ import { useState } from "react";
 
 import Tunstile from "../../../../componentes/Turnstile";
 import { AuthContext } from "../../../../providers/AuthContext.js";
-
-import { router } from "expo-router";
-
 import * as Notifications from "expo-notifications";
+
 import { useNotificationObserver } from "../../../../hooks/useNotification";
 import Constantes from "../../../../config/constantes.js";
 import { ModalAviso } from "../../../../componentes/componentesUI/ComponentesUI.jsx";
 
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+    shouldShowBanner: true,
+    shouldShowList: true,
+  }),
+});
 export default function Inicio() {
   console.log("Renderizando Inicio.jsx");
   const { expoPushToken } = useNotification();
