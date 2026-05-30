@@ -63,6 +63,13 @@ export default function CambiarPassword() {
           padding: 10,
         }}
       >
+        <View style={{ position: "absolute", top: 40, left: 20 }}>
+          <BotonIcono
+            nombre={"arrow-back"}
+            onPress={() => router.navigate("/")}
+            size={30}
+          ></BotonIcono>
+        </View>
         <KeyboardAvoidingView
           sytle={{ flex: 1 }}
           behavior={Platform.OS === "ios" ? "padding" : "height"}
