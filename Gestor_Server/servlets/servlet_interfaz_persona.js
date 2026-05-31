@@ -21,8 +21,8 @@ function obtener_interfaz_personas(req, res) {
             interfaz_personas[i].nid_interfaz_persona,
           );
 
-        const interfaz_padre = null;
-        const interfaz_madre = null;
+        let interfaz_padre = null;
+        let interfaz_madre = null;
 
         // Se recupera la interfaz del padre
         if (interfaz_personas[i].nid_interfaz_padre) {
@@ -49,7 +49,7 @@ function obtener_interfaz_personas(req, res) {
         let nid_socio = null;
         if (
           interfaz_personas[i].operacion ===
-            constantes.OPERACIONES_INTERFAZ.ACTUALIZAR &&
+          constantes.OPERACIONES_INTERFAZ.ACTUALIZAR &&
           conflictos.length > 0
         ) {
           nid_socio = conflictos[0].nid_socio;

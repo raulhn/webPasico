@@ -8,8 +8,6 @@ function obtener_persona_nif(nif, lote) {
     constantes.ESQUEMA_BD +
     ".interfaz_persona where dni = " +
     conexion.dbConn.escape(nif) +
-    "and operacion = " +
-    conexion.dbConn.escape(constantes.OPERACIONES_INTERFAZ.INSERTAR) +
     " and lote = " +
     conexion.dbConn.escape(lote) +
     " and dni <> ''";
@@ -171,9 +169,12 @@ function actualizar_interfaz_persona(interfaz_persona) {
     conexion.dbConn.escape(interfaz_persona.nid_persona) +
     ", estado = " +
     conexion.dbConn.escape(interfaz_persona.estado) +
+    ", nid_interfaz_socio = " + conexion.dbConn.escape(interfaz_persona.nid_interfaz_socio) +
+    ", nid_interfaz_madre = " + conexion.dbConn.escape(interfaz_persona.nid_interfaz_madre) + ", nid_interfaz_padre = " + conexion.dbConn.escape(interfaz_persona.nid_interfaz_padre) +
     " where nid_interfaz_persona = " +
     conexion.dbConn.escape(interfaz_persona.nid_interfaz_persona);
 
+  console.log("SQL: ", sql)
   return new Promise((resolve, reject) => {
     conexion.dbConn.beginTransaction((err) => {
       if (err) {

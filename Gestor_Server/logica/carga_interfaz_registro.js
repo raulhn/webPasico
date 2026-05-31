@@ -194,8 +194,8 @@ async function cargar_padres(lote) {
     const interfaz_personas =
       await gestor_interfaz_persona.obtener_interfaz_personas(lote);
     for (const interfaz_persona of interfaz_personas) {
-      const nid_padre = null;
-      const nid_madre = null;
+      let nid_padre = null;
+      let nid_madre = null;
 
       const nid_persona = interfaz_persona.nid_persona;
       const persona = await gestor_personas.obtener_persona(nid_persona);

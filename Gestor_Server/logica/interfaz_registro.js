@@ -82,12 +82,18 @@ function cargar_registro(cadena, lote) {
     "), trim(" +
     conexion.dbConn.escape(valores[17]) +
     "), trim(" +
+    constantes.ESQUEMA_BD +
+    ".initcap(" +
     conexion.dbConn.escape(valores[18]) +
-    "), trim(" +
+    ")), trim(" +
+    constantes.ESQUEMA_BD +
+    ".initcap(" +
     conexion.dbConn.escape(valores[19]) +
-    "), trim(" +
+    ")), trim(" +
+    constantes.ESQUEMA_BD +
+    ".initcap(" +
     conexion.dbConn.escape(valores[20]) +
-    "), trim(" +
+    ")), trim(" +
     conexion.dbConn.escape(valores[21]) +
     "), trim(" +
     conexion.dbConn.escape(valores[22]) +
@@ -527,9 +533,8 @@ async function cargar_datos_interfaz(lote) {
               interfaz_persona.nid_interfaz_madre =
                 nid_interfaz_persona_padre_madre;
             }
-            await actualizar_interfaz_persona(
+            await gestor_interfaz_persona.actualizar_interfaz_persona(
               interfaz_persona,
-              nid_interfaz_persona,
             );
           }
         }
@@ -667,9 +672,8 @@ async function cargar_datos_interfaz(lote) {
               interfaz_persona.fecha_nacimiento,
             );
             interfaz_persona.nid_interfaz_socio = nid_interfaz_socio;
-            await actualizar_interfaz_persona(
+            await gestor_interfaz_persona.actualizar_interfaz_persona(
               interfaz_persona,
-              nid_interfaz_persona,
             );
           }
         }
