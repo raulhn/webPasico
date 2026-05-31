@@ -19,7 +19,10 @@ import {
   ModalExito,
   EntradaTexto,
   Boton,
+  BotonIcono,
 } from "../componentesUI/ComponentesUI";
+
+import { useRouter } from "expo-router";
 
 export default function CambiarPassword() {
   const [nuevaContrasena, setNuevaContrasena] = useState("");
@@ -32,6 +35,8 @@ export default function CambiarPassword() {
 
   const [error, setError] = useState(null);
   const [exito, setExito] = useState(null);
+
+  const router = useRouter();
 
   const peticionCambiarContraseña = () => {
     if (nuevaContrasena !== confirmarContrasena) {
@@ -66,7 +71,7 @@ export default function CambiarPassword() {
         <View style={{ position: "absolute", top: 40, left: 20 }}>
           <BotonIcono
             nombre={"arrow-back"}
-            onPress={() => router.navigate("/")}
+            onPress={() => router.navigate("/PantallaLogin")}
             size={30}
           ></BotonIcono>
         </View>
