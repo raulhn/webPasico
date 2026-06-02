@@ -119,8 +119,7 @@ export default function PerfilUsuario() {
         visible={modalExitoVisible}
         setVisible={() => {
           setModalExitoVisible(false);
-          cerrarSesion(); // Cierra sesión después de eliminar la cuenta
-          router.replace("Inicio");
+          lanzaCerrarSesion();
         }}
         mensaje="Cuenta eliminada correctamente"
         textBoton={"Aceptar"}
