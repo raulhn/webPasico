@@ -50,7 +50,7 @@ export default function PerfilUsuario() {
     }
   }
 
-  async function eliminarUsuario() {
+  async function peticionEliminarUsuario() {
     try {
       let response = await serviceUsuario.eliminarUsuario();
       if (response.error) {
@@ -97,9 +97,10 @@ export default function PerfilUsuario() {
       />
       <ModalConfirmacion
         visible={modalVisible}
+        setVisible={() => setModalVisible(false)}
         mensaje="¿Estás seguro de que deseas eliminar la cuenta?"
         accion={() => {
-          eliminarUsuario();
+          peticionEliminarUsuario();
           setModalVisible(false);
         }}
         accionCancelar={() => setModalVisible(false)}
@@ -108,8 +109,10 @@ export default function PerfilUsuario() {
       />
       <ModalAviso
         visible={modalAvisoVisible}
-        setVisible={setModalAvisoVisible(false)}
-        mensaje="Cuenta eliminada correctamente"
+        setVisible={() => {
+          setModalAvisoVisible(false);
+        }}
+        mensaje="Se ha producido un error al eliminar la cuenta"
         textBoton={"Aceptar"}
       />
       <ModalExito

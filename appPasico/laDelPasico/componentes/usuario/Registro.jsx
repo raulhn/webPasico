@@ -30,7 +30,6 @@ import {
 import Constantes from "../../config/constantes.js";
 
 export default function registrarUsuario(recaptchaToken) {
-  const [inputActivo, setInputActivo] = React.useState(0);
   const logo = require("../../assets/logo.png");
   const router = useRouter();
 

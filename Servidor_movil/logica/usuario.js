@@ -536,7 +536,7 @@ function obtenerUsuarios() {
 function eliminar_usuario(nid_usuario) {
   return new Promise((resolve, reject) => {
     const query =
-      "update from " +
+      "update  " +
       constantes.ESQUEMA +
       ".usuarios set borrado = 'S' where nid_usuario = " +
       conexion.dbConn.escape(nid_usuario);
