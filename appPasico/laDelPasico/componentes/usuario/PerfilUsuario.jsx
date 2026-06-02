@@ -1,15 +1,26 @@
 import { AuthContext } from "../../providers/AuthContext";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Pressable, View, StyleSheet, Text } from "react-native";
-import serviceUsuario from "../../servicios/serviceUsuario"; // Ajusta la ruta según tu estructura de carpetas
+import serviceUsuario, {
+  eliminarUsuario,
+} from "../../servicios/serviceUsuario"; // Ajusta la ruta según tu estructura de carpetas
 import { useRouter } from "expo-router"; // Asegúrate de tener instalado expo-router
 import { useEffect } from "react";
 
-import { Boton, BotonIcono } from "../componentesUI/ComponentesUI"; // Asegúrate de que Boton esté correctamente importado
+import {
+  Boton,
+  BotonIcono,
+  ModalConfirmacion,
+  ModalAviso,
+  ModalExito,
+} from "../componentesUI/ComponentesUI"; // Asegúrate de que Boton esté correctamente importado
 
 export default function PerfilUsuario() {
   const { usuario, cerrarSesion } = useContext(AuthContext);
   const router = useRouter();
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalAvisoVisible, setModalAvisoVisible] = useState(false);
+  const [modalExitoVisible, setModalExitoVisible] = useState(false);
 
   useEffect(() => {
     if (!usuario) {
@@ -39,6 +50,18 @@ export default function PerfilUsuario() {
     }
   }
 
+  async function eliminarUsuario() {
+    try {
+      let response = await serviceUsuario.eliminarUsuario();
+      if (response.error) {
+        console.log("Error al eliminar usuario:", response.mensaje);
+        setModalAvisoVisible(true);
+      } else {
+        setModalExitoVisible(true);
+      }
+    } catch (error) {}
+  }
+
   return (
     <>
       <View style={{ position: "absolute", top: 40, left: 20 }}>
@@ -66,6 +89,38 @@ export default function PerfilUsuario() {
         onPress={lanzaCerrarSesion}
         color="#FF0000"
         colorTexto="#FFF"
+      />
+      <Boton
+        nombre="Eliminar Cuenta"
+        onPress={() => setModalVisible(true)}
+        color="#FF0000"
+      />
+      <ModalConfirmacion
+        visible={modalVisible}
+        mensaje="¿Estás seguro de que deseas eliminar la cuenta?"
+        accion={() => {
+          eliminarUsuario();
+          setModalVisible(false);
+        }}
+        accionCancelar={() => setModalVisible(false)}
+        textBoton={"Eliminar"}
+        textBotonCancelar={"Cancelar"}
+      />
+      <ModalAviso
+        visible={modalAvisoVisible}
+        setVisible={setModalAvisoVisible(false)}
+        mensaje="Cuenta eliminada correctamente"
+        textBoton={"Aceptar"}
+      />
+      <ModalExito
+        visible={modalExitoVisible}
+        setVisible={() => {
+          setModalExitoVisible(false);
+          cerrarSesion(); // Cierra sesión después de eliminar la cuenta
+          router.replace("Inicio");
+        }}
+        mensaje="Cuenta eliminada correctamente"
+        textBoton={"Aceptar"}
       />
     </>
   );

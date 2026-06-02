@@ -198,6 +198,28 @@ function recuperarPassword(correoElectronico) {
   });
 }
 
+function eliminarUsuario() {
+  return new Promise((resolve, reject) => {
+    fetch(Constantes.URL_SERVICIO_MOVIL + "eliminar_usuario", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({}),
+    }).then((response) => {
+      response
+        .json()
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((error) => {
+          console.log("Error en el servicio eliminarUsuario");
+          reject(error);
+        });
+    });
+  });
+}
+
 module.exports.registrarUsuario = registrarUsuario;
 module.exports.reenviarCorreoVerificacion = reenviarCorreoVerificacion;
 module.exports.login = login;
@@ -205,3 +227,4 @@ module.exports.obtenerUsuario = obtenerUsuario;
 module.exports.logout = logout;
 module.exports.cambiarPassword = cambiarPassword;
 module.exports.recuperarPassword = recuperarPassword;
+module.exports.eliminarUsuario = eliminarUsuario;

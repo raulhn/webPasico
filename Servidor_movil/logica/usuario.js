@@ -11,13 +11,15 @@ const gestorMatriculas = require("./matricula.js");
 const gestorRoles = require("./roles.js");
 const gestorProfesor = require("./profesores.js");
 
-function existeUsuario(correoElectronico) {
+function existeUsuario(correoElectronico, borrado = "N") {
   return new Promise((resolve, reject) => {
     const query =
       "select count(*) num from " +
       constantes.ESQUEMA +
       ".usuarios where correo_electronico = " +
-      conexion.dbConn.escape(correoElectronico);
+      conexion.dbConn.escape(correoElectronico) +
+      " and borrado = " +
+      conexion.dbConn.escape(borrado);
     conexion.dbConn.query(query, (error, results) => {
       if (error) {
         console.error("Error al comprobar la existencia del usuario:", error);
@@ -35,7 +37,8 @@ function existeUsuarioNid(nid_usuario) {
       "select count(*) num from " +
       constantes.ESQUEMA +
       ".usuarios where nid_usuario = " +
-      conexion.dbConn.escape(nid_usuario);
+      conexion.dbConn.escape(nid_usuario) +
+      " and borrado = 'N'";
     conexion.dbConn.query(query, (error, results) => {
       if (error) {
         console.error("Error al comprobar la existencia del usuario:", error);
@@ -60,6 +63,11 @@ async function registrarUsuario(
     if (bExiste) {
       console.error("El usuario ya está registrado.");
       throw new Error("El usuario ya está registrado.");
+    }
+    let bExisteEliminado = await existeUsuario(correoElectronico, "S");
+    if (bExisteEliminado) {
+      console.error("El usuario ya fue eliminado");
+      throw new Error("El usuario está eliminado");
     }
     return new Promise((resolve, reject) => {
       bcrypt.hash(password, saltRounds, (err, hash) => {
@@ -205,7 +213,8 @@ function obtenerUsuario(nid_usuario) {
       "SELECT nid_usuario, nombre, primer_apellido, segundo_apellido, correo_electronico FROM " +
       constantes.ESQUEMA +
       ".usuarios WHERE nid_usuario = " +
-      conexion.dbConn.escape(nid_usuario);
+      conexion.dbConn.escape(nid_usuario) +
+      " borrado = 'N'";
 
     conexion.dbConn.query(query, (error, results) => {
       if (error) {
@@ -228,7 +237,7 @@ function obtenerUsuarioNoVerificado(correoElectronico) {
       constantes.ESQUEMA +
       ".usuarios WHERE correo_electronico = " +
       conexion.dbConn.escape(correoElectronico) +
-      " and verificado = 'N'";
+      " and verificado = 'N'  ";
     conexion.dbConn.query(query, (error, results) => {
       if (error) {
         console.error("Error al comprobar la existencia del usuario:", error);
@@ -281,7 +290,7 @@ function login(correoElectronico, password) {
       constantes.ESQUEMA +
       ".usuarios WHERE correo_electronico = " +
       conexion.dbConn.escape(correoElectronico) +
-      " and verificado = 'S'";
+      " and verificado = 'S' and borrado = 'N'";
     conexion.dbConn.query(query, (error, results) => {
       if (error) {
         console.error("Error al comprobar la existencia del usuario:", error);
@@ -455,7 +464,8 @@ function actualizarPassword(nid_usuario, password) {
         ".usuarios SET password = " +
         conexion.dbConn.escape(hash) +
         " WHERE nid_usuario = " +
-        conexion.dbConn.escape(nid_usuario);
+        conexion.dbConn.escape(nid_usuario) +
+        " and borrado = 'N'";
       conexion.dbConn.query(query, (error, results) => {
         if (error) {
           console.error("Error al actualizar la contraseña:", error);
@@ -474,7 +484,9 @@ function realizarCambioPassword(nid_usuario, passwordActual, passwordNuevo) {
       "SELECT * FROM " +
       constantes.ESQUEMA +
       ".usuarios WHERE nid_usuario = " +
-      conexion.dbConn.escape(nid_usuario);
+      conexion.dbConn.escape(nid_usuario) +
+      " and borrado = 'N'";
+
     conexion.dbConn.query(query, (error, results) => {
       if (error) {
         console.error("Error al comprobar la existencia del usuario:", error);
@@ -509,7 +521,7 @@ function obtenerUsuarios() {
       ".usuarios u, " +
       constantes.ESQUEMA +
       ".conexiones c " +
-      "WHERE u.nid_usuario = c.nid_usuario";
+      "WHERE u.nid_usuario = c.nid_usuario and borrado = 'N'";
     conexion.dbConn.query(query, (error, results) => {
       if (error) {
         console.error("Error al obtener los usuarios:", error);
