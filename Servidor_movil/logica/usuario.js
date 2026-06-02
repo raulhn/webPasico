@@ -521,6 +521,33 @@ function obtenerUsuarios() {
   });
 }
 
+function eliminar_usuario(nid_usuario) {
+  return new Promise((resolve, reject) => {
+    const query =
+      "update from " +
+      constantes.ESQUEMA +
+      ".usuarios set borrado = 'S' where nid_usuario = " +
+      conexion.dbConn.escape(nid_usuario);
+
+    conexion.dbConn.beginTransaction((err) => {
+      if (err) {
+        console.error("Error al iniciar la transacción:", err);
+        reject(new Error("Error al eliminar el usuario"));
+      }
+      conexion.dbConn.query(query, (error, results) => {
+        if (error) {
+          console.error("Error al eliminar el usuario:", error);
+          conexion.dbConn.rollback();
+          reject(new Error("Error al eliminar el usuario"));
+        } else {
+          conexion.dbConn.commit();
+          resolve(results);
+        }
+      });
+    });
+  });
+}
+
 module.exports.existeUsuario = existeUsuario;
 module.exports.existeUsuarioNid = existeUsuarioNid;
 module.exports.registrarUsuario = registrarUsuario;
@@ -534,3 +561,4 @@ module.exports.obtenerUsuarios = obtenerUsuarios;
 
 module.exports.permisosMusico = permisosMusico;
 module.exports.permisosEscuela = permisosEscuela;
+module.exports.eliminar_usuario = eliminar_usuario;

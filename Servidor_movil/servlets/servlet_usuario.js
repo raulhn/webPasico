@@ -6,6 +6,7 @@ const validacionEmail = require("../logica/validacionEmail.js");
 const nodeMail = require("../logica/nodemail.js");
 const jwt = require("jsonwebtoken");
 const constantes = require("../constantes.js");
+const servletComun = require("./servlet_comun.js");
 
 const gestorPersona = require("../logica/persona.js");
 
@@ -377,6 +378,27 @@ async function recuperarPassword(req, res) {
   }
 }
 
+async function eliminarUsuario(req, res) {
+  try {
+    const tokenDecode = await servletComun.obtenerTokenDecoded(req, res);
+    if (!tokenDecode) {
+      res.status(401).send({ error: true, mensaje: "No autenticado" });
+      return;
+    }
+    const nid_usuario = tokenDecode.nid_usuario;
+    await gestorUsuario.eliminar_usuario(nid_usuario);
+    res.status(200).send({
+      error: false,
+      mensaje: "Usuario eliminado correctamente",
+    });
+  } catch (error) {
+    console.error("Error al eliminar el usuario:", error);
+    res.status(400).send({
+      error: true,
+      mensaje: "Error al eliminar el usuario",
+    });
+  }
+}
 module.exports.registrarUsuario = registrarUsuario;
 module.exports.verificarCorreo = verificarCorreo;
 module.exports.reenviarCorreoVerificacion = reenviarCorreoVerificacion;
@@ -386,3 +408,4 @@ module.exports.refreshToken = refreshToken;
 module.exports.logout = logout;
 module.exports.recuperarPassword = recuperarPassword;
 module.exports.cambiarPassword = cambiarPassword;
+module.exports.eliminarUsuario = eliminarUsuario;

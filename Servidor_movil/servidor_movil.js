@@ -277,6 +277,8 @@ app.get(
   servletEventoConcierto.obtenerPartiturasEvento,
 );
 
+app.post("/eliminar_usuario", servletUsuario.eliminarUsuario);
+
 app.post("/eliminar_evento_concierto", servletEventoConcierto.eliminar_evento);
 
 // Tipo evento musico //
