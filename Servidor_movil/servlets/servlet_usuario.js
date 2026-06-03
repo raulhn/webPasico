@@ -271,54 +271,64 @@ async function refreshToken(req, res) {
     }
 
     jwt.verify(token, process.env.SESSION_SECRET, async (err, decoded) => {
-      if (err) {
-        console.error("Error al verificar el token:", err);
-        res.status(401).send({ error: true, mensaje: "No autenticado" });
-        return;
+      try {
+        if (err) {
+          console.error("Error al verificar el token:", err);
+          res.status(401).send({ error: true, mensaje: "No autenticado" });
+          return;
+        }
+
+        const usuario = await gestorUsuario.obtenerUsuario(decoded.nid_usuario);
+
+        const nuevoToken = jwt.sign(
+          {
+            nid_usuario: decoded.nid_usuario,
+            correoElectronico: usuario.correo_electronico,
+            nombre:
+              usuario.nombre +
+              " " +
+              usuario.primer_apellido +
+              " " +
+              usuario.segundo_apellido,
+          },
+          process.env.SESSION_SECRET,
+          { expiresIn: constantes.TIEMPO_ACCESS_TOKEN },
+        );
+
+        const refreshToken = jwt.sign(
+          { nid_usuario: usuario.nid_usuario },
+          process.env.SESSION_SECRET,
+          {
+            expiresIn: constantes.TIEMPO_REFRESH_TOKEN,
+          },
+        );
+
+        await gestorConexion.registrar_token_refresco(
+          refreshToken,
+          usuario.nid_usuario,
+        );
+
+        res.cookie(constantes.ACCESS_TOKEN, nuevoToken, {
+          httpOnly: true,
+          secure: true, // Asegúrate de que tu aplicación esté sirviendo a través de HTTPS
+          sameSite: "Strict", // Cambia esto según tus necesidades
+          maxAge: constantes.TIEMPO_ACCESS_TOKEN * 1000,
+        });
+
+        res.status(200).send({
+          error: false,
+          mensaje: "Token actualizado",
+          refreshToken: refreshToken,
+        });
+      } catch (error) {
+        console.error("Error inesperado al refrescar el token:", error);
+        res
+          .status(500)
+          .send({
+            error: true,
+            mensaje: "Error inesperado al refrescar el token",
+          });
       }
-
-      const usuario = await gestorUsuario.obtenerUsuario(decoded.nid_usuario);
-
-      const nuevoToken = jwt.sign(
-        {
-          nid_usuario: decoded.nid_usuario,
-          correoElectronico: usuario.correo_electronico,
-          nombre:
-            usuario.nombre +
-            " " +
-            usuario.primer_apellido +
-            " " +
-            usuario.segundo_apellido,
-        },
-        process.env.SESSION_SECRET,
-        { expiresIn: constantes.TIEMPO_ACCESS_TOKEN },
-      );
-
-      const refreshToken = jwt.sign(
-        { nid_usuario: usuario.nid_usuario },
-        process.env.SESSION_SECRET,
-        {
-          expiresIn: constantes.TIEMPO_REFRESH_TOKEN,
-        },
-      );
-
-      await gestorConexion.registrar_token_refresco(
-        refreshToken,
-        usuario.nid_usuario,
-      );
-
-      res.cookie(constantes.ACCESS_TOKEN, nuevoToken, {
-        httpOnly: true,
-        secure: true, // Asegúrate de que tu aplicación esté sirviendo a través de HTTPS
-        sameSite: "Strict", // Cambia esto según tus necesidades
-        maxAge: constantes.TIEMPO_ACCESS_TOKEN * 1000,
-      });
-
-      res.status(200).send({
-        error: false,
-        mensaje: "Token actualizado",
-        refreshToken: refreshToken,
-      });
     });
   } catch (error) {
     console.error("Error inesperado al refrescar el token:", error);
