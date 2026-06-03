@@ -65,38 +65,57 @@ async function registrarUsuario(
       throw new Error("El usuario ya está registrado.");
     }
     let bExisteEliminado = await existeUsuario(correoElectronico, "S");
-    if (bExisteEliminado) {
-      console.error("El usuario ya fue eliminado");
-      throw new Error("El usuario está eliminado");
-    }
+
     return new Promise((resolve, reject) => {
       bcrypt.hash(password, saltRounds, (err, hash) => {
-        const query =
-          "INSERT INTO " +
-          constantes.ESQUEMA +
-          ".usuarios (nombre, primer_apellido, segundo_apellido, correo_electronico, password) " +
-          "VALUES (trim(" +
-          conexion.dbConn.escape(nombre) +
-          "), trim(" +
-          conexion.dbConn.escape(primerApellido) +
-          "), trim(" +
-          conexion.dbConn.escape(segundoApellido) +
-          "), trim(" +
-          conexion.dbConn.escape(correoElectronico) +
-          "), trim(" +
-          conexion.dbConn.escape(hash) +
-          "))";
+        let query = "";
+        if (bExisteEliminado) {
+          query =
+            "UPDATE " +
+            constantes.ESQUEMA +
+            ".usuarios SET nombre = trim(" +
+            conexion.dbConn.escape(nombre) +
+            "), primer_apellido = trim(" +
+            conexion.dbConn.escape(primerApellido) +
+            "), segundo_apellido = trim(" +
+            conexion.dbConn.escape(segundoApellido) +
+            "), password = trim(" +
+            conexion.dbConn.escape(hash) +
+            "), borrado = 'N', verificado = 'N' WHERE correo_electronico = " +
+            conexion.dbConn.escape(correoElectronico);
+        } else {
+          query =
+            "INSERT INTO " +
+            constantes.ESQUEMA +
+            ".usuarios (nombre, primer_apellido, segundo_apellido, correo_electronico, password) " +
+            "VALUES (trim(" +
+            conexion.dbConn.escape(nombre) +
+            "), trim(" +
+            conexion.dbConn.escape(primerApellido) +
+            "), trim(" +
+            conexion.dbConn.escape(segundoApellido) +
+            "), trim(" +
+            conexion.dbConn.escape(correoElectronico) +
+            "), trim(" +
+            conexion.dbConn.escape(hash) +
+            "))";
+        }
 
         conexion.dbConn.query(query, async (error, results) => {
-          if (error) {
-            console.error("Error al registrar el usuario:", error);
-            reject("Error al reigistrar el usuario");
-          } else {
-            await validacionEmail.enviarEmailValidacion(
-              results.insertId,
-              correoElectronico,
-            );
-            resolve(results);
+          try {
+            if (error) {
+              console.error("Error al registrar el usuario:", error);
+              reject("Error al reigistrar el usuario");
+            } else {
+              await validacionEmail.enviarEmailValidacion(
+                results.insertId,
+                correoElectronico,
+              );
+              resolve(results);
+            }
+          } catch (error) {
+            console.error("Error al enviar el correo de verificación:", error);
+            reject("Error al enviar el correo de verificación");
           }
         });
       });
