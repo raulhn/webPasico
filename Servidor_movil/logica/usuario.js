@@ -31,6 +31,28 @@ function existeUsuario(correoElectronico, borrado = "N") {
   });
 }
 
+function obtenerUsuarioCorreo(correoElectronico, borrado = "N") {
+  return new Promise((resolve, reject) => {
+    const query =
+      "select * from " +
+      constantes.ESQUEMA +
+      ".usuarios where correo_electronico = " +
+      conexion.dbConn.escape(correoElectronico) +
+      " and borrado = " +
+      conexion.dbConn.escape(borrado);
+    conexion.dbConn.query(query, (error, results) => {
+      if (error) {
+        console.error("Error al comprobar la existencia del usuario:", error);
+        resolve(null);
+      } else if (results.length == 0) {
+        resolve(null);
+      } else {
+        resolve(results[0]);
+      }
+    });
+  });
+}
+
 function existeUsuarioNid(nid_usuario) {
   return new Promise((resolve, reject) => {
     const query =
@@ -65,7 +87,16 @@ async function registrarUsuario(
       throw new Error("El usuario ya está registrado.");
     }
     let bExisteEliminado = await existeUsuario(correoElectronico, "S");
-
+    let nid_usuario_eliminado = null;
+    if (bExisteEliminado) {
+      const usuario_eliminado = await obtenerUsuarioCorreo(
+        correoElectronico,
+        "S",
+      );
+      if (usuario_eliminado) {
+        nid_usuario_eliminado = usuario_eliminado.nid_usuario;
+      }
+    }
     return new Promise((resolve, reject) => {
       bcrypt.hash(password, saltRounds, (err, hash) => {
         let query = "";
@@ -107,8 +138,14 @@ async function registrarUsuario(
               console.error("Error al registrar el usuario:", error);
               reject("Error al reigistrar el usuario");
             } else {
+              let nid_usuario_registrado;
+              if (nid_usuario_eliminado) {
+                nid_usuario_registrado = nid_usuario_eliminado;
+              } else {
+                nid_usuario_registrado = results.insertId;
+              }
               await validacionEmail.enviarEmailValidacion(
-                results.insertId,
+                nid_usuario_registrado,
                 correoElectronico,
               );
               resolve(results);
@@ -226,14 +263,15 @@ async function construirRoles(nid_usuario) {
   }
 }
 
-function obtenerUsuario(nid_usuario) {
+function obtenerUsuario(nid_usuario, borrado = "N") {
   return new Promise((resolve, reject) => {
     const query =
       "SELECT nid_usuario, nombre, primer_apellido, segundo_apellido, correo_electronico FROM " +
       constantes.ESQUEMA +
       ".usuarios WHERE nid_usuario = " +
       conexion.dbConn.escape(nid_usuario) +
-      " and borrado = 'N'";
+      " and borrado = " +
+      conexion.dbConn.escape(borrado);
 
     conexion.dbConn.query(query, (error, results) => {
       if (error) {
