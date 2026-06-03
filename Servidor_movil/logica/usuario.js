@@ -112,7 +112,7 @@ async function registrarUsuario(
             conexion.dbConn.escape(segundoApellido) +
             "), password = trim(" +
             conexion.dbConn.escape(hash) +
-            "), borrado = 'N', verificado = 'N' WHERE correo_electronico = " +
+            "), borrado = 'N', verificado = 'N', nid_persona = null WHERE correo_electronico = " +
             conexion.dbConn.escape(correoElectronico);
         } else {
           query =
