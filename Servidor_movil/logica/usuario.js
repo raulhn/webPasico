@@ -214,7 +214,7 @@ function obtenerUsuario(nid_usuario) {
       constantes.ESQUEMA +
       ".usuarios WHERE nid_usuario = " +
       conexion.dbConn.escape(nid_usuario) +
-      " borrado = 'N'";
+      " and borrado = 'N'";
 
     conexion.dbConn.query(query, (error, results) => {
       if (error) {
