@@ -1,43 +1,34 @@
+import { useCursos } from "../../hooks/escuela/useCurso";
+import { useRouter } from "expo-router";
+import { useState } from "react";
 import {
   View,
   Text,
-  ActivityIndicator,
-  StyleSheet,
-  RefreshControl,
-  Pressable,
   FlatList,
+  Pressable,
+  ActivityIndicator,
+  RefreshControl,
+  StyleSheet,
 } from "react-native";
-import { useAsignaturasProfesor } from "../../../../hooks/escuela/useAsignaturas";
-import { EntradaGroupRadioButton } from "../../../../componentes/componentesUI/ComponentesUI";
-import { useCursos } from "../../../../hooks/escuela/useCurso";
-import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../../../../providers/AuthContext";
-import { useAlumnosAsignaturaProfesor } from "../../../../hooks/escuela/useAlumnos";
-import CardAlumno from "../../../../componentes/componentesEscuela/CardAlumno";
-import { Link, useRouter } from "expo-router";
-import { useNavigation } from "expo-router";
-import ListaAlumnos from "../../../../componentes/componentesEscuela/ListaAlumnos";
+import { EntradaGroupRadioButton } from "../../componentes/componentesUI/ComponentesUI";
 
-export default function Alumnos() {
-  const { cerrarSesion } = useContext(AuthContext);
-  const { asignaturas, cargando, error, lanzarRefresco } =
-    useAsignaturasProfesor(cerrarSesion);
+export default function ListaAlumnos({
+  alumnos,
+  cargandoAlumnos,
+  lanzarRefresco,
+  cargando,
+  error,
+  asignaturas,
+  setNidAsignatura,
+  setNidCurso,
+  cerrarSesion,
+}) {
+  const [presionado, setPresionado] = useState(null);
   const {
     cursos,
     cargando: cargandoCursos,
     error: errorCursos,
   } = useCursos(cerrarSesion);
-  const {
-    setNidAsignatura,
-    setNidCurso,
-    alumnos,
-    cargando: cargandoAlumnos,
-    error: errorAlumnos,
-    lanzarRefresco: lanzarRefrescoAlumnos,
-  } = useAlumnosAsignaturaProfesor(null, null, cerrarSesion);
-
-  const [presionado, setPresionado] = useState(null);
-
   const [asignaturaSeleccionada, setAsignaturaSeleccionada] = useState(null);
   const [cursoSeleccionado, setCursoSeleccionado] = useState(null);
 
@@ -64,20 +55,6 @@ export default function Alumnos() {
     etiqueta: curso.descripcion,
     valor: curso.nid_curso,
   }));
-  /*
-  return (
-    <ListaAlumnos
-      alumnos={alumnos}
-      cargandoAlumnos={cargandoAlumnos}
-      lanzarRefresco={lanzarRefresco}
-      cargando={cargando}
-      error={error}
-      asignaturas={asignaturas}
-      setNidAsignatura={setNidAsignatura}
-      setNidCurso={setNidCurso}
-      cerrarSesion={cerrarSesion}
-    />
-  );*/
 
   return (
     <>

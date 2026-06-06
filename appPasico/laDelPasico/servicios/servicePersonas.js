@@ -46,12 +46,12 @@ function obtenerPersonasMusicos(cerrar_sesion) {
   });
 }
 
-function obtenerPersonasAlumnos(cerrar_sesion) {
+function obtenerPersonasAlumnos(nid_curso, cerrar_sesion) {
   return new Promise((resolve, reject) => {
     servicioComun
       .peticionSesion(
         "GET",
-        Constantes.URL_SERVICIO_MOVIL + "obtener_personas_alumnos",
+        Constantes.URL_SERVICIO_MOVIL + "obtener_personas_alumnos/" + nid_curso,
         null,
         cerrar_sesion
       )
@@ -69,24 +69,27 @@ function obtenerPersonasAlumnos(cerrar_sesion) {
   });
 }
 
-async function obtenerAlumnoProfesor(nid_alumno, nid_curso, cerrar_sesion)
-{
-   try {
-       const response = await servicioComun.peticionSesion(
-           "GET",
-           Constantes.URL_SERVICIO_MOVIL + "obtener_alumno_profesor/" + nid_alumno + "/" + nid_curso,
-           null,
-           cerrar_sesion
-       );
-       if (!response.error) {
-           return response;
-       } else {
-           throw new Error(response.error);
-       }
-   } catch (error) {
-       console.log("Error en el servicio obtener_alumno_profesor");
-       throw error;
-   }
+async function obtenerAlumnoProfesor(nid_alumno, nid_curso, cerrar_sesion) {
+  try {
+    const response = await servicioComun.peticionSesion(
+      "GET",
+      Constantes.URL_SERVICIO_MOVIL +
+        "obtener_alumno_profesor/" +
+        nid_alumno +
+        "/" +
+        nid_curso,
+      null,
+      cerrar_sesion
+    );
+    if (!response.error) {
+      return response;
+    } else {
+      throw new Error(response.error);
+    }
+  } catch (error) {
+    console.log("Error en el servicio obtener_alumno_profesor");
+    throw error;
+  }
 }
 
 function obtenerPersonasAsociacion(cerrar_sesion) {

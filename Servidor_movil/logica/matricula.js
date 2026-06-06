@@ -7,7 +7,7 @@ function insertarMaticula(
   nid_matricula,
   nid_persona,
   nid_curso,
-  fecha_actualizacion
+  fecha_actualizacion,
 ) {
   return new Promise((resolve, reject) => {
     var sql =
@@ -70,7 +70,7 @@ function actualizarMatricula(
   nid_matricula,
   nid_persona,
   nid_curso,
-  fecha_actualizacion
+  fecha_actualizacion,
 ) {
   return new Promise((resolve, reject) => {
     var sql =
@@ -120,7 +120,7 @@ async function registrarMatricula(
   nid_matricula,
   nid_persona,
   nid_curso,
-  fecha_actualizacion
+  fecha_actualizacion,
 ) {
   try {
     const existe = await existeMatricula(nid_matricula);
@@ -129,14 +129,14 @@ async function registrarMatricula(
         nid_matricula,
         nid_persona,
         nid_curso,
-        fecha_actualizacion
+        fecha_actualizacion,
       );
     } else {
       return await insertarMaticula(
         nid_matricula,
         nid_persona,
         nid_curso,
-        fecha_actualizacion
+        fecha_actualizacion,
       );
     }
   } catch (error) {
@@ -184,7 +184,7 @@ function obtenerMatriculasPersona(nid_persona) {
       if (err) {
         console.log(
           "matricula.js -> obtenerMatriculasPersona: Error al obtener las matriculas de la persona: " +
-            err
+            err,
         );
         reject(new Error("Error al obtener las matriculas de la persona"));
       } else {
@@ -214,7 +214,7 @@ function obtenerMatricula(nid_matricula) {
       if (err) {
         console.log(
           "matricula.js -> obtenerMatriculasPersona: Error al obtener las matriculas de la persona: " +
-            err
+            err,
         );
         reject(new Error("Error al obtener las matriculas de la persona"));
       } else {
@@ -224,7 +224,7 @@ function obtenerMatricula(nid_matricula) {
   });
 }
 
-function obtenerPersonasAlumnos() {
+function obtenerPersonasAlumnos(nid_curso) {
   return new Promise((resolve, reject) => {
     const sql =
       "SELECT p.nid_persona, p.nombre, p.primer_apellido, p.segundo_apellido, ma.nid_asignatura " +
@@ -238,6 +238,8 @@ function obtenerPersonasAlumnos() {
       "WHERE p.nid_persona = m.nid_persona " +
       "AND m.nid_matricula = ma.nid_matricula " +
       "AND (ma.fecha_baja IS NULL OR ma.fecha_baja > NOW()) " +
+      " and m.nid_curso = " +
+      conexion.dbConn.escape(nid_curso) +
       "GROUP BY p.nid_persona, p.nombre, p.primer_apellido, p.segundo_apellido, ma.nid_asignatura";
 
     conexion.dbConn.query(sql, (err, result) => {

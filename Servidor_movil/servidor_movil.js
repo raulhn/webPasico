@@ -328,7 +328,10 @@ app.get(
 // Obtener Personas //
 app.get("/obtener_personas", servletPersona.obtenerPersonas);
 app.get("/obtener_personas_musicos", servletPersona.obtenerPersonasMusicos);
-app.get("/obtener_personas_alumnos", servletPersona.obtenerPersonasAlumnos);
+app.get(
+  "/obtener_personas_alumnos/:nid_curso",
+  servletPersona.obtenerPersonasAlumnos,
+);
 app.get("/obtener_personas_socios", servletPersona.obtenerPersonasSocios);
 app.get(
   "/obtener_alumnos_profesor",

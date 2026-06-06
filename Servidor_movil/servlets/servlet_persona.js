@@ -246,7 +246,7 @@ async function obtenerNidPersona(req) {
 
 async function obtenerPersonasAlumnos(req, res) {
   try {
-    const rolesPermitidos = [constantes.ADMINISTRADOR];
+    const rolesPermitidos = [constantes.ADMINISTRADOR, constantes.DIRECTIVO];
     let rolAdministrador = await servletComun.comprobarRol(
       req,
       res,
@@ -260,7 +260,10 @@ async function obtenerPersonasAlumnos(req, res) {
       return;
     }
 
-    const personasAlumnos = await gestorMatricula.obtenerPersonasAlumnos();
+    let nid_curso = req.params.curso;
+
+    const personasAlumnos =
+      await gestorMatricula.obtenerPersonasAlumnos(nid_curso);
     res.status(200).send({
       error: false,
       mensaje: "Alumnos obtenidos correctamente",

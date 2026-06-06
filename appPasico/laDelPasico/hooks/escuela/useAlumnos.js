@@ -2,94 +2,141 @@ import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../../providers/AuthContext.js";
 import serviceMatriculaAsignatura from "../../servicios/serviceMatriculaAsignatura.js";
 import servicePersonas from "../../servicios/servicePersonas.js";
+import { esRol } from "../useRol.js";
+import { ROL_ADMINISTRADOR, ROL_DIRECTIVO } from "../../config/constantes.js";
 
-export const useAlumnos = () =>
-{
-    const { alumnos } = useContext(AuthContext);
+export const useAlumnosAsignaturaProfesor = (
+  nidCurso_,
+  nidAsignatura_,
+  cerrarSesion
+) => {
+  const [alumnos, setAlumnos] = useState([]);
+  const [cargando, setCargando] = useState(true);
+  const [error, setError] = useState(null);
+  const [refrescar, setRefrescar] = useState(false);
 
-    const esAlumno = (alumnosPermitidos) => {
-        if (!alumnos || alumnos.length === 0) {
-            return false; // Si no hay alumnos, no se muestra la opción
-        }
+  const [nidAsignatura, setNidAsignatura] = useState(nidAsignatura_);
+  const [nidCurso, setNidCurso] = useState(nidCurso_);
 
-        for (let a = 0; a < alumnos.length; a++) {
-            for (let i = 0; i < alumnosPermitidos.length; i++) {
-                if (alumnos[a].id === alumnosPermitidos[i]) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    };
+  function lanzarRefresco() {
+    setRefrescar(true);
+  }
 
-    return { esAlumno };
-}
-
-export const useAlumnosAsignaturaProfesor = (nidCurso_, nidAsignatura_, cerrarSesion) => {
-    const [alumnos, setAlumnos] = useState([]);
-    const [cargando, setCargando] = useState(true);
-    const [error, setError] = useState(null);
-    const [refrescar, setRefrescar] = useState(false);
-
-    const [nidAsignatura, setNidAsignatura] = useState(nidAsignatura_);
-    const [nidCurso, setNidCurso] = useState(nidCurso_);
-
-    function lanzarRefresco() {
-        setRefrescar(true);
+  useEffect(() => {
+    if (nidAsignatura && nidCurso) {
+      serviceMatriculaAsignatura
+        .obtenerAlumnosAsignaturaProfesor(nidCurso, nidAsignatura, cerrarSesion)
+        .then((data) => {
+          setAlumnos(data);
+          setCargando(false);
+          setRefrescar(false);
+        })
+        .catch((error) => {
+          console.error(
+            "Error al obtener los alumnos de la asignatura del profesor:",
+            error
+          );
+          setError(error);
+          setCargando(false);
+          setRefrescar(false);
+        });
+    } else {
+      setAlumnos([]);
+      setRefrescar(false);
     }
+  }, [refrescar, nidCurso, nidAsignatura]);
 
-    useEffect(() => {
- 
-        if(nidAsignatura && nidCurso)      {
-        serviceMatriculaAsignatura.obtenerAlumnosAsignaturaProfesor(nidCurso, nidAsignatura, cerrarSesion)
-            .then((data) => {
-                setAlumnos(data);
-                setCargando(false);
-                setRefrescar(false);
-            })
-            .catch((error) => {
-                console.error("Error al obtener los alumnos de la asignatura del profesor:", error);
-                setError(error);
-                setCargando(false);
-                setRefrescar(false);
-            });
-        }
-        else {
-            setAlumnos([]);
-            setRefrescar(false)
-        }
-    }, [refrescar, nidCurso, nidAsignatura]);
-
-    return { alumnos, cargando, error, lanzarRefresco, setNidAsignatura, setNidCurso};
-}
+  return {
+    alumnos,
+    cargando,
+    error,
+    lanzarRefresco,
+    setNidAsignatura,
+    setNidCurso,
+  };
+};
 
 export const useAlumnoProfesor = (nidAlumno, nidCurso, cerrarSesion) => {
+  const [alumno, setAlumno] = useState(null);
+  const [cargando, setCargando] = useState(true);
+  const [error, setError] = useState(null);
+  const [refrescar, setRefrescar] = useState(false);
 
-    const [alumno, setAlumno] = useState(null);
-    const [cargando, setCargando] = useState(true);
-    const [error, setError] = useState(null);
-    const [refrescar, setRefrescar] = useState(false);
+  function lanzarRefresco() {
+    setRefrescar(true);
+  }
 
-    function lanzarRefresco() {
-        setRefrescar(true);
+  useEffect(() => {
+    if (nidAlumno) {
+      servicePersonas
+        .obtenerAlumnoProfesor(nidAlumno, nidCurso, cerrarSesion)
+        .then((data) => {
+          setAlumno(data);
+          setCargando(false);
+          setRefrescar(false);
+        })
+        .catch((error) => {
+          console.error("Error al obtener el alumno del profesor:", error);
+          setError(error);
+          setCargando(false);
+          setRefrescar(false);
+        });
     }
+  }, [nidAlumno, nidCurso, refrescar]);
 
-    useEffect(() => {
-        if (nidAlumno) {
-            servicePersonas.obtenerAlumnoProfesor(nidAlumno, nidCurso, cerrarSesion)
-                .then((data) => {
-                    setAlumno(data);
-                    setCargando(false);
-                    setRefrescar(false);
-                })
-                .catch((error) => {
-                    console.error("Error al obtener el alumno del profesor:", error);
-                    setError(error);
-                    setCargando(false);
-                    setRefrescar(false);
-                });
-        }
-    }, [nidAlumno, nidCurso, refrescar]);
+  return { alumno, cargando, error, refrescar, lanzarRefresco };
+};
 
-    return { alumno, cargando, error, refrescar, lanzarRefresco};
-}
+export const useAlumnos = (nidCurso, cerrarSesion) => {
+  const [alumnos, setAlumnos] = useState([]);
+  const [alumnosFiltrados, setAlumnosFiltrados] = useState([]);
+  const [nidAsignatura, setNidAsignatura] = useState(null);
+
+  const [cargando, setCargando] = useState(true);
+  const [error, setError] = useState(null);
+  const [refrescar, setRefrescar] = useState(false);
+
+  function lanzarRefresco() {
+    setRefrescar(true);
+  }
+
+  useEffect(() => {
+    let rolPermitido = esRol([ROL_ADMINISTRADOR, ROL_DIRECTIVO]);
+
+    if (rolPermitido && nidCurso) {
+      servicePersonas
+        .obtenerPersonasAlumnos(nidCurso, cerrarSesion)
+        .then((personas) => {
+          setAlumnos(personas);
+
+          setRefrescar(false);
+          setCargando(false);
+        })
+        .catch((error) => {
+          console.log("Error al obtener los alumnos:", error);
+          setError("Error al recuperar los alumnos");
+          setRefrescar(false);
+          setCargando(false);
+        });
+    }
+  }, [refrescar, nidCurso]);
+
+  useEffect(() => {
+    if (nidAsignatura) {
+      const alumnosAsignatura = alumnos.filter(
+        (alumno) => alumno.nid_asignatura === nidAsignatura
+      );
+      setAlumnosFiltrados(alumnosAsignatura);
+    } else {
+      setAlumnosFiltrados(alumnos);
+    }
+  }, [alumnos, nidAsignatura]);
+
+  return {
+    alumnos: alumnosFiltrados,
+    setNidAsignatura,
+    cargando,
+    error,
+    lanzarRefresco,
+  };
+};
