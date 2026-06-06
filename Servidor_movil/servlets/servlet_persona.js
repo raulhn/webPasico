@@ -260,7 +260,7 @@ async function obtenerPersonasAlumnos(req, res) {
       return;
     }
 
-    let nid_curso = req.params.curso;
+    let nid_curso = req.params.nid_curso;
 
     const personasAlumnos =
       await gestorMatricula.obtenerPersonasAlumnos(nid_curso);

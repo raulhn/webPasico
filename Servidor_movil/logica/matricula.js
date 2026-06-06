@@ -240,7 +240,7 @@ function obtenerPersonasAlumnos(nid_curso) {
       "AND (ma.fecha_baja IS NULL OR ma.fecha_baja > NOW()) " +
       " and m.nid_curso = " +
       conexion.dbConn.escape(nid_curso) +
-      "GROUP BY p.nid_persona, p.nombre, p.primer_apellido, p.segundo_apellido, ma.nid_asignatura";
+      " GROUP BY p.nid_persona, p.nombre, p.primer_apellido, p.segundo_apellido, ma.nid_asignatura";
 
     conexion.dbConn.query(sql, (err, result) => {
       if (err) {
