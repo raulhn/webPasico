@@ -57,8 +57,6 @@ export default function Alumnos() {
     (alumno) => alumno.nid_asignatura === nidAsignatura
   );
 
-  console.log("asignaturasAdmin", alumnosAdministrador);
-
   const alumnosAdministradorUnicos = [
     ...new Map(
       alumnosAdministrador?.map((alumno) => [alumno.nid_persona, alumno])

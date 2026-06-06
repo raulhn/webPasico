@@ -71,6 +71,7 @@ function obtenerPersonasAlumnos(nid_curso, cerrar_sesion) {
 
 async function obtenerAlumnoProfesor(nid_alumno, nid_curso, cerrar_sesion) {
   try {
+    console.log("obtener_alumno_profesor/" + nid_alumno + "/" + nid_curso);
     const response = await servicioComun.peticionSesion(
       "GET",
       Constantes.URL_SERVICIO_MOVIL +

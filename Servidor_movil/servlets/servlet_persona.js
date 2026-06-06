@@ -321,7 +321,11 @@ async function obtenerAlumnoProfesor(req, res) {
       rolesPermitidos,
     );
 
-    let rolAdministrador = await servletComun.comprobarRol(rolesAdministrador);
+    let rolAdministrador = await servletComun.comprobarRol(
+      req,
+      res,
+      rolesAdministrador,
+    );
 
     // ROL ADMINISTRADOR //
     if (rolAdministrador) {
