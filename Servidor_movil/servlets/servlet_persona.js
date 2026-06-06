@@ -3,7 +3,7 @@ const gestorPersona = require("../logica/persona.js");
 const constantes = require("../constantes.js");
 const gestorMatricula = require("../logica/matricula.js");
 const gestorProfesorAlumnoMatricula = require("../logica/profesor_alumno_matricula.js");
-const gestorCurso = require("../logica/curso.js");
+const gestorSocios = require("../logica/socios.js");
 
 function registrarPersona(req, res) {
   servletComun.comprobacionAccesoAPIKey(req, res, async () => {
@@ -280,7 +280,7 @@ async function obtenerPersonasAlumnos(req, res) {
 
 async function obtenerPersonasSocios(req, res) {
   try {
-    const rolesPermitidos = [constantes.ADMINISTRADOR];
+    const rolesPermitidos = [constantes.ADMINISTRADOR, constantes.DIRECTIVO];
     let rolAdministrador = await servletComun.comprobarRol(
       req,
       res,
@@ -338,8 +338,14 @@ async function obtenerAlumnoProfesor(req, res) {
         return;
       }
 
-      const padre = await gestorPersona.obtenerPersona(alumno.nid_padre);
-      const madre = await gestorPersona.obtenerPersona(alumno.nid_madre);
+      let esSocio = await gestorSocios.esSocio(nid_alumno);
+
+      let padre = null;
+      let madre = null;
+      if (!esSocio) {
+        padre = await gestorPersona.obtenerPersona(alumno.nid_padre);
+        madre = await gestorPersona.obtenerPersona(alumno.nid_madre);
+      }
 
       res.status(200).send({
         error: false,
@@ -392,9 +398,14 @@ async function obtenerAlumnoProfesor(req, res) {
       return;
     }
 
-    const padre = await gestorPersona.obtenerPersona(alumno.nid_padre);
-    const madre = await gestorPersona.obtenerPersona(alumno.nid_madre);
-
+    let esSocio = await gestorSocios.esSocio(nid_alumno);
+    let padre = null;
+    let madre = null;
+    // Si no es socio se considera menor de edad y se recuperan los datos de los padres
+    if (!esSocio) {
+      padre = await gestorPersona.obtenerPersona(alumno.nid_padre);
+      madre = await gestorPersona.obtenerPersona(alumno.nid_madre);
+    }
     res.status(200).send({
       error: false,
       mensaje: "Información del alumno profesor obtenida correctamente",
