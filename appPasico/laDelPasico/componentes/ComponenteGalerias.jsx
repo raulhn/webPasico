@@ -2,6 +2,7 @@ import { FlatList, RefreshControl } from "react-native";
 import React, { useState, useEffect } from "react";
 import { CardBlog, AnimatedCardBlog } from "./CardBlog.jsx";
 import { View, Text } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { StyleSheet, ActivityIndicator } from "react-native";
 import { Pressable } from "react-native";
 import { Boton } from "./componentesUI/ComponentesUI.jsx";
@@ -59,38 +60,39 @@ export default function ComponenteGalerias() {
   }
 
   return (
-    <View style={{ display: "flex" }}>
-      <FlatList
-        onScrollEndDrag={() => {
-          setPresionado(null); // Cambia el estado a no presionado al hacer scroll
-        }}
-        refreshControl={
-          <RefreshControl
-            refreshing={refrescar}
-            onRefresh={() => setRefresco(true)}
-          />
-        }
-        style={{ flexGrow: 1, backgroundColor: "white" }}
-        data={listaGalerias}
-        keyExtractor={(galeria) => galeria.nid_imagen}
-        renderItem={({ item }) => (
-          <Pressable
-            onTouchStart={() => {
-              setPresionado(item.nid_imagen); // Cambia el estado a presionado
-            }}
-            onTouchEnd={() => {
-              setPresionado(null); // Cambia el estado a no presionado
-            }}
-            style={
-              presionado === item.nid_imagen ? styles.tarjetaPresionada : null
-            }
-          >
-            <AnimatedCardBlog ruta={"/stackGaleria/paginaGaleria/[nidPaginaGaleria]"} noticia={item}></AnimatedCardBlog>
-          </Pressable>
-        )}
-        contentContainerStyle={styles.flatListContent} // Estilo para el contenedor de la lista
-      ></FlatList>
-    </View>
+    <FlatList
+      onScrollEndDrag={() => {
+        setPresionado(null); // Cambia el estado a no presionado al hacer scroll
+      }}
+      refreshControl={
+        <RefreshControl
+          refreshing={refrescar}
+          onRefresh={() => setRefresco(true)}
+        />
+      }
+      style={{ flexGrow: 1, backgroundColor: "white" }}
+      data={listaGalerias}
+      keyExtractor={(galeria) => galeria.nid_imagen}
+      renderItem={({ item }) => (
+        <Pressable
+          onTouchStart={() => {
+            setPresionado(item.nid_imagen); // Cambia el estado a presionado
+          }}
+          onTouchEnd={() => {
+            setPresionado(null); // Cambia el estado a no presionado
+          }}
+          style={
+            presionado === item.nid_imagen ? styles.tarjetaPresionada : null
+          }
+        >
+          <AnimatedCardBlog
+            ruta={"/stackGaleria/paginaGaleria/[nidPaginaGaleria]"}
+            noticia={item}
+          ></AnimatedCardBlog>
+        </Pressable>
+      )}
+      contentContainerStyle={styles.flatListContent} // Estilo para el contenedor de la lista
+    ></FlatList>
   );
 }
 
@@ -108,7 +110,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     textAlign: "center",
-    marginVertical: 10,
   },
   flatListContent: {
     flexGrow: 1, // Permite que la lista crezca dinámicamente
