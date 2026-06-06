@@ -314,12 +314,40 @@ async function obtenerAlumnoProfesor(req, res) {
     const nid_alumno = req.params.nid_alumno;
     const nid_curso = req.params.nid_curso;
     const rolesPermitidos = [constantes.PROFESOR];
+    const rolesAdministrador = [constantes.ADMINISTRADOR, constantes.DIRECTIVO];
     let rolProfesor = await servletComun.comprobarRol(
       req,
       res,
       rolesPermitidos,
     );
 
+    let rolAdministrador = await servletComun.comprobarRol(rolesAdministrador);
+
+    // ROL ADMINISTRADOR //
+    if (rolAdministrador) {
+      const alumno = await gestorPersona.obtenerPersona(nid_alumno);
+      if (!alumno) {
+        res.status(404).send({
+          error: true,
+          mensaje: "No se encontró la información del alumno profesor",
+        });
+        return;
+      }
+
+      const padre = await gestorPersona.obtenerPersona(alumno.nid_padre);
+      const madre = await gestorPersona.obtenerPersona(alumno.nid_madre);
+
+      res.status(200).send({
+        error: false,
+        mensaje: "Información del alumno profesor obtenida correctamente",
+        persona: alumno,
+        padre: padre,
+        madre: madre,
+      });
+      return;
+    }
+
+    // ROL PROFESOR //
     if (!rolProfesor) {
       res.status(403).send({
         error: true,

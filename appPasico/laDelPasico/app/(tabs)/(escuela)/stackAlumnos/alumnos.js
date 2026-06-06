@@ -43,7 +43,7 @@ export default function Alumnos() {
   } = useAsignaturas(cerrarSesion);
 
   const {
-    alumnos,
+    personas: alumnos,
     cargando: cargandoAlumnosAdmin,
     error: errorAlumnosAdmin,
     lanzarRefresco: lanzarRefrescoAlumnosAdmin,
