@@ -10,12 +10,14 @@ import {
   RefreshControl,
   StyleSheet,
 } from "react-native";
+import CardAlumno from "./CardAlumno";
 import { EntradaGroupRadioButton } from "../../componentes/componentesUI/ComponentesUI";
 
 export default function ListaAlumnos({
   alumnos,
   cargandoAlumnos,
-  lanzarRefresco,
+  lanzarRefrescoAsignaturas,
+  lanzarRefrescoAlumnos,
   cargando,
   error,
   asignaturas,
@@ -33,7 +35,7 @@ export default function ListaAlumnos({
   const [cursoSeleccionado, setCursoSeleccionado] = useState(null);
 
   const router = useRouter();
-
+  console.log("cursoSeleccionado:", cursoSeleccionado);
   if (cargando || cargandoCursos) {
     return (
       <View>
@@ -56,6 +58,7 @@ export default function ListaAlumnos({
     valor: curso.nid_curso,
   }));
 
+  console.log("Curso seleccionado:", cursoSeleccionado);
   return (
     <>
       <View
@@ -75,7 +78,7 @@ export default function ListaAlumnos({
             setValorSeleccionado={(valor) => {
               setCursoSeleccionado(valor);
               setNidCurso(valor.valor);
-              lanzarRefresco();
+              lanzarRefrescoAsignaturas();
             }}
           />
         </View>

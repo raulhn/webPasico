@@ -2,7 +2,7 @@ import servicePersonas from "../../servicios/servicePersonas.js";
 import { useState, useEffect } from "react";
 import Constantes from "../../config/constantes.js";
 
-export const usePersonas = (tipo = "", cerrar_sesion) => {
+export const usePersonas = (tipo = "", nid_curso = null, cerrar_sesion) => {
   const [personas, setPersonas] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [refrescar, setRefrescar] = useState(false);
@@ -30,21 +30,23 @@ export const usePersonas = (tipo = "", cerrar_sesion) => {
           setRefrescar(false);
         });
     } else if (tipo === Constantes.ESCUELA) {
-      servicePersonas
-        .obtenerPersonasAlumnos(cerrar_sesion)
-        .then((personasRecuperadas) => {
-          setPersonas(personasRecuperadas);
-          setCargando(false); // Finaliza la carga
-          setRefrescar(false);
-          setError(false);
-        })
-        .catch((error) => {
-          console.log("Error al obtener las personas alumnos:", error);
-          setPersonas([]);
-          setCargando(false); // Finaliza la carga incluso si hay error
-          setError(true);
-          setRefrescar(false);
-        });
+      if (nid_curso) {
+        servicePersonas
+          .obtenerPersonasAlumnos(nid_curso, cerrar_sesion)
+          .then((personasRecuperadas) => {
+            setPersonas(personasRecuperadas);
+            setCargando(false); // Finaliza la carga
+            setRefrescar(false);
+            setError(false);
+          })
+          .catch((error) => {
+            console.log("Error al obtener las personas alumnos:", error);
+            setPersonas([]);
+            setCargando(false); // Finaliza la carga incluso si hay error
+            setError(true);
+            setRefrescar(false);
+          });
+      }
     } else if (tipo === Constantes.ASOCIACION) {
       servicePersonas
         .obtenerPersonasAsociacion(cerrar_sesion)
@@ -78,7 +80,7 @@ export const usePersonas = (tipo = "", cerrar_sesion) => {
           setError(true);
         });
     }
-  }, [refrescar]);
+  }, [refrescar, tipo, nid_curso]);
 
   return { personas, cargando, refrescarPersonas, error };
 };

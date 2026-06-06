@@ -1,192 +1,99 @@
 import {
-  View,
-  Text,
-  ActivityIndicator,
-  StyleSheet,
-  RefreshControl,
-  Pressable,
-  FlatList,
-} from "react-native";
-import { useAsignaturasProfesor } from "../../../../hooks/escuela/useAsignaturas";
-import { EntradaGroupRadioButton } from "../../../../componentes/componentesUI/ComponentesUI";
-import { useCursos } from "../../../../hooks/escuela/useCurso";
-import { useContext, useEffect, useState } from "react";
+  useAsignaturasProfesor,
+  useAsignaturas,
+} from "../../../../hooks/escuela/useAsignaturas";
+import { useContext, useState } from "react";
 import { AuthContext } from "../../../../providers/AuthContext";
 import { useAlumnosAsignaturaProfesor } from "../../../../hooks/escuela/useAlumnos";
-import CardAlumno from "../../../../componentes/componentesEscuela/CardAlumno";
-import { Link, useRouter } from "expo-router";
-import { useNavigation } from "expo-router";
+import { usePersonas } from "../../../../hooks/personas/usePersonas";
 import ListaAlumnos from "../../../../componentes/componentesEscuela/ListaAlumnos";
+import {
+  ROL_ADMINISTRADOR,
+  ROL_DIRECTIVO,
+  ESCUELA,
+} from "../../../../config/constantes";
+
+import { useRol } from "../../../../hooks/useRol";
 
 export default function Alumnos() {
+  const [nidCurso, setNidCurso] = useState(null);
+  const [nidAsignatura, setNidAsignatura] = useState(null);
   const { cerrarSesion } = useContext(AuthContext);
-  const { asignaturas, cargando, error, lanzarRefresco } =
-    useAsignaturasProfesor(cerrarSesion);
   const {
-    cursos,
-    cargando: cargandoCursos,
-    error: errorCursos,
-  } = useCursos(cerrarSesion);
+    asignaturas: asignaturasProfesor,
+    cargando,
+    error,
+    lanzarRefresco,
+  } = useAsignaturasProfesor(cerrarSesion);
+
   const {
-    setNidAsignatura,
-    setNidCurso,
-    alumnos,
+    setNidAsignatura: setNidAsignaturaProfesor,
+    setNidCurso: setNidCursoProfesor,
+    alumnos: alumnosProfesor,
     cargando: cargandoAlumnos,
     error: errorAlumnos,
     lanzarRefresco: lanzarRefrescoAlumnos,
   } = useAlumnosAsignaturaProfesor(null, null, cerrarSesion);
 
-  const [presionado, setPresionado] = useState(null);
+  const {
+    asignaturas,
+    cargando: cargandoAsignaturas,
+    error: errorAsignaturas,
+    lanzarRefresco: lanzarRefrescoAsignaturas,
+  } = useAsignaturas(cerrarSesion);
 
-  const [asignaturaSeleccionada, setAsignaturaSeleccionada] = useState(null);
-  const [cursoSeleccionado, setCursoSeleccionado] = useState(null);
+  const {
+    alumnos,
+    cargando: cargandoAlumnosAdmin,
+    error: errorAlumnosAdmin,
+    lanzarRefresco: lanzarRefrescoAlumnosAdmin,
+  } = usePersonas(ESCUELA, nidCurso, cerrarSesion);
 
-  const router = useRouter();
+  const { esRol } = useRol();
 
-  if (cargando || cargandoCursos) {
+  const rolAdministrador = esRol([ROL_ADMINISTRADOR, ROL_DIRECTIVO]);
+
+  const alumnosAdministrador = alumnos?.filter(
+    (alumno) => alumno.nid_asignatura === nidAsignatura
+  );
+
+  console.log("asignaturasAdmin", alumnosAdministrador);
+
+  const alumnosAdministradorUnicos = [
+    ...new Map(
+      alumnosAdministrador?.map((alumno) => [alumno.nid_persona, alumno])
+    ).values(),
+  ];
+
+  if (!rolAdministrador) {
     return (
-      <View>
-        <ActivityIndicator size="large" color="#0000ff" />
-      </View>
+      <ListaAlumnos
+        alumnos={alumnosProfesor}
+        cargandoAlumnos={cargandoAlumnos}
+        lanzarRefrescoAsignaturas={lanzarRefresco}
+        lanzarRefrescoAlumnos={lanzarRefrescoAlumnos}
+        cargando={cargando}
+        error={error}
+        asignaturas={asignaturasProfesor}
+        setNidAsignatura={setNidAsignaturaProfesor}
+        setNidCurso={setNidCursoProfesor}
+        cerrarSesion={cerrarSesion}
+      />
+    );
+  } else {
+    return (
+      <ListaAlumnos
+        alumnos={alumnosAdministradorUnicos}
+        cargandoAlumnos={cargandoAlumnosAdmin}
+        lanzarRefrescoAsignaturas={lanzarRefresco}
+        lanzarRefrescoAlumnos={lanzarRefrescoAlumnosAdmin}
+        cargando={cargando}
+        error={error}
+        asignaturas={asignaturas}
+        setNidAsignatura={setNidAsignatura}
+        setNidCurso={setNidCurso}
+        cerrarSesion={cerrarSesion}
+      />
     );
   }
-
-  if (error) {
-    return <Text>Error: {error.message}</Text>;
-  }
-
-  const opcionesAsignaturas = asignaturas.map((asignatura) => ({
-    etiqueta: asignatura.descripcion,
-    valor: asignatura.nid_asignatura,
-  }));
-
-  const opcionesCursos = cursos.map((curso) => ({
-    etiqueta: curso.descripcion,
-    valor: curso.nid_curso,
-  }));
-  /*
-  return (
-    <ListaAlumnos
-      alumnos={alumnos}
-      cargandoAlumnos={cargandoAlumnos}
-      lanzarRefresco={lanzarRefresco}
-      cargando={cargando}
-      error={error}
-      asignaturas={asignaturas}
-      setNidAsignatura={setNidAsignatura}
-      setNidCurso={setNidCurso}
-      cerrarSesion={cerrarSesion}
-    />
-  );*/
-
-  return (
-    <>
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-around",
-          padding: 10,
-          backgroundColor: "#ffffff",
-        }}
-      >
-        <View style={{ justifyContent: "center", alignItems: "center" }}>
-          <Text>Curso</Text>
-          <EntradaGroupRadioButton
-            opciones={opcionesCursos}
-            titulo={"Cursos"}
-            valor={cursoSeleccionado}
-            setValorSeleccionado={(valor) => {
-              setCursoSeleccionado(valor);
-              setNidCurso(valor.valor);
-              lanzarRefresco();
-            }}
-          />
-        </View>
-        <View
-          style={
-            cursoSeleccionado && cursoSeleccionado.valor
-              ? { justifyContent: "center", alignItems: "center" }
-              : { display: "none" }
-          }
-        >
-          <Text>Asignatura</Text>
-          <EntradaGroupRadioButton
-            valor={asignaturaSeleccionada}
-            opciones={opcionesAsignaturas}
-            titulo={"Asignaturas"}
-            setValorSeleccionado={(valor) => {
-              setAsignaturaSeleccionada(valor);
-              setNidAsignatura(valor.valor);
-            }}
-          />
-        </View>
-      </View>
-      <View style={estilos.contenedor}>
-        <View>
-          <FlatList
-            data={alumnos}
-            onScrollEndDrag={() => {
-              setPresionado(null); // Cambia el estado a no presionado al hacer scroll
-            }}
-            refreshControl={
-              <RefreshControl
-                refreshing={cargandoAlumnos}
-                onRefresh={() => {
-                  lanzarRefrescoAlumnos();
-                  setPresionado(null);
-                }}
-              />
-            }
-            renderItem={({ item }) => {
-              return (
-                <View key={item.nid_persona}>
-                  <Pressable
-                    onPress={() => {
-                      router.push({
-                        pathname: "stackAlumnos/" + item.nid_persona,
-                        params: {
-                          nidAlumno: item.nid_persona,
-                          nidCurso: cursoSeleccionado.valor,
-                        },
-                      });
-                    }}
-                    onTouchStart={() => {
-                      setPresionado(item.nid_persona); // Cambia el estado a presionado
-                    }}
-                    onTouchEnd={() => {
-                      setPresionado(null); // Cambia el estado a no presionado
-                    }}
-                    style={[{ width: "100%", alignItems: "center" }]}
-                  >
-                    <View
-                      style={[
-                        presionado === item.nid_persona
-                          ? estilos.tarjetaPresionada
-                          : null,
-                      ]}
-                    >
-                      <CardAlumno alumno={item} />
-                    </View>
-                  </Pressable>
-                </View>
-              );
-            }}
-            keyExtractor={(item) => item.nid_persona}
-            contentContainerStyle={{ gap: 10, flexGrow: 1 }}
-          />
-        </View>
-      </View>
-    </>
-  );
 }
-
-const estilos = StyleSheet.create({
-  contenedor: {
-    backgroundColor: "#ffffff",
-    flex: 1,
-    width: "100%",
-  },
-  tarjetaPresionada: {
-    transform: [{ scale: 1.05 }],
-  },
-});
