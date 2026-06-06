@@ -56,7 +56,9 @@ export default function DrawerLayout() {
           options={{
             title: "Alumnos",
             headerShown: false,
-            drawerItemStyle: esRol(["PROFESOR"]) ? {} : { display: "none" },
+            drawerItemStyle: esRol(["PROFESOR", "ADMINISTRADOR", "DIRECTIVO"])
+              ? {}
+              : { display: "none" },
           }}
         />
 
