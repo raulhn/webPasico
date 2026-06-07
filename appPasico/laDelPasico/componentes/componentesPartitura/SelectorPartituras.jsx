@@ -44,17 +44,16 @@ export default function SelectorPartituras({ callback, edicion, refrescar }) {
             .includes(filtroTexto.toLowerCase())) &&
         categoriaSeleccionada &&
         (categoriaSeleccionada.etiqueta === "" ||
-          partitura.nombre_categoria === categoriaSeleccionada.etiqueta),
+          partitura.nombre_categoria === categoriaSeleccionada.etiqueta)
     );
 
     setPartiturasFiltradas(resultado);
-  }, [categoriaSeleccionada, filtroTexto]);
+  }, [categoriaSeleccionada, filtroTexto, partituras]);
 
   useEffect(() => {
     ServicePartituras.obtenerPartituras()
       .then((response) => {
         setPartituras(response.partituras);
-        setPartiturasFiltradas(response.partituras);
         setCargando(false);
         setRefresco(false);
       })
