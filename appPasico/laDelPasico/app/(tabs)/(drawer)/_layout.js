@@ -1,7 +1,8 @@
 import { Drawer } from "expo-router/drawer";
 import { CustomHeaderInicio } from "../../../componentes/cabecera.jsx";
-
+import { useRol } from "../../../hooks/useRol";
 export default function DrawerLayout() {
+  const { esRol } = useRol(); // Hook para verificar roles
   return (
     <Drawer
       screenOptions={{
@@ -33,6 +34,14 @@ export default function DrawerLayout() {
       <Drawer.Screen
         name="stackAgenda"
         options={{ title: "Agenda", headerShown: false }}
+      />
+      <Drawer.Screen
+        name="stackAdministracion"
+        options={{
+          title: "Administración",
+          headerShown: false,
+          drawerItemStyle: esRol(["ADMINISTRADOR"]) ? {} : { display: "none" },
+        }}
       />
     </Drawer>
   );

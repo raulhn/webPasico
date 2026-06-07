@@ -84,3 +84,38 @@ export const usePersonas = (tipo = "", nid_curso = null, cerrar_sesion) => {
 
   return { personas, cargando, refrescarPersonas, error };
 };
+
+export const useListadoPersonas = (tipo = 1, activo = 0, cerrar_sesion) => {
+  const [personas, setPersonas] = useState([]);
+  const [cargando, setCargando] = useState(true);
+  const [refrescar, setRefrescar] = useState(false);
+  const [error, setError] = useState(false);
+
+  function refrescarPersonas() {
+    setRefrescar(true);
+  }
+
+  useEffect(() => {
+    cargarPersonas();
+  }, [refrescar, tipo, activo]);
+
+  async function cargarPersonas() {
+    try {
+      const personasRecuperadas = await servicePersonas.obtenerPersonasListado(
+        tipo,
+        activo,
+        cerrar_sesion
+      );
+      setPersonas(personasRecuperadas);
+      setCargando(false); // Finaliza la carga
+      setRefrescar(false);
+    } catch (error) {
+      setPersonas([]);
+      setCargando(false); // Finaliza la carga incluso si hay error
+      setRefrescar(false);
+      setError(true);
+      console.log("Error al cargar el listado de personas:", error);
+    }
+  }
+  return { personas, cargando, refrescarPersonas, error };
+};

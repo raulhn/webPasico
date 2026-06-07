@@ -1,0 +1,339 @@
+import {
+  BotonIcono,
+  EntradaGroupRadioButton,
+  Boton,
+  EntradaTexto,
+} from "../../componentes/componentesUI/ComponentesUI";
+import { CardAlumno } from "../../componentes/componentesEscuela/CardAlumno";
+import { useState, useContext, useEffect } from "react";
+import {
+  Pressable,
+  Text,
+  Modal,
+  StyleSheet,
+  View,
+  FlatList,
+  RefreshControl,
+} from "react-native";
+import { useAsignaturas } from "../../hooks/escuela/useAsignaturas";
+import { useCursos } from "../../hooks/escuela/useCurso";
+import { AuthContext } from "../../providers/AuthContext";
+
+import { useRouter } from "expo-router";
+
+import { COLOR_ROJO } from "../../config/constantes.js";
+
+import { useListadoPersonas } from "../../hooks/personas/usePersonas";
+import CardPersona from "./CardPersona.jsx";
+
+export default function ListadoPersonas() {
+  const opcionesTipo = [
+    { etiqueta: "Todas las personas", valor: 1 },
+    { etiqueta: "Alumnos", valor: 2 },
+    { etiqueta: "Socios", valor: 3 },
+    { etiqueta: "Profesores", valor: 4 },
+  ];
+
+  const { cerrarSesion } = useContext(AuthContext);
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const opcionesActivo = [
+    { etiqueta: "Todos", valor: 0 },
+    { etiqueta: "Activos", valor: 1 },
+    { etiqueta: "Inactivos", valor: 2 },
+  ];
+
+  const {
+    cursos,
+    cargando: cargandoCursos,
+    error: errorCursos,
+  } = useCursos(cerrarSesion);
+
+  const {
+    asignaturas,
+    cargando: cargandoAsignaturas,
+    error: errorAsignaturas,
+    lanzarRefresco: lanzarRefrescoAsignaturas,
+  } = useAsignaturas(cerrarSesion);
+
+  const [tipoSeleccionado, setTipoSeleccionado] = useState({
+    valor: 1,
+    etiqueta: "Todas las personas",
+  });
+
+  const opcionesAsignaturas = asignaturas.map((asignatura) => ({
+    etiqueta: asignatura.descripcion,
+    valor: asignatura.nid_asignatura,
+  }));
+
+  const opcionesCursos = cursos.map((curso) => ({
+    etiqueta: curso.descripcion,
+    valor: curso.nid_curso,
+  }));
+
+  const [activoSeleccionado, setActivoSeleccionado] = useState({
+    etiqueta: "Todos",
+    valor: 0,
+  });
+  const [asignaturaSeleccionada, setAsignaturaSeleccionada] = useState({
+    etiqueta: "Todas las asignaturas",
+    valor: 0,
+  });
+
+  const [cursoSeleccionado, setCursoSeleccionado] = useState({
+    etiqueta: null,
+    valor: null,
+  });
+
+  const router = useRouter();
+
+  const { personas, refrescarPersonas, cargando, error } = useListadoPersonas(
+    tipoSeleccionado.valor,
+    activoSeleccionado.valor
+  );
+
+  const [presionado, setPresionado] = useState(null);
+
+  const [personasFiltradas, setPersonasFiltradas] = useState([]);
+
+  const [textoFiltro, setTextoFiltro] = useState("");
+
+  useEffect(() => {
+    console.log("filtro");
+    let personasFiltradasTemporal = [];
+    if (tipoSeleccionado.valor === 2) {
+      personasFiltradasTemporal = personas.filter((persona) => {
+        const coincideActivo =
+          activoSeleccionado.valor === 0 ||
+          (activoSeleccionado.valor === 1 && persona.activo) ||
+          (activoSeleccionado.valor === 2 && !persona.activo);
+
+        const coincideCurso =
+          cursoSeleccionado.valor === null ||
+          persona.nid_curso === cursoSeleccionado.valor;
+
+        const coincideAsignatura =
+          asignaturaSeleccionada.valor === 0 ||
+          persona.nid_asignatura === asignaturaSeleccionada.valor;
+
+        return coincideActivo && coincideCurso && coincideAsignatura;
+      });
+      setPersonasFiltradas(personasFiltradasTemporal);
+    } else if (tipoSeleccionado.valor === 3) {
+      personasFiltradasTemporal = personas.filter((persona) => {
+        const coincideActivo =
+          activoSeleccionado.valor === 0 ||
+          (activoSeleccionado.valor === 1 && persona.activo) ||
+          (activoSeleccionado.valor === 2 && !persona.activo);
+
+        return coincideActivo;
+      });
+      setPersonasFiltradas(personasFiltradasTemporal);
+    } else {
+      console.log("personas filtradas:", personas.length);
+      setPersonasFiltradas(personas);
+      console.log("personas filtradas:", personasFiltradas.length);
+    }
+
+    personasFiltradasTemporal = personasFiltradas.filter((persona) => {
+      const nombreCompleto =
+        `${persona.nombre} ${persona.apellidos}`.toLowerCase();
+      return nombreCompleto.includes(textoFiltro.toLowerCase());
+    });
+    setPersonasFiltradas(personasFiltradasTemporal);
+  }, [
+    tipoSeleccionado,
+    activoSeleccionado,
+    cursoSeleccionado,
+    asignaturaSeleccionada,
+    personas,
+    textoFiltro,
+  ]);
+
+  return (
+    <>
+      <View style={estilos.contenedor}>
+        <View style={estilos.contenedorFiltros}>
+          <EntradaTexto
+            placeholder="Buscar persona..."
+            valor={textoFiltro}
+            setValor={(texto) => setTextoFiltro(texto)}
+          />
+          <BotonIcono
+            nombre={"filter-list"}
+            onPress={() => {
+              setModalVisible(true);
+            }}
+          />
+        </View>
+        <View>
+          <FlatList
+            data={personasFiltradas}
+            onScrollEndDrag={() => {
+              setPresionado(null); // Cambia el estado a no presionado al hacer scroll
+            }}
+            refreshControl={
+              <RefreshControl
+                refreshing={cargando}
+                onRefresh={() => {
+                  refrescarPersonas();
+                  setPresionado(null);
+                }}
+              />
+            }
+            renderItem={({ item }) => {
+              return (
+                <View key={item.nid_persona}>
+                  <Pressable
+                    onPress={() => {
+                      router.push({
+                        pathname: "stackAlumnos/" + item.nid_persona,
+                        params: {
+                          nidAlumno: item.nid_persona,
+                          nidCurso: cursoSeleccionado.valor,
+                        },
+                      });
+                    }}
+                    onTouchStart={() => {
+                      setPresionado(item.nid_persona); // Cambia el estado a presionado
+                    }}
+                    onTouchEnd={() => {
+                      setPresionado(null); // Cambia el estado a no presionado
+                    }}
+                    style={[{ width: "100%", alignItems: "center" }]}
+                  >
+                    <View
+                      style={[
+                        presionado === item.nid_persona
+                          ? estilos.tarjetaPresionada
+                          : null,
+                      ]}
+                    >
+                      <View style={{ width: "100%", alignItems: "center" }}>
+                        <CardPersona persona={item} />
+                      </View>
+                    </View>
+                  </Pressable>
+                </View>
+              );
+            }}
+            keyExtractor={(item) => item.nid_persona}
+            contentContainerStyle={{ gap: 10, flexGrow: 1 }}
+          />
+        </View>
+      </View>
+      <Modal
+        visible={modalVisible}
+        animationType="slide"
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={estilos.contenedorModal}>
+          <Text>Tipo</Text>
+          <EntradaGroupRadioButton
+            titulo={"Tipo"}
+            opciones={opcionesTipo}
+            valor={tipoSeleccionado}
+            setValorSeleccionado={(seleccion) => {
+              if (seleccion.valor === null) {
+                setTipoSeleccionado({
+                  valor: 1,
+                  etiqueta: "Todas las personas",
+                });
+                return;
+              }
+              setTipoSeleccionado(seleccion);
+            }}
+          />
+          {(tipoSeleccionado.valor === 2 || tipoSeleccionado.valor === 3) && (
+            <>
+              <Text>Activo</Text>
+              <EntradaGroupRadioButton
+                titulo={"Estado"}
+                opciones={opcionesActivo}
+                valor={activoSeleccionado}
+                setValorSeleccionado={(seleccion) => {
+                  if (seleccion.valor === null) {
+                    setActivoSeleccionado({ etiqueta: "Todos", valor: 0 });
+                    return;
+                  }
+                  setActivoSeleccionado(seleccion);
+                }}
+              />
+            </>
+          )}
+
+          {tipoSeleccionado.valor === 2 && (
+            <>
+              <Text>Curso</Text>
+              <EntradaGroupRadioButton
+                titulo={"Cursos"}
+                opciones={opcionesCursos}
+                valor={cursoSeleccionado}
+                setValorSeleccionado={(seleccion) => {
+                  if (seleccion.valor === null) {
+                    setCursoSeleccionado({
+                      etiqueta: null,
+                      valor: null,
+                    });
+                    return;
+                  }
+                  setCursoSeleccionado(seleccion);
+                }}
+              />
+              <Text>Asignatura</Text>
+              <EntradaGroupRadioButton
+                titulo={"Asignatura"}
+                opciones={opcionesAsignaturas}
+                valor={asignaturaSeleccionada}
+                setValorSeleccionado={(seleccion) => {
+                  if (seleccion.valor === null) {
+                    setAsignaturaSeleccionada({
+                      etiqueta: "Todas las asignaturas",
+                      valor: 0,
+                    });
+                    return;
+                  }
+                  setAsignaturaSeleccionada(seleccion);
+                }}
+              />
+            </>
+          )}
+
+          <Boton
+            nombre={"Cerrar"}
+            color={COLOR_ROJO}
+            onPress={() => setModalVisible(false)}
+          />
+        </View>
+      </Modal>
+    </>
+  );
+}
+
+const estilos = StyleSheet.create({
+  contenedor: {
+    padding: 25,
+    backgroundColor: "white",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100%",
+  },
+  contenedorModal: {
+    flex: 1,
+    padding: 10,
+    backgroundColor: "#f0f0f0",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  tarjetaPresionada: {
+    transform: [{ scale: 1.05 }],
+  },
+  contenedorFiltros: {
+    marginTop: 10,
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: "100%",
+    alignItems: "center",
+    alignContent: "center",
+  },
+});

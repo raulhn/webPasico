@@ -116,8 +116,36 @@ function obtenerPersonasAsociacion(cerrar_sesion) {
   });
 }
 
+function obtenerPersonasListado(tipo, activo, cerrar_sesion) {
+  return new Promise((resolve, reject) => {
+    servicioComun
+      .peticionSesion(
+        "GET",
+        Constantes.URL_SERVICIO_MOVIL +
+          "obtener_personas_listado/" +
+          tipo +
+          "/" +
+          activo,
+        null,
+        cerrar_sesion
+      )
+      .then((response) => {
+        if (!response.error) {
+          resolve(response.personas);
+        } else {
+          reject(response.error);
+        }
+      })
+      .catch((error) => {
+        console.log("Error en el servicio obtenerPersonasListado");
+        reject(error);
+      });
+  });
+}
+
 module.exports.obtenerPersonas = obtenerPersonas;
 module.exports.obtenerPersonasMusicos = obtenerPersonasMusicos;
 module.exports.obtenerPersonasAlumnos = obtenerPersonasAlumnos;
 module.exports.obtenerAlumnoProfesor = obtenerAlumnoProfesor;
 module.exports.obtenerPersonasAsociacion = obtenerPersonasAsociacion;
+module.exports.obtenerPersonasListado = obtenerPersonasListado;

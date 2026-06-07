@@ -2,7 +2,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { View, Text, StyleSheet } from "react-native";
 import Constantes from "../../config/constantes.js";
 
-export default function CardAlumno({ alumno }) {
+export default function CardPersona({ persona }) {
   return (
     <View style={estilos.contenedor}>
       <View style={estilos.fila}>
@@ -14,7 +14,7 @@ export default function CardAlumno({ alumno }) {
         />
 
         <Text style={estilos.nombre} numberOfLines={2} ellipsizeMode="tail">
-          {alumno.nombre} {alumno.primer_apellido} {alumno.segundo_apellido}
+          {persona.nombre} {persona.primer_apellido} {persona.segundo_apellido}
         </Text>
       </View>
     </View>
@@ -50,4 +50,3 @@ const estilos = StyleSheet.create({
     flexGrow: 1, // <-- Ocupa el espacio restante
   },
 });
-

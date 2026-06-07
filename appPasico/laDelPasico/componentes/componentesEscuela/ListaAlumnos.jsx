@@ -13,6 +13,8 @@ import {
 import CardAlumno from "./CardAlumno";
 import { EntradaGroupRadioButton } from "../../componentes/componentesUI/ComponentesUI";
 
+import { COLOR_ROJO } from "../../config/constantes.js";
+
 export default function ListaAlumnos({
   alumnos,
   cargandoAlumnos,
@@ -35,7 +37,6 @@ export default function ListaAlumnos({
   const [cursoSeleccionado, setCursoSeleccionado] = useState(null);
 
   const router = useRouter();
-  console.log("cursoSeleccionado:", cursoSeleccionado);
   if (cargando || cargandoCursos) {
     return (
       <View>
