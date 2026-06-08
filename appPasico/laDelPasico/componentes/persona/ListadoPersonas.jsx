@@ -99,7 +99,6 @@ export default function ListadoPersonas() {
   const [textoFiltro, setTextoFiltro] = useState("");
 
   useEffect(() => {
-    console.log("filtro");
     let personasFiltradasTemporal = [];
     if (tipoSeleccionado.valor === 2) {
       personasFiltradasTemporal = personas.filter((persona) => {
@@ -118,7 +117,6 @@ export default function ListadoPersonas() {
 
         return coincideActivo && coincideCurso && coincideAsignatura;
       });
-      setPersonasFiltradas(personasFiltradasTemporal);
     } else if (tipoSeleccionado.valor === 3) {
       personasFiltradasTemporal = personas.filter((persona) => {
         const coincideActivo =
@@ -128,16 +126,18 @@ export default function ListadoPersonas() {
 
         return coincideActivo;
       });
-      setPersonasFiltradas(personasFiltradasTemporal);
     } else {
-      console.log("personas filtradas:", personas.length);
-      setPersonasFiltradas(personas);
-      console.log("personas filtradas:", personasFiltradas.length);
+      personasFiltradasTemporal = personas;
     }
 
-    personasFiltradasTemporal = personasFiltradas.filter((persona) => {
-      const nombreCompleto =
-        `${persona.nombre} ${persona.apellidos}`.toLowerCase();
+    personasFiltradasTemporal = personasFiltradasTemporal.filter((persona) => {
+      let nombreCompleto =
+        persona.nombre +
+        " " +
+        persona.primer_apellido +
+        " " +
+        persona.segundo_apellido;
+      nombreCompleto = nombreCompleto.toLowerCase();
       return nombreCompleto.includes(textoFiltro.toLowerCase());
     });
     setPersonasFiltradas(personasFiltradasTemporal);
