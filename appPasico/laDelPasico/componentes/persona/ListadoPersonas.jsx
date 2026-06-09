@@ -192,10 +192,10 @@ export default function ListadoPersonas() {
                   <Pressable
                     onPress={() => {
                       router.push({
-                        pathname: "stackAlumnos/" + item.nid_persona,
+                        pathname:
+                          "/(drawer)/stackAdministracion/" + item.nid_persona,
                         params: {
-                          nidAlumno: item.nid_persona,
-                          nidCurso: cursoSeleccionado.valor,
+                          nidListaPersona: item.nid_persona,
                         },
                       });
                     }}
