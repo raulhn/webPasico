@@ -4,6 +4,7 @@ const constantes = require("../constantes.js");
 const gestorMatricula = require("../logica/matricula.js");
 const gestorProfesorAlumnoMatricula = require("../logica/profesor_alumno_matricula.js");
 const gestorSocios = require("../logica/socios.js");
+const gestorMatriculaAsignatura = require("../logica/matricula_asignatura.js");
 
 function registrarPersona(req, res) {
   servletComun.comprobacionAccesoAPIKey(req, res, async () => {
