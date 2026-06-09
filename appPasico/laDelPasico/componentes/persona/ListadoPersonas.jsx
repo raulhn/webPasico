@@ -92,7 +92,8 @@ export default function ListadoPersonas() {
   const { personas, refrescarPersonas, cargando, error } = useListadoPersonas(
     tipoSeleccionado.valor,
     activoSeleccionado.valor,
-    cursoSeleccionado.valor
+    cursoSeleccionado.valor,
+    asignaturaSeleccionada.valor
   );
   const [presionado, setPresionado] = useState(null);
 

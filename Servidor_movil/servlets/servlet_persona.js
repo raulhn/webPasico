@@ -196,7 +196,7 @@ async function obtenerListadoPersona(req, res) {
         return;
       }
 
-      if (!nid_asignatura) {
+      if (!nid_asignatura || nid_asignatura == 0) {
         const alumnos = await gestorMatriculaAsignatura.obtenerAlumnosCurso(
           nid_curso,
           activo,

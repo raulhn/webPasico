@@ -116,7 +116,13 @@ function obtenerPersonasAsociacion(cerrar_sesion) {
   });
 }
 
-function obtenerPersonasListado(tipo, activo, nid_curso, cerrar_sesion) {
+function obtenerPersonasListado(
+  tipo,
+  activo,
+  nid_curso,
+  nid_asignatura,
+  cerrar_sesion
+) {
   return new Promise((resolve, reject) => {
     servicioComun
       .peticionSesion(
@@ -127,7 +133,9 @@ function obtenerPersonasListado(tipo, activo, nid_curso, cerrar_sesion) {
           "/" +
           activo +
           "/" +
-          nid_curso,
+          nid_curso +
+          "/" +
+          nid_asignatura,
         null,
         cerrar_sesion
       )

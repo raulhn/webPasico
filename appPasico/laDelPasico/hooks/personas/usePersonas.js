@@ -89,6 +89,7 @@ export const useListadoPersonas = (
   tipo = 1,
   activo = 0,
   nid_curso,
+  nid_asignatura,
   cerrar_sesion
 ) => {
   const [personas, setPersonas] = useState([]);
@@ -102,7 +103,7 @@ export const useListadoPersonas = (
 
   useEffect(() => {
     cargarPersonas();
-  }, [refrescar, tipo, activo]);
+  }, [refrescar, tipo, activo, nid_curso, nid_asignatura]);
 
   async function cargarPersonas() {
     try {
@@ -110,6 +111,7 @@ export const useListadoPersonas = (
         tipo,
         activo,
         nid_curso,
+        nid_asignatura,
         cerrar_sesion
       );
       setPersonas(personasRecuperadas);
