@@ -91,7 +91,8 @@ export default function ListadoPersonas() {
 
   const { personas, refrescarPersonas, cargando, error } = useListadoPersonas(
     tipoSeleccionado.valor,
-    activoSeleccionado.valor
+    activoSeleccionado.valor,
+    cursoSeleccionado.valor
   );
   const [presionado, setPresionado] = useState(null);
 
@@ -99,10 +100,16 @@ export default function ListadoPersonas() {
 
   const [textoFiltro, setTextoFiltro] = useState("");
 
+  const alumnosUnicos = [
+    ...new Map(
+      personas?.map((alumno) => [alumno.nid_persona, alumno])
+    ).values(),
+  ];
+
   useEffect(() => {
     let personasFiltradasTemporal = [];
     if (tipoSeleccionado.valor === 3) {
-      personasFiltradasTemporal = alumnos.filter((persona) => {
+      personasFiltradasTemporal = alumnosUnicos.filter((persona) => {
         let nombreCompleto =
           persona.nombre +
           " " +
@@ -241,24 +248,6 @@ export default function ListadoPersonas() {
               setTipoSeleccionado(seleccion);
             }}
           />
-          {(tipoSeleccionado.valor === 2 || tipoSeleccionado.valor === 3) && (
-            <>
-              <Text>Activo</Text>
-              <EntradaGroupRadioButton
-                titulo={"Estado"}
-                opciones={opcionesActivo}
-                valor={activoSeleccionado}
-                setValorSeleccionado={(seleccion) => {
-                  if (seleccion.valor === null) {
-                    setActivoSeleccionado({ etiqueta: "Todos", valor: 0 });
-                    return;
-                  }
-                  setActivoSeleccionado(seleccion);
-                }}
-              />
-            </>
-          )}
-
           {tipoSeleccionado.valor === 3 && (
             <>
               <Text>Curso</Text>
@@ -291,6 +280,24 @@ export default function ListadoPersonas() {
                     return;
                   }
                   setAsignaturaSeleccionada(seleccion);
+                }}
+              />
+            </>
+          )}
+
+          {(tipoSeleccionado.valor === 2 || tipoSeleccionado.valor === 3) && (
+            <>
+              <Text>Activo</Text>
+              <EntradaGroupRadioButton
+                titulo={"Estado"}
+                opciones={opcionesActivo}
+                valor={activoSeleccionado}
+                setValorSeleccionado={(seleccion) => {
+                  if (seleccion.valor === null) {
+                    setActivoSeleccionado({ etiqueta: "Todos", valor: 0 });
+                    return;
+                  }
+                  setActivoSeleccionado(seleccion);
                 }}
               />
             </>

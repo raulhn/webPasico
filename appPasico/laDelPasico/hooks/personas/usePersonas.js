@@ -85,7 +85,12 @@ export const usePersonas = (tipo = "", nid_curso = null, cerrar_sesion) => {
   return { personas, cargando, refrescarPersonas, error };
 };
 
-export const useListadoPersonas = (tipo = 1, activo = 0, cerrar_sesion) => {
+export const useListadoPersonas = (
+  tipo = 1,
+  activo = 0,
+  nid_curso,
+  cerrar_sesion
+) => {
   const [personas, setPersonas] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [refrescar, setRefrescar] = useState(false);
@@ -104,6 +109,7 @@ export const useListadoPersonas = (tipo = 1, activo = 0, cerrar_sesion) => {
       const personasRecuperadas = await servicePersonas.obtenerPersonasListado(
         tipo,
         activo,
+        nid_curso,
         cerrar_sesion
       );
       setPersonas(personasRecuperadas);
