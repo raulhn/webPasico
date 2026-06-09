@@ -42,7 +42,7 @@ export default function ListadoPersonas() {
   const opcionesActivo = [
     { etiqueta: "Todos", valor: 0 },
     { etiqueta: "Activos", valor: 1 },
-    { etiqueta: "Inactivos", valor: 2 },
+    { etiqueta: "Baja", valor: 2 },
   ];
 
   const {
@@ -100,8 +100,6 @@ export default function ListadoPersonas() {
   const [personasFiltradas, setPersonasFiltradas] = useState([]);
 
   const [textoFiltro, setTextoFiltro] = useState("");
-
-  console.log("personas", personas);
 
   const alumnosUnicos = [
     ...new Map(
