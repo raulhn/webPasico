@@ -351,7 +351,7 @@ app.get(
 );
 
 app.get(
-  "/obtener_personas_listado/:tipo/:activo/:nid_curso",
+  "/obtener_personas_listado/:tipo/:activo/:nid_curso/:nid_asignatura",
   servletPersona.obtenerListadoPersona,
 );
 

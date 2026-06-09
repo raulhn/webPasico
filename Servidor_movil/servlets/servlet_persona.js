@@ -185,6 +185,7 @@ async function obtenerListadoPersona(req, res) {
     } else if (tipo == 3) {
       const activo = req.params.activo;
       const nid_curso = req.params.nid_curso;
+      const nid_asignatura = req.params.nid_asignatura;
 
       if (!nid_curso) {
         res.status(200).send({
@@ -194,16 +195,32 @@ async function obtenerListadoPersona(req, res) {
         });
         return;
       }
-      const alumnos = await gestorMatriculaAsignatura.obtenerAlumnos(
-        nid_curso,
-        activo,
-      );
 
-      res.status(200).send({
-        error: false,
-        mensaje: "Listado de personas obtenido correctamente",
-        personas: alumnos,
-      });
+      if (!nid_asignatura) {
+        const alumnos = await gestorMatriculaAsignatura.obtenerAlumnosCurso(
+          nid_curso,
+          activo,
+        );
+
+        res.status(200).send({
+          error: false,
+          mensaje: "Listado de personas obtenido correctamente",
+          personas: alumnos,
+        });
+      } else {
+        const alumnos =
+          await gestorMatriculaAsignatura.obtenerAlumnosCursoAsignatura(
+            nid_curso,
+            nid_asignatura,
+            activo,
+          );
+
+        res.status(200).send({
+          error: false,
+          mensaje: "Listado de personas obtenido correctamente",
+          personas: alumnos,
+        });
+      }
     } else {
       res.status(400).send({
         error: false,

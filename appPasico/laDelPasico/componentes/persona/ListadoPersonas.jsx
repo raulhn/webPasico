@@ -100,6 +100,8 @@ export default function ListadoPersonas() {
 
   const [textoFiltro, setTextoFiltro] = useState("");
 
+  console.log("personas", personas);
+
   const alumnosUnicos = [
     ...new Map(
       personas?.map((alumno) => [alumno.nid_persona, alumno])
