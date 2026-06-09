@@ -40,7 +40,9 @@ export default function DrawerLayout() {
         options={{
           title: "Administración",
           headerShown: false,
-          drawerItemStyle: esRol(["ADMINISTRADOR"]) ? {} : { display: "none" },
+          drawerItemStyle: esRol(["ADMINISTRADOR", "DIRECTIVO"])
+            ? {}
+            : { display: "none" },
         }}
       />
     </Drawer>

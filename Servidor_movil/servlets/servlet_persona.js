@@ -152,7 +152,7 @@ async function obtenerPersonas(req, res) {
 
 async function obtenerListadoPersona(req, res) {
   try {
-    const rolesPermitidos = [constantes.ADMINISTRADOR];
+    const rolesPermitidos = [constantes.ADMINISTRADOR, constantes.DIRECTIVO];
     let rolPermitido = await servletComun.comprobarRol(
       req,
       res,
@@ -504,7 +504,7 @@ async function obtenerPersonasAlumnosAsignatura(req, res) {
 
 async function obtenerInfoPersona(req, res) {
   try {
-    const rolesPermitidos = [constantes.ADMINISTRADOR];
+    const rolesPermitidos = [constantes.ADMINISTRADOR, constantes.DIRECTIVO];
     let rolAdministrador = await servletComun.comprobarRol(
       req,
       res,
