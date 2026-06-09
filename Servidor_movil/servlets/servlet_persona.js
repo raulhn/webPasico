@@ -181,6 +181,28 @@ async function obtenerListadoPersona(req, res) {
         mensaje: "Listado de personas obtenido correctamente",
         personas: personas,
       });
+    } else if (tipo == 3) {
+      const activo = req.params.activo;
+      const nid_curso = req.params.nid_curso;
+
+      if (!nid_curso) {
+        res.status(200).send({
+          error: false,
+          mensaje: "Listado de personas obtenido correctamente",
+          personas: [],
+        });
+        return;
+      }
+      const alumnos = await gestorMatriculaAsignatura.obtenerAlumnos(
+        nid_curso,
+        activo,
+      );
+
+      res.status(200).send({
+        error: false,
+        mensaje: "Listado de personas obtenido correctamente",
+        personas: alumnos,
+      });
     } else {
       res.status(400).send({
         error: false,

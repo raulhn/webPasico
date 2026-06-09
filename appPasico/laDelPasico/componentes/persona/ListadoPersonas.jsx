@@ -4,7 +4,6 @@ import {
   Boton,
   EntradaTexto,
 } from "../../componentes/componentesUI/ComponentesUI";
-import { CardAlumno } from "../../componentes/componentesEscuela/CardAlumno";
 import { useState, useContext, useEffect } from "react";
 import {
   Pressable,
@@ -21,16 +20,19 @@ import { AuthContext } from "../../providers/AuthContext";
 
 import { useRouter } from "expo-router";
 
-import { COLOR_ROJO } from "../../config/constantes.js";
+import { COLOR_ROJO, ESCUELA } from "../../config/constantes.js";
 
-import { useListadoPersonas } from "../../hooks/personas/usePersonas";
+import {
+  useListadoPersonas,
+  usePersonas,
+} from "../../hooks/personas/usePersonas";
 import CardPersona from "./CardPersona.jsx";
 
 export default function ListadoPersonas() {
   const opcionesTipo = [
     { etiqueta: "Todas las personas", valor: 1 },
-    { etiqueta: "Alumnos", valor: 2 },
-    { etiqueta: "Socios", valor: 3 },
+    { etiqueta: "Alumnos", valor: 3 },
+    { etiqueta: "Socios", valor: 2 },
     { etiqueta: "Profesores", valor: 4 },
   ];
 
@@ -91,7 +93,6 @@ export default function ListadoPersonas() {
     tipoSeleccionado.valor,
     activoSeleccionado.valor
   );
-
   const [presionado, setPresionado] = useState(null);
 
   const [personasFiltradas, setPersonasFiltradas] = useState([]);
@@ -100,31 +101,27 @@ export default function ListadoPersonas() {
 
   useEffect(() => {
     let personasFiltradasTemporal = [];
-    if (tipoSeleccionado.valor === 2) {
-      personasFiltradasTemporal = personas.filter((persona) => {
-        const coincideActivo =
-          activoSeleccionado.valor === 0 ||
-          (activoSeleccionado.valor === 1 && persona.activo) ||
-          (activoSeleccionado.valor === 2 && !persona.activo);
-
-        const coincideCurso =
-          cursoSeleccionado.valor === null ||
-          persona.nid_curso === cursoSeleccionado.valor;
-
-        const coincideAsignatura =
-          asignaturaSeleccionada.valor === 0 ||
-          persona.nid_asignatura === asignaturaSeleccionada.valor;
-
-        return coincideActivo && coincideCurso && coincideAsignatura;
+    if (tipoSeleccionado.valor === 3) {
+      personasFiltradasTemporal = alumnos.filter((persona) => {
+        let nombreCompleto =
+          persona.nombre +
+          " " +
+          persona.primer_apellido +
+          " " +
+          persona.segundo_apellido;
+        nombreCompleto = nombreCompleto.toLowerCase();
+        return nombreCompleto.includes(textoFiltro.toLowerCase());
       });
-    } else if (tipoSeleccionado.valor === 3) {
+    } else if (tipoSeleccionado.valor === 2) {
       personasFiltradasTemporal = personas.filter((persona) => {
-        const coincideActivo =
-          activoSeleccionado.valor === 0 ||
-          (activoSeleccionado.valor === 1 && persona.activo) ||
-          (activoSeleccionado.valor === 2 && !persona.activo);
-
-        return coincideActivo;
+        let nombreCompleto =
+          persona.nombre +
+          " " +
+          persona.primer_apellido +
+          " " +
+          persona.segundo_apellido;
+        nombreCompleto = nombreCompleto.toLowerCase();
+        return nombreCompleto.includes(textoFiltro.toLowerCase());
       });
     } else {
       personasFiltradasTemporal = personas;
@@ -262,7 +259,7 @@ export default function ListadoPersonas() {
             </>
           )}
 
-          {tipoSeleccionado.valor === 2 && (
+          {tipoSeleccionado.valor === 3 && (
             <>
               <Text>Curso</Text>
               <EntradaGroupRadioButton
