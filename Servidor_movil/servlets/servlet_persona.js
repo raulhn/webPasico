@@ -5,6 +5,7 @@ const gestorMatricula = require("../logica/matricula.js");
 const gestorProfesorAlumnoMatricula = require("../logica/profesor_alumno_matricula.js");
 const gestorSocios = require("../logica/socios.js");
 const gestorMatriculaAsignatura = require("../logica/matricula_asignatura.js");
+const gestorProfesores = require("../logica/profesores.js");
 
 function registrarPersona(req, res) {
   servletComun.comprobacionAccesoAPIKey(req, res, async () => {
@@ -221,6 +222,20 @@ async function obtenerListadoPersona(req, res) {
           personas: alumnos,
         });
       }
+    } else if (tipo == 4) {
+      const personas = await gestorPersona.obtenerPersonasMusicos();
+      res.status(200).send({
+        error: false,
+        mensaje: "Listado de personas obtenido correctamente",
+        personas: personas,
+      });
+    } else if (tipo == 5) {
+      const personas = await gestorProfesores.obtenerProfesores();
+      res.status(200).send({
+        error: false,
+        mensaje: "Listado de personas obtenido correctamente",
+        personas: personas,
+      });
     } else {
       res.status(400).send({
         error: false,
