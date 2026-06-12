@@ -30,12 +30,17 @@ export const useAsignaturas = () => {
     setRefrescar(true);
   }
 
-  return { asignaturas, cargando, error, lanzarRefresco };
+  function obtenerAsignatura(nid_asignatura) {
+    const asignatura = asignaturas.find(
+      (a) => a.nid_asignatura === nid_asignatura
+    );
+
+    return asignatura ? asignatura.descripcion : null;
+  }
+  return { asignaturas, cargando, error, lanzarRefresco, obtenerAsignatura };
 };
 
-
-export const useAsignaturasProfesor = (cerrarSesion) =>
-{
+export const useAsignaturasProfesor = (cerrarSesion) => {
   const [asignaturas, setAsignaturas] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
@@ -43,7 +48,9 @@ export const useAsignaturasProfesor = (cerrarSesion) =>
 
   async function fetchAsignaturasProfesor() {
     try {
-      const data = await serviceAsignaturas.obtenerAsignaturasProfesor(cerrarSesion);
+      const data = await serviceAsignaturas.obtenerAsignaturasProfesor(
+        cerrarSesion
+      );
       setAsignaturas(data);
       setRefrescar(false);
       setCargando(false);
@@ -68,6 +75,3 @@ export const useAsignaturasProfesor = (cerrarSesion) =>
   return { asignaturas, cargando, error, lanzarRefresco };
 };
 
-
-
-  

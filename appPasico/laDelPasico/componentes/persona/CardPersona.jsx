@@ -1,8 +1,36 @@
 import { MaterialIcons } from "@expo/vector-icons";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, FlatList } from "react-native";
 import Constantes from "../../config/constantes.js";
 
-export default function CardPersona({ persona }) {
+export default function CardPersona({ persona, detalles = [] }) {
+  const coloresBadge = [
+    "#616161",
+    "#0077cc",
+    "#009688",
+    "#4caf50",
+    "#ff5722",
+    "#9c27b0",
+    "#3f51b5",
+    "#e91e63",
+    "#00bcd4",
+    "#8bc34a",
+  ];
+
+  function obtenerBadges() {
+    return detalles.map((detalle, index) => (
+      <View
+        key={index}
+        style={[
+          estilos.badge,
+          {
+            backgroundColor: coloresBadge[detalle.length % coloresBadge.length],
+          },
+        ]}
+      >
+        <Text style={estilos.badgeText}>{detalle}</Text>
+      </View>
+    ));
+  }
   return (
     <View style={estilos.contenedor}>
       <View style={estilos.fila}>
@@ -16,6 +44,15 @@ export default function CardPersona({ persona }) {
         <Text style={estilos.nombre} numberOfLines={2} ellipsizeMode="tail">
           {persona.nombre} {persona.primer_apellido} {persona.segundo_apellido}
         </Text>
+      </View>
+      <View
+        style={{
+          justifyContent: "flex-start",
+          flexDirection: "row",
+          flexWrap: "wrap",
+        }}
+      >
+        {obtenerBadges()}{" "}
       </View>
     </View>
   );
@@ -48,5 +85,16 @@ const estilos = StyleSheet.create({
     letterSpacing: 0.5,
     flexShrink: 1, // <-- Permite que el texto se reduzca si es necesario
     flexGrow: 1, // <-- Ocupa el espacio restante
+  },
+  badge: {
+    margin: 2,
+    padding: 3,
+    borderRadius: 12,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  badgeText: {
+    fontSize: 11,
+    color: "#fff",
   },
 });

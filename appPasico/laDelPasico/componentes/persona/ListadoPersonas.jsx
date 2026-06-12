@@ -57,6 +57,7 @@ export default function ListadoPersonas() {
     cargando: cargandoAsignaturas,
     error: errorAsignaturas,
     lanzarRefresco: lanzarRefrescoAsignaturas,
+    obtenerAsignatura: obtenerAsignatura,
   } = useAsignaturas(cerrarSesion);
 
   const [tipoSeleccionado, setTipoSeleccionado] = useState({
@@ -108,6 +109,20 @@ export default function ListadoPersonas() {
     ).values(),
   ];
 
+  const musicosUnicos = [
+    ...new Map(
+      personas?.map((musico) => [musico.nid_persona, musico])
+    ).values(),
+  ];
+
+  const profesoresUnicos = [
+    ...new Map(
+      personas?.map((profesor) => [profesor.nid_persona, profesor])
+    ).values(),
+  ];
+
+  console.log("Profesores unicos:", profesoresUnicos);
+
   useEffect(() => {
     let personasFiltradasTemporal = [];
     if (tipoSeleccionado.valor === 3) {
@@ -123,6 +138,28 @@ export default function ListadoPersonas() {
       });
     } else if (tipoSeleccionado.valor === 2) {
       personasFiltradasTemporal = personas.filter((persona) => {
+        let nombreCompleto =
+          persona.nombre +
+          " " +
+          persona.primer_apellido +
+          " " +
+          persona.segundo_apellido;
+        nombreCompleto = nombreCompleto.toLowerCase();
+        return nombreCompleto.includes(textoFiltro.toLowerCase());
+      });
+    } else if (tipoSeleccionado.valor === 4) {
+      personasFiltradasTemporal = musicosUnicos.filter((persona) => {
+        let nombreCompleto =
+          persona.nombre +
+          " " +
+          persona.primer_apellido +
+          " " +
+          persona.segundo_apellido;
+        nombreCompleto = nombreCompleto.toLowerCase();
+        return nombreCompleto.includes(textoFiltro.toLowerCase());
+      });
+    } else if (tipoSeleccionado.valor === 5) {
+      personasFiltradasTemporal = profesoresUnicos.filter((persona) => {
         let nombreCompleto =
           persona.nombre +
           " " +
@@ -155,6 +192,29 @@ export default function ListadoPersonas() {
     personas,
     textoFiltro,
   ]);
+
+  function obtenerListaAsignaturas(nid_persona) {
+    let listaAsignaturas = [];
+    if (tipoSeleccionado.valor === 5) {
+      listaAsignaturas = personas
+        .filter(
+          (persona) =>
+            persona.nid_persona === nid_persona && persona.esBaja === "N"
+        )
+        .map((persona) => {
+          console.log("Persona:", persona);
+          return obtenerAsignatura(persona.nid_asignatura);
+        });
+    }
+    console.log(
+      "Lista de asignaturas para persona con nid_persona",
+      nid_persona,
+      ":",
+      listaAsignaturas
+    );
+
+    return listaAsignaturas;
+  }
 
   return (
     <>
@@ -216,7 +276,10 @@ export default function ListadoPersonas() {
                       ]}
                     >
                       <View style={{ width: "100%", alignItems: "center" }}>
-                        <CardPersona persona={item} />
+                        <CardPersona
+                          persona={item}
+                          detalles={obtenerListaAsignaturas(item.nid_persona)}
+                        />
                       </View>
                     </View>
                   </Pressable>
