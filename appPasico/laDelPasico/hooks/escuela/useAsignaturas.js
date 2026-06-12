@@ -35,7 +35,9 @@ export const useAsignaturas = () => {
       (a) => a.nid_asignatura === nid_asignatura
     );
 
-    return asignatura ? asignatura.descripcion : null;
+    return asignatura
+      ? { nid: asignatura.nid_asignatura, descripcion: asignatura.descripcion }
+      : null;
   }
   return { asignaturas, cargando, error, lanzarRefresco, obtenerAsignatura };
 };
@@ -74,4 +76,3 @@ export const useAsignaturasProfesor = (cerrarSesion) => {
 
   return { asignaturas, cargando, error, lanzarRefresco };
 };
-

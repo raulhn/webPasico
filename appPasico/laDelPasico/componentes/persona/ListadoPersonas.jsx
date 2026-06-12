@@ -102,12 +102,41 @@ export default function ListadoPersonas() {
   const [personasFiltradas, setPersonasFiltradas] = useState([]);
 
   const [textoFiltro, setTextoFiltro] = useState("");
+  const alumnosUnicos = Object.values(
+    personas
+      ? personas.reduce(
+          (
+            acc,
+            {
+              nid_persona,
+              nombre,
+              primer_apellido,
+              segundo_apellido,
+              nid_asignatura,
+            }
+          ) => {
+            if (!acc[nid_persona]) {
+              acc[nid_persona] = {
+                nid_persona,
+                nombre,
+                primer_apellido,
+                segundo_apellido,
+                asignaturas: [],
+              };
+            }
 
-  const alumnosUnicos = [
-    ...new Map(
-      personas?.map((alumno) => [alumno.nid_persona, alumno])
-    ).values(),
-  ];
+            acc[nid_persona].asignaturas.push({
+              nid: nid_asignatura,
+              descripcion: obtenerAsignatura(nid_asignatura),
+            });
+
+            return acc;
+          },
+          {}
+        )
+      : {}
+  );
+  console.log(alumnosUnicos);
 
   const musicosUnicos = [
     ...new Map(
@@ -120,8 +149,6 @@ export default function ListadoPersonas() {
       personas?.map((profesor) => [profesor.nid_persona, profesor])
     ).values(),
   ];
-
-  console.log("Profesores unicos:", profesoresUnicos);
 
   useEffect(() => {
     let personasFiltradasTemporal = [];
@@ -202,17 +229,15 @@ export default function ListadoPersonas() {
             persona.nid_persona === nid_persona && persona.esBaja === "N"
         )
         .map((persona) => {
-          console.log("Persona:", persona);
+          return obtenerAsignatura(persona.nid_asignatura);
+        });
+    } else if (tipoSeleccionado.valor === 3) {
+      listaAsignaturas = personas
+        .filter((persona) => persona.nid_persona === nid_persona)
+        .map((persona) => {
           return obtenerAsignatura(persona.nid_asignatura);
         });
     }
-    console.log(
-      "Lista de asignaturas para persona con nid_persona",
-      nid_persona,
-      ":",
-      listaAsignaturas
-    );
-
     return listaAsignaturas;
   }
 
@@ -278,7 +303,7 @@ export default function ListadoPersonas() {
                       <View style={{ width: "100%", alignItems: "center" }}>
                         <CardPersona
                           persona={item}
-                          detalles={obtenerListaAsignaturas(item.nid_persona)}
+                          detalles={item.asignaturas}
                         />
                       </View>
                     </View>

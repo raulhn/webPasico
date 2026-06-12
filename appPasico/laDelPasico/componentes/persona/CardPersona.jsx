@@ -16,18 +16,18 @@ export default function CardPersona({ persona, detalles = [] }) {
     "#8bc34a",
   ];
 
-  function obtenerBadges() {
+  function ObtenerBadges() {
     return detalles.map((detalle, index) => (
       <View
         key={index}
         style={[
           estilos.badge,
           {
-            backgroundColor: coloresBadge[detalle.length % coloresBadge.length],
+            backgroundColor: coloresBadge[detalle.nid % coloresBadge.length],
           },
         ]}
       >
-        <Text style={estilos.badgeText}>{detalle}</Text>
+        <Text style={estilos.badgeText}>{detalle.descripcion}</Text>
       </View>
     ));
   }
@@ -52,7 +52,7 @@ export default function CardPersona({ persona, detalles = [] }) {
           flexWrap: "wrap",
         }}
       >
-        {obtenerBadges()}{" "}
+        <ObtenerBadges />
       </View>
     </View>
   );
