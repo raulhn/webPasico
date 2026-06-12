@@ -33,7 +33,8 @@ export default function ListadoPersonas() {
     { etiqueta: "Todas las personas", valor: 1 },
     { etiqueta: "Alumnos", valor: 3 },
     { etiqueta: "Socios", valor: 2 },
-    { etiqueta: "Profesores", valor: 4 },
+    { etiqueta: "Musicos", valor: 4 },
+    { etiqueta: "Profesores", valor: 5 },
   ];
 
   const { cerrarSesion } = useContext(AuthContext);

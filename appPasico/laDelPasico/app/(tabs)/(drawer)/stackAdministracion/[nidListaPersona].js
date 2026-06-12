@@ -79,7 +79,7 @@ export default function FichaPersona() {
       const alumnoRecuperado = alumno.persona;
       return (
         <View style={estilos.card}>
-          <Text style={estilos.tituloPrincipal}>Alumno</Text>
+          <Text style={estilos.tituloPrincipal}>Información</Text>
           <Text style={estilos.texto}>
             {alumnoRecuperado.nombre} {alumnoRecuperado.primer_apellido}{" "}
             {alumnoRecuperado.segundo_apellido}
