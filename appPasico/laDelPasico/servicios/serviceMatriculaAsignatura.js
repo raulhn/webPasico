@@ -43,10 +43,6 @@ async function obtenerAlumnosAsignaturaProfesor(
       cerrar_sesion
     );
 
-    console.log(
-      "Respuesta del servicio obtenerAlumnosAsignaturaProfesor:",
-      respuesta
-    );
     return respuesta.alumnos;
   } catch (error) {
     console.log("Error en el servicio obtenerAlumnosAsignaturaProfesor");

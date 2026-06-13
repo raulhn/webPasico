@@ -21,9 +21,6 @@ export const useAlumnosAsignaturaProfesor = (
 
   useEffect(() => {
     if (nidAsignatura_ && nidCurso_) {
-      console.log(
-        `Obteniendo alumnos para curso ${nidCurso_} y asignatura ${nidAsignatura_}`
-      );
       serviceMatriculaAsignatura
         .obtenerAlumnosAsignaturaProfesor(
           nidCurso_,

@@ -36,7 +36,6 @@ export default function Alumnos() {
     lanzarRefresco: lanzarRefrescoAlumnos,
   } = useAlumnosAsignaturaProfesor(nidCurso, nidAsignatura, cerrarSesion);
 
-  console.log("Renderizando ListaAlumnos para profesor", alumnosProfesor);
   return (
     <ListaAlumnos
       alumnos={alumnosProfesor}

@@ -59,7 +59,6 @@ export default function ListaAlumnos({
     valor: curso.nid_curso,
   }));
 
-  console.log("Curso seleccionado:", cursoSeleccionado);
   return (
     <>
       <View
@@ -146,7 +145,7 @@ export default function ListaAlumnos({
                           : null,
                       ]}
                     >
-                      <CardAlumno alumno={item} />
+                      <CardAlumno alumno={item} detalles={item.asignaturas} />
                     </View>
                   </Pressable>
                 </View>

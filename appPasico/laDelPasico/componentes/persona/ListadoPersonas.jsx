@@ -181,7 +181,6 @@ export default function ListadoPersonas() {
     textoFiltro,
   ]);
 
-  console.log("Personas filtradas:", personasFiltradas);
   return (
     <>
       <View style={estilos.contenedor}>
