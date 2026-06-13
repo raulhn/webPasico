@@ -288,11 +288,16 @@ async function obtenerListadoPersona(req, res) {
     // MUSICOS //
     else if (tipo == 4) {
       const personas = await gestorPersona.obtenerPersonasMusicos();
+      const personasUnicas = [
+        ...new Map(
+          personas?.map((persona) => [persona.nid_persona, persona]),
+        ).values(),
+      ];
 
       let personasFormateadas = [];
-      for (let i = 0; i < personas.length; i++) {
+      for (let i = 0; i < personasUnicas.length; i++) {
         const instrumentosPersona = await gestorMusicos.obtenerInstrumentos(
-          personas[i].nid_persona,
+          personasUnicas[i].nid_persona,
         );
         const instrumentosFormateados = instrumentosPersona.map(
           (instrumento) => {
@@ -303,7 +308,7 @@ async function obtenerListadoPersona(req, res) {
           },
         );
         personasFormateadas.push({
-          persona: personas[i],
+          persona: personasUnicas[i],
           asignaturas: instrumentosFormateados,
         });
       }
@@ -317,13 +322,18 @@ async function obtenerListadoPersona(req, res) {
     // PROFESORES //
     else if (tipo == 5) {
       const personas = await gestorProfesores.obtenerProfesores();
+      const personasUnicas = [
+        ...new Map(
+          personas?.map((persona) => [persona.nid_persona, persona]),
+        ).values(),
+      ];
 
       let personasFormateadas = [];
 
-      for (let i = 0; i < personas.length; i++) {
+      for (let i = 0; i < personasUnicas.length; i++) {
         const asignaturasPersona =
           await gestorProfesores.obtenerAsignaturasProfesor(
-            personas[i].nid_persona,
+            personasUnicas[i].nid_persona,
           );
         const asignaturasFormateadas = asignaturasPersona.map((asignatura) => {
           return {
@@ -333,7 +343,7 @@ async function obtenerListadoPersona(req, res) {
         });
 
         personasFormateadas.push({
-          persona: personas[i],
+          persona: personasUnicas[i],
           asignaturas: asignaturasFormateadas,
         });
       }

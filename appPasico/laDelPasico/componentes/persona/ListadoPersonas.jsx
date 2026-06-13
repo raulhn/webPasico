@@ -105,13 +105,13 @@ export default function ListadoPersonas() {
 
   const musicosUnicos = [
     ...new Map(
-      personas?.map((musico) => [musico.nid_persona, musico])
+      personas?.map((musico) => [musico.persona.nid_persona, musico.persona])
     ).values(),
   ];
 
   const profesoresUnicos = [
     ...new Map(
-      personas?.map((profesor) => [profesor.nid_persona, profesor])
+      personas?.map((profesor) => [profesor.persona.nid_persona, profesor])
     ).values(),
   ];
 
@@ -143,7 +143,7 @@ export default function ListadoPersonas() {
         return nombreCompleto.includes(textoFiltro.toLowerCase());
       });
     } else if (tipoSeleccionado.valor === 4) {
-      personasFiltradasTemporal = musicosUnicos.filter((personaObjeto) => {
+      personasFiltradasTemporal = personas.filter((personaObjeto) => {
         const persona = personaObjeto.persona;
         let nombreCompleto =
           persona.nombre +
@@ -155,7 +155,7 @@ export default function ListadoPersonas() {
         return nombreCompleto.includes(textoFiltro.toLowerCase());
       });
     } else if (tipoSeleccionado.valor === 5) {
-      personasFiltradasTemporal = profesoresUnicos.filter((personaObjeto) => {
+      personasFiltradasTemporal = personas.filter((personaObjeto) => {
         const persona = personaObjeto.persona;
         let nombreCompleto =
           persona.nombre +
@@ -190,6 +190,7 @@ export default function ListadoPersonas() {
     textoFiltro,
   ]);
 
+  console.log("Personas filtradas:", personasFiltradas);
   return (
     <>
       <View style={estilos.contenedor}>
