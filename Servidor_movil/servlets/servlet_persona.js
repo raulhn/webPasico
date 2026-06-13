@@ -198,15 +198,31 @@ async function obtenerListadoPersona(req, res) {
       }
 
       if (!nid_asignatura || nid_asignatura == 0) {
-        const alumnos = await gestorMatriculaAsignatura.obtenerAlumnosCurso(
+        const alumnos = await gestorMatriculaAsignatura.obtenerAlumnos(
           nid_curso,
           activo,
         );
 
+        let alumnosRetorno = [];
+        for (let i = 0; i < alumnos.length; i++) {
+          const asignaturas =
+            await gestorMatriculaAsignatura.obtenerAsignaturasAlumno(
+              alumnos[i].nid_persona,
+              nid_curso,
+              activo,
+            );
+          const alumno_asignatura = {
+            persona: alumnos[i],
+            asignaturas: asignaturas,
+          };
+
+          alumnosRetorno.push(alumno_asignatura);
+        }
+
         res.status(200).send({
           error: false,
           mensaje: "Listado de personas obtenido correctamente",
-          personas: alumnos,
+          personas: alumnosRetorno,
         });
       } else {
         const alumnos =
@@ -216,10 +232,26 @@ async function obtenerListadoPersona(req, res) {
             activo,
           );
 
+        let alumnosRetorno = [];
+        for (let i = 0; i < alumnos.length; i++) {
+          const asignaturas =
+            await gestorMatriculaAsignatura.obtenerAsignaturasAlumno(
+              alumnos[i].nid_persona,
+              nid_curso,
+              activo,
+            );
+          const alumno_asignatura = {
+            persona: alumnos[i],
+            asignaturas: asignaturas,
+          };
+
+          alumnosRetorno.push(alumno_asignatura);
+        }
+
         res.status(200).send({
           error: false,
           mensaje: "Listado de personas obtenido correctamente",
-          personas: alumnos,
+          personas: alumnosRetorno,
         });
       }
     } else if (tipo == 4) {

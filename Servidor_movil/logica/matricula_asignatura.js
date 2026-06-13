@@ -409,6 +409,43 @@ function obtenerAlumnosAsignaturaProfesor(
   });
 }
 
+function obtenerAsignaturasAlumno(nid_persona, nid_curso, activo = 1) {
+  let sql =
+    "SELECT a.nid_asignatura, a.descripcion, ma.nid_matricula_asignatura, ma.nid_matricula " +
+    "FROM " +
+    constantes.ESQUEMA +
+    ".asignaturas a, " +
+    constantes.ESQUEMA +
+    ".matricula m, " +
+    constantes.ESQUEMA +
+    ".matricula_asignatura ma " +
+    "WHERE ma.nid_asignatura = a.nid_asignatura " +
+    "AND ma.nid_matricula = m.nid_matricula " +
+    "AND m.nid_persona = " +
+    conexion.dbConn.escape(nid_persona) +
+    " " +
+    "AND m.nid_curso = " +
+    conexion.dbConn.escape(nid_curso) +
+    " ";
+
+  if (activo == 1) {
+    sql += "AND (ma.fecha_baja IS NULL OR ma.fecha_baja > NOW()) ";
+  } else if (activo == 2) {
+    sql += "AND (ma.fecha_baja IS NOT NULL AND ma.fecha_baja <= NOW()) ";
+  }
+
+  return new Promise((resolve, reject) => {
+    conexion.dbConn.query(sql, (err, result) => {
+      if (err) {
+        console.error("Error al obtener las asignaturas del alumno:", err);
+        reject("Se ha producido un error al obtener las asignaturas");
+      } else {
+        resolve(result);
+      }
+    });
+  });
+}
+
 module.exports.registrarMatriculaAsignatura = registrarMatriculaAsignatura;
 module.exports.obtenerAlumnos = obtenerAlumnos;
 module.exports.obtenerAlumnosCursoActivo = obtenerAlumnosCursoActivo;
@@ -421,3 +458,4 @@ module.exports.obtenerAlumnosAsignaturaProfesor =
   obtenerAlumnosAsignaturaProfesor;
 module.exports.obtenerAlumnosCurso = obtenerAlumnosCurso;
 module.exports.obtenerAlumnosCursoAsignatura = obtenerAlumnosCursoAsignatura;
+module.exports.obtenerAsignaturasAlumno = obtenerAsignaturasAlumno;
