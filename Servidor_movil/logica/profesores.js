@@ -242,7 +242,7 @@ function obtenerAsignaturasProfesor(nid_persona) {
     constantes.ESQUEMA +
     ".profesor p, " +
     constantes.ESQUEMA +
-    ".asignatura a " +
+    ".asignaturas a " +
     " where p.nid_asignatura = a.nid_asignatura " +
     " and p.nid_persona = " +
     conexion.dbConn.escape(nid_persona) +
