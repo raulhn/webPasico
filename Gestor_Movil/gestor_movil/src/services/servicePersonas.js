@@ -19,7 +19,12 @@ export function obtenerInfoPersona(nidPersona) {
   });
 }
 
-export async function obtenerListadoPersonas(tipo, activo) {
+export async function obtenerListadoPersonas(
+  tipo,
+  activo,
+  nid_curso = 0,
+  nid_asignatura = 0,
+) {
   try {
     const respuesta = await peticionServicio(
       "GET",
@@ -27,7 +32,11 @@ export async function obtenerListadoPersonas(tipo, activo) {
         "obtener_personas_listado/" +
         tipo +
         "/" +
-        activo,
+        activo +
+        "/" +
+        nid_curso +
+        "/" +
+        nid_asignatura,
       null,
     );
     return respuesta.personas;

@@ -72,11 +72,11 @@ export default function ListaPersonas() {
   let bidimensional = [];
 
   if (tipo != 3 || asignatura == "") {
-    bidimensional = personas.map((persona) => [
-      persona.nid_persona,
-      persona.nombre,
-      persona.primer_apellido,
-      persona.segundo_apellido,
+    bidimensional = personas.map((personaObjeto) => [
+      personaObjeto.persona.nid_persona,
+      personaObjeto.persona.nombre,
+      personaObjeto.persona.primer_apellido,
+      personaObjeto.persona.segundo_apellido,
     ]);
   } else {
     bidimensional = alumnos.map((persona) => [
