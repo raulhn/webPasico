@@ -278,7 +278,7 @@ async function obtenerAlumnosAsignaturaProfesor(req, res) {
         await gestorMatriculaAsignatura.obtenerAsignaturasAlumno(
           alumnos[i].nid_persona,
           nid_curso,
-          activo,
+          1,
         );
 
       const asignaturasFormateadas = asignaturas.map((asignatura) => {

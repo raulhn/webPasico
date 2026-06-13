@@ -5,7 +5,10 @@ import {
 import { useContext, useState } from "react";
 import { AuthContext } from "../../../../providers/AuthContext";
 import { useAlumnosAsignaturaProfesor } from "../../../../hooks/escuela/useAlumnos";
-import { usePersonas } from "../../../../hooks/personas/usePersonas";
+import {
+  usePersonas,
+  useListadoPersonas,
+} from "../../../../hooks/personas/usePersonas";
 import ListaAlumnos from "../../../../componentes/componentesEscuela/ListaAlumnos";
 import {
   ROL_ADMINISTRADOR,
@@ -27,71 +30,29 @@ export default function Alumnos() {
   } = useAsignaturasProfesor(cerrarSesion);
 
   const {
-    setNidAsignatura: setNidAsignaturaProfesor,
-    setNidCurso: setNidCursoProfesor,
     alumnos: alumnosProfesor,
     cargando: cargandoAlumnos,
     error: errorAlumnos,
     lanzarRefresco: lanzarRefrescoAlumnos,
-  } = useAlumnosAsignaturaProfesor(null, null, cerrarSesion);
+  } = useAlumnosAsignaturaProfesor(nidCurso, nidAsignatura, cerrarSesion);
 
-  const {
-    asignaturas,
-    cargando: cargandoAsignaturas,
-    error: errorAsignaturas,
-    lanzarRefresco: lanzarRefrescoAsignaturas,
-  } = useAsignaturas(cerrarSesion);
-
-  const {
-    personas: alumnos,
-    cargando: cargandoAlumnosAdmin,
-    error: errorAlumnosAdmin,
-    lanzarRefresco: lanzarRefrescoAlumnosAdmin,
-  } = usePersonas(ESCUELA, nidCurso, cerrarSesion);
-
-  const { esRol } = useRol();
-
-  const rolAdministrador = esRol([ROL_ADMINISTRADOR, ROL_DIRECTIVO]);
-
-  const alumnosAdministrador = alumnos?.filter(
-    (alumno) => alumno.nid_asignatura === nidAsignatura
+  console.log("Renderizando ListaAlumnos para profesor", alumnosProfesor);
+  return (
+    <ListaAlumnos
+      alumnos={alumnosProfesor}
+      cargandoAlumnos={cargandoAlumnos}
+      lanzarRefrescoAsignaturas={lanzarRefresco}
+      lanzarRefrescoAlumnos={lanzarRefrescoAlumnos}
+      cargando={cargando}
+      error={error}
+      asignaturas={asignaturasProfesor}
+      setNidAsignatura={(valor) => {
+        setNidAsignatura(valor);
+      }}
+      setNidCurso={(valor) => {
+        setNidCurso(valor);
+      }}
+      cerrarSesion={cerrarSesion}
+    />
   );
-
-  const alumnosAdministradorUnicos = [
-    ...new Map(
-      alumnosAdministrador?.map((alumno) => [alumno.nid_persona, alumno])
-    ).values(),
-  ];
-
-  if (!rolAdministrador) {
-    return (
-      <ListaAlumnos
-        alumnos={alumnosProfesor}
-        cargandoAlumnos={cargandoAlumnos}
-        lanzarRefrescoAsignaturas={lanzarRefresco}
-        lanzarRefrescoAlumnos={lanzarRefrescoAlumnos}
-        cargando={cargando}
-        error={error}
-        asignaturas={asignaturasProfesor}
-        setNidAsignatura={setNidAsignaturaProfesor}
-        setNidCurso={setNidCursoProfesor}
-        cerrarSesion={cerrarSesion}
-      />
-    );
-  } else {
-    return (
-      <ListaAlumnos
-        alumnos={alumnosAdministradorUnicos}
-        cargandoAlumnos={cargandoAlumnosAdmin}
-        lanzarRefrescoAsignaturas={lanzarRefresco}
-        lanzarRefrescoAlumnos={lanzarRefrescoAlumnosAdmin}
-        cargando={cargando}
-        error={error}
-        asignaturas={asignaturas}
-        setNidAsignatura={setNidAsignatura}
-        setNidCurso={setNidCurso}
-        cerrarSesion={cerrarSesion}
-      />
-    );
-  }
 }

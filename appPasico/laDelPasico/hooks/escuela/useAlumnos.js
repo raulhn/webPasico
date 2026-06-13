@@ -15,17 +15,21 @@ export const useAlumnosAsignaturaProfesor = (
   const [error, setError] = useState(null);
   const [refrescar, setRefrescar] = useState(false);
 
-  const [nidAsignatura, setNidAsignatura] = useState(nidAsignatura_);
-  const [nidCurso, setNidCurso] = useState(nidCurso_);
-
   function lanzarRefresco() {
     setRefrescar(true);
   }
 
   useEffect(() => {
-    if (nidAsignatura && nidCurso) {
+    if (nidAsignatura_ && nidCurso_) {
+      console.log(
+        `Obteniendo alumnos para curso ${nidCurso_} y asignatura ${nidAsignatura_}`
+      );
       serviceMatriculaAsignatura
-        .obtenerAlumnosAsignaturaProfesor(nidCurso, nidAsignatura, cerrarSesion)
+        .obtenerAlumnosAsignaturaProfesor(
+          nidCurso_,
+          nidAsignatura_,
+          cerrarSesion
+        )
         .then((data) => {
           setAlumnos(data);
           setCargando(false);
@@ -44,15 +48,13 @@ export const useAlumnosAsignaturaProfesor = (
       setAlumnos([]);
       setRefrescar(false);
     }
-  }, [refrescar, nidCurso, nidAsignatura]);
+  }, [refrescar, nidCurso_, nidAsignatura_]);
 
   return {
     alumnos,
     cargando,
     error,
     lanzarRefresco,
-    setNidAsignatura,
-    setNidCurso,
   };
 };
 

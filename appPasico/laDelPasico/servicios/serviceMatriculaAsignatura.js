@@ -26,16 +26,34 @@ function obtenerMatriculasAsignaturaPersona(nid_matricula, cerrar_sesion) {
   });
 }
 
-async function obtenerAlumnosAsignaturaProfesor(nid_curso, nid_asignatura, cerrar_sesion)
-{
+async function obtenerAlumnosAsignaturaProfesor(
+  nid_curso,
+  nid_asignatura,
+  cerrar_sesion
+) {
   try {
+    const respuesta = await servletComun.peticionSesion(
+      "GET",
+      Constantes.URL_SERVICIO_MOVIL +
+        "obtener_alumnos_asignatura_profesor/" +
+        nid_asignatura +
+        "/" +
+        nid_curso,
+      null,
+      cerrar_sesion
+    );
 
-    const respuesta = await servletComun.peticionSesion("GET", Constantes.URL_SERVICIO_MOVIL + "obtener_alumnos_asignatura_profesor/" + nid_asignatura + "/" + nid_curso, null, cerrar_sesion);
-
+    console.log(
+      "Respuesta del servicio obtenerAlumnosAsignaturaProfesor:",
+      respuesta
+    );
     return respuesta.alumnos;
   } catch (error) {
     console.log("Error en el servicio obtenerAlumnosAsignaturaProfesor");
-    throw new Error("Error al obtener los alumnos de la asignatura del profesor: " + error.message);
+    throw new Error(
+      "Error al obtener los alumnos de la asignatura del profesor: " +
+        error.message
+    );
   }
 }
 
