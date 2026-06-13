@@ -219,7 +219,8 @@ function obtenerInstrumentos(nid_persona) {
       constantes.ESQUEMA +
       ".instrumentos i where m.nid_persona = " +
       conexion.dbConn.escape(nid_persona) +
-      " and m.nid_instrumento = i.nid_instrumento";
+      " and m.nid_instrumento = i.nid_instrumento" +
+      " group by i.nid_instrumento, i.descripcion";
 
     conexion.dbConn.query(sql, (error, results) => {
       if (error) {
