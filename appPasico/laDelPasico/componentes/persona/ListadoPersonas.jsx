@@ -136,7 +136,7 @@ export default function ListadoPersonas() {
         )
       : {}
   );
-  console.log(alumnosUnicos);
+  console.log("Personas:", personas);
 
   const musicosUnicos = [
     ...new Map(
@@ -153,7 +153,7 @@ export default function ListadoPersonas() {
   useEffect(() => {
     let personasFiltradasTemporal = [];
     if (tipoSeleccionado.valor === 3) {
-      personasFiltradasTemporal = alumnosUnicos.filter((persona) => {
+      personasFiltradasTemporal = personas.filter((persona) => {
         let nombreCompleto =
           persona.nombre +
           " " +
@@ -232,11 +232,7 @@ export default function ListadoPersonas() {
           return obtenerAsignatura(persona.nid_asignatura);
         });
     } else if (tipoSeleccionado.valor === 3) {
-      listaAsignaturas = personas
-        .filter((persona) => persona.nid_persona === nid_persona)
-        .map((persona) => {
-          return obtenerAsignatura(persona.nid_asignatura);
-        });
+      listaAsignaturas = personas;
     }
     return listaAsignaturas;
   }
@@ -302,7 +298,7 @@ export default function ListadoPersonas() {
                     >
                       <View style={{ width: "100%", alignItems: "center" }}>
                         <CardPersona
-                          persona={item}
+                          persona={item.persona}
                           detalles={item.asignaturas}
                         />
                       </View>

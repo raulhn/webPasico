@@ -16,6 +16,8 @@ export default function CardPersona({ persona, detalles = [] }) {
     "#8bc34a",
   ];
 
+  console.log("Detalles recibidos en CardPersona:", detalles);
+
   function ObtenerBadges() {
     return detalles.map((detalle, index) => (
       <View
