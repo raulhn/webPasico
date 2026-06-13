@@ -272,6 +272,25 @@ async function obtenerAlumnosAsignaturaProfesor(req, res) {
         nid_curso,
         nid_profesor,
       );
+
+    for (let i = 0; i < alumnos.length; i++) {
+      const asignaturas =
+        await gestorMatriculaAsignatura.obtenerAsignaturasAlumno(
+          alumnos[i].nid_persona,
+          nid_curso,
+          activo,
+        );
+
+      const asignaturasFormateadas = asignaturas.map((asignatura) => {
+        return {
+          descripcion: asignatura.descripcion,
+          nid: asignatura.nid_asignatura,
+        };
+      });
+
+      alumnos[i].asignaturas = asignaturasFormateadas;
+    }
+
     res.status(200).send({ error: false, alumnos: alumnos });
   } catch (error) {
     console.error(

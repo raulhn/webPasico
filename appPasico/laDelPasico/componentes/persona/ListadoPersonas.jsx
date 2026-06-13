@@ -103,18 +103,6 @@ export default function ListadoPersonas() {
 
   const [textoFiltro, setTextoFiltro] = useState("");
 
-  const musicosUnicos = [
-    ...new Map(
-      personas?.map((musico) => [musico.persona.nid_persona, musico.persona])
-    ).values(),
-  ];
-
-  const profesoresUnicos = [
-    ...new Map(
-      personas?.map((profesor) => [profesor.persona.nid_persona, profesor])
-    ).values(),
-  ];
-
   useEffect(() => {
     let personasFiltradasTemporal = [];
     if (tipoSeleccionado.valor === 3) {
@@ -170,16 +158,19 @@ export default function ListadoPersonas() {
       personasFiltradasTemporal = personas;
     }
 
-    personasFiltradasTemporal = personasFiltradasTemporal.filter((persona) => {
-      let nombreCompleto =
-        persona.nombre +
-        " " +
-        persona.primer_apellido +
-        " " +
-        persona.segundo_apellido;
-      nombreCompleto = nombreCompleto.toLowerCase();
-      return nombreCompleto.includes(textoFiltro.toLowerCase());
-    });
+    personasFiltradasTemporal = personasFiltradasTemporal.filter(
+      (personaObjeto) => {
+        const persona = personaObjeto.persona;
+        let nombreCompleto =
+          persona.nombre +
+          " " +
+          persona.primer_apellido +
+          " " +
+          persona.segundo_apellido;
+        nombreCompleto = nombreCompleto.toLowerCase();
+        return nombreCompleto.includes(textoFiltro.toLowerCase());
+      }
+    );
     setPersonasFiltradas(personasFiltradasTemporal);
   }, [
     tipoSeleccionado,
