@@ -259,9 +259,17 @@ async function obtenerListadoPersona(req, res) {
               nid_curso,
               activo,
             );
+
+          const asignaturasFormateadas = asignaturas.map((asignatura) => {
+            return {
+              descripcion: asignatura.descripcion,
+              nid: asignatura.nid_asignatura,
+            };
+          });
+
           const alumno_asignatura = {
             persona: alumnos[i],
-            asignaturas: asignaturas,
+            asignaturas: asignaturasFormateadas,
           };
 
           alumnosRetorno.push(alumno_asignatura);

@@ -153,7 +153,8 @@ export default function ListadoPersonas() {
   useEffect(() => {
     let personasFiltradasTemporal = [];
     if (tipoSeleccionado.valor === 3) {
-      personasFiltradasTemporal = personas.filter((persona) => {
+      personasFiltradasTemporal = personas.filter((personaObjeto) => {
+        const persona = personaObjeto.persona;
         let nombreCompleto =
           persona.nombre +
           " " +
@@ -164,7 +165,9 @@ export default function ListadoPersonas() {
         return nombreCompleto.includes(textoFiltro.toLowerCase());
       });
     } else if (tipoSeleccionado.valor === 2) {
-      personasFiltradasTemporal = personas.filter((persona) => {
+      personasFiltradasTemporal = personas.filter((personaObjeto) => {
+        const persona = personaObjeto.persona;
+
         let nombreCompleto =
           persona.nombre +
           " " +
@@ -175,7 +178,8 @@ export default function ListadoPersonas() {
         return nombreCompleto.includes(textoFiltro.toLowerCase());
       });
     } else if (tipoSeleccionado.valor === 4) {
-      personasFiltradasTemporal = musicosUnicos.filter((persona) => {
+      personasFiltradasTemporal = musicosUnicos.filter((personaObjeto) => {
+        const persona = personaObjeto.persona;
         let nombreCompleto =
           persona.nombre +
           " " +
@@ -186,7 +190,8 @@ export default function ListadoPersonas() {
         return nombreCompleto.includes(textoFiltro.toLowerCase());
       });
     } else if (tipoSeleccionado.valor === 5) {
-      personasFiltradasTemporal = profesoresUnicos.filter((persona) => {
+      personasFiltradasTemporal = profesoresUnicos.filter((personaObjeto) => {
+        const persona = personaObjeto.persona;
         let nombreCompleto =
           persona.nombre +
           " " +
@@ -259,6 +264,7 @@ export default function ListadoPersonas() {
             onScrollEndDrag={() => {
               setPresionado(null); // Cambia el estado a no presionado al hacer scroll
             }}
+            keyExtractor={(item) => item.persona.nid_persona.toString()}
             refreshControl={
               <RefreshControl
                 refreshing={cargando}
@@ -307,7 +313,6 @@ export default function ListadoPersonas() {
                 </View>
               );
             }}
-            keyExtractor={(item) => item.nid_persona}
             contentContainerStyle={{ gap: 10, flexGrow: 1 }}
           />
         </View>
