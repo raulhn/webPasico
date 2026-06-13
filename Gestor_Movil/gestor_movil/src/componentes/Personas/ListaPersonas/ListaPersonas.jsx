@@ -2,7 +2,6 @@ import "./ListaPersonas.css";
 import { Boton, DataTable, Selector } from "../../ComponentesUI/ComponentesUI";
 import { useCursos } from "../../../hooks/useCursos";
 import { useAsignaturas } from "../../../hooks/useAsignaturas";
-import { useAlumnosAsignatura } from "../../../hooks/useAlumnos";
 import { usePersonas } from "../../../hooks/usePersonas";
 import { useState } from "react";
 import Cabecera from "../../Cabecera/Cabecera";
@@ -12,8 +11,8 @@ export default function ListaPersonas() {
   const { cursos } = useCursos();
   const { asignaturas } = useAsignaturas();
 
-  const [curso, setCurso] = useState("");
-  const [asignatura, setAsignatura] = useState("");
+  const [curso, setCurso] = useState(0);
+  const [asignatura, setAsignatura] = useState(0);
   const [activo, setActivo] = useState(1);
   const [seleccionado, setSeleccionado] = useState(null);
   const [tipo, setTipo] = useState(1);
@@ -22,14 +21,14 @@ export default function ListaPersonas() {
     valor: asignatura.nid_asignatura,
     etiqueta: asignatura.descripcion,
   }));
-  opcionesAsignatura.push({ valor: "", etiqueta: "Seleccione asignatura" });
+  opcionesAsignatura.push({ valor: 0, etiqueta: "Seleccione asignatura" });
 
   let opcionesCurso = cursos.map((curso) => ({
     valor: curso.nid_curso,
     etiqueta: curso.descripcion,
   }));
 
-  opcionesCurso.push({ valor: "", etiqueta: "Seleccione curso" });
+  opcionesCurso.push({ valor: 0, etiqueta: "Seleccione curso" });
 
   const tipoPersonas = [
     { nid: 1, nombre: "Personas" },
@@ -52,40 +51,16 @@ export default function ListaPersonas() {
     valor: tipo.nid,
     etiqueta: tipo.nombre,
   }));
-
-  const {
-    alumnos,
-    lanzarRefresco,
-    setNidAsignatura,
-    setNidCurso,
-    setActivo: setActivoHook,
-  } = useAlumnosAsignatura(curso, asignatura, activo);
-
-  const {
-    personas,
-    setTipoPersona,
-    refresh,
-    setActivoPersona,
-    setNidCursoPersona,
-  } = usePersonas(tipo, activo, curso);
+  const { personas, refresh } = usePersonas(tipo, activo, curso, asignatura);
 
   let bidimensional = [];
 
-  if (tipo != 3 || asignatura == "") {
-    bidimensional = personas.map((personaObjeto) => [
-      personaObjeto.persona.nid_persona,
-      personaObjeto.persona.nombre,
-      personaObjeto.persona.primer_apellido,
-      personaObjeto.persona.segundo_apellido,
-    ]);
-  } else {
-    bidimensional = alumnos.map((persona) => [
-      persona.nid_persona,
-      persona.nombre,
-      persona.primer_apellido,
-      persona.segundo_apellido,
-    ]);
-  }
+  bidimensional = personas.map((personaObjeto) => [
+    personaObjeto.persona.nid_persona,
+    personaObjeto.persona.nombre,
+    personaObjeto.persona.primer_apellido,
+    personaObjeto.persona.segundo_apellido,
+  ]);
 
   function accionSeleccion(filaSeleccionada) {
     setSeleccionado(filaSeleccionada);
@@ -102,8 +77,6 @@ export default function ListaPersonas() {
             valor={tipo}
             setValor={(valor) => {
               setTipo(valor);
-              setTipoPersona(valor);
-              lanzarRefresco();
               refresh();
             }}
             width="150px"
@@ -115,9 +88,7 @@ export default function ListaPersonas() {
                 valor={curso}
                 setValor={(valor) => {
                   setCurso(valor);
-                  setNidCurso(valor);
-                  setNidCursoPersona(valor);
-                  lanzarRefresco();
+                  refresh();
                 }}
                 width="250px"
               />
@@ -126,8 +97,7 @@ export default function ListaPersonas() {
                 valor={asignatura}
                 setValor={(valor) => {
                   setAsignatura(valor);
-                  setNidAsignatura(valor);
-                  lanzarRefresco();
+                  refresh();
                 }}
                 width="250px"
               />
@@ -140,9 +110,7 @@ export default function ListaPersonas() {
               valor={activo}
               setValor={(valor) => {
                 setActivo(valor);
-                setActivoHook(valor);
-                lanzarRefresco();
-                setActivoPersona(valor);
+                refresh();
               }}
               width="150px"
             />

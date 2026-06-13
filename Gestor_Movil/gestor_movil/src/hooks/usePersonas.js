@@ -1,7 +1,6 @@
 import {
   obtenerInfoPersona,
   obtenerListadoPersonas,
-  obtenerPersonasAlumnosCurso,
 } from "../services/servicePersonas.js";
 import { useState, useEffect } from "react";
 
@@ -29,7 +28,6 @@ export const usePersona = (nidPersona) => {
             padre: data.padre,
             madre: data.madre,
           };
-          console.log("Info obtenida:", infoObjeto);
           setInfo(infoObjeto);
           setLoading(false);
         } else {
@@ -56,15 +54,11 @@ export const usePersona = (nidPersona) => {
   return { info, loading, error, refresh };
 };
 
-export const usePersonas = (tipo, activo, nidCurso) => {
+export const usePersonas = (tipo, activo, nidCurso, nidAsignatura) => {
   const [personas, setPersonas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [refrescar, setRefrescar] = useState(false);
-
-  const [tipoPersona, setTipoPersona] = useState(tipo);
-  const [activoPersona, setActivoPersona] = useState(activo);
-  const [nidCursoPersona, setNidCursoPersona] = useState(nidCurso);
 
   useEffect(() => {
     const fetchPersonas = async () => {
@@ -72,31 +66,20 @@ export const usePersonas = (tipo, activo, nidCurso) => {
       setError(true);
 
       try {
-        if (tipo != 3) {
-          const data = await obtenerListadoPersonas(tipoPersona, activoPersona);
-          if (!data.error) {
-            setError(false);
-            setPersonas(data);
-            setLoading(false);
-          } else {
-            setError(true);
-            setPersonas([]);
-            setLoading(false);
-          }
+        const data = await obtenerListadoPersonas(
+          tipo,
+          activo,
+          nidCurso,
+          nidAsignatura,
+        );
+        if (!data.error) {
+          setError(false);
+          setPersonas(data);
+          setLoading(false);
         } else {
-          const data = await obtenerPersonasAlumnosCurso(
-            nidCursoPersona,
-            activoPersona,
-          );
-          if (!data.error) {
-            setError(false);
-            setPersonas(data);
-            setLoading(false);
-          } else {
-            setError(true);
-            setPersonas([]);
-            setLoading(false);
-          }
+          setError(true);
+          setPersonas([]);
+          setLoading(false);
         }
       } catch (err) {
         console.log("Error al obtener el listado de personas:", err);
@@ -105,9 +88,8 @@ export const usePersonas = (tipo, activo, nidCurso) => {
         setPersonas([]);
       }
     };
-
     fetchPersonas();
-  }, [tipoPersona, activoPersona, nidCursoPersona, refrescar]);
+  }, [tipo, activo, nidCurso, nidAsignatura, refrescar]);
 
   function refresh() {
     setRefrescar(!refrescar);
@@ -117,8 +99,5 @@ export const usePersonas = (tipo, activo, nidCurso) => {
     loading,
     error,
     refresh,
-    setTipoPersona,
-    setActivoPersona,
-    setNidCursoPersona,
   };
 };
