@@ -170,18 +170,30 @@ async function obtenerListadoPersona(req, res) {
     const tipo = req.params.tipo;
     if (tipo == 1) {
       const personas = await gestorPersona.obtenerPersonas();
+      const personasFormateadas = personas.map((persona) => {
+        return {
+          persona: persona,
+        };
+      });
+
       res.status(200).send({
         error: false,
         mensaje: "Listado de personas obtenido correctamente",
-        personas: personas,
+        personas: personasFormateadas,
       });
     } else if (tipo == 2) {
       const activo = req.params.activo;
       const personas = await gestorPersona.obtenerPersonasSociosActivos(activo);
+
+      const personasFormateadas = personas.map((persona) => {
+        return {
+          persona: persona,
+        };
+      });
       res.status(200).send({
         error: false,
         mensaje: "Listado de personas obtenido correctamente",
-        personas: personas,
+        personas: personasFormateadas,
       });
     } else if (tipo == 3) {
       const activo = req.params.activo;
@@ -263,17 +275,27 @@ async function obtenerListadoPersona(req, res) {
       }
     } else if (tipo == 4) {
       const personas = await gestorPersona.obtenerPersonasMusicos();
+      const personasFormateadas = personas.map((persona) => {
+        return {
+          persona: persona,
+        };
+      });
       res.status(200).send({
         error: false,
         mensaje: "Listado de personas obtenido correctamente",
-        personas: personas,
+        personas: personasFormateadas,
       });
     } else if (tipo == 5) {
       const personas = await gestorProfesores.obtenerProfesores();
+      const personasFormateadas = personas.map((persona) => {
+        return {
+          persona: persona,
+        };
+      });
       res.status(200).send({
         error: false,
         mensaje: "Listado de personas obtenido correctamente",
-        personas: personas,
+        personas: personasFormateadas,
       });
     } else {
       res.status(400).send({
