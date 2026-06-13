@@ -102,41 +102,6 @@ export default function ListadoPersonas() {
   const [personasFiltradas, setPersonasFiltradas] = useState([]);
 
   const [textoFiltro, setTextoFiltro] = useState("");
-  const alumnosUnicos = Object.values(
-    personas
-      ? personas.reduce(
-          (
-            acc,
-            {
-              nid_persona,
-              nombre,
-              primer_apellido,
-              segundo_apellido,
-              nid_asignatura,
-            }
-          ) => {
-            if (!acc[nid_persona]) {
-              acc[nid_persona] = {
-                nid_persona,
-                nombre,
-                primer_apellido,
-                segundo_apellido,
-                asignaturas: [],
-              };
-            }
-
-            acc[nid_persona].asignaturas.push({
-              nid: nid_asignatura,
-              descripcion: obtenerAsignatura(nid_asignatura),
-            });
-
-            return acc;
-          },
-          {}
-        )
-      : {}
-  );
-  console.log("Personas:", personas);
 
   const musicosUnicos = [
     ...new Map(
@@ -225,23 +190,6 @@ export default function ListadoPersonas() {
     textoFiltro,
   ]);
 
-  function obtenerListaAsignaturas(nid_persona) {
-    let listaAsignaturas = [];
-    if (tipoSeleccionado.valor === 5) {
-      listaAsignaturas = personas
-        .filter(
-          (persona) =>
-            persona.nid_persona === nid_persona && persona.esBaja === "N"
-        )
-        .map((persona) => {
-          return obtenerAsignatura(persona.nid_asignatura);
-        });
-    } else if (tipoSeleccionado.valor === 3) {
-      listaAsignaturas = personas;
-    }
-    return listaAsignaturas;
-  }
-
   return (
     <>
       <View style={estilos.contenedor}>
@@ -276,19 +224,20 @@ export default function ListadoPersonas() {
             }
             renderItem={({ item }) => {
               return (
-                <View key={item.nid_persona}>
+                <View key={item.persona.nid_persona}>
                   <Pressable
                     onPress={() => {
                       router.push({
                         pathname:
-                          "/(drawer)/stackAdministracion/" + item.nid_persona,
+                          "/(drawer)/stackAdministracion/" +
+                          item.persona.nid_persona,
                         params: {
-                          nidListaPersona: item.nid_persona,
+                          nidListaPersona: item.persona.nid_persona,
                         },
                       });
                     }}
                     onTouchStart={() => {
-                      setPresionado(item.nid_persona); // Cambia el estado a presionado
+                      setPresionado(item.persona.nid_persona); // Cambia el estado a presionado
                     }}
                     onTouchEnd={() => {
                       setPresionado(null); // Cambia el estado a no presionado
@@ -297,7 +246,7 @@ export default function ListadoPersonas() {
                   >
                     <View
                       style={[
-                        presionado === item.nid_persona
+                        presionado === item.persona.nid_persona
                           ? estilos.tarjetaPresionada
                           : null,
                       ]}

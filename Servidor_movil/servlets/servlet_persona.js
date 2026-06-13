@@ -6,6 +6,7 @@ const gestorProfesorAlumnoMatricula = require("../logica/profesor_alumno_matricu
 const gestorSocios = require("../logica/socios.js");
 const gestorMatriculaAsignatura = require("../logica/matricula_asignatura.js");
 const gestorProfesores = require("../logica/profesores.js");
+const gestorMusicos = require("../logica/musicos.js");
 
 function registrarPersona(req, res) {
   servletComun.comprobacionAccesoAPIKey(req, res, async () => {
@@ -195,7 +196,9 @@ async function obtenerListadoPersona(req, res) {
         mensaje: "Listado de personas obtenido correctamente",
         personas: personasFormateadas,
       });
-    } else if (tipo == 3) {
+    }
+    // ALUMNOS //
+    else if (tipo == 3) {
       const activo = req.params.activo;
       const nid_curso = req.params.nid_curso;
       const nid_asignatura = req.params.nid_asignatura;
@@ -281,25 +284,60 @@ async function obtenerListadoPersona(req, res) {
           personas: alumnosRetorno,
         });
       }
-    } else if (tipo == 4) {
+    }
+    // MUSICOS //
+    else if (tipo == 4) {
       const personas = await gestorPersona.obtenerPersonasMusicos();
-      const personasFormateadas = personas.map((persona) => {
-        return {
-          persona: persona,
-        };
-      });
+
+      let personasFormateadas = [];
+      for (let i = 0; i < personas.length; i++) {
+        const instrumentosPersona = await gestorMusicos.obtenerInstrumentos(
+          personas[i].nid_persona,
+        );
+        const instrumentosFormateados = instrumentosPersona.map(
+          (instrumento) => {
+            return {
+              descripcion: instrumento.descripcion,
+              nid: instrumento.nid_instrumento,
+            };
+          },
+        );
+        personasFormateadas.push({
+          persona: personas[i],
+          asignaturas: instrumentosFormateados,
+        });
+      }
+
       res.status(200).send({
         error: false,
         mensaje: "Listado de personas obtenido correctamente",
         personas: personasFormateadas,
       });
-    } else if (tipo == 5) {
+    }
+    // PROFESORES //
+    else if (tipo == 5) {
       const personas = await gestorProfesores.obtenerProfesores();
-      const personasFormateadas = personas.map((persona) => {
-        return {
-          persona: persona,
-        };
-      });
+
+      let personasFormateadas = [];
+
+      for (let i = 0; i < personas.length; i++) {
+        const asignaturasPersona =
+          await gestorProfesores.obtenerAsignaturasProfesor(
+            personas[i].nid_persona,
+          );
+        const asignaturasFormateadas = asignaturasPersona.map((asignatura) => {
+          return {
+            descripcion: asignatura.descripcion,
+            nid: asignatura.nid_asignatura,
+          };
+        });
+
+        personasFormateadas.push({
+          persona: personas[i],
+          asignaturas: asignaturasFormateadas,
+        });
+      }
+
       res.status(200).send({
         error: false,
         mensaje: "Listado de personas obtenido correctamente",

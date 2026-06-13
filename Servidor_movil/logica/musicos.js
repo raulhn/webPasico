@@ -33,7 +33,7 @@ function insertarMusico(
   fecha_baja,
   nid_tipo_musico,
   nid_instrumento,
-  fecha_actualizacion
+  fecha_actualizacion,
 ) {
   return new Promise((resolve, reject) => {
     const sql =
@@ -76,7 +76,7 @@ function actualizarMusico(
   fecha_baja,
   nid_tipo_musico,
   nid_instrumento,
-  fecha_actualizacion
+  fecha_actualizacion,
 ) {
   return new Promise((resolve, reject) => {
     const sql =
@@ -117,13 +117,13 @@ async function registrarMusico(
   fecha_baja,
   nid_tipo_musico,
   nid_instrumento,
-  fecha_actualizacion
+  fecha_actualizacion,
 ) {
   try {
     let bExiste = await existeMusico(
       nid_persona,
       nid_tipo_musico,
-      nid_instrumento
+      nid_instrumento,
     );
 
     if (bExiste) {
@@ -133,7 +133,7 @@ async function registrarMusico(
         fecha_baja,
         nid_tipo_musico,
         nid_instrumento,
-        fecha_actualizacion
+        fecha_actualizacion,
       );
     } else {
       await insertarMusico(
@@ -142,7 +142,7 @@ async function registrarMusico(
         fecha_baja,
         nid_tipo_musico,
         nid_instrumento,
-        fecha_actualizacion
+        fecha_actualizacion,
       );
     }
   } catch (error) {
@@ -210,7 +210,30 @@ function obtenerPersonasTipoMusico(tipos_musico) {
   });
 }
 
+function obtenerInstrumentos(nid_persona) {
+  return new Promise((resolve, reject) => {
+    const sql =
+      "select i.nid_instrumento, i.descripcion from " +
+      constantes.ESQUEMA +
+      ".musicos m, " +
+      constantes.ESQUEMA +
+      ".instrumentos i where m.nid_persona = " +
+      conexion.dbConn.escape(nid_persoa) +
+      " and m.nid_instrumento = i.nid_instrumento";
+
+    conexion.dbConn.query(sql, (error, results) => {
+      if (error) {
+        console.log("Error al obtener los instrumentos del músico: ", error);
+        reject(new Error("Error al obtener los instrumentos del músico"));
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
+
 module.exports.registrarMusico = registrarMusico;
 module.exports.esMusico = esMusico;
 module.exports.esPadreMusico = esPadreMusico;
 module.exports.obtenerPersonasTipoMusico = obtenerPersonasTipoMusico;
+module.exports.obtenerInstrumentos = obtenerInstrumentos;
