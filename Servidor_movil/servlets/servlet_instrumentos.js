@@ -20,4 +20,21 @@ function registrarInstrumento(req, res) {
   });
 }
 
+async function obtenerInstrumentos(req, res) {
+  try {
+    const instrumentos = await gestorInstrumentos.obtenerInstrumentos();
+    res.status(200).json({
+      error: false,
+      instrumentos: instrumentos,
+    });
+  } catch (error) {
+    console.error("Error al obtener los instrumentos:", error);
+    res.status(500).json({
+      error: "Error al obtener los instrumentos",
+      message: "Error al obtener los instrumentos",
+    });
+  }
+}
+
 module.exports.registrarInstrumento = registrarInstrumento;
+module.exports.obtenerInstrumentos = obtenerInstrumentos;

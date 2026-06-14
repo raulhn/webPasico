@@ -454,6 +454,8 @@ app.post(
   servletTablonAnuncios.eliminarTablonAnuncio,
 );
 
+app.get("/obtener_instrumentos", servletInstrumentos.obtenerInstrumentos);
+
 https
   .createServer(
     {
