@@ -93,6 +93,12 @@ export default function ListadoPersonas() {
     valor: 0,
   });
 
+  const [asignaturaSeleccionadaProfesor, setAsignaturaSeleccionadaProfesor] =
+    useState({
+      etiqueta: "Todas las asignaturas",
+      valor: 0,
+    });
+
   const [cursoSeleccionado, setCursoSeleccionado] = useState({
     etiqueta: null,
     valor: null,
@@ -178,7 +184,15 @@ export default function ListadoPersonas() {
           " " +
           persona.segundo_apellido;
         nombreCompleto = nombreCompleto.toLowerCase();
-        return nombreCompleto.includes(textoFiltro.toLowerCase());
+
+        return (
+          nombreCompleto.includes(textoFiltro.toLowerCase()) &&
+          (existe(
+            personaObjeto.asignaturas,
+            asignaturaSeleccionadaProfesor.valor
+          ) ||
+            asignaturaSeleccionadaProfesor.valor === 0)
+        );
       });
     } else {
       personasFiltradasTemporal = personas;
@@ -204,6 +218,7 @@ export default function ListadoPersonas() {
     cursoSeleccionado,
     asignaturaSeleccionada,
     instrumentoSeleccionado,
+    asignaturaSeleccionadaProfesor,
     personas,
     textoFiltro,
   ]);
@@ -343,6 +358,27 @@ export default function ListadoPersonas() {
             </>
           )}
 
+          {tipoSeleccionado.valor === 5 && (
+            <>
+              <Text>Asignatura</Text>
+              <EntradaGroupRadioButton
+                titulo={"Asignatura"}
+                opciones={opcionesAsignaturas}
+                valor={asignaturaSeleccionadaProfesor}
+                setValorSeleccionado={(seleccion) => {
+                  if (seleccion.valor === null) {
+                    setAsignaturaSeleccionadaProfesor({
+                      etiqueta: "Todas las asignaturas",
+                      valor: 0,
+                    });
+                    return;
+                  }
+                  setAsignaturaSeleccionadaProfesor(seleccion);
+                }}
+              />
+            </>
+          )}
+
           {(tipoSeleccionado.valor === 2 || tipoSeleccionado.valor === 3) && (
             <>
               <Text>Activo</Text>
@@ -397,8 +433,7 @@ const estilos = StyleSheet.create({
   contenedor: {
     paddingTop: 25,
     backgroundColor: "white",
-    justifyContent: "center",
-    alignItems: "center",
+    alignItems: "stretch",
     height: "100%",
   },
   contenedorModal: {
