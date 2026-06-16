@@ -16,16 +16,15 @@ import {
 } from "react-native";
 import { useAsignaturas } from "../../hooks/escuela/useAsignaturas";
 import { useCursos } from "../../hooks/escuela/useCurso";
+import { useInstrumentos } from "../../hooks/banda/useInstrumentos";
+
 import { AuthContext } from "../../providers/AuthContext";
 
 import { useRouter } from "expo-router";
 
-import { COLOR_ROJO, ESCUELA } from "../../config/constantes.js";
+import { COLOR_ROJO } from "../../config/constantes.js";
 
-import {
-  useListadoPersonas,
-  usePersonas,
-} from "../../hooks/personas/usePersonas";
+import { useListadoPersonas } from "../../hooks/personas/usePersonas";
 import CardPersona from "./CardPersona.jsx";
 
 export default function ListadoPersonas() {
@@ -39,6 +38,16 @@ export default function ListadoPersonas() {
 
   const { cerrarSesion } = useContext(AuthContext);
   const [modalVisible, setModalVisible] = useState(false);
+  const {
+    instrumentos,
+    cargando: cargandoInstrumentos,
+    error: errorInstrumentos,
+  } = useInstrumentos(cerrarSesion);
+
+  const opcionesInstrumento = instrumentos.map((instrumento) => ({
+    etiqueta: instrumento.descripcion,
+    valor: instrumento.nid_instrumento,
+  }));
 
   const opcionesActivo = [
     { etiqueta: "Todos", valor: 0 },
@@ -89,6 +98,11 @@ export default function ListadoPersonas() {
     valor: null,
   });
 
+  const [instrumentoSeleccionado, setInstrumentoSeleccionado] = useState({
+    etiqueta: null,
+    valor: null,
+  });
+
   const router = useRouter();
 
   const { personas, refrescarPersonas, cargando, error } = useListadoPersonas(
@@ -102,6 +116,13 @@ export default function ListadoPersonas() {
   const [personasFiltradas, setPersonasFiltradas] = useState([]);
 
   const [textoFiltro, setTextoFiltro] = useState("");
+
+  function existe(array, valor) {
+    if (!array || array.length === 0) {
+      return false;
+    }
+    return array.some((elemento) => elemento.nid === valor);
+  }
 
   useEffect(() => {
     let personasFiltradasTemporal = [];
@@ -140,7 +161,12 @@ export default function ListadoPersonas() {
           " " +
           persona.segundo_apellido;
         nombreCompleto = nombreCompleto.toLowerCase();
-        return nombreCompleto.includes(textoFiltro.toLowerCase());
+
+        return (
+          nombreCompleto.includes(textoFiltro.toLowerCase()) &&
+          (existe(personaObjeto.asignaturas, instrumentoSeleccionado.valor) ||
+            !instrumentoSeleccionado.valor)
+        );
       });
     } else if (tipoSeleccionado.valor === 5) {
       personasFiltradasTemporal = personas.filter((personaObjeto) => {
@@ -177,6 +203,7 @@ export default function ListadoPersonas() {
     activoSeleccionado,
     cursoSeleccionado,
     asignaturaSeleccionada,
+    instrumentoSeleccionado,
     personas,
     textoFiltro,
   ]);
@@ -334,6 +361,27 @@ export default function ListadoPersonas() {
             </>
           )}
 
+          {tipoSeleccionado.valor === 4 && (
+            <>
+              <Text>Instrumento</Text>
+              <EntradaGroupRadioButton
+                titulo={"Instrumento"}
+                opciones={opcionesInstrumento}
+                valor={instrumentoSeleccionado}
+                setValorSeleccionado={(seleccion) => {
+                  if (seleccion.valor === null) {
+                    setInstrumentoSeleccionado({
+                      etiqueta: null,
+                      valor: null,
+                    });
+                    return;
+                  }
+                  setInstrumentoSeleccionado(seleccion);
+                }}
+              />
+            </>
+          )}
+
           <Boton
             nombre={"Cerrar"}
             color={COLOR_ROJO}
@@ -347,7 +395,7 @@ export default function ListadoPersonas() {
 
 const estilos = StyleSheet.create({
   contenedor: {
-    padding: 25,
+    paddingTop: 25,
     backgroundColor: "white",
     justifyContent: "center",
     alignItems: "center",
