@@ -60,7 +60,7 @@ export default function CardPersona({ persona, detalles = [] }) {
 
 const estilos = StyleSheet.create({
   contenedor: {
-    padding: 10,
+    padding: 5,
     backgroundColor: "#fff",
     borderRadius: 12,
     shadowColor: "#000",
@@ -71,6 +71,9 @@ const estilos = StyleSheet.create({
     borderWidth: 0,
     width: "95%",
     alignSelf: "center",
+    height: 100,
+    justifyContent: "center",
+    alignItems: "flex-start",
   },
   fila: {
     flexDirection: "row",

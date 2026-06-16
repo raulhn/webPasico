@@ -31,7 +31,7 @@ async function obtenerInstrumentos(req, res) {
     console.error("Error al obtener los instrumentos:", error);
     res.status(500).json({
       error: "Error al obtener los instrumentos",
-      message: "Error al obtener los instrumentos",
+      message: error.message,
     });
   }
 }
