@@ -85,6 +85,8 @@ app.get(
   servlet_tipo_evento_musico.obtener_tipos_evento,
 );
 
+app.get("/obtener_instrumentos", servletInstrumentos.obtenerInstrumentos);
+
 /** Llamadas por API KEY **/
 // Personas //
 app.post("/registrar_persona", servletPersona.registrarPersona);
