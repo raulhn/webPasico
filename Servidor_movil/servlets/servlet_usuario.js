@@ -315,6 +315,8 @@ async function refreshToken(req, res) {
           maxAge: constantes.TIEMPO_ACCESS_TOKEN * 1000,
         });
 
+        await gestorPersona.asociarUsuarioPersona(usuario.nid_usuario);
+
         res.status(200).send({
           error: false,
           mensaje: "Token actualizado",
@@ -322,12 +324,10 @@ async function refreshToken(req, res) {
         });
       } catch (error) {
         console.error("Error inesperado al refrescar el token:", error);
-        res
-          .status(500)
-          .send({
-            error: true,
-            mensaje: "Error inesperado al refrescar el token",
-          });
+        res.status(500).send({
+          error: true,
+          mensaje: "Error inesperado al refrescar el token",
+        });
       }
     });
   } catch (error) {
