@@ -57,6 +57,7 @@ export default function ListadoPersonas() {
 
   const {
     cursos,
+    obtenerCursoActivo,
     cargando: cargandoCursos,
     error: errorCursos,
   } = useCursos(cerrarSesion);
@@ -100,8 +101,8 @@ export default function ListadoPersonas() {
     });
 
   const [cursoSeleccionado, setCursoSeleccionado] = useState({
-    etiqueta: null,
-    valor: null,
+    etiqueta: obtenerCursoActivo()?.descripcion || "Todos los cursos",
+    valor: obtenerCursoActivo()?.nid_curso || 0,
   });
 
   const [instrumentoSeleccionado, setInstrumentoSeleccionado] = useState({
@@ -110,6 +111,13 @@ export default function ListadoPersonas() {
   });
 
   const router = useRouter();
+
+  useEffect(() => {
+    setCursoSeleccionado({
+      etiqueta: obtenerCursoActivo()?.descripcion || "Todos los cursos",
+      valor: obtenerCursoActivo()?.nid_curso || 0,
+    });
+  }, [obtenerCursoActivo()]);
 
   const { personas, refrescarPersonas, cargando, error } = useListadoPersonas(
     tipoSeleccionado.valor,
@@ -331,8 +339,8 @@ export default function ListadoPersonas() {
                 setValorSeleccionado={(seleccion) => {
                   if (seleccion.valor === null) {
                     setCursoSeleccionado({
-                      etiqueta: null,
-                      valor: null,
+                      etiqueta: cursoSeleccionado.etiqueta,
+                      valor: cursoSeleccionado.valor,
                     });
                     return;
                   }
