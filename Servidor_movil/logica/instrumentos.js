@@ -77,22 +77,17 @@ async function registrarInstrumento(nid_instrumento, descripcion) {
   }
 }
 
-function obtenerInstrumentos(nid_persona) {
+function obtenerInstrumentos() {
   return new Promise((resolve, reject) => {
     const sql =
       "select i.nid_instrumento, i.descripcion from " +
       constantes.ESQUEMA +
-      ".musicos m, " +
-      constantes.ESQUEMA +
-      ".instrumentos i where m.nid_persona = " +
-      conexion.dbConn.escape(nid_persona) +
-      " and m.nid_instrumento = i.nid_instrumento" +
-      " group by i.nid_instrumento, i.descripcion";
+      ".instrumentos i group by i.nid_instrumento, i.descripcion";
 
     conexion.dbConn.query(sql, (error, results) => {
       if (error) {
-        console.log("Error al obtener los instrumentos del músico: ", error);
-        reject(new Error("Error al obtener los instrumentos del músico"));
+        console.log("Error al obtener los instrumentos: ", error);
+        reject(new Error("Error al obtener los instrumentos"));
       } else {
         resolve(results);
       }
