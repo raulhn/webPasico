@@ -33,7 +33,7 @@ export default function StackMatriculaLayout() {
             return null;
           },
 
-          headerShown: true,
+          headerShown: false,
           gestureEnabled: false,
         })}
       />
