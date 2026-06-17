@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "Banda del Pasico",
+    "name": "La del Pasico",
     "slug": "laDelPasico",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "scheme": "laDelPasico",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
@@ -16,7 +16,7 @@
     "ios": {
       "supportsTablet": true,
       "requireFullScreen": true,
-       "infoPlist": {
+      "infoPlist": {
         "UISupportedInterfaceOrientations": [
           "UIInterfaceOrientationPortrait",
           "UIInterfaceOrientationLandscapeLeft",
@@ -24,7 +24,7 @@
           "UIInterfaceOrientationLandscape"
         ]
       }
-    }, 
+    },
     "android": {
       "googleServicesFile": "./google-services.json",
       "package": "com.ladelpasico.app",
@@ -44,9 +44,10 @@
       [
         {
           "icon": "./assets/logo.png",
-           "color": "#ffffff"
+          "color": "#ffffff"
         }
-      ]],
+      ]
+    ],
     "extra": {
       "router": {
         "origin": false
