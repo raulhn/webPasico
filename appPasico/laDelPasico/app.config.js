@@ -1,8 +1,8 @@
 export default {
 	  "expo": {
-    "name": "Banda del Pasico",
+    "name": "La del Pasico",
     "slug": "laDelPasico",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "scheme": "laDelPasico",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
