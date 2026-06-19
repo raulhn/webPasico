@@ -1,33 +1,51 @@
 const jwt = require("jsonwebtoken");
 const gestorUsuarios = require("../logica/usuario.js");
+const gestorPersona = require("../logica/persona.js");
 
-function comprobacionLogin(req, res) {
-  return new Promise((resolve, reject) => {
-    try {
-      const token = req.cookies.access_token;
+async function comprobacionLogin(req, res) {
+  try {
+    const token = req.cookies.access_token;
 
-      if (!token || token === undefined) {
-        reject("No autenticado");
-        return;
-      }
-
-      jwt.verify(token, process.env.SESSION_SECRET, (err, decoded) => {
-        if (err) {
-          if (err.name === "TokenExpiredError") {
-            console.error("El token ha expirado:", err);
-            reject("Token expirado");
-          }
-          console.error("Error al verificar el token:", err);
-          reject("No autenticado");
-        } else {
-          resolve();
-        }
-      });
-    } catch (error) {
-      console.error("Error en la comprobacion de login:", error);
-      reject("Error en la comprobacion de login");
+    if (!token || token === undefined) {
+      reject("No autenticado");
+      return;
     }
-  });
+
+    const tokenDecode = await obtenerTokenDecoded(req, res);
+    const nid_usuario = tokenDecode.nid_usuario;
+    if (!nid_usuario) {
+      reject("No autenticado");
+      return;
+    }
+    const usuario = await gestorUsuarios.obtenerUsuario(nid_usuario);
+
+    if (!usuario.nid_persona) {
+      await gestorPersona.asociarUsuarioPersona(usuario.nid_usuario);
+    }
+
+    return new Promise((resolve, reject) => {
+      try {
+        jwt.verify(token, process.env.SESSION_SECRET, (err, decoded) => {
+          if (err) {
+            if (err.name === "TokenExpiredError") {
+              console.error("El token ha expirado:", err);
+              reject("Token expirado");
+            }
+            console.error("Error al verificar el token:", err);
+            reject("No autenticado");
+          } else {
+            resolve();
+          }
+        });
+      } catch (error) {
+        console.error("Error en la verificacion del token:", error);
+        reject("Error en la verificacion del token");
+      }
+    });
+  } catch (error) {
+    console.error("Error en la comprobacion de login:", error);
+    reject("Error en la comprobacion de login");
+  }
 }
 
 function obtenerTokenDecoded(req) {

@@ -266,7 +266,7 @@ async function construirRoles(nid_usuario) {
 function obtenerUsuario(nid_usuario, borrado = "N") {
   return new Promise((resolve, reject) => {
     const query =
-      "SELECT nid_usuario, nombre, primer_apellido, segundo_apellido, correo_electronico FROM " +
+      "SELECT nid_usuario, nombre, primer_apellido, segundo_apellido, correo_electronico, nid_persona FROM " +
       constantes.ESQUEMA +
       ".usuarios WHERE nid_usuario = " +
       conexion.dbConn.escape(nid_usuario) +
