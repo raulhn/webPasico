@@ -472,7 +472,7 @@ function obtenerPersonaApellido(
       " AND correo_electronico = " +
       conexion.dbConn.escape(correo_electronico);
 
-    conexiondbConn.query(sql, (error, results) => {
+    conexion.dbConn.query(sql, (error, results) => {
       if (error) {
         console.error("Error al obtener la persona:", error);
         reject(error);
