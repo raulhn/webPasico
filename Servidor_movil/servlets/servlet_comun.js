@@ -7,15 +7,15 @@ async function comprobacionLogin(req, res) {
     const token = req.cookies.access_token;
 
     if (!token || token === undefined) {
-      reject("No autenticado");
-      return;
+      console.error("No autenticado: Token no proporcionado");
+      throw new Error("No autenticado: Token no proporcionado");
     }
 
     const tokenDecode = await obtenerTokenDecoded(req, res);
     const nid_usuario = tokenDecode.nid_usuario;
     if (!nid_usuario) {
-      reject("No autenticado");
-      return;
+      consle.error("No autenticado: nid_usuario no proporcionado");
+      throw new Error("No autenticado: nid_usuario no proporcionado");
     }
     const usuario = await gestorUsuarios.obtenerUsuario(nid_usuario);
 
