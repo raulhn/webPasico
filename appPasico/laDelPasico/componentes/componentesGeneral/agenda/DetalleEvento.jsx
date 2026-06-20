@@ -184,7 +184,7 @@ export default function DetalleEvento({ nid_evento, tipo, cerrar_sesion }) {
             (evento?.nombre || "Evento sin título")
           }
           valorTitulo={evento?.nombre || "Evento sin título"}
-          tipo={Constantes.GENERAL}
+          tipo={Constantes.BANDA}
           data={{
             pathname: "/stackAgenda/[nidAgenda]",
             params: {
