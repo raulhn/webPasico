@@ -1,4 +1,13 @@
-import { Component, Input, EventEmitter, Output, input, effect, signal, WritableSignal } from '@angular/core';
+import {
+  Component,
+  Input,
+  EventEmitter,
+  Output,
+  input,
+  effect,
+  signal,
+  WritableSignal,
+} from '@angular/core';
 import { Constantes } from '../../logica/constantes';
 
 @Component({
@@ -8,7 +17,6 @@ import { Constantes } from '../../logica/constantes';
   standalone: false,
 })
 export class DatatableComponent {
-
   $lista = input();
   $cabeceras = input();
   $identificador = input();
@@ -17,9 +25,13 @@ export class DatatableComponent {
 
   @Output() rowSelected = new EventEmitter<any>();
   id_tr = '#' + this.$identificador() + ' tr';
+  id_tabla: string = String(this.$identificador());
 
   constructor() {
     effect(() => {
+      var datatable = $(this.id_tabla).DataTable();
+      datatable.destroy();
+
       this.$dtOptions.set({
         language: Constantes.DataTablesOptions.spanish_datatables,
         data: this.$lista(),
@@ -40,11 +52,10 @@ export class DatatableComponent {
             $(row).addClass('selected');
           });
 
-          this.rowSelected.emit(data)
+          this.rowSelected.emit(data);
           return row;
-        }
-      }
-      )
-    })
+        },
+      });
+    });
   }
 }
