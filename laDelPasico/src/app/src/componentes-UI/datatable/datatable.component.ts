@@ -40,6 +40,7 @@ export class DatatableComponent {
             $(row).addClass('selected');
           });
 
+          this.rowSelected.emit(data)
           return row;
         }
       }
