@@ -8,19 +8,18 @@ import { Constantes } from '../../logica/constantes';
   standalone: false,
 })
 export class DatatableComponent {
-  @Input() id = '';
 
   $lista = input();
   $cabeceras = input();
+  $identificador = input();
 
   $dtOptions: WritableSignal<any> = signal({});
 
   @Output() rowSelected = new EventEmitter<any>();
-  id_tr = '#' + this.id + ' tr';
+  id_tr = '#' + this.$identificador() + ' tr';
 
   constructor() {
     effect(() => {
-      console.log("Listado", this.$lista());
       this.$dtOptions.set({
         language: Constantes.DataTablesOptions.spanish_datatables,
         data: this.$lista(),

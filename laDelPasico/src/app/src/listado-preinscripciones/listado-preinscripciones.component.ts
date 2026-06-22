@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, effect, WritableSignal } from '@angular/core';
+import { Component, OnInit, signal, effect, WritableSignal, Signal } from '@angular/core';
 import { ServicioPreinscripcionService } from 'src/app/servicios/servicio-preinscripcion.service';
 import { Constantes } from '../logica/constantes';
 
@@ -21,6 +21,8 @@ export class ListadoPreinscripcionesComponent implements OnInit {
   bCargadoPreinscripciones2: boolean = false;
 
   preinscripcion_seleccionada: any;
+
+  $id_tabla_preinscripciones: Signal<String> = signal("tabla_preinscripciones")
 
   constructor(private preinscripcionService: ServicioPreinscripcionService) {
     effect(() => { console.log(this.$lista_preinscripcion()) })
