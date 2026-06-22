@@ -46,7 +46,6 @@ import { EditarComponenteBlogComponent } from './src/editar_componente/editar-co
 import { ComponenteBlogReducidoComponent } from './src/componente-blog-reducido/componente-blog-reducido.component';
 import { FormularioPreinscripcionComponent } from './src/formulario-preinscripcion/formulario-preinscripcion.component';
 
-import { environment } from 'src/environments/environment';
 import { FormularioPreinscripcionPedaniaComponent } from './src/formulario-preinscripcion-pedania/formulario-preinscripcion-pedania.component';
 import { FormularioPreinscripcionTorrePachecoComponent } from './src/formulario-preinscripcion-torre-pacheco/formulario-preinscripcion-torre-pacheco.component';
 import { ListadoPreinscripcionesComponent } from './src/listado-preinscripciones/listado-preinscripciones.component';
@@ -56,6 +55,8 @@ import { ComponenteCardComponent } from './src/componente-card/componente-card.c
 import { RouterModule } from '@angular/router';
 import { NgxCaptchaModule } from 'ngx-captcha';
 import { EditarComponenteCardComponent } from './src/editar_componente/editar-componente-card/editar-componente-card.component';
+
+import { DatatableComponent } from './src/componentes-UI/datatable/datatable.component';
 
 @NgModule({
   declarations: [
@@ -94,6 +95,7 @@ import { EditarComponenteCardComponent } from './src/editar_componente/editar-co
     ListaOrdenadaComponent,
     ComponenteCardComponent,
     EditarComponenteCardComponent,
+    DatatableComponent,
   ],
   bootstrap: [AppComponent],
   imports: [

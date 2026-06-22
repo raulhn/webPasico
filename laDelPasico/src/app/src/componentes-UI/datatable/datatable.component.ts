@@ -1,22 +1,18 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, EventEmitter, Output } from '@angular/core';
 import { Constantes } from '../../logica/constantes';
 
 @Component({
   selector: 'app-datatable',
-  imports: [],
   templateUrl: './datatable.component.html',
   styleUrl: './datatable.component.css',
+  standalone: false,
 })
 export class DatatableComponent {
   @Input() lista: any[] = [];
-  @Input() cabeceras: string[] = [];
+  @Input() cabeceras: any[] = [];
   @Input() id = '';
 
-  titulos = Object.keys(this.lista);
-
-  titulos_tabla = this.cabeceras.map((titulo, index) => {
-    return { title: this.cabeceras[index], data: titulo };
-  });
+  @Output() rowSelected = new EventEmitter<any>();
 
   id_tr = '#' + this.id + ' tr';
 
@@ -31,7 +27,7 @@ export class DatatableComponent {
         className: 'btn btn-dark mb-3',
       },
     ],
-    columns: this.titulos_tabla,
+    columns: this.cabeceras,
 
     rowCallback: (row: Node, data: any[] | Object, index: number) => {
       $('td', row).off('click');

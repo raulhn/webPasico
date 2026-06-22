@@ -1,13 +1,26 @@
-
 <legend>Preinscripciones</legend>
 <div class="container pt-4">
   @if (bCargadoPreinscripciones) {
     <div>
-      <table datatable [dtOptions]="dtOptions" class="row-border hover" id="tabla_preinscripciones"></table>
+      <app-datatable
+        [cabeceras]="cabeceras"
+        [lista]="lista_preinscripcion"
+        id="tabla_preinscripciones"
+      ></app-datatable>
       @if (bCargadoPreinscripciones2) {
         <div>
-          <table datatable [dtOptions]="dtOptions_3" class="row-border hover" id="tabla_preinscripciones_3"></table>
-          <table datatable [dtOptions]="dtOptions_2" class="row-border hover" id="tabla_preinscripciones_2"></table>
+          <table
+            datatable
+            [dtOptions]="dtOptions_3"
+            class="row-border hover"
+            id="tabla_preinscripciones_3"
+          ></table>
+          <table
+            datatable
+            [dtOptions]="dtOptions_2"
+            class="row-border hover"
+            id="tabla_preinscripciones_2"
+          ></table>
         </div>
       }
     </div>
