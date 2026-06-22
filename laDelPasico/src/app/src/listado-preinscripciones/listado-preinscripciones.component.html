@@ -2,11 +2,12 @@
 <div class="container pt-4">
   @if (bCargadoPreinscripciones) {
     <div>
+      @if(bCargadoPreinscripciones){
       <app-datatable
-        [cabeceras]="cabeceras"
-        [lista]="lista_preinscripcion"
+        [$cabeceras]="cabeceras"
+        [$lista]="$lista_preinscripcion()"
         id="tabla_preinscripciones"
-      ></app-datatable>
+      ></app-datatable>}
       @if (bCargadoPreinscripciones2) {
         <div>
           <table

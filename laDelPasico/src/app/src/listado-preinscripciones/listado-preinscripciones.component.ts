@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, effect } from '@angular/core';
+import { Component, OnInit, signal, effect, WritableSignal } from '@angular/core';
 import { ServicioPreinscripcionService } from 'src/app/servicios/servicio-preinscripcion.service';
 import { Constantes } from '../logica/constantes';
 
@@ -9,7 +9,7 @@ import { Constantes } from '../logica/constantes';
   standalone: false,
 })
 export class ListadoPreinscripcionesComponent implements OnInit {
-  lista_preinscripcion: any[] = [];
+  $lista_preinscripcion: WritableSignal<any[]> = signal([]);
 
   lista_preinscripcion2: any[] = [];
 
@@ -22,11 +22,13 @@ export class ListadoPreinscripcionesComponent implements OnInit {
 
   preinscripcion_seleccionada: any;
 
-  constructor(private preinscripcionService: ServicioPreinscripcionService) {}
+  constructor(private preinscripcionService: ServicioPreinscripcionService) {
+    effect(() => { console.log(this.$lista_preinscripcion()) })
+  }
 
   obtener_preinscripcions = {
     next: (respuesta: any) => {
-      this.lista_preinscripcion = respuesta.preinscripciones;
+      this.$lista_preinscripcion.set(respuesta.preinscripciones)
     },
   };
   ngOnInit(): void {
@@ -148,11 +150,11 @@ export class ListadoPreinscripcionesComponent implements OnInit {
     next: (respuesta: any) => {
       var datatable = $('#tabla_preinscripciones').DataTable();
       datatable.destroy();
-      this.lista_preinscripcion = respuesta.preinscripciones;
+      this.$lista_preinscripcion.set(respuesta.preinscripciones)
 
       this.dtOptions = {
         language: Constantes.DataTablesOptions.spanish_datatables,
-        data: this.lista_preinscripcion,
+        data: this.$lista_preinscripcion,
         dom: 'Bfrtip',
         buttons: [
           {

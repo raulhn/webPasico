@@ -1,4 +1,4 @@
-import { Component, Input, EventEmitter, Output } from '@angular/core';
+import { Component, Input, EventEmitter, Output, input, effect, signal, WritableSignal } from '@angular/core';
 import { Constantes } from '../../logica/constantes';
 
 @Component({
@@ -8,35 +8,43 @@ import { Constantes } from '../../logica/constantes';
   standalone: false,
 })
 export class DatatableComponent {
-  @Input() lista: any[] = [];
-  @Input() cabeceras: any[] = [];
   @Input() id = '';
 
-  @Output() rowSelected = new EventEmitter<any>();
+  $lista = input();
+  $cabeceras = input();
 
+  $dtOptions: WritableSignal<any> = signal({});
+
+  @Output() rowSelected = new EventEmitter<any>();
   id_tr = '#' + this.id + ' tr';
 
-  dtOptions: any = {
-    language: Constantes.DataTablesOptions.spanish_datatables,
-    data: this.lista,
-    dom: 'Bfrtip',
-    buttons: [
-      {
-        extend: 'excel',
-        text: 'Generar Excel',
-        className: 'btn btn-dark mb-3',
-      },
-    ],
-    columns: this.cabeceras,
+  constructor() {
+    effect(() => {
+      console.log("Listado", this.$lista());
+      this.$dtOptions.set({
+        language: Constantes.DataTablesOptions.spanish_datatables,
+        data: this.$lista(),
+        dom: 'Bfrtip',
+        buttons: [
+          {
+            extend: 'excel',
+            text: 'Generar Excel',
+            className: 'btn btn-dark mb-3',
+          },
+        ],
+        columns: this.$cabeceras(),
 
-    rowCallback: (row: Node, data: any[] | Object, index: number) => {
-      $('td', row).off('click');
-      $('td', row).on('click', () => {
-        $(this.id_tr).removeClass('selected');
-        $(row).addClass('selected');
-      });
+        rowCallback: (row: Node, data: any[] | Object, index: number) => {
+          $('td', row).off('click');
+          $('td', row).on('click', () => {
+            $(this.id_tr).removeClass('selected');
+            $(row).addClass('selected');
+          });
 
-      return row;
-    },
-  };
+          return row;
+        }
+      }
+      )
+    })
+  }
 }
