@@ -7,7 +7,6 @@ import {
   Signal,
 } from '@angular/core';
 import { ServicioPreinscripcionService } from 'src/app/servicios/servicio-preinscripcion.service';
-import { Constantes } from '../logica/constantes';
 
 @Component({
   selector: 'app-listado-preinscripciones',
@@ -28,7 +27,7 @@ export class ListadoPreinscripcionesComponent implements OnInit {
 
   preinscripcion_seleccionada: any;
 
-  $fila_seleccionada: WritableSignal<any> = signal({})
+  $fila_seleccionada: WritableSignal<any> = signal({});
 
   $id_tabla_preinscripciones: Signal<String> = signal('tabla_preinscripciones');
   $id_tabla_preinscripciones2: Signal<String> = signal(
@@ -83,13 +82,12 @@ export class ListadoPreinscripcionesComponent implements OnInit {
 
   constructor(private preinscripcionService: ServicioPreinscripcionService) {
     effect(() => {
-      console.log("Lista de preinscripciones", this.$lista_preinscripcion());
+      console.log('Lista de preinscripciones', this.$lista_preinscripcion());
       this.preinscripcionService
         .obtener_preinscripciones_detalle(
           this.$fila_seleccionada().nid_preinscripcion,
         )
         .subscribe(this.refrescar_personas2);
-
     });
   }
 
@@ -99,22 +97,21 @@ export class ListadoPreinscripcionesComponent implements OnInit {
       .subscribe(this.refrescar_personas);
   }
 
-
   refrescar_personas2 = {
     next: (respuesta: any) => {
-      console.log("Respuesta recibida")
+      console.log('Respuesta recibida');
       this.$lista_preinscripcion2.set(respuesta.preinscripciones);
     },
   };
 
   preinscripcion_marcada(data: any) {
-    console.log("Fila seleccionada", data)
-    this.$fila_seleccionada.set(data)
+    console.log('Fila seleccionada', data);
+    this.$fila_seleccionada.set(data);
   }
 
   refrescar_personas = {
     next: (respuesta: any) => {
-      console.log("Preinscripciones", respuesta.preinscripciones)
+      console.log('Preinscripciones', respuesta.preinscripciones);
       this.$lista_preinscripcion.set(respuesta.preinscripciones);
     },
   };
