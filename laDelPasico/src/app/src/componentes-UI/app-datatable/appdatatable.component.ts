@@ -30,7 +30,6 @@ export class AppDataTableComponent implements OnChanges {
   currentPage = 1;
 
   filterText = '';
-  columns: string[] = [];
 
   @Output() rowSelected = new EventEmitter<any>();
 
@@ -42,8 +41,7 @@ export class AppDataTableComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['data']) {
-      this.columns = this.$lista().length ? Object.keys(this.$lista()[0]) : [];
+    if (changes['$lista']) {
       this.applyFilter();
     }
   }
