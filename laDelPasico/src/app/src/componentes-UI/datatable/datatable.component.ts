@@ -21,18 +21,15 @@ export class DatatableComponent {
   $cabeceras = input();
   $identificador = input();
 
-  $dtOptions: WritableSignal<any> = signal({});
+  dtOptions: any = {};
+
 
   @Output() rowSelected = new EventEmitter<any>();
-  id_tr = '#' + this.$identificador() + ' tr';
-  id_tabla: string = String(this.$identificador());
-
   constructor() {
     effect(() => {
-      var datatable = $(this.id_tabla).DataTable();
-      datatable.destroy();
+      let id_tr: string = '#' + this.$identificador() + ' tr';
 
-      this.$dtOptions.set({
+      this.dtOptions = {
         language: Constantes.DataTablesOptions.spanish_datatables,
         data: this.$lista(),
         dom: 'Bfrtip',
@@ -48,14 +45,29 @@ export class DatatableComponent {
         rowCallback: (row: Node, data: any[] | Object, index: number) => {
           $('td', row).off('click');
           $('td', row).on('click', () => {
-            $(this.id_tr).removeClass('selected');
+            $(id_tr).removeClass('selected');
             $(row).addClass('selected');
+            this.rowSelected.emit(data)
           });
 
-          this.rowSelected.emit(data);
           return row;
         },
-      });
+      };
     });
+
+    effect(() => {
+      let id_tabla: string = "#" + String(this.$identificador());
+
+      var datatable = $(id_tabla).DataTable();
+      datatable.destroy();
+      console.log("Efecto", id_tabla)
+      console.log("Lista", this.$lista())
+      console.log("Cabeceras", this.$cabeceras())
+      console.log("Opciones", this.dtOptions)
+      console.log("Id tabla", id_tabla)
+      $(id_tabla).DataTable(this.dtOptions);
+    })
   }
 }
+
+

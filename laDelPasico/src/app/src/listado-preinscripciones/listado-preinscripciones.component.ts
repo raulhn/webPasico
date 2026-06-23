@@ -28,6 +28,8 @@ export class ListadoPreinscripcionesComponent implements OnInit {
 
   preinscripcion_seleccionada: any;
 
+  $fila_seleccionada: WritableSignal<any> = signal({})
+
   $id_tabla_preinscripciones: Signal<String> = signal('tabla_preinscripciones');
   $id_tabla_preinscripciones2: Signal<String> = signal(
     'tabla_preinscripciones2',
@@ -81,87 +83,39 @@ export class ListadoPreinscripcionesComponent implements OnInit {
 
   constructor(private preinscripcionService: ServicioPreinscripcionService) {
     effect(() => {
-      console.log(this.$lista_preinscripcion());
+      console.log("Lista de preinscripciones", this.$lista_preinscripcion());
+      this.preinscripcionService
+        .obtener_preinscripciones_detalle(
+          this.$fila_seleccionada().nid_preinscripcion,
+        )
+        .subscribe(this.refrescar_personas2);
+
     });
   }
 
-  obtener_preinscripcions = {
-    next: (respuesta: any) => {
-      this.$lista_preinscripcion.set(respuesta.preinscripciones);
-    },
-  };
   ngOnInit(): void {
     this.preinscripcionService
       .obtener_preinscripciones()
       .subscribe(this.refrescar_personas);
   }
+
+
   refrescar_personas2 = {
     next: (respuesta: any) => {
+      console.log("Respuesta recibida")
       this.$lista_preinscripcion2.set(respuesta.preinscripciones);
     },
   };
 
   preinscripcion_marcada(data: any) {
-    this.preinscripcion_seleccionada = data;
-    this.preinscripcionService
-      .obtener_preinscripciones_detalle(
-        this.preinscripcion_seleccionada.nid_preinscripcion,
-      )
-      .subscribe(this.refrescar_personas2);
+    console.log("Fila seleccionada", data)
+    this.$fila_seleccionada.set(data)
   }
 
   refrescar_personas = {
     next: (respuesta: any) => {
-      var datatable = $('#tabla_preinscripciones').DataTable();
-      datatable.destroy();
+      console.log("Preinscripciones", respuesta.preinscripciones)
       this.$lista_preinscripcion.set(respuesta.preinscripciones);
-
-      this.dtOptions = {
-        language: Constantes.DataTablesOptions.spanish_datatables,
-        data: this.$lista_preinscripcion,
-        dom: 'Bfrtip',
-        buttons: [
-          {
-            extend: 'excel',
-            text: 'Generar Excel',
-            className: 'btn btn-dark mb-3',
-          },
-        ],
-        columns: [
-          { title: 'Nombre', data: 'nombre' },
-          { title: 'Primer apellido', data: 'primer_apellido' },
-          { title: 'Segundo apellido', data: 'segundo_apellido' },
-          { title: 'DNI', data: 'dni' },
-          { title: 'Tipo Preinscripción', data: 'tipo_matricula' },
-          {
-            title: 'Fecha solicitud',
-            data: 'fecha_solicitud',
-          },
-          {
-            title: 'Fecha de nacimiento',
-            data: 'fecha_nacimiento',
-          },
-
-          { title: 'Teléfono', data: 'telefono' },
-          {
-            title: 'Correo electrónico',
-            data: 'correo_electronico',
-          },
-        ],
-        rowCallback: (row: Node, data: any[] | Object, index: number) => {
-          $('td', row).off('click');
-          $('td', row).on('click', () => {
-            $('#tabla_preinscripciones tr').removeClass('selected');
-            $(row).addClass('selected');
-            this.preinscripcion_marcada(data);
-          });
-
-          return row;
-        },
-      };
-      $('#tabla_preinscripciones').DataTable(this.dtOptions);
-
-      this.bCargadoPreinscripciones = true;
     },
   };
 }
