@@ -17,7 +17,7 @@ import { Constantes } from '../logica/constantes';
 export class ListadoPreinscripcionesCompletoComponent implements OnInit {
   $lista_preinscripcion: WritableSignal<any[]> = signal([]);
   preinscripcion_seleccionada: any = {};
-  $id_tabla_preinscripciones: Signal<String> = signal('tabla_preinscripciones');
+  $id_tabla_preinscripciones: Signal<string> = signal('tabla_preinscripciones');
 
   cabeceras = [
     { title: 'Nombre', data: 'nombre' },

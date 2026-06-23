@@ -1,0 +1,15 @@
+th {
+  background-color: #f9fafb;
+}
+th.active .indicator {
+  color: #000; /* negro activo */
+}
+th .indicator {
+  color: #fff; /* blanco cuando no está ordenando */
+  margin-left: 4px;
+}
+.indicator.asc,
+.indicator.desc {
+  font-weight: bold;
+}
+

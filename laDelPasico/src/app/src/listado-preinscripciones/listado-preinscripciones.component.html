@@ -1,21 +1,21 @@
 <legend>Preinscripciones</legend>
 <div class="container pt-4">
-    <div>
-      <app-datatable
-        [$cabeceras]="cabeceras"
-        [$lista]="$lista_preinscripcion()"
-        [$identificador]="$id_tabla_preinscripciones()"
-        (rowSelected)="preinscripcion_marcada($event)"
-      ></app-datatable>
-      <app-datatable
-        [$cabeceras]="cabeceras2"
-        [$lista]="$lista_preinscripcion2()"
-        [$identificador]="$id_tabla_preinscripciones2()"
-      ></app-datatable>
-      <app-datatable
-        [$cabeceras]="cabeceras3"
-        [$lista]="$lista_preinscripcion2()"
-        [$identificador]="$id_tabla_preinscripciones3()"
-      ></app-datatable>
-    </div>
+  <div>
+    <app-appdatatable
+      [$cabeceras]="cabeceras"
+      [$lista]="$lista_preinscripcion()"
+      [$identificador]="$id_tabla_preinscripciones()"
+      (rowSelected)="preinscripcion_marcada($event)"
+    ></app-appdatatable>
+    <app-appdatatable
+      [$cabeceras]="cabeceras2"
+      [$lista]="$lista_preinscripcion2()"
+      [$identificador]="$id_tabla_preinscripciones2()"
+    ></app-appdatatable>
+    <app-appdatatable
+      [$cabeceras]="cabeceras3"
+      [$lista]="$lista_preinscripcion2()"
+      [$identificador]="$id_tabla_preinscripciones3()"
+    ></app-appdatatable>
+  </div>
 </div>

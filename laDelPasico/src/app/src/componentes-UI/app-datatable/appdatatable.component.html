@@ -1,0 +1,114 @@
+<div class="datatable">
+  <div class="toolbar">
+    <input type="text" placeholder="Filter…" (input)="onFilterChange($event)" />
+    <button type="button" (click)="exportCsv()">Export CSV</button>
+  </div>
+
+  @if (paginatedData.length) {
+    <table [id]="$identificador()" class="table table-striped table-hover">
+      <thead>
+        <tr>
+          @for (col of $cabeceras(); track col) {
+            <th (click)="sortData(col)" [class.active]="sortColumn === col">
+              {{ col.title | titlecase }}
+              @if (sortColumn === col && sortDirection === "asc") {
+                <span class="indicator asc">▲</span>
+                <span class="indicator desc unselected">▼</span>
+              } @else if (sortColumn === col && sortDirection === "desc") {
+                <span class="indicator desc unselected">▼</span>
+                <span class="indicator desc">▲</span>
+              } @else {
+                <span class="indicator asc unselected">▲</span>
+                <span class="indicator desc unselected">▼</span>
+              }
+            </th>
+          }
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of paginatedData; track row) {
+          <tr
+            (click)="selectRow(row)"
+            [class.selected]="row === selectedRow"
+            style="cursor: pointer"
+          >
+            @for (col of $cabeceras(); track col) {
+              <td>{{ row[col.data] }}</td>
+            }
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else {
+    <table noData></table>
+  }
+  @if (totalPages > 1) {
+    <div class="pagination">
+      <button
+        type="button"
+        (click)="goToPage(1)"
+        [disabled]="currentPage === 1"
+      >
+        1
+      </button>
+      <button type="button" (click)="prevPage()" [disabled]="currentPage === 1">
+        Prev
+      </button>
+
+      @if (pageNumbers.length && pageNumbers[0] > 2) {
+        <span>…</span>
+      }
+
+      @for (p of pageNumbers; track p; let i = $index) {
+        <span *ngIf="i > 0 && p - pageNumbers[i - 1] > 1">…</span>
+        <button
+          type="button"
+          (click)="goToPage(p)"
+          [disabled]="p === currentPage"
+          [class.active]="p === currentPage"
+        >
+          {{ p }}
+        </button>
+      }
+
+      @if (
+        pageNumbers.length &&
+        pageNumbers[pageNumbers.length - 1] < totalPages - 1
+      ) {
+        <span>…</span>
+      }
+
+      <button
+        type="button"
+        (click)="nextPage()"
+        [disabled]="currentPage === totalPages"
+      >
+        Next
+      </button>
+      <button
+        type="button"
+        (click)="goToPage(totalPages)"
+        [disabled]="currentPage === totalPages"
+      >
+        {{ totalPages }}
+      </button>
+    </div>
+  }
+
+  <style>
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+    }
+    button[disabled] {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+  </style>
+
+  <ng-template #noData>
+    <p>No data available.</p>
+  </ng-template>
+</div>

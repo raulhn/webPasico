@@ -29,11 +29,11 @@ export class ListadoPreinscripcionesComponent implements OnInit {
 
   $fila_seleccionada: WritableSignal<any> = signal({});
 
-  $id_tabla_preinscripciones: Signal<String> = signal('tabla_preinscripciones');
-  $id_tabla_preinscripciones2: Signal<String> = signal(
+  $id_tabla_preinscripciones: Signal<string> = signal('tabla_preinscripciones');
+  $id_tabla_preinscripciones2: Signal<string> = signal(
     'tabla_preinscripciones2',
   );
-  $id_tabla_preinscripciones3: Signal<String> = signal(
+  $id_tabla_preinscripciones3: Signal<string> = signal(
     'tabla_preinscripciones3',
   );
 

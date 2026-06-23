@@ -1,11 +1,11 @@
 <legend>Preinscripciones</legend>
 <div class="container pt-4">
   <div>
-    <app-datatable
+    <app-appdatatable
       [$cabeceras]="cabeceras"
       [$lista]="$lista_preinscripcion()"
       [$identificador]="$id_tabla_preinscripciones()"
       (rowSelected)="preinscripcion_marcada($event)"
-    ></app-datatable>
+    ></app-appdatatable>
   </div>
 </div>

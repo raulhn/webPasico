@@ -55,7 +55,6 @@
     "@types/jasmine": "~3.10.0",
     "@types/jquery": "^3.5.14",
     "@types/node": "^12.11.1",
-    "angular-datatables": "^13.0.1",
     "datatables.net": "^1.13.5",
     "datatables.net-buttons": "^2.4.3",
     "datatables.net-dt": "^1.13.11",

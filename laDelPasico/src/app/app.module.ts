@@ -29,7 +29,6 @@ import { EditarCompomenteComponentesComponent } from './src/editar_componente/ed
 import { NuevoComponenteComponentesComponent } from './src/editar_componente/nuevo-componente-componentes/nuevo-componente-componentes.component';
 import { ComponenteComponenteComponent } from './src/componente-componente/componente-componente.component';
 
-import { DataTablesModule } from 'angular-datatables';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { ComponenteVideoComponent } from './src/componente-video/componente-video.component';
 import { EditarComponenteVideoComponent } from './src/editar_componente/editar-componente-video/editar-componente-video.component';
@@ -57,6 +56,7 @@ import { NgxCaptchaModule } from 'ngx-captcha';
 import { EditarComponenteCardComponent } from './src/editar_componente/editar-componente-card/editar-componente-card.component';
 
 import { DatatableComponent } from './src/componentes-UI/datatable/datatable.component';
+import { AppDataTableComponent } from './src/componentes-UI/app-datatable/appdatatable.component';
 
 @NgModule({
   declarations: [
@@ -96,6 +96,7 @@ import { DatatableComponent } from './src/componentes-UI/datatable/datatable.com
     ComponenteCardComponent,
     EditarComponenteCardComponent,
     DatatableComponent,
+    AppDataTableComponent,
   ],
   bootstrap: [AppComponent],
   imports: [
@@ -112,8 +113,6 @@ import { DatatableComponent } from './src/componentes-UI/datatable/datatable.com
     ReactiveFormsModule,
     RouterModule,
     // RecaptchaV3Module,
-
-    DataTablesModule,
   ],
   providers: [Usuario, provideHttpClient(withInterceptorsFromDi())],
   /*
