@@ -55,7 +55,6 @@ import { RouterModule } from '@angular/router';
 import { NgxCaptchaModule } from 'ngx-captcha';
 import { EditarComponenteCardComponent } from './src/editar_componente/editar-componente-card/editar-componente-card.component';
 
-import { DatatableComponent } from './src/componentes-UI/datatable/datatable.component';
 import { AppDataTableComponent } from './src/componentes-UI/app-datatable/appdatatable.component';
 
 @NgModule({
@@ -95,7 +94,6 @@ import { AppDataTableComponent } from './src/componentes-UI/app-datatable/appdat
     ListaOrdenadaComponent,
     ComponenteCardComponent,
     EditarComponenteCardComponent,
-    DatatableComponent,
     AppDataTableComponent,
   ],
   bootstrap: [AppComponent],
