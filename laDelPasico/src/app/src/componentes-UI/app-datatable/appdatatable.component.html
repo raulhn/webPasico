@@ -29,7 +29,7 @@
         @for (row of paginatedData; track row) {
           <tr
             (click)="selectRow(row)"
-            [class.selected]="row === selectedRow"
+            [ngClass]="comparaFila(row)  ? 'selected' : ''"
             style="cursor: pointer"
           >
             @for (col of $cabeceras(); track col) {

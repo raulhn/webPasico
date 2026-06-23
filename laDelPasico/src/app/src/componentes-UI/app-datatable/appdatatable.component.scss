@@ -1,5 +1,7 @@
 /* DataTable component styles */
 
+
+
 .datatable {
   margin: 1rem;
 }
@@ -33,7 +35,7 @@ table {
   border-collapse: collapse;
 }
 
-.selected {
+tbody tr.selected td {
   background-color: #007bff;
   color: white;
 }
@@ -45,10 +47,6 @@ td {
 }
 
 th {
-  .selected {
-    background-color: #007bff;
-    color: white;
-  }
   background-color: #f8f9fa;
 }
 

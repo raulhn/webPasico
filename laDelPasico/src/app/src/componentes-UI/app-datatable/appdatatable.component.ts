@@ -46,6 +46,10 @@ export class AppDataTableComponent implements OnChanges {
     }
   }
 
+  comparaFila(row: any) {
+    return JSON.stringify(row) === JSON.stringify(this.selectedRow)
+  }
+
   sortData(col: string): void {
     if (this.sortColumn === col) {
       // toggle direction
