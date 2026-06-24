@@ -94,41 +94,7 @@ export class ListaPersonasComponent {
 
   refrescar_personas = {
     next: (respuesta: any) => {
-      var datatable = $('#tabla_personas').DataTable();
-      datatable.destroy();
       this.$lista_personas.set(respuesta.personas);
-
-      this.dtOptions_personas = {
-        language: DataTablesOptions.spanish_datatables,
-        data: this.$lista_personas(),
-        dom: 'Bfrtip',
-        buttons: [
-          {
-            extend: 'excel',
-            text: 'Generar Excel',
-            className: 'btn btn-dark mb-3',
-          },
-        ],
-        columns: [
-          { title: 'DNI', data: 'nif' },
-          { title: 'Nombre', data: 'nombre' },
-          { title: 'Primer apellido', data: 'primer_apellido' },
-          { title: 'Segundo apellido', data: 'segundo_apellido' },
-          { title: 'Teléfono', data: 'telefono' },
-          { title: 'Correo electrónico', data: 'correo_electronico' },
-        ],
-        rowCallback: (row: Node, data: any[] | Object, index: number) => {
-          $('td', row).off('click');
-          $('td', row).on('click', () => {
-            this.click_persona(data);
-            $('#tabla_personas tr').removeClass('selected');
-            $(row).addClass('selected');
-          });
-          return row;
-        },
-      };
-      $('#tabla_personas').DataTable(this.dtOptions_personas);
-      this.bCargadoPersonas = true;
     },
   };
 
