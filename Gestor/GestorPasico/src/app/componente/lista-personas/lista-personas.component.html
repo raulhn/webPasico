@@ -91,4 +91,11 @@
     [$identificador]="$id_tabla_personas()"
     (rowSelected)="click_persona($event)"
   ></app-appdatatable>
+  @if (persona_seleccionada !== undefined) {
+    <div class="float-end p-3">
+      <a [href]="obtenerUrlFicha()">
+        <button class="btn btn-primary">Ver Ficha</button></a
+      >
+    </div>
+  }
 </div>
