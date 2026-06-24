@@ -9,12 +9,12 @@
       <thead>
         <tr>
           @for (col of $cabeceras(); track col) {
-            <th (click)="sortData(col)" [class.active]="sortColumn === col">
+            <th (click)="sortData(col.data)" [class.active]="sortColumn === col.data">
               {{ col.title | titlecase }}
-              @if (sortColumn === col && sortDirection === "asc") {
+              @if (sortColumn === col.data && sortDirection === "asc") {
                 <span class="indicator asc">▲</span>
                 <span class="indicator desc unselected">▼</span>
-              } @else if (sortColumn === col && sortDirection === "desc") {
+              } @else if (sortColumn === col.data && sortDirection === "desc") {
                 <span class="indicator desc unselected">▼</span>
                 <span class="indicator desc">▲</span>
               } @else {
