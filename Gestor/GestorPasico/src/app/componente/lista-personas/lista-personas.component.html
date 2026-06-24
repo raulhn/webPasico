@@ -89,6 +89,7 @@
     [$cabeceras]="cabecera_personas"
     [$lista]="$lista_personas()"
     [$identificador]="$id_tabla_personas()"
+    (rowSelected)="click_persona($event)"
   ></app-appdatatable>
 
   @if (bCargadoPersonas) {
