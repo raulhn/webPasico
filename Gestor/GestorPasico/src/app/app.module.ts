@@ -83,6 +83,8 @@ import { AlertaAlumnosSinSocioComponent } from './componente/alertas/alerta-alum
 import { AlertaAlumnosSinProfesorComponent } from './componente/alertas/alerta-alumnos-sin-profesor/alerta-alumnos-sin-profesor.component';
 import { AlertaSociosSinPagoComponent } from './componente/alertas/alerta-socios-sin-pago/alerta-socios-sin-pago.component';
 
+import { AppDataTableComponent } from './componente/componentes-UI/app-datatable/appdatatable.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -147,6 +149,7 @@ import { AlertaSociosSinPagoComponent } from './componente/alertas/alerta-socios
     AlertaAlumnosSinSocioComponent,
     AlertaAlumnosSinProfesorComponent,
     AlertaSociosSinPagoComponent,
+    AppDataTableComponent,
   ],
   exports: [MenuComponent],
   bootstrap: [AppComponent],

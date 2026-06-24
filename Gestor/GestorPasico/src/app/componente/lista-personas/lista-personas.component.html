@@ -1,17 +1,21 @@
 <app-menu class=""></app-menu>
 <div class="container pt-4">
   <label>Tipo de persona</label>
-  <select class="form-select" [(ngModel)]="tipo" (change)="cambia_seleccion()" >
+  <select class="form-select" [(ngModel)]="tipo" (change)="cambia_seleccion()">
     <option selected value="1">Todos</option>
     <option value="2">Socios</option>
     <option value="3">Profesores</option>
     <option value="4">Alumnos</option>
   </select>
 
-  @if (tipo == '2') {
+  @if (tipo == "2") {
     <div>
       <label>Estado</label>
-      <select class="form-select" [(ngModel)]="alta_socio" (change)="cambia_seleccion_socio()">
+      <select
+        class="form-select"
+        [(ngModel)]="alta_socio"
+        (change)="cambia_seleccion_socio()"
+      >
         <option selected value="1">Todos</option>
         <option value="2">Dados de alta</option>
         <option value="3">Dados de baja</option>
@@ -19,38 +23,48 @@
     </div>
   }
 
-  @if (tipo == '4') {
+  @if (tipo == "4") {
     <div>
       <label>Curso</label>
       @if (bCargado_cursos) {
         <div class="row form-row">
           <div class="col">
-            <ng-select [items]="lista_cursos"
+            <ng-select
+              [items]="lista_cursos"
               bindLabel="descripcion"
               bindValue="clave_curso"
               [(ngModel)]="curso_seleccionado"
-              (change)="cambia_seleccion_curso()">
+              (change)="cambia_seleccion_curso()"
+            >
             </ng-select>
           </div>
         </div>
       }
       <label>Asignatura</label>
-      <select  class="form-select" [(ngModel)]="asignatura_seleccionada" (change)="cambia_seleccion_curso()">
+      <select
+        class="form-select"
+        [(ngModel)]="asignatura_seleccionada"
+        (change)="cambia_seleccion_curso()"
+      >
         <option selected value="0">Todas las asignaturas</option>
         @for (asignatura_actual of lista_asignaturas; track asignatura_actual) {
           <option [value]="asignatura_actual.nid">
-            {{asignatura_actual.descripcion}}
+            {{ asignatura_actual.descripcion }}
           </option>
         }
       </select>
       @if (bCargadoProfesores) {
         <div>
           <label>Profesor</label>
-          <select  class="form-select" [(ngModel)]="profesor_seleccionado" (change)="cambia_profesor()">
+          <select
+            class="form-select"
+            [(ngModel)]="profesor_seleccionado"
+            (change)="cambia_profesor()"
+          >
             <option selected value="0">Todos los profesores</option>
             @for (profesor_actual of lista_profesores; track profesor_actual) {
               <option [value]="profesor_actual.nid">
-                {{profesor_actual.etiqueta}}
+                {{ profesor_actual.etiqueta }}
               </option>
             }
             <option value="-1">Sin profesor asignado</option>
@@ -58,7 +72,12 @@
         </div>
       }
       <label>Estado</label>
-      <select class="form-select" [(ngModel)]="alumno_activo" (change)="cambia_seleccion_estado_alumno()" aria-label="Default select example">
+      <select
+        class="form-select"
+        [(ngModel)]="alumno_activo"
+        (change)="cambia_seleccion_estado_alumno()"
+        aria-label="Default select example"
+      >
         <option selected value="1">Activos</option>
         <option value="2">Dados de baja</option>
         <option value="3">Todos</option>
@@ -66,15 +85,27 @@
     </div>
   }
 
+  <app-appdatatable
+    [$cabeceras]="cabecera_personas"
+    [$lista]="$lista_personas()"
+    [$identificador]="$id_tabla_personas()"
+  ></app-appdatatable>
+
   @if (bCargadoPersonas) {
     <div>
-      <table datatable [dtOptions]="dtOptions_personas" id="tabla_personas" class="row-border hover"></table>
+      <table
+        datatable
+        [dtOptions]="dtOptions_personas"
+        id="tabla_personas"
+        class="row-border hover"
+      ></table>
       @if (persona_seleccionada !== undefined) {
         <div class="float-end p-3">
-          <a [href]="obtenerUrlFicha()"> <button class="btn btn-primary"> Ver Ficha</button></a>
+          <a [href]="obtenerUrlFicha()">
+            <button class="btn btn-primary">Ver Ficha</button></a
+          >
         </div>
       }
     </div>
   }
 </div>
-
