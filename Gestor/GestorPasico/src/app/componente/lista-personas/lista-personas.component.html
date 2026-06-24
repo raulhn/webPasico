@@ -30,7 +30,7 @@
         <div class="row form-row">
           <div class="col">
             <ng-select
-              [items]="lista_cursos"
+              [items]="$lista_cursos()"
               bindLabel="descripcion"
               bindValue="clave_curso"
               [(ngModel)]="curso_seleccionado"
@@ -47,7 +47,10 @@
         (change)="cambia_seleccion_curso()"
       >
         <option selected value="0">Todas las asignaturas</option>
-        @for (asignatura_actual of lista_asignaturas; track asignatura_actual) {
+        @for (
+          asignatura_actual of $lista_asignaturas();
+          track asignatura_actual
+        ) {
           <option [value]="asignatura_actual.nid">
             {{ asignatura_actual.descripcion }}
           </option>
@@ -62,7 +65,10 @@
             (change)="cambia_profesor()"
           >
             <option selected value="0">Todos los profesores</option>
-            @for (profesor_actual of lista_profesores; track profesor_actual) {
+            @for (
+              profesor_actual of $lista_profesores();
+              track profesor_actual
+            ) {
               <option [value]="profesor_actual.nid">
                 {{ profesor_actual.etiqueta }}
               </option>

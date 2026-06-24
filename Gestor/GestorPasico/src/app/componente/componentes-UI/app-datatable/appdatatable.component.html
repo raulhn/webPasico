@@ -29,7 +29,7 @@
         @for (row of paginatedData; track row) {
           <tr
             (click)="selectRow(row)"
-            [ngClass]="comparaFila(row)  ? 'selected' : ''"
+            [ngClass]="comparaFila(row) ? 'selected' : ''"
             style="cursor: pointer"
           >
             @for (col of $cabeceras(); track col) {
@@ -49,7 +49,7 @@
         (click)="goToPage(1)"
         [disabled]="currentPage === 1"
       >
-        1
+        Primera
       </button>
       <button type="button" (click)="prevPage()" [disabled]="currentPage === 1">
         Prev
@@ -90,7 +90,7 @@
         (click)="goToPage(totalPages)"
         [disabled]="currentPage === totalPages"
       >
-        {{ totalPages }}
+        Última
       </button>
     </div>
   }

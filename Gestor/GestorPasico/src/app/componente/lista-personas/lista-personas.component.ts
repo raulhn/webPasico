@@ -41,7 +41,6 @@ export class ListaPersonasComponent {
   //  lista_personas: any[] = [];
 
   $lista_personas: WritableSignal<any[]> = signal([]);
-
   $id_tabla_personas: Signal<string> = signal('tabla_personas');
 
   cabecera_personas: any[] = [
@@ -59,9 +58,9 @@ export class ListaPersonasComponent {
 
   alta_socio: string = '1';
 
-  lista_asignaturas: any[] = [];
-  lista_cursos: any[] = [];
-  lista_profesores: any;
+  $lista_asignaturas: WritableSignal<any[]> = signal([]);
+  $lista_cursos: WritableSignal<any[]> = signal([]);
+  $lista_profesores: WritableSignal<any[]> = signal([]);
 
   asignatura_seleccionada: string = '0';
   curso_seleccionado: string = '0';
@@ -100,56 +99,26 @@ export class ListaPersonasComponent {
 
   recuperar_asignaturas = {
     next: (respuesta: any) => {
-      this.lista_asignaturas = respuesta.asignaturas;
+      this.$lista_asignaturas.set(respuesta.asignaturas);
     },
   };
 
   refrescar_alumnos = {
     next: (respuesta: any) => {
-      var datatable = $('#tabla_personas').DataTable();
-      datatable.destroy();
       this.$lista_personas.set(respuesta.alumnos);
-
-      this.dtOptions_personas = {
-        language: DataTablesOptions.spanish_datatables,
-        data: this.$lista_personas(),
-        dom: 'Bfrtip',
-        buttons: [
-          {
-            extend: 'excel',
-            text: 'Generar Excel',
-            className: 'btn btn-dark mb-3',
-          },
-        ],
-        columns: [
-          { title: 'DNI', data: 'nif' },
-          { title: 'Nombre', data: 'nombre' },
-          { title: 'Primer apellido', data: 'primer_apellido' },
-          { title: 'Segundo apellido', data: 'segundo_apellido' },
-          { title: 'Teléfono', data: 'telefono' },
-          { title: 'Correo electrónico', data: 'correo_electronico' },
-        ],
-        rowCallback: (row: Node, data: any[] | Object, index: number) => {
-          $('td', row).off('click');
-          $('td', row).on('click', () => {
-            this.click_persona(data);
-            $('#tabla_personas tr').removeClass('selected');
-            $(row).addClass('selected');
-          });
-          return row;
-        },
-      };
-      $('#tabla_personas').DataTable(this.dtOptions_personas);
-      this.bCargadoPersonas = true;
     },
   };
 
   obtener_cursos = {
     next: (respuesta: any) => {
-      this.lista_cursos = respuesta.cursos.map((elemento: any) => {
-        return { descripcion: elemento.descripcion, clave_curso: elemento.nid };
-      });
-      this.bCargado_cursos = true;
+      this.$lista_cursos.set(
+        respuesta.cursos.map((elemento: any) => {
+          return {
+            descripcion: elemento.descripcion,
+            clave_curso: elemento.nid,
+          };
+        }),
+      );
       this.curso_seleccionado = respuesta.cursos[0]['nid'];
     },
   };
@@ -182,7 +151,7 @@ export class ListaPersonasComponent {
   recupera_profesores = {
     next: (respuesta: any) => {
       this.profesor_seleccionado = '0';
-      this.lista_profesores = respuesta.profesores;
+      this.$lista_profesores.set(respuesta.profesores);
       this.bCargadoProfesores = true;
     },
   };
