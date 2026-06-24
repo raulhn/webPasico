@@ -7,7 +7,6 @@ import { UsuariosComponent } from './componente/usuarios/usuarios.component';
 import { ListaPersonasComponent } from './componente/lista-personas/lista-personas.component';
 import { RegistroPersonaComponent } from './componente/registro-persona/registro-persona.component';
 import { FichaPersonaComponent } from './componente/ficha-persona/ficha-persona.component';
-import { ListaSociosComponent } from './componente/lista-socios/lista-socios.component';
 import { RegistroSocioComponent } from './componente/registro-socio/registro-socio.component';
 import { AsignaturasComponent } from './componente/asignaturas/asignaturas.component';
 import { RegistroMatriculaComponent } from './componente/registro-matricula/registro-matricula.component';

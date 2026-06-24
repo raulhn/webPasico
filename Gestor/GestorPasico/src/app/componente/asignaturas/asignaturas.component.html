@@ -1,29 +1,26 @@
-
 <app-menu class=""></app-menu>
 <div class="container pt-4">
-
-
-
-
-  @if (bCargado) {
-    <div class="card p-3" >
-      <legend> Asignaturas </legend>
-      <div class="row form-row pt-3">
-        <div class="col">
-          <button class="btn btn-primary mb-3 " (click) = "addAsignatura()"> Añadir Asignatura </button>
-        </div>
+  <div class="card p-3">
+    <legend>Asignaturas</legend>
+    <div class="row form-row pt-3">
+      <div class="col">
+        <button class="btn btn-primary mb-3" (click)="addAsignatura()">
+          Añadir Asignatura
+        </button>
       </div>
-      <table datatable [dtOptions]="dtOptions" id="tabla_asignaturas" class="row-border hover">
-      </table>
-      @if (bSelecionada_asignatura) {
-        <div>
-          <a [href]="url_ficha_asignatura()"> <button class="btn btn-primary"> Ver Ficha</button></a>
-        </div>
-      }
     </div>
-  }
-
-
-
+    <app-appdatatable
+      [$cabeceras]="cabeceras_asignaturas"
+      [$lista]="$asignaturas()"
+      [$identificador]="$id_tabla_asignaturas()"
+      (rowSelected)="click_asignatura($event)"
+    ></app-appdatatable>
+    @if (bSelecionada_asignatura) {
+      <div>
+        <a [href]="url_ficha_asignatura()">
+          <button class="btn btn-primary">Ver Ficha</button></a
+        >
+      </div>
+    }
+  </div>
 </div>
-
