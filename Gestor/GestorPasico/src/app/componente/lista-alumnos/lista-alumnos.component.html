@@ -4,38 +4,54 @@
   @if (bCargadoCursos && bObtenidoUltimoCurso) {
     <div class="row form-row">
       <div class="col">
-        <ng-select [items]="lista_cursos"
+        <ng-select
+          [items]="lista_cursos"
           bindLabel="descripcion"
           bindValue="nid"
           [(ngModel)]="curso_seleccionado"
-          (change)="cambia_seleccion_curso()">
+          (change)="cambia_seleccion_curso()"
+        >
         </ng-select>
       </div>
       <label>Asignatura</label>
-      <select  class="form-select" [(ngModel)]="asignatura_seleccionada" (change)="cambia_seleccion_curso()">
+      <select
+        class="form-select"
+        [(ngModel)]="asignatura_seleccionada"
+        (change)="cambia_seleccion_curso()"
+      >
         <option selected value="0">Todas las asignaturas</option>
         @for (asignatura_actual of lista_asignaturas; track asignatura_actual) {
           <option [value]="asignatura_actual.nid">
-            {{asignatura_actual.descripcion}}
+            {{ asignatura_actual.descripcion }}
           </option>
         }
       </select>
       <label>Estado</label>
-      <select class="form-select" [(ngModel)]="alumno_activo" (change)="cambia_seleccion_curso()" aria-label="Default select example">
+      <select
+        class="form-select"
+        [(ngModel)]="alumno_activo"
+        (change)="cambia_seleccion_curso()"
+        aria-label="Default select example"
+      >
         <option selected value="1">Activos</option>
         <option value="2">Dados de baja</option>
         <option value="3">Todos</option>
       </select>
-      @if (bCargadoPersonas) {
-        <div>
-          <table datatable [dtOptions]="dtOptions_personas" id="tabla_personas" class="row-border hover"></table>
-          @if (persona_seleccionada !== undefined) {
-            <div class="float-end p-3">
-              <a [href]="obtenerUrlFicha()"> <button class="btn btn-primary"> Ver Ficha</button></a>
-            </div>
-          }
-        </div>
-      }
+      <div>
+        <app-appdatatable
+          [$cabeceras]="cabecera_personas"
+          [$lista]="$lista_personas()"
+          [$identificador]="$id_tabla_personas()"
+          (rowSelected)="click_persona($event)"
+        ></app-appdatatable>
+        @if (persona_seleccionada !== undefined) {
+          <div class="float-end p-3">
+            <a [href]="obtenerUrlFicha()">
+              <button class="btn btn-primary">Ver Ficha</button></a
+            >
+          </div>
+        }
+      </div>
     </div>
   }
 </div>
