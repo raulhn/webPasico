@@ -27,7 +27,6 @@
     "@ng-select/ng-select": "^21.0.0",
     "@popperjs/core": "^2.11.6",
     "@swimlane/ngx-datatable": "^20.1.0",
-    "angular-datatables": "^15.0.0",
     "bootstrap": "^5.2.3",
     "datatables.net": "^1.13.5",
     "datatables.net-bs5": "^1.11.3",

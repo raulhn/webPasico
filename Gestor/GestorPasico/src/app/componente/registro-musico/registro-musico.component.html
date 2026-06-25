@@ -53,32 +53,26 @@
         Mostrar Bajas
       </div>
     </div>
-      <div>
-        <app-appdatatable
-          [$cabeceras]="cabecera_musicos"
-          [$lista]="$lista_musicos_filtrados()"
-          [$identificador]="$id_tabla_musicos()"
-          (rowSelected)="click_musico($event)"
-        ></app-appdatatable>
+    <div>
+      <app-appdatatable
+        [$cabeceras]="cabecera_musicos"
+        [$lista]="$lista_musicos_filtrados()"
+        [$identificador]="$id_tabla_musicos()"
+        (rowSelected)="click_musico($event)"
+      ></app-appdatatable>
 
-        <table
-          datatable
-          [dtOptions]="dtOptions_musicos"
-          id="tabla_musicos"
-          class="row-border hover"
-        ></table>
-        @if (musico_seleccionado !== undefined) {
-          <div class="float-end p-3" style="display: flex; gap: 10px">
-            <a [href]="obtenerUrlFicha()">
-              <button class="btn btn-primary">Ver Ficha</button></a
-            >
-            <button (click)="dar_baja_musico()" class="btn btn-danger">
-              Cambiar fecha baja
-            </button>
-          </div>
-        }
-      </div>
-    }
+      @if (musico_seleccionado !== undefined) {
+        <div class="float-end p-3" style="display: flex; gap: 10px">
+          <a [href]="obtenerUrlFicha()">
+            <button class="btn btn-primary">Ver Ficha</button></a
+          >
+          <button (click)="dar_baja_musico()" class="btn btn-danger">
+            Cambiar fecha baja
+          </button>
+        </div>
+      }
+    </div>
+  }
 
   <div class="mb-1 mt-1" style="display: none">
     <div style="min-height: 300px" #instancia_registrar_musico>

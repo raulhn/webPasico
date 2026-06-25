@@ -28,7 +28,6 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { MadresPersonaComponent } from './componente/madres-persona/madres-persona.component';
 import { RegistroSocioComponent } from './componente/registro-socio/registro-socio.component';
 import { SocioComponent } from './componente/socio/socio.component';
-import { DataTablesModule } from 'angular-datatables';
 import { AsignaturasComponent } from './componente/asignaturas/asignaturas.component';
 import { RegistroMatriculaComponent } from './componente/registro-matricula/registro-matricula.component';
 import { RegistroCursoComponent } from './componente/registro-curso/registro-curso.component';
@@ -154,7 +153,6 @@ import { AppDataTableComponent } from './componente/componentes-UI/app-datatable
   imports: [
     FormsModule,
     BrowserModule,
-    DataTablesModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     TooltipModule,

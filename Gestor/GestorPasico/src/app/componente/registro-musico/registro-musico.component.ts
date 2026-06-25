@@ -34,7 +34,7 @@ export class RegistroMusicoComponent implements OnInit {
   $lista_personas: WritableSignal<any[]> = signal([]);
 
   $lista_musicos: WritableSignal<any[]> = signal([]);
-  $lista_musicos_filtrados: WritableSignal<any[]> = signal([])
+  $lista_musicos_filtrados: WritableSignal<any[]> = signal([]);
   cabecera_musicos: any[] = [
     { title: 'DNI', data: 'nif' },
     { title: 'Nombre', data: 'nombre' },
@@ -47,7 +47,6 @@ export class RegistroMusicoComponent implements OnInit {
     { title: 'Fecha de baja', data: 'fecha_baja_local' },
   ];
   $id_tabla_musicos: Signal<string> = signal('tabla_musicos');
-
 
   nid_persona_seleccionada: string = '';
   nid_instrumento: string = '0';
@@ -62,8 +61,6 @@ export class RegistroMusicoComponent implements OnInit {
   tipos_musicos: any = {};
   agrupar_por_tipo_musico: boolean = false;
 
-  dtOptions_musicos: any = {};
-
   musico_seleccionado: any;
 
   fecha_baja: string = '';
@@ -73,8 +70,7 @@ export class RegistroMusicoComponent implements OnInit {
   }
 
   refrescar_tabla(lista_musicos: any[]) {
-
-    console.log("lista musicos", lista_musicos)
+    console.log('lista musicos', lista_musicos);
     this.$lista_musicos_filtrados.set(
       lista_musicos.sort((a: any, b: any) => {
         if (a.nid < b.nid) {
@@ -89,11 +85,8 @@ export class RegistroMusicoComponent implements OnInit {
   }
 
   refrescar_personas = {
-    next: (respuesta: any) => {
-
-    }
-  }
-
+    next: (respuesta: any) => {},
+  };
 
   refrescar_musicos = {
     next: (respuesta: any) => {
@@ -106,24 +99,21 @@ export class RegistroMusicoComponent implements OnInit {
           : '';
         return { ...persona, fecha_baja_local: fecha_baja_local };
       });
-      console.log("Musicos", musicos)
-      this.$lista_musicos.set(
-        musicos
-      );
-      this.$lista_musicos_filtrados.set(musicos)
+      console.log('Musicos', musicos);
+      this.$lista_musicos.set(musicos);
+      this.$lista_musicos_filtrados.set(musicos);
 
       this.bCargadasPersonas = true;
       if (this.bCargadosTiposMusicos) {
         this.cambia_seleccion_musico();
       }
-    }
-  }
-
+    },
+  };
 
   constructor(
     private personasServices: PersonasService,
     private musicosService: MusicosService,
-  ) { }
+  ) {}
 
   obtener_instrumentos = {
     next: (respuesta: any) => {

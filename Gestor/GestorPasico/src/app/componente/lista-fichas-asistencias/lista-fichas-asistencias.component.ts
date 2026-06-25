@@ -5,7 +5,6 @@ import {
   Signal,
   signal,
 } from '@angular/core';
-import { DataTablesOptions } from 'src/app/logica/constantes';
 import { FichaAsistenciaService } from 'src/app/servicios/fichaasistencia.service';
 import Swal from 'sweetalert2';
 
@@ -23,8 +22,6 @@ export class ListaFichasAsistenciasComponent implements OnInit {
   bCargadas_fichas_asistencias: boolean = false;
 
   ficha_seleccionada: string = '';
-
-  dtOptions_fichas_asistencias: any = {};
 
   URL_FICHA_ASISTENCIA = '/ficha_asistencia/';
 

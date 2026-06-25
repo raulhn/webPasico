@@ -8,11 +8,8 @@ import {
 } from '@angular/core';
 import { MusicosService } from 'src/app/servicios/musicos.service';
 import { OnInit } from '@angular/core';
-import { DataTablesOptions } from 'src/app/logica/constantes';
 import 'datatables.net-plugins/filtering/type-based/accent-neutralise.mjs';
 import Swal from 'sweetalert2';
-import { DataTablesModule } from 'angular-datatables';
-import { MenuComponent } from '../menu/menu.component';
 
 @Component({
   selector: 'app-lista-tipo-musico',

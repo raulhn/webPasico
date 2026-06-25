@@ -53,8 +53,6 @@ export class FichaProfesorComponent implements OnInit {
   profesor: any;
   nombre_profesor: string = '';
 
-  dtOptions_alumnos: any = {};
-
   alumno_seleccionado: string = '';
 
   bhorario_asignatura_recuperado: boolean = false;
@@ -77,7 +75,9 @@ export class FichaProfesorComponent implements OnInit {
     this.nid_profesor = rutaActiva.snapshot.params['nid_profesor'];
   }
 
-  click_alumno(data: any) { this.alumno_seleccionado = data.nid }
+  click_alumno(data: any) {
+    this.alumno_seleccionado = data.nid;
+  }
 
   refrescar_alumnos = {
     next: (respuesta: any) => {
@@ -139,7 +139,7 @@ export class FichaProfesorComponent implements OnInit {
   }
 
   cambia_seleccion() {
-    console.log("Asignatura seleccionada", this.asignatura_seleccionada)
+    console.log('Asignatura seleccionada', this.asignatura_seleccionada);
 
     this.matriculasService
       .obtener_alumnos_profesores(

@@ -6,7 +6,6 @@ import {
   signal,
 } from '@angular/core';
 import { PrestamosService } from 'src/app/servicios/prestamos.service';
-import { DataTablesOptions } from 'src/app/logica/constantes';
 import 'datatables.net-plugins/filtering/type-based/accent-neutralise.mjs';
 import Swal from 'sweetalert2';
 
@@ -18,7 +17,6 @@ import Swal from 'sweetalert2';
 })
 export class ListaPrestamosComponent implements OnInit {
   bCargado_Prestamos: boolean = false;
-  dtOptions_Prestamos: any = {};
 
   constructor(private prestamosServices: PrestamosService) {}
 

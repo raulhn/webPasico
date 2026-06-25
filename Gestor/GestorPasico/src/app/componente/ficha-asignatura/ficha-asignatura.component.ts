@@ -31,7 +31,6 @@ export class FichaAsignaturaComponent implements OnInit {
 
   tipo_asignatura: string = '0';
 
-  dtOptions_profesor: DataTables.Settings = {};
   profesor_nuevo: string = '';
 
   lista_personas: any[] = [];
@@ -103,20 +102,6 @@ export class FichaAsignaturaComponent implements OnInit {
   obtener_profesores = {
     next: (respuesta: any) => {
       this.$profesores.set(respuesta.profesores);
-      var datatable = $('#tabla_profesor').DataTable();
-      datatable.destroy();
-
-      this.dtOptions_profesor = {
-        language: DataTablesOptions.spanish_datatables,
-        data: this.$profesores(),
-        columns: [
-          { title: 'nombre', data: 'nombre' },
-          { title: 'primer apellido', data: 'primer_apellido' },
-          { title: 'segundo apellido', data: 'segundo_apellido' },
-        ],
-      };
-
-      $('#tabla_profesor').DataTable(this.dtOptions_profesor);
     },
   };
 
@@ -224,16 +209,5 @@ export class FichaAsignaturaComponent implements OnInit {
       .obtener_profesores_asignatura(this.nid_asignatura)
       .subscribe(this.obtener_profesores);
     // Inicializa el dataTable de los profesores vacío //
-    this.dtOptions_profesor = {
-      data: [],
-      columns: [
-        {
-          title: 'Nombre',
-          data: 'nombre',
-        },
-        { title: 'Primer apellido', data: 'primer_apellido' },
-        { title: 'Segundo apellido', data: 'segundo_apellido' },
-      ],
-    };
   }
 }

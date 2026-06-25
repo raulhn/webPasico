@@ -5,12 +5,12 @@
   <hr />
   @if (bCargadosSocios) {
     <div>
-      <table
-        datatable
-        [dtOptions]="dtOptions_socioSinPago"
-        id="tabla_personas"
-        class="row-border hover"
-      ></table>
+      <app-appdatatable
+        [$cabeceras]="cabecera_tabla_socios_sin_pago"
+        [$lista]="$sociosSinPago()"
+        [$identificador]="$idTablaSociosSinPago()"
+        (rowSelected)="clickSocio($event)"
+      ></app-appdatatable>
       @if (socioSeleccionado !== undefined) {
         <div class="float-end p-3">
           <a [href]="obtenerUrlFicha()">

@@ -41,8 +41,6 @@ export class ListaAlumnosComponent implements OnInit {
   asignatura_seleccionada: string = '0';
   alumno_activo: string = '1';
 
-  dtOptions_personas: any = {};
-
   persona_seleccionada: any;
 
   constructor(

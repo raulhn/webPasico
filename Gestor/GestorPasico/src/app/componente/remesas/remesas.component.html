@@ -1,30 +1,42 @@
-
 <app-menu class=""></app-menu>
 <div class="container pt-4">
   <div class="card p-3 mb-1">
     <label>Concepto</label>
-    <input class="form-control" name ="Concepto" [(ngModel)] = "concepto" type="text"/>
+    <input
+      class="form-control"
+      name="Concepto"
+      [(ngModel)]="concepto"
+      type="text"
+    />
     <label>Fecha Desde</label>
-    <input class="form-control" name ="Fecha desde" [(ngModel)] = "fecha_desde" type="date"/>
+    <input
+      class="form-control"
+      name="Fecha desde"
+      [(ngModel)]="fecha_desde"
+      type="date"
+    />
     <label>Fecha Hasta</label>
-    <input class="form-control" name ="Fecha Hasta" [(ngModel)] = "fecha_hasta" type="date"/>
+    <input
+      class="form-control"
+      name="Fecha Hasta"
+      [(ngModel)]="fecha_hasta"
+      type="date"
+    />
     <div>
-      <button class="btn btn-primary mb-3 mt-2 tp-3" (click)="crear_remesa()" >
+      <button class="btn btn-primary mb-3 mt-2 tp-3" (click)="crear_remesa()">
         @if (bCargaRemesa) {
-          <div class="spinner-border spinner-border-sm" role="status">
-          </div>
+          <div class="spinner-border spinner-border-sm" role="status"></div>
         }
         Crear nueva remesa
       </button>
     </div>
   </div>
   <div class="card p-3 mb-1">
-
     <div class="row">
       <div class="col">
-        <input class="form-control" type="text" [(ngModel)] = "lote"/>
+        <input class="form-control" type="text" [(ngModel)]="lote" />
         <div class="m-2">
-          <button class="btn btn-primary" (click) ="buscar()"> Buscar </button>
+          <button class="btn btn-primary" (click)="buscar()">Buscar</button>
         </div>
       </div>
     </div>
@@ -32,33 +44,52 @@
   <div class="card p-3 mb-1">
     @if (bCargado_remesas) {
       <div>
-        <div class = "mb-2">
+        <div class="mb-2">
           <label>Estado</label>
-          <select class="form-select" [(ngModel)]="estado" (change)="cambia_seleccion_estado()">
+          <select
+            class="form-select"
+            [(ngModel)]="estado"
+            (change)="cambia_seleccion_estado()"
+          >
             <option selected value="Todos">Todos</option>
             <option value="Pendiente">Pendientes</option>
             <option value="Rechazado">Rechazados</option>
             <option value="Pagado">Pagados</option>
           </select>
         </div>
-        <table datatable [dtOptions]="dtOpciones_remesas" class="table" id="tabla_remesas"></table>
+        <app-appdatatable
+          [$cabeceras]="cabecera_remesas"
+          [$lista]="$remesas()"
+          [$identificador]="$id_tabla_remesas()"
+          (rowSelected)="click_remesa($event)"
+        ></app-appdatatable>
+
         @if (remesa_seleccionada !== undefined) {
           <div class="float-end p-3">
-            <button class="btn btn-primary m-1" (click)="cobrar_remesa()">Cobrar recibo</button>
-            <a [href]="obtenerUrlFicha()"> <button class="btn btn-primary m-1"> Ver Ficha</button></a>
-            <button class="btn btn-danger m-1" (click) ="rechazar_recibo()">Rechazar recibo</button>
-            <button class="btn btn-primary m-1" (click) ="aceptar_recibo()">Aceptar recibo</button>
+            <button class="btn btn-primary m-1" (click)="cobrar_remesa()">
+              Cobrar recibo
+            </button>
+            <a [href]="obtenerUrlFicha()">
+              <button class="btn btn-primary m-1">Ver Ficha</button></a
+            >
+            <button class="btn btn-danger m-1" (click)="rechazar_recibo()">
+              Rechazar recibo
+            </button>
+            <button class="btn btn-primary m-1" (click)="aceptar_recibo()">
+              Aceptar recibo
+            </button>
           </div>
         }
       </div>
     }
     <div class="row">
       <div class="col-12">
-        <button class="btn btn-primary m-1" (click) ="aceptar_recibos()">Aceptar lote</button>
-        <button class="btn btn-primary m-1" (click) ="cobrar_lote()">
+        <button class="btn btn-primary m-1" (click)="aceptar_recibos()">
+          Aceptar lote
+        </button>
+        <button class="btn btn-primary m-1" (click)="cobrar_lote()">
           @if (bCargaLote) {
-            <div class="spinner-border spinner-border-sm" role="status">
-            </div>
+            <div class="spinner-border spinner-border-sm" role="status"></div>
           }
           Cobrar lote
         </button>
@@ -67,11 +98,17 @@
   </div>
 </div>
 
-<div class="mb-1 mt-1" style="display: none;">
-
+<div class="mb-1 mt-1" style="display: none">
   <div #instancia_remesa>
-    <div  >
-      <input class="mb-2 mt-2" type="text" id="id_anotaciones" class="swal2-input" placeholder=""  [value]="anotaciones"/>
+    <div>
+      <input
+        class="mb-2 mt-2"
+        type="text"
+        id="id_anotaciones"
+        class="swal2-input"
+        placeholder=""
+        [value]="anotaciones"
+      />
     </div>
   </div>
 </div>

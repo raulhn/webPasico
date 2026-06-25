@@ -64,8 +64,6 @@ export class RegistroMatriculaComponent implements OnInit {
 
   fecha_baja: string = '';
 
-  dtOptions: any;
-
   activo: string = '1';
 
   @ViewChild('instancia_alumno') instancia_alumno!: ElementRef;
@@ -135,78 +133,13 @@ export class RegistroMatriculaComponent implements OnInit {
   obtener_alumnos = {
     next: (respuesta: any) => {
       this.$listaAlumnos.set(respuesta.alumnos);
-      this.dtOptions = {
-        language: DataTablesOptions.spanish_datatables,
-        data: this.$listaAlumnos(),
-        dom: 'Bfrtip',
-        buttons: [
-          {
-            extend: 'excel',
-            text: 'Generar Excel',
-            className: 'btn btn-dark mb-3',
-          },
-        ],
-        columns: [
-          { title: 'Nombre', data: 'nombre' },
-          { title: 'Primer apellido', data: 'primer_apellido' },
-          { title: 'Segundo apellido', data: 'segundo_apellido' },
-          { title: 'Teléfono', data: 'telefono' },
-        ],
-        rowCallback: (row: Node, data: any[] | Object, index: number) => {
-          $('td', row).off('click');
-          $('td', row).on('click', () => {
-            this.click_alumno(data);
-            $('#tabla_alumnos tr').removeClass('selected');
-            $(row).addClass('selected');
-          });
-          return row;
-        },
-        /* Incluir botones en datatable */
-        /* https://stackblitz.com/edit/angular-hxdbgi-t371wf?file=app%2Ftab-nav-bar-basic-example.ts
-          {
-            title: '',
-            data: null,
-            render: (e: any) =>{ return '<button class="btn btn-danger"> <fa-icon _ngcontent-irg-c51="" class="ng-fa-icon"><svg role="img" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="x" class="svg-inline--fa fa-x" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="currentColor" d="M376.6 84.5c11.3-13.6 9.5-33.8-4.1-45.1s-33.8-9.5-45.1 4.1L192 206 56.6 43.5C45.3 29.9 25.1 28.1 11.5 39.4S-3.9 70.9 7.4 84.5L150.3 256 7.4 427.5c-11.3 13.6-9.5 33.8 4.1 45.1s33.8 9.5 45.1-4.1L192 306 327.4 468.5c11.3 13.6 31.5 15.4 45.1 4.1s15.4-31.5 4.1-45.1L233.7 256 376.6 84.5z"></path></svg></fa-icon> Eliminar </button>'}
-
-          }*/
-      };
       this.bCargado = true;
     },
   };
 
   refrescar_alumnos = {
     next: (respuesta: any) => {
-      var datatable = $('#tabla_alumnos').DataTable();
-      datatable.destroy();
       this.$listaAlumnos.set(respuesta.alumnos);
-
-      this.dtOptions = {
-        data: this.$listaAlumnos(),
-        dom: 'Bfrtip',
-        buttons: [
-          {
-            extend: 'excel',
-            text: 'Generar Excel',
-            className: 'btn btn-dark mb-3',
-          },
-        ],
-        columns: [
-          { title: 'Nombre', data: 'nombre' },
-          { title: 'Primer apellido', data: 'primer_apellido' },
-          { title: 'Segundo apellido', data: 'segundo_apellido' },
-          { title: 'Teléfono', data: 'telefono' },
-        ],
-        rowCallback: (row: Node, data: any[] | Object, index: number) => {
-          $('td', row).off('click');
-          $('td', row).on('click', () => {
-            this.click_alumno(data);
-            $('#tabla_alumnos tr').removeClass('selected');
-            $(row).addClass('selected');
-          });
-          return row;
-        },
-      };
-      $('#tabla_alumnos').DataTable(this.dtOptions);
     },
   };
 

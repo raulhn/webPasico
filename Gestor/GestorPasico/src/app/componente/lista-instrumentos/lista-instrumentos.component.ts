@@ -1,7 +1,6 @@
 import { Component, WritableSignal, Signal, signal } from '@angular/core';
 import { ElementRef, ViewChild } from '@angular/core';
 import { MusicosService } from 'src/app/servicios/musicos.service';
-import { DataTablesOptions } from 'src/app/logica/constantes';
 import Swal from 'sweetalert2';
 import { OnInit } from '@angular/core';
 
@@ -22,7 +21,6 @@ export class ListaInstrumentosComponent implements OnInit {
   $id_tabla_instrumentos: Signal<string> = signal('#tabla_musicos');
 
   instrumentoSeleccionado: any = null;
-  dtOptions_Instrumentos: any = {};
 
   @ViewChild('instanciaRegistroInstrumento')
   instancia_registro_instrumento!: ElementRef;

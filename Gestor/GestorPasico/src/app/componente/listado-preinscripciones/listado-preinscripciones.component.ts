@@ -60,9 +60,6 @@ export class ListadoPreinscripcionesComponent implements OnInit {
     { title: 'Curso', data: 'nombre_curso' },
   ];
 
-  dtOptions: any = {};
-  dtOptions_2: any = {};
-
   bCargadoPreinscripciones: boolean = false;
   bCargadoPreinscripciones2: boolean = false;
 

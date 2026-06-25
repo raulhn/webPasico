@@ -16,8 +16,6 @@ import { MatriculasService } from 'src/app/servicios/matriculas.service';
 import { CursosService } from 'src/app/servicios/cursos.service';
 import 'datatables.net-plugins/filtering/type-based/accent-neutralise.mjs';
 
-import { DataTableDirective } from 'angular-datatables';
-
 @Component({
   selector: 'app-lista-personas',
   templateUrl: './lista-personas.component.html',
@@ -25,18 +23,12 @@ import { DataTableDirective } from 'angular-datatables';
   standalone: false,
 })
 export class ListaPersonasComponent {
-  @ViewChild(DataTableDirective, { static: false })
-  datatableElement!: DataTableDirective;
-
   enlaceFicha: string = URL.URL_FRONT_END + '/ficha_persona/';
 
   bCargado: boolean = false;
   bCargadoPersonas: boolean = false;
   bCargado_cursos: boolean = false;
   bCargadoProfesores: boolean = false;
-
-  dtOptions: any = {};
-  dtOptions_personas: any = {};
 
   //  lista_personas: any[] = [];
 
@@ -73,19 +65,7 @@ export class ListaPersonasComponent {
     private asignaturasService: AsignaturasService,
     private matriculasService: MatriculasService,
     private cursosService: CursosService,
-  ) {
-    this.dtOptions = {
-      language: DataTablesOptions.spanish_datatables,
-      dom: 'Bfrtip',
-      buttons: [
-        {
-          extend: 'excel',
-          text: 'Generar Excel',
-          className: 'btn btn-dark mb-3',
-        },
-      ],
-    };
-  }
+  ) {}
 
   click_persona(persona_marcada: any) {
     this.persona_seleccionada = persona_marcada;

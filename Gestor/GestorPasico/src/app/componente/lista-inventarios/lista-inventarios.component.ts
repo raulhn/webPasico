@@ -5,7 +5,6 @@ import {
   signal,
   Signal,
 } from '@angular/core';
-import { DataTablesOptions } from 'src/app/logica/constantes';
 import { InventarioService } from 'src/app/servicios/inventario.service';
 import Swal from 'sweetalert2';
 
@@ -17,8 +16,6 @@ import Swal from 'sweetalert2';
 })
 export class ListaInventariosComponent implements OnInit {
   bCargados_inventarios: boolean = false;
-
-  dtOptions_fichas_inventarios: any = {};
 
   ficha_seleccionada: string = '';
 

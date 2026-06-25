@@ -11,7 +11,6 @@ import { PersonasService } from 'src/app/servicios/personas.service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { DataTablesOptions } from 'src/app/logica/constantes';
-import { ElementSchemaRegistry } from '@angular/compiler';
 
 @Component({
   selector: 'app-registro-persona',
@@ -37,8 +36,6 @@ export class RegistroPersonaComponent implements OnInit {
 
   bRegistrado: boolean = false;
   mensaje_registro: string = 'Se ha registrado correctamente';
-
-  dtOptions_personas: DataTables.Settings = {};
 
   $lista_personas_repetidas: WritableSignal<any[]> = signal([]);
   $id_personas_repetidas: Signal<string> = signal('tabla_persona_repetidas');
@@ -84,17 +81,6 @@ export class RegistroPersonaComponent implements OnInit {
     next: (respuesta: any) => {
       this.$lista_personas_repetidas.set(respuesta.resultados);
       if (this.$lista_personas_repetidas().length > 0) {
-        var datatable = $('#tabla_persona_repetidas').DataTable();
-        datatable.destroy();
-
-        this.dtOptions_personas = {
-          language: DataTablesOptions.spanish_datatables,
-          data: this.$lista_personas_repetidas(),
-          columns: [{ title: 'Nombre', data: 'etiqueta' }],
-        };
-
-        $('#tabla_persona_repetidas').DataTable(this.dtOptions_personas);
-
         Swal.fire({
           title: 'Existen otras personas con esos apellidos',
           html: this.instancia_personas_repetidas.nativeElement,

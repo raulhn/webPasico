@@ -78,9 +78,6 @@ export class FichaMatriculaComponent implements OnInit {
     },
   ];
 
-  dtOptions: any = {};
-  dtOptionsAsignaturas: any = {};
-
   bCargados_trimestres: boolean = false;
   bCargado_mensualidad: boolean = false;
   bCargadas_asignaturas: boolean = false;
@@ -122,50 +119,6 @@ export class FichaMatriculaComponent implements OnInit {
     next: (respuesta: any) => {
       this.$asignaturas.set(respuesta['asignaturas']);
       this.bCargado = true;
-
-      var datatable = $('#tabla_asignaturas').DataTable();
-      datatable.destroy();
-
-      this.dtOptionsAsignaturas = {
-        language: DataTablesOptions.spanish_datatables,
-        data: this.$asignaturas(),
-        dom: 'Bfrtip',
-        buttons: [
-          {
-            extend: 'excel',
-            text: 'Generar Excel',
-            className: 'btn btn-dark mb-3',
-          },
-        ],
-        columns: [
-          { title: 'Asignatura', data: 'descripcion' },
-          {
-            title: 'Profesor',
-            data: 'nombre_profesor',
-          },
-          { title: 'Fecha Desde', data: 'fecha_desde' },
-          { title: 'Fecha Hasta', data: 'fecha_hasta' },
-          {
-            title: 'Fecha Alta',
-            data: 'fecha_alta_local',
-          },
-          {
-            title: 'Fecha Baja',
-            data: 'fecha_baja_local',
-          },
-        ],
-        rowCallback: (row: Node, data: any[] | Object, index: number) => {
-          $('td', row).off('click');
-          $('td', row).on('click', () => {
-            this.click_matricula_asignatura(data);
-            $('#tabla_asignaturas tr').removeClass('selected');
-            $(row).addClass('selected');
-          });
-          return row;
-        },
-      };
-
-      $('#tabla_asignaturas').DataTable(this.dtOptionsAsignaturas);
 
       this.bCargadas_asignaturas = true;
     },

@@ -1,6 +1,6 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { AlertasService } from '../../../servicios/alertas.service';
-import { DataTablesOptions, URL } from 'src/app/logica/constantes';
+import { URL } from 'src/app/logica/constantes';
 
 @Component({
   selector: 'app-alerta-socios-sin-pago',
@@ -11,50 +11,29 @@ import { DataTablesOptions, URL } from 'src/app/logica/constantes';
 export class AlertaSociosSinPagoComponent implements OnInit {
   enlaceFicha: string = URL.URL_FRONT_END + '/ficha_persona/';
 
-  sociosSinPago = signal([]);
+  $sociosSinPago = signal([]);
+  $idTablaSociosSinPago = signal('tabla_personas');
+  cabecera_tabla_socios_sin_pago = [
+    { title: 'Nombre', data: 'nombre' },
+    { title: 'Primer Apellido', data: 'primer_apellido' },
+    { title: 'Segundo Apellido', data: 'segundo_apellido' },
+    { title: 'Email', data: 'correo_electronico' },
+    { title: 'Teléfono', data: 'telefono' },
+  ];
+
   socioSeleccionado: any;
-  dtOptions_socioSinPago: any = {};
 
   bCargadosSocios: boolean = false;
 
-  constructor(private alertasService: AlertasService) { }
+  clickSocio(data: any) {
+    this.socioSeleccionado = data;
+  }
+
+  constructor(private alertasService: AlertasService) {}
 
   peticion_socios_sin_pago = {
     next: (res: any) => {
-      console.log(res);
-      this.sociosSinPago.set(res.socios_sin_forma_pago);
-      var datatable = $('#tabla_personas').DataTable();
-      datatable.destroy();
-
-      this.dtOptions_socioSinPago = {
-        data: this.sociosSinPago(),
-        columns: [
-          { title: 'Nombre', data: 'nombre' },
-          { title: 'Primer Apellido', data: 'primer_apellido' },
-          { title: 'Segundo Apellido', data: 'segundo_apellido' },
-          { title: 'Email', data: 'correo_electronico' },
-          { title: 'Teléfono', data: 'telefono' },
-        ],
-        language: DataTablesOptions.spanish_datatables,
-        dom: 'Bfrtip',
-        buttons: [
-          {
-            extend: 'excel',
-            text: 'Generar Excel',
-            className: 'btn btn-dark mb-3',
-          },
-        ],
-        rowCallback: (row: Node, data: any[] | Object, index: number) => {
-          $('td', row).off('click');
-          $('td', row).on('click', () => {
-            this.socioSeleccionado = data;
-            $('#tabla_personas tr').removeClass('selected');
-            $(row).addClass('selected');
-          });
-          return row;
-        },
-      };
-      $('#tabla_personas').DataTable(this.dtOptions_socioSinPago);
+      this.$sociosSinPago.set(res.socios_sin_forma_pago);
       this.bCargadosSocios = true;
     },
     error: (err: any) => {

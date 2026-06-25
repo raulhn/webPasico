@@ -8,8 +8,6 @@ import {
   signal,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { dom, text } from '@fortawesome/fontawesome-svg-core';
-import { DataTablesOptions } from 'src/app/logica/constantes';
 import { CursosService } from 'src/app/servicios/cursos.service';
 import { EvaluacionService } from 'src/app/servicios/evaluacion.service';
 import { MatriculasService } from 'src/app/servicios/matriculas.service';
@@ -37,15 +35,11 @@ export class FichaMatriculaProfesorComponent implements OnInit {
 
   matricula_asignatura_seleccionada: any;
 
-  dtOptionsAsignaturas: any = {};
-
   bCargadasEvaluciones: boolean = false;
   bCargadosTrimestres: boolean = false;
 
   lista_trimestres: any;
   trimestre_seleccionado: string = '';
-
-  dtOptions: any = {};
 
   $evaluaciones: WritableSignal<any> = signal([]);
   $id_tabla_evaluaciones: Signal<string> = signal('tabla_evaluaciones');

@@ -15,7 +15,6 @@ import Swal from 'sweetalert2';
   standalone: false,
 })
 export class RegistroCursoComponent implements OnInit {
-  dtOptions: any;
   $cursos: WritableSignal<any[]> = signal([]);
   $id_tabla_cursos: Signal<string> = signal('tabla_cursos');
   cabecera_cursos: any[] = [{ title: 'Curso', data: 'descripcion' }];

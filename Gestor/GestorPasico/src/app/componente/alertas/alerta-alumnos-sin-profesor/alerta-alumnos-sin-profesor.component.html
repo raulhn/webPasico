@@ -5,12 +5,12 @@
   <hr />
   @if (bCargadosAlumnos) {
     <div>
-      <table
-        datatable
-        [dtOptions]="dtOptions_alumnosSinProfesor"
-        id="tabla_personas"
-        class="row-border hover"
-      ></table>
+      <app-appdatatable
+        [$cabeceras]="cabecera_tabla_alumnos_sin_profesor"
+        [$lista]="$alumnosSinProfesor()"
+        [$identificador]="$idTablaAlumnosSinProfesor()"
+        (rowSelected)="clickAlumno($event)"
+      ></app-appdatatable>
       @if (alumnoSeleccionado !== undefined) {
         <div class="float-end p-3">
           <a [href]="obtenerUrlFicha()">

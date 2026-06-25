@@ -9,7 +9,6 @@ import { ActivatedRoute } from '@angular/router';
 import { HorariosService } from 'src/app/servicios/horarios.service';
 import { MatriculasService } from 'src/app/servicios/matriculas.service';
 import Swal from 'sweetalert2';
-import { DataTablesOptions } from 'src/app/logica/constantes';
 
 @Component({
   selector: 'app-horario-clase',
@@ -34,8 +33,6 @@ export class HorarioClaseComponent implements OnInit {
     { title: 'Segundo apellido', data: 'segundo_apellido' },
     { title: 'Teléfono', data: 'telefono' },
   ];
-
-  dtOptions_personas: any = {};
 
   bCargadoPersonas: boolean = false;
 

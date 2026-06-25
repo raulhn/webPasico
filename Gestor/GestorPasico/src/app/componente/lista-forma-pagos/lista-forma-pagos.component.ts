@@ -6,7 +6,6 @@ import {
   signal,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { DataTablesOptions, URL } from 'src/app/logica/constantes';
 import { PersonasService } from 'src/app/servicios/personas.service';
 
 @Component({
@@ -32,7 +31,6 @@ export class ListaFormaPagosComponent implements OnInit {
   bCargadasFormaPago: boolean = false;
   forma_pago_seleccionada: string = '';
 
-  dtOptions_forma_pagos: any = {};
   URL_FICHA_FORMA_PAGO = '/ficha_forma_pago/';
 
   constructor(
