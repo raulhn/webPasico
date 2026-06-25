@@ -53,12 +53,11 @@
         Mostrar Bajas
       </div>
     </div>
-    @if (bCargadosMusicos) {
       <div>
         <app-appdatatable
-          [$cabeceras]="cabecera_personas"
-          [$lista]="$lista_musicos()"
-          [$identificador]="$id_tabla_personas()"
+          [$cabeceras]="cabecera_musicos"
+          [$lista]="$lista_musicos_filtrados()"
+          [$identificador]="$id_tabla_musicos()"
           (rowSelected)="click_musico($event)"
         ></app-appdatatable>
 
@@ -80,7 +79,6 @@
         }
       </div>
     }
-  }
 
   <div class="mb-1 mt-1" style="display: none">
     <div style="min-height: 300px" #instancia_registrar_musico>

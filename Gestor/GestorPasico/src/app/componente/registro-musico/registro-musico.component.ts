@@ -7,6 +7,7 @@ import {
   Signal,
   signal,
 } from '@angular/core';
+import { Writable } from 'node_modules/@angular/core/types/_chrome_dev_tools_performance-chunk';
 import { DataTablesOptions, URL } from 'src/app/logica/constantes';
 import { MusicosService } from 'src/app/servicios/musicos.service';
 import { PersonasService } from 'src/app/servicios/personas.service';
@@ -33,7 +34,8 @@ export class RegistroMusicoComponent implements OnInit {
   $lista_personas: WritableSignal<any[]> = signal([]);
 
   $lista_musicos: WritableSignal<any[]> = signal([]);
-  cabecera_personas: any[] = [
+  $lista_musicos_filtrados: WritableSignal<any[]> = signal([])
+  cabecera_musicos: any[] = [
     { title: 'DNI', data: 'nif' },
     { title: 'Nombre', data: 'nombre' },
     { title: 'Primer apellido', data: 'primer_apellido' },
@@ -44,7 +46,8 @@ export class RegistroMusicoComponent implements OnInit {
     { title: 'Banda', data: 'tipo_musico' },
     { title: 'Fecha de baja', data: 'fecha_baja_local' },
   ];
-  $id_tabla_personas: Signal<string> = signal('tabla_musicos');
+  $id_tabla_musicos: Signal<string> = signal('tabla_musicos');
+
 
   nid_persona_seleccionada: string = '';
   nid_instrumento: string = '0';
@@ -52,7 +55,6 @@ export class RegistroMusicoComponent implements OnInit {
 
   nid_instrumento_filtro: string = '0';
 
-  bCargadosMusicos: boolean = false;
   bCargadasPersonas: boolean = false;
   bCargadosTiposMusicos: boolean = false;
   bMostrarBajas: boolean = false;
@@ -71,10 +73,9 @@ export class RegistroMusicoComponent implements OnInit {
   }
 
   refrescar_tabla(lista_musicos: any[]) {
-    var datatable = $('#tabla_musicos').DataTable();
-    datatable.destroy();
 
-    this.$lista_musicos.set(
+    console.log("lista musicos", lista_musicos)
+    this.$lista_musicos_filtrados.set(
       lista_musicos.sort((a: any, b: any) => {
         if (a.nid < b.nid) {
           return -1;
@@ -89,29 +90,40 @@ export class RegistroMusicoComponent implements OnInit {
 
   refrescar_personas = {
     next: (respuesta: any) => {
+
+    }
+  }
+
+
+  refrescar_musicos = {
+    next: (respuesta: any) => {
+      let musicos = respuesta.personas.map((persona: any) => {
+        const fecha_baja = persona.fecha_baja
+          ? new Date(persona.fecha_baja)
+          : null;
+        const fecha_baja_local = fecha_baja
+          ? fecha_baja.toLocaleDateString()
+          : '';
+        return { ...persona, fecha_baja_local: fecha_baja_local };
+      });
+      console.log("Musicos", musicos)
       this.$lista_musicos.set(
-        respuesta.personas.map((persona: any) => {
-          const fecha_baja = persona.fecha_baja
-            ? new Date(persona.fecha_baja)
-            : null;
-          const fecha_baja_local = fecha_baja
-            ? fecha_baja.toLocaleDateString()
-            : '';
-          return { ...persona, fecha_baja_local: fecha_baja_local };
-        }),
+        musicos
       );
+      this.$lista_musicos_filtrados.set(musicos)
 
       this.bCargadasPersonas = true;
       if (this.bCargadosTiposMusicos) {
         this.cambia_seleccion_musico();
       }
-    },
-  };
+    }
+  }
+
 
   constructor(
     private personasServices: PersonasService,
     private musicosService: MusicosService,
-  ) {}
+  ) { }
 
   obtener_instrumentos = {
     next: (respuesta: any) => {
@@ -146,7 +158,7 @@ export class RegistroMusicoComponent implements OnInit {
   };
 
   ngOnInit(): void {
-    this.musicosService.obtener_musicos().subscribe(this.refrescar_personas);
+    this.musicosService.obtener_musicos().subscribe(this.refrescar_musicos);
     this.musicosService
       .obtener_tipo_musicos()
       .subscribe(this.obtener_tipo_musicos);
@@ -177,7 +189,7 @@ export class RegistroMusicoComponent implements OnInit {
         title: 'Registro correcto',
         text: 'Se ha registrado correctamente',
       });
-      this.musicosService.obtener_musicos().subscribe(this.refrescar_personas);
+      this.musicosService.obtener_musicos().subscribe(this.refrescar_musicos);
     },
     error: (respuesta: any) => {
       Swal.fire({
@@ -216,7 +228,7 @@ export class RegistroMusicoComponent implements OnInit {
   }
 
   cambia_seleccion_musico() {
-    let lista_musicos = this.$lista_personas().filter((musico: any) => {
+    let lista_musicos = this.$lista_musicos().filter((musico: any) => {
       if (this.nid_instrumento_filtro == '0') {
         return true;
       } else {
@@ -285,7 +297,7 @@ export class RegistroMusicoComponent implements OnInit {
             next: (respuesta: any) => {
               this.musicosService
                 .obtener_musicos()
-                .subscribe(this.refrescar_personas);
+                .subscribe(this.refrescar_musicos);
               Swal.fire(
                 'Baja correcta',
                 'El músico ha sido dado de baja correctamente',
