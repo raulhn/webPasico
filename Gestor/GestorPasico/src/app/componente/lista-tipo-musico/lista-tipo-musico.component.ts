@@ -1,4 +1,11 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import {
+  Component,
+  ViewChild,
+  ElementRef,
+  WritableSignal,
+  Signal,
+  signal,
+} from '@angular/core';
 import { MusicosService } from 'src/app/servicios/musicos.service';
 import { OnInit } from '@angular/core';
 import { DataTablesOptions } from 'src/app/logica/constantes';
@@ -7,100 +14,64 @@ import Swal from 'sweetalert2';
 import { DataTablesModule } from 'angular-datatables';
 import { MenuComponent } from '../menu/menu.component';
 
-
 @Component({
   selector: 'app-lista-tipo-musico',
   templateUrl: './lista-tipo-musico.component.html',
   styleUrl: './lista-tipo-musico.component.css',
   standalone: false,
 })
-
-
-
-
 export class ListaTipoMusicoComponent implements OnInit {
+  nombreTipoMusico: string = '';
+  nombreEditarTipoMusico: string = '';
 
-  bCargadosTipoMusicos: boolean = false;
-  dtOptions_Musicos: any= {};
+  constructor(private musicoService: MusicosService) {}
 
-  nombreTipoMusico: string = "";
-  nombreEditarTipoMusico: string = "";
-
-  constructor(private musicoService: MusicosService) { }
-
-  lista_tipo_musicos: any[] = [];
+  $lista_tipo_musicos: WritableSignal<any[]> = signal([]);
+  $id_tabla_tipos_musicos: Signal<string> = signal('#tabla_tipo_musicos');
+  cabecera_tabla_tipos_musicos: any[] = [
+    { title: 'Tipo Musico', data: 'descripcion' },
+  ];
 
   tipoMusicoSeleccionado: any = null;
 
-
-
-  @ViewChild('instanciaRegistroTipoMusico') instancia_registro_tipo_musico!: ElementRef;
-  @ViewChild('instanciaEditarTipoMusico') instancia_editar_tipo_musico!: ElementRef;
-
+  @ViewChild('instanciaRegistroTipoMusico')
+  instancia_registro_tipo_musico!: ElementRef;
+  @ViewChild('instanciaEditarTipoMusico')
+  instancia_editar_tipo_musico!: ElementRef;
 
   click_tipo_musico(tipo_musico: any) {
-  this.tipoMusicoSeleccionado = tipo_musico;
-}
+    this.tipoMusicoSeleccionado = tipo_musico;
+  }
 
   refrescar_tipo_musicos = {
     next: (respuesta: any) => {
-      const id_tabla_musicos = '#tabla_musicos';
-      this.lista_tipo_musicos = respuesta.tipo_musicos;
-
-      var datatable = $(id_tabla_musicos).DataTable();
-      datatable.destroy();
-      this.dtOptions_Musicos =
-      {
-       language: DataTablesOptions.spanish_datatables,
-       data: this.lista_tipo_musicos,
-       dom: 'Bfrtip',
-       buttons: [{extend: 'excel', text: 'Generar Excel', className: 'btn btn-dark mb-3'}],
-       columns:
-       [
-         {title: 'Tipo Musico',
-          data: 'descripcion'},
-        ],
-          rowCallback: (row: Node, data: any[] | Object, index: number) => {
-            $('td', row).off('click');
-            $('td', row).on('click', () => {
-              $(id_tabla_musicos + ' tr').removeClass('selected')
-              $(row).addClass('selected');
-              this.click_tipo_musico(data);
-            });
-            return row;
-          }
-      }
-
-      $(id_tabla_musicos).DataTable(this.dtOptions_Musicos);
-
-      this.bCargadosTipoMusicos = true;
+      this.$lista_tipo_musicos.set(respuesta.tipo_musicos);
     },
     error: (error: any) => {
       console.error('Error fetching tipo musicos:', error);
-    }
+    },
   };
 
   ngOnInit(): void {
-    this.musicoService.obtener_tipo_musicos().subscribe(this.refrescar_tipo_musicos);
+    this.musicoService
+      .obtener_tipo_musicos()
+      .subscribe(this.refrescar_tipo_musicos);
   }
 
-
-  mostrar_registro_tipo_musico()
-  {
+  mostrar_registro_tipo_musico() {
     Swal.fire({
       title: 'Registrar Tipo de Músico',
       html: this.instancia_registro_tipo_musico.nativeElement,
       confirmButtonText: 'Registrar',
-      showCancelButton: true})
-      .then((result) => {
-        if (result.isConfirmed) {
-          this.crear_tipo_musico();
-        }
-      })
+      showCancelButton: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.crear_tipo_musico();
+      }
+    });
   }
 
-  mostrar_editar_tipo_musico()
-  {
+  mostrar_editar_tipo_musico() {
     if (this.tipoMusicoSeleccionado === null) {
       Swal.fire({
         icon: 'error',
@@ -116,36 +87,37 @@ export class ListaTipoMusicoComponent implements OnInit {
       title: 'Editar Tipo de Músico',
       html: this.instancia_editar_tipo_musico.nativeElement,
       confirmButtonText: 'Actualizar',
-      showCancelButton: true})
-      .then((result) => {
-        if (result.isConfirmed) {
-          this.editar_tipo_musico();
-        }
-      })
+      showCancelButton: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.editar_tipo_musico();
+      }
+    });
   }
 
-  peticion_registrar_tipo_musico =
-  {
-      next: (respuesta: any) => {
-        Swal.fire({
-          icon: 'success',
-          title: 'Éxito',
-          text: 'Tipo de músico registrado correctamente.',
-        });
-        this.nombreTipoMusico = "";
-        this.musicoService.obtener_tipo_musicos().subscribe(this.refrescar_tipo_musicos);
-      },
-      error: (error: any) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'No se pudo registrar el tipo de músico. Inténtelo más tarde.',
-        });
-      }
-  }
+  peticion_registrar_tipo_musico = {
+    next: (respuesta: any) => {
+      Swal.fire({
+        icon: 'success',
+        title: 'Éxito',
+        text: 'Tipo de músico registrado correctamente.',
+      });
+      this.nombreTipoMusico = '';
+      this.musicoService
+        .obtener_tipo_musicos()
+        .subscribe(this.refrescar_tipo_musicos);
+    },
+    error: (error: any) => {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'No se pudo registrar el tipo de músico. Inténtelo más tarde.',
+      });
+    },
+  };
 
   crear_tipo_musico() {
-    if (this.nombreTipoMusico.trim() === "") {
+    if (this.nombreTipoMusico.trim() === '') {
       Swal.fire({
         icon: 'error',
         title: 'Error',
@@ -154,7 +126,9 @@ export class ListaTipoMusicoComponent implements OnInit {
       return;
     }
 
-    this.musicoService.registrar_tipo_musico(this.nombreTipoMusico).subscribe(this.peticion_registrar_tipo_musico);
+    this.musicoService
+      .registrar_tipo_musico(this.nombreTipoMusico)
+      .subscribe(this.peticion_registrar_tipo_musico);
   }
 
   peticion_actualizar_tipo_musico = {
@@ -164,9 +138,11 @@ export class ListaTipoMusicoComponent implements OnInit {
         title: 'Éxito',
         text: 'Tipo de músico actualizado correctamente.',
       });
-      this.nombreTipoMusico = "";
+      this.nombreTipoMusico = '';
       this.tipoMusicoSeleccionado = null;
-      this.musicoService.obtener_tipo_musicos().subscribe(this.refrescar_tipo_musicos);
+      this.musicoService
+        .obtener_tipo_musicos()
+        .subscribe(this.refrescar_tipo_musicos);
     },
     error: (error: any) => {
       Swal.fire({
@@ -174,8 +150,8 @@ export class ListaTipoMusicoComponent implements OnInit {
         title: 'Error',
         text: 'No se pudo actualizar el tipo de músico. Inténtelo más tarde.',
       });
-    }
-  }
+    },
+  };
 
   editar_tipo_musico() {
     if (this.tipoMusicoSeleccionado === null) {
@@ -186,8 +162,8 @@ export class ListaTipoMusicoComponent implements OnInit {
       });
       return;
     }
-    
-    if (this.nombreEditarTipoMusico.trim() === "") {
+
+    if (this.nombreEditarTipoMusico.trim() === '') {
       Swal.fire({
         icon: 'error',
         title: 'Error',
@@ -196,7 +172,11 @@ export class ListaTipoMusicoComponent implements OnInit {
       return;
     }
 
-    this.musicoService.actualizar_tipo_musico(this.tipoMusicoSeleccionado.nid_tipo_musico, this.nombreEditarTipoMusico)
+    this.musicoService
+      .actualizar_tipo_musico(
+        this.tipoMusicoSeleccionado.nid_tipo_musico,
+        this.nombreEditarTipoMusico,
+      )
       .subscribe(this.peticion_actualizar_tipo_musico);
   }
 }

@@ -1,34 +1,57 @@
 <app-menu></app-menu>
 <div class="container card mt-3">
-@if(bCargadosInstrumentos)
-{
-<div  class="mt-3">
-
-    <table datatable [dtOptions]="dtOptions_Instrumentos" id="tabla_musicos" class="row-border hover"></table>
-       <div style="display: flex; justify-content: flex-start; gap: 10px; align-items: center; padding-bottom: 10px;">
-
-        <button class="btn btn-primary mt-3" (click)="mostrar_registro_instrumento()">Nuevo</button>
-        @if(instrumentoSeleccionado !== null)
-        {
-             <button class="btn btn-primary mt-3" (click)="mostrar_editar_instrumento()">Editar</button>  
-    
-        }
-        </div>  
-</div>
-}
-</div>
-
-
-<div style="display:none">
-    <div #instanciaRegistroInstrumento>
-        <input type="text" class="form-control" placeholder="Nombre del tipo de músico" [(ngModel)]="nombreInstrumento">
-        
+  <div class="mt-3">
+    <app-appdatatable
+      [$cabeceras]="cabecera_instrumentos"
+      [$lista]="$lista_instrumentos()"
+      [$identificador]="$id_tabla_instrumentos()"
+      (rowSelected)="click_instrumento($event)"
+    ></app-appdatatable>
+    <div
+      style="
+        display: flex;
+        justify-content: flex-start;
+        gap: 10px;
+        align-items: center;
+        padding-bottom: 10px;
+      "
+    >
+      <button
+        class="btn btn-primary mt-3"
+        (click)="mostrar_registro_instrumento()"
+      >
+        Nuevo
+      </button>
+      @if (instrumentoSeleccionado !== null) {
+        <button
+          class="btn btn-primary mt-3"
+          (click)="mostrar_editar_instrumento()"
+        >
+          Editar
+        </button>
+      }
     </div>
+  </div>
 </div>
 
-<div style="display:none">
-    <div #instanciaEditarInstrumento>
-        <input type="text" class="form-control" placeholder="Nombre del tipo de músico" [(ngModel)]="nombreEditarInstrumento">
+<div style="display: none">
+  <div #instanciaRegistroInstrumento>
+    <input
+      type="text"
+      class="form-control"
+      placeholder="Nombre del tipo de músico"
+      [(ngModel)]="nombreInstrumento"
+    />
+  </div>
+</div>
 
-    </div>
-    </div>
+<div style="display: none">
+  <div #instanciaEditarInstrumento>
+    <input
+      type="text"
+      class="form-control"
+      placeholder="Nombre del tipo de músico"
+      [(ngModel)]="nombreEditarInstrumento"
+    />
+  </div>
+</div>
