@@ -2,10 +2,20 @@
 <div class="container pt-4">
   @if (bCargadoPreinscripciones) {
     <div>
-      <table datatable [dtOptions]="dtOptions" class="row-border hover" id="tabla_preinscripciones"></table>
+      <app-appdatatable
+        [$cabeceras]="cabecera_preinscripcion"
+        [$lista]="$listado_preinscripcion()"
+        [$identificador]="$id_tabla_preinscripiones()"
+        (rowSelected)="preinscripcion_marcada($event)"
+      ></app-appdatatable>
+
       @if (bCargadoPreinscripciones2) {
         <div>
-          <table datatable [dtOptions]="dtOptions_2" class="row-border hover" id="tabla_preinscripciones_2"></table>
+          <app-appdatatable
+            [$cabeceras]="cabecera_preinscripcion2"
+            [$lista]="$listado_preinscripcion2()"
+            [$identificador]="$id_tabla_preinscripiones2()"
+          ></app-appdatatable>
         </div>
       }
     </div>
