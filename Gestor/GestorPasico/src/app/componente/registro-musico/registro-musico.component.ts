@@ -89,7 +89,7 @@ export class RegistroMusicoComponent implements OnInit {
 
   refrescar_personas = {
     next: (respuesta: any) => {
-      this.$lista_personas.set(
+      this.$lista_musicos.set(
         respuesta.personas.map((persona: any) => {
           const fecha_baja = persona.fecha_baja
             ? new Date(persona.fecha_baja)
