@@ -47,7 +47,7 @@ export class AppDataTableComponent implements OnChanges {
   }
 
   comparaFila(row: any) {
-    return JSON.stringify(row) === JSON.stringify(this.selectedRow)
+    return JSON.stringify(row) === JSON.stringify(this.selectedRow);
   }
 
   sortData(col: string): void {
@@ -74,12 +74,10 @@ export class AppDataTableComponent implements OnChanges {
     } else {
       const normalize = (s: string) =>
         s.normalize('NFD').replace(/\p{Diacritic}/gu, '');
-      this.filteredData = this.$lista().filter((row: any) =>
-        Object.values(row).some((v) => {
-          const str = typeof v === 'string' ? v : String(v);
-          return normalize(str.toLowerCase()).includes(normalize(text));
-        }),
-      );
+      this.filteredData = this.$lista().filter((row: any) => {
+        const texto = Object.values(row).join(' ').toLowerCase();
+        return normalize(texto.toLowerCase()).includes(normalize(text));
+      });
     }
 
     // Apply sorting after filtering
