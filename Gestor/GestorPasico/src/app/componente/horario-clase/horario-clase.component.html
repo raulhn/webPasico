@@ -3,26 +3,37 @@
   <div class="row form-row">
     <div class="col">
       <label>Alumnos:</label>
-      <ng-select [items]="alumnos_sin_asingar"
+      <ng-select
+        [items]="alumnos_sin_asingar"
         bindLabel="etiqueta"
         bindValue="nid_matricula_asignatura"
         [(ngModel)]="nid_matricula_asignatura_seleccionada"
-        [compareWith]="comparePersona">
+        [compareWith]="comparePersona"
+      >
       </ng-select>
     </div>
 
-    <button class="btn btn-primary" (click)="asignar_clase()"> Asignar Clase </button>
-
+    <button class="btn btn-primary" (click)="asignar_clase()">
+      Asignar Clase
+    </button>
 
     @if (bCargadoPersonas) {
       <div>
-        <table datatable [dtOptions]="dtOptions_personas" id="tabla_personas" class="row-border hover"></table>
+        <app-appdatatable
+          [$cabeceras]="cabecera_alumnos"
+          [$lista]="$alumnos()"
+          [$identificador]="$id_tabla_alumnos()"
+          (rowSelected)="click_persona($event)"
+        ></app-appdatatable>
       </div>
     }
-    @if (nid_matricula_asignatura_tabla != '') {
+    @if (nid_matricula_asignatura_tabla != "") {
       <div>
-        <button class="btn btn-primary" (click)="liberar_clase()"> Liberar Clase </button>
+        <button class="btn btn-primary" (click)="liberar_clase()">
+          Liberar Clase
+        </button>
       </div>
     }
   </div>
 </div>
+

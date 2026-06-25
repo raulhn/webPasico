@@ -4,14 +4,26 @@
   <legend>Lista de fichas de asistencias</legend>
   @if (bCargadas_fichas_asistencias) {
     <div>
-      <table datatable [dtOptions]="dtOptions_fichas_asistencias" id="tabla_ficha_asistencias" class="row-border hover"></table>
-      @if (ficha_seleccionada != '') {
+      <app-appdatatable
+        [$cabeceras]="cabecera_asistencias"
+        [$lista]="$lista_ficha_asistencias()"
+        [$identificador]="$id_tabla_asistencias()"
+        (rowSelected)="click_ficha($event)"
+      ></app-appdatatable>
+      @if (ficha_seleccionada != "") {
         <div>
-          <a [href]="obtener_url_ficha()"> <button class="btn btn-primary"> Ver Ficha</button></a>
-          <button class="btn btn-danger ms-3" (click)="cancelar_ficha_asistencia()"> Eliminar Ficha</button>
+          <a [href]="obtener_url_ficha()">
+            <button class="btn btn-primary">Ver Ficha</button></a
+          >
+          <button
+            class="btn btn-danger ms-3"
+            (click)="cancelar_ficha_asistencia()"
+          >
+            Eliminar Ficha
+          </button>
         </div>
       }
     </div>
   }
-
 </div>
+

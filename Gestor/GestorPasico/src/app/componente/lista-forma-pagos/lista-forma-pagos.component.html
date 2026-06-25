@@ -3,13 +3,20 @@
 <div class="container mt-2 pt-2">
   @if (bCargadasFormaPago) {
     <div>
-      <table datatable [dtOptions]="dtOptions_forma_pagos" id="tabla_forma_pago" class="row-border hover"></table>
+      <app-appdatatable
+        [$cabeceras]="cabecera_forma_pagos"
+        [$lista]="$lista_forma_pagos()"
+        [$identificador]="$id_tabla_forma_pagos()"
+        (rowSelected)="click_ficha($event)"
+      ></app-appdatatable>
     </div>
   }
 
-  @if (forma_pago_seleccionada != '') {
+  @if (forma_pago_seleccionada != "") {
     <div>
-      <a [href]="obtener_url_ficha()"> <button class="btn btn-primary"> Ver Ficha</button></a>
+      <a [href]="obtener_url_ficha()">
+        <button class="btn btn-primary">Ver Ficha</button></a
+      >
     </div>
   }
 </div>
