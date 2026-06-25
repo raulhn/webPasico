@@ -157,7 +157,7 @@ export class AppDataTableComponent implements OnChanges {
     if (!this.filteredData.length) return;
 
     const headers = Object.keys(this.$lista()[0] || {});
-    const csvRows = [headers.join(',')];
+    const csvRows = [headers.join(';')];
     for (const row of this.filteredData) {
       const csvRow = headers
         .map((h) => {
@@ -168,7 +168,7 @@ export class AppDataTableComponent implements OnChanges {
           }
           return String(val);
         })
-        .join(',');
+        .join(';');
       csvRows.push(csvRow);
     }
     const csvContent = csvRows.join('\n');
