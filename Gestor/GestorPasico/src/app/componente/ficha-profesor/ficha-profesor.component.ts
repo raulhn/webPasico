@@ -35,10 +35,10 @@ export class FichaProfesorComponent implements OnInit {
   $lista_alumnos: WritableSignal<any[]> = signal([]);
   $id_tabla_alumnos: Signal<string> = signal('tabla_alumnos');
   cabecera_alumnos: any[] = [
-    { title: 'Nombre' },
-    { title: 'Primer apellido' },
-    { title: 'Segundo apellido' },
-    { title: 'Teléfono' },
+    { title: 'Nombre', data: 'nombre' },
+    { title: 'Primer apellido', data: 'primer_apellido' },
+    { title: 'Segundo apellido', data: 'segundo_apellido' },
+    { title: 'Teléfono', data: 'telefono' },
   ];
 
   bCargadoCursos: boolean = false;
@@ -77,7 +77,7 @@ export class FichaProfesorComponent implements OnInit {
     this.nid_profesor = rutaActiva.snapshot.params['nid_profesor'];
   }
 
-  click_alumno(data: any) {}
+  click_alumno(data: any) { this.alumno_seleccionado = data.nid }
 
   refrescar_alumnos = {
     next: (respuesta: any) => {
@@ -139,6 +139,8 @@ export class FichaProfesorComponent implements OnInit {
   }
 
   cambia_seleccion() {
+    console.log("Asignatura seleccionada", this.asignatura_seleccionada)
+
     this.matriculasService
       .obtener_alumnos_profesores(
         this.nid_profesor,
