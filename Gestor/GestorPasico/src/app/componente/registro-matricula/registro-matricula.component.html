@@ -1,36 +1,45 @@
 <app-menu class=""></app-menu>
 <div class="container pt-4">
-
   <div class="mt-2">
-    <app-ficha-asignatura nid_asignatura={{nid_asignatura}}></app-ficha-asignatura>
+    <app-ficha-asignatura
+      nid_asignatura="{{ nid_asignatura }}"
+    ></app-ficha-asignatura>
   </div>
 
   @if (bCargadocompleto) {
     <div>
       <div class="mb-2 mt-2">
-        <form  ngNativeValidate class="form-control">
+        <form ngNativeValidate class="form-control">
           <legend>Curso</legend>
           @if (bCargado_cursos) {
             <div class="row form-row">
               <div class="col">
-                <ng-select [items]="cursos"
+                <ng-select
+                  [items]="cursos"
                   bindLabel="descripcion"
                   bindValue="clave_curso"
                   [(ngModel)]="curso"
                   [compareWith]="compareCursos"
-                  (change)="onChangeCurso($event)">
+                  (change)="onChangeCurso($event)"
+                >
                 </ng-select>
               </div>
             </div>
           }
-          <button class="btn btn-primary mb-3 " (click)="add_alumno()"> Registrar alumno</button>
+          <button class="btn btn-primary mb-3" (click)="add_alumno()">
+            Registrar alumno
+          </button>
         </form>
       </div>
     </div>
   }
 
-
-  <select class="form-select" [(ngModel)]="activo" (change)="cambia_seleccion()" aria-label="Default select example">
+  <select
+    class="form-select"
+    [(ngModel)]="activo"
+    (change)="cambia_seleccion()"
+    aria-label="Default select example"
+  >
     <option selected value="1">Activos</option>
     <option value="2">Dados de baja</option>
     <option value="3">Todos</option>
@@ -39,11 +48,15 @@
   @if (bCargadoProfesores) {
     <div>
       <label>Profesor</label>
-      <select  class="form-select" [(ngModel)]="profesor_seleccionado" (change)="cambia_profesor()">
+      <select
+        class="form-select"
+        [(ngModel)]="profesor_seleccionado"
+        (change)="cambia_profesor()"
+      >
         <option selected value="0">Todos los profesores</option>
         @for (profesor_actual of lista_profesores; track profesor_actual) {
           <option [value]="profesor_actual.clave_profesor">
-            {{profesor_actual.etiqueta_profesor}}
+            {{ profesor_actual.etiqueta_profesor }}
           </option>
         }
         <option value="-1">Sin profesor asignado</option>
@@ -53,64 +66,82 @@
 
   @if (bCargado) {
     <div class="mt-2 mb-2">
-      <table datatable [dtOptions]="dtOptions" id="tabla_alumnos" class="table">
-      </table>
+      <app-appdatatable
+        [$cabeceras]="cabecera_alumnos"
+        [$lista]="$listaAlumnos()"
+        [$identificador]="$id_tabla_alumnos()"
+        (rowSelected)="click_alumno($event)"
+      ></app-appdatatable>
       @if (alumno_seleccionado !== undefined) {
         <div class="float-end p-3">
-          <button class="btn btn-danger" (click)="dar_baja_alumno()"><fa-icon [icon]="faXmark"></fa-icon> Dar de baja </button>
+          <button class="btn btn-danger" (click)="dar_baja_alumno()">
+            <fa-icon [icon]="faXmark"></fa-icon> Dar de baja
+          </button>
           <span class="p-1"></span>
-          <a [href]="obtener_url_ficha_alumno()"><button class="btn btn-primary"> Ficha alumno </button></a>
+          <a [href]="obtener_url_ficha_alumno()"
+            ><button class="btn btn-primary">Ficha alumno</button></a
+          >
           <span class="p-1"></span>
-          <button class="btn btn-primary" (click)="cambiar_profesor()"> Cambiar Profesor </button>
+          <button class="btn btn-primary" (click)="cambiar_profesor()">
+            Cambiar Profesor
+          </button>
         </div>
       }
     </div>
   }
 
   <!-- Registrar alumno en asignatura -->
-  <div style="display: none;">
+  <div style="display: none">
     <div #instancia_alumno>
-      <div style="min-height: 300px;">
+      <div style="min-height: 300px">
         <label>Alumno</label>
-        <ng-select  [items]="lista_personas"
+        <ng-select
+          [items]="lista_personas"
           bindLabel="etiqueta"
           bindValue="clave_persona"
-          [(ngModel)]="alumno">
+          [(ngModel)]="alumno"
+        >
         </ng-select>
 
         <label>Profesor</label>
-        <ng-select [items]="lista_profesores"
+        <ng-select
+          [items]="lista_profesores"
           bindLabel="etiqueta_profesor"
           bindValue="clave_profesor"
-        [(ngModel)]="profesor"></ng-select>
+          [(ngModel)]="profesor"
+        ></ng-select>
       </div>
     </div>
   </div>
 
   <!-- Registrar alumno en asignatura -->
-  <div style="display: none;">
+  <div style="display: none">
     <div #instancia_baja>
-      <div style="min-height: 100px;">
+      <div style="min-height: 100px">
         <label>Fecha baja:</label>
-        <input class="form-control" name ="Fecha nacimiento" [(ngModel)] = "fecha_baja" type="date" required/>
+        <input
+          class="form-control"
+          name="Fecha nacimiento"
+          [(ngModel)]="fecha_baja"
+          type="date"
+          required
+        />
       </div>
     </div>
   </div>
 
   <!-- Registrar alumno en asignatura -->
-  <div style="display: none;">
+  <div style="display: none">
     <div #instancia_cambio_profesor>
-      <div >
+      <div>
         <label>Profesor</label>
-        <ng-select [items]="lista_profesores"
+        <ng-select
+          [items]="lista_profesores"
           bindLabel="etiqueta_profesor"
           bindValue="clave_profesor"
-        [(ngModel)]="profesor"></ng-select>
+          [(ngModel)]="profesor"
+        ></ng-select>
       </div>
     </div>
   </div>
-
-
 </div>
-
-

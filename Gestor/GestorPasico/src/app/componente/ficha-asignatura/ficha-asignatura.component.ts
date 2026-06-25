@@ -13,6 +13,7 @@ import { PersonasService } from 'src/app/servicios/personas.service';
 import { DataTablesOptions } from 'src/app/logica/constantes';
 import Swal from 'sweetalert2';
 import { MatriculasService } from 'src/app/servicios/matriculas.service';
+import { URL } from 'src/app/logica/constantes';
 
 @Component({
   selector: 'app-ficha-asignatura',
@@ -43,12 +44,15 @@ export class FichaAsignaturaComponent implements OnInit {
     { title: 'segundo apellido', data: 'segundo_apellido' },
   ];
 
+  profesor_seleccionado: any = null;
+
   nueva_asignatura: string = '';
 
   bCargadaAsignatura: boolean = false;
 
   profesor_sustituto: string = '';
   profesor_a_sustituir: string = '';
+  enlaceFicha: string = URL.URL_FRONT_END + '/ficha_persona/';
 
   constructor(
     private asignaturaServices: AsignaturasService,
@@ -64,6 +68,14 @@ export class FichaAsignaturaComponent implements OnInit {
       this.bCargadaAsignatura = true;
     },
   };
+
+  obtener_url_ficha_profesor() {
+    return this.enlaceFicha + this.profesor_seleccionado.nid;
+  }
+
+  click_profesor(profesor: any) {
+    this.profesor_seleccionado = profesor;
+  }
 
   registrar_asignatura = {
     next: (respuesta: any) => {

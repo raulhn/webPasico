@@ -94,7 +94,15 @@
         [$cabeceras]="cabecera_profesores"
         [$lista]="$profesores()"
         [$identificador]="$id_tabla_profesores()"
+        (rowSelected)="click_profesor($event)"
       ></app-appdatatable>
+      @if (profesor_seleccionado !== null) {
+        <div class="float-end p-3">
+          <a [href]="obtener_url_ficha_profesor()"
+            ><button class="btn btn-primary">Ficha alumno</button></a
+          >
+        </div>
+      }
     </div>
   }
 </div>
