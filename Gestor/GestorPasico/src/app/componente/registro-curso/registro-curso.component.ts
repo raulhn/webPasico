@@ -1,112 +1,84 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  WritableSignal,
+  signal,
+  Signal,
+} from '@angular/core';
 import { CursosService } from 'src/app/servicios/cursos.service';
 import Swal from 'sweetalert2';
 
 @Component({
-    selector: 'app-registro-curso',
-    templateUrl: './registro-curso.component.html',
-    styleUrls: ['./registro-curso.component.css'],
-    standalone: false
+  selector: 'app-registro-curso',
+  templateUrl: './registro-curso.component.html',
+  styleUrls: ['./registro-curso.component.css'],
+  standalone: false,
 })
-export class RegistroCursoComponent implements OnInit{
- 
-  cursos: any[] = [];
+export class RegistroCursoComponent implements OnInit {
   dtOptions: any;
+  $cursos: WritableSignal<any[]> = signal([]);
+  $id_tabla_cursos: Signal<string> = signal('tabla_cursos');
+  cabecera_cursos: any[] = [{ title: 'Curso', data: 'descripcion' }];
 
-  nuevo_curso: string = "";
+  nuevo_curso: string = '';
 
   bCargado: boolean = false;
 
-  constructor(private cursosService: CursosService)
-  {}
+  constructor(private cursosService: CursosService) {}
 
-  recuperar_cursos = 
-  {
-    next: (respuesta: any) =>
-    {
-      this.cursos = respuesta.cursos;
-
-      this.dtOptions = {
-        data: this.cursos,
-        columns:
-        [
-          {title: 'Curso',
-            data: 'descripcion'}]
-      };
-
-      this.bCargado = true;
-    }
-  }
+  recuperar_cursos = {
+    next: (respuesta: any) => {
+      this.$cursos.set(respuesta.cursos);
+    },
+  };
 
   ngOnInit(): void {
     this.cursosService.obtener_cursos().subscribe(this.recuperar_cursos);
   }
 
+  refrescar_cursos = {
+    next: (respuesta: any) => {
+      this.$cursos.set(respuesta.cursos);
+    },
+  };
 
-  refrescar_cursos = 
-  {
-    next: (respuesta: any) =>
-    {
-      var datatable = $('#tabla_cursos').DataTable();
-      datatable.destroy();
-      this.cursos = respuesta.cursos;
+  registrar_curso = {
+    next: (respuesta: any) => {
+      Swal.fire({
+        icon: 'success',
+        title: 'Registro correcto',
+        text: 'Se ha registrado correctamente',
+      });
+      this.cursosService.obtener_cursos().subscribe(this.refrescar_cursos);
+    },
+    error: (respuesta: any) => {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Se ha producido un error',
+      });
+    },
+  };
 
-      this.dtOptions = {
-        data: this.cursos,
-        columns:
-        [
-          {title: 'Curso',
-            data: 'descripcion'
-          }]
-      };
-
-      $('#tabla_cursos').DataTable(this.dtOptions);
-    }
-  }
-
-  registrar_curso = 
-  {
-    next: (respuesta: any) =>
-    {
-        Swal.fire({
-          icon: 'success',
-          title: 'Registro correcto',
-          text: 'Se ha registrado correctamente'
-        })
-        this.cursosService.obtener_cursos().subscribe(this.refrescar_cursos);
-      },
-      error: (respuesta: any) =>
-      {
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'Se ha producido un error',
-        })
-      }
-  }
-
-
-
-  addCurso()
-  {
+  addCurso() {
     //https://sweetalert2.github.io/
     Swal.fire({
       title: 'Crear asignatura',
-      html : `<input type="text" id="nombre_curso" class="swal2-input" placeholder="Username">
+      html: `<input type="text" id="nombre_curso" class="swal2-input" placeholder="Username">
              `,
       confirmButtonText: 'Crear',
       showCancelButton: true,
       preConfirm: () => {
-        this.nuevo_curso = (<HTMLInputElement>document.getElementById("nombre_curso")).value;
+        this.nuevo_curso = (<HTMLInputElement>(
+          document.getElementById('nombre_curso')
+        )).value;
+      },
+    }).then((results: any) => {
+      if (results.isConfirmed) {
+        this.cursosService
+          .registrar_curso(this.nuevo_curso)
+          .subscribe(this.registrar_curso);
       }
-    }).then(
-      (results: any) =>
-        {
-        if(results.isConfirmed)
-        {
-          this.cursosService.registrar_curso(this.nuevo_curso).subscribe(this.registrar_curso);
-        }
-      }
-    )
-   }
+    });
+  }
 }

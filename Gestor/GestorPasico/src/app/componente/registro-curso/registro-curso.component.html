@@ -1,8 +1,9 @@
-<button (click) = "addCurso()">Añadir Curso</button>
+<button (click)="addCurso()">Añadir Curso</button>
 
-@if (bCargado) {
-  <div>
-    <table datatable [dtOptions]="dtOptions" id="tabla_cursos" class="row-border hover">
-    </table>
-  </div>
-}
+<div>
+  <app-appdatatable
+    [$cabeceras]="cabecera_cursos"
+    [$lista]="$cursos()"
+    [$identificador]="$id_tabla_cursos()"
+  ></app-appdatatable>
+</div>
