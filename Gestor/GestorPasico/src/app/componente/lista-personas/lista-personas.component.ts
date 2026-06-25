@@ -68,7 +68,7 @@ export class ListaPersonasComponent {
   ) {}
 
   click_persona(persona_marcada: any) {
-    this.persona_seleccionada = persona_marcada.nid;
+    this.persona_seleccionada = persona_marcada;
   }
 
   refrescar_personas = {
