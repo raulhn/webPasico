@@ -42,10 +42,15 @@ function obtener_imagen(req, res) {
         .then((ruta_imagen) => {
           try {
             fs.readFile(ruta_imagen, (err, data) => {
-              res.writeHead(200);
-              res.write(data);
+              try {
+                res.writeHead(200);
+                res.write(data);
 
-              return res.end();
+                return res.end();
+              } catch (error) {
+                console.log(error);
+                return res.status(400).send({ error: true, message: error });
+              }
             });
           } catch (error) {
             console.log(error);

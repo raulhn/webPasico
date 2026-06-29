@@ -102,15 +102,11 @@ function obtiene_url_menu(id_menu) {
         constantes.ESQUEMA_BD +
         ".menu where nid =" +
         conexion.dbConn.escape(id_menu);
-      console.log("Consulta menu", sql);
       conexion.dbConn.query(
         sql,
 
         (error, results, field) => {
           try {
-            console.log("Resultados", results);
-            console.log("Error", error);
-            console.log(results.length);
             if (error) {
               console.log("Error", error);
               reject("Error al obtener la url");
