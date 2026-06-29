@@ -82,12 +82,17 @@ function obtiene_titulo(id_menu) {
         ".menu where nid =" +
         conexion.dbConn.escape(id_menu),
       (error, results, field) => {
-        console.log(results.length);
-        if (results.length < 1) reject();
-        else if (error) reject();
-        else {
-          let titulo = results[0]["vTitulo"];
-          resolve(titulo);
+        try {
+          console.log(results.length);
+          if (results.length < 1) reject();
+          else if (error) reject();
+          else {
+            let titulo = results[0]["vTitulo"];
+            resolve(titulo);
+          }
+        } catch (error) {
+          console.log("Error en obtiene_titulo", error);
+          reject(error);
         }
       },
     );
