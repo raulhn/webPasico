@@ -22,7 +22,7 @@ function registrar_menu(titulo, padre, tipo_pagina, enlace) {
         } else {
           resolve(true);
         }
-      }
+      },
     );
   });
 }
@@ -49,7 +49,7 @@ function registrar_menu_id(titulo, padre, tipo_pagina, enlace) {
         } else {
           resolve(results.insertId);
         }
-      }
+      },
     );
   });
 }
@@ -69,7 +69,7 @@ function obtiene_menu(id_menu) {
         } else {
           resolve(results);
         }
-      }
+      },
     );
   });
 }
@@ -89,30 +89,53 @@ function obtiene_titulo(id_menu) {
           let titulo = results[0]["vTitulo"];
           resolve(titulo);
         }
-      }
+      },
     );
   });
 }
 
 function obtiene_url_menu(id_menu) {
   return new Promise(function (resolve, reject) {
-    conexion.dbConn.query(
-      "select * from " +
+    try {
+      const sql =
+        "select * from " +
         constantes.ESQUEMA_BD +
         ".menu where nid =" +
-        conexion.dbConn.escape(id_menu),
-      (error, results, field) => {
-        console.log(results.length);
-        if (results.length < 1) reject();
-        else if (error) reject();
-        else {
-          let tipo_pagina = results[0]["nTipo_pagina"];
-          if ((tipo_pagina = constantes.TIPO_PAGINA_GENERAL)) {
-            resolve("/general/" + id_menu);
+        conexion.dbConn.escape(id_menu);
+      console.log("Consulta menu", sql);
+      conexion.dbConn.query(
+        sql,
+
+        (error, results, field) => {
+          try {
+            console.log("Resultados", results);
+            console.log("Error", error);
+            console.log(results.length);
+            if (error) {
+              console.log("Error", error);
+              reject("Error al obtener la url");
+              return;
+            }
+            if (results.length < 1) reject();
+            else if (error) reject();
+            else {
+              let tipo_pagina = results[0]["nTipo_pagina"];
+              if (tipo_pagina == constantes.TIPO_PAGINA_GENERAL) {
+                resolve("/general/" + id_menu);
+              } else {
+                reject("Tipo de pagina no soportada");
+              }
+            }
+          } catch (error) {
+            console.log("Error en obtiene_url_menu", error);
+            reject(error);
           }
-        }
-      }
-    );
+        },
+      );
+    } catch (error) {
+      console.log("Error en obtiene_url_menu", error);
+      reject(error);
+    }
   });
 }
 
@@ -130,7 +153,7 @@ function menu_tiene_componentes(id_menu) {
         } else {
           resolve(false);
         }
-      }
+      },
     );
   });
 }
@@ -150,7 +173,7 @@ function menu_tiene_hijos(id_menu) {
         } else {
           resolve(false);
         }
-      }
+      },
     );
   });
 }
@@ -167,7 +190,7 @@ function eliminar_menu(id_menu) {
             "delete from " +
               constantes.ESQUEMA_BD +
               ".menu where nid = " +
-              conexion.dbConn.escape(id_menu)
+              conexion.dbConn.escape(id_menu),
           );
           conexion.dbConn.query(
             "delete from " +
@@ -179,7 +202,7 @@ function eliminar_menu(id_menu) {
                 reject();
               }
               resolve();
-            }
+            },
           );
         }
       });
@@ -202,7 +225,7 @@ function actualizar_titulo_menu(id_menu, titulo) {
         } else {
           resolve();
         }
-      }
+      },
     );
   });
 }

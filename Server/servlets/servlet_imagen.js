@@ -36,14 +36,30 @@ function ruta_imagen(req, res) {
 function obtener_imagen(req, res) {
   let id_componente_imagen = req.params.id;
   imagen.obtiene_id_imagen(id_componente_imagen).then((id_imagen) => {
-    imagen.obtiene_ruta_imagen(id_imagen).then((ruta_imagen) => {
-      fs.readFile(ruta_imagen, (err, data) => {
-        res.writeHead(200);
-        res.write(data);
+    try {
+      imagen
+        .obtiene_ruta_imagen(id_imagen)
+        .then((ruta_imagen) => {
+          try {
+            fs.readFile(ruta_imagen, (err, data) => {
+              res.writeHead(200);
+              res.write(data);
 
-        return res.end();
-      });
-    });
+              return res.end();
+            });
+          } catch (error) {
+            console.log(error);
+            return res.status(400).send({ error: true, message: error });
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          return res.status(400).send({ error: true, message: error });
+        });
+    } catch (error) {
+      console.log(error);
+      return res.status(400).send({ error: true, message: error });
+    }
   });
 }
 

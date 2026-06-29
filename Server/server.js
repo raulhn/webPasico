@@ -289,8 +289,8 @@ app.get("/obtener_votaciones", servlet_canciones_eu.obtener_votaciones);
 https
   .createServer(
     {
-      key: fs.readFileSync("apache.key"),
-      cert: fs.readFileSync("apache-certificate.crt"),
+      key: fs.readFileSync("./apache/apache.key"),
+      cert: fs.readFileSync("./apache/apache-certificate.crt"),
     },
     app,
   )
