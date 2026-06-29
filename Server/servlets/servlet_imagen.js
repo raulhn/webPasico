@@ -43,9 +43,8 @@ function obtener_imagen(req, res) {
           try {
             fs.readFile(ruta_imagen, (err, data) => {
               try {
-                res.writeHead(200);
                 res.write(data);
-
+                res.writeHead(200);
                 return res.end();
               } catch (error) {
                 console.log(error);
