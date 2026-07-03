@@ -2,10 +2,8 @@ export namespace Constantes {
   // Class for general global variables.
   export class General {
     /** Producción **/
-    /*
     public static readonly URL_BACKED = 'https://ladelpasico.es/api';
     public static readonly URL_FRONTED = 'https://ladelpasico.es';
-*/
 
     /** Prueba **/
 
@@ -15,10 +13,10 @@ export namespace Constantes {
 
 */
     /** Local **/
-
+    /*
     public static readonly URL_BACKED = 'https://localhost:8443';
     public static readonly URL_FRONTED = 'https://localhost';
-
+*/
     /** Desarrollo **/
     /*
        public static readonly URL_BACKED = 'https://80.240.127.138:8444';
