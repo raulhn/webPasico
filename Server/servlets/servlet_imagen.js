@@ -42,13 +42,23 @@ function obtener_imagen(req, res) {
         .then((ruta_imagen) => {
           try {
             fs.readFile(ruta_imagen, (err, data) => {
+              if (err) {
+                console.error(err);
+                res.writeHead(404, { "Content-Type": "application/json" });
+                return res.end(
+                  JSON.stringify({ error: true, message: err.message }),
+                );
+              }
+
               try {
-                res.write(data);
                 res.writeHead(200);
-                return res.end();
+                return res.end(data);
               } catch (error) {
-                console.log(error);
-                return res.status(400).send({ error: true, message: error });
+                console.error(error);
+                res.writeHead(500, { "Content-Type": "application/json" });
+                return res.end(
+                  JSON.stringify({ error: true, message: error.message }),
+                );
               }
             });
           } catch (error) {
