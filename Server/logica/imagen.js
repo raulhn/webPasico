@@ -1,26 +1,25 @@
 const constantes = require("../constantes.js");
 const conexion = require("../conexion.js");
 const gestion_ficheros = require("./gestion_ficheros.js");
+const gestion_base_datos = require("./base_datos.js");
 
-function obtiene_id_imagen(id_componente_imagen) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(
+async function obtiene_id_imagen(id_componente_imagen) {
+  try {
+    const sql =
       "select nid_imagen from " +
-        constantes.ESQUEMA_BD +
-        ".componente_imagen where nid_componente = " +
-        conexion.dbConn.escape(id_componente_imagen),
-      (error, results, fields) => {
-        if (error) resolve("-1");
-        else if (results.length < 1) resolve("-1");
-        else resolve(results[0]["nid_imagen"]);
-      }
-    );
-  });
+      constantes.ESQUEMA_BD +
+      ".componente_imagen where nid_componente = " +
+      conexion.dbConn.escape(id_componente_imagen);
+
+    return await gestion_base_datos.consulta(sql);
+  } catch (error) {
+    console.log("imagen.js: Error al obtener id_imagen: " + error);
+    return "-1";
+  }
 }
 
 function obtiene_ruta_imagen(id_imagen) {
   return new Promise((resolve, reject) => {
-    console.log(id_imagen);
     conexion.dbConn.query(
       "select ruta_servidor from " +
         constantes.ESQUEMA_BD +
@@ -35,7 +34,7 @@ function obtiene_ruta_imagen(id_imagen) {
         } else if (results[0]["ruta_servidor"] == null) {
           resolve(constantes.IMAGEN_NO_ENCONTRADA);
         } else resolve(results[0]["ruta_servidor"]);
-      }
+      },
     );
   });
 }
@@ -57,7 +56,7 @@ function eliminar_imagen(id_imagen) {
             conexion.dbConn.commit();
             resolve();
           }
-        }
+        },
       );
     });
   });
@@ -98,7 +97,7 @@ function actualizar_imagen_servidor(id_imagen, fichero) {
               reject(error);
             });
         }
-      }
+      },
     );
   });
 }
@@ -147,7 +146,7 @@ function subir_imagen(titulo, fichero) {
                 reject();
               });
           }
-        }
+        },
       );
     });
   });
