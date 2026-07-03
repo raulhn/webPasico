@@ -18,138 +18,91 @@ async function obtiene_id_imagen(id_componente_imagen) {
   }
 }
 
-function obtiene_ruta_imagen(id_imagen) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(
+async function obtiene_ruta_imagen(id_imagen) {
+  try {
+    const sql =
       "select ruta_servidor from " +
-        constantes.ESQUEMA_BD +
-        ".imagen where nid = " +
-        conexion.dbConn.escape(id_imagen),
-      (error, results, fields) => {
-        console.log(results);
-        if (error) {
-          resolve(constantes.IMAGEN_NO_ENCONTRADA);
-        } else if (results.length < 1) {
-          resolve(constantes.IMAGEN_NO_ENCONTRADA);
-        } else if (results[0]["ruta_servidor"] == null) {
-          resolve(constantes.IMAGEN_NO_ENCONTRADA);
-        } else resolve(results[0]["ruta_servidor"]);
-      },
-    );
-  });
+      constantes.ESQUEMA_BD +
+      ".imagen where nid = " +
+      conexion.dbConn.escape(id_imagen);
+
+    const results = await gestion_base_datos.consulta(sql);
+    if (results.length < 1) {
+      return constantes.IMAGEN_NO_ENCONTRADA;
+    } else if (results[0]["ruta_servidor"] == null) {
+      return constantes.IMAGEN_NO_ENCONTRADA;
+    } else {
+      return results[0]["ruta_servidor"];
+    }
+  } catch (error) {
+    console.log("imagen.js: Error al obtener ruta_imagen: " + error);
+    return constantes.IMAGEN_NO_ENCONTRADA;
+  }
 }
 
-function eliminar_imagen(id_imagen) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(
-        "delete from " +
-          constantes.ESQUEMA_BD +
-          "imagen where nid = " +
-          conexion.dbConn.escape(id_imagen),
-        (error, results, fields) => {
-          if (error) {
-            console.log(error);
-            conexion.dbConn.rollback();
-            reject();
-          } else {
-            conexion.dbConn.commit();
-            resolve();
-          }
-        },
-      );
-    });
-  });
+async function eliminar_imagen(id_imagen) {
+  try {
+    const sql =
+      "delete from " +
+      constantes.ESQUEMA_BD +
+      "imagen where nid = " +
+      conexion.dbConn.escape(id_imagen);
+
+    await gestion_base_datos.actualiza(sql);
+  } catch (error) {
+    console.log("imagen.js: Error al eliminar imagen: " + error);
+    throw new Error("Error al eliminar imagen: " + error);
+  }
 }
 
-function actualizar_imagen_servidor(id_imagen, fichero) {
-  return new Promise((resolve, reject) => {
-    console.log(fichero);
+async function actualizar_imagen_servidor(id_imagen, fichero) {
+  try {
     let imagen = fichero.imagen;
-    console.log("xxxx");
-    console.log(imagen);
     let nombre_imagen = id_imagen + "_" + imagen.name;
 
-    console.log("Actualiza imagen " + nombre_imagen);
-    conexion.dbConn.query(
+    const sql =
       "update " +
-        constantes.ESQUEMA_BD +
-        ".imagen set ruta_servidor = " +
-        conexion.dbConn.escape(constantes.RUTA_SUBIDAS + nombre_imagen) +
-        " where nid = " +
-        conexion.dbConn.escape(id_imagen),
-      (error, results, field) => {
-        if (error) {
-          console.log(error);
-          conexion.dbConn.rollback();
-          reject(error);
-        } else {
-          console.log("Subida de fichero");
-          gestion_ficheros
-            .subir_ficheros(fichero, nombre_imagen)
-            .then(() => {
-              conexion.dbConn.commit();
-              resolve();
-            })
-            .catch((error) => {
-              console.log(error);
-              conexion.dbConn.rollback();
-              reject(error);
-            });
-        }
-      },
-    );
-  });
+      constantes.ESQUEMA_BD +
+      ".imagen set ruta_servidor = " +
+      conexion.dbConn.escape(constantes.RUTA_SUBIDAS + nombre_imagen) +
+      " where nid = " +
+      conexion.dbConn.escape(id_imagen);
+
+    await gestion_base_datos.actualiza(sql);
+    console.log("Subida de fichero");
+    await gestion_ficheros.subir_ficheros(fichero, nombre_imagen);
+  } catch (error) {
+    console.log("imagen.js: Error al actualizar imagen en servidor: " + error);
+    throw new Error("Error al actualizar imagen en servidor: " + error);
+  }
 }
 
-function actualizar_imagen(id_componente_imagen, fichero) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.beginTransaction(() => {
-      obtiene_id_imagen(id_componente_imagen).then((id_imagen) => {
-        actualizar_imagen_servidor(id_imagen, fichero)
-          .then(() => {
-            resolve();
-          })
-          .catch(() => {
-            reject();
-          });
-      });
-    });
-  });
+async function actualizar_imagen(id_componente_imagen, fichero) {
+  try {
+    const id_imagen = await obtiene_id_imagen(id_componente_imagen);
+    await actualizar_imagen_servidor(id_imagen, fichero);
+  } catch (error) {
+    console.log("imagen.js: Error al actualizar imagen: " + error);
+    throw new Error("Error al actualizar imagen: " + error);
+  }
 }
 
-function subir_imagen(titulo, fichero) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.beginTransaction(() => {
-      console.log("registrar imagen");
-      conexion.dbConn.query(
-        "insert into " +
-          constantes.ESQUEMA_BD +
-          ".imagen(titulo) values(" +
-          conexion.dbConn.escape(titulo) +
-          ")",
-        (error, results, fields) => {
-          if (error) {
-            console.log(error);
-            reject(error);
-          } else {
-            let id_imagen = results.insertId;
-            console.log("Subir imagen");
-            console.log(fichero);
-            actualizar_imagen_servidor(id_imagen, fichero)
-              .then(() => {
-                conexion.dbConn.commit();
-                resolve(id_imagen);
-              })
-              .catch(() => {
-                conexion.dbConn.rollback();
-                reject();
-              });
-          }
-        },
-      );
-    });
-  });
+async function subir_imagen(titulo, fichero) {
+  try {
+    const sql =
+      "insert into " +
+      constantes.ESQUEMA_BD +
+      ".imagen(titulo) values(" +
+      conexion.dbConn.escape(titulo) +
+      ")";
+    const results = await gestion_base_datos.actualiza(sql);
+    const id_imagen = results.insertId;
+    await actualizar_imagen_servidor(id_imagen, fichero);
+    return id_imagen;
+  } catch (error) {
+    console.log("imagen.js: Error al subir imagen: " + error);
+    throw new Error("Error al subir imagen: " + error);
+  }
 }
 
 module.exports.actualizar_imagen = actualizar_imagen;
