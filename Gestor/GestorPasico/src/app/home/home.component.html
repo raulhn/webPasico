@@ -19,7 +19,10 @@
     </a>
   }
   @if (bCargadosAlumnosSinPago() && alumnos_sin_pago().length > 0) {
-    <a class="enlace-alerta" href="/alerta_alumnos_sin_pago">
+    <a
+      class="enlace-alerta"
+      href="{{ url_frontend + '/alerta_alumnos_sin_pago' }}"
+    >
       <section class="alerta">
         <alerta-general
           [infoAlerta]="{
@@ -32,7 +35,10 @@
     </a>
   }
   @if (bCargadosAlumnosSinSocio() && alumnos_sin_socios().length > 0) {
-    <a class="enlace-alerta" href="/alerta_alumnos_sin_socio">
+    <a
+      class="enlace-alerta"
+      href="{{ url_frontend + '/alerta_alumnos_sin_socio' }}"
+    >
       <section class="alerta">
         <alerta-general
           [infoAlerta]="{
@@ -45,7 +51,10 @@
     </a>
   }
   @if (bCargadosSociosSinPago() && socios_sin_pago().length > 0) {
-    <a class="enlace-alerta" href="/alerta_socios_sin_pago">
+    <a
+      class="enlace-alerta"
+      href="{{ url_frontend + '/alerta_socios_sin_pago' }}"
+    >
       <section class="alerta">
         <alerta-general
           [infoAlerta]="{
