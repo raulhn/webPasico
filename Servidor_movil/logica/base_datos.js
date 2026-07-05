@@ -42,7 +42,6 @@ function actualiza(sql) {
                     try {
                       if (error) {
                         connection.rollback();
-                        console.log("base_datos.js -> actualiza:", error);
                         reject(error);
                       } else {
                         connection.commit((error) => {
