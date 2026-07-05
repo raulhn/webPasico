@@ -3,22 +3,12 @@ const conexion = require("../conexion.js");
 function consulta(sql) {
   return new Promise((resolve, reject) => {
     try {
-      conexion.pool.getConnection((error, connection) => {
+      conexion.pool.query(sql, (error, results) => {
         try {
           if (error) {
             reject(error);
           } else {
-            connection.query(sql, (error, results) => {
-              try {
-                if (error) {
-                  reject(error);
-                } else {
-                  resolve(results);
-                }
-              } catch (error) {
-                reject(error);
-              }
-            });
+            resolve(results);
           }
         } catch (error) {
           reject(error);
@@ -53,9 +43,10 @@ function actualiza(sql) {
                           if (error) {
                             connection.rollback();
                             reject(error);
+                          } else {
+                            resolve(results);
                           }
                         });
-                        resolve(results);
                       }
                     } catch (error) {
                       reject(error);
