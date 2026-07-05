@@ -1,5 +1,6 @@
 const conexion = require("../conexion.js");
 const constantes = require("../constantes.js");
+const gestor_base_datos = require("./base_datos");
 
 function formatDateToMySQL(date) {
   try {
@@ -10,8 +11,8 @@ function formatDateToMySQL(date) {
   }
 }
 
-function insertarCurso(nid_curso, descripcion, ano, fecha_actualizacion) {
-  return new Promise((resolve, reject) => {
+async function insertarCurso(nid_curso, descripcion, ano, fecha_actualizacion) {
+  try {
     const sql =
       "INSERT INTO " +
       constantes.ESQUEMA +
@@ -26,23 +27,21 @@ function insertarCurso(nid_curso, descripcion, ano, fecha_actualizacion) {
       conexion.dbConn.escape(formatDateToMySQL(fecha_actualizacion)) +
       ")";
 
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(sql, (error, result) => {
-        if (error) {
-          console.error("Error al insertar el curso: " + error.message);
-          conexion.dbConn.rollback();
-          reject(new Error("Error al insertar el curso"));
-        } else {
-          conexion.dbConn.commit();
-          resolve(result);
-        }
-      });
-    });
-  });
+    const result = await gestor_base_datos.actualiza(sql);
+    return result;
+  } catch (error) {
+    console.error("Error al insertar el curso: ", error);
+    throw new Error("Error al insertar el curso");
+  }
 }
 
-function actualizarCurso(nid_curso, descripcion, ano, fecha_actualizacion) {
-  return new Promise((resolve, reject) => {
+async function actualizarCurso(
+  nid_curso,
+  descripcion,
+  ano,
+  fecha_actualizacion,
+) {
+  try {
     const sql =
       "UPDATE " +
       constantes.ESQUEMA +
@@ -55,45 +54,35 @@ function actualizarCurso(nid_curso, descripcion, ano, fecha_actualizacion) {
       " WHERE nid_curso = " +
       conexion.dbConn.escape(nid_curso);
 
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(sql, (error, result) => {
-        if (error) {
-          console.error("Error al actualizar el curso: " + error.message);
-          conexion.dbConn.rollback();
-          reject(new Error("Error al actualizar el curso"));
-        } else {
-          conexion.dbConn.commit();
-          resolve(result);
-        }
-      });
-    });
-  });
+    const result = await gestor_base_datos.actualiza(sql);
+    return result;
+  } catch (error) {
+    console.error("Error al actualizar el curso: ", error);
+    throw new Error("Error al actualizar el curso");
+  }
 }
 
-function existeCurso(nid_curso) {
-  return new Promise((resolve, reject) => {
+async function existeCurso(nid_curso) {
+  try {
     const sql =
       "SELECT * FROM " +
       constantes.ESQUEMA +
       ".curso WHERE nid_curso = " +
       conexion.dbConn.escape(nid_curso);
 
-    conexion.dbConn.query(sql, (error, result) => {
-      if (error) {
-        console.error("Error al comprobar el curso: " + error.message);
-        reject(new Error("Error al comprobar el curso"));
-      } else {
-        resolve(result.length > 0);
-      }
-    });
-  });
+    const result = await gestor_base_datos.consulta(sql);
+    return result.length > 0;
+  } catch (error) {
+    console.error("Error al comprobar el curso: ", error);
+    throw new Error("Error al comprobar el curso");
+  }
 }
 
 async function registrarCurso(
   nid_curso,
   descripcion,
   ano,
-  fecha_actualizacion
+  fecha_actualizacion,
 ) {
   try {
     const existeCurso = await existeCurso(nid_curso);
@@ -103,48 +92,36 @@ async function registrarCurso(
       return insertarCurso(nid_curso, descripcion, ano, fecha_actualizacion);
     }
   } catch (error) {
-    console.error("Error al registrar el curso: " + error.message);
+    console.error("Error al registrar el curso: ", error);
     throw new Error("Error al registrar el curso");
   }
 }
 
-function obtenerCursoActivo() {
-  return new Promise((resolve, reject) => {
+async function obtenerCursoActivo() {
+  try {
     const sql =
       "SELECT * FROM " + constantes.ESQUEMA + ".curso WHERE activo = 'S'";
 
-    conexion.dbConn.query(sql, (error, result) => {
-      if (error) {
-        console.error("Error al obtener el curso activo: " + error.message);
-        reject(new Error("Error al obtener el curso activo"));
-      } else {
-        if (result.length === 0) {
-          reject(new Error("No hay curso activo registrado"));
-        }
-        resolve(result[0]);
-      }
-    });
-  });
+    const result = await gestor_base_datos.consulta(sql);
+    return result.length > 0 ? result[0] : null;
+  } catch (error) {
+    console.error("Error al obtener el curso activo: ", error);
+    throw new Error("Error al obtener el curso activo");
+  }
 }
 
-
-function obtenerCursos()
-{
-  return new Promise((resolve, reject) => {
+async function obtenerCursos() {
+  try {
     const sql =
       "SELECT * FROM " + constantes.ESQUEMA + ".curso order by nid_curso desc";
 
-    conexion.dbConn.query(sql, (error, result) => {
-      if (error) {
-        console.error("Error al obtener los cursos: " + error.message);
-        reject(new Error("Error al obtener los cursos"));
-      } else {
-        resolve(result);
-      }
-    });
-  });
+    const result = await gestor_base_datos.consulta(sql);
+    return result;
+  } catch (error) {
+    console.error("Error al obtener los cursos: ", error);
+    throw new Error("Error al obtener los cursos");
+  }
 }
-
 
 module.exports.registrarCurso = registrarCurso;
 module.exports.obtenerCursoActivo = obtenerCursoActivo;
