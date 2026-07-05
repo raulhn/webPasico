@@ -1,9 +1,10 @@
 const envio_email = require("../config/envio_email_solicitud.json");
 const conexion = require("../conexion");
 const constantes = require("../constantes");
+const gestion_base_datos = require("./base_datos.js");
 
-function insertarSolicitudEliminacionUsuario(correo_electronico) {
-  return new Promise((resolve, reject) => {
+async function insertarSolicitudEliminacionUsuario(correo_electronico) {
+  try {
     const sql =
       "INSERT INTO " +
       constantes.ESQUEMA_BD +
@@ -11,27 +12,19 @@ function insertarSolicitudEliminacionUsuario(correo_electronico) {
       conexion.dbConn.escape(correo_electronico) +
       ")";
 
-    conexion.dbConn.query(sql, (error) => {
-      if (error) {
-        console.error(
-          "Error al insertar la solicitud de eliminación de usuario:",
-          error,
-        );
-        conexion.dbConn.rollback();
-        reject(
-          new Error("Error al insertar la solicitud de eliminación de usuario"),
-        );
-      } else {
-        conexion.dbConn.commit();
-        resolve();
-      }
-    });
-  });
+    await gestion_base_datos.actualiza(sql);
+  } catch (error) {
+    console.error(
+      "Error al insertar la solicitud de eliminación de usuario:",
+      error,
+    );
+    throw new Error("Error al insertar la solicitud de eliminación de usuario");
+  }
 }
 
-function registrarCorreoEliminacion(to, subject, html) {
-  return new Promise((resolve, reject) => {
-    const query =
+async function registrarCorreoEliminacion(to, subject, html) {
+  try {
+    const sql =
       "INSERT INTO " +
       constantes.ESQUEMA_BD_MOVIL +
       ".envio_correo (correo_electronico, asunto, cuerpo, estado) " +
@@ -40,17 +33,13 @@ function registrarCorreoEliminacion(to, subject, html) {
       ", 'Verificación de correo', " +
       conexion.dbConn.escape(html) +
       ", '0')";
-    conexion.dbConn.query(query, (error, results) => {
-      if (error) {
-        console.error("Error al registrar el correo de validación:", error);
-        conexion.dbConn.rollback();
-        reject(error);
-      } else {
-        conexion.dbConn.commit();
-        resolve(results.insertId); // Devuelve el ID del nuevo registro
-      }
-    });
-  });
+
+    const results = await gestion_base_datos.actualiza(sql);
+    return results.insertId; // Devuelve el ID del nuevo registro
+  } catch (error) {
+    console.error("Error al registrar el correo de validación:", error);
+    throw new Error("Error al registrar el correo de validación");
+  }
 }
 
 async function registrarSolicitudEliminacionUsuario(correo_electronico) {
