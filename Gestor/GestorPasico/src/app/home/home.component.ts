@@ -2,6 +2,7 @@ import { Component, OnInit, signal } from '@angular/core';
 import { UsuariosService } from '../servicios/usuarios.service';
 import { AlertasService } from '../servicios/alertas.service';
 import { Router } from '@angular/router';
+import { URL } from '../logica/constantes';
 
 @Component({
   selector: 'app-home',
@@ -14,9 +15,10 @@ export class HomeComponent implements OnInit {
     private usuariosService: UsuariosService,
     private router: Router,
     private alertasService: AlertasService,
-  ) { }
+  ) {}
   usuario = '';
 
+  url_frontend = URL.URL_FRONT_END;
   alumnos_sin_profesor = signal<any[]>([]);
   alumnos_sin_pago = signal<any[]>([]);
   alumnos_sin_socios = signal<any[]>([]);
@@ -97,5 +99,4 @@ export class HomeComponent implements OnInit {
       .obtener_socios_sin_pago()
       .subscribe(this.peticion_socios_sin_pago);
   }
-
 }
