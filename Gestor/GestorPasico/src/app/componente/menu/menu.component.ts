@@ -4,123 +4,107 @@ import { UsuariosService } from 'src/app/servicios/usuarios.service';
 import { faUser as faUser } from '@fortawesome/free-regular-svg-icons';
 import { ROL } from 'src/app/logica/constantes';
 import Swal from 'sweetalert2';
+import { URL } from 'src/app/logica/constantes';
 
 @Component({
-    selector: 'app-menu',
-    templateUrl: './menu.component.html',
-    styleUrls: ['./menu.component.css'],
-    standalone: false
+  selector: 'app-menu',
+  templateUrl: './menu.component.html',
+  styleUrls: ['./menu.component.css'],
+  standalone: false,
 })
 export class MenuComponent implements OnInit {
-
-  usuario = "";
+  usuario = '';
   logueado = false;
 
   faUser = faUser;
 
-  nuevo_password: string = "";
+  nuevo_password: string = '';
 
-  nid_rol:string = "";
+  nid_rol: string = '';
 
   nid_administrador: string = ROL.ADMINISTRADOR;
   nid_profesor: string = ROL.PROFESOR;
 
-  @ViewChild('instancia_cambio_password') instancia_cambio_password!: ElementRef;
+  url_frontend = URL.URL_FRONT_END;
 
-  constructor(private usuariosService: UsuariosService, private router: Router) { }
+  @ViewChild('instancia_cambio_password')
+  instancia_cambio_password!: ElementRef;
 
+  constructor(
+    private usuariosService: UsuariosService,
+    private router: Router,
+  ) {}
 
-  recupera_rol =
-  {
-    next: (respuesta: any) =>
-    {
-       this.nid_rol = respuesta['nid_rol'];
-    }
-
-  }
+  recupera_rol = {
+    next: (respuesta: any) => {
+      this.nid_rol = respuesta['nid_rol'];
+    },
+  };
 
   ngOnInit(): void {
-    this.usuariosService.logueado().subscribe(
-      (res:any) =>
-      {
-        if(!res.logueado)
-        {
-          this.router.navigate(['login']);
-        }
-        else{
-          this.usuario = res.login;
-          this.logueado = res.logueado;
-        }
+    this.usuariosService.logueado().subscribe((res: any) => {
+      if (!res.logueado) {
+        this.router.navigate(['login']);
+      } else {
+        this.usuario = res.login;
+        this.logueado = res.logueado;
       }
-    )
+    });
 
     this.usuariosService.obtener_rol().subscribe(this.recupera_rol);
   }
 
-  logout()
-  {
-    this.usuariosService.logout().subscribe(
-      (res:any) =>
-      {
-        if(!res.error)
-        {
-          this.logueado = false;
-          this.usuario = "";
-          this.router.navigate(['login']);
-        }
+  logout() {
+    this.usuariosService.logout().subscribe((res: any) => {
+      if (!res.error) {
+        this.logueado = false;
+        this.usuario = '';
+        this.router.navigate(['login']);
       }
-    )
+    });
   }
 
-  actualiza_password =
-  {
-    next: (respuesta: any) =>
-    {
+  actualiza_password = {
+    next: (respuesta: any) => {
       Swal.fire({
         icon: 'success',
         title: 'Contraseña actualizada',
-        text: 'Se ha actualizado la contraseña correctamente'
-      })
+        text: 'Se ha actualizado la contraseña correctamente',
+      });
     },
-    error: (respuesta: any) =>
-    {
+    error: (respuesta: any) => {
       Swal.fire({
         icon: 'error',
         title: 'Error al actualizar contraseña',
-        text: 'Se ha producido un error durante la actualización de la contraseña'
-      })
-    }
-  }
-
-  actualiza_password_web = 
-  {
-    next: (respuesta: any) =>
-    {
-      console.log('Actualizada contraseña en web')
+        text: 'Se ha producido un error durante la actualización de la contraseña',
+      });
     },
-    error: (respuestas: any) =>
-    {
-      console.log('Error cambio contraseña web')
-    }
-  }
+  };
 
-  cambiar_password()
-  {
+  actualiza_password_web = {
+    next: (respuesta: any) => {
+      console.log('Actualizada contraseña en web');
+    },
+    error: (respuestas: any) => {
+      console.log('Error cambio contraseña web');
+    },
+  };
+
+  cambiar_password() {
     Swal.fire({
       title: 'Cambiar contraseña',
       html: this.instancia_cambio_password.nativeElement,
       confirmButtonText: 'Guardar',
       showCancelButton: true,
-    }).then(
-      (results: any) =>
-        {
-        if(results.isConfirmed)
-        {
-          this.usuariosService.actualizar_password_web(this.nuevo_password).subscribe(this.actualiza_password_web)
-          this.usuariosService.actualizar_password(this.nuevo_password).subscribe(this.actualiza_password);
-        }
+    }).then((results: any) => {
+      if (results.isConfirmed) {
+        this.usuariosService
+          .actualizar_password_web(this.nuevo_password)
+          .subscribe(this.actualiza_password_web);
+        this.usuariosService
+          .actualizar_password(this.nuevo_password)
+          .subscribe(this.actualiza_password);
       }
-    )
+    });
   }
-
 }
