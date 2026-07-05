@@ -1,5 +1,6 @@
 const constantes = require("../constantes");
 const conexion = require("../conexion");
+const gestor_base_datos = require("../base_datos");
 
 function formatDateToMySQL(date) {
   try {
@@ -10,14 +11,14 @@ function formatDateToMySQL(date) {
   }
 }
 
-function insertarAsignatura(
+async function insertarAsignatura(
   nid_asignatura,
   descripcion,
   instrumento_banda,
   tipo_asignatura,
   fecha_actualizacion,
 ) {
-  return new Promise((resolve, reject) => {
+  try {
     const sql =
       "insert into " +
       constantes.ESQUEMA +
@@ -34,30 +35,22 @@ function insertarAsignatura(
       conexion.dbConn.escape(formatDateToMySQL(fecha_actualizacion)) +
       ")";
 
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(sql, (error, result) => {
-        if (error) {
-          console.log("Error al insertar la asignatura: ", error);
-          conexion.dbConn.rollback();
-          reject(new Error("Error al insertar la asignatura"));
-        } else {
-          conexion.dbConn.commit();
-          console.log("Asignatura insertada correctamente");
-          resolve();
-        }
-      });
-    });
-  });
+    await gestor_base_datos.actualiza(sql);
+    return;
+  } catch (error) {
+    console.log("Error al insertar la asignatura: ", error);
+    throw new Error("Error al insertar la asignatura");
+  }
 }
 
-function actualizarAsignatura(
+async function actualizarAsignatura(
   nid_asignatura,
   descripcion,
   instrumento_banda,
   tipo_asignatura,
   fecha_actualizacion,
 ) {
-  return new Promise((resolve, reject) => {
+  try {
     const sql =
       "update " +
       constantes.ESQUEMA +
@@ -72,61 +65,45 @@ function actualizarAsignatura(
       " where nid_asignatura = " +
       conexion.dbConn.escape(nid_asignatura);
 
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(sql, (error, result) => {
-        if (error) {
-          console.log("Error al actualizar la asignatura: ", error);
-          conexion.dbConn.rollback();
-          reject(new Error("Error al actualizar la asignatura"));
-        } else {
-          conexion.dbConn.commit();
-          console.log("Asignatura actualizada correctamente");
-          resolve();
-        }
-      });
-    });
-  });
+    await gestor_base_datos.actualiza(sql);
+    return;
+  } catch (error) {
+    console.log("Error al actualizar la asignatura: ", error);
+    throw new Error("Error al actualizar la asignatura");
+  }
 }
 
-function obtenerAsignatura(nid_asignatura) {
-  return new Promise((resolve, reject) => {
+async function obtenerAsignatura(nid_asignatura) {
+  try {
     const sql =
       "select * from " +
       constantes.ESQUEMA +
       ".asignaturas where nid_asignatura = " +
       conexion.dbConn.escape(nid_asignatura);
 
-    conexion.dbConn.query(sql, (error, result) => {
-      if (error) {
-        console.log("Error al obtener la asignatura: ", error);
-        reject(new Error("Error al obtener la asignatura"));
-      } else {
-        resolve(result[0]);
-      }
-    });
-  });
+    const result = await gestor_base_datos.consulta(sql);
+    return result[0];
+  } catch (error) {
+    console.log("Error al obtener la asignatura: ", error);
+    throw new Error("Error al obtener la asignatura");
+  }
 }
 
-function existeAsignatura(nid_asignatura) {
-  return new Promise((resolve, reject) => {
+async function existeAsignatura(nid_asignatura) {
+  try {
     const sql =
       "select count(*) as existe from " +
       constantes.ESQUEMA +
       ".asignaturas where nid_asignatura = " +
       conexion.dbConn.escape(nid_asignatura);
 
-    conexion.dbConn.query(sql, (error, result) => {
-      if (error) {
-        console.log(
-          "Error al comprobar la existencia de la asignatura: ",
-          error,
-        );
-        reject(new Error("Error al comprobar la existencia de la asignatura"));
-      } else {
-        resolve(result[0].existe > 0);
-      }
-    });
-  });
+    const results = await gestor_base_datos.consulta(sql);
+
+    return results[0].existe > 0;
+  } catch (error) {
+    console.log("Error al comprobar la existencia de la asignatura: ", error);
+    throw new Error("Error al comprobar la existencia de la asignatura");
+  }
 }
 
 async function registrarAsignatura(
@@ -161,26 +138,23 @@ async function registrarAsignatura(
   }
 }
 
-function obtenerAsignaturas() {
-  return new Promise((resolve, reject) => {
+async function obtenerAsignaturas() {
+  try {
     const sql =
       "select * from " +
       constantes.ESQUEMA +
       ".asignaturas order by descripcion";
 
-    conexion.dbConn.query(sql, (error, results) => {
-      if (error) {
-        console.log("Error al obtener las asignaturas: ", error);
-        reject(new Error("Error al obtener las asignaturas"));
-      } else {
-        resolve(results);
-      }
-    });
-  });
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.log("Error al obtener las asignaturas: ", error);
+    throw new Error("Error al obtener las asignaturas");
+  }
 }
 
-function obtenerAsignaturasProfesor(nid_profesor) {
-  return new Promise((resolve, reject) => {
+async function obtenerAsignaturasProfesor(nid_profesor) {
+  try {
     const sql =
       "select a.* from " +
       constantes.ESQUEMA +
@@ -191,17 +165,15 @@ function obtenerAsignaturasProfesor(nid_profesor) {
       conexion.dbConn.escape(nid_profesor) +
       " and p.esBaja = 'N'";
 
-    conexion.dbConn.query(sql, (error, results) => {
-      if (error) {
-        console.log("Error al obtener las asignaturas del profesor: ", error);
-        reject(new Error("Error al obtener las asignaturas del profesor"));
-      } else {
-        resolve(results);
-      }
-    });
-  });
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.log("Error al obtener las asignaturas del profesor: ", error);
+    throw new Error("Error al obtener las asignaturas del profesor");
+  }
 }
 
+module.exports.obtenerAsignatura = obtenerAsignatura;
 module.exports.registrarAsignatura = registrarAsignatura;
 module.exports.obtenerAsignaturas = obtenerAsignaturas;
 module.exports.obtenerAsignaturasProfesor = obtenerAsignaturasProfesor;
