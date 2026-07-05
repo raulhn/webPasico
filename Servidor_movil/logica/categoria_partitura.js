@@ -1,8 +1,9 @@
 const conexion = require("../conexion");
 const constantes = require("../constantes");
+const gestor_base_datos = require("./base_datos");
 
-function insertarCategoriaPartitura(nombre_categoria) {
-  return new Promise((resolve, reject) => {
+async function insertarCategoriaPartitura(nombre_categoria) {
+  try {
     const sql =
       "INSERT INTO " +
       constantes.ESQUEMA +
@@ -10,25 +11,16 @@ function insertarCategoriaPartitura(nombre_categoria) {
       conexion.dbConn.escape(nombre_categoria) +
       "))";
 
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(sql, (error, result) => {
-        if (error) {
-          console.error(
-            "Error al insertar la categoria de partitura: " + error.message
-          );
-          conexion.dbConn.rollback();
-          reject("Error al insertar la categoria de partitura");
-        } else {
-          conexion.dbConn.commit();
-          resolve(result);
-        }
-      });
-    });
-  });
+    const result = await gestor_base_datos.actualiza(sql);
+    return result;
+  } catch (error) {
+    console.error("Error al insertar la categoria de partitura: ", error);
+    throw new Error("Error al insertar la categoria de partitura");
+  }
 }
 
-function actualizarCategoriaPartitura(nid_categoria, nombre_categoria) {
-  return new Promise((resolve, reject) => {
+async function actualizarCategoriaPartitura(nid_categoria, nombre_categoria) {
+  try {
     const sql =
       "UPDATE " +
       constantes.ESQUEMA +
@@ -37,42 +29,27 @@ function actualizarCategoriaPartitura(nid_categoria, nombre_categoria) {
       " WHERE nid_categoria = " +
       conexion.dbConn.escape(nid_categoria);
 
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(sql, (error, result) => {
-        if (error) {
-          console.error(
-            "Error al actualizar la categoria de partitura: " + error.message
-          );
-          conexion.dbConn.rollback();
-          reject("Error al actualizar la categoria de partitura");
-        } else {
-          conexion.dbConn.commit();
-          resolve(result);
-        }
-      });
-    });
-  });
+    const result = await gestor_base_datos.actualiza(sql);
+    return result;
+  } catch (error) {
+    console.error("Error al actualizar la categoria de partitura: ", error);
+    throw new Error("Error al actualizar la categoria de partitura");
+  }
 }
 
-function obtenerCategoriasPartitura() {
-  return new Promise((resolve, reject) => {
+async function obtenerCategoriasPartitura() {
+  try {
     const sql =
       "SELECT nid_categoria, nombre_categoria FROM " +
       constantes.ESQUEMA +
       ".categoria_partitura";
 
-    conexion.dbConn.query(sql, (error, result) => {
-      if (error) {
-        console.error(
-          "Error al obtener las categorias de partitura: " + error.message
-        );
-        reject("Error al obtener las categorias de partitura");
-      } else {
-        console.log("Categorias de partitura obtenidas correctamente");
-        resolve(result);
-      }
-    });
-  });
+    const result = await gestor_base_datos.consulta(sql);
+    return result;
+  } catch (error) {
+    console.error("Error al obtener las categorias de partitura: ", error);
+    throw new Error("Error al obtener las categorias de partitura");
+  }
 }
 
 module.exports.insertarCategoriaPartitura = insertarCategoriaPartitura;
