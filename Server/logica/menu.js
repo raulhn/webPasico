@@ -1,234 +1,181 @@
 const constantes = require("../constantes.js");
 const conexion = require("../conexion.js");
+const gestion_base_datos = require("./base_datos.js");
 
-function registrar_menu(titulo, padre, tipo_pagina, enlace) {
-  return new Promise(function (resolve) {
-    conexion.dbConn.query(
+async function registrar_menu(titulo, padre, tipo_pagina, enlace) {
+  try {
+    const sql =
       "insert into " +
-        constantes.ESQUEMA_BD +
-        ".menu(vTitulo, padre, nTipo_Pagina, vEnlace) values(" +
-        conexion.dbConn.escape(titulo) +
-        ", " +
-        conexion.dbConn.escape(padre) +
-        ", " +
-        conexion.dbConn.escape(tipo_pagina) +
-        ", " +
-        conexion.dbConn.escape(enlace) +
-        ")",
-      function (error, results, field) {
-        if (error) {
-          console.log(error);
-          resolve(false);
-        } else {
-          resolve(true);
-        }
-      },
-    );
-  });
+      constantes.ESQUEMA_BD +
+      ".menu(vTitulo, padre, nTipo_Pagina, vEnlace) values(" +
+      conexion.dbConn.escape(titulo) +
+      ", " +
+      conexion.dbConn.escape(padre) +
+      ", " +
+      conexion.dbConn.escape(tipo_pagina) +
+      ", " +
+      conexion.dbConn.escape(enlace) +
+      ")";
+
+    await gestion_base_datos.actualiza(sql);
+    return true;
+  } catch (error) {
+    console.log("Error al registrar menu", error);
+    return false;
+  }
 }
 
-function registrar_menu_id(titulo, padre, tipo_pagina, enlace) {
-  return new Promise(function (resolve) {
-    console.log("Insertar menu id");
-    conexion.dbConn.query(
+async function registrar_menu_id(titulo, padre, tipo_pagina, enlace) {
+  try {
+    const sql =
       "insert into " +
-        constantes.ESQUEMA_BD +
-        ".menu(vTitulo, padre, nTipo_Pagina, vEnlace) values(" +
-        conexion.dbConn.escape(titulo) +
-        ", " +
-        conexion.dbConn.escape(padre) +
-        ", " +
-        conexion.dbConn.escape(tipo_pagina) +
-        ", " +
-        conexion.dbConn.escape(enlace) +
-        ")",
-      function (error, results, field) {
-        if (error) {
-          console.log(error);
-          resolve(-1);
-        } else {
-          resolve(results.insertId);
-        }
-      },
-    );
-  });
+      constantes.ESQUEMA_BD +
+      ".menu(vTitulo, padre, nTipo_Pagina, vEnlace) values(" +
+      conexion.dbConn.escape(titulo) +
+      ", " +
+      conexion.dbConn.escape(padre) +
+      ", " +
+      conexion.dbConn.escape(tipo_pagina) +
+      ", " +
+      conexion.dbConn.escape(enlace) +
+      ")";
+
+    const results = await gestion_base_datos.actualiza(sql);
+    return results.insertId;
+  } catch (error) {
+    console.log("menu.js -> registrar_menu_id:", error);
+    return -1;
+  }
 }
 
-function obtiene_menu(id_menu) {
-  return new Promise(function (resolve, reject) {
-    conexion.dbConn.query(
+async function obtiene_menu(id_menu) {
+  try {
+    const sql =
       "select * from " +
-        constantes.ESQUEMA_BD +
-        ".menu where padre = " +
-        conexion.dbConn.escape(id_menu) +
-        " order by norden",
-      function (error, results, field) {
-        if (error) {
-          console.log(error);
-          reject();
-        } else {
-          resolve(results);
-        }
-      },
-    );
-  });
+      constantes.ESQUEMA_BD +
+      ".menu where padre = " +
+      conexion.dbConn.escape(id_menu) +
+      " order by norden";
+
+    const results = await gestion_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.log("menu.js -> obtiene_menu:", error);
+    throw new Error("Error al obtener el menu");
+  }
 }
 
-function obtiene_titulo(id_menu) {
-  return new Promise(function (resolve, reject) {
-    conexion.dbConn.query(
+async function obtiene_titulo(id_menu) {
+  try {
+    const sql =
       "select vTitulo from " +
-        constantes.ESQUEMA_BD +
-        ".menu where nid =" +
-        conexion.dbConn.escape(id_menu),
-      (error, results, field) => {
-        try {
-          console.log(results.length);
-          if (results.length < 1) reject();
-          else if (error) reject();
-          else {
-            let titulo = results[0]["vTitulo"];
-            resolve(titulo);
-          }
-        } catch (error) {
-          console.log("Error en obtiene_titulo", error);
-          reject(error);
-        }
-      },
-    );
-  });
+      constantes.ESQUEMA_BD +
+      ".menu where nid =" +
+      conexion.dbConn.escape(id_menu);
+
+    const results = await gestion_base_datos.consulta(sql);
+    if (results.length < 1) throw new Error("Menu no encontrado");
+    let titulo = results[0]["vTitulo"];
+    return titulo;
+  } catch (error) {
+    console.log("menu.js -> obtiene_titulo:", error);
+    throw new Error("Error al obtener el titulo del menu");
+  }
 }
 
-function obtiene_url_menu(id_menu) {
-  return new Promise(function (resolve, reject) {
-    try {
-      const sql =
-        "select * from " +
-        constantes.ESQUEMA_BD +
-        ".menu where nid =" +
-        conexion.dbConn.escape(id_menu);
-      conexion.dbConn.query(
-        sql,
-
-        (error, results, field) => {
-          try {
-            if (error) {
-              console.log("Error", error);
-              reject("Error al obtener la url");
-              return;
-            }
-            if (results.length < 1) reject();
-            else if (error) reject();
-            else {
-              let tipo_pagina = results[0]["nTipo_pagina"];
-              if (tipo_pagina == constantes.TIPO_PAGINA_GENERAL) {
-                resolve("/general/" + id_menu);
-              } else {
-                reject("Tipo de pagina no soportada");
-              }
-            }
-          } catch (error) {
-            console.log("Error en obtiene_url_menu", error);
-            reject(error);
-          }
-        },
-      );
-    } catch (error) {
-      console.log("Error en obtiene_url_menu", error);
-      reject(error);
+async function obtiene_url_menu(id_menu) {
+  try {
+    const sql =
+      "select * from " +
+      constantes.ESQUEMA_BD +
+      ".menu where nid =" +
+      conexion.dbConn.escape(id_menu);
+    const results = await gestion_base_datos.consulta(sql);
+    if (results.length < 1) throw new Error("Menu no encontrado");
+    let tipo_pagina = results[0]["nTipo_pagina"];
+    if (tipo_pagina == constantes.TIPO_PAGINA_GENERAL) {
+      return "/general/" + id_menu;
+    } else {
+      throw new Error("Tipo de pagina no soportada");
     }
-  });
+  } catch (error) {
+    console.log("menu.js -> obtiene_url_menu:", error);
+    throw new Error("Error al obtener la url del menu");
+  }
 }
 
-function menu_tiene_componentes(id_menu) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(
+async function menu_tiene_componentes(id_menu) {
+  try {
+    const sql =
       "select count(*) num_componentes from " +
-        constantes.ESQUEMA_BD +
-        ".pagina_componente where nid_pagina = " +
-        conexion.dbConn.escape(id_menu),
-      (error, results, field) => {
-        let num_componentes = results[0]["num_componentes"];
-        if (num_componentes > 0) {
-          resolve(true);
-        } else {
-          resolve(false);
-        }
-      },
-    );
-  });
+      constantes.ESQUEMA_BD +
+      ".pagina_componente where nid_pagina = " +
+      conexion.dbConn.escape(id_menu);
+
+    const results = await gestion_base_datos.consulta(sql);
+    let num_componentes = results[0]["num_componentes"];
+    return num_componentes > 0;
+  } catch (error) {
+    console.log("menu.js -> menu_tiene_componentes:", error);
+    throw new Error("Error al comprobar si el menu tiene componentes");
+  }
 }
 
-function menu_tiene_hijos(id_menu) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(
+async function menu_tiene_hijos(id_menu) {
+  try {
+    const sql =
       "select count(*) num_hijos from " +
+      constantes.ESQUEMA_BD +
+      ".menu where padre = " +
+      conexion.dbConn.escape(id_menu);
+
+    const results = await gestion_base_datos.consulta(sql);
+    let num_hijos = results[0]["num_hijos"];
+    return num_hijos > 0;
+  } catch (error) {
+    console.log("menu.js -> menu_tiene_hijos:", error);
+    throw new Error("Error al comprobar si el menu tiene hijos");
+  }
+}
+
+async function eliminar_menu(id_menu) {
+  try {
+    const bTiene_componentes = await menu_tiene_componentes(id_menu);
+    const bTiene_hijos = await menu_tiene_hijos(id_menu);
+
+    if (bTiene_componentes || bTiene_hijos) {
+      throw new Error("La pagina tiene componentes o hijos");
+    } else {
+      const sql =
+        "delete from " +
         constantes.ESQUEMA_BD +
-        ".menu where padre = " +
-        conexion.dbConn.escape(id_menu),
-      (error, results, field) => {
-        let num_hijos = results[0]["num_hijos"];
-        console.log(num_hijos);
-        if (num_hijos > 0) {
-          resolve(true);
-        } else {
-          resolve(false);
-        }
-      },
-    );
-  });
+        ".menu where nid = " +
+        conexion.dbConn.escape(id_menu);
+      await gestion_base_datos.actualiza(sql);
+    }
+    return;
+  } catch (error) {
+    console.log("menu.js -> eliminar_menu:", error);
+    throw new Error("Error al eliminar el menu: " + error.message);
+  }
 }
 
-function eliminar_menu(id_menu) {
-  return new Promise((resolve, reject) => {
-    menu_tiene_componentes(id_menu).then((bTiene_componentes) => {
-      menu_tiene_hijos(id_menu).then((bTiene_hijos) => {
-        if (bTiene_componentes || bTiene_hijos) {
-          console.log(bTiene_hijos);
-          reject("La pagina tiene componentes");
-        } else {
-          console.log(
-            "delete from " +
-              constantes.ESQUEMA_BD +
-              ".menu where nid = " +
-              conexion.dbConn.escape(id_menu),
-          );
-          conexion.dbConn.query(
-            "delete from " +
-              constantes.ESQUEMA_BD +
-              ".menu where nid = " +
-              conexion.dbConn.escape(id_menu),
-            (error, results, field) => {
-              if (error) {
-                reject();
-              }
-              resolve();
-            },
-          );
-        }
-      });
-    });
-  });
-}
-
-function actualizar_titulo_menu(id_menu, titulo) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(
+async function actualizar_titulo_menu(id_menu, titulo) {
+  try {
+    const sql =
       "update " +
-        constantes.ESQUEMA_BD +
-        ".menu set vTitulo = " +
-        conexion.dbConn.escape(titulo) +
-        " where nid = " +
-        conexion.dbConn.escape(id_menu),
-      (error, results, field) => {
-        if (error) {
-          reject();
-        } else {
-          resolve();
-        }
-      },
-    );
-  });
+      constantes.ESQUEMA_BD +
+      ".menu set vTitulo = " +
+      conexion.dbConn.escape(titulo) +
+      " where nid = " +
+      conexion.dbConn.escape(id_menu);
+
+    await gestion_base_datos.actualiza(sql);
+    return;
+  } catch (error) {
+    console.log("menu.js -> actualizar_titulo_menu:", error);
+    throw new Error("Error al actualizar el titulo del menu: " + error.message);
+  }
 }
 
 module.exports.registrar_menu = registrar_menu;
