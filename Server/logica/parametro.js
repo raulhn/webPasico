@@ -1,6 +1,6 @@
 const conexion = require("../conexion.js");
 const constantes = require("../constantes.js");
-const gestion_base_datos = require("./gestion_base_datos.js");
+const gestion_base_datos = require("./base_datos.js");
 
 async function obtiene_parametro(identificador) {
   try {
@@ -10,7 +10,7 @@ async function obtiene_parametro(identificador) {
       ".parametros where identificador = " +
       conexion.dbConn.escape(identificador);
 
-    const results = await gestion_base_datos.ejecuta_sql(sql);
+    const results = await gestion_base_datos.consulta(sql);
     return results[0];
   } catch (error) {
     console.log("parametro.js: Error en obtiene_parametro: " + error);
