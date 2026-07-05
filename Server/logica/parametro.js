@@ -1,6 +1,6 @@
 const conexion = require("../conexion.js");
 const constantes = require("../constantes.js");
-const gestion_base_datos = require("../gestion_base_datos.js");
+const gestion_base_datos = require("./gestion_base_datos.js");
 
 async function obtiene_parametro(identificador) {
   try {
