@@ -1,5 +1,6 @@
 const constantes = require("../constantes.js");
 const conexion = require("../conexion.js");
+const gestion_base_datos = require("./base_datos.js");
 
 const bcrypt = require("bcryptjs");
 const rondas = 10;
@@ -12,164 +13,139 @@ function esLogueado(usuario) {
   }
 }
 
-function esAdministrador(usuario) {
-  return new Promise(function (resolve, reject) {
-    if (!esLogueado(usuario)) {
-      resolve(false);
-    } else {
-      conexion.dbConn.query(
-        "select * from " +
-          constantes.ESQUEMA_BD +
-          ".usuario where usuario = " +
-          conexion.dbConn.escape(usuario) +
-          " and rol = " +
-          constantes.ROL_ADMINISTRADOR,
-        function (error, results, fields) {
-          if (error) return resolve(false);
-          if (results.length <= 0) {
-            resolve(false);
-          }
-          resolve(true);
-        }
-      );
+async function esAdministrador(usuario) {
+  try {
+    const sql =
+      "select * from " +
+      constantes.ESQUEMA_BD +
+      ".usuario where usuario = " +
+      conexion.dbConn.escape(usuario) +
+      " and rol = " +
+      constantes.ROL_ADMINISTRADOR;
+    const results = await gestion_base_datos.consulta(sql);
+    if (results.length <= 0) {
+      return false;
     }
-  });
+    return true;
+  } catch (error) {
+    console.log("usaurio.js -> esAdministrador:", error);
+    throw new Error("Error al comprobar si es administrador");
+  }
 }
 
-function login(usuario, password) {
-  return new Promise(function (resolve) {
-    conexion.dbConn.query(
+async function login(usuario, password) {
+  try {
+    const sql =
       "select pass from " +
-        constantes.ESQUEMA_BD +
-        ".usuario where usuario = " +
-        conexion.dbConn.escape(usuario),
-      function (error, results, fields) {
-        if (error) throw resolve(false);
-        console.log(results.length);
-        if (results.length <= 0) {
-          resolve(false);
-        } else {
-          let passHash = results[0].pass;
-          bcrypt.compare(password, passHash, (err, coinciden) => {
-            if (err) {
-              console.log("Error comprobando:", err);
-            } else {
-              resolve(coinciden);
-            }
-          });
-        }
-      }
-    );
-  });
+      constantes.ESQUEMA_BD +
+      ".usuario where usuario = " +
+      conexion.dbConn.escape(usuario);
+    const results = await gestion_base_datos.consulta(sql);
+    if (results.length <= 0) {
+      return false;
+    } else {
+      let passHash = results[0].pass;
+      const coinciden = await bcrypt.compare(password, passHash);
+      return coinciden;
+    }
+  } catch (error) {
+    console.log("usaurio.js -> login:", error);
+    throw new Error("Error al comprobar el login");
+  }
 }
-function obtener_usuarios() {
-  return new Promise(function (resolve, reject) {
-    conexion.dbConn.query(
-      "select * from " + constantes.ESQUEMA_BD + ".usuario",
-      function (error, results, fields) {
-        if (error) {
-          console.log(error);
-          reject();
-        }
-        return resolve(results);
+
+async function obtener_usuarios() {
+  try {
+    const sql = "select * from " + constantes.ESQUEMA_BD + ".usuario";
+    const results = await gestion_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.log("usaurio.js -> obtener_usuarios:", error);
+    throw new Error("Error al obtener usuarios");
+  }
+}
+
+function hashPassword(pass, saltRounds) {
+  return new Promise((resolve, reject) => {
+    bcrypt.hash(pass, saltRounds, (err, hash) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(hash);
       }
-    );
+    });
   });
 }
 
 async function async_actualizar_password(user, pass) {
-  let bExiste = await existe_login(user);
-  if (bExiste) {
-    const saltRounds = 9;
-    conexion.dbConn.beginTransaction(() => {
-      bcrypt.hash(pass, saltRounds, (err, hash) => {
-        conexion.dbConn.query(
-          "update " +
-            constantes.ESQUEMA_BD +
-            ".usuario set pass = " +
-            conexion.dbConn.escape(hash) +
-            " where usuario = " +
-            conexion.dbConn.escape(user),
-          (error, results, fields) => {
-            if (error) {
-              conexion.dbConn.rollback();
-              console.log(error);
-              reject();
-            } else {
-              conexion.dbConn.commit();
-              console.log("Usuario registrado");
-              resolve();
-            }
-          }
-        );
-      });
-    });
-  } else {
-    reject();
+  try {
+    let bExiste = await existe_login(user);
+    if (bExiste) {
+      const saltRounds = 9;
+      const hash = hashPassword(pass, saltRounds);
+      const sql =
+        "update " +
+        constantes.ESQUEMA_BD +
+        ".usuario set pass = " +
+        conexion.dbConn.escape(hash) +
+        " where usuario = " +
+        conexion.dbConn.escape(user);
+
+      await gestion_base_datos.actualiza(sql);
+    } else {
+      console.log("El usuario no existe");
+      throw new Error("El usuario no existe");
+    }
+  } catch (error) {
+    console.log("Error en async_actualizar_password: " + error);
+    throw new Error("Error al actualizar la contraseña");
   }
 }
 
 async function actualizar_password(user, pass) {
   try {
     await async_actualizar_password(user, pass);
-    return new Promise((resolve, reject) => {
-      resolve();
-    });
+    return;
   } catch (error) {
     console.log("Error en actualizar_password: " + error);
-    return new Promise((resolve, reject) => {
-      reject();
-    });
+    throw new Error("Error al actualizar la contraseña");
   }
 }
 
-function existe_login(user) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(
+async function existe_login(user) {
+  try {
+    const sql =
       "select count(*) nCont from " +
-        constantes.ESQUEMA_BD +
-        ".usuario where usuario = " +
-        conexion.dbConn.escape(user),
-      function (error, results, fields) {
-        if (error) {
-          console.log(error);
-          reject();
-        }
-        if (results.length < 1 || results.length > 1) {
-          resolve(false);
-        } else {
-          resolve(results[0].nCont > 0);
-        }
-      }
-    );
-  });
+      constantes.ESQUEMA_BD +
+      ".usuario where usuario = " +
+      conexion.dbConn.escape(user);
+    const results = await gestion_base_datos.consulta(sql);
+    if (results.length < 1 || results.length > 1) {
+      return false;
+    } else {
+      return results[0].nCont > 0;
+    }
+  } catch (error) {
+    console.log("usuario.js -> existe_login:", error);
+    throw new Error("Error al comprobar si existe el login");
+  }
 }
 
-function registrar(usuario, password) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(
-        "insert into " +
-          constantes.ESQUEMA_BD +
-          ".usuario(usuario, pass) values(" +
-          conexion.dbConn.escape(usuario) +
-          ", " +
-          conexion.dbConn.escape(password) +
-          ")",
-        function (error, results, field) {
-          if (error) {
-            console.log(error);
-            conexion.dbConn.rollback();
-            reject(new Error("Error al registrar el usuario"));
-          } else {
-            conexion.dbConn.commit();
-            console.log("Usuario registrado");
-            resolve();
-          }
-        }
-      );
-    });
-  });
+async function registrar(usuario, password) {
+  try {
+    const sql =
+      "insert into " +
+      constantes.ESQUEMA_BD +
+      ".usuario(usuario, pass) values(" +
+      conexion.dbConn.escape(usuario) +
+      ", " +
+      conexion.dbConn.escape(password) +
+      ")";
+    await gestion_base_datos.actualiza(sql);
+  } catch (error) {
+    console.log("usuario.js -> registrar:", error);
+    throw new Error("Error al registrar el usuario");
+  }
 }
 
 module.exports.esAdministrador = esAdministrador;
