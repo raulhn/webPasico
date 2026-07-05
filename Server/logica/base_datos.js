@@ -3,12 +3,22 @@ const conexion = require("../conexion.js");
 function consulta(sql) {
   return new Promise((resolve, reject) => {
     try {
-      conexion.pool.query(sql, (error, results) => {
+      conexion.pool.getConnection((error, connection) => {
         try {
           if (error) {
             reject(error);
           } else {
-            resolve(results);
+            connection.query(sql, (error, results) => {
+              try {
+                if (error) {
+                  reject(error);
+                } else {
+                  resolve(results);
+                }
+              } catch (error) {
+                reject(error);
+              }
+            });
           }
         } catch (error) {
           reject(error);
@@ -23,24 +33,34 @@ function consulta(sql) {
 function actualiza(sql) {
   return new Promise((resolve, reject) => {
     try {
-      conexion.pool.beginTransaction((error) => {
+      conexion.pool.getConnection((error, connection) => {
         try {
           if (error) {
             reject(error);
           } else {
-            conexion.pool.query(sql, (error, results) => {
+            connection.beginTransaction((error) => {
               try {
                 if (error) {
-                  conexion.pool.rollback();
                   reject(error);
                 } else {
-                  conexion.pool.commit((error) => {
-                    if (error) {
-                      conexion.pool.rollback();
+                  connection.query(sql, (error, results) => {
+                    try {
+                      if (error) {
+                        connection.rollback();
+                        reject(error);
+                      } else {
+                        connection.commit((error) => {
+                          if (error) {
+                            connection.rollback();
+                            reject(error);
+                          }
+                        });
+                        resolve(results);
+                      }
+                    } catch (error) {
                       reject(error);
                     }
                   });
-                  resolve(results);
                 }
               } catch (error) {
                 reject(error);
@@ -48,6 +68,7 @@ function actualiza(sql) {
             });
           }
         } catch (error) {
+          console.log("base_datos.js -> actualiza:", error);
           reject(error);
         }
       });
