@@ -1,6 +1,6 @@
 const constantes = require("../constantes");
 const conexion = require("../conexion");
-const gestor_base_datos = require("../base_datos");
+const gestor_base_datos = require("./base_datos");
 
 async function registrarAgendaEvento(
   nombre,
