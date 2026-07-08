@@ -1,186 +1,158 @@
 const conexion = require("../conexion.js");
 const constantes = require("../constantes.js");
+const gestor_base_datos = require("./base_datos.js");
 
-function limpiarToken(token, nidUsuario) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(
+async function limpiarToken(token, nidUsuario) {
+  try {
+    const sql =
       "DELETE FROM " +
-        constantes.ESQUEMA +
-        ".conexiones WHERE token <> " +
-        conexion.dbConn.escape(token) +
-        " AND nid_usuario = " +
-        conexion.dbConn.escape(nidUsuario),
-      (error, results) => {
-        if (error) {
-          console.error("Error al limpiar el token:", error);
-          reject(error);
-        } else {
-          resolve(results);
-        }
-      },
-    );
-  });
+      constantes.ESQUEMA +
+      ".conexiones WHERE token <> " +
+      conexion.dbConn.escape(token) +
+      " AND nid_usuario = " +
+      conexion.dbConn.escape(nidUsuario);
+
+    const result = await gestor_base_datos.actualiza(sql);
+    return result;
+  } catch (error) {
+    console.error("Error al limpiar el token:", error);
+    throw new Error("Error al limpiar el token: " + error.message);
+  }
 }
 
-function eliminarToken(token) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(
+async function eliminarToken(token) {
+  try {
+    const sql =
       "DELETE FROM " +
-        constantes.ESQUEMA +
-        ".conexiones WHERE token = " +
-        conexion.dbConn.escape(token),
-      (error, results) => {
-        if (error) {
-          console.error("Error al eliminar el token:", error);
-          reject(error);
-        } else {
-          resolve(results);
-        }
-      },
+      constantes.ESQUEMA +
+      ".conexiones WHERE token = " +
+      conexion.dbConn.escape(token);
+
+    const result = await gestor_base_datos.actualiza(sql);
+    return result;
+  } catch (error) {
+    console.error("Error al eliminar el token:", error);
+    throw new Error("Error al eliminar el token: " + error.message);
+  }
+}
+
+async function eliminarConexionesAntiguas(nid_usuario, ultima_conexion) {
+  try {
+    const sql =
+      "delete from " +
+      constantes.ESQUEMA +
+      ".conexiones where nid_usuario = " +
+      conexion.dbConn.escape(nid_usuario) +
+      " and nid_conexion < " +
+      conexion.dbConn.escape(ultima_conexion);
+
+    const result = await gestor_base_datos.actualiza(sql);
+    return result;
+  } catch (error) {
+    console.error("Error al eliminar las conexiones antiguas:", error);
+    throw new Error(
+      "Error al eliminar las conexiones antiguas: " + error.message,
     );
-  });
+  }
 }
 
-function eliminarConexionesAntiguas(nid_usuario, ultima_conexion) {
-  const sql =
-    "delete from " +
-    constantes.ESQUEMA +
-    ".conexiones where nid_usuario = " +
-    conexion.dbConn.escape(nid_usuario) +
-    " and nid_conexion < " +
-    conexion.dbConn.escape(ultima_conexion);
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(sql, (error, results) => {
-      if (error) {
-        console.error("Error al eliminar las conexiones antiguas:", error);
-        reject(error);
-      } else {
-        resolve(results);
-      }
-    });
-  });
-}
-
-function actualizarTokenUsuario(token, nidUsuario) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(
+async function actualizarTokenUsuario(token, nidUsuario) {
+  try {
+    const sql =
       "UPDATE " +
-        constantes.ESQUEMA +
-        ".conexiones set nid_usuario = " +
-        conexion.dbConn.escape(nidUsuario) +
-        " WHERE token = " +
-        conexion.dbConn.escape(token),
-      (error, results) => {
-        if (error) {
-          console.error("Error al actualizar el token del usuario:", error);
-          reject(error);
-        } else {
-          resolve();
-        }
-      },
+      constantes.ESQUEMA +
+      ".conexiones set nid_usuario = " +
+      conexion.dbConn.escape(nidUsuario) +
+      " WHERE token = " +
+      conexion.dbConn.escape(token);
+
+    const result = await gestor_base_datos.actualiza(sql);
+    return;
+  } catch (error) {
+    console.error("Error al actualizar el token del usuario:", error);
+    throw new Error(
+      "Error al actualizar el token del usuario: " + error.message,
     );
-  });
+  }
 }
 
-function obtener_ultima_observacion(nid_usuario) {
-  const sql =
-    "SELECT max(nid_conexion) as ultima_conexion FROM " +
-    constantes.ESQUEMA +
-    ".conexiones WHERE nid_usuario = " +
-    conexion.dbConn.escape(nid_usuario);
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(sql, (error, results) => {
-      if (error) {
-        console.error(
-          "Error al obtener la última conexión del usuario:",
-          error,
-        );
-        reject(error);
-      } else if (results.length > 0) {
-        resolve(results[0].ultima_conexion);
-      } else {
-        resolve(null); // No se encontró la última conexión
-      }
-    });
-  });
+async function obtener_ultima_observacion(nid_usuario) {
+  try {
+    const sql =
+      "SELECT max(nid_conexion) as ultima_conexion FROM " +
+      constantes.ESQUEMA +
+      ".conexiones WHERE nid_usuario = " +
+      conexion.dbConn.escape(nid_usuario);
+
+    const result = await gestor_base_datos.consulta(sql);
+    if (result.length > 0) {
+      return result[0].ultima_conexion;
+    } else {
+      return null; // No se encontró la última conexión
+    }
+  } catch (error) {
+    console.error("Error al obtener la última conexión del usuario:", error);
+    throw new Error("Error al obtener la última conexión del usuario ");
+  }
 }
 
-function obtenerTokenUsuario(nidUsuario) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(
+async function obtenerTokenUsuario(nidUsuario) {
+  try {
+    const sql =
       "SELECT token FROM " +
-        constantes.ESQUEMA +
-        ".conexiones WHERE nid_usuario = " +
-        conexion.dbConn.escape(nidUsuario) +
-        " and token is not null and fecha = (select max(fecha) from " +
-        constantes.ESQUEMA +
-        ".conexiones where nid_usuario = " +
-        conexion.dbConn.escape(nidUsuario) +
-        " and token is not null)",
-      (error, results) => {
-        if (error) {
-          console.error("Error al obtener el token del usuario:", error);
-          reject(error);
-        } else if (results.length > 0) {
-          resolve(results[0].token);
-        } else {
-          resolve(null); // No se encontró el token
-        }
-      },
-    );
-  });
+      constantes.ESQUEMA +
+      ".conexiones WHERE nid_usuario = " +
+      conexion.dbConn.escape(nidUsuario) +
+      " and token is not null and fecha = (select max(fecha) from " +
+      constantes.ESQUEMA +
+      ".conexiones where nid_usuario = " +
+      conexion.dbConn.escape(nidUsuario) +
+      " and token is not null)";
+
+    const result = await gestor_base_datos.consulta(sql);
+    if (result.length > 0) {
+      return result[0].token;
+    } else {
+      return null; // No se encontró el token
+    }
+  } catch (error) {
+    console.error("Error al obtener el token del usuario:", error);
+    throw new Error("Error al obtener el token del usuario");
+  }
 }
 
 async function registrarConexion(token) {
   try {
     let bExsiste = await existeConexion(token);
     let numeroConexiones = await numConexiones();
-    return new Promise((resolve, reject) => {
-      try {
-        if (numeroConexiones > constantes.MAX_CONEXIONES) {
-          console.error("Se ha alcanzado el número máximo de conexiones.");
-          reject("Se ha alcanzado el número máximo de conexiones.");
-        } else {
-          if (!bExsiste) {
-            conexion.dbConn.query(
-              "INSERT INTO " +
-                constantes.ESQUEMA +
-                ".conexiones (token, fecha) " +
-                "values (" +
-                conexion.dbConn.escape(token) +
-                ", now() )",
-              (error, results) => {
-                if (error) {
-                  console.error("Error al registrar la conexión:", error);
-                  reject(error);
-                } else {
-                  resolve(results);
-                }
-              },
-            );
-          } else {
-            conexion.dbConn.query(
-              "UPDATE " +
-                constantes.ESQUEMA +
-                ".conexiones SET fecha = now() WHERE token = " +
-                conexion.dbConn.escape(token),
-              (error, results) => {
-                if (error) {
-                  console.error("Error al actualizar la conexión:", error);
-                  reject(error);
-                } else {
-                  resolve(results);
-                }
-              },
-            );
-          }
-        }
-      } catch (error) {
-        reject("Se ha producido un error al insertar el token");
+
+    if (numeroConexiones > constantes.MAX_CONEXIONES) {
+      console.error("Se ha alcanzado el número máximo de conexiones.");
+      throw new Error("Se ha alcanzado el número máximo de conexiones.");
+    } else {
+      if (!bExsiste) {
+        const sql =
+          "INSERT INTO " +
+          constantes.ESQUEMA +
+          ".conexiones (token, fecha) " +
+          "values (" +
+          conexion.dbConn.escape(token) +
+          ", now() )";
+        const result = gestor_base_datos.actualiza(sql);
+        return result;
+      } else {
+        const sql =
+          "UPDATE " +
+          constantes.ESQUEMA +
+          ".conexiones SET fecha = now() WHERE token = " +
+          conexion.dbConn.escape(token);
+        const result = gestor_base_datos.actualiza(sql);
+        return result;
       }
-    });
-  } catch (e) {
-    throw new Error("Error al registrar el token de notificación");
+    }
+  } catch (error) {
+    console.error("Error al registrar la conexión:", error);
+    throw new Error("Error al registrar la conexión");
   }
 }
 
