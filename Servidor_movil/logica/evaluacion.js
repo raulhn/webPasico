@@ -3,15 +3,16 @@ const conexion = require("../conexion");
 const comun = require("./comun");
 const parametros = require("./parametros");
 const ficheros = require("./ficheros");
+const gestor_base_datos = require("./base_datos");
 
-function insertarEvaluacion(
+async function insertarEvaluacion(
   nid_trimestre,
   nid_asignatura,
   nid_profesor,
   nid_curso,
   sucio = "S",
 ) {
-  return new Promise((resolve, reject) => {
+  try {
     const sql =
       "INSERT INTO " +
       constantes.ESQUEMA +
@@ -27,29 +28,22 @@ function insertarEvaluacion(
       conexion.dbConn.escape(nid_curso) +
       ")";
 
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(sql, (err, result) => {
-        if (err) {
-          console.error("Error al insertar la evaluación:", err);
-          conexion.dbConn.rollback();
-          reject(err);
-        } else {
-          conexion.dbConn.commit();
-          resolve(result.insertId);
-        }
-      });
-    });
-  });
+    const result = await gestor_base_datos.actualiza(sql);
+    return result.insertId;
+  } catch (error) {
+    console.error("Error al insertar la evaluación:", error);
+    throw new Error("Error al insertar la evaluación");
+  }
 }
 
-function insertarEvaluacionSucio(
+async function insertarEvaluacionSucio(
   nid_trimestre,
   nid_asignatura,
   nid_profesor,
   fecha_actualizacion,
   nid_curso,
 ) {
-  return new Promise((resolve, reject) => {
+  try {
     const sql =
       "INSERT INTO " +
       constantes.ESQUEMA +
@@ -69,22 +63,15 @@ function insertarEvaluacionSucio(
       conexion.dbConn.escape(nid_curso) +
       ")";
 
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(sql, (err, result) => {
-        if (err) {
-          console.error("Error al insertar la evaluación:", err);
-          conexion.dbConn.rollback();
-          reject(err);
-        } else {
-          conexion.dbConn.commit();
-          resolve(result.insertId);
-        }
-      });
-    });
-  });
+    const result = await gestor_base_datos.actualiza(sql);
+    return result.insertId;
+  } catch (error) {
+    console.error("Error al insertar la evaluación sucia:", error);
+    throw new Error("Error al insertar la evaluación sucia");
+  }
 }
 
-function actualizarEvaluacion(
+async function actualizarEvaluacion(
   nid_evaluacion,
   nid_trimestre,
   nid_asignatura,
@@ -92,7 +79,7 @@ function actualizarEvaluacion(
   fecha_actualizacion,
   nid_curso,
 ) {
-  return new Promise((resolve, reject) => {
+  try {
     const sql =
       "UPDATE " +
       constantes.ESQUEMA +
@@ -113,44 +100,35 @@ function actualizarEvaluacion(
       " and fecha_actualizacion < " +
       conexion.dbConn.escape(comun.formatDateToMySQL(fecha_actualizacion));
 
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(sql, (err, result) => {
-        if (err) {
-          console.error("Error al actualizar la evaluación:", err);
-          conexion.dbConn.rollback();
-          reject(err);
-        } else {
-          conexion.dbConn.commit();
-          resolve(result.affectedRows);
-        }
-      });
-    });
-  });
+    const result = await gestor_base_datos.actualiza(sql);
+    return result.affectedRows;
+  } catch (error) {
+    console.error("Error al actualizar la evaluación:", error);
+    throw new Error("Error al actualizar la evaluación");
+  }
 }
 
-function existeEvaluacion(nid_evaluacion) {
-  return new Promise((resolve, reject) => {
+async function existeEvaluacion(nid_evaluacion) {
+  try {
     const sql =
       "SELECT COUNT(*) AS count FROM " +
       constantes.ESQUEMA +
       ".evaluacion WHERE nid_evaluacion = " +
       conexion.dbConn.escape(nid_evaluacion);
 
-    conexion.dbConn.query(sql, (error, results) => {
-      if (error) {
-        console.error(
-          "Error al verificar la existencia de la evaluación:",
-          error,
-        );
-        reject(error);
-      }
-      resolve(results[0].count > 0);
-    });
-  });
+    const result = await gestor_base_datos.consulta(sql);
+    return result[0].count > 0;
+  } catch (error) {
+    console.error("Error al verificar la existencia de la evaluación:", error);
+    throw new Error("Error al verificar la existencia de la evaluación");
+  }
 }
 
-function requiereActualizarEvaluacion(nid_evaluacion, fecha_actualizacion) {
-  return new Promise((resolve, reject) => {
+async function requiereActualizarEvaluacion(
+  nid_evaluacion,
+  fecha_actualizacion,
+) {
+  try {
     const sql =
       "SELECT COUNT(*) AS requiere FROM " +
       constantes.ESQUEMA +
@@ -159,16 +137,13 @@ function requiereActualizarEvaluacion(nid_evaluacion, fecha_actualizacion) {
       " AND fecha_actualizacion < " +
       conexion.dbConn.escape(comun.formatDateToMySQL(fecha_actualizacion));
 
-    conexion.dbConn.query(sql, (error, results) => {
-      if (error) {
-        console.error("Error al verificar si requiere actualización:", error);
-        reject(error);
-      }
-      resolve(results[0].requiere > 0);
-    });
-  });
+    const result = await gestor_base_datos.consulta(sql);
+    return result[0].requiere > 0;
+  } catch (error) {
+    console.error("Error al verificar si requiere actualización:", error);
+    throw new Error("Error al verificar si requiere actualización");
+  }
 }
-
 async function registrarEvaluacion(
   nid_evaluacion,
   nid_trimestre,
@@ -231,8 +206,8 @@ function obtenerEvaluacionesSucias() {
   });
 }
 
-function obtenerEvaluacionTrimestre(nid_matricula, nid_trimestre) {
-  return new Promise((resolve, reject) => {
+async function obtenerEvaluacionTrimestre(nid_matricula, nid_trimestre) {
+  try {
     const sql =
       "select e.nid_evaluacion, e.nid_trimestre, e.nid_asignatura, e.nid_profesor, " +
       "em.nota, em.nid_tipo_progreso, em.comentario," +
@@ -272,20 +247,15 @@ function obtenerEvaluacionTrimestre(nid_matricula, nid_trimestre) {
       conexion.dbConn.escape(nid_trimestre) +
       " order by  e.nid_evaluacion";
 
-    conexion.dbConn.query(sql, (err, results) => {
-      if (err) {
-        console.error(
-          "evaluacion.js -> obtenerEvaluacionTrimestre: Error al obtener la evaluación del trimestre:",
-          err,
-        );
-        reject(err);
-      }
-      if (results.length == 0) {
-        resolve(null);
-      }
-      resolve(results[0]);
-    });
-  });
+    const result = await gestor_base_datos.consulta(sql);
+    if (result.length == 0) {
+      return null;
+    }
+    return result[0];
+  } catch (error) {
+    console.error("Error al obtener la evaluación del trimestre:", error);
+    throw new Error("Error al obtener la evaluación del trimestre");
+  }
 }
 
 function obtenerEvaluaciones(nid_matricula) {
@@ -333,12 +303,12 @@ function obtenerEvaluaciones(nid_matricula) {
   });
 }
 
-function obtener_evaluacion_matricula_asginatura_tipo(
+async function obtener_evaluacion_matricula_asginatura_tipo(
   nid_matricula,
   tipo_asignatura,
   nid_trimestre,
 ) {
-  return new Promise((resolve, reject) => {
+  try {
     let filtro_tipo_asignatura = "";
     let filtro_trimestre = "";
 
@@ -352,64 +322,65 @@ function obtener_evaluacion_matricula_asginatura_tipo(
         " and e.nid_trimestre = " + conexion.dbConn.escape(nid_trimestre);
     }
 
-    conexion.dbConn.query(
+    const sql =
       "select a.descripcion asignatura, t.descripcion trimestre, concat(p.nombre, ' ' , p.primer_apellido, ' ', p.segundo_apellido) profesor, " +
-        "em.nota, em.nid_tipo_progreso, em.comentario, t.nid_trimestre, t.descripcion nombre_trimestre, tp.descripcion tipo_progreso, " +
-        "  tp.descripcion progreso,  c.descripcion curso,  concat(p2.nombre, ' ' , p2.primer_apellido, ' ', p2.segundo_apellido) alumno, ma.curso curso_instrumento " +
-        "from " +
-        constantes.ESQUEMA +
-        ".evaluacion e, " +
-        "      " +
-        constantes.ESQUEMA +
-        ".evaluacion_matricula em, " +
-        "      " +
-        constantes.ESQUEMA +
-        ".matricula m, " +
-        "      " +
-        constantes.ESQUEMA +
-        ".matricula_asignatura ma, " +
-        "      " +
-        constantes.ESQUEMA +
-        ".asignaturas a, " +
-        "      " +
-        constantes.ESQUEMA +
-        ".trimestre t, " +
-        "      " +
-        constantes.ESQUEMA +
-        ".persona p, " +
-        "      " +
-        constantes.ESQUEMA +
-        ".persona p2, " +
-        "      " +
-        constantes.ESQUEMA +
-        ".tipo_progreso tp, " +
-        "      " +
-        constantes.ESQUEMA +
-        ".curso c " +
-        "where e.nid_evaluacion = em.nid_evaluacion  " +
-        "  and a.nid_asignatura = e.nid_asignatura " +
-        "  and c.nid_curso = m.nid_curso " +
-        "  and t.nid_trimestre = e.nid_trimestre " +
-        "  and p.nid_persona = e.nid_profesor " +
-        "  and ma.nid_matricula_asignatura = em.nid_matricula_asignatura " +
-        "  and p2.nid_persona = m.nid_persona " +
-        "  and m.nid_matricula = ma.nid_matricula " +
-        "  and em.nid_tipo_progreso = tp.nid_tipo_progreso " +
-        "  and m.nid_matricula = " +
-        conexion.dbConn.escape(nid_matricula) +
-        filtro_tipo_asignatura +
-        filtro_trimestre +
-        " order by t.nid_trimestre, a.nid_asignatura",
-      (error, results, fields) => {
-        if (error) {
-          console.log(error);
-          reject(error);
-        } else {
-          resolve(results);
-        }
-      },
+      "em.nota, em.nid_tipo_progreso, em.comentario, t.nid_trimestre, t.descripcion nombre_trimestre, tp.descripcion tipo_progreso, " +
+      "  tp.descripcion progreso,  c.descripcion curso,  concat(p2.nombre, ' ' , p2.primer_apellido, ' ', p2.segundo_apellido) alumno, ma.curso curso_instrumento " +
+      "from " +
+      constantes.ESQUEMA +
+      ".evaluacion e, " +
+      "      " +
+      constantes.ESQUEMA +
+      ".evaluacion_matricula em, " +
+      "      " +
+      constantes.ESQUEMA +
+      ".matricula m, " +
+      "      " +
+      constantes.ESQUEMA +
+      ".matricula_asignatura ma, " +
+      "      " +
+      constantes.ESQUEMA +
+      ".asignaturas a, " +
+      "      " +
+      constantes.ESQUEMA +
+      ".trimestre t, " +
+      "      " +
+      constantes.ESQUEMA +
+      ".persona p, " +
+      "      " +
+      constantes.ESQUEMA +
+      ".persona p2, " +
+      "      " +
+      constantes.ESQUEMA +
+      ".tipo_progreso tp, " +
+      "      " +
+      constantes.ESQUEMA +
+      ".curso c " +
+      "where e.nid_evaluacion = em.nid_evaluacion  " +
+      "  and a.nid_asignatura = e.nid_asignatura " +
+      "  and c.nid_curso = m.nid_curso " +
+      "  and t.nid_trimestre = e.nid_trimestre " +
+      "  and p.nid_persona = e.nid_profesor " +
+      "  and ma.nid_matricula_asignatura = em.nid_matricula_asignatura " +
+      "  and p2.nid_persona = m.nid_persona " +
+      "  and m.nid_matricula = ma.nid_matricula " +
+      "  and em.nid_tipo_progreso = tp.nid_tipo_progreso " +
+      "  and m.nid_matricula = " +
+      conexion.dbConn.escape(nid_matricula) +
+      filtro_tipo_asignatura +
+      filtro_trimestre +
+      " order by t.nid_trimestre, a.nid_asignatura";
+
+    const result = await gestor_base_datos.consulta(sql);
+    return result;
+  } catch (error) {
+    console.log(
+      "evaluacion.js - obtener_evaluacion_matricula_asginatura_tipo ->" + error,
     );
-  });
+    throw new Error(
+      "Error al obtener la evaluación de la matrícula por asignatura y tipo",
+    );
+  }
 }
 
 function textoAcentosARtf(texto) {
@@ -740,13 +711,13 @@ async function generar_boletin(nid_matricula, nid_trimestre) {
   }
 }
 
-function obtenerEvaluacionesAsignaturas(
+async function obtenerEvaluacionesAsignaturas(
   nidAsignatura,
   nidCurso,
   nidTrimestre,
   nidProfesor,
 ) {
-  return new Promise((resolve, reject) => {
+  try {
     const sql =
       "SELECT e.nid_evaluacion, e.nid_trimestre, e.nid_asignatura, e.nid_profesor, " +
       "em.nota, em.nid_tipo_progreso, em.comentario, m.nid_persona as nid_alumno, " +
@@ -780,19 +751,21 @@ function obtenerEvaluacionesAsignaturas(
       " AND e.nid_profesor = " +
       conexion.dbConn.escape(nidProfesor);
 
-    conexion.dbConn.query(sql, (err, results) => {
-      if (err) {
-        console.error("Error al obtener las evaluaciones de asignaturas:", err);
-        reject(err);
-      } else {
-        resolve(results);
-      }
-    });
-  });
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.error("Error al obtener las evaluaciones de asignaturas:", error);
+    throw new Error("Error al obtener las evaluaciones de asignaturas");
+  }
 }
 
-function obtenerEvaluacion(nidCurso, nidAsignatura, nidTrimestre, nidProfesor) {
-  return new Promise((resolve, reject) => {
+async function obtenerEvaluacion(
+  nidCurso,
+  nidAsignatura,
+  nidTrimestre,
+  nidProfesor,
+) {
+  try {
     const sql =
       "SELECT e.* FROM " +
       constantes.ESQUEMA +
@@ -809,25 +782,22 @@ function obtenerEvaluacion(nidCurso, nidAsignatura, nidTrimestre, nidProfesor) {
       " AND e.nid_profesor = " +
       conexion.dbConn.escape(nidProfesor);
 
-    conexion.dbConn.query(sql, (err, result) => {
-      if (err) {
-        console.error("Error al obtener la evaluacion:", err);
-        reject(err);
-      } else {
-        resolve(result.length > 0 ? result[0] : null);
-      }
-    });
-  });
+    const result = await gestor_base_datos.consulta(sql);
+    return result.length > 0 ? result[0] : null;
+  } catch (error) {
+    console.error("Error al obtener la evaluacion:", error);
+    throw new Error("Error al obtener la evaluacion");
+  }
 }
 
-function insertarEvaluacionMatricula(
+async function insertarEvaluacionMatricula(
   nidEvaluacion,
   nota,
   nid_tipo_progreso,
   nid_matricula_asignatura,
   comentario,
 ) {
-  return new Promise((resolve, reject) => {
+  try {
     const sql =
       "INSERT INTO " +
       constantes.ESQUEMA +
@@ -844,18 +814,16 @@ function insertarEvaluacionMatricula(
       conexion.dbConn.escape(comentario) +
       "), 'S')";
 
-    conexion.dbConn.query(sql, (err, result) => {
-      if (err) {
-        console.error("Error al registrar la evaluacion matricula:", err);
-        reject(err);
-      } else {
-        resolve(result);
-      }
-    });
-  });
+    const result = await gestor_base_datos.actualiza(sql);
+
+    return result;
+  } catch (error) {
+    console.error("Error al insertar la evaluacion matricula:", error);
+    throw new Error("Error al insertar la evaluacion matricula");
+  }
 }
 
-function actualizarEvaluacionMatricula(
+async function actualizarEvaluacionMatricula(
   nidEvaluacionMatricula,
   nidEvaluacion,
   nota,
@@ -863,7 +831,7 @@ function actualizarEvaluacionMatricula(
   nid_matricula_asignatura,
   comentario,
 ) {
-  return new Promise((resolve, reject) => {
+  try {
     const sql =
       "UPDATE " +
       constantes.ESQUEMA +
@@ -884,19 +852,19 @@ function actualizarEvaluacionMatricula(
       " WHERE nid_evaluacion_matricula = " +
       conexion.dbConn.escape(nidEvaluacionMatricula);
 
-    conexion.dbConn.query(sql, (err, result) => {
-      if (err) {
-        console.error("Error al actualizar la evaluacion matricula:", err);
-        reject(err);
-      } else {
-        resolve(result);
-      }
-    });
-  });
+    const result = await gestor_base_datos.actualiza(sql);
+    return result;
+  } catch (error) {
+    console.error("Error al actualizar la evaluacion matricula:", error);
+    throw new Error("Error al actualizar la evaluacion matricula");
+  }
 }
 
-function existeEvaluacionMatricula(nidEvaluacion, nidMatriculaAsignatura) {
-  return new Promise((resolve, reject) => {
+async function existeEvaluacionMatricula(
+  nidEvaluacion,
+  nidMatriculaAsignatura,
+) {
+  try {
     const sql =
       "SELECT COUNT(*) AS existe FROM " +
       constantes.ESQUEMA +
@@ -905,19 +873,19 @@ function existeEvaluacionMatricula(nidEvaluacion, nidMatriculaAsignatura) {
       " AND nid_matricula_asignatura = " +
       conexion.dbConn.escape(nidMatriculaAsignatura);
 
-    conexion.dbConn.query(sql, (err, result) => {
-      if (err) {
-        console.error("Error al verificar la existencia de la matricula:", err);
-        reject(err);
-      } else {
-        resolve(result[0].existe > 0);
-      }
-    });
-  });
+    const result = await gestor_base_datos.consulta(sql);
+    return result[0].existe > 0;
+  } catch (error) {
+    console.error("Error al verificar la existencia de la matricula:", error);
+    throw new Error("Error al verificar la existencia de la matricula");
+  }
 }
 
-function obtenerEvaluacionMatricula(nidEvaluacion, nidMatriculaAsignatura) {
-  return new Promise((resolve, reject) => {
+async function obtenerEvaluacionMatricula(
+  nidEvaluacion,
+  nidMatriculaAsignatura,
+) {
+  try {
     const sql =
       "SELECT * FROM " +
       constantes.ESQUEMA +
@@ -926,41 +894,42 @@ function obtenerEvaluacionMatricula(nidEvaluacion, nidMatriculaAsignatura) {
       " AND nid_matricula_asignatura = " +
       conexion.dbConn.escape(nidMatriculaAsignatura);
 
-    conexion.dbConn.query(sql, (err, result) => {
-      if (err) {
-        console.error("Error al obtener la evaluacion matricula:", err);
-        reject(err);
-      } else {
-        resolve(result[0]);
-      }
-    });
-  });
+    const result = await gestor_base_datos.consulta(sql);
+    if (result.length > 0) {
+      return result[0];
+    } else {
+      console.log(
+        "No se encontró la evaluación matricula para nidEvaluacion:",
+        nidEvaluacion,
+        "y nidMatriculaAsignatura:",
+        nidMatriculaAsignatura,
+      );
+      throw new Error(
+        "No se encontró la evaluación matricula para los parámetros proporcionados",
+      );
+    }
+  } catch (error) {
+    console.error("Error al obtener la evaluacion matricula:", error);
+    throw new Error("Error al obtener la evaluacion matricula");
+  }
 }
 
-function actualizarEvaluacionSucia(nidEvaluacion) {
-  return new Promise((resolve, reject) => {
+async function actualizarEvaluacionSucia(nidEvaluacion) {
+  try {
     const sql =
       "UPDATE " +
       constantes.ESQUEMA +
       ".evaluacion SET sucio = 'N' WHERE nid_evaluacion = " +
       conexion.dbConn.escape(nidEvaluacion);
-
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(sql, (err, result) => {
-        if (err) {
-          console.error(
-            "Error al actualizar el estado sucio de la evaluacion:",
-            err,
-          );
-          conexion.dbConn.rollback();
-          reject(err);
-        } else {
-          conexion.dbConn.commit();
-          resolve(result);
-        }
-      });
-    });
-  });
+    const result = await gestor_base_datos.actualiza(sql);
+    return result;
+  } catch (error) {
+    console.error(
+      "Error al actualizar el estado sucio de la evaluacion:",
+      error,
+    );
+    throw new Error("Error al actualizar el estado sucio de la evaluacion");
+  }
 }
 
 module.exports.insertarEvaluacion = insertarEvaluacion;
