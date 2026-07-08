@@ -1,7 +1,8 @@
 const conexion = require("../conexion.js");
 const constantes = require("../constantes.js");
+const gestor_base_datos = require("./base_datos.js");
 
-function insertarEventoConcierto(
+async function insertarEventoConcierto(
   nombre,
   descripcion,
   fecha_evento,
@@ -11,7 +12,7 @@ function insertarEventoConcierto(
   vestimenta,
   lugar,
 ) {
-  return new Promise((resolve, reject) => {
+  try {
     const sql =
       "INSERT INTO " +
       constantes.ESQUEMA +
@@ -34,26 +35,15 @@ function insertarEventoConcierto(
       conexion.dbConn.escape(lugar) +
       ")";
 
-    console.log("eventoConcierto.js - insertarEventoConcierto -> SQL: " + sql);
-
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(sql, (err, results) => {
-        if (err) {
-          console.log(
-            "eventoConcienrot.js - insertarEventoConcierot -> Error: " + err,
-          );
-          conexion.dbConn.rollback();
-          reject("Error al insertar el evento de concierto");
-        } else {
-          conexion.dbConn.commit();
-          resolve(results.insertId);
-        }
-      });
-    });
-  });
+    const result = await gestor_base_datos.actualiza(sql);
+    return result.insertId;
+  } catch (error) {
+    console.error("Error al insertar el evento de concierto:", error);
+    throw new Error("Error al insertar el evento de concierto");
+  }
 }
 
-function actualizarEventoConcierto(
+async function actualizarEventoConcierto(
   nid_evento_concierto,
   nombre,
   descripcion,
@@ -64,7 +54,7 @@ function actualizarEventoConcierto(
   vestimenta,
   lugar,
 ) {
-  return new Promise((resolve, reject) => {
+  try {
     const sql =
       "UPDATE " +
       constantes.ESQUEMA +
@@ -87,68 +77,47 @@ function actualizarEventoConcierto(
       " WHERE nid_evento_concierto = " +
       conexion.dbConn.escape(nid_evento_concierto);
 
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(sql, (err, result) => {
-        if (err) {
-          console.log("eventoConcierto.js - actualizarEvento -> Error: " + err);
-          conexion.dbConn.rollback();
-          reject("Error al actualizar el evento de concierto");
-        } else {
-          conexion.dbConn.commit();
-          resolve();
-        }
-      });
-    });
-  });
+    const result = await gestor_base_datos.actualiza(sql);
+    return result.affectedRows;
+  } catch (error) {
+    console.error("Error al actualizar el evento de concierto:", error);
+    throw new Error("Error al actualizar el evento de concierto");
+  }
 }
 
-function eliminarEvento(nid_evento_concierto) {
-  return new Promise((resolve, reject) => {
+async function eliminarEvento(nid_evento_concierto) {
+  try {
     const sql =
       "UPDATE " +
       constantes.ESQUEMA +
       ".evento_concierto SET borrado = 'S' WHERE nid_evento_concierto = " +
       conexion.dbConn.escape(nid_evento_concierto);
 
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(sql, (err, result) => {
-        if (err) {
-          console.log("eventoConcierto.js - eliminarEvento -> Error: " + err);
-          conexion.dbConn.rollback();
-          reject("Error al eliminar el evento de concierto");
-        } else {
-          conexion.dbConn.commit();
-          resolve();
-        }
-      });
-    });
-  });
+    const result = await gestor_base_datos.actualiza(sql);
+  } catch (error) {
+    console.error("Error al eliminar el evento de concierto:", error);
+    throw new Error("Error al eliminar el evento de concierto");
+  }
 }
 
-function obtenerEventosConcierto() {
-  return new Promise((resolve, reject) => {
+async function obtenerEventosConcierto() {
+  try {
     const sql =
       "SELECT * FROM " +
       constantes.ESQUEMA +
       ".evento_concierto where borrado = 'N' " +
       " and date(fecha_evento) >= date(now()) " +
       " ORDER BY fecha_evento DESC, nid_evento_concierto DESC";
-
-    conexion.dbConn.query(sql, (err, result) => {
-      if (err) {
-        console.log(
-          "eventoConcierto.js - obtenerEventosConcierto -> Error: " + err,
-        );
-        reject("Error al obtener los eventos de concierto");
-      } else {
-        resolve(result);
-      }
-    });
-  });
+    const result = await gestor_base_datos.consulta(sql);
+    return result;
+  } catch (error) {
+    console.error("Error al obtener los eventos de concierto:", error);
+    throw new Error("Error al obtener los eventos de concierto");
+  }
 }
 
-function obtenerEventoConcierto(nid_evento_concierto) {
-  return new Promise((resolve, reject) => {
+async function obtenerEventoConcierto(nid_evento_concierto) {
+  try {
     const sql =
       "SELECT * FROM " +
       constantes.ESQUEMA +
@@ -156,45 +125,49 @@ function obtenerEventoConcierto(nid_evento_concierto) {
       conexion.dbConn.escape(nid_evento_concierto) +
       " and borrado = 'N'";
 
-    conexion.dbConn.query(sql, (err, result) => {
-      if (err) {
-        console.log(
-          "eventoConcierto.js - obtenerInforEventoConcierto -> Error: " + err,
-        );
-        reject("Error al obtener la información del evento de concierto");
-      } else {
-        resolve(result[0]);
-      }
-    });
-  });
+    const result = await gestor_base_datos.consulta(sql);
+    if (result.length === 0) {
+      throw new Error("Evento de concierto no encontrado");
+    }
+    return result[0];
+  } catch (error) {
+    console.error(
+      "Error al obtener la información del evento de concierto:",
+      error,
+    );
+    throw new Error("Error al obtener la información del evento de concierto");
+  }
 }
 
-function obtenerEvento(nid_evento_concierto, bPublico) {
-  const sql =
-    "select nid_evento_concierto nid_evento, nombre, descripcion, fecha_evento fecha, hora, publicado, 'Banda' tipo " +
-    "from " +
-    constantes.ESQUEMA +
-    ".evento_concierto where nid_evento_concierto = " +
-    conexion.dbConn.escape(nid_evento_concierto) +
-    (bPublico ? " and publicado = 'S' " : " ") +
-    " and borrado = 'N'";
+async function obtenerEvento(nid_evento_concierto, bPublico) {
+  try {
+    const sql =
+      "select nid_evento_concierto nid_evento, nombre, descripcion, fecha_evento fecha, hora, publicado, 'Banda' tipo " +
+      "from " +
+      constantes.ESQUEMA +
+      ".evento_concierto where nid_evento_concierto = " +
+      conexion.dbConn.escape(nid_evento_concierto) +
+      (bPublico ? " and publicado = 'S' " : " ") +
+      " and borrado = 'N'";
 
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(sql, (err, result) => {
-      if (err) {
-        console.log("eventoConcierto.js - obtenerEvento -> Error: " + err);
-        reject("Error al obtener la información del evento de concierto");
-      } else if (result.length === 0) {
-        reject("Evento de concierto no encontrado");
-      } else {
-        resolve(result[0]);
-      }
-    });
-  });
+    const result = await gestor_base_datos.consulta(sql);
+
+    if (result.length === 0) {
+      throw new Error("Evento de concierto no encontrado");
+    } else {
+      return result[0];
+    }
+  } catch (error) {
+    console.error(
+      "Error al obtener la información del evento de concierto:",
+      error,
+    );
+    throw new Error("Error al obtener la información del evento de concierto");
+  }
 }
 
-function registrar_partitura_evento(nid_evento_concierto, nid_partitura) {
-  return new Promise((resolve, reject) => {
+async function registrar_partitura_evento(nid_evento_concierto, nid_partitura) {
+  try {
     const sql =
       "INSERT INTO " +
       constantes.ESQUEMA +
@@ -205,21 +178,21 @@ function registrar_partitura_evento(nid_evento_concierto, nid_partitura) {
       conexion.dbConn.escape(nid_partitura) +
       ")";
 
-    conexion.dbConn.query(sql, (err, result) => {
-      if (err) {
-        console.log(
-          "eventoConcierto.js - registrar_partitura_evento -> Error: " + err,
-        );
-        reject("Error al registrar la partitura en el evento de concierto");
-      } else {
-        resolve(result);
-      }
-    });
-  });
+    const result = await gestor_base_datos.actualiza(sql);
+    return result;
+  } catch (error) {
+    console.error(
+      "Error al registrar la partitura en el evento de concierto:",
+      error,
+    );
+    throw new Error(
+      "Error al registrar la partitura en el evento de concierto",
+    );
+  }
 }
 
-function eliminar_partitura_evento(nid_evento_concierto, nid_partitura) {
-  return new Promise((resolve, reject) => {
+async function eliminar_partitura_evento(nid_evento_concierto, nid_partitura) {
+  try {
     const sql =
       "DELETE FROM " +
       constantes.ESQUEMA +
@@ -228,21 +201,19 @@ function eliminar_partitura_evento(nid_evento_concierto, nid_partitura) {
       " AND nid_partitura = " +
       conexion.dbConn.escape(nid_partitura);
 
-    conexion.dbConn.query(sql, (err, result) => {
-      if (err) {
-        console.log(
-          "eventoConcierto.js - eliminar_partitura_evento -> Error: " + err,
-        );
-        reject("Error al eliminar la partitura del evento de concierto");
-      } else {
-        resolve(result);
-      }
-    });
-  });
+    const result = await gestor_base_datos.actualiza(sql);
+    return result;
+  } catch (error) {
+    console.error(
+      "Error al eliminar la partitura del evento de concierto:",
+      error,
+    );
+    throw new Error("Error al eliminar la partitura del evento de concierto");
+  }
 }
 
-function obtenerPartiturasEvento(nid_evento_concierto) {
-  return new Promise((resolve, reject) => {
+async function obtenerPartiturasEvento(nid_evento_concierto) {
+  try {
     const sql =
       "SELECT p.*, cp.nid_categoria, nombre_categoria FROM " +
       constantes.ESQUEMA +
@@ -256,50 +227,49 @@ function obtenerPartiturasEvento(nid_evento_concierto) {
       "and pe.nid_evento_concierto = " +
       conexion.dbConn.escape(nid_evento_concierto);
 
-    conexion.dbConn.query(sql, (err, result) => {
-      if (err) {
-        console.log(
-          "eventoConcierto.js - obtenerPartiturasEvento -> Error: " + err,
-        );
-        reject("Error al obtener las partituras del evento de concierto");
-      } else {
-        resolve(result);
-      }
-    });
-  });
+    const result = await gestor_base_datos.consulta(sql);
+    return result;
+  } catch (error) {
+    console.error(
+      "Error al obtener las partituras del evento de concierto:",
+      error,
+    );
+    throw new Error("Error al obtener las partituras del evento de concierto");
+  }
 }
 
-function obtenerEventosConciertoRangoFecha(fecha_inicio, fecha_fin, publicado) {
-  const sql =
-    "select ev.nid_evento_concierto nid_evento, nombre, fecha_evento fecha, descripcion, publicado, vestimenta, lugar, 'Concierto' tipo, hora from " +
-    constantes.ESQUEMA +
-    ".evento_concierto ev where fecha_evento between " +
-    conexion.dbConn.escape(fecha_inicio) +
-    " and " +
-    conexion.dbConn.escape(fecha_fin) +
-    (publicado ? " and publicado = 'S' " : " ") +
-    " and borrado = 'N'";
-  (" order by fecha_evento desc");
+async function obtenerEventosConciertoRangoFecha(
+  fecha_inicio,
+  fecha_fin,
+  publicado,
+) {
+  try {
+    const sql =
+      "select ev.nid_evento_concierto nid_evento, nombre, fecha_evento fecha, descripcion, publicado, vestimenta, lugar, 'Concierto' tipo, hora from " +
+      constantes.ESQUEMA +
+      ".evento_concierto ev where fecha_evento between " +
+      conexion.dbConn.escape(fecha_inicio) +
+      " and " +
+      conexion.dbConn.escape(fecha_fin) +
+      (publicado ? " and publicado = 'S' " : " ") +
+      " and borrado = 'N'";
+    (" order by fecha_evento desc");
 
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(sql, (err, result) => {
-      if (err) {
-        console.log(
-          "eventoConcierto.js - obtenerEventosConciertoRangoFecha -> Error: " +
-            err,
-        );
-        reject(
-          "Error al obtener los eventos de concierto en el rango de fechas",
-        );
-      } else {
-        resolve(result);
-      }
-    });
-  });
+    const result = await gestor_base_datos.consulta(sql);
+    return result;
+  } catch (error) {
+    console.error(
+      "Error al obtener los eventos de concierto en el rango de fechas:",
+      error,
+    );
+    throw new Error(
+      "Error al obtener los eventos de concierto en el rango de fechas",
+    );
+  }
 }
 
-function existePartituraEvento(nid_evento_concierto, nid_partitura) {
-  return new Promise((resolve, reject) => {
+async function existePartituraEvento(nid_evento_concierto, nid_partitura) {
+  try {
     const sql =
       "SELECT * FROM " +
       constantes.ESQUEMA +
@@ -308,17 +278,17 @@ function existePartituraEvento(nid_evento_concierto, nid_partitura) {
       " AND nid_partitura = " +
       conexion.dbConn.escape(nid_partitura);
 
-    conexion.dbConn.query(sql, (err, result) => {
-      if (err) {
-        console.log(
-          "eventoConcierto.js - existePartituraEvento -> Error: " + err,
-        );
-        reject("Error al verificar la existencia de la partitura en el evento");
-      } else {
-        resolve(result.length > 0);
-      }
-    });
-  });
+    const result = await gestor_base_datos.consulta(sql);
+    return result.length > 0;
+  } catch (error) {
+    console.error(
+      "Error al verificar la existencia de la partitura en el evento:",
+      error,
+    );
+    throw new Error(
+      "Error al verificar la existencia de la partitura en el evento",
+    );
+  }
 }
 
 module.exports.insertarEventoConcierto = insertarEventoConcierto;
