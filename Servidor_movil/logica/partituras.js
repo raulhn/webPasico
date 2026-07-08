@@ -1,44 +1,38 @@
 const conexion = require("../conexion");
 const constantes = require("../constantes");
+const gestor_base_datos = require("./base_datos");
 
-function insertarPartitura(titulo, autor, nid_categoria, url_partitura) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.beginTransaction(() => {
-      const sql =
-        "INSERT INTO " +
-        constantes.ESQUEMA +
-        ".partituras (titulo, autor, nid_categoria, url_partitura) VALUES (" +
-        conexion.dbConn.escape(titulo) +
-        ", " +
-        conexion.dbConn.escape(autor) +
-        ", nullif(" +
-        conexion.dbConn.escape(nid_categoria) +
-        ", '')," +
-        conexion.dbConn.escape(url_partitura) +
-        ")";
+async function insertarPartitura(titulo, autor, nid_categoria, url_partitura) {
+  try {
+    const sql =
+      "INSERT INTO " +
+      constantes.ESQUEMA +
+      ".partituras (titulo, autor, nid_categoria, url_partitura) VALUES (" +
+      conexion.dbConn.escape(titulo) +
+      ", " +
+      conexion.dbConn.escape(autor) +
+      ", nullif(" +
+      conexion.dbConn.escape(nid_categoria) +
+      ", '')," +
+      conexion.dbConn.escape(url_partitura) +
+      ")";
 
-      conexion.dbConn.query(sql, (error, result) => {
-        if (error) {
-          console.error("Error al insertar la partitura: " + error.message);
-          conexion.dbConn.rollback();
-          reject("Error al insertar la partitura");
-        } else {
-          conexion.dbConn.commit();
-          resolve(result.insertId);
-        }
-      });
-    });
-  });
+    const result = await gestor_base_datos.actualiza(sql);
+    return result.insertId;
+  } catch (error) {
+    console.error("Error al insertar la partitura: " + error.message);
+    throw new Error("Error al insertar la partitura");
+  }
 }
 
-function actualizarPartitura(
+async function actualizarPartitura(
   nid_partitura,
   titulo,
   autor,
   nid_categoria,
-  url_partitura
+  url_partitura,
 ) {
-  return new Promise((resolve, reject) => {
+  try {
     const sql =
       "UPDATE " +
       constantes.ESQUEMA +
@@ -57,23 +51,16 @@ function actualizarPartitura(
       " WHERE nid_partitura = " +
       conexion.dbConn.escape(nid_partitura);
 
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(sql, (error, result) => {
-        if (error) {
-          console.error("Error al actualizar la partitura: " + error.message);
-          conexion.dbConn.rollback();
-          reject("Error al actualizar la partitura");
-        } else {
-          conexion.dbConn.commit();
-          resolve(result);
-        }
-      });
-    });
-  });
+    const result = await gestor_base_datos.actualiza(sql);
+    return result.affectedRows;
+  } catch (error) {
+    console.error("Error al actualizar la partitura: " + error.message);
+    throw new Error("Error al actualizar la partitura");
+  }
 }
 
-function obtenerPartituras() {
-  return new Promise((resolve, reject) => {
+async function obtenerPartituras() {
+  try {
     const sql =
       "SELECT p.nid_partitura, p.titulo, p.autor, p.nid_categoria, p.url_partitura, ifnull(c.nombre_categoria, '') nombre_categoria, p.url_partitura " +
       "FROM " +
@@ -83,19 +70,16 @@ function obtenerPartituras() {
       constantes.ESQUEMA +
       ".categoria_partitura c ON p.nid_categoria = c.nid_categoria";
 
-    conexion.dbConn.query(sql, (error, results) => {
-      if (error) {
-        console.error("Error al obtener las partituras: " + error.message);
-        reject("Error al obtener las partituras");
-      } else {
-        resolve(results);
-      }
-    });
-  });
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.error("Error al obtener las partituras: " + error.message);
+    throw new Error("Error al obtener las partituras");
+  }
 }
 
-function obtenerPartitura(nid_partitura) {
-  return new Promise((resolve, reject) => {
+async function obtenerPartitura(nid_partitura) {
+  try {
     const sql =
       "SELECT p.nid_partitura, p.titulo, p.autor, p.nid_categoria, p.url_partitura, ifnull(c.nombre_categoria, '') nombre_categoria " +
       "FROM " +
@@ -107,15 +91,12 @@ function obtenerPartitura(nid_partitura) {
       "WHERE p.nid_partitura = " +
       conexion.dbConn.escape(nid_partitura);
 
-    conexion.dbConn.query(sql, (error, results) => {
-      if (error) {
-        console.error("Error al obtener la partitura: " + error.message);
-        reject("Error al obtener la partitura");
-      } else {
-        resolve(results[0]);
-      }
-    });
-  });
+    const results = await gestor_base_datos.consulta(sql);
+    return results[0];
+  } catch (error) {
+    console.error("Error al obtener la partitura: " + error.message);
+    throw new Error("Error al obtener la partitura");
+  }
 }
 
 module.exports.insertarPartitura = insertarPartitura;

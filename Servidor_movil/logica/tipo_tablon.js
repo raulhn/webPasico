@@ -1,124 +1,76 @@
 const constantes = require("../constantes");
 const conexion = require("../conexion");
+const gestor_base_datos = require("./base_datos.js");
 
-function insertarTipoTablon(descripcion)
-{
-    return new Promise((resolve, reject) =>
-    {
-        const sql = "insert into " + constantes.ESQUEMA +
-                    ".tipo_tablon(descripcion) values(" +
-                    conexion.dbConn.escape(descripcion) + ")";
-        
-        conexion.dbConn.beginTransaction(
-            () =>
-            {
-                conexion.dbConn.query(sql,
-                    (error, results, fields) =>
-                    {
-                        if(error)
-                        {
-                            console.log("tipo_tablon.js -> insertarTipoTablon: " + error);
-                            conexion.dbConn.rollback();
-                            reject("Se ha producido un error al insertar el tipo de tablon");
-                        }
-                        else
-                        {
-                            conexion.dbConn.commit();
-                            resolve(results.insertId);
-                        }
-                    }
-                )
-            }
-        )
-    })
+async function insertarTipoTablon(descripcion) {
+  try {
+    const sql =
+      "insert into " +
+      constantes.ESQUEMA +
+      ".tipo_tablon(descripcion) values(" +
+      conexion.dbConn.escape(descripcion) +
+      ")";
+
+    const results = await gestor_base_datos.actualiza(sql);
+    return results.insertId;
+  } catch (error) {
+    console.log("tipo_tablon.js -> insertarTipoTablon: " + error);
+    throw new Error("Se ha producido un error al insertar el tipo de tablon");
+  }
 }
 
-function actualizarTipoTablon(nidTipoTablon, descripcion)
-{
-    return new Promise((resolve, reject) =>
-    {
-        const sql = "update " + constantes.ESQUEMA + 
-                    ".tipo_tablon set descripcion = " +
-                    conexion.dbConn.escape(descripcion) +
-                    " where nid_tipo_tablon = " +
-                    conexion.dbConn.escape(nidTipoTablon);
+async function actualizarTipoTablon(nidTipoTablon, descripcion) {
+  try {
+    const sql =
+      "update " +
+      constantes.ESQUEMA +
+      ".tipo_tablon set descripcion = " +
+      conexion.dbConn.escape(descripcion) +
+      " where nid_tipo_tablon = " +
+      conexion.dbConn.escape(nidTipoTablon);
 
-        conexion.dbConn.beginTransaction(() =>
-        {
-            conexion.dbConn.query(sql, 
-                (error, results, fields) =>
-                {
-                    if(error)
-                    {
-                        console.log("tipo_tablon.js -> actualizarTipoTablon: " + error);
-                        conexion.dbConn.rollback();
-                        reject("Se ha producido un error al actualizar el tipo de tablón");
-                    }
-                    else
-                    {
-                        conexion.dbConn.commit();
-                        resolve();
-                    }
-                }
-            )
-        })
-    })
+    const results = await gestor_base_datos.actualiza(sql);
+    return results.affectedRows;
+  } catch (error) {
+    console.log("tipo_tablon.js -> actualizarTipoTablon: " + error);
+    throw new Error("Se ha producido un error al actualizar el tipo de tablón");
+  }
 }
 
-function obtenerTipoTablon(nidTipoTablon)
-{
-    return new Promise((resolve, reject) =>
-    {
-        const sql = "select * from " + constantes.ESQUEMA +
-                    ".tipo_tablon where nid_tipo_tablon " +
-                    conexion.dbConn.escape(nidTipoTablon);
+async function obtenerTipoTablon(nidTipoTablon) {
+  try {
+    const sql =
+      "select * from " +
+      constantes.ESQUEMA +
+      ".tipo_tablon where nid_tipo_tablon " +
+      conexion.dbConn.escape(nidTipoTablon);
 
-        conexion.dbConn.query(sql,
-            (error, results, fields) =>
-            {
-                if(error)
-                {
-                    console.log("tipo_tablon.js -> obtenerTipoTablon: ", error);
-                    reject("Se ha producido un error al recuperar el tipo de tablón")
-                }
-                else if(results.length == 0)
-                {
-                    console.log("No se ha encontrado el tipo de tablón")
-                    reject("No se ha encontrado el tipo de tablón");
-                }
-                else
-                {
-                    resolve(results[0])
-                }
-            }
-        )
-    })
+    const results = await gestor_base_datos.consulta(sql);
+    if (results.length == 0) {
+      console.log("No se ha encontrado el tipo de tablón");
+      throw new Error("No se ha encontrado el tipo de tablón");
+    } else {
+      return results[0];
+    }
+  } catch (error) {
+    console.log("tipo_tablon.js -> obtenerTipoTablon: ", error);
+    throw new Error("Se ha producido un error al recuperar el tipo de tablón");
+  }
 }
 
-function obtenerTiposTablon()
-{
-    return new Promise((resolve, reject) =>
-    {
-        const sql = "select * from " + constantes.ESQUEMA + 
-                    ".tipo_tablon";
+async function obtenerTiposTablon() {
+  try {
+    const sql = "select * from " + constantes.ESQUEMA + ".tipo_tablon";
 
-        conexion.dbConn.query(sql,
-            (error, results, fields) =>
-            {
-                if(error)
-                {
-                    console.log("tipo_tablon.js -> obtenerTiposTablon: ", error);
-                    reject("Se ha producido un error al recuperar los tipos de tablon");
-                }
-                else
-                {
-                    resolve(results);
-                }
-            }
-        )
-    })
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.log("tipo_tablon.js -> obtenerTiposTablon: ", error);
+    throw new Error(
+      "Se ha producido un error al recuperar los tipos de tablon",
+    );
+  }
 }
-
 
 module.exports.insertarTipoTablon = insertarTipoTablon;
 module.exports.actualizarTipoTablon = actualizarTipoTablon;

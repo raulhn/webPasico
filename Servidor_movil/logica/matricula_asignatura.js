@@ -1,6 +1,7 @@
 const constantes = require("../constantes");
 const conexion = require("../conexion");
 const gestorCurso = require("./curso");
+const gestor_base_datos = require("./base_datos.js");
 
 function formatDateToMySQL(date) {
   try {
@@ -14,26 +15,23 @@ function formatDateToMySQL(date) {
   }
 }
 
-function existeMatriculaAsignatura(nid_matricula_asignatura) {
-  return new Promise((resolve, reject) => {
+async function existeMatriculaAsignatura(nid_matricula_asignatura) {
+  try {
     const sql =
       "SELECT COUNT(*) AS existe FROM " +
       constantes.ESQUEMA +
       ".matricula_asignatura WHERE nid_matricula_asignatura =" +
       conexion.dbConn.escape(nid_matricula_asignatura);
 
-    conexion.dbConn.query(sql, (err, result) => {
-      if (err) {
-        console.error("Error al verificar la existencia de la matricula:", err);
-        reject(err);
-      } else {
-        resolve(result[0].existe > 0);
-      }
-    });
-  });
+    const result = await gestor_base_datos.consulta(sql);
+    return result[0].existe > 0;
+  } catch (error) {
+    console.error("Error al verificar la existencia de la matricula:", error);
+    throw new Error("Error al verificar la existencia de la matricula");
+  }
 }
 
-function insertarMatriculaAsignatura(
+async function insertarMatriculaAsignatura(
   nid_matricula_asignatura,
   nid_matricula,
   nid_asignatura,
@@ -41,7 +39,7 @@ function insertarMatriculaAsignatura(
   fecha_baja,
   fecha_actualizacion,
 ) {
-  return new Promise((resolve, reject) => {
+  try {
     const sql =
       "INSERT INTO " +
       constantes.ESQUEMA +
@@ -60,22 +58,15 @@ function insertarMatriculaAsignatura(
       conexion.dbConn.escape(formatDateToMySQL(fecha_actualizacion)) +
       ")";
 
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(sql, (err, result) => {
-        if (err) {
-          console.error("Error al insertar la matricula:", err);
-          conexion.dbConn.rollback();
-          reject("Error al insertar la matricula");
-        } else {
-          conexion.dbConn.commit();
-          resolve(result);
-        }
-      });
-    });
-  });
+    const result = await gestor_base_datos.actualiza(sql);
+    return result;
+  } catch (error) {
+    console.error("Error al insertar la matricula:", error);
+    throw new Error("Error al insertar la matricula");
+  }
 }
 
-function actualizarMatriculaAsignatura(
+async function actualizarMatriculaAsignatura(
   nid_matricula_asignatura,
   nid_matricula,
   nid_asignatura,
@@ -83,7 +74,7 @@ function actualizarMatriculaAsignatura(
   fecha_baja,
   fecha_actualizacion,
 ) {
-  return new Promise((resolve, reject) => {
+  try {
     const sql =
       "UPDATE " +
       constantes.ESQUEMA +
@@ -99,19 +90,13 @@ function actualizarMatriculaAsignatura(
       conexion.dbConn.escape(formatDateToMySQL(fecha_actualizacion)) +
       " WHERE nid_matricula_asignatura = " +
       conexion.dbConn.escape(nid_matricula_asignatura);
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(sql, (err, result) => {
-        if (err) {
-          console.error("Error al actualizar la matricula:", err);
-          conexion.dbConn.rollback();
-          reject("Error al actualizar la matricula");
-        } else {
-          conexion.dbConn.commit();
-          resolve(result);
-        }
-      });
-    });
-  });
+
+    const result = await gestor_base_datos.actualiza(sql);
+    return result;
+  } catch (error) {
+    console.error("Error al actualizar la matricula:", error);
+    throw new Error("Error al actualizar la matricula");
+  }
 }
 
 async function registrarMatriculaAsignatura(
@@ -149,8 +134,8 @@ async function registrarMatriculaAsignatura(
   }
 }
 
-function obtenerAlumnos(nid_curso, activo = 1) {
-  return new Promise((resolve, reject) => {
+async function obtenerAlumnos(nid_curso, activo = 1) {
+  try {
     let sql =
       "SELECT p.nid_persona, p.nombre, p.primer_apellido, p.segundo_apellido FROM " +
       constantes.ESQUEMA +
@@ -173,19 +158,16 @@ function obtenerAlumnos(nid_curso, activo = 1) {
       sql +
       " GROUP BY p.nid_persona, p.primer_apellido, p.segundo_apellido, p.nombre";
 
-    conexion.dbConn.query(sql, (err, result) => {
-      if (err) {
-        console.error("Error al obtener los alumnos activos:", err);
-        reject(err);
-      } else {
-        resolve(result);
-      }
-    });
-  });
+    const result = await gestor_base_datos.consulta(sql);
+    return result;
+  } catch (error) {
+    console.error("Error al obtener los alumnos activos:", error);
+    throw new Error("Error al obtener los alumnos activos");
+  }
 }
 
-function obtenerAlumnosCurso(nid_curso, activo = 1) {
-  return new Promise((resolve, reject) => {
+async function obtenerAlumnosCurso(nid_curso, activo = 1) {
+  try {
     let sql =
       "SELECT p.*, ma.nid_asignatura FROM " +
       constantes.ESQUEMA +
@@ -205,19 +187,20 @@ function obtenerAlumnosCurso(nid_curso, activo = 1) {
         sql + " AND (ma.fecha_baja IS NOT NULL AND ma.fecha_baja <= NOW()) ";
     }
 
-    conexion.dbConn.query(sql, (err, result) => {
-      if (err) {
-        console.error("Error al obtener los alumnos activos:", err);
-        reject(err);
-      } else {
-        resolve(result);
-      }
-    });
-  });
+    const result = await gestor_base_datos.consulta(sql);
+    return result;
+  } catch (error) {
+    console.error("Error al obtener los alumnos activos:", error);
+    throw new Error("Error al obtener los alumnos activos");
+  }
 }
 
-function obtenerAlumnosCursoAsignatura(nid_curso, nid_asignatura, activo = 1) {
-  return new Promise((resolve, reject) => {
+async function obtenerAlumnosCursoAsignatura(
+  nid_curso,
+  nid_asignatura,
+  activo = 1,
+) {
+  try {
     let sql =
       "SELECT p.*, ma.nid_asignatura FROM " +
       constantes.ESQUEMA +
@@ -239,15 +222,12 @@ function obtenerAlumnosCursoAsignatura(nid_curso, nid_asignatura, activo = 1) {
         sql + " AND (ma.fecha_baja IS NOT NULL AND ma.fecha_baja <= NOW()) ";
     }
 
-    conexion.dbConn.query(sql, (err, result) => {
-      if (err) {
-        console.error("Error al obtener los alumnos activos:", err);
-        reject(err);
-      } else {
-        resolve(result);
-      }
-    });
-  });
+    const result = await gestor_base_datos.consulta(sql);
+    return result;
+  } catch (error) {
+    console.error("Error al obtener los alumnos activos:", error);
+    throw new Error("Error al obtener los alumnos activos");
+  }
 }
 
 async function obtenerAlumnosCursoActivo() {
@@ -277,8 +257,8 @@ async function obtenerAlumnosCursoActivoAsignatura(nid_asignatura) {
   }
 }
 
-function obtenerMatriculasAsignatura(nid_matricula) {
-  return new Promise((resolve, reject) => {
+async function obtenerMatriculasAsignatura(nid_matricula) {
+  try {
     const sql =
       "SELECT ma.nid_matricula_asignatura, ma.nid_matricula, ma.nid_asignatura, " +
       "ma.fecha_alta, ma.fecha_baja, ma.fecha_actualizacion, a.descripcion AS asignatura, " +
@@ -300,19 +280,16 @@ function obtenerMatriculasAsignatura(nid_matricula) {
       " AND ma.nid_matricula = m.nid_matricula " +
       " AND m.nid_persona = p.nid_persona ";
 
-    conexion.dbConn.query(sql, (err, result) => {
-      if (err) {
-        console.error("Error al obtener las matriculas de asignaturas:", err);
-        reject(err);
-      } else {
-        resolve(result);
-      }
-    });
-  });
+    const result = await gestor_base_datos.consulta(sql);
+    return result;
+  } catch (error) {
+    console.error("Error al obtener las matriculas de asignaturas:", error);
+    throw new Error("Error al obtener las matriculas de asignaturas");
+  }
 }
 
-function esAlumnoAsignatura(nid_persona, nid_asignatura, nid_curso) {
-  return new Promise((resolve, reject) => {
+async function esAlumnoAsignatura(nid_persona, nid_asignatura, nid_curso) {
+  try {
     const sql =
       "SELECT COUNT(*) AS existe FROM " +
       constantes.ESQUEMA +
@@ -328,19 +305,16 @@ function esAlumnoAsignatura(nid_persona, nid_asignatura, nid_curso) {
       " AND m.nid_matricula = ma.nid_matricula " +
       " AND (ma.fecha_baja IS NULL OR ma.fecha_baja > NOW())";
 
-    conexion.dbConn.query(sql, (err, result) => {
-      if (err) {
-        console.error("Error al verificar si es alumno de la asignatura:", err);
-        reject(err);
-      } else {
-        resolve(result[0].existe > 0);
-      }
-    });
-  });
+    const result = await gestor_base_datos.consulta(sql);
+    return result[0].existe > 0;
+  } catch (error) {
+    console.error("Error al verificar si es alumno de la asignatura:", error);
+    throw new Error("Error al verificar si es alumno de la asignatura");
+  }
 }
 
-function obtenerAlumnosAsignatura(nid_asignatura, nid_curso) {
-  return new Promise((resolve, reject) => {
+async function obtenerAlumnosAsignatura(nid_asignatura, nid_curso) {
+  try {
     const sql =
       "SELECT a.nid_persona, a.nombre, a.primer_apellido, a.segundo_apellido, ma.nid_matricula_asignatura, ma.nid_matricula " +
       "FROM " +
@@ -358,23 +332,20 @@ function obtenerAlumnosAsignatura(nid_asignatura, nid_curso) {
       conexion.dbConn.escape(nid_curso) +
       " AND (m.fecha_baja IS NULL OR m.fecha_baja > NOW())";
 
-    conexion.dbConn.query(sql, (err, result) => {
-      if (err) {
-        console.error("Error al obtener los alumnos de la asignatura:", err);
-        reject(err);
-      } else {
-        resolve(result);
-      }
-    });
-  });
+    const result = await gestor_base_datos.consulta(sql);
+    return result;
+  } catch (error) {
+    console.error("Error al obtener los alumnos de la asignatura:", error);
+    throw new Error("Error al obtener los alumnos de la asignatura");
+  }
 }
 
-function obtenerAlumnosAsignaturaProfesor(
+async function obtenerAlumnosAsignaturaProfesor(
   nid_asignatura,
   nid_curso,
   nid_profesor,
 ) {
-  return new Promise((resolve, reject) => {
+  try {
     const sql =
       "SELECT p.nid_persona, p.nombre, p.primer_apellido, p.segundo_apellido , ma.nid_matricula_asignatura, ma.nid_matricula " +
       "FROM " +
@@ -398,52 +369,46 @@ function obtenerAlumnosAsignaturaProfesor(
       " AND (ma.fecha_baja IS NULL OR ma.fecha_baja > NOW())" +
       " and (pam.fecha_baja IS NULL OR pam.fecha_baja > NOW())";
 
-    conexion.dbConn.query(sql, (err, result) => {
-      if (err) {
-        console.error("Error al obtener los alumnos de la asignatura:", err);
-        reject(err);
-      } else {
-        resolve(result);
-      }
-    });
-  });
+    const result = await gestor_base_datos.consulta(sql);
+    return result;
+  } catch (error) {
+    console.error("Error al obtener los alumnos de la asignatura:", error);
+    throw new Error("Error al obtener los alumnos de la asignatura");
+  }
 }
 
-function obtenerAsignaturasAlumno(nid_persona, nid_curso, activo = 1) {
-  let sql =
-    "SELECT a.nid_asignatura, a.descripcion, ma.nid_matricula_asignatura, ma.nid_matricula " +
-    "FROM " +
-    constantes.ESQUEMA +
-    ".asignaturas a, " +
-    constantes.ESQUEMA +
-    ".matricula m, " +
-    constantes.ESQUEMA +
-    ".matricula_asignatura ma " +
-    "WHERE ma.nid_asignatura = a.nid_asignatura " +
-    "AND ma.nid_matricula = m.nid_matricula " +
-    "AND m.nid_persona = " +
-    conexion.dbConn.escape(nid_persona) +
-    " " +
-    "AND m.nid_curso = " +
-    conexion.dbConn.escape(nid_curso) +
-    " ";
+async function obtenerAsignaturasAlumno(nid_persona, nid_curso, activo = 1) {
+  try {
+    let sql =
+      "SELECT a.nid_asignatura, a.descripcion, ma.nid_matricula_asignatura, ma.nid_matricula " +
+      "FROM " +
+      constantes.ESQUEMA +
+      ".asignaturas a, " +
+      constantes.ESQUEMA +
+      ".matricula m, " +
+      constantes.ESQUEMA +
+      ".matricula_asignatura ma " +
+      "WHERE ma.nid_asignatura = a.nid_asignatura " +
+      "AND ma.nid_matricula = m.nid_matricula " +
+      "AND m.nid_persona = " +
+      conexion.dbConn.escape(nid_persona) +
+      " " +
+      "AND m.nid_curso = " +
+      conexion.dbConn.escape(nid_curso) +
+      " ";
 
-  if (activo == 1) {
-    sql += "AND (ma.fecha_baja IS NULL OR ma.fecha_baja > NOW()) ";
-  } else if (activo == 2) {
-    sql += "AND (ma.fecha_baja IS NOT NULL AND ma.fecha_baja <= NOW()) ";
+    if (activo == 1) {
+      sql += "AND (ma.fecha_baja IS NULL OR ma.fecha_baja > NOW()) ";
+    } else if (activo == 2) {
+      sql += "AND (ma.fecha_baja IS NOT NULL AND ma.fecha_baja <= NOW()) ";
+    }
+
+    const result = await gestor_base_datos.consulta(sql);
+    return result;
+  } catch (error) {
+    console.error("Error al obtener las asignaturas del alumno:", error);
+    throw new Error("Error al obtener las asignaturas del alumno");
   }
-
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(sql, (err, result) => {
-      if (err) {
-        console.error("Error al obtener las asignaturas del alumno:", err);
-        reject("Se ha producido un error al obtener las asignaturas");
-      } else {
-        resolve(result);
-      }
-    });
-  });
 }
 
 module.exports.registrarMatriculaAsignatura = registrarMatriculaAsignatura;

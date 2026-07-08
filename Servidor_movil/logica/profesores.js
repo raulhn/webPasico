@@ -1,14 +1,15 @@
 const conexion = require("../conexion");
 const constantes = require("../constantes");
 const comun = require("./comun");
+const gestor_base_datos = require("./base_datos.js");
 
-function insertarProfesor(
+async function insertarProfesor(
   nid_persona,
   nid_asignatura,
   esBaja,
   fecha_actualizacion,
 ) {
-  return new Promise((resolve, reject) => {
+  try {
     const sql =
       "INSERT INTO " +
       constantes.ESQUEMA +
@@ -23,27 +24,21 @@ function insertarProfesor(
       conexion.dbConn.escape(esBaja) +
       ")";
 
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(sql, (error, result) => {
-        if (error) {
-          console.error("Error al insertar el profesor: " + error.message);
-          conexion.dbConn.rollback();
-          reject(new Error("Error al insertar el profesor"));
-        } else {
-          conexion.dbConn.commit();
-          resolve(result);
-        }
-      });
-    });
-  });
+    const result = await gestor_base_datos.actualiza(sql);
+    return result;
+  } catch (error) {
+    console.error("Error al insertar el profesor: " + error.message);
+    throw new Error("Error al insertar el profesor");
+  }
 }
-function actualizarProfesor(
+
+async function actualizarProfesor(
   nid_persona,
   nid_asignatura,
   esBaja,
   fecha_actualizacion,
 ) {
-  return new Promise((resolve, reject) => {
+  try {
     const sql =
       "UPDATE " +
       constantes.ESQUEMA +
@@ -56,23 +51,16 @@ function actualizarProfesor(
       " AND nid_asignatura = " +
       conexion.dbConn.escape(nid_asignatura);
 
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(sql, (error, result) => {
-        if (error) {
-          console.error("Error al actualizar el profesor: " + error.message);
-          conexion.dbConn.rollback();
-          reject(new Error("Error al actualizar el profesor"));
-        } else {
-          conexion.dbConn.commit();
-          resolve(result);
-        }
-      });
-    });
-  });
+    const result = await gestor_base_datos.actualiza(sql);
+    return result;
+  } catch (error) {
+    console.error("Error al actualizar el profesor: " + error.message);
+    throw new Error("Error al actualizar el profesor");
+  }
 }
 
-function existeProfesor(nid_persona, nid_asignatura) {
-  return new Promise((resolve, reject) => {
+async function existeProfesor(nid_persona, nid_asignatura) {
+  try {
     const sql =
       "SELECT * FROM " +
       constantes.ESQUEMA +
@@ -81,15 +69,12 @@ function existeProfesor(nid_persona, nid_asignatura) {
       " AND nid_asignatura = " +
       conexion.dbConn.escape(nid_asignatura);
 
-    conexion.dbConn.query(sql, (error, result) => {
-      if (error) {
-        console.error("Error al verificar el profesor: " + error.message);
-        reject(new Error("Error al verificar el profesor"));
-      } else {
-        resolve(result.length > 0);
-      }
-    });
-  });
+    const result = await gestor_base_datos.consulta(sql);
+    return result.length > 0;
+  } catch (error) {
+    console.error("Error al verificar el profesor: " + error.message);
+    throw new Error("Error al verificar el profesor");
+  }
 }
 
 async function registrarProfesor(
@@ -121,8 +106,8 @@ async function registrarProfesor(
   }
 }
 
-function eliminarProfesor(nid_persona, nid_asignatura) {
-  return new Promise((resolve, reject) => {
+async function eliminarProfesor(nid_persona, nid_asignatura) {
+  try {
     const sql =
       "DELETE FROM " +
       constantes.ESQUEMA +
@@ -131,44 +116,32 @@ function eliminarProfesor(nid_persona, nid_asignatura) {
       " AND nid_asignatura = " +
       conexion.dbConn.escape(nid_asignatura);
 
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(sql, (error, result) => {
-        if (error) {
-          console.error("Error al eliminar el profesor: " + error.message);
-          conexion.dbConn.rollback();
-          reject(new Error("Error al eliminar el profesor"));
-        } else {
-          conexion.dbConn.commit();
-          resolve(result);
-        }
-      });
-    });
-  });
-}
-
-function obtenerProfesor(nid_persona) {
-  {
-    return new Promise((resolve, reject) => {
-      const sql =
-        "SELECT * FROM " +
-        constantes.ESQUEMA +
-        ".profesor WHERE nid_persona = " +
-        conexion.dbConn.escape(nid_persona);
-
-      conexion.dbConn.query(sql, (error, result) => {
-        if (error) {
-          console.error("Error al obtener el profesor: " + error.message);
-          reject(new Error("Error al obtener el profesor"));
-        } else {
-          resolve(result);
-        }
-      });
-    });
+    const result = await gestor_base_datos.actualiza(sql);
+    return result;
+  } catch (error) {
+    console.error("Error al eliminar el profesor: " + error.message);
+    throw new Error("Error al eliminar el profesor");
   }
 }
 
-function esProfesor(nid_persona, nid_asignatura) {
-  return new Promise((resolve, reject) => {
+async function obtenerProfesor(nid_persona) {
+  try {
+    const sql =
+      "SELECT * FROM " +
+      constantes.ESQUEMA +
+      ".profesor WHERE nid_persona = " +
+      conexion.dbConn.escape(nid_persona);
+
+    const result = await gestor_base_datos.consulta(sql);
+    return result;
+  } catch (error) {
+    console.error("Error al obtener el profesor: " + error.message);
+    throw new Error("Error al obtener el profesor");
+  }
+}
+
+async function esProfesor(nid_persona, nid_asignatura) {
+  try {
     const sql =
       "select count(*) num " +
       " from " +
@@ -179,19 +152,16 @@ function esProfesor(nid_persona, nid_asignatura) {
       " and nid_asignatura = " +
       conexion.dbConn.escape(nid_asignatura);
 
-    conexion.dbConn.query(sql, (error, results, fields) => {
-      if (error) {
-        console.log("profesores.js -> esProfesor: ", error);
-        reject("Se ha producido un error al comprobar el profesor");
-      } else {
-        resolve(results[0]["num"] > 0);
-      }
-    });
-  });
+    const result = await gestor_base_datos.consulta(sql);
+    return result[0]["num"] > 0;
+  } catch (error) {
+    console.error("Error al comprobar si es profesor: " + error.message);
+    throw new Error("Error al comprobar si es profesor");
+  }
 }
 
-function obtenerProfesores() {
-  return new Promise((resolve, reject) => {
+async function obtenerProfesores() {
+  try {
     const sql =
       "SELECT pr.*, pe.nombre, pe.primer_apellido, pe.segundo_apellido FROM " +
       constantes.ESQUEMA +
@@ -201,19 +171,16 @@ function obtenerProfesores() {
       " where pr.nid_persona = pe.nid_persona" +
       " and esBaja = 'N'";
 
-    conexion.dbConn.query(sql, (error, result) => {
-      if (error) {
-        console.error("Error al obtener los profesores: " + error.message);
-        reject(new Error("Error al obtener los profesores"));
-      } else {
-        resolve(result);
-      }
-    });
-  });
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.error("Error al obtener los profesores: " + error.message);
+    throw new Error("Error al obtener los profesores");
+  }
 }
 
-function obtenerProfesoresAsignatura(nid_asignatura) {
-  return new Promise((resolve, reject) => {
+async function obtenerProfesoresAsignatura(nid_asignatura) {
+  try {
     const sql =
       "SELECT pr.*, pe.nombre, pe.primer_apellido, pe.segundo_apellido FROM " +
       constantes.ESQUEMA +
@@ -225,41 +192,35 @@ function obtenerProfesoresAsignatura(nid_asignatura) {
       conexion.dbConn.escape(nid_asignatura) +
       " and pr.esBaja = 'N'";
 
-    conexion.dbConn.query(sql, (error, result) => {
-      if (error) {
-        console.error("Error al obtener los profesores: " + error.message);
-        reject(new Error("Error al obtener los profesores"));
-      } else {
-        resolve(result);
-      }
-    });
-  });
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.error("Error al obtener los profesores: " + error.message);
+    throw new Error("Error al obtener los profesores");
+  }
 }
 
-function obtenerAsignaturasProfesor(nid_persona) {
-  const sql =
-    "select a.nid_asignatura, a.descripcion from " +
-    constantes.ESQUEMA +
-    ".profesor p, " +
-    constantes.ESQUEMA +
-    ".asignaturas a " +
-    " where p.nid_asignatura = a.nid_asignatura " +
-    " and p.nid_persona = " +
-    conexion.dbConn.escape(nid_persona) +
-    " and p.esBaja = 'N'";
+async function obtenerAsignaturasProfesor(nid_persona) {
+  try {
+    const sql =
+      "select a.nid_asignatura, a.descripcion from " +
+      constantes.ESQUEMA +
+      ".profesor p, " +
+      constantes.ESQUEMA +
+      ".asignaturas a " +
+      " where p.nid_asignatura = a.nid_asignatura " +
+      " and p.nid_persona = " +
+      conexion.dbConn.escape(nid_persona) +
+      " and p.esBaja = 'N'";
 
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(sql, (error, result) => {
-      if (error) {
-        console.error(
-          "Error al obtener las asignaturas del profesor: " + error.message,
-        );
-        reject(new Error("Error al obtener las asignaturas del profesor"));
-      } else {
-        resolve(result);
-      }
-    });
-  });
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.error(
+      "Error al obtener las asignaturas del profesor: " + error.message,
+    );
+    throw new Error("Error al obtener las asignaturas del profesor");
+  }
 }
 
 module.exports.obtenerProfesoresAsignatura = obtenerProfesoresAsignatura;

@@ -2,10 +2,10 @@ const constantes = require("../constantes");
 const conexion = require("../conexion");
 const comun = require("./comun");
 const gestorPersonas = require("./persona");
-const gestorSocios = require("./socios");
+const gestor_base_datos = require("./base_datos.js");
 
-function existeMusico(nid_persona, nid_tipo_musico, nid_instrumento) {
-  return new Promise((resolve, reject) => {
+async function existeMusico(nid_persona, nid_tipo_musico, nid_instrumento) {
+  try {
     const sql =
       "select * from " +
       constantes.ESQUEMA +
@@ -16,18 +16,15 @@ function existeMusico(nid_persona, nid_tipo_musico, nid_instrumento) {
       " and nid_instrumento = " +
       conexion.dbConn.escape(nid_instrumento);
 
-    conexion.dbConn.query(sql, (error, result) => {
-      if (error) {
-        console.log("Error al comprobar si existe el músico: ", error);
-        reject(new Error("Error al comprobar si existe el músico"));
-      } else {
-        resolve(result.length > 0);
-      }
-    });
-  });
+    const results = await gestor_base_datos.consulta(sql);
+    return results.length > 0;
+  } catch (error) {
+    console.error("Error al comprobar si existe el músico: ", error);
+    throw new Error("Error al comprobar si existe el músico");
+  }
 }
 
-function insertarMusico(
+async function insertarMusico(
   nid_persona,
   fecha_alta,
   fecha_baja,
@@ -35,7 +32,7 @@ function insertarMusico(
   nid_instrumento,
   fecha_actualizacion,
 ) {
-  return new Promise((resolve, reject) => {
+  try {
     const sql =
       "insert into " +
       constantes.ESQUEMA +
@@ -54,23 +51,15 @@ function insertarMusico(
       conexion.dbConn.escape(comun.formatDateToMySQL(fecha_actualizacion)) +
       ")";
 
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(sql, (error, result) => {
-        if (error) {
-          console.log("Error al insertar el músico: ", error);
-          conexion.dbConn.rollback();
-          reject(new Error("Error al insertar el músico"));
-        } else {
-          conexion.dbConn.commit();
-          console.log("Músico insertado correctamente");
-          resolve();
-        }
-      });
-    });
-  });
+    const results = await gestor_base_datos.actualiza(sql);
+    return results.insertId;
+  } catch (error) {
+    console.error("Error al insertar el músico: ", error);
+    throw new Error("Error al insertar el músico");
+  }
 }
 
-function actualizarMusico(
+async function actualizarMusico(
   nid_persona,
   fecha_alta,
   fecha_baja,
@@ -78,7 +67,7 @@ function actualizarMusico(
   nid_instrumento,
   fecha_actualizacion,
 ) {
-  return new Promise((resolve, reject) => {
+  try {
     const sql =
       "update " +
       constantes.ESQUEMA +
@@ -95,20 +84,12 @@ function actualizarMusico(
       " and nid_instrumento = " +
       conexion.dbConn.escape(nid_instrumento);
 
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(sql, (error, result) => {
-        if (error) {
-          console.log("Error al actualizar el músico: ", error);
-          conexion.dbConn.rollback();
-          reject(new Error("Error al actualizar el músico"));
-        } else {
-          conexion.dbConn.commit();
-          console.log("Músico actualizado correctamente");
-          resolve();
-        }
-      });
-    });
-  });
+    const results = await gestor_base_datos.actualiza(sql);
+    return results.affectedRows;
+  } catch (error) {
+    console.error("Error al actualizar el músico: ", error);
+    throw new Error("Error al actualizar el músico");
+  }
 }
 
 async function registrarMusico(
@@ -151,23 +132,20 @@ async function registrarMusico(
   }
 }
 
-function esMusico(nid_persona) {
-  return new Promise((resolve, reject) => {
+async function esMusico(nid_persona) {
+  try {
     const sql =
       "select * from " +
       constantes.ESQUEMA +
       ".musicos where nid_persona = " +
       conexion.dbConn.escape(nid_persona);
 
-    conexion.dbConn.query(sql, (error, result) => {
-      if (error) {
-        console.log("Error al comprobar si es músico: ", error);
-        reject(new Error("Error al comprobar si es músico"));
-      } else {
-        resolve(result.length > 0);
-      }
-    });
-  });
+    const results = await gestor_base_datos.consulta(sql);
+    return results.length > 0;
+  } catch (error) {
+    console.error("Error al comprobar si es músico: ", error);
+    throw new Error("Error al comprobar si es músico");
+  }
 }
 
 // El parametro bSocio indica si se quiere no tener en cuenta los hijos que ya son socios,
@@ -189,8 +167,8 @@ async function esPadreMusico(nid_persona, bSocio = true) {
   }
 }
 
-function obtenerPersonasTipoMusico(tipos_musico) {
-  return new Promise((resolve, reject) => {
+async function obtenerPersonasTipoMusico(tipos_musico) {
+  try {
     const sql =
       "select nid_persona from " +
       constantes.ESQUEMA +
@@ -199,19 +177,16 @@ function obtenerPersonasTipoMusico(tipos_musico) {
       ")" +
       " group by nid_persona";
 
-    conexion.dbConn.query(sql, (error, results) => {
-      if (error) {
-        console.log("Error al obtener el tipo de músico: ", error);
-        reject(new Error("Error al obtener el tipo de músico"));
-      } else {
-        resolve(results);
-      }
-    });
-  });
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.error("Error al obtener el tipo de músico: ", error);
+    throw new Error("Error al obtener el tipo de músico");
+  }
 }
 
-function obtenerInstrumentos(nid_persona) {
-  return new Promise((resolve, reject) => {
+async function obtenerInstrumentos(nid_persona) {
+  try {
     const sql =
       "select i.nid_instrumento, i.descripcion from " +
       constantes.ESQUEMA +
@@ -222,15 +197,12 @@ function obtenerInstrumentos(nid_persona) {
       " and m.nid_instrumento = i.nid_instrumento" +
       " group by i.nid_instrumento, i.descripcion";
 
-    conexion.dbConn.query(sql, (error, results) => {
-      if (error) {
-        console.log("Error al obtener los instrumentos del músico: ", error);
-        reject(new Error("Error al obtener los instrumentos del músico"));
-      } else {
-        resolve(results);
-      }
-    });
-  });
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.error("Error al obtener los instrumentos del músico: ", error);
+    throw new Error("Error al obtener los instrumentos del músico");
+  }
 }
 
 module.exports.registrarMusico = registrarMusico;

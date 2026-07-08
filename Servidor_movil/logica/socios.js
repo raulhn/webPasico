@@ -1,15 +1,16 @@
 const conexion = require("../conexion");
 const constantes = require("../constantes");
 const comun = require("./comun");
+const gestor_base_datos = require("./base_datos.js");
 
-function insertarSocio(
+async function insertarSocio(
   nid_persona,
   fecha_alta,
   fecha_baja,
   num_socio,
-  fecha_actualizacion
+  fecha_actualizacion,
 ) {
-  return new Promise((resolve, reject) => {
+  try {
     const sql =
       "INSERT INTO " +
       constantes.ESQUEMA +
@@ -25,39 +26,22 @@ function insertarSocio(
       conexion.dbConn.escape(comun.formatDateToMySQL(fecha_actualizacion)) +
       ")";
 
-    conexion.dbConn.beginTransaction((err) => {
-      if (err) {
-        console.error("Error al iniciar la transacción:", err);
-        reject(new Error("Error al iniciar la transacción"));
-      } else {
-        conexion.dbConn.query(sql, (error) => {
-          if (error) {
-            console.error("Error al insertar el socio:", error);
-            reject(new Error("Error al insertar el socio"));
-          }
-          conexion.dbConn.commit((err) => {
-            if (err) {
-              console.error("Error al confirmar la transacción:", err);
-              conexion.dbConn.rollback(() => {
-                reject(err);
-              });
-            }
-          });
-          resolve();
-        });
-      }
-    });
-  });
+    const results = await gestor_base_datos.actualiza(sql);
+    return results;
+  } catch (error) {
+    console.error("Error al insertar el socio: " + error.message);
+    throw new Error("Error al insertar el socio");
+  }
 }
 
-function actualizarSocio(
+async function actualizarSocio(
   nid_persona,
   fecha_alta,
   fecha_baja,
   num_socio,
-  fecha_actualizacion
+  fecha_actualizacion,
 ) {
-  return new Promise((resolve, reject) => {
+  try {
     const sql =
       "UPDATE " +
       constantes.ESQUEMA +
@@ -72,48 +56,28 @@ function actualizarSocio(
       " WHERE nid_persona = " +
       conexion.dbConn.escape(nid_persona);
 
-    conexion.dbConn.beginTransaction((err) => {
-      if (err) {
-        console.error("Error al iniciar la transacción:", err);
-        reject(err);
-      } else {
-        conexion.dbConn.query(sql, (error) => {
-          if (error) {
-            console.error("Error al actualizar el socio:", error);
-            reject(error);
-          }
-          conexion.dbConn.commit((err) => {
-            if (err) {
-              console.error("Error al confirmar la transacción:", err);
-              conexion.dbConn.rollback(() => {
-                reject(err);
-              });
-            }
-            resolve();
-          });
-        });
-      }
-    });
-  });
+    const results = await gestor_base_datos.actualiza(sql);
+    return results;
+  } catch (error) {
+    console.error("Error al actualizar el socio: " + error.message);
+    throw new Error("Error al actualizar el socio");
+  }
 }
 
-function existeSocio(nid_persona) {
-  return new Promise((resolve, reject) => {
+async function existeSocio(nid_persona) {
+  try {
     const sql =
       "SELECT COUNT(*) AS existe FROM " +
       constantes.ESQUEMA +
       ".socios WHERE nid_persona = " +
       conexion.dbConn.escape(nid_persona);
 
-    conexion.dbConn.query(sql, (error, results) => {
-      if (error) {
-        console.error("Error al verificar la existencia del socio:", error);
-        reject(error);
-      } else {
-        resolve(results[0].existe > 0);
-      }
-    });
-  });
+    const result = await gestor_base_datos.consulta(sql);
+    return result[0].existe > 0;
+  } catch (error) {
+    console.error("Error al verificar la existencia del socio:", error);
+    throw new Error("Error al verificar la existencia del socio");
+  }
 }
 
 async function registrarSocio(
@@ -121,7 +85,7 @@ async function registrarSocio(
   fecha_alta,
   fecha_baja,
   num_socio,
-  fecha_actualizacion
+  fecha_actualizacion,
 ) {
   try {
     let existe = await existeSocio(nid_persona);
@@ -131,7 +95,7 @@ async function registrarSocio(
         fecha_alta,
         fecha_baja,
         num_socio,
-        fecha_actualizacion
+        fecha_actualizacion,
       );
     } else {
       return await insertarSocio(
@@ -139,7 +103,7 @@ async function registrarSocio(
         fecha_alta,
         fecha_baja,
         num_socio,
-        fecha_actualizacion
+        fecha_actualizacion,
       );
     }
   } catch (error) {
@@ -148,42 +112,36 @@ async function registrarSocio(
   }
 }
 
-function esSocio(nid_persona) {
-  return new Promise((resolve, reject) => {
+async function esSocio(nid_persona) {
+  try {
     const sql =
       "SELECT COUNT(*) AS esSocio FROM " +
       constantes.ESQUEMA +
       ".socios WHERE nid_persona = " +
       conexion.dbConn.escape(nid_persona);
 
-    conexion.dbConn.query(sql, (error, results) => {
-      if (error) {
-        console.error("Error al verificar si es socio:", error);
-        reject(error);
-      } else {
-        resolve(results[0].esSocio > 0);
-      }
-    });
-  });
+    const results = await gestor_base_datos.consulta(sql);
+    return results[0].esSocio > 0;
+  } catch (error) {
+    console.error("Error al verificar si es socio:", error);
+    throw new Error("Error al verificar si es socio");
+  }
 }
 
-function obtenerSocio(nid_persona) {
-  return new Promise((resolve, reject) => {
+async function obtenerSocio(nid_persona) {
+  try {
     const sql =
       "SELECT * FROM " +
       constantes.ESQUEMA +
       ".socios WHERE nid_persona = " +
       conexion.dbConn.escape(nid_persona);
 
-    conexion.dbConn.query(sql, (error, results) => {
-      if (error) {
-        console.error("Error al obtener el socio:", error);
-        reject(error);
-      } else {
-        resolve(results[0]);
-      }
-    });
-  });
+    const results = await gestor_base_datos.consulta(sql);
+    return results[0];
+  } catch (error) {
+    console.error("Error al obtener el socio:", error);
+    throw new Error("Error al obtener el socio");
+  }
 }
 
 module.exports.registrarSocio = registrarSocio;

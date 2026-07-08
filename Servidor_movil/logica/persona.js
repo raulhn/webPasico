@@ -1,30 +1,28 @@
-const eslintPluginPrettier = require("eslint-plugin-prettier");
 const conexion = require("../conexion.js");
 const constantes = require("../constantes.js");
 const gestorUsuario = require("./usuario.js");
 const comun = require("./comun.js");
+const gestor_base_datos = require("./base_datos.js");
 
-function existePersona(nid_persona) {
-  return new Promise((resolve, reject) => {
+async function existePersona(nid_persona) {
+  try {
     const sql =
       "SELECT * FROM " +
       constantes.ESQUEMA +
       ".persona WHERE nid_persona = " +
       conexion.dbConn.escape(nid_persona);
 
-    conexion.dbConn.query(sql, (error, results) => {
-      if (error) {
-        console.error("Error al verificar la existencia de la persona:", error);
-        reject(error);
-      }
-      resolve(results.length > 0);
-    });
-  });
+    const results = await gestor_base_datos.consulta(sql);
+    return results.length > 0;
+  } catch (error) {
+    console.error("Error al verificar la existencia de la persona:", error);
+    throw new Error("Error al verificar la existencia de la persona");
+  }
 }
 
 //bSocio indica si se tienen que incluir los hijos que son socios, TRUE indica que si
-function obtenerHijos(nid_persona, bSocio) {
-  return new Promise((resolve, reject) => {
+async function obtenerHijos(nid_persona, bSocio) {
+  try {
     let condicionSocio;
     if (!bSocio) {
       condicionSocio =
@@ -48,85 +46,76 @@ function obtenerHijos(nid_persona, bSocio) {
       ")" +
       condicionSocio;
 
-    conexion.dbConn.query(sql, (error, results, fields) => {
-      if (error) {
-        console.log("persona.js -> obtenerHijos: " + error);
-        reject("Error al obtener los hijos");
-      } else {
-        resolve(results);
-      }
-    });
-  });
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.error("Error al obtener los hijos de la persona:", error);
+    throw new Error("Error al obtener los hijos de la persona");
+  }
 }
 
-function obtenerPadre(nid_persona) {
-  return new Promise((resolve, reject) => {
+async function obtenerPadre(nid_persona) {
+  try {
     const sql =
       "SELECT nid_padre FROM " +
       constantes.ESQUEMA +
       ".persona WHERE nid_persona = " +
       conexion.dbConn.escape(nid_persona);
 
-    conexion.dbConn.query(sql, (error, results) => {
-      if (error) {
-        console.error("Error al obtener el padre de la persona:", error);
-        reject(error);
-      } else if (results.length === 0) {
-        resolve(null);
-      } else {
-        resolve(results[0]["nid_padre"]);
-      }
-    });
-  });
+    const results = await gestor_base_datos.consulta(sql);
+    if (results.length === 0) {
+      return null;
+    } else {
+      return results[0]["nid_padre"];
+    }
+  } catch (error) {
+    console.error("Error al obtener el padre de la persona:", error);
+    throw new Error("Error al obtener el padre de la persona");
+  }
 }
 
-function obtenerMadre(nid_persona) {
-  return new Promise((resolve, reject) => {
+async function obtenerMadre(nid_persona) {
+  try {
     const sql =
       "SELECT nid_madre FROM " +
       constantes.ESQUEMA +
       ".persona WHERE nid_persona = " +
       conexion.dbConn.escape(nid_persona);
 
-    conexion.dbConn.query(sql, (error, results) => {
-      if (error) {
-        console.error("Error al obtener la madre de la persona:", error);
-        reject(error);
-      } else if (results.length === 0) {
-        resolve(null);
-      } else {
-        resolve(results[0]["nid_madre"]);
-      }
-    });
-  });
+    const results = await gestor_base_datos.consulta(sql);
+    if (results.length === 0) {
+      return null;
+    } else {
+      return results[0]["nid_madre"];
+    }
+  } catch (error) {
+    console.error("Error al obtener la madre de la persona:", error);
+    throw new Error("Error al obtener la madre de la persona");
+  }
 }
 
-function obtenerSocioAsociado(nid_persona) {
-  return new Promise((resolve, reject) => {
+async function obtenerSocioAsociado(nid_persona) {
+  try {
     const sql =
       "SELECT nid_socio FROM " +
       constantes.ESQUEMA +
       ".persona WHERE nid_persona = " +
       conexion.dbConn.escape(nid_persona);
 
-    conexion.dbConn.query(sql, (error, results) => {
-      if (error) {
-        console.error(
-          "Error al obtener el socio asociado de la persona:",
-          error,
-        );
-        reject(error);
-      } else if (results.length === 0) {
-        resolve(null);
-      } else {
-        resolve(results[0]["nid_socio"]);
-      }
-    });
-  });
+    const results = await gestor_base_datos.consulta(sql);
+    if (results.length === 0) {
+      return null;
+    } else {
+      return results[0]["nid_socio"];
+    }
+  } catch (error) {
+    console.error("Error al obtener el socio asociado de la persona:", error);
+    throw new Error("Error al obtener el socio asociado de la persona");
+  }
 }
 
-function requiereActualizarPersona(nid_persona, fecha_actualizacion) {
-  return new Promise((resolve, reject) => {
+async function requiereActualizarPersona(nid_persona, fecha_actualizacion) {
+  try {
     const sql =
       "SELECT * FROM " +
       constantes.ESQUEMA +
@@ -136,20 +125,18 @@ function requiereActualizarPersona(nid_persona, fecha_actualizacion) {
       conexion.dbConn.escape(comun.formatDateToMySQL(fecha_actualizacion)) +
       " or fecha_actualizacion is null)";
 
-    conexion.dbConn.query(sql, (error, results) => {
-      if (error) {
-        console.error(
-          "Error al verificar si se requiere actualizar la persona:",
-          error,
-        );
-        reject(error);
-      }
-      resolve(results.length > 0);
-    });
-  });
+    const results = await gestor_base_datos.consulta(sql);
+    return results.length > 0;
+  } catch (error) {
+    console.error(
+      "Error al verificar si se requiere actualizar la persona:",
+      error,
+    );
+    throw new Error("Error al verificar si se requiere actualizar la persona");
+  }
 }
 
-function actualizarPersona(
+async function actualizarPersona(
   nid_persona,
   nombre,
   primer_apellido,
@@ -163,7 +150,7 @@ function actualizarPersona(
   nid_socio,
   fecha_actualizacion,
 ) {
-  return new Promise((resolve, reject) => {
+  try {
     const sql =
       "UPDATE persona SET nombre = " +
       conexion.dbConn.escape(nombre) +
@@ -191,30 +178,15 @@ function actualizarPersona(
       " WHERE nid_persona = " +
       conexion.dbConn.escape(nid_persona);
 
-    conexion.dbConn.beginTransaction((err) => {
-      conexion.dbConn.query(sql, (error) => {
-        if (error) {
-          console.error("Error al actualizar la persona:", error);
-          return conexion.dbConn.rollback(() => {
-            reject(error);
-          });
-        }
-        conexion.dbConn.commit((err) => {
-          if (err) {
-            console.error("Error al confirmar la transacción:", err);
-            return conexion.dbConn.rollback(() => {
-              reject(err);
-            });
-          } else {
-            resolve();
-          }
-        });
-      });
-    });
-  });
+    const results = await gestor_base_datos.actualiza(sql);
+    return results.affectedRows;
+  } catch (error) {
+    console.error("Error al actualizar la persona:", error);
+    throw new Error("Error al actualizar la persona");
+  }
 }
 
-function insertarPersona(
+async function insertarPersona(
   nid_persona,
   nombre,
   primer_apellido,
@@ -228,7 +200,7 @@ function insertarPersona(
   nid_socio,
   fecha_actualizacion,
 ) {
-  return new Promise((resolve, reject) => {
+  try {
     const sql =
       "INSERT INTO persona (nid_persona, nombre, primer_apellido, segundo_apellido, fecha_nacimiento, nif, telefono, correo_electronico, nid_madre, nid_padre, nid_socio, fecha_actualizacion) VALUES (" +
       conexion.dbConn.escape(nid_persona) +
@@ -256,29 +228,12 @@ function insertarPersona(
       conexion.dbConn.escape(comun.formatDateToMySQL(fecha_actualizacion)) +
       ")";
 
-    conexion.dbConn.beginTransaction((err) => {
-      if (err) {
-        console.error("Error al iniciar la transacción:", err);
-        reject(err);
-      } else {
-        conexion.dbConn.query(sql, (error) => {
-          if (error) {
-            console.error("Error al insertar la persona:", error);
-            reject(error);
-          }
-          conexion.dbConn.commit((err) => {
-            if (err) {
-              console.error("Error al confirmar la transacción:", err);
-              conexion.dbConn.rollback(() => {
-                reject(err);
-              });
-            }
-          });
-          resolve();
-        });
-      }
-    });
-  });
+    const results = await gestor_base_datos.actualiza(sql);
+    return results.insertId;
+  } catch (error) {
+    console.error("Error al insertar la persona:", error);
+    throw new Error("Error al insertar la persona");
+  }
 }
 
 async function registrarPersona(
@@ -346,90 +301,63 @@ async function registrarPersona(
   }
 }
 
-function obtenerPersonasSucias() {
-  const consulta =
-    "select * from " +
-    constantes.ESQUEMA +
-    ".persona p " +
-    " where p.sucio = 'S'";
+async function obtenerPersonasSucias() {
+  try {
+    const consulta =
+      "select * from " +
+      constantes.ESQUEMA +
+      ".persona p " +
+      " where p.sucio = 'S'";
 
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(consulta, (error, result) => {
-      if (error) {
-        console.error("Error al obtener las personas sucias:", error);
-        reject(error);
-      } else {
-        resolve(result);
-      }
-    });
-  });
+    const results = await gestor_base_datos.consulta(consulta);
+    return results;
+  } catch (error) {
+    console.error("Error al obtener las personas sucias:", error);
+    throw new Error("Error al obtener las personas sucias");
+  }
 }
 
-function limpiarPersona(nid_persona) {
-  const instruccion =
-    "update " +
-    constantes.ESQUEMA +
-    ".persona set sucio = 'N' " +
-    " where nid_persona = " +
-    conexion.dbConn.escape(nid_persona);
+async function limpiarPersona(nid_persona) {
+  try {
+    const sql =
+      "update " +
+      constantes.ESQUEMA +
+      ".persona set sucio = 'N' " +
+      " where nid_persona = " +
+      conexion.dbConn.escape(nid_persona);
 
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.beginTransaction((err) => {
-      if (err) {
-        console.error("Error al iniciar la transacción:", err);
-        reject(err);
-      } else {
-        conexion.dbConn.query(instruccion, (error, result) => {
-          if (error) {
-            console.error("Error al limpiar la persona:", error);
-            conexion.dbConn.rollback();
-            reject(error);
-          } else {
-            conexion.dbConn.commit();
-            resolve(result);
-          }
-        });
-      }
-    });
-  });
+    const results = await gestor_base_datos.actualiza(sql);
+    return results;
+  } catch (error) {
+    console.error("Error al limpiar la persona:", error);
+    throw new Error("Error al limpiar la persona");
+  }
 }
 
 async function obtenerUsuario(nid_usuario) {
   try {
     let existe = await gestorUsuario.existeUsuarioNid(nid_usuario);
+    const sql =
+      "SELECT * FROM " +
+      constantes.ESQUEMA +
+      ".usuarios WHERE nid_usuario = " +
+      conexion.dbConn.escape(nid_usuario);
 
-    return new Promise((resolve, reject) => {
-      if (existe) {
-        const sql =
-          "SELECT * FROM " +
-          constantes.ESQUEMA +
-          ".usuarios WHERE nid_usuario = " +
-          conexion.dbConn.escape(nid_usuario);
-
-        conexion.dbConn.query(sql, (error, results) => {
-          if (error) {
-            console.error("Error al obtener el usuario:", error);
-            reject(error);
-          }
-          resolve(results[0]);
-        });
-      } else {
-        resolve(null);
-      }
-    });
+    const results = await gestor_base_datos.consulta(sql);
+    return results.length > 0 ? results[0] : null;
   } catch (error) {
     console.error("Error al obtener el usuario:", error);
     throw new Error("Error al obtener el usuario"); // Propagar el error para manejarlo en otro lugar si es necesario
   }
 }
 
-function obtenerPersonaNombre(
+async function obtenerPersonaNombre(
   nombre,
   primer_apellido,
   segundo_apellido,
   correo_electronico,
 ) {
-  return new Promise((resolve, reject) => {
+  try {
     const sql =
       "SELECT * FROM " +
       constantes.ESQUEMA +
@@ -442,26 +370,24 @@ function obtenerPersonaNombre(
       " AND correo_electronico = " +
       conexion.dbConn.escape(correo_electronico);
 
-    conexion.dbConn.query(sql, (error, results) => {
-      if (error) {
-        console.error("Error al obtener la persona:", error);
-        reject(error);
-      }
-      if (results.length === 0) {
-        resolve(null); // No se encontró la persona
-      } else {
-        resolve(results[0]);
-      }
-    });
-  });
+    const results = await gestor_base_datos.consulta(sql);
+    if (results.length === 0) {
+      return null; // No se encontró la persona
+    } else {
+      return results[0];
+    }
+  } catch (error) {
+    console.error("Error al obtener la persona por nombre:", error);
+    throw new Error("Error al obtener la persona por nombre"); // Propagar el error para manejarlo en otro lugar si es necesario}
+  }
 }
 
-function obtenerPersonaApellido(
+async function obtenerPersonaApellido(
   primer_apellido,
   segundo_apellido,
   correo_electronico,
 ) {
-  return new Promise((resolve, reject) => {
+  try {
     const sql =
       "SELECT * FROM " +
       constantes.ESQUEMA +
@@ -472,25 +398,23 @@ function obtenerPersonaApellido(
       " AND correo_electronico = " +
       conexion.dbConn.escape(correo_electronico);
 
-    conexion.dbConn.query(sql, (error, results) => {
-      if (error) {
-        console.error("Error al obtener la persona:", error);
-        reject(error);
-      }
-      if (results.length === 0) {
-        resolve(null); // No se encontró la persona
-      } else if (results.length > 1) {
-        // Se ha encontrado más de una persona
-        resolve(null);
-      } else {
-        resolve(results[0]);
-      }
-    });
-  });
+    const results = await gestor_base_datos.consulta(sql);
+    if (results.length === 0) {
+      return null; // No se encontró la persona
+    } else if (results.length > 1) {
+      // Se ha encontrado más de una persona
+      return null;
+    } else {
+      return results[0];
+    }
+  } catch (error) {
+    console.error("Error al obtener la persona por apellido:", error);
+    throw new Error("Error al obtener la persona por apellido"); // Propagar el error para manejarlo en otro lugar si es necesario
+  }
 }
 
-function actualizarPersonaUsuario(nid_persona, nid_usuario) {
-  return new Promise((resolve, reject) => {
+async function actualizarPersonaUsuario(nid_persona, nid_usuario) {
+  try {
     const sql =
       "UPDATE " +
       constantes.ESQUEMA +
@@ -500,14 +424,12 @@ function actualizarPersonaUsuario(nid_persona, nid_usuario) {
       conexion.dbConn.escape(nid_usuario) +
       " and verificado = 'S'";
 
-    conexion.dbConn.query(sql, (error, results) => {
-      if (error) {
-        console.error("Error al actualizar la persona del usuario:", error);
-        reject(error);
-      }
-      resolve(results);
-    });
-  });
+    const results = await gestor_base_datos.actualiza(sql);
+    return results;
+  } catch (error) {
+    console.error("Error al actualizar la persona del usuario:", error);
+    throw new Error("Error al actualizar la persona del usuario"); // Propagar el error para manejarlo en otro lugar si es necesario
+  }
 }
 
 async function asociarUsuarioPersona(nid_usuario) {
@@ -545,8 +467,8 @@ async function asociarUsuarioPersona(nid_usuario) {
   }
 }
 
-function obtenerPersonaUsuario(nid_usuario) {
-  return new Promise((resolve, reject) => {
+async function obtenerPersonaUsuario(nid_usuario) {
+  try {
     const sql =
       "SELECT p.* FROM " +
       constantes.ESQUEMA +
@@ -555,22 +477,20 @@ function obtenerPersonaUsuario(nid_usuario) {
       ".persona p WHERE u.nid_persona = p.nid_persona and u.nid_usuario = " +
       conexion.dbConn.escape(nid_usuario);
 
-    conexion.dbConn.query(sql, (error, results) => {
-      if (error) {
-        console.error("Error al obtener la persona del usuario:", error);
-        reject(error);
-      }
-      if (results.length === 0) {
-        resolve(null); // No se encontró la persona asociada al usuario
-      } else {
-        resolve(results[0]);
-      }
-    });
-  });
+    const results = await gestor_base_datos.consulta(sql);
+    if (results.length === 0) {
+      return null; // No se encontró la persona asociada al usuario
+    } else {
+      return results[0];
+    }
+  } catch (error) {
+    console.error("Error al obtener la persona del usuario:", error);
+    throw new Error("Error al obtener la persona del usuario"); // Propagar el error para manejarlo en otro lugar si es necesario
+  }
 }
 
-function obtenerUsuarioPersona(nid_persona) {
-  return new Promise((resolve, reject) => {
+async function obtenerUsuarioPersona(nid_persona) {
+  try {
     const sql =
       "SELECT u.* FROM " +
       constantes.ESQUEMA +
@@ -580,18 +500,20 @@ function obtenerUsuarioPersona(nid_persona) {
       " and p.nid_persona = " +
       conexion.dbConn.escape(nid_persona);
 
-    conexion.dbConn.query(sql, (error, results) => {
-      if (error) {
-        console.error("Error al obtener el usuario de la persona:", error);
-        reject(error);
-      }
-      resolve(results[0]);
-    });
-  });
+    const results = await gestor_base_datos.consulta(sql);
+    if (results.length === 0) {
+      return null; // No se encontró el usuario asociado a la persona
+    } else {
+      return results[0];
+    }
+  } catch (error) {
+    console.error("Error al obtener el usuario de la persona:", error);
+    throw new Error("Error al obtener el usuario de la persona"); // Propagar el error para manejarlo en otro lugar si es necesario
+  }
 }
 
-function obtenerPersonaUsuario(nid_usuario) {
-  return new Promise((resolve, reject) => {
+async function obtenerPersonaUsuario(nid_usuario) {
+  try {
     const sql =
       "SELECT p.* FROM " +
       constantes.ESQUEMA +
@@ -599,58 +521,53 @@ function obtenerPersonaUsuario(nid_usuario) {
       constantes.ESQUEMA +
       ".persona p WHERE u.nid_persona = p.nid_persona and u.nid_usuario = " +
       conexion.dbConn.escape(nid_usuario);
-    conexion.dbConn.query(sql, (error, results) => {
-      if (error) {
-        console.error("Error al obtener la persona del usuario:", error);
-        reject(error);
-      }
-      if (results.length === 0) {
-        resolve(null); // No se encontró la persona asociada al usuario
-      } else {
-        resolve(results[0]);
-      }
-    });
-  });
+
+    const results = await gestor_base_datos.consulta(sql);
+    if (results.length === 0) {
+      return null; // No se encontró la persona asociada al usuario
+    } else {
+      return results[0];
+    }
+  } catch (error) {
+    console.error("Error al obtener la persona del usuario:", error);
+    throw new Error("Error al obtener la persona del usuario"); // Propagar el error para manejarlo en otro lugar si es necesario
+  }
 }
 
-function obtenerPersonas() {
-  return new Promise((resolve, reject) => {
+async function obtenerPersonas() {
+  try {
     const sql = "SELECT * FROM " + constantes.ESQUEMA + ".persona";
 
-    conexion.dbConn.query(sql, (error, results) => {
-      if (error) {
-        console.error("Error al obtener las personas:", error);
-        reject(error);
-      }
-      resolve(results);
-    });
-  });
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.error("Error al obtener las personas:", error);
+    throw new Error("Error al obtener las personas");
+  }
 }
 
-function obtenerPersona(nid_persona) {
-  return new Promise((resolve, reject) => {
+async function obtenerPersona(nid_persona) {
+  try {
     const sql =
       "SELECT * FROM " +
       constantes.ESQUEMA +
       ".persona WHERE nid_persona = " +
       conexion.dbConn.escape(nid_persona);
-    console.log("SQL", sql);
-    conexion.dbConn.query(sql, (error, results) => {
-      if (error) {
-        console.error("Error al obtener la persona:", error);
-        reject(error);
-      }
-      if (results.length === 0) {
-        resolve(null); // No se encontró la persona
-      } else {
-        resolve(results[0]);
-      }
-    });
-  });
+
+    const results = await gestor_base_datos.consulta(sql);
+    if (results.length === 0) {
+      return null; // No se encontró la persona
+    } else {
+      return results[0];
+    }
+  } catch (error) {
+    console.error("Error al obtener la persona:", error);
+    throw new Error("Error al obtener la persona");
+  }
 }
 
-function obtenerPersonasMusicos() {
-  return new Promise((resolve, reject) => {
+async function obtenerPersonasMusicos() {
+  try {
     const sql =
       "SELECT p.*, m.nid_tipo_musico, m.nid_instrumento FROM " +
       constantes.ESQUEMA +
@@ -659,18 +576,16 @@ function obtenerPersonasMusicos() {
       ".musicos m WHERE p.nid_persona = m.nid_persona" +
       " and (m.fecha_baja is null or m.fecha_baja > NOW())";
 
-    conexion.dbConn.query(sql, (error, results) => {
-      if (error) {
-        console.error("Error al obtener las personas músicos:", error);
-        reject(error);
-      }
-      resolve(results);
-    });
-  });
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.error("Error al obtener las personas músicos:", error);
+    throw new Error("Error al obtener las personas músicos");
+  }
 }
 
-function obtenerPersonasSocios() {
-  return new Promise((resolve, reject) => {
+async function obtenerPersonasSocios() {
+  try {
     const sql =
       "SELECT p.* FROM " +
       constantes.ESQUEMA +
@@ -679,44 +594,44 @@ function obtenerPersonasSocios() {
       ".socios s WHERE p.nid_persona = s.nid_persona" +
       " and (s.fecha_baja is null or s.fecha_baja > NOW())";
 
-    conexion.dbConn.query(sql, (error, results) => {
-      if (error) {
-        console.error("Error al obtener las personas socios:", error);
-        reject(error);
-      }
-      resolve(results);
-    });
-  });
-}
-
-function obtenerPersonasSociosActivos(activo) {
-  let sql =
-    "Select p.* from " +
-    constantes.ESQUEMA +
-    ".persona p, " +
-    constantes.ESQUEMA +
-    ".socios s " +
-    " where p.nid_persona = s.nid_persona ";
-
-  if (activo == 1) {
-    sql = sql + " and (s.fecha_baja is null or s.fecha_baja > NOW())";
-  } else if (activo == 2) {
-    sql = sql + " and s.fecha_baja is not null and s.fecha_baja <= NOW()";
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.error("Error al obtener las personas socios:", error);
+    throw new Error("Error al obtener las personas socios");
   }
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(sql, (error, results) => {
-      if (error) {
-        console.error("Error al obtener las personas socios activos:", error);
-        reject(error);
-      } else {
-        resolve(results);
-      }
-    });
-  });
 }
 
-function obtenerPersonasAlumnosAsignatura(nid_curso, nid_asignatura, activo) {
-  return new Promise((resolve, reject) => {
+async function obtenerPersonasSociosActivos(activo) {
+  try {
+    let sql =
+      "Select p.* from " +
+      constantes.ESQUEMA +
+      ".persona p, " +
+      constantes.ESQUEMA +
+      ".socios s " +
+      " where p.nid_persona = s.nid_persona ";
+
+    if (activo == 1) {
+      sql = sql + " and (s.fecha_baja is null or s.fecha_baja > NOW())";
+    } else if (activo == 2) {
+      sql = sql + " and s.fecha_baja is not null and s.fecha_baja <= NOW()";
+    }
+
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.error("Error al obtener las personas socios activos:", error);
+    throw new Error("Error al obtener las personas socios activos");
+  }
+}
+
+async function obtenerPersonasAlumnosAsignatura(
+  nid_curso,
+  nid_asignatura,
+  activo,
+) {
+  try {
     let sql =
       "select p.* from " +
       constantes.ESQUEMA +
@@ -738,18 +653,19 @@ function obtenerPersonasAlumnosAsignatura(nid_curso, nid_asignatura, activo) {
       sql = sql + " and ma.fecha_baja is not null and ma.fecha_baja <= NOW()";
     }
 
-    conexion.dbConn.query(sql, (error, results) => {
-      if (error) {
-        console.error("Error al obtener las personas alumnos:", error);
-        reject(error);
-      }
-      resolve(results);
-    });
-  });
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.error(
+      "Error al obtener las personas alumnos de la asignatura:",
+      error,
+    );
+    throw new Error("Error al obtener las personas alumnos de la asignatura");
+  }
 }
 
-function esHijo(nid_persona, nid_hijo) {
-  return new Promise((resolve, reject) => {
+async function esHijo(nid_persona, nid_hijo) {
+  try {
     const sql =
       "SELECT * FROM " +
       constantes.ESQUEMA +
@@ -762,15 +678,12 @@ function esHijo(nid_persona, nid_hijo) {
       ") AND nid_persona = " +
       conexion.dbConn.escape(nid_hijo);
 
-    conexion.dbConn.query(sql, (error, results) => {
-      if (error) {
-        console.error("Error al verificar si es hijo:", error);
-        reject(error);
-      } else {
-        resolve(results.length > 0);
-      }
-    });
-  });
+    const results = await gestor_base_datos.consulta(sql);
+    return results.length > 0;
+  } catch (error) {
+    console.error("Error al verificar si es hijo:", error);
+    throw new Error("Error al verificar si es hijo");
+  }
 }
 
 module.exports.registrarPersona = registrarPersona;

@@ -8,41 +8,41 @@ const gestorMusicos = require("./musicos.js");
 const gestorSocios = require("./socios.js");
 const gestorMatriculaAsignatura = require("./matricula_asignatura.js");
 const gestorComun = require("./comun.js");
+const gestor_base_datos = require("./base_datos.js");
 
 const Expo = require("expo-server-sdk");
 
-function insertarNotificacion(pushToken, titulo, body, data, fecha_a_enviar) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.beginTransaction(() => {
-      const sql =
-        "INSERT INTO " +
-        constantes.ESQUEMA +
-        ".notificaciones (push_token, titulo, body, data, estado, fecha_a_enviar) VALUES (" +
-        conexion.dbConn.escape(pushToken) +
-        ", " +
-        conexion.dbConn.escape(titulo) +
-        ", " +
-        conexion.dbConn.escape(body) +
-        ", " +
-        conexion.dbConn.escape(JSON.stringify(data)) +
-        ", " +
-        conexion.dbConn.escape("PENDIENTE") +
-        ", ifnull( " +
-        conexion.dbConn.escape(gestorComun.formatDateToMySQL(fecha_a_enviar)) +
-        ", now()) )";
+async function insertarNotificacion(
+  pushToken,
+  titulo,
+  body,
+  data,
+  fecha_a_enviar,
+) {
+  try {
+    const sql =
+      "INSERT INTO " +
+      constantes.ESQUEMA +
+      ".notificaciones (push_token, titulo, body, data, estado, fecha_a_enviar) VALUES (" +
+      conexion.dbConn.escape(pushToken) +
+      ", " +
+      conexion.dbConn.escape(titulo) +
+      ", " +
+      conexion.dbConn.escape(body) +
+      ", " +
+      conexion.dbConn.escape(JSON.stringify(data)) +
+      ", " +
+      conexion.dbConn.escape("PENDIENTE") +
+      ", ifnull( " +
+      conexion.dbConn.escape(gestorComun.formatDateToMySQL(fecha_a_enviar)) +
+      ", now()) )";
 
-      conexion.dbConn.query(sql, (error, result) => {
-        if (error) {
-          console.error("Error al insertar la notificación:", error);
-          conexion.dbConn.rollback();
-          reject("Error al insertar la notificación");
-        } else {
-          conexion.dbConn.commit();
-          resolve(result.insertId);
-        }
-      });
-    });
-  });
+    const result = await gestor_base_datos.actualiza(sql);
+    return result.insertId;
+  } catch (error) {
+    console.error("Error al insertar la notificación:", error);
+    throw new Error("Error al insertar la notificación");
+  }
 }
 
 async function registrarNotificacion(nid_persona, titulo, body, data) {
@@ -78,7 +78,9 @@ async function registrarNotificacionesTodos(titulo, body, data) {
     const conexiones = await gestorConexiones.obtenerConexiones();
 
     for (const conexion of conexiones) {
-      await insertarNotificacion(conexion.token, titulo, body, data);
+      if (conexion.token) {
+        await insertarNotificacion(conexion.token, titulo, body, data);
+      }
     }
   } catch (error) {
     console.error("Error al registrar las notificaciones para todos:", error);
@@ -137,27 +139,24 @@ async function enviarNotificacionesTodos(titulo, body, data) {
   }
 }
 
-function obtenerNotificacionesEstado(estado) {
-  return new Promise((resolve, reject) => {
+async function obtenerNotificacionesEstado(estado) {
+  try {
     const sql =
       "SELECT * FROM " +
       constantes.ESQUEMA +
       ".notificaciones WHERE estado = " +
       conexion.dbConn.escape(estado);
 
-    conexion.dbConn.query(sql, (error, results) => {
-      if (error) {
-        console.error("Error al obtener notificaciones pendientes:", error);
-        reject(error);
-      } else {
-        resolve(results);
-      }
-    });
-  });
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.error("Error al obtener notificaciones pendientes:", error);
+    throw new Error("Error al obtener notificaciones pendientes");
+  }
 }
 
-function actualizarIdEnvioNotificacion(nid_notificacion, id_envio) {
-  return new Promise((resolve, reject) => {
+async function actualizarIdEnvioNotificacion(nid_notificacion, id_envio) {
+  try {
     const sql =
       "UPDATE " +
       constantes.ESQUEMA +
@@ -166,22 +165,15 @@ function actualizarIdEnvioNotificacion(nid_notificacion, id_envio) {
       " WHERE nid_notificacion = " +
       conexion.dbConn.escape(nid_notificacion);
 
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(sql, (error, result) => {
-        if (error) {
-          console.error(
-            "Error al actualizar el ID de envío de la notificación:",
-            error,
-          );
-          conexion.dbConn.rollback();
-          reject(error);
-        } else {
-          conexion.dbConn.commit();
-          resolve(result.affectedRows > 0);
-        }
-      });
-    });
-  });
+    const results = await gestor_base_datos.actualiza(sql);
+    return results.affectedRows > 0;
+  } catch (error) {
+    console.error(
+      "Error al actualizar el ID de envío de la notificación:",
+      error,
+    );
+    throw new Error("Error al actualizar el ID de envío de la notificación");
+  }
 }
 
 async function enviarChunk(chunks, expo) {
@@ -215,8 +207,8 @@ async function enviarChunk(chunks, expo) {
   }
 }
 
-function actualizarEstadoNotificacion(nid_notificacion, estado) {
-  return new Promise((resolve, reject) => {
+async function actualizarEstadoNotificacion(nid_notificacion, estado) {
+  try {
     const sql =
       "UPDATE " +
       constantes.ESQUEMA +
@@ -225,22 +217,12 @@ function actualizarEstadoNotificacion(nid_notificacion, estado) {
       " WHERE nid_notificacion = " +
       conexion.dbConn.escape(nid_notificacion);
 
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(sql, (error, result) => {
-        if (error) {
-          console.error(
-            "Error al actualizar el estado de la notificación:",
-            error,
-          );
-          conexion.dbConn.rollback();
-          reject(error);
-        } else {
-          conexion.dbConn.commit();
-          resolve(result.affectedRows > 0);
-        }
-      });
-    });
-  });
+    const results = await gestor_base_datos.actualiza(sql);
+    return results.affectedRows > 0;
+  } catch (error) {
+    console.error("Error al actualizar el estado de la notificación:", error);
+    throw new Error("Error al actualizar el estado de la notificación");
+  }
 }
 
 async function enviarNotificacionesPendientes() {
@@ -333,8 +315,8 @@ async function obtenerRecibos() {
   }
 }
 
-function procesarNotificacion(idEnvioNotificacion, estado) {
-  return new Promise((resolve, reject) => {
+async function procesarNotificacion(idEnvioNotificacion, estado) {
+  try {
     const sql =
       "Update " +
       constantes.ESQUEMA +
@@ -343,19 +325,12 @@ function procesarNotificacion(idEnvioNotificacion, estado) {
       " WHERE id_envio_notificacion = " +
       conexion.dbConn.escape(idEnvioNotificacion);
 
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(sql, (error, result) => {
-        if (error) {
-          console.error("Error al procesar la notificación:", error);
-          conexion.dbConn.rollback();
-          reject(error);
-        } else {
-          conexion.dbConn.commit();
-          resolve(result.affectedRows > 0);
-        }
-      });
-    });
-  });
+    const results = await gestor_base_datos.actualiza(sql);
+    return results.affectedRows > 0;
+  } catch (error) {
+    console.error("Error al procesar la notificación:", error);
+    throw new Error("Error al procesar la notificación");
+  }
 }
 
 async function procesoObtenerRecibos() {

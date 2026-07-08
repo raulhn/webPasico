@@ -2,15 +2,16 @@ const conexion = require("../conexion");
 const constantes = require("../constantes");
 const comun = require("./comun");
 const gestorPersonas = require("./persona");
+const gestor_base_datos = require("./base_datos.js");
 
-function insertarMaticula(
+async function insertarMaticula(
   nid_matricula,
   nid_persona,
   nid_curso,
   fecha_actualizacion,
 ) {
-  return new Promise((resolve, reject) => {
-    var sql =
+  try {
+    const sql =
       "INSERT INTO matricula (nid_matricula, nid_persona, nid_curso, fecha_actualizacion) " +
       "values (" +
       conexion.dbConn.escape(nid_matricula) +
@@ -22,20 +23,12 @@ function insertarMaticula(
       conexion.dbConn.escape(comun.formatDateToMySQL(fecha_actualizacion)) +
       ")";
 
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(sql, (err, result) => {
-        if (err) {
-          console.log("Error al insertar la matricula: " + err);
-          conexion.dbConn.rollback();
-          reject(new Error("Error al insertar la matricula"));
-        } else {
-          console.log("Matricula insertada correctamente");
-          conexion.dbConn.commit();
-          resolve(result);
-        }
-      });
-    });
-  });
+    const result = await gestor_base_datos.actualiza(sql);
+    return result.insertId;
+  } catch (error) {
+    console.error("Error al insertar la matricula: ", error);
+    throw new Error("Error al insertar la matricula");
+  }
 }
 
 async function esAlumno(nid_persona) {
@@ -66,14 +59,14 @@ async function esPadreAlumno(nid_persona, bSocio = true) {
   }
 }
 
-function actualizarMatricula(
+async function actualizarMatricula(
   nid_matricula,
   nid_persona,
   nid_curso,
   fecha_actualizacion,
 ) {
-  return new Promise((resolve, reject) => {
-    var sql =
+  try {
+    const sql =
       "UPDATE matricula SET nid_persona = " +
       conexion.dbConn.escape(nid_persona) +
       ", nid_curso = " +
@@ -83,37 +76,26 @@ function actualizarMatricula(
       " WHERE nid_matricula = " +
       conexion.dbConn.escape(nid_matricula);
 
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(sql, (err, result) => {
-        if (err) {
-          console.log("Error al actualizar la matricula: " + err);
-          conexion.dbConn.rollback();
-          reject(new Error("Error al actualizar la matricula"));
-        } else {
-          console.log("Matricula actualizada correctamente");
-          conexion.dbConn.commit();
-          resolve(result);
-        }
-      });
-    });
-  });
+    const result = await gestor_base_datos.actualiza(sql);
+    return result;
+  } catch (error) {
+    console.error("Error al actualizar la matricula: ", error);
+    throw new Error("Error al actualizar la matricula");
+  }
 }
 
-function existeMatricula(nid_matricula) {
-  return new Promise((resolve, reject) => {
-    var sql =
+async function existeMatricula(nid_matricula) {
+  try {
+    const sql =
       "SELECT * FROM matricula WHERE nid_matricula = " +
       conexion.dbConn.escape(nid_matricula);
 
-    conexion.dbConn.query(sql, (err, result) => {
-      if (err) {
-        console.log("Error al verificar la matricula: " + err);
-        reject(new Error("Error al verificar la matricula"));
-      } else {
-        resolve(result.length > 0);
-      }
-    });
-  });
+    const result = await gestor_base_datos.consulta(sql);
+    return result.length > 0;
+  } catch (error) {
+    console.error("Error al verificar la matricula: ", error);
+    throw new Error("Error al verificar la matricula");
+  }
 }
 
 async function registrarMatricula(
@@ -145,28 +127,24 @@ async function registrarMatricula(
   }
 }
 
-function obtenerMatriculas(nid_persona) {
-  return new Promise((resolve, reject) => {
-    var sql =
+async function obtenerMatriculas(nid_persona) {
+  try {
+    const sql =
       "SELECT * FROM " +
       constantes.ESQUEMA +
       ".matricula WHERE nid_persona = " +
       conexion.dbConn.escape(nid_persona);
-
-    conexion.dbConn.query(sql, (err, result) => {
-      if (err) {
-        console.log("Error al obtener las matriculas: " + err);
-        reject(new Error("Error al obtener las matriculas"));
-      } else {
-        resolve(result);
-      }
-    });
-  });
+    const result = await gestor_base_datos.consulta(sql);
+    return result;
+  } catch (error) {
+    console.error("Error al obtener las matriculas: ", error);
+    throw new Error("Error al obtener las matriculas");
+  }
 }
 
-function obtenerMatriculasPersona(nid_persona) {
-  return new Promise((resolve, reject) => {
-    var sql =
+async function obtenerMatriculasPersona(nid_persona) {
+  try {
+    const sql =
       "SELECT m.nid_matricula, p.nombre, p.primer_apellido, p.segundo_apellido, c.descripcion curso, c.nid_curso FROM " +
       constantes.ESQUEMA +
       ".matricula m, " +
@@ -180,23 +158,17 @@ function obtenerMatriculasPersona(nid_persona) {
       conexion.dbConn.escape(nid_persona) +
       " order by c.ano desc";
 
-    conexion.dbConn.query(sql, (err, result) => {
-      if (err) {
-        console.log(
-          "matricula.js -> obtenerMatriculasPersona: Error al obtener las matriculas de la persona: " +
-            err,
-        );
-        reject(new Error("Error al obtener las matriculas de la persona"));
-      } else {
-        resolve(result);
-      }
-    });
-  });
+    const result = await gestor_base_datos.consulta(sql);
+    return result;
+  } catch (error) {
+    console.error("Error al obtener las matriculas de la persona: ", error);
+    throw new Error("Error al obtener las matriculas de la persona");
+  }
 }
 
-function obtenerMatricula(nid_matricula) {
-  return new Promise((resolve, reject) => {
-    var sql =
+async function obtenerMatricula(nid_matricula) {
+  try {
+    const sql =
       "SELECT m.nid_matricula, p.nombre, p.primer_apellido, p.segundo_apellido, c.nid_curso, c.descripcion curso, p.nid_persona FROM " +
       constantes.ESQUEMA +
       ".matricula m, " +
@@ -210,22 +182,16 @@ function obtenerMatricula(nid_matricula) {
       conexion.dbConn.escape(nid_matricula) +
       " order by c.ano desc";
 
-    conexion.dbConn.query(sql, (err, result) => {
-      if (err) {
-        console.log(
-          "matricula.js -> obtenerMatriculasPersona: Error al obtener las matriculas de la persona: " +
-            err,
-        );
-        reject(new Error("Error al obtener las matriculas de la persona"));
-      } else {
-        resolve(result[0]);
-      }
-    });
-  });
+    const result = await gestor_base_datos.consulta(sql);
+    return result[0];
+  } catch (error) {
+    console.error("Error al obtener la matricula: ", error);
+    throw new Error("Error al obtener la matricula");
+  }
 }
 
-function obtenerPersonasAlumnos(nid_curso) {
-  return new Promise((resolve, reject) => {
+async function obtenerPersonasAlumnos(nid_curso) {
+  try {
     const sql =
       "SELECT p.nid_persona, p.nombre, p.primer_apellido, p.segundo_apellido, ma.nid_asignatura " +
       "FROM " +
@@ -242,15 +208,12 @@ function obtenerPersonasAlumnos(nid_curso) {
       conexion.dbConn.escape(nid_curso) +
       " GROUP BY p.nid_persona, p.nombre, p.primer_apellido, p.segundo_apellido, ma.nid_asignatura";
 
-    conexion.dbConn.query(sql, (err, result) => {
-      if (err) {
-        console.error("Error al obtener las personas alumnos:", err);
-        reject(err);
-      } else {
-        resolve(result);
-      }
-    });
-  });
+    const result = await gestor_base_datos.consulta(sql);
+    return result;
+  } catch (error) {
+    console.error("Error al obtener las personas alumnos:", error);
+    throw new Error("Error al obtener las personas alumnos");
+  }
 }
 
 module.exports.registrarMatricula = registrarMatricula;

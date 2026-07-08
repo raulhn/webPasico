@@ -1,50 +1,41 @@
 const conexion = require("../conexion.js");
 const constantes = require("../constantes.js");
+const gestor_base_datos = require("./base_datos.js");
 
-function obtener_valor(p_nombre) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(
+async function obtener_valor(p_nombre) {
+  try {
+    const sql =
       "select nombre, valor from " +
-        constantes.ESQUEMA +
-        ".parametros " +
-        "where nombre = " +
-        conexion.dbConn.escape(p_nombre),
-      (error, results, fields) => {
-        if (error) {
-          console.log(error);
-          reject();
-        } else {
-          resolve(results[0]);
-        }
-      }
-    );
-  });
+      constantes.ESQUEMA +
+      ".parametros " +
+      "where nombre = " +
+      conexion.dbConn.escape(p_nombre);
+
+    const results = await gestor_base_datos.consulta(sql);
+    return results[0];
+  } catch (error) {
+    console.error("Error al obtener el valor del parámetro: ", error);
+    throw new Error("Error al obtener el valor del parámetro");
+  }
 }
 
-function actualizar_valor(p_nombre, p_valor) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(
-        "update " +
-          constantes.ESQUEMA +
-          ".parametros " +
-          "set valor = " +
-          conexion.dbConn.escape(p_valor) +
-          " where nombre = " +
-          conexion.dbConn.escape(p_nombre),
-        (error, reults, fields) => {
-          if (error) {
-            console.log(error);
-            conexion.dbConn.rollback();
-            reject();
-          } else {
-            conexion.dbConn.commit();
-            resolve();
-          }
-        }
-      );
-    });
-  });
+async function actualizar_valor(p_nombre, p_valor) {
+  try {
+    const sql =
+      "update " +
+      constantes.ESQUEMA +
+      ".parametros " +
+      "set valor = " +
+      conexion.dbConn.escape(p_valor) +
+      " where nombre = " +
+      conexion.dbConn.escape(p_nombre);
+
+    const results = await gestor_base_datos.actualiza(sql);
+    return results.affectedRows;
+  } catch (error) {
+    console.error("Error al actualizar el valor del parámetro: ", error);
+    throw new Error("Error al actualizar el valor del parámetro");
+  }
 }
 
 module.exports.obtener_valor = obtener_valor;

@@ -156,152 +156,120 @@ async function registrarConexion(token) {
   }
 }
 
-function existeConexion(token) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(
+async function existeConexion(token) {
+  try {
+    const sql =
       "SELECT * FROM " +
-        constantes.ESQUEMA +
-        ".conexiones WHERE token = " +
-        conexion.dbConn.escape(token),
-      (error, results) => {
-        if (error) {
-          console.error("Error al verificar la conexión:", error);
-          reject(error);
-        } else {
-          resolve(results.length > 0);
-        }
-      },
-    );
-  });
+      constantes.ESQUEMA +
+      ".conexiones WHERE token = " +
+      conexion.dbConn.escape(token);
+    const results = await gestor_base_datos.consulta(sql);
+
+    return results.length > 0;
+  } catch (error) {
+    console.error("Error al verificar la conexión:", error);
+    throw new Error("Error al verificar la conexión");
+  }
 }
 
-function numConexiones() {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(
+async function numConexiones() {
+  try {
+    const sql =
       "SELECT COUNT(*) as numConexiones FROM " +
-        constantes.ESQUEMA +
-        ".conexiones",
-      (error, results) => {
-        if (error) {
-          console.error("Error al contar las conexiones:", error);
-          reject(error);
-        } else {
-          resolve(results[0].numConexiones);
-        }
-      },
-    );
-  });
+      constantes.ESQUEMA +
+      ".conexiones";
+
+    const results = await gestor_base_datos.consulta(sql);
+    return results[0].numConexiones;
+  } catch (error) {
+    console.error("Error al contar las conexiones:", error);
+    throw new Error("Error al contar las conexiones");
+  }
 }
 
-function obtenerConexiones() {
-  const sql = "SELECT * FROM " + constantes.ESQUEMA + ".conexiones";
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(sql, (error, results) => {
-      if (error) {
-        console.error("Error al obtener las conexiones:", error);
-        reject(error);
-      } else {
-        resolve(results);
-      }
-    });
-  });
+async function obtenerConexiones() {
+  try {
+    const sql = "SELECT * FROM " + constantes.ESQUEMA + ".conexiones";
+
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.error("Error al obtener las conexiones:", error);
+    throw new Error("Error al obtener las conexiones");
+  }
 }
 
-function obtener_token_refresco(nid_usuario) {
-  const sql =
-    "select token_refresco from " +
-    constantes.ESQUEMA +
-    ".conexiones where nid_usuario = " +
-    conexion.dbConn.escape(nid_usuario);
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(sql, (error, results) => {
-      if (error) {
-        console.error("Error al obtener el token de refresco:", error);
-        reject(error);
-      } else if (results.length > 0) {
-        resolve(results[0].token_refresco);
-      } else {
-        resolve(null); // No se encontró el token de refresco
-      }
-    });
-  });
+async function obtener_token_refresco(nid_usuario) {
+  try {
+    const sql =
+      "select token_refresco from " +
+      constantes.ESQUEMA +
+      ".conexiones where nid_usuario = " +
+      conexion.dbConn.escape(nid_usuario);
+
+    const results = await gestor_base_datos.consulta(sql);
+    if (results.length > 0) {
+      return results[0].token_refresco;
+    } else {
+      return null; // No se encontró el token de refresco
+    }
+  } catch (error) {
+    console.error("Error al obtener el token de refresco:", error);
+    throw new Error("Error al obtener el token de refresco");
+  }
 }
 
-function insertar_token_refresco(token_refresco, nid_usuario) {
-  const sql =
-    "insert into " +
-    constantes.ESQUEMA +
-    ".conexiones (token_refresco, nid_usuario) values (" +
-    conexion.dbConn.escape(token_refresco) +
-    ", " +
-    conexion.dbConn.escape(nid_usuario) +
-    ")";
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.beginTransaction((err) => {
-      if (err) {
-        console.error("Error al iniciar la transacción:", err);
-        reject(err);
-        return;
-      }
-      conexion.dbConn.query(sql, (error, results) => {
-        if (error) {
-          console.error("Error al insertar el token de refresco:", error);
-          conexion.dbConn.rollback();
-          reject(error);
-        } else {
-          conexion.dbConn.commit();
-          resolve(results);
-        }
-      });
-    });
-  });
+async function insertar_token_refresco(token_refresco, nid_usuario) {
+  try {
+    const sql =
+      "insert into " +
+      constantes.ESQUEMA +
+      ".conexiones (token_refresco, nid_usuario) values (" +
+      conexion.dbConn.escape(token_refresco) +
+      ", " +
+      conexion.dbConn.escape(nid_usuario) +
+      ")";
+
+    const results = await gestor_base_datos.actualiza(sql);
+    return results;
+  } catch (error) {
+    console.error("Error al insertar el token de refresco:", error);
+    throw new Error("Error al insertar el token de refresco");
+  }
 }
 
-function actualizar_token_refresco(token_refresco, nid_usuario) {
-  const sql =
-    "update " +
-    constantes.ESQUEMA +
-    ".conexiones set token_refresco = " +
-    conexion.dbConn.escape(token_refresco) +
-    " where nid_usuario = " +
-    conexion.dbConn.escape(nid_usuario);
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.beginTransaction((err) => {
-      if (err) {
-        console.error("Error al iniciar la transacción:", err);
-        reject(err);
-        return;
-      }
-      conexion.dbConn.query(sql, (error, results) => {
-        if (error) {
-          console.error("Error al actualizar el token de refresco:", error);
-          conexion.dbConn.rollback();
-          reject(error);
-        } else {
-          conexion.dbConn.commit();
-          resolve(results);
-        }
-      });
-    });
-  });
+async function actualizar_token_refresco(token_refresco, nid_usuario) {
+  try {
+    const sql =
+      "update " +
+      constantes.ESQUEMA +
+      ".conexiones set token_refresco = " +
+      conexion.dbConn.escape(token_refresco) +
+      " where nid_usuario = " +
+      conexion.dbConn.escape(nid_usuario);
+
+    const results = await gestor_base_datos.actualiza(sql);
+    return results;
+  } catch (error) {
+    console.error("Error al actualizar el token de refresco:", error);
+    throw new Error("Error al actualizar el token de refresco");
+  }
 }
 
-function existe_usuario(nid_usuario) {
-  const sql =
-    "select * from " +
-    constantes.ESQUEMA +
-    ".conexiones where nid_usuario = " +
-    conexion.dbConn.escape(nid_usuario);
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(sql, (error, results) => {
-      if (error) {
-        console.error("Error al verificar el usuario:", error);
-        reject(error);
-      } else {
-        resolve(results.length > 0);
-      }
-    });
-  });
+async function existe_usuario(nid_usuario) {
+  try {
+    const sql =
+      "select * from " +
+      constantes.ESQUEMA +
+      ".conexiones where nid_usuario = " +
+      conexion.dbConn.escape(nid_usuario);
+
+    const results = await gestor_base_datos.consulta(sql);
+    return results.length > 0;
+  } catch (error) {
+    console.error("Error al verificar el usuario:", error);
+    throw new Error("Error al verificar el usuario");
+  }
 }
 
 async function registrar_token_refresco(token_refresco, nid_usuario) {
@@ -321,22 +289,20 @@ async function registrar_token_refresco(token_refresco, nid_usuario) {
   }
 }
 
-function existe_token_refresco(token_refresco) {
-  const sql =
-    "select * from " +
-    constantes.ESQUEMA +
-    ".conexiones where token_refresco = " +
-    conexion.dbConn.escape(token_refresco);
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(sql, (error, results) => {
-      if (error) {
-        console.error("Error al verificar el token de refresco:", error);
-        reject(error);
-      } else {
-        resolve(results.length > 0);
-      }
-    });
-  });
+async function existe_token_refresco(token_refresco) {
+  try {
+    const sql =
+      "select * from " +
+      constantes.ESQUEMA +
+      ".conexiones where token_refresco = " +
+      conexion.dbConn.escape(token_refresco);
+
+    const results = await gestor_base_datos.consulta(sql);
+    return results.length > 0;
+  } catch (error) {
+    console.error("Error al verificar el token de refresco:", error);
+    throw new Error("Error al verificar el token de refresco");
+  }
 }
 
 module.exports.registrarConexion = registrarConexion;

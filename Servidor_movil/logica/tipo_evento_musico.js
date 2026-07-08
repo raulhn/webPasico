@@ -1,37 +1,31 @@
 const conexion = require("../conexion");
 const constantes = require("../constantes");
+const gestor_base_datos = require("./base_datos.js");
 
 function registrar_tipo_evento_musico(nid_evento_concierto, nid_tipo_musico) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.beginTransaction(() => {
-      const instrunccionsql =
-        "insert into " +
-        constantes.ESQUEMA +
-        ".tipo_evento_musico(nid_evento_concierto, nid_tipo_musico) " +
-        "values(" +
-        conexion.dbConn.escape(nid_evento_concierto) +
-        ", " +
-        conexion.dbConn.escape(nid_tipo_musico) +
-        ")";
+  try {
+    const instrunccionsql =
+      "insert into " +
+      constantes.ESQUEMA +
+      ".tipo_evento_musico(nid_evento_concierto, nid_tipo_musico) " +
+      "values(" +
+      conexion.dbConn.escape(nid_evento_concierto) +
+      ", " +
+      conexion.dbConn.escape(nid_tipo_musico) +
+      ")";
 
-      conexion.dbConn.query(instrunccionsql, (error, results, fields) => {
-        if (error) {
-          console.log(
-            "tipo_evento_musico.js -> registrar_tipo_evento_musico: " + error
-          );
-          conexion.dbConn.rollback();
-          reject("Se ha producio un error al asociar el tipo al evento");
-        } else {
-          conexion.dbConn.commit();
-          resolve();
-        }
-      });
-    });
-  });
+    const results = gestor_base_datos.actualiza(instrunccionsql);
+    return results;
+  } catch (error) {
+    console.log(
+      "tipo_evento_musico.js -> registrar_tipo_evento_musico: " + error,
+    );
+    throw new Error("Se ha producio un error al asociar el tipo al evento");
+  }
 }
 
-function obtener_tipos_evento(nid_evento_concierto) {
-  return new Promise((resolve, reject) => {
+async function obtener_tipos_evento(nid_evento_concierto) {
+  try {
     const instruccionSql =
       "select ec.*, tm.descripcion, tm.nid_tipo_musico " +
       "from " +
@@ -46,69 +40,55 @@ function obtener_tipos_evento(nid_evento_concierto) {
       "and tem.nid_evento_concierto = " +
       conexion.dbConn.escape(nid_evento_concierto);
 
-    conexion.dbConn.query(instruccionSql, (error, results, fields) => {
-      if (error) {
-        console.log("tipo_evento_musico.js -> obtener_tipos_eventro: " + error);
-        reject("Error al obtener los tipos de evento");
-      } else {
-        resolve(results);
-      }
-    });
-  });
+    const results = await gestor_base_datos.consulta(instruccionSql);
+    return results;
+  } catch (error) {
+    console.log("tipo_evento_musico.js -> obtener_tipos_eventro: " + error);
+    throw new Error("Error al obtener los tipos de evento");
+  }
 }
 
-function eliminar_tipo_evento_musico(nid_evento_concierto, nid_tipo_musico) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.beginTransaction(() => {
-      const instruccionSql =
-        "delete from " +
-        constantes.ESQUEMA +
-        ".tipo_evento_musico  " +
-        " where nid_evento_concierto = " +
-        conexion.dbConn.escape(nid_evento_concierto) +
-        "   and nid_tipo_musico = " +
-        conexion.dbConn.escape(nid_tipo_musico);
+async function eliminar_tipo_evento_musico(
+  nid_evento_concierto,
+  nid_tipo_musico,
+) {
+  try {
+    const instruccionSql =
+      "delete from " +
+      constantes.ESQUEMA +
+      ".tipo_evento_musico  " +
+      " where nid_evento_concierto = " +
+      conexion.dbConn.escape(nid_evento_concierto) +
+      "   and nid_tipo_musico = " +
+      conexion.dbConn.escape(nid_tipo_musico);
 
-      conexion.dbConn.query(instruccionSql, (error, results, fields) => {
-        if (error) {
-          console.log(
-            "tipo_evento_musico.js -> eliminar_tipo_evento_musico: " + error
-          );
-          conexion.dbConn.rollback();
-          reject("Se ha producido un error al eliminar el tipo de evento");
-        } else {
-          conexion.dbConn.commit();
-          resolve();
-        }
-      });
-    });
-  });
+    const results = await gestor_base_datos.actualiza(instruccionSql);
+    return results;
+  } catch (error) {
+    console.log(
+      "tipo_evento_musico.js -> eliminar_tipo_evento_musico: " + error,
+    );
+    throw new Error("Se ha producido un error al eliminar el tipo de evento");
+  }
 }
 
-function eliminar_tipos_evento_musico(nid_evento_concierto) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.beginTransaction(() => {
-      const instruccionSql =
-        "delete from " +
-        constantes.ESQUEMA +
-        ".tipo_evento_musico  " +
-        " where nid_evento_concierto = " +
-        conexion.dbConn.escape(nid_evento_concierto);
+async function eliminar_tipos_evento_musico(nid_evento_concierto) {
+  try {
+    const instruccionSql =
+      "delete from " +
+      constantes.ESQUEMA +
+      ".tipo_evento_musico  " +
+      " where nid_evento_concierto = " +
+      conexion.dbConn.escape(nid_evento_concierto);
 
-      conexion.dbConn.query(instruccionSql, (error, results, fields) => {
-        if (error) {
-          console.log(
-            "tipo_evento_musico.js -> eliminar_tipos_evento_musico: " + error
-          );
-          conexion.dbConn.rollback();
-          reject("Se ha producido un error al eliminar los tipos de evento");
-        } else {
-          conexion.dbConn.commit();
-          resolve();
-        }
-      });
-    });
-  });
+    const results = await gestor_base_datos.actualiza(instruccionSql);
+    return results;
+  } catch (error) {
+    console.log(
+      "tipo_evento_musico.js -> eliminar_tipos_evento_musico: " + error,
+    );
+    throw new Error("Se ha producido un error al eliminar los tipos de evento");
+  }
 }
 
 module.exports.registrar_tipo_evento_musico = registrar_tipo_evento_musico;

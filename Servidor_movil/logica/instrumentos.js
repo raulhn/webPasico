@@ -1,27 +1,25 @@
 const conexion = require("../conexion");
 const constantes = require("../constantes");
+const gestor_base_datos = require("./base_datos.js");
 
-function existeInstumento(nid_instrumento) {
-  return new Promise((resolve, reject) => {
+async function existeInstumento(nid_instrumento) {
+  try {
     const sql =
       "SELECT COUNT(*) AS existe FROM " +
       constantes.ESQUEMA +
       ".instrumentos WHERE nid_instrumento = " +
       conexion.dbConn.escape(nid_instrumento);
 
-    conexion.dbConn.query(sql, (err, result) => {
-      if (err) {
-        console.error("Error al verificar la existencia del instrumento:", err);
-        reject(err);
-      } else {
-        resolve(result[0].existe > 0);
-      }
-    });
-  });
+    const result = await gestor_base_datos.consulta(sql);
+    return result[0].existe > 0;
+  } catch (error) {
+    console.error("Error al verificar la existencia del instrumento:", error);
+    throw new Error("Error al verificar la existencia del instrumento");
+  }
 }
 
-function insertarInstrumento(nid_instrumento, descripcion) {
-  return new Promise((resolve, reject) => {
+async function insertarInstrumento(nid_instrumento, descripcion) {
+  try {
     const sql =
       "INSERT INTO " +
       constantes.ESQUEMA +
@@ -31,19 +29,16 @@ function insertarInstrumento(nid_instrumento, descripcion) {
       conexion.dbConn.escape(descripcion) +
       ")";
 
-    conexion.dbConn.query(sql, (err, result) => {
-      if (err) {
-        console.error("Error al insertar el instrumento:", err);
-        reject(err);
-      } else {
-        resolve(result.insertId);
-      }
-    });
-  });
+    const results = await gestor_base_datos.actualiza(sql);
+    return results.insertId;
+  } catch (error) {
+    console.error("Error al insertar el instrumento:", error);
+    throw new Error("Error al insertar el instrumento");
+  }
 }
 
-function actualizarInstrumento(nid_instrumento, descripcion) {
-  return new Promise((resolve, reject) => {
+async function actualizarInstrumento(nid_instrumento, descripcion) {
+  try {
     const sql =
       "UPDATE " +
       constantes.ESQUEMA +
@@ -52,15 +47,12 @@ function actualizarInstrumento(nid_instrumento, descripcion) {
       " WHERE nid_instrumento = " +
       conexion.dbConn.escape(nid_instrumento);
 
-    conexion.dbConn.query(sql, (err, result) => {
-      if (err) {
-        console.error("Error al actualizar el instrumento:", err);
-        reject(err);
-      } else {
-        resolve(result.affectedRows);
-      }
-    });
-  });
+    const results = await gestor_base_datos.actualiza(sql);
+    return results.affectedRows;
+  } catch (error) {
+    console.error("Error al actualizar el instrumento:", error);
+    throw new Error("Error al actualizar el instrumento");
+  }
 }
 
 async function registrarInstrumento(nid_instrumento, descripcion) {
@@ -77,22 +69,19 @@ async function registrarInstrumento(nid_instrumento, descripcion) {
   }
 }
 
-function obtenerInstrumentos() {
-  return new Promise((resolve, reject) => {
+async function obtenerInstrumentos() {
+  try {
     const sql =
       "select i.nid_instrumento, i.descripcion from " +
       constantes.ESQUEMA +
       ".instrumentos i group by i.nid_instrumento, i.descripcion";
 
-    conexion.dbConn.query(sql, (error, results) => {
-      if (error) {
-        console.log("Error al obtener los instrumentos: ", error);
-        reject(new Error("Error al obtener los instrumentos"));
-      } else {
-        resolve(results);
-      }
-    });
-  });
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.error("Error al obtener los instrumentos:", error);
+    throw new Error("Error al obtener los instrumentos");
+  }
 }
 
 module.exports.registrarInstrumento = registrarInstrumento;

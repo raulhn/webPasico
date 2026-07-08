@@ -1,8 +1,9 @@
 const constantes = require("../constantes");
 const conexion = require("../conexion");
+const gestor_base_datos = require("./base_datos.js");
 
-function insertarTablonAnuncio(titulo, descripcion, nidTipoTablon) {
-  return new Promise((resolve, reject) => {
+async function insertarTablonAnuncio(titulo, descripcion, nidTipoTablon) {
+  try {
     const sql =
       "insert into " +
       constantes.ESQUEMA +
@@ -15,29 +16,21 @@ function insertarTablonAnuncio(titulo, descripcion, nidTipoTablon) {
       conexion.dbConn.escape(nidTipoTablon) +
       ")";
 
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(sql, (error, results, fields) => {
-        if (error) {
-          console.log("tablon_anuncios.js -> insertarTablonAnuncio: ", error);
-          conexion.dbConn.rollback();
-          reject("Error al insertar el tablón de anuncios");
-        }
-        {
-          conexion.dbConn.commit();
-          resolve(results.insertId);
-        }
-      });
-    });
-  });
+    const results = await gestor_base_datos.actualiza(sql);
+    return results.insertId;
+  } catch (error) {
+    console.log("tablon_anuncios.js -> insertarTablonAnuncio: ", error);
+    throw new Error("Error al insertar el tablón de anuncios");
+  }
 }
 
-function actualizarTablonAnuncio(
+async function actualizarTablonAnuncio(
   nidTablonAnuncio,
   titulo,
   descripcion,
-  nidTipoTablon
+  nidTipoTablon,
 ) {
-  return new Promise((resolve, reject) => {
+  try {
     const sql =
       "update " +
       constantes.ESQUEMA +
@@ -50,23 +43,17 @@ function actualizarTablonAnuncio(
       conexion.dbConn.escape(nidTipoTablon) +
       " where nid_tablon_anuncio = " +
       conexion.dbConn.escape(nidTablonAnuncio);
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(sql, (error, results, fields) => {
-        if (error) {
-          console.log("tablon_anuncios.js -> actualizarTablonAnuncio: ", error);
-          conexion.dbConn.rollback();
-          reject("Se ha producido un error al actualizar el tabón");
-        } else {
-          conexion.dbConn.commit();
-          resolve();
-        }
-      });
-    });
-  });
+
+    const results = await gestor_base_datos.actualiza(sql);
+    return results.affectedRows;
+  } catch (error) {
+    console.log("tablon_anuncios.js -> actualizarTablonAnuncio: ", error);
+    throw new Error("Error al actualizar el tablón de anuncios");
+  }
 }
 
-function eliminarTablonAnuncio(nidTablonAnuncio) {
-  return new Promise((resolve, reject) => {
+async function eliminarTablonAnuncio(nidTablonAnuncio) {
+  try {
     const sql =
       "update " +
       constantes.ESQUEMA +
@@ -75,23 +62,16 @@ function eliminarTablonAnuncio(nidTablonAnuncio) {
       "where nid_tablon_anuncio = " +
       conexion.dbConn.escape(nidTablonAnuncio);
 
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(sql, (error, results, fields) => {
-        if (error) {
-          console.log("tablon_anuncios.js -> eliminarTablonAnuncio: ", error);
-          conexion.dbConn.rollback();
-          reject("Se ha producido un error al eliminar el tabón");
-        } else {
-          conexion.dbConn.commit();
-          resolve();
-        }
-      });
-    });
-  });
+    const results = await gestor_base_datos.actualiza(sql);
+    return results.affectedRows;
+  } catch (error) {
+    console.log("tablon_anuncios.js -> eliminarTablonAnuncio: ", error);
+    throw new Error("Error al eliminar el tablón de anuncios");
+  }
 }
 
-function obtenerTodosTablonesAnuncio() {
-  return new Promise((resolve, reject) => {
+async function obtenerTodosTablonesAnuncio() {
+  try {
     const sql =
       "select ta.*, tt.descripcion as tipo_tablon from " +
       constantes.ESQUEMA +
@@ -101,19 +81,16 @@ function obtenerTodosTablonesAnuncio() {
       "where ta.nid_tipo_tablon = tt.nid_tipo_tablon and " +
       "  ta.borrado = 'N'";
 
-    conexion.dbConn.query(sql, (error, results, fields) => {
-      if (error) {
-        console.log("tablon_anuncios.js -> obtenerTablonesAnuncio: ", error);
-        reject("Se ha producido un error al recuperar los tablones");
-      } else {
-        resolve(results);
-      }
-    });
-  });
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.log("tablon_anuncios.js -> obtenerTodosTablonesAnuncio: ", error);
+    throw new Error("Se ha producido un error al recuperar los tablones");
+  }
 }
 
-function obtenerTablonesAnuncio(tipo) {
-  return new Promise((resolve, reject) => {
+async function obtenerTablonesAnuncio(tipo) {
+  try {
     const sql =
       "select ta.*, tt.descripcion as tipo_tablon from " +
       constantes.ESQUEMA +
@@ -125,15 +102,12 @@ function obtenerTablonesAnuncio(tipo) {
       conexion.dbConn.escape(tipo) +
       " and ta.borrado = 'N'";
 
-    conexion.dbConn.query(sql, (error, results, fields) => {
-      if (error) {
-        console.log("tablon_anuncios.js -> obtenerTablonesAnuncion: ", error);
-        reject("Se ha producido un error al recuperar los tablones");
-      } else {
-        resolve(results);
-      }
-    });
-  });
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.log("tablon_anuncios.js -> obtenerTablonesAnuncio: ", error);
+    throw new Error("Se ha producido un error al recuperar los tablones");
+  }
 }
 
 async function obtenerTablonesAnuncioGeneral() {
@@ -143,7 +117,7 @@ async function obtenerTablonesAnuncioGeneral() {
   } catch (error) {
     console.log("tablon_anuncios.js -> obtenerTablonesAnuncioGeneral: ", error);
     throw new Error(
-      "Se ha producido un error al recuperar los tablones generales"
+      "Se ha producido un error al recuperar los tablones generales",
     );
   }
 }
@@ -155,7 +129,7 @@ async function obtenerTablonesAnuncioBanda() {
   } catch (error) {
     console.log("tablon_anuncios.js -> obtenerTablonesAnuncioBanda: ", error);
     throw new Error(
-      "Se ha producido un error al recuperar los tablones de banda"
+      "Se ha producido un error al recuperar los tablones de banda",
     );
   }
 }
@@ -167,16 +141,16 @@ async function obtenerTablonesAnuncioAsociacion() {
   } catch (error) {
     console.log(
       "tablon_anuncios.js -> obtenerTablonesAnuncioAsociacion: ",
-      error
+      error,
     );
     throw new Error(
-      "Se ha producido un error al recuperar los tablones de asociación"
+      "Se ha producido un error al recuperar los tablones de asociación",
     );
   }
 }
 
-function obtenerTablonesAnuncioEscuela() {
-  return new Promise((resolve, reject) => {
+async function obtenerTablonesAnuncioEscuela() {
+  try {
     const sql =
       "select ta.*, tt.descripcion as tipo_tablon, taa.nid_asignatura, taa.nid_curso from " +
       constantes.ESQUEMA +
@@ -191,22 +165,18 @@ function obtenerTablonesAnuncioEscuela() {
       conexion.dbConn.escape(constantes.ESCUELA) +
       " and ta.borrado = 'N'";
 
-    conexion.dbConn.query(sql, (error, results, fields) => {
-      if (error) {
-        console.log(
-          "tablon_anuncios.js -> obtenerTablonesAnuncioEscuela: ",
-          error
-        );
-        reject("Se ha producido un error al recuperar los tablones");
-      } else {
-        resolve(results);
-      }
-    });
-  });
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.log("tablon_anuncios.js -> obtenerTablonesAnuncioEscuela: ", error);
+    throw new Error(
+      "Se ha producido un error al recuperar los tablones de escuela",
+    );
+  }
 }
 
-function obtenerTablonAnuncio(nidTablonAnuncio) {
-  return new Promise((resolve, reject) => {
+async function obtenerTablonAnuncio(nidTablonAnuncio) {
+  try {
     const sql =
       "select ta.*, tt.descripcion as tipo_tablon, taa.nid_asignatura, taa.nid_curso, a.descripcion as asignatura from " +
       constantes.ESQUEMA +
@@ -218,26 +188,27 @@ function obtenerTablonAnuncio(nidTablonAnuncio) {
       constantes.ESQUEMA +
       ".tipo_tablon tt on ta.nid_tipo_tablon = tt.nid_tipo_tablon " +
       "left join " +
-      constantes.ESQUEMA + ".asignaturas a on taa.nid_asignatura = a.nid_asignatura " +
+      constantes.ESQUEMA +
+      ".asignaturas a on taa.nid_asignatura = a.nid_asignatura " +
       "where ta.nid_tablon_anuncio = " +
-      conexion.dbConn.escape(nidTablonAnuncio);
-    (" and ta.borrado = 'N'");
+      conexion.dbConn.escape(nidTablonAnuncio) +
+      " and ta.borrado = 'N'";
 
-    conexion.dbConn.query(sql, (error, results, fields) => {
-      if (error) {
-        console.log("tablon_anuncios.js -> obtenerTablonAnuncio: ", error);
-        reject("Se ha producido un error al recuperar el tablón de anuncios");
-      } else if (results.length === 0) {
-        reject("No se ha encontrado el tablón de anuncios");
-      } else {
-        resolve(results[0]);
-      }
-    });
-  });
+    const results = await gestor_base_datos.consulta(sql);
+    if (results.length === 0) {
+      throw new Error("No se ha encontrado el tablón de anuncios");
+    }
+    return results[0];
+  } catch (error) {
+    console.log("tablon_anuncios.js -> obtenerTablonAnuncio: ", error);
+    throw new Error(
+      "Se ha producido un error al recuperar el tablón de anuncios",
+    );
+  }
 }
 
-function obtenerTablonesAnuncioTipo(nidTipoTablon) {
-  return new Promise((resolve, reject) => {
+async function obtenerTablonesAnuncioTipo(nidTipoTablon) {
+  try {
     const sql =
       "select * from " +
       constantes.ESQUEMA +
@@ -246,18 +217,14 @@ function obtenerTablonesAnuncioTipo(nidTipoTablon) {
       conexion.dbConn.escape(nidTipoTablon) +
       " and borrado = 'N'";
 
-    conexion.dbConn.query(sql, (error, results, fields) => {
-      if (error) {
-        console.log(
-          "tablon_anuncios.js -> obtenerTablonesAnuncioTipo: ",
-          error
-        );
-        reject("Se ha producido un error al recuperar los tablones por tipo");
-      } else {
-        resolve(results);
-      }
-    });
-  });
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.log("tablon_anuncios.js -> obtenerTablonesAnuncioTipo: ", error);
+    throw new Error(
+      "Se ha producido un error al recuperar los tablones por tipo",
+    );
+  }
 }
 
 module.exports.insertarTablonAnuncio = insertarTablonAnuncio;

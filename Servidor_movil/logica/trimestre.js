@@ -1,9 +1,14 @@
 const constantes = require("../constantes");
 const conexion = require("../conexion");
 const comun = require("./comun");
+const gestor_base_datos = require("./base_datos.js");
 
-function insertarTrimestre(nid_trimestre, descripcion, fecha_actualizacion) {
-  return new Promise((resolve, reject) => {
+async function insertarTrimestre(
+  nid_trimestre,
+  descripcion,
+  fecha_actualizacion,
+) {
+  try {
     const sql =
       "INSERT INTO " +
       constantes.ESQUEMA +
@@ -16,23 +21,20 @@ function insertarTrimestre(nid_trimestre, descripcion, fecha_actualizacion) {
       ", 'N' " +
       ")";
 
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(sql, (err, result) => {
-        if (err) {
-          console.error("Error al insertar el trimestre:", err);
-          conexion.dbConn.rollback();
-          reject(err);
-        } else {
-          conexion.dbConn.commit();
-          resolve(result.insertId);
-        }
-      });
-    });
-  });
+    const results = await gestor_base_datos.actualiza(sql);
+    return results.insertId;
+  } catch (error) {
+    console.error("Error al insertar el trimestre:", error);
+    throw new Error("Error al insertar el trimestre");
+  }
 }
 
-function actualizarTrimestre(nid_trimestre, descripcion, fecha_actualizacion) {
-  return new Promise((resolve, reject) => {
+async function actualizarTrimestre(
+  nid_trimestre,
+  descripcion,
+  fecha_actualizacion,
+) {
+  try {
     const sql =
       "UPDATE " +
       constantes.ESQUEMA +
@@ -44,42 +46,32 @@ function actualizarTrimestre(nid_trimestre, descripcion, fecha_actualizacion) {
       " WHERE nid_trimestre = " +
       conexion.dbConn.escape(nid_trimestre);
 
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(sql, (err, result) => {
-        if (err) {
-          console.error("Error al actualizar el trimestre:", err);
-          conexion.dbConn.rollback();
-          reject(err);
-        } else {
-          conexion.dbConn.commit();
-          resolve(result.affectedRows);
-        }
-      });
-    });
-  });
+    const results = await gestor_base_datos.actualiza(sql);
+    return results.affectedRows;
+  } catch (error) {
+    console.error("Error al actualizar el trimestre:", error);
+    throw new Error("Error al actualizar el trimestre");
+  }
 }
 
-function existeTrimestre(nid_trimestre) {
-  return new Promise((resolve, reject) => {
+async function existeTrimestre(nid_trimestre) {
+  try {
     const sql =
       "SELECT COUNT(*) AS count FROM " +
       constantes.ESQUEMA +
       ".trimestre WHERE nid_trimestre = " +
       conexion.dbConn.escape(nid_trimestre);
 
-    conexion.dbConn.query(sql, (err, result) => {
-      if (err) {
-        console.error("Error al verificar la existencia del trimestre:", err);
-        reject(err);
-      } else {
-        resolve(result[0].count > 0);
-      }
-    });
-  });
+    const results = await gestor_base_datos.consulta(sql);
+    return results[0].count > 0;
+  } catch (error) {
+    console.error("Error al verificar la existencia del trimestre:", error);
+    throw new Error("Error al verificar la existencia del trimestre");
+  }
 }
 
-function requiereActualizarTrimestre(nid_trimestre, fecha_actualizacion) {
-  return new Promise((resolve, reject) => {
+async function requiereActualizarTrimestre(nid_trimestre, fecha_actualizacion) {
+  try {
     const sql =
       "SELECT COUNT(*) AS requiere FROM " +
       constantes.ESQUEMA +
@@ -88,21 +80,18 @@ function requiereActualizarTrimestre(nid_trimestre, fecha_actualizacion) {
       " AND fecha_actualizacion < " +
       conexion.dbConn.escape(comun.formatDateToMySQL(fecha_actualizacion));
 
-    conexion.dbConn.query(sql, (err, result) => {
-      if (err) {
-        console.error("Error al verificar si requiere actualización:", err);
-        reject(err);
-      } else {
-        resolve(result[0].requiere > 0);
-      }
-    });
-  });
+    const result = await gestor_base_datos.consulta(sql);
+    return result[0].requiere > 0;
+  } catch (error) {
+    console.log("Error al verificar si requiere actualización:", error);
+    throw new Error("Error al verificar si requiere actualización");
+  }
 }
 
 async function registrarTrimestre(
   nid_trimestre,
   descripcion,
-  fecha_actualizacion
+  fecha_actualizacion,
 ) {
   const existe = await existeTrimestre(nid_trimestre);
 
@@ -118,39 +107,31 @@ async function registrarTrimestre(
   }
 }
 
-function obtenerTrimestresSucios() {
-  return new Promise((resolve, reject) => {
+async function obtenerTrimestresSucios() {
+  try {
     const sql =
       "SELECT * FROM " + constantes.ESQUEMA + ".trimestre WHERE sucio = 'S'";
 
-    conexion.dbConn.query(sql, (err, result) => {
-      if (err) {
-        console.error("Error al obtener los trimestres sucios:", err);
-        reject(err);
-      } else {
-        resolve(result);
-      }
-    });
-  });
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.error("Error al obtener los trimestres sucios:", error);
+    throw new Error("Error al obtener los trimestres sucios");
+  }
 }
 
-function obtenerTrimestres() {
-  return new Promise((resolve, reject) => {
+async function obtenerTrimestres() {
+  try {
     const sql = "SELECT * FROM " + constantes.ESQUEMA + ".trimestre";
-
-    conexion.dbConn.query(sql, (error, result) => {
-      if (error) {
-        console.error("Error al obtener los trimestres: " + error.message);
-        reject(new Error("Error al obtener los trimestres"));
-      } else {
-        if (result.length === 0) {
-          reject(new Error("No hay trimestres registrados"));
-        } else {
-          resolve(result);
-        }
-      }
-    });
-  });
+    const results = await gestor_base_datos.consulta(sql);
+    if (results.length === 0) {
+      throw new Error("No hay trimestres registrados");
+    }
+    return results;
+  } catch (error) {
+    console.error("Error al obtener los trimestres: " + error.message);
+    throw new Error("Error al obtener los trimestres");
+  }
 }
 
 module.exports.registrarTrimestre = registrarTrimestre;

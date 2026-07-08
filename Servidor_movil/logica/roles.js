@@ -1,8 +1,9 @@
 const constantes = require("../constantes");
 const conexion = require("../conexion");
+const gestor_base_datos = require("./base_datos.js");
 
-function obtenerRoles(nid_usuario) {
-  return new Promise((resolve, reject) => {
+async function obtenerRoles(nid_usuario) {
+  try {
     const sql =
       "SELECT r.* FROM " +
       constantes.ESQUEMA +
@@ -12,15 +13,12 @@ function obtenerRoles(nid_usuario) {
       " and u.nid_usuario = " +
       conexion.dbConn.escape(nid_usuario);
 
-    conexion.dbConn.query(sql, (err, result) => {
-      if (err) {
-        console.log("roles.js - obtenerRoles -> Error: " + err);
-        reject("Error al obtener los roles");
-      } else {
-        resolve(result);
-      }
-    });
-  });
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.error("Error al obtener los roles: " + error.message);
+    throw new Error("Error al obtener los roles");
+  }
 }
 
 module.exports.obtenerRoles = obtenerRoles;
