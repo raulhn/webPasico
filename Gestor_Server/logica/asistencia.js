@@ -1,54 +1,41 @@
 const conexion = require("../conexion.js");
 const constantes = require("../constantes.js");
+const gestor_base_datos = require("./base_datos.js");
 
-function registrar_asistencia(nid_evento_asistencia, nid_persona) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(
-        "insert into " +
-          constantes.ESQUEMA_BD +
-          ".asistentes(nid_evento_asistencia, nid_persona) values(" +
-          conexion.dbConn.escape(nid_evento_asistencia) +
-          ", " +
-          conexion.dbConn.escape(nid_persona) +
-          ")",
-        (error, results, fields) => {
-          if (error) {
-            console.log(error);
-            conexion.dbConn.rollback();
-            reject(error);
-          } else {
-            conexion.dbConn.commit();
-            resolve(results.insertId);
-          }
-        }
-      );
-    });
-  });
+async function registrar_asistencia(nid_evento_asistencia, nid_persona) {
+  try {
+    const sql =
+      "insert into " +
+      constantes.ESQUEMA_BD +
+      ".asistentes(nid_evento_asistencia, nid_persona) values(" +
+      conexion.dbConn.escape(nid_evento_asistencia) +
+      ", " +
+      conexion.dbConn.escape(nid_persona) +
+      ")";
+
+    const results = await gestor_base_datos.actualiza(sql);
+    return results.insertId;
+  } catch (error) {
+    console.log("Error al registrar asistencia: ", error);
+    throw new Error("Error al registrar asistencia");
+  }
 }
 
-function registrar_evento_asistencia(descripcion) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(
-        "insert into " +
-          constantes.ESQUEMA_BD +
-          ".evento_asistencia(descripcion, fecha) values(" +
-          conexion.dbConn.escape(descripcion) +
-          ", sysdate())",
-        (error, results, fields) => {
-          if (error) {
-            console.log(error);
-            conexion.dbConn.rollback();
-            reject(error);
-          } else {
-            conexion.dbConn.commit();
-            resolve();
-          }
-        }
-      );
-    });
-  });
+async function registrar_evento_asistencia(descripcion) {
+  try {
+    const sql =
+      "insert into " +
+      constantes.ESQUEMA_BD +
+      ".evento_asistencia(descripcion, fecha) values(" +
+      conexion.dbConn.escape(descripcion) +
+      ", sysdate())";
+
+    const results = await gestor_base_datos.actualiza(sql);
+    return results.insertId;
+  } catch (error) {
+    console.log("Error al registrar evento de asistencia: ", error);
+    throw new Error("Error al registrar evento de asistencia");
+  }
 }
 
 async function registrar_asistencias(descripcion, personas) {
@@ -57,14 +44,11 @@ async function registrar_asistencias(descripcion, personas) {
     for (let i = 0; i < personas.length; i++) {
       await registrar_asistencia(nid_evento_asistencia, personas[i]);
     }
-    return new Promise((resolve, reject) => {
-      resolve();
-    });
+    return;
   } catch (error) {
-    console.log(error);
-    return new Promise((resolve, reject) => {
-      reject("Error al registrar asistencias");
-    });
+    console.log("Error al registrar asistencias: " + error.message);
+
+    throw new Error("Error al registrar asistencias");
   }
 }
 
