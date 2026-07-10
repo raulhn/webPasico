@@ -1,153 +1,115 @@
 const conexion = require("../conexion.js");
 const constantes = require("../constantes.js");
 const curso = require("./curso.js");
+const gestor_base_datos = require("./base_datos.js");
 
-function registrar_horario_clase(
+async function registrar_horario_clase(
   hora_inicio,
   minutos_inicio,
   duracion_clase,
   num_clase,
   nid_horario,
-  dia
+  dia,
 ) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.beginTransaction(() => {
-      var minutos_totales = Number(minutos_inicio) + Number(hora_inicio) * 60;
-      var minutos_comienzo_clase =
-        Number(minutos_totales) + Number(duracion_clase) * Number(num_clase);
+  try {
+    var minutos_totales = Number(minutos_inicio) + Number(hora_inicio) * 60;
+    var minutos_comienzo_clase =
+      Number(minutos_totales) + Number(duracion_clase) * Number(num_clase);
 
-      var hora_comienzo_clase = Math.trunc(Number(minutos_comienzo_clase) / 60);
-      var minuto_comienzo_clase = Math.abs(Number(minutos_comienzo_clase)) % 60;
-
-      conexion.dbConn.query(
-        "insert into " +
-          constantes.ESQUEMA_BD +
-          ".horario_clase(hora_inicio, minutos_inicio, duracion_clase, nid_horario, dia) " +
-          " values(" +
-          conexion.dbConn.escape(hora_comienzo_clase) +
-          ", " +
-          conexion.dbConn.escape(minuto_comienzo_clase) +
-          ", " +
-          conexion.dbConn.escape(duracion_clase) +
-          ", " +
-          conexion.dbConn.escape(nid_horario) +
-          ", " +
-          conexion.dbConn.escape(dia) +
-          ")",
-        (error, results, fields) => {
-          if (error) {
-            conexion.dbConn.rollback();
-            console.log(error);
-            reject();
-          } else {
-            conexion.dbConn.commit();
-            resolve();
-          }
-        }
-      );
-    });
-  });
+    var hora_comienzo_clase = Math.trunc(Number(minutos_comienzo_clase) / 60);
+    var minuto_comienzo_clase = Math.abs(Number(minutos_comienzo_clase)) % 60;
+    const sql =
+      "insert into " +
+      constantes.ESQUEMA_BD +
+      ".horario_clase(hora_inicio, minutos_inicio, duracion_clase, nid_horario, dia) " +
+      " values(" +
+      conexion.dbConn.escape(hora_comienzo_clase) +
+      ", " +
+      conexion.dbConn.escape(minuto_comienzo_clase) +
+      ", " +
+      conexion.dbConn.escape(duracion_clase) +
+      ", " +
+      conexion.dbConn.escape(nid_horario) +
+      ", " +
+      conexion.dbConn.escape(dia) +
+      ")";
+    const results = await gestor_base_datos.actualiza(sql);
+    return results;
+  } catch (error) {
+    console.log("Error al registrar horario clase: " + error);
+    throw new Error("Error al registrar horario clase");
+  }
 }
 
-function eliminar_horario_clase(nid_horario_clase) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(
-        "delete from " +
-          constantes.ESQUEMA_BD +
-          ".horario_clase where nid_horario_clase = " +
-          conexion.dbConn.escape(nid_horario_clase),
-        (error, results, fields) => {
-          if (error) {
-            console.log(error);
-            conexion.dbConn.rollback();
-            reject();
-          } else {
-            conexion.dbConn.commit();
-            resolve();
-          }
-        }
-      );
-    });
-  });
+async function eliminar_horario_clase(nid_horario_clase) {
+  try {
+    const sql =
+      "delete from " +
+      constantes.ESQUEMA_BD +
+      ".horario_clase where nid_horario_clase = " +
+      conexion.dbConn.escape(nid_horario_clase);
+
+    const results = await gestor_base_datos.actualiza(sql);
+    return results;
+  } catch (error) {
+    console.log("Error al eliminar horario clase: " + error);
+    throw new Error("Error al eliminar horario clase");
+  }
 }
 
-function obtener_horario(nid_horario) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(
+async function obtener_horario(nid_horario) {
+  try {
+    const sql =
       "select * " +
-        "from " +
-        constantes.ESQUEMA_BD +
-        ".horario_clases " +
-        "where nid_horario = " +
-        conexion.dbConn.escape(nid_horario),
-      (error, results, fields) => {
-        if (error) {
-          console.log(error);
-          reject();
-        } else {
-          resolve(results);
-        }
-      }
-    );
-  });
+      "from " +
+      constantes.ESQUEMA_BD +
+      ".horario_clases " +
+      "where nid_horario = " +
+      conexion.dbConn.escape(nid_horario);
+
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.log("Error al obtener horario: " + error);
+    throw new Error("Error al obtener horario");
+  }
 }
 
-function eliminar_horario_clase_no_commit(nid_horario_clase) {
-  return new Promise((resolve, reject) => {
-    {
-      conexion.dbConn.query(
-        "delete from " +
-          constantes.ESQUEMA_BD +
-          ".horario_clase where nid_horario_clase = " +
-          conexion.dbConn.escape(nid_horario_clase),
-        (error, results, fields) => {
-          if (error) {
-            console.log(error);
-            reject();
-          } else {
-            resolve();
-          }
-        }
-      );
+async function eliminar_horario_clase_no_commit(nid_horario_clase) {
+  try {
+    const sql =
+      "delete from " +
+      constantes.ESQUEMA_BD +
+      ".horario_clase where nid_horario_clase = " +
+      conexion.dbConn.escape(nid_horario_clase);
+
+    const results = await gestor_base_datos.actualiza(sql);
+    return results;
+  } catch (error) {
+    console.log("Error al eliminar horario clase: " + error);
+    throw new Error("Error al eliminar horario clase");
+  }
+}
+
+async function eliminar_horario(nid_horario) {
+  try {
+    let horario_clase = await obtener_horario(nid_horario);
+
+    for (i = 0; i < horario_clase.length; i++) {
+      eliminar_horario_clase_no_commit(horario_clase[i]["nid_horario_clase"]);
     }
-  });
-}
+    const sql =
+      "delete from " +
+      constantes.ESQUEMA_BD +
+      "horario where nid_horario = " +
+      conexion.dbConn.escape(nid_horario);
 
-function eliminar_horario(nid_horario) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.beginTransaction(async () => {
-      let horario_clase = await obtener_horario(nid_horario);
-
-      for (i = 0; i < horario_clase.length; i++) {
-        try {
-          eliminar_horario_clase_no_commit(
-            horario_clase[i]["nid_horario_clase"]
-          );
-        } catch (error) {
-          console.log(error);
-          reject();
-        }
-      }
-
-      conexion.dbConn.query(
-        "delete from " +
-          constantes.ESQUEMA_BD +
-          "horario where nid_horario = " +
-          conexion.dbConn.escape(nid_horario),
-        () => {
-          if (error) {
-            console.log(error);
-            conexion.dbConn.rollback();
-            reject();
-          } else {
-            conexion.dbConn.commit();
-            resolve();
-          }
-        }
-      );
-    });
-  });
+    const results = await gestor_base_datos.actualiza(sql);
+    return results;
+  } catch (error) {
+    console.log("Error al eliminar horario: " + error);
+    throw new Error("Error al eliminar horario");
+  }
 }
 
 async function registrar_horario(nid_profesor, nid_asignatura) {
@@ -181,7 +143,7 @@ async function registrar_horario(nid_profesor, nid_asignatura) {
               conexion.dbConn.commit();
               resolve(results.insertId);
             }
-          }
+          },
         );
       });
     });
@@ -196,7 +158,7 @@ function crear_horario(
   minutos_fin,
   nid_asignatura,
   nid_profesor,
-  duracion_clase
+  duracion_clase,
 ) {
   return new Promise((resolve, reject) => {
     conexion.dbConn.beginTransaction(async () => {
@@ -213,7 +175,7 @@ function crear_horario(
       if (total % Number(duracion_clase) > 0) {
         conexion.dbConn.rollback();
         reject(
-          "No coincide la duración de la clase con el rango de tiempo dado"
+          "No coincide la duración de la clase con el rango de tiempo dado",
         );
       } else {
         console.log("Número de clases " + num_clases);
@@ -226,7 +188,7 @@ function crear_horario(
               duracion_clase,
               i,
               nid_horario,
-              dia
+              dia,
             );
           } catch (error) {
             conexion.dbConn.rollback();
@@ -262,7 +224,7 @@ function asignar_horario_clase(nid_horario_clase, nid_matricula_asignatura) {
             conexion.dbConn.commit();
             resolve();
           }
-        }
+        },
       );
     });
   });
@@ -287,7 +249,7 @@ function liberar_horario_clase(nid_horario_clase, nid_matricula_asignatura) {
             conexion.dbConn.commit();
             resolve();
           }
-        }
+        },
       );
     });
   });
@@ -326,7 +288,7 @@ async function obtener_horarios(nid_profesor, nid_asignatura, nid_curso) {
           } else {
             resolve(results);
           }
-        }
+        },
       );
     });
   } catch (error) {
@@ -375,7 +337,7 @@ async function obtener_horarios_clase(nid_profesor, nid_asignatura, nid_curso) {
           } else {
             resolve(results);
           }
-        }
+        },
       );
     });
   } catch (error) {
@@ -402,7 +364,7 @@ function obtener_horarios_profesor(nid_profesor) {
         } else {
           resolve(results);
         }
-      }
+      },
     );
   });
 }
@@ -440,7 +402,7 @@ function obtener_horario_clase_alumno(nid_matricula) {
         } else {
           resolve(results);
         }
-      }
+      },
     );
   });
 }
@@ -460,7 +422,7 @@ function obtener_horario(nid_horario) {
         } else {
           resolve(results);
         }
-      }
+      },
     );
   });
 }
@@ -487,7 +449,7 @@ function obtener_horario_clase(nid_horario) {
         } else {
           resolve(results);
         }
-      }
+      },
     );
   });
 }
@@ -514,7 +476,7 @@ function obtener_horario_asignado(nid_horario) {
         } else {
           resolve(results);
         }
-      }
+      },
     );
   });
 }
@@ -548,7 +510,7 @@ function obtener_alumnos_horario_clase(nid_horario_clase) {
         } else {
           resolve(results);
         }
-      }
+      },
     );
   });
 }
@@ -592,7 +554,7 @@ function obtener_alumnos_sin_asignar(nid_horario_clase) {
         } else {
           resolve(results);
         }
-      }
+      },
     );
   });
 }
