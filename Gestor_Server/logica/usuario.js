@@ -1,22 +1,19 @@
 const constantes = require("../constantes.js");
 const conexion = require("../conexion.js");
+const gestor_base_datos = require("./base_datos.js");
 
 const bcrypt = require("bcryptjs");
 const rondas = 10;
 
-function obtener_usuarios() {
-  return new Promise(function (resolve, reject) {
-    conexion.dbConn.query(
-      "select * from " + constantes.ESQUEMA_BD + ".usuario",
-      function (error, results, fields) {
-        if (error) {
-          console.log(error);
-          reject();
-        }
-        return resolve(results);
-      }
-    );
-  });
+async function obtener_usuarios() {
+  try {
+    const sql = "select * from " + constantes.ESQUEMA_BD + ".usuario";
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.log("Error al obtener usuarios: ", error);
+    throw new Error("Error al obtener usuarios");
+  }
 }
 
 /**
@@ -24,27 +21,24 @@ function obtener_usuarios() {
  * @param {*} user
  * @returns
  */
-function obtener_pass(user) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(
+async function obtener_pass(user) {
+  try {
+    const sql =
       "select password from " +
-        constantes.ESQUEMA_BD +
-        ".usuario where usuario = " +
-        conexion.dbConn.escape(user),
-      function (error, results, fields) {
+      constantes.ESQUEMA_BD +
+      ".usuario where usuario = " +
+      conexion.dbConn.escape(user);
 
-        if (error) {
-          console.log(error);
-          reject();
-        }
-        if (results.length < 1 || results.length > 1) {
-          reject();
-        } else {
-          resolve(results[0].password);
-        }
-      }
-    );
-  });
+    const results = await gestor_base_datos.consulta(sql);
+    if (results.length < 1 || results.length > 1) {
+      throw new Error("Usuario no encontrado");
+    } else {
+      return results[0].password;
+    }
+  } catch (error) {
+    console.log("Error al obtener contraseña: ", error);
+    throw new Error("Error al obtener contraseña");
+  }
 }
 
 /**
@@ -55,14 +49,24 @@ function obtener_pass(user) {
  */
 async function comparar_pass(pass, pass_hash) {
   return new Promise((resolve, reject) => {
-    bcrypt.compare(pass, pass_hash, (err, coinciden) => {
-      if (err) {
-        console.log("Error comprobando:", err);
-        resolve(false);
-      } else {
-        resolve(coinciden);
-      }
-    });
+    try {
+      bcrypt.compare(pass, pass_hash, (err, coinciden) => {
+        try {
+          if (err) {
+            console.log("Error comprobando:", err);
+            resolve(false);
+          } else {
+            resolve(coinciden);
+          }
+        } catch (error) {
+          console.log("Error en comparar_pass:", error);
+          reject("Error al comparar password", error);
+        }
+      });
+    } catch (error) {
+      console.log("Error en comparar_pass:", error);
+      reject("Error al comparar password", error);
+    }
   });
 }
 
@@ -81,31 +85,24 @@ async function login(user, pass) {
   }
 }
 
-function existe_login(user) {
-  return new Promise((resolve, reject) => {
-    try {
-      conexion.dbConn.query(
-        "select count(*) nCont from " +
-          constantes.ESQUEMA_BD +
-          ".usuario where usuario = " +
-          conexion.dbConn.escape(user),
-        (error, results, fields) => {
-          if (error) {
-            console.log(error);
-            reject();
-          }
-          if (results.length < 1 || results.length > 1) {
-            resolve(false);
-          } else {
-            resolve(results[0].nCont > 0);
-          }
-        }
-      );
-    } catch (error) {
-      console.log(error);
-      reject("Error al consultar login");
+async function existe_login(user) {
+  try {
+    const sql =
+      "select count(*) nCont from " +
+      constantes.ESQUEMA_BD +
+      ".usuario where usuario = " +
+      conexion.dbConn.escape(user);
+
+    const results = await gestor_base_datos.consulta(sql);
+    if (results.length < 1 || results.length > 1) {
+      return false;
+    } else {
+      return results[0].nCont > 0;
     }
-  });
+  } catch (error) {
+    console.log("Error al comprobar existencia de login: ", error);
+    throw new Error("Error al comprobar existencia de login");
+  }
 }
 
 /**
@@ -113,45 +110,65 @@ function existe_login(user) {
  * @param {*} user
  * @returns
  */
-function esAdministrador(user) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(
+async function esAdministrador(user) {
+  try {
+    const sql =
       "select count(*) ncont from " +
-        constantes.ESQUEMA_BD +
-        ".usuario where usuario = " +
-        conexion.dbConn.escape(user) +
-        " and nid_rol = " +
-        conexion.dbConn.escape(constantes.ROL_ADMINISTRADOR),
-      (error, results, fileds) => {
-        if (error) {
-          console.log(error);
-          resolve(false);
-        } else {
-          resolve(results[0].ncont > 0);
-        }
-      }
-    );
-  });
+      constantes.ESQUEMA_BD +
+      ".usuario where usuario = " +
+      conexion.dbConn.escape(user) +
+      " and nid_rol = " +
+      conexion.dbConn.escape(constantes.ROL_ADMINISTRADOR);
+
+    const results = await gestor_base_datos.consulta(sql);
+    if (results.length < 1 || results.length > 1) {
+      return false;
+    } else {
+      return results[0].ncont > 0;
+    }
+  } catch (error) {
+    console.log("Error al comprobar si es administrador: ", error);
+    throw new Error("Error al comprobar si es administrador");
+  }
 }
 
-function esProfesor(user) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(
+async function esProfesor(user) {
+  try {
+    const sql =
       "select count(*) ncont from " +
-        constantes.ESQUEMA_BD +
-        ".usuario where usuario = " +
-        conexion.dbConn.escape(user) +
-        " and nid_rol = " +
-        conexion.dbConn.escape(constantes.ROL_PROFESOR),
-      (error, results, fileds) => {
-        if (error) {
-          console.log(error);
-          resolve(false);
+      constantes.ESQUEMA_BD +
+      ".usuario where usuario = " +
+      conexion.dbConn.escape(user) +
+      " and nid_rol = " +
+      conexion.dbConn.escape(constantes.ROL_PROFESOR);
+
+    const results = await gestor_base_datos.consulta(sql);
+    if (results.length < 1 || results.length > 1) {
+      return false;
+    } else {
+      return results[0].ncont > 0;
+    }
+  } catch (error) {
+    console.log("Error al comprobar si es profesor: ", error);
+    throw new Error("Error al comprobar si es profesor");
+  }
+}
+
+function hass_password(pass, rondas) {
+  return new Promise((resolve, reject) => {
+    try {
+      bcrypt.hash(pass, rondas, (err, hash) => {
+        if (err) {
+          console.log("Error al hashear la contraseña:", err);
+          reject("Error al hashear la contraseña");
         } else {
-          resolve(results[0].ncont > 0);
+          resolve(hash);
         }
-      }
-    );
+      });
+    } catch (error) {
+      console.log("Error en hass_password:", error);
+      reject("Error al hashear la contraseña");
+    }
   });
 }
 
@@ -166,32 +183,20 @@ async function registrar_usuario(user, pass) {
     bExiste = await existe_login(user);
     if (!bExiste) {
       const saltRounds = 15;
-      return new Promise(resolve, (reject) => {
-        conexion.dbConn.beginTransaction(() => {
-          bcrypt.hash(pass, saltRounds, (err, hash) => {
-            conexion.dbConn.query(
-              "insert into " +
-                constantes.ESQUEMA_BD +
-                ".usuario(usuario, password, nid_rol) values(" +
-                conexion.dbConn.escape(user) +
-                ", " +
-                conexion.dbConn.escape(hash) +
-                ", 2)",
-              (error, results, fields) => {
-                if (error) {
-                  conexion.dbConn.rollback();
-                  console.log(error);
-                  reject("Error al registrar el usuario");
-                } else {
-                  conexion.dbConn.commit();
-                  console.log("Usuario registrado");
-                  resolve();
-                }
-              }
-            );
-          });
-        });
-      });
+      const hash = await hass_password(pass, saltRounds);
+      const sql =
+        "insert into " +
+        constantes.ESQUEMA_BD +
+        ".usuario(usuario, password, nid_rol) values(" +
+        conexion.dbConn.escape(user) +
+        ", " +
+        conexion.dbConn.escape(hash) +
+        ", 2)";
+
+      const results = await gestor_base_datos.inserta(sql);
+      return results.insertId;
+    } else {
+      throw new Error("El usuario ya existe");
     }
   } catch (error) {
     console.log(error);
@@ -203,85 +208,64 @@ async function actualizar_password(user, pass) {
   try {
     let bExiste = await existe_login(user);
     if (bExiste) {
-      const saltRounds = 9;
-      return new Promise((resolve, reject) => {
-        conexion.dbConn.beginTransaction(() => {
-          bcrypt.hash(pass, saltRounds, (err, hash) => {
-            conexion.dbConn.query(
-              "update " +
-                constantes.ESQUEMA_BD +
-                ".usuario set password = " +
-                conexion.dbConn.escape(hash) +
-                " where usuario = " +
-                conexion.dbConn.escape(user),
-              (error, results, fields) => {
-                if (error) {
-                  conexion.dbConn.rollback();
-                  console.log(error);
-                  reject("Error al actualizar la contraseña");
-                } else {
-                  conexion.dbConn.commit();
-                  console.log("Usuario registrado");
-                  resolve();
-                }
-              }
-            );
-          });
-        });
-      });
+      const saltRounds = 15;
+      const hash = await hass_password(pass, saltRounds);
+      const sql =
+        "update " +
+        constantes.ESQUEMA_BD +
+        ".usuario set password = " +
+        conexion.dbConn.escape(hash) +
+        " where usuario = " +
+        conexion.dbConn.escape(user);
+      const results = await gestor_base_datos.actualiza(sql);
+      return results;
     } else {
-      throw new Error("Error al actualizar la contraseña");
+      throw new Error("El usuario no existe");
     }
   } catch (error) {
-    console.log(error);
+    console.log("Error al actualizar la contraseña: ", error);
     throw new Error("Error al actualizar la contraseña");
   }
 }
 
-function obtener_rol(user) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(
+async function obtener_rol(user) {
+  try {
+    const sql =
       "select nid_rol from " +
-        constantes.ESQUEMA_BD +
-        ".usuario where usuario = " +
-        conexion.dbConn.escape(user),
-      (error, results, fields) => {
-        if (error) {
-          console.log(error);
-          reject(error);
-        } else {
-          if (results.length > 0) {
-            resolve(results[0]["nid_rol"]);
-          } else {
-            reject("Usuario no encontrado");
-          }
-        }
-      }
-    );
-  });
+      constantes.ESQUEMA_BD +
+      ".usuario where usuario = " +
+      conexion.dbConn.escape(user);
+
+    const results = await gestor_base_datos.consulta(sql);
+    if (results.length < 1 || results.length > 1) {
+      throw new Error("Usuario no encontrado");
+    } else {
+      return results[0].nid_rol;
+    }
+  } catch (error) {
+    console.log("Error al obtener rol: ", error);
+    throw new Error("Error al obtener rol");
+  }
 }
 
-function obtener_nid_persona(user) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(
+async function obtener_nid_persona(user) {
+  try {
+    const sql =
       "select nid_persona from " +
-        constantes.ESQUEMA_BD +
-        ".persona_usuario where usuario = " +
-        conexion.dbConn.escape(user),
-      (error, results, fields) => {
-        if (error) {
-          console.log(error);
-          reject(error);
-        } else {
-          if (results.length > 0) {
-            resolve(results[0]["nid_persona"]);
-          } else {
-            reject("Usuario no encontrado");
-          }
-        }
-      }
-    );
-  });
+      constantes.ESQUEMA_BD +
+      ".persona_usuario where usuario = " +
+      conexion.dbConn.escape(user);
+
+    const results = await gestor_base_datos.consulta(sql);
+    if (results.length < 1 || results.length > 1) {
+      throw new Error("Usuario no encontrado");
+    } else {
+      return results[0].nid_persona;
+    }
+  } catch (error) {
+    console.log("Error al obtener nid_persona: ", error);
+    throw new Error("Error al obtener nid_persona");
+  }
 }
 
 module.exports.login = login;
