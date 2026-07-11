@@ -4,133 +4,124 @@ const gestor_personas = require("./persona.js");
 const gestor_socios = require("./socio.js");
 const gestor_interfaz_persona = require("./interfaz_persona.js");
 const gestor_interfaz_socio = require("./interfaz_socio.js");
+const gestor_base_datos = requiree("./base_datos.js");
 
-function obtener_siguiente_lote() {
-  const sql =
-    "select ifnull(max(lote), 1) + 1 as lote from " +
-    constantes.ESQUEMA_BD +
-    ".carga_datos";
+async function obtener_siguiente_lote() {
+  try {
+    const sql =
+      "select ifnull(max(lote), 1) + 1 as lote from " +
+      constantes.ESQUEMA_BD +
+      ".carga_datos";
 
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(sql, (error, results, fields) => {
-      if (error) {
-        console.log(error);
-        reject(error);
-      } else {
-        resolve(results[0].lote);
-      }
-    });
-  });
+    const results = await gestor_base_datos.consulta(sql);
+    return results[0].lote;
+  } catch (error) {
+    console.log("Error al obtener el siguiente lote: ", error);
+    throw new Error("Error al obtener el siguiente lote");
+  }
 }
 
-function cargar_registro(cadena, lote) {
-  const valores = cadena.split(";");
+async function cargar_registro(cadena, lote) {
+  try {
+    const valores = cadena.split(";");
 
-  const sql =
-    "insert into " +
-    constantes.ESQUEMA_BD +
-    ".carga_datos( dni, nombre, primer_apellido, segundo_apellido, email, telefono, fecha_nacimiento," +
-    "dni_socio, nombre_socio, primer_apellido_socio, segundo_apellido_socio, email_socio, telefono_socio, fecha_nacimiento_socio, fecha_alta_socio, fecha_baja_socio, " +
-    " padre_madre, dni_padre_madre, nombre_padre_madre, primer_apellido_padre_madre, segundo_apellido_padre_madre, email_padre_madre, telefono_padre_madre, fecha_nacimiento_padre_madre, " +
-    " iban, lenguaje_musical, " +
-    "instrumento1, instrumento2, instrumento3, instrumento4, instrumento5, lote) values(trim(" +
-    conexion.dbConn.escape(valores[0]) +
-    "), trim(" +
-    constantes.ESQUEMA_BD +
-    ".initcap(" +
-    conexion.dbConn.escape(valores[1]) +
-    ")), trim(" +
-    constantes.ESQUEMA_BD +
-    ".initcap(" +
-    conexion.dbConn.escape(valores[2]) +
-    ")), trim(" +
-    constantes.ESQUEMA_BD +
-    ".initcap(" +
-    conexion.dbConn.escape(valores[3]) +
-    ")), trim(" +
-    conexion.dbConn.escape(valores[4]) +
-    "), trim(" +
-    conexion.dbConn.escape(valores[5]) +
-    "), trim(" +
-    conexion.dbConn.escape(valores[6]) +
-    "), trim(" +
-    conexion.dbConn.escape(valores[7]) +
-    "), trim(" +
-    constantes.ESQUEMA_BD +
-    ".initcap(" +
-    conexion.dbConn.escape(valores[8]) +
-    ")), trim(" +
-    constantes.ESQUEMA_BD +
-    ".initcap(" +
-    conexion.dbConn.escape(valores[9]) +
-    ")), trim(" +
-    constantes.ESQUEMA_BD +
-    ".initcap(" +
-    conexion.dbConn.escape(valores[10]) +
-    ")), trim(" +
-    conexion.dbConn.escape(valores[11]) +
-    "), trim(" +
-    conexion.dbConn.escape(valores[12]) +
-    "), trim(" +
-    conexion.dbConn.escape(valores[13]) +
-    "), trim(" +
-    conexion.dbConn.escape(valores[14]) +
-    "), trim(" +
-    conexion.dbConn.escape(valores[15]) +
-    "), trim(" +
-    conexion.dbConn.escape(valores[16]) +
-    "), trim(" +
-    conexion.dbConn.escape(valores[17]) +
-    "), trim(" +
-    constantes.ESQUEMA_BD +
-    ".initcap(" +
-    conexion.dbConn.escape(valores[18]) +
-    ")), trim(" +
-    constantes.ESQUEMA_BD +
-    ".initcap(" +
-    conexion.dbConn.escape(valores[19]) +
-    ")), trim(" +
-    constantes.ESQUEMA_BD +
-    ".initcap(" +
-    conexion.dbConn.escape(valores[20]) +
-    ")), trim(" +
-    conexion.dbConn.escape(valores[21]) +
-    "), trim(" +
-    conexion.dbConn.escape(valores[22]) +
-    "), trim(" +
-    conexion.dbConn.escape(valores[23]) +
-    "), trim(" +
-    conexion.dbConn.escape(valores[24]) +
-    "), trim(" +
-    conexion.dbConn.escape(valores[25]) +
-    "), trim(" +
-    conexion.dbConn.escape(valores[26]) +
-    "), trim(" +
-    conexion.dbConn.escape(valores[27]) +
-    "), trim(" +
-    conexion.dbConn.escape(valores[28]) +
-    "), trim(" +
-    conexion.dbConn.escape(valores[29]) +
-    "), trim(" +
-    conexion.dbConn.escape(valores[30]) +
-    "), " +
-    conexion.dbConn.escape(lote) +
-    ")";
+    const sql =
+      "insert into " +
+      constantes.ESQUEMA_BD +
+      ".carga_datos( dni, nombre, primer_apellido, segundo_apellido, email, telefono, fecha_nacimiento," +
+      "dni_socio, nombre_socio, primer_apellido_socio, segundo_apellido_socio, email_socio, telefono_socio, fecha_nacimiento_socio, fecha_alta_socio, fecha_baja_socio, " +
+      " padre_madre, dni_padre_madre, nombre_padre_madre, primer_apellido_padre_madre, segundo_apellido_padre_madre, email_padre_madre, telefono_padre_madre, fecha_nacimiento_padre_madre, " +
+      " iban, lenguaje_musical, " +
+      "instrumento1, instrumento2, instrumento3, instrumento4, instrumento5, lote) values(trim(" +
+      conexion.dbConn.escape(valores[0]) +
+      "), trim(" +
+      constantes.ESQUEMA_BD +
+      ".initcap(" +
+      conexion.dbConn.escape(valores[1]) +
+      ")), trim(" +
+      constantes.ESQUEMA_BD +
+      ".initcap(" +
+      conexion.dbConn.escape(valores[2]) +
+      ")), trim(" +
+      constantes.ESQUEMA_BD +
+      ".initcap(" +
+      conexion.dbConn.escape(valores[3]) +
+      ")), trim(" +
+      conexion.dbConn.escape(valores[4]) +
+      "), trim(" +
+      conexion.dbConn.escape(valores[5]) +
+      "), trim(" +
+      conexion.dbConn.escape(valores[6]) +
+      "), trim(" +
+      conexion.dbConn.escape(valores[7]) +
+      "), trim(" +
+      constantes.ESQUEMA_BD +
+      ".initcap(" +
+      conexion.dbConn.escape(valores[8]) +
+      ")), trim(" +
+      constantes.ESQUEMA_BD +
+      ".initcap(" +
+      conexion.dbConn.escape(valores[9]) +
+      ")), trim(" +
+      constantes.ESQUEMA_BD +
+      ".initcap(" +
+      conexion.dbConn.escape(valores[10]) +
+      ")), trim(" +
+      conexion.dbConn.escape(valores[11]) +
+      "), trim(" +
+      conexion.dbConn.escape(valores[12]) +
+      "), trim(" +
+      conexion.dbConn.escape(valores[13]) +
+      "), trim(" +
+      conexion.dbConn.escape(valores[14]) +
+      "), trim(" +
+      conexion.dbConn.escape(valores[15]) +
+      "), trim(" +
+      conexion.dbConn.escape(valores[16]) +
+      "), trim(" +
+      conexion.dbConn.escape(valores[17]) +
+      "), trim(" +
+      constantes.ESQUEMA_BD +
+      ".initcap(" +
+      conexion.dbConn.escape(valores[18]) +
+      ")), trim(" +
+      constantes.ESQUEMA_BD +
+      ".initcap(" +
+      conexion.dbConn.escape(valores[19]) +
+      ")), trim(" +
+      constantes.ESQUEMA_BD +
+      ".initcap(" +
+      conexion.dbConn.escape(valores[20]) +
+      ")), trim(" +
+      conexion.dbConn.escape(valores[21]) +
+      "), trim(" +
+      conexion.dbConn.escape(valores[22]) +
+      "), trim(" +
+      conexion.dbConn.escape(valores[23]) +
+      "), trim(" +
+      conexion.dbConn.escape(valores[24]) +
+      "), trim(" +
+      conexion.dbConn.escape(valores[25]) +
+      "), trim(" +
+      conexion.dbConn.escape(valores[26]) +
+      "), trim(" +
+      conexion.dbConn.escape(valores[27]) +
+      "), trim(" +
+      conexion.dbConn.escape(valores[28]) +
+      "), trim(" +
+      conexion.dbConn.escape(valores[29]) +
+      "), trim(" +
+      conexion.dbConn.escape(valores[30]) +
+      "), " +
+      conexion.dbConn.escape(lote) +
+      ")";
 
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(sql, (error, results, fields) => {
-        if (error) {
-          console.log(error);
-          conexion.dbConn.rollback();
-          reject(error);
-        } else {
-          conexion.dbConn.commit();
-          resolve(results.insertId);
-        }
-      });
-    });
-  });
+    const results = await gestor_base_datos.actualiza(sql);
+    return results.insertId;
+  } catch (error) {
+    console.log("Error al cargar el registro: ", error);
+    throw new Error("Error al cargar el registro");
+  }
 }
 
 function formatearFecha(fechaISO) {
@@ -163,106 +154,92 @@ function formatearFechaRevert(fechaISO) {
   return null;
 }
 
-function registrar_interfaz_persona(lote, persona) {
-  console.log("Interfaz Persona", persona);
-  const sql =
-    "insert into " +
-    constantes.ESQUEMA_BD +
-    ".interfaz_persona(lote, dni, nombre, primer_apellido, segundo_apellido, email, telefono, fecha_nacimiento, operacion, estado) values(" +
-    conexion.dbConn.escape(lote) +
-    ", " +
-    conexion.dbConn.escape(persona.nif) +
-    ", " +
-    constantes.ESQUEMA_BD +
-    ".initcap(" +
-    conexion.dbConn.escape(persona.nombre) +
-    "), " +
-    constantes.ESQUEMA_BD +
-    ".initcap(" +
-    conexion.dbConn.escape(persona.primer_apellido) +
-    "), " +
-    constantes.ESQUEMA_BD +
-    ".initcap(" +
-    conexion.dbConn.escape(persona.segundo_apellido) +
-    "), " +
-    conexion.dbConn.escape(persona.email) +
-    ", " +
-    conexion.dbConn.escape(persona.telefono) +
-    ", str_to_date(substr(nullif(" +
-    conexion.dbConn.escape(persona.fecha_nacimiento) +
-    ", ''), 1, 10), '%d-%m-%Y'), " +
-    conexion.dbConn.escape(persona.operacion) +
-    ", " +
-    conexion.dbConn.escape(constantes.ESTADOS_INTERFAZ.PENDIENTE) +
-    ")";
+async function registrar_interfaz_persona(lote, persona) {
+  try {
+    console.log("Interfaz Persona", persona);
+    const sql =
+      "insert into " +
+      constantes.ESQUEMA_BD +
+      ".interfaz_persona(lote, dni, nombre, primer_apellido, segundo_apellido, email, telefono, fecha_nacimiento, operacion, estado) values(" +
+      conexion.dbConn.escape(lote) +
+      ", " +
+      conexion.dbConn.escape(persona.nif) +
+      ", " +
+      constantes.ESQUEMA_BD +
+      ".initcap(" +
+      conexion.dbConn.escape(persona.nombre) +
+      "), " +
+      constantes.ESQUEMA_BD +
+      ".initcap(" +
+      conexion.dbConn.escape(persona.primer_apellido) +
+      "), " +
+      constantes.ESQUEMA_BD +
+      ".initcap(" +
+      conexion.dbConn.escape(persona.segundo_apellido) +
+      "), " +
+      conexion.dbConn.escape(persona.email) +
+      ", " +
+      conexion.dbConn.escape(persona.telefono) +
+      ", str_to_date(substr(nullif(" +
+      conexion.dbConn.escape(persona.fecha_nacimiento) +
+      ", ''), 1, 10), '%d-%m-%Y'), " +
+      conexion.dbConn.escape(persona.operacion) +
+      ", " +
+      conexion.dbConn.escape(constantes.ESTADOS_INTERFAZ.PENDIENTE) +
+      ")";
 
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(sql, (error, results, fields) => {
-        if (error) {
-          console.log(error);
-          conexion.dbConn.rollback();
-          reject(error);
-        } else {
-          conexion.dbConn.commit();
-          resolve(results.insertId);
-        }
-      });
-    });
-  });
+    const results = await gestor_base_datos.actualiza(sql);
+    return results.insertId;
+  } catch (error) {
+    console.log("Error al registrar la persona en la interfaz: ", error);
+    throw new Error("Error al registrar la persona en la interfaz");
+  }
 }
 
-function actualizar_interfaz_persona(persona, nid_interfaz_persona) {
-  const sql =
-    "update " +
-    constantes.ESQUEMA_BD +
-    ".interfaz_persona set dni = nullif(" +
-    conexion.dbConn.escape(persona.nif) +
-    ", ''), nombre = " +
-    constantes.ESQUEMA_BD +
-    ".initcap(" +
-    conexion.dbConn.escape(persona.nombre) +
-    "), primer_apellido = " +
-    constantes.ESQUEMA_BD +
-    ".initcap(" +
-    conexion.dbConn.escape(persona.primer_apellido) +
-    "), segundo_apellido = " +
-    constantes.ESQUEMA_BD +
-    ".initcap(" +
-    conexion.dbConn.escape(persona.segundo_apellido) +
-    "), email = " +
-    conexion.dbConn.escape(persona.email) +
-    ", telefono = " +
-    conexion.dbConn.escape(persona.telefono) +
-    ", fecha_nacimiento = str_to_date(substr(nullif(" +
-    conexion.dbConn.escape(persona.fecha_nacimiento) +
-    ", ''), 1, 10), '%d-%m-%Y'), operacion = " +
-    conexion.dbConn.escape(persona.operacion) +
-    ", nid_persona = " +
-    conexion.dbConn.escape(persona.nid_persona) +
-    ", nid_interfaz_socio = " +
-    conexion.dbConn.escape(persona.nid_interfaz_socio) +
-    ", nid_interfaz_padre = " +
-    conexion.dbConn.escape(persona.nid_interfaz_padre) +
-    ", nid_interfaz_madre = " +
-    conexion.dbConn.escape(persona.nid_interfaz_madre) +
-    " where nid_interfaz_persona = " +
-    conexion.dbConn.escape(nid_interfaz_persona);
+async function actualizar_interfaz_persona(persona, nid_interfaz_persona) {
+  try {
+    const sql =
+      "update " +
+      constantes.ESQUEMA_BD +
+      ".interfaz_persona set dni = nullif(" +
+      conexion.dbConn.escape(persona.nif) +
+      ", ''), nombre = " +
+      constantes.ESQUEMA_BD +
+      ".initcap(" +
+      conexion.dbConn.escape(persona.nombre) +
+      "), primer_apellido = " +
+      constantes.ESQUEMA_BD +
+      ".initcap(" +
+      conexion.dbConn.escape(persona.primer_apellido) +
+      "), segundo_apellido = " +
+      constantes.ESQUEMA_BD +
+      ".initcap(" +
+      conexion.dbConn.escape(persona.segundo_apellido) +
+      "), email = " +
+      conexion.dbConn.escape(persona.email) +
+      ", telefono = " +
+      conexion.dbConn.escape(persona.telefono) +
+      ", fecha_nacimiento = str_to_date(substr(nullif(" +
+      conexion.dbConn.escape(persona.fecha_nacimiento) +
+      ", ''), 1, 10), '%d-%m-%Y'), operacion = " +
+      conexion.dbConn.escape(persona.operacion) +
+      ", nid_persona = " +
+      conexion.dbConn.escape(persona.nid_persona) +
+      ", nid_interfaz_socio = " +
+      conexion.dbConn.escape(persona.nid_interfaz_socio) +
+      ", nid_interfaz_padre = " +
+      conexion.dbConn.escape(persona.nid_interfaz_padre) +
+      ", nid_interfaz_madre = " +
+      conexion.dbConn.escape(persona.nid_interfaz_madre) +
+      " where nid_interfaz_persona = " +
+      conexion.dbConn.escape(nid_interfaz_persona);
 
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(sql, (error, results, fields) => {
-        if (error) {
-          console.log(error);
-          conexion.dbConn.rollback();
-          reject(error);
-        } else {
-          conexion.dbConn.commit();
-          resolve(results.insertId);
-        }
-      });
-    });
-  });
+    const results = await gestor_base_datos.actualiza(sql);
+    return results;
+  } catch (error) {
+    console.log("Error al actualizar la persona en la interfaz: ", error);
+    throw new Error("Error al actualizar la persona en la interfaz");
+  }
 }
 
 function compararSinAcentos(str1, str2) {
@@ -316,165 +293,133 @@ function compara_persona_interfaz(persona, persona_interfaz) {
   }
 }
 
-function insertar_conflicto_persona(persona_interfaz, nid_interfaz_persona) {
-  const sql =
-    "insert into " +
-    constantes.ESQUEMA_BD +
-    ".interfaz_conflictos_persona(nid_interfaz_persona, nif, nombre, primer_apellido, segundo_apellido, email, telefono, fecha_nacimiento, nid_persona, nid_socio) values(" +
-    conexion.dbConn.escape(nid_interfaz_persona) +
-    ", nullif(" +
-    conexion.dbConn.escape(persona_interfaz.nif) +
-    ", ''), " +
-    constantes.ESQUEMA_BD +
-    ".initcap(" +
-    conexion.dbConn.escape(persona_interfaz.nombre) +
-    "), " +
-    constantes.ESQUEMA_BD +
-    ".initcap(" +
-    conexion.dbConn.escape(persona_interfaz.primer_apellido) +
-    "), " +
-    constantes.ESQUEMA_BD +
-    ".initcap(" +
-    conexion.dbConn.escape(persona_interfaz.segundo_apellido) +
-    "), " +
-    conexion.dbConn.escape(persona_interfaz.email) +
-    ", " +
-    conexion.dbConn.escape(persona_interfaz.telefono) +
-    ", str_to_date(substr(nullif(" +
-    conexion.dbConn.escape(persona_interfaz.fecha_nacimiento) +
-    ", ''), 1, 10), '%Y-%m-%d'), " +
-    conexion.dbConn.escape(persona_interfaz.nid_persona) +
-    ", " +
-    conexion.dbConn.escape(persona_interfaz.nid_socio) +
-    ")";
+async function insertar_conflicto_persona(
+  persona_interfaz,
+  nid_interfaz_persona,
+) {
+  try {
+    const sql =
+      "insert into " +
+      constantes.ESQUEMA_BD +
+      ".interfaz_conflictos_persona(nid_interfaz_persona, nif, nombre, primer_apellido, segundo_apellido, email, telefono, fecha_nacimiento, nid_persona, nid_socio) values(" +
+      conexion.dbConn.escape(nid_interfaz_persona) +
+      ", nullif(" +
+      conexion.dbConn.escape(persona_interfaz.nif) +
+      ", ''), " +
+      constantes.ESQUEMA_BD +
+      ".initcap(" +
+      conexion.dbConn.escape(persona_interfaz.nombre) +
+      "), " +
+      constantes.ESQUEMA_BD +
+      ".initcap(" +
+      conexion.dbConn.escape(persona_interfaz.primer_apellido) +
+      "), " +
+      constantes.ESQUEMA_BD +
+      ".initcap(" +
+      conexion.dbConn.escape(persona_interfaz.segundo_apellido) +
+      "), " +
+      conexion.dbConn.escape(persona_interfaz.email) +
+      ", " +
+      conexion.dbConn.escape(persona_interfaz.telefono) +
+      ", str_to_date(substr(nullif(" +
+      conexion.dbConn.escape(persona_interfaz.fecha_nacimiento) +
+      ", ''), 1, 10), '%Y-%m-%d'), " +
+      conexion.dbConn.escape(persona_interfaz.nid_persona) +
+      ", " +
+      conexion.dbConn.escape(persona_interfaz.nid_socio) +
+      ")";
 
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(sql, (error, results, fields) => {
-        if (error) {
-          console.log(error);
-          conexion.dbConn.rollback();
-          reject(error);
-        } else {
-          conexion.dbConn.commit();
-          resolve(results.insertId);
-        }
-      });
-    });
-  });
+    const results = await gestor_base_datos.actualiza(sql);
+    return results.insertId;
+  } catch (error) {
+    console.log(
+      "Error al insertar el conflicto de persona en la interfaz: ",
+      error,
+    );
+    throw new Error("Error al insertar el conflicto de persona en la interfaz");
+  }
 }
 
-function obtener_volcado_lote(lote) {
-  const sql =
-    "select * from " +
-    constantes.ESQUEMA_BD +
-    ".carga_datos where lote = " +
-    conexion.dbConn.escape(lote);
+async function obtener_volcado_lote(lote) {
+  try {
+    const sql =
+      "select * from " +
+      constantes.ESQUEMA_BD +
+      ".carga_datos where lote = " +
+      conexion.dbConn.escape(lote);
 
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(sql, (error, results, fields) => {
-      if (error) {
-        console.log(error);
-        reject(error);
-      } else {
-        resolve(results);
-      }
-    });
-  });
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.log("Error al obtener el volcado del lote: ", error);
+    throw new Error("Error al obtener el volcado del lote");
+  }
 }
 
-function actualizar_nid_persona_interfaz(
+async function actualizar_nid_persona_interfaz(
   nid_carga_datos,
   nid_interfaz_persona,
 ) {
-  const sql =
-    "update " +
-    constantes.ESQUEMA_BD +
-    ".carga_datos set nid_interfaz_persona = " +
-    conexion.dbConn.escape(nid_interfaz_persona) +
-    " where nid_carga_datos = " +
-    conexion.dbConn.escape(nid_carga_datos);
+  try {
+    const sql =
+      "update " +
+      constantes.ESQUEMA_BD +
+      ".carga_datos set nid_interfaz_persona = " +
+      conexion.dbConn.escape(nid_interfaz_persona) +
+      " where nid_carga_datos = " +
+      conexion.dbConn.escape(nid_carga_datos);
 
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(sql, (error, results, fields) => {
-        if (error) {
-          console.log(error);
-          conexion.dbConn.rollback();
-          reject(error);
-        } else {
-          conexion.dbConn.commit();
-          resolve(results.insertId);
-        }
-      });
-    });
-  });
+    const results = await gestor_base_datos.actualiza(sql);
+    return results;
+  } catch (error) {
+    console.log("Error al actualizar nid_interfaz_persona: ", error);
+    throw new Error("Error al actualizar nid_interfaz_persona");
+  }
 }
 
-function actualizar_nid_persona_socio_interfaz(
+async function actualizar_nid_persona_socio_interfaz(
   nid_carga_datos,
   nid_interfaz_persona_socio,
 ) {
-  const sql =
-    "update " +
-    constantes.ESQUEMA_BD +
-    ".carga_datos set nid_interfaz_persona_socio = " +
-    conexion.dbConn.escape(nid_interfaz_persona_socio) +
-    " where nid_carga_datos = " +
-    conexion.dbConn.escape(nid_carga_datos);
+  try {
+    const sql =
+      "update " +
+      constantes.ESQUEMA_BD +
+      ".carga_datos set nid_interfaz_persona_socio = " +
+      conexion.dbConn.escape(nid_interfaz_persona_socio) +
+      " where nid_carga_datos = " +
+      conexion.dbConn.escape(nid_carga_datos);
 
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(sql, (error, results) => {
-        if (error) {
-          console.log(
-            "interfaz_registro -> actualizar_nid_persona_socio_interfaz: ",
-            error,
-          );
-          conexion.dbConn.rollback();
-          reject(
-            "Se ha producido un error al registrar en la interfaz el socio",
-          );
-        } else {
-          conexion.dbConn.commit();
-          resolve(results.insertId);
-        }
-      });
-    });
-  });
+    const results = await gestor_base_datos.actualiza(sql);
+    return results;
+  } catch (error) {
+    console.log("Error al actualizar nid_interfaz_persona_socio: ", error);
+    throw new Error("Error al actualizar nid_interfaz_persona_socio");
+  }
 }
 
-function actualizar_nid_persona_padre_madre_interfaz(
+async function actualizar_nid_persona_padre_madre_interfaz(
   nid_carga_datos,
   nid_interfaz_persona_padre_madre,
 ) {
-  const sql =
-    "update " +
-    constantes.ESQUEMA_BD +
-    ".carga_datos set nid_interfaz_persona_padre_madre = " +
-    conexion.dbConn.escape(nid_interfaz_persona_padre_madre) +
-    " where nid_carga_datos = " +
-    conexion.dbConn.escape(nid_carga_datos);
+  try {
+    const sql =
+      "update " +
+      constantes.ESQUEMA_BD +
+      ".carga_datos set nid_interfaz_persona_padre_madre = " +
+      conexion.dbConn.escape(nid_interfaz_persona_padre_madre) +
+      " where nid_carga_datos = " +
+      conexion.dbConn.escape(nid_carga_datos);
 
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(sql, (error, results) => {
-        if (error) {
-          console.log(
-            "interfaz_registro -> actualizar_nid_persona_padre_madre_interfaz: ",
-            error,
-          );
-          conexion.dbConn.rollback();
-          reject(
-            "Se ha producido un error al registrar en la interfaz el padre/madre",
-          );
-        } else {
-          conexion.dbConn.commit();
-          resolve(results.insertId);
-        }
-      });
-    });
-  });
+    const results = await gestor_base_datos.actualiza(sql);
+    return results;
+  } catch (error) {
+    console.log(
+      "Error al actualizar nid_interfaz_persona_padre_madre: ",
+      error,
+    );
+    throw new Error("Error al actualizar nid_interfaz_persona_padre_madre");
+  }
 }
 
 async function cargar_datos_interfaz(lote) {
@@ -523,7 +468,6 @@ async function cargar_datos_interfaz(lote) {
             await gestor_interfaz_persona.obtener_interfaz_persona(
               nid_interfaz_persona,
             );
-
 
           if (interfaz_persona && nid_interfaz_persona_padre_madre) {
             if (dato.padre_madre.toUpperCase() === "P") {

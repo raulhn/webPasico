@@ -2,154 +2,116 @@ const conexion = require("../conexion.js");
 const constantes = require("../constantes.js");
 const persona = require("./persona.js");
 const serviceMusicos = require("../services/serviceMusicos.js");
+const gestor_base_datos = require("./base_datos.js");
 
-function existe_instrumento(nid_instrumento) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(
+async function existe_instrumento(nid_instrumento) {
+  try {
+    const sql =
       "select count(*) cont from " +
-        constantes.ESQUEMA_BD +
-        ".instrumentos where nid = " +
-        conexion.dbConn.escape(nid_instrumento),
-      (error, results, fields) => {
-        if (error) {
-          resolve(false);
-        } else {
-          resolve(results[0]["cont"] > 0);
-        }
-      }
-    );
-  });
+      constantes.ESQUEMA_BD +
+      ".instrumentos where nid = " +
+      conexion.dbConn.escape(nid_instrumento);
+    const result = await gestor_base_datos.consulta(sql);
+    return result[0]["cont"] > 0;
+  } catch (error) {
+    console.error("Error al verificar la existencia del instrumento:", error);
+    return false;
+  }
 }
 
-function obtener_instrumentos() {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(
+async function obtener_instrumentos() {
+  try {
+    const sql =
       "select i.nid, i.descripcion from " +
         constantes.ESQUEMA_BD +
-        ".instrumentos i",
-      (error, results, fields) => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(results);
-        }
-      }
-    );
-  });
+        ".instrumentos i";
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.error("Error al obtener instrumentos:", error);
+    throw new Error("Error al obtener instrumentos");
+  }
 }
 
-function obtener_instrumentos_filtro() {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(
+async function obtener_instrumentos_filtro() {
+  try {
+    const sql =
       "select i.nid, i.descripcion from " +
         constantes.ESQUEMA_BD +
-        ".instrumentos i union select 0, 'Todos' from dual",
-      (error, results, fields) => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(results);
-        }
-      }
-    );
-  });
+        ".instrumentos i union select 0, 'Todos' from dual";
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.error("Error al obtener instrumentos filtro:", error);
+    throw new Error("Error al obtener instrumentos filtro");
+  }
 }
 
-function obtener_instrumentos_sucios() {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(
+async function obtener_instrumentos_sucios() {
+  try {
+    const sql =
       "select i.nid, i.descripcion from " +
         constantes.ESQUEMA_BD +
-        ".instrumentos i where i.sucio = 'S'",
-      (error, results, fields) => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(results);
-        }
-      }
-    );
-  });
+        ".instrumentos i where i.sucio = 'S'";
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.error("Error al obtener instrumentos sucios:", error);
+    throw new Error("Error al obtener instrumentos sucios");
+  }
 }
 
-function actualizar_instrumento_sucio(nid_instrumento, sucio) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(
-        "update " +
-          constantes.ESQUEMA_BD +
-          ".instrumentos set sucio = " +
-          conexion.dbConn.escape(sucio) +
-          " where nid = " +
-          conexion.dbConn.escape(nid_instrumento),
-        (error, results, fields) => {
-          if (error) {
-            console.log(error);
-            conexion.dbConn.rollback();
-            reject("Error al actualizar el instrumento sucio");
-          } else {
-            conexion.dbConn.commit();
-            resolve();
-          }
-        }
-      );
-    });
-  });
+async function actualizar_instrumento_sucio(nid_instrumento, sucio) {
+  try {
+    const sql =
+      "update " +
+        constantes.ESQUEMA_BD +
+        ".instrumentos set sucio = " +
+        conexion.dbConn.escape(sucio) +
+        " where nid = " +
+        conexion.dbConn.escape(nid_instrumento);
+    await gestor_base_datos.actualiza(sql);
+  } catch (error) {
+    console.error("Error al actualizar el instrumento sucio:", error);
+    throw new Error("Error al actualizar el instrumento sucio");
+  }
 }
 
-function registrar_instrumento(instrumento) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(
-        "insert into " +
-          constantes.ESQUEMA_BD +
-          ".instrumentos(descripcion) values(" +
-          conexion.dbConn.escape(instrumento) +
-          ")",
-        (error, results, fields) => {
-          if (error) {
-            console.log(error);
-            conexion.dbConn.rollback();
-            reject("Error al registrar el instrumento");
-          } else {
-            conexion.dbConn.commit();
-            resolve();
-          }
-        }
-      );
-    });
-  });
+async function registrar_instrumento(instrumento) {
+  try {
+    const sql =
+      "insert into " +
+        constantes.ESQUEMA_BD +
+        ".instrumentos(descripcion) values(" +
+        conexion.dbConn.escape(instrumento) +
+        ")";
+    await gestor_base_datos.actualiza(sql);
+  } catch (error) {
+    console.error("Error al registrar el instrumento:", error);
+    throw new Error("Error al registrar el instrumento");
+  }
 }
 
-function actualizar_instrumento(nid_instrumento, descripcion) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(
-        "update " +
-          constantes.ESQUEMA_BD +
-          ".instrumentos set descripcion = " +
-          conexion.dbConn.escape(descripcion) +
-          ", sucio = 'S'" +
-          " where nid = " +
-          conexion.dbConn.escape(nid_instrumento),
-        (error, results, fields) => {
-          if (error) {
-            console.log(error);
-            conexion.dbConn.rollback();
-            reject("Error al actualizar el instrumento");
-          } else {
-            conexion.dbConn.commit();
-            resolve();
-          }
-        }
-      );
-    });
-  });
+async function actualizar_instrumento(nid_instrumento, descripcion) {
+  try {
+    const sql =
+      "update " +
+        constantes.ESQUEMA_BD +
+        ".instrumentos set descripcion = " +
+        conexion.dbConn.escape(descripcion) +
+        ", sucio = 'S'" +
+        " where nid = " +
+        conexion.dbConn.escape(nid_instrumento);
+    await gestor_base_datos.actualiza(sql);
+  } catch (error) {
+    console.error("Error al actualizar el instrumento:", error);
+    throw new Error("Error al actualizar el instrumento");
+  }
 }
 
-function obtener_musicos() {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(
+async function obtener_musicos() {
+  try {
+    const sql =
       "select p.nid, p.nif, p.nombre, p.primer_apellido, p.segundo_apellido, p.telefono, p.correo_electronico, " +
         " m.fecha_alta, m.nid_tipo_musico, m.fecha_baja, m.fecha_alta, m.nid_instrumento, m.fecha_actualizacion, " +
         " t.descripcion as tipo_musico, i.descripcion as instrumento" +
@@ -165,44 +127,32 @@ function obtener_musicos() {
         " where p.nid = m.nid_persona " +
         " and m.nid_instrumento = i.nid " +
         " and m.nid_tipo_musico = t.nid_tipo_musico" +
-        " group by p.nombre, p.primer_apellido, p.segundo_apellido, p.telefono, p.correo_electronico, t.nid_tipo_musico, m.nid_instrumento",
-      (error, results, fields) => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(results);
-        }
-      }
-    );
-  });
+        " group by p.nombre, p.primer_apellido, p.segundo_apellido, p.telefono, p.correo_electronico, t.nid_tipo_musico, m.nid_instrumento";
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.error("Error al obtener músicos:", error);
+    throw new Error("Error al obtener músicos");
+  }
 }
 
-function insertar_musico(nid_persona, nid_instrumento, nid_tipo_musico) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(
-        "insert into " +
-          constantes.ESQUEMA_BD +
-          ".musico(nid_persona, nid_instrumento, fecha_alta, nid_tipo_musico) values(" +
-          conexion.dbConn.escape(nid_persona) +
-          ", " +
-          conexion.dbConn.escape(nid_instrumento) +
-          ", sysdate(), " +
-          conexion.dbConn.escape(nid_tipo_musico) +
-          ")",
-        (error, results, fields) => {
-          if (error) {
-            console.log(error);
-            conexion.dbConn.rollback();
-            reject("Error al registrar al músico");
-          } else {
-            conexion.dbConn.commit();
-            resolve();
-          }
-        }
-      );
-    });
-  });
+async function insertar_musico(nid_persona, nid_instrumento, nid_tipo_musico) {
+  try {
+    const sql =
+      "insert into " +
+        constantes.ESQUEMA_BD +
+        ".musico(nid_persona, nid_instrumento, fecha_alta, nid_tipo_musico) values(" +
+        conexion.dbConn.escape(nid_persona) +
+        ", " +
+        conexion.dbConn.escape(nid_instrumento) +
+        ", sysdate(), " +
+        conexion.dbConn.escape(nid_tipo_musico) +
+        ")";
+    await gestor_base_datos.actualiza(sql);
+  } catch (error) {
+    console.error("Error al registrar al músico:", error);
+    throw new Error("Error al registrar al músico");
+  }
 }
 
 async function registrar_instrumento_persona(
@@ -227,61 +177,48 @@ async function registrar_instrumento_persona(
 }
 
 async function obtener_instrumentos_persona(nid_persona) {
-  bExistePersona = await persona.existe_nid(nid_persona);
-  if (bExistePersona) {
-    return new Promise((resolve, reject) => {
-      conexion.dbConn.query(
+  try {
+    const bExistePersona = await persona.existe_nid(nid_persona);
+    if (bExistePersona) {
+      const sql =
         "select i.* from " +
           constantes.ESQUEMA_BD +
           ".musico m, " +
           constantes.ESQUEMA_BD +
           ".instrumentos i where m.nid_persona = " +
           conexion.dbConn.escape(nid_persona) +
-          " and m.nid_instrumento = i.nid",
-        (error, results, fields) => {
-          if (error) {
-            console.log(error);
-            reject(error);
-          } else {
-            resolve(results);
-          }
-        }
-      );
-    });
-  } else {
+          " and m.nid_instrumento = i.nid";
+      const results = await gestor_base_datos.consulta(sql);
+      return results;
+    } else {
+      throw new Error("Error al obtener la información");
+    }
+  } catch (error) {
+    console.error("Error en obtener_instrumentos_persona:", error);
     throw new Error("Error al obtener la información");
   }
 }
 
-function eliminar_instrumento_persona(nid_persona, nid_instrumento) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(
-        "delete from " +
-          constantes.ESQUEMA_BD +
-          ".musico where nid_persona " +
-          conexion.dbConn.escape(nid_persona) +
-          " and nid_instrumento = " +
-          conexion.dbConn.escape(nid_instrumento),
-        (error, results, fields) => {
-          if (error) {
-            console.log(error);
-            conexion.dbConn.rollback();
-            reject(error);
-          } else {
-            conexion.dbConn.commit();
-            resolve();
-          }
-        }
-      );
-    });
-  });
+async function eliminar_instrumento_persona(nid_persona, nid_instrumento) {
+  try {
+    const sql =
+      "delete from " +
+        constantes.ESQUEMA_BD +
+        ".musico where nid_persona " +
+        conexion.dbConn.escape(nid_persona) +
+        " and nid_instrumento = " +
+        conexion.dbConn.escape(nid_instrumento);
+    await gestor_base_datos.actualiza(sql);
+  } catch (error) {
+    console.error("Error al eliminar instrumento de persona:", error);
+    throw new Error("Error al eliminar instrumento de persona");
+  }
 }
 
 async function obtener_personas_instrumento(nid_instrumento) {
-  if (await existe_instrumento(nid_instrumento)) {
-    return new Promise((resolve, reject) => {
-      conexion.dbConn.query(
+  try {
+    if (await existe_instrumento(nid_instrumento)) {
+      const sql =
         "select p.*, " +
           " m.fecha_alta, m.nid_tipo_musico, m.fecha_baja, m.fecha_alta, m.nid_instrumento, m.fecha_actualizacion" +
           " from " +
@@ -290,239 +227,175 @@ async function obtener_personas_instrumento(nid_instrumento) {
           constantes.ESQUEMA_BD +
           ".musico m where m.nid_persona = p.nid and " +
           "m.nid_instrumento = " +
-          conexion.dbConn.escape(nid_instrumento),
-        (error, results, fields) => {
-          if (error) {
-            console.log(error);
-            reject(error);
-          } else {
-            resolve(results);
-          }
-        }
-      );
-    });
-  } else {
-    throw new Error("No existe instrumento");
+          conexion.dbConn.escape(nid_instrumento);
+      const results = await gestor_base_datos.consulta(sql);
+      return results;
+    } else {
+      throw new Error("No existe instrumento");
+    }
+  } catch (error) {
+    console.error("Error en obtener_personas_instrumento:", error);
+    throw new Error(error.message);
   }
 }
 
-function obtener_tipo_musicos() {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(
-      "select * from " + constantes.ESQUEMA_BD + ".tipo_musico",
-      (error, results, fields) => {
-        if (error) {
-          console.log(error);
-          reject(error);
-        } else {
-          resolve(results);
-        }
-      }
-    );
-  });
+async function obtener_tipo_musicos() {
+  try {
+    const sql =
+      "select * from " + constantes.ESQUEMA_BD + ".tipo_musico";
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.error("Error al obtener tipos de músicos:", error);
+    throw new Error("Error al obtener tipos de músicos");
+  }
 }
 
-function registrar_tipo_musico(descripcion) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(
-        "insert into " +
-          constantes.ESQUEMA_BD +
-          ".tipo_musico(descripcion) values(" +
-          conexion.dbConn.escape(descripcion) +
-          ")",
-        (error, results, fields) => {
-          if (error) {
-            console.log(error);
-            conexion.dbConn.rollback();
-            reject("Error al registrar el tipo de músico");
-          } else {
-            conexion.dbConn.commit();
-            resolve();
-          }
-        }
-      );
-    });
-  });
+async function registrar_tipo_musico(descripcion) {
+  try {
+    const sql =
+      "insert into " +
+        constantes.ESQUEMA_BD +
+        ".tipo_musico(descripcion) values(" +
+        conexion.dbConn.escape(descripcion) +
+        ")";
+    await gestor_base_datos.actualiza(sql);
+  } catch (error) {
+    console.error("Error al registrar el tipo de músico:", error);
+    throw new Error("Error al registrar el tipo de músico");
+  }
 }
 
-function actualizar_tipo_musico(nid_tipo_musico, descripcion) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(
-        "update " +
-          constantes.ESQUEMA_BD +
-          ".tipo_musico set descripcion = " +
-          conexion.dbConn.escape(descripcion) +
-          ", sucio = 'S'" +
-          " where nid_tipo_musico = " +
-          conexion.dbConn.escape(nid_tipo_musico),
-        (error, results, fields) => {
-          if (error) {
-            console.log(error);
-            conexion.dbConn.rollback();
-            reject("Error al actualizar el tipo de músico");
-          } else {
-            conexion.dbConn.commit();
-            resolve();
-          }
-        }
-      );
-    });
-  });
+async function actualizar_tipo_musico(nid_tipo_musico, descripcion) {
+  try {
+    const sql =
+      "update " +
+        constantes.ESQUEMA_BD +
+        ".tipo_musico set descripcion = " +
+        conexion.dbConn.escape(descripcion) +
+        ", sucio = 'S'" +
+        " where nid_tipo_musico = " +
+        conexion.dbConn.escape(nid_tipo_musico);
+    await gestor_base_datos.actualiza(sql);
+  } catch (error) {
+    console.error("Error al actualizar el tipo de músico:", error);
+    throw new Error("Error al actualizar el tipo de músico");
+  }
 }
 
-function actualizar_tipo_musico_sucio(nid_tipo_musico, sucio) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(
-        "update " +
-          constantes.ESQUEMA_BD +
-          ".tipo_musico set sucio = " +
-          conexion.dbConn.escape(sucio) +
-          " where nid_tipo_musico = " +
-          conexion.dbConn.escape(nid_tipo_musico),
-        (error, results, fields) => {
-          if (error) {
-            console.log(error);
-            conexion.dbConn.rollback();
-            reject("Error al actualizar el tipo de músico sucio");
-          } else {
-            conexion.dbConn.commit();
-            resolve();
-          }
-        }
-      );
-    });
-  });
+async function actualizar_tipo_musico_sucio(nid_tipo_musico, sucio) {
+  try {
+    const sql =
+      "update " +
+        constantes.ESQUEMA_BD +
+        ".tipo_musico set sucio = " +
+        conexion.dbConn.escape(sucio) +
+        " where nid_tipo_musico = " +
+        conexion.dbConn.escape(nid_tipo_musico);
+    await gestor_base_datos.actualiza(sql);
+  } catch (error) {
+    console.error("Error al actualizar el tipo de músico sucio:", error);
+    throw new Error("Error al actualizar el tipo de músico sucio");
+  }
 }
 
-function obtener_tipos_musico_sucios() {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(
+async function obtener_tipos_musico_sucios() {
+  try {
+    const sql =
       "select * from " +
         constantes.ESQUEMA_BD +
-        ".tipo_musico where sucio = 'S'",
-      (error, results, fields) => {
-        if (error) {
-          console.log(error);
-          reject(error);
-        } else {
-          resolve(results);
-        }
-      }
-    );
-  });
+        ".tipo_musico where sucio = 'S'";
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.error("Error al obtener tipos de músicos sucios:", error);
+    throw new Error("Error al obtener tipos de músicos sucios");
+  }
 }
 
-function obtener_musico(nid_persona) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(
+async function obtener_musico(nid_persona) {
+  try {
+    const sql =
       "select  m.nid_persona, m.nid_instrumento, m.fecha_alta, m.nid_tipo_musico, m.fecha_baja, m.fecha_actualizacion from " +
         constantes.ESQUEMA_BD +
         ".musico m where m.nid_persona = " +
-        conexion.dbConn.escape(nid_persona),
-      (error, results, fields) => {
-        if (error) {
-          console.log(error);
-          reject(error);
-        } else {
-          resolve(results);
-        }
-      }
-    );
-  });
+        conexion.dbConn.escape(nid_persona);
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.error("Error al obtener músico:", error);
+    throw new Error("Error al obtener músico");
+  }
 }
 
-function baja_musico(
+async function baja_musico(
   nid_persona,
   nid_instrumento,
   nid_tipo_musico,
   fecha_baja
 ) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(
-        "update " +
-          constantes.ESQUEMA_BD +
-          ".musico set fecha_baja = nullif(" +
-          conexion.dbConn.escape(fecha_baja) +
-          ", ''), fecha_actualizacion = sysdate() " +
-          " where nid_persona = " +
-          conexion.dbConn.escape(nid_persona) +
-          " and nid_instrumento = " +
-          conexion.dbConn.escape(nid_instrumento) +
-          " and nid_tipo_musico = " +
-          conexion.dbConn.escape(nid_tipo_musico),
-        (error, results, fields) => {
-          if (error) {
-            console.log(error);
-            conexion.dbConn.rollback();
-            reject(error);
-          } else {
-            console.log(
-              "update " +
-                constantes.ESQUEMA_BD +
-                ".musico set fecha_baja = " +
-                conexion.dbConn.escape(fecha_baja) +
-                ", nid_tipo_musico = " +
-                conexion.dbConn.escape(nid_tipo_musico) +
-                " where nid_persona = " +
-                conexion.dbConn.escape(nid_persona) +
-                " and nid_instrumento = " +
-                conexion.dbConn.escape(nid_instrumento)
-            );
-            console.log("Se ha dado de baja al músico");
-            conexion.dbConn.commit();
-            resolve();
-          }
-        }
-      );
-    });
-  });
+  try {
+    const sql =
+      "update " +
+        constantes.ESQUEMA_BD +
+        ".musico set fecha_baja = nullif(" +
+        conexion.dbConn.escape(fecha_baja) +
+        ", ''), fecha_actualizacion = sysdate() " +
+        " where nid_persona = " +
+        conexion.dbConn.escape(nid_persona) +
+        " and nid_instrumento = " +
+        conexion.dbConn.escape(nid_instrumento) +
+        " and nid_tipo_musico = " +
+        conexion.dbConn.escape(nid_tipo_musico);
+    await gestor_base_datos.actualiza(sql);
+
+    console.log(
+      "update " +
+        constantes.ESQUEMA_BD +
+        ".musico set fecha_baja = " +
+        conexion.dbConn.escape(fecha_baja) +
+        ", nid_tipo_musico = " +
+        conexion.dbConn.escape(nid_tipo_musico) +
+        " where nid_persona = " +
+        conexion.dbConn.escape(nid_persona) +
+        " and nid_instrumento = " +
+        conexion.dbConn.escape(nid_instrumento)
+    );
+    console.log("Se ha dado de baja al músico");
+  } catch (error) {
+    console.error("Error al dar de baja al músico:", error);
+    throw new Error("Error al dar de baja al músico");
+  }
 }
 
-function actualizar_sucio(nid_persona, sucio) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(
-        "update " +
-          constantes.ESQUEMA_BD +
-          ".musico set sucio = " +
-          conexion.dbConn.escape(sucio) +
-          " where nid_persona = " +
-          conexion.dbConn.escape(nid_persona),
-        (error, results, fields) => {
-          if (error) {
-            console.log(error);
-            conexion.dbConn.rollback();
-            reject(error);
-          } else {
-            conexion.dbConn.commit();
-            resolve(results);
-          }
-        }
-      );
-    });
-  });
+async function actualizar_sucio(nid_persona, sucio) {
+  try {
+    const sql =
+      "update " +
+        constantes.ESQUEMA_BD +
+        ".musico set sucio = " +
+        conexion.dbConn.escape(sucio) +
+        " where nid_persona = " +
+        conexion.dbConn.escape(nid_persona);
+    await gestor_base_datos.actualiza(sql);
+  } catch (error) {
+    console.error("Error al actualizar el campo sucio del músico:", error);
+    throw new Error("Error al actualizar el campo sucio del músico");
+  }
 }
 
-function obtener_sucios() {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(
+async function obtener_sucios() {
+  try {
+    const sql =
       "select m.* from " +
         constantes.ESQUEMA_BD +
-        ".musico m where m.sucio = 'S'",
-      (error, results, fields) => {
-        if (error) {
-          console.log(error);
-          reject(error);
-        } else {
-          resolve(results);
-        }
-      }
-    );
-  });
+        ".musico m where m.sucio = 'S'";
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.error("Error al obtener músicos sucios:", error);
+    throw new Error("Error al obtener músicos sucios");
+  }
 }
 
 module.exports.obtener_instrumentos_filtro = obtener_instrumentos_filtro;
