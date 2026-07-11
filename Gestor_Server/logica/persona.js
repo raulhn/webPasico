@@ -1,9 +1,10 @@
 const conexion = require("../conexion.js");
 const constantes = require("../constantes.js");
 const servicePersona = require("../services/servicePersona.js");
+const gestor_base_datos = require("./base_datos.js");
 
-function requiere_actualizar_usuario(nidPersona, fechaActualizacion) {
-  return new Promise((resolve, reject) => {
+async function requiere_actualizar_usuario(nidPersona, fechaActualizacion) {
+  try {
     const consulta =
       "select count(*) num " +
       "from " +
@@ -13,14 +14,12 @@ function requiere_actualizar_usuario(nidPersona, fechaActualizacion) {
       conexion.dbConn.escape(nidPersona) +
       "  and p.fecha_actualizacion > " +
       conexion.dbConn.escape(fechaActualizacion);
-    conexion.dbConn.query(consulta, (error, results, fields) => {
-      if (error) {
-        reject("Error al comprobar si require actualización");
-      } else {
-        resolve(results[0]["num"] > 0);
-      }
-    });
-  });
+    const results = await gestor_base_datos.consulta(consulta);
+    return results[0]["num"] > 0;
+  } catch (error) {
+    console.log("Error al comprobar si requiere actualización: " + error);
+    throw new Error("Error al comprobar si requiere actualización");
+  }
 }
 
 function formatearFecha(fechaISO) {
@@ -35,8 +34,8 @@ function formatearFecha(fechaISO) {
     .padStart(2, "0")}`;
 }
 
-function actualizar_persona_objeto(persona) {
-  return new Promise((resolve, reject) => {
+async function actualizar_persona_objeto(persona) {
+  try {
     const actualizarSQL =
       "update " +
       constantes.ESQUEMA_BD +
@@ -72,20 +71,12 @@ function actualizar_persona_objeto(persona) {
       " where nid = " +
       conexion.dbConn.escape(persona.nid_persona);
 
-    console.log(actualizarSQL);
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(actualizarSQL, (error, results, fields) => {
-        if (error) {
-          console.log(error);
-          conexion.dbConn.rollback();
-          reject("Error al actualizar la persona del servicio movil");
-        } else {
-          conexion.dbConn.commit();
-          resolve();
-        }
-      });
-    });
-  });
+    const results = await gestor_base_datos.actualiza(actualizarSQL);
+    return results;
+  } catch (error) {
+    console.log("Error al actualizar la persona: " + error);
+    throw new Error("Error al actualizar la persona");
+  }
 }
 
 async function actualizar_personas_sucias() {
@@ -110,101 +101,83 @@ async function actualizar_personas_sucias() {
 }
 
 async function existe_nif(nif) {
-  await actualizar_personas_sucias();
-  return new Promise((resolve, reject) => {
+  try {
+    await actualizar_personas_sucias();
+
     if (!nif || nif.length === 0) {
       resolve(false);
     } else {
-      conexion.dbConn.query(
+      const sql =
         "select count(*) cont from " +
-          constantes.ESQUEMA_BD +
-          ".persona where nif = " +
-          conexion.dbConn.escape(nif),
-        (error, results, fields) => {
-          if (error) {
-            resolve(false);
-          } else {
-            resolve(results[0]["cont"] > 0);
-          }
-        },
-      );
+        constantes.ESQUEMA_BD +
+        ".persona where nif = " +
+        conexion.dbConn.escape(nif);
+      const results = await gestor_base_datos.consulta(sql);
+      return results[0]["cont"] > 0;
     }
-  });
+  } catch (error) {
+    console.log("Error al comprobar si existe el NIF: " + error);
+    throw new Error("Error al comprobar si existe el NIF");
+  }
 }
 
 async function valida_nif(nif) {
   try {
     let bExisteNif = await existe_nif(nif);
     if (!bExisteNif) {
-      return new Promise((resolve, reject) => {
-        conexion.dbConn.query(
-          "select " +
-            constantes.ESQUEMA_BD +
-            ".comprueba_nif(" +
-            conexion.dbConn.escape(nif) +
-            ") valido from dual",
-          (error, results, fields) => {
-            if (error) {
-              reject("Error al validar el NIF");
-            } else {
-              if (results[0]["valido"] == "S") {
-                resolve(true);
-              } else {
-                reject("NIF/NIE no válido");
-              }
-            }
-          },
-        );
-      });
+      const sql =
+        "select " +
+        constantes.ESQUEMA_BD +
+        ".comprueba_nif(" +
+        conexion.dbConn.escape(nif) +
+        ") valido from dual";
+
+      const results = await gestor_base_datos.consulta(sql);
+      return results[0]["valido"] == "S";
     } else {
       throw new Error("El NIF/NIE ya existe");
     }
   } catch (error) {
-    console.log(error);
+    console.log("persona.js -> valida_nif Error al validar el NIF: " + error);
     throw new Error("Error al validar el NIF");
   }
 }
 
 async function existe_nid(nid_persona) {
-  await actualizar_personas_sucias();
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(
+  try {
+    await actualizar_personas_sucias();
+    const sql =
       "select count(*) cont from " +
-        constantes.ESQUEMA_BD +
-        ".persona where nid = " +
-        conexion.dbConn.escape(nid_persona),
-      (error, results, fields) => {
-        if (error) {
-          resolve(false);
-        } else {
-          resolve(results[0]["cont"] > 0);
-        }
-      },
-    );
-  });
+      constantes.ESQUEMA_BD +
+      ".persona where nid = " +
+      conexion.dbConn.escape(nid_persona);
+
+    const results = await gestor_base_datos.consulta(sql);
+    return results[0]["cont"] > 0;
+  } catch (error) {
+    console.log("Error al comprobar si existe el NID: " + error);
+    throw new Error("Error al comprobar si existe el NID");
+  }
 }
 
 async function obtener_persona_apellidos(primer_apellido, segundo_apellido) {
-  await actualizar_personas_sucias();
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(
+  try {
+    await actualizar_personas_sucias();
+    const sql =
       "select concat(nombre, ' ', primer_apellido, ' ', segundo_apellido) etiqueta from " +
-        constantes.ESQUEMA_BD +
-        ".persona where upper(primer_apellido) = upper(" +
-        conexion.dbConn.escape(primer_apellido) +
-        ") and ifnull(upper(segundo_apellido), '') = ifnull(upper(" +
-        conexion.dbConn.escape(segundo_apellido) +
-        "), '')",
-      (error, results, fields) => {
-        if (error) {
-          console.log(error);
-          reject(error);
-        } else {
-          resolve(results);
-        }
-      },
-    );
-  });
+      constantes.ESQUEMA_BD +
+      ".persona where upper(primer_apellido) = upper(" +
+      conexion.dbConn.escape(primer_apellido) +
+      ") and ifnull(upper(segundo_apellido), '') = ifnull(upper(" +
+      conexion.dbConn.escape(segundo_apellido) +
+      "), '')";
+
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.log("Error al obtener persona por apellidos: " + error);
+    throw new Error("Error al obtener persona por apellidos");
+  }
 }
 
 async function existe_persona(
@@ -213,47 +186,44 @@ async function existe_persona(
   segundo_apellido,
   fecha_nacimiento,
 ) {
-  await actualizar_personas_sucias();
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(
+  try {
+    await actualizar_personas_sucias();
+    const sql =
       "select count(*) cont from " +
-        constantes.ESQUEMA_BD +
-        ".persona " +
-        " where " +
-        constantes.ESQUEMA_BD +
-        ".initcap(nombre) = " +
-        constantes.ESQUEMA_BD +
-        ".initcap( " +
-        conexion.dbConn.escape(nombre) +
-        ") " +
-        " and " +
-        constantes.ESQUEMA_BD +
-        ".initcap(primer_apellido) = " +
-        constantes.ESQUEMA_BD +
-        ".initcap( " +
-        conexion.dbConn.escape(primer_apellido) +
-        ") " +
-        " and " +
-        constantes.ESQUEMA_BD +
-        ".initcap(segundo_apellido) = " +
-        constantes.ESQUEMA_BD +
-        ".initcap( " +
-        conexion.dbConn.escape(segundo_apellido) +
-        ") " +
-        " and fecha_nacimiento = " +
-        "str_to_date(nullif(" +
-        conexion.dbConn.escape(fecha_nacimiento) +
-        ", '') , '%Y-%m-%d')",
-      (error, results, fields) => {
-        if (error) {
-          console.log(error);
-          resolve(false);
-        } else {
-          resolve(results[0]["cont"] > 0);
-        }
-      },
-    );
-  });
+      constantes.ESQUEMA_BD +
+      ".persona " +
+      " where " +
+      constantes.ESQUEMA_BD +
+      ".initcap(nombre) = " +
+      constantes.ESQUEMA_BD +
+      ".initcap( " +
+      conexion.dbConn.escape(nombre) +
+      ") " +
+      " and " +
+      constantes.ESQUEMA_BD +
+      ".initcap(primer_apellido) = " +
+      constantes.ESQUEMA_BD +
+      ".initcap( " +
+      conexion.dbConn.escape(primer_apellido) +
+      ") " +
+      " and " +
+      constantes.ESQUEMA_BD +
+      ".initcap(segundo_apellido) = " +
+      constantes.ESQUEMA_BD +
+      ".initcap( " +
+      conexion.dbConn.escape(segundo_apellido) +
+      ") " +
+      " and fecha_nacimiento = " +
+      "str_to_date(nullif(" +
+      conexion.dbConn.escape(fecha_nacimiento) +
+      ", '') , '%Y-%m-%d')";
+
+    const results = await gestor_base_datos.consulta(sql);
+    return results[0]["cont"] > 0;
+  } catch (error) {
+    console.log("Error al comprobar si existe la persona: " + error);
+    throw new Error("Error al comprobar si existe la persona");
+  }
 }
 
 async function registrar_persona(
@@ -275,56 +245,42 @@ async function registrar_persona(
       fecha_nacimiento,
     );
     if (!bExiste_nif && !bExiste_persona) {
-      return new Promise((resolve, reject) => {
-        conexion.dbConn.beginTransaction(async () => {
-          conexion.dbConn.query(
-            "insert into " +
-              constantes.ESQUEMA_BD +
-              ".persona(nombre, primer_apellido, segundo_apellido, telefono, fecha_nacimiento, nif, correo_electronico, codigo) " +
-              " values(" +
-              constantes.ESQUEMA_BD +
-              ".initcap(" +
-              conexion.dbConn.escape(nombre) +
-              "), " +
-              constantes.ESQUEMA_BD +
-              ".initcap(" +
-              conexion.dbConn.escape(primer_apellido) +
-              "), " +
-              constantes.ESQUEMA_BD +
-              ".initcap(" +
-              conexion.dbConn.escape(segundo_apellido) +
-              ")," +
-              "cast(nullif(cast(" +
-              conexion.dbConn.escape(telefono) +
-              " as char), '') as unsigned)" +
-              "," +
-              "str_to_date(nullif(" +
-              conexion.dbConn.escape(fecha_nacimiento) +
-              ", '') , '%Y-%m-%d')" +
-              ", " +
-              "nullif(" +
-              conexion.dbConn.escape(nif) +
-              ", ''), " +
-              conexion.dbConn.escape(correo_electronico) +
-              "," +
-              "nullif(cast(" +
-              conexion.dbConn.escape(codigo) +
-              " as char), ''))",
-            (error, results, fields) => {
-              if (error) {
-                conexion.dbConn.rollback();
-                console.log(error);
-                reject(error);
-              } else {
-                conexion.dbConn.commit();
-                actualizar_sucio(results.insertId, "S");
-                console.log("Usuario registrado");
-                resolve(results.insertId);
-              }
-            },
-          );
-        });
-      });
+      const sql =
+        "insert into " +
+        constantes.ESQUEMA_BD +
+        ".persona(nombre, primer_apellido, segundo_apellido, telefono, fecha_nacimiento, nif, correo_electronico, codigo) " +
+        " values(" +
+        constantes.ESQUEMA_BD +
+        ".initcap(" +
+        conexion.dbConn.escape(nombre) +
+        "), " +
+        constantes.ESQUEMA_BD +
+        ".initcap(" +
+        conexion.dbConn.escape(primer_apellido) +
+        "), " +
+        constantes.ESQUEMA_BD +
+        ".initcap(" +
+        conexion.dbConn.escape(segundo_apellido) +
+        ")," +
+        "cast(nullif(cast(" +
+        conexion.dbConn.escape(telefono) +
+        " as char), '') as unsigned)" +
+        "," +
+        "str_to_date(nullif(" +
+        conexion.dbConn.escape(fecha_nacimiento) +
+        ", '') , '%Y-%m-%d')" +
+        ", " +
+        "nullif(" +
+        conexion.dbConn.escape(nif) +
+        ", ''), " +
+        conexion.dbConn.escape(correo_electronico) +
+        "," +
+        "nullif(cast(" +
+        conexion.dbConn.escape(codigo) +
+        " as char), ''))";
+      const results = await gestor_base_datos.actualiza(sql);
+      await actualizar_sucio(results.insertId, "S");
+      return results.insertId;
     } else if (bExiste_nif) {
       throw new Error("Ya existe un nif registrado para esa persona");
     } else {
@@ -342,29 +298,23 @@ async function obtener_nid_persona(nif) {
   try {
     bExiste = await existe_nif(nif);
     if (bExiste) {
-      return new Promise((resolve, reject) => {
-        conexion.dbConn.query(
-          "select nid from " +
-            constantes.ESQUEMA_BD +
-            ".persona where nif = " +
-            conexion.dbConn.escape(nif),
-          (error, results, fields) => {
-            if (error) {
-              console.log(error);
-              reject(error);
-            } else if (results.length < 1) {
-              resolve("");
-            } else {
-              resolve(results[0]["nid"]);
-            }
-          },
-        );
-      });
+      const sql =
+        "select nid from " +
+        constantes.ESQUEMA_BD +
+        ".persona where nif = " +
+        conexion.dbConn.escape(nif);
+
+      const results = await gestor_base_datos.consulta(sql);
+      if (results.length < 1) {
+        return "";
+      } else {
+        return results[0]["nid"];
+      }
     } else {
       return "";
     }
   } catch (error) {
-    console.log(error);
+    console.log("Error al obtener el nid de la persona: " + error);
     throw new Error("Error al obtener el nid de la persona");
   }
 }
@@ -373,24 +323,18 @@ async function obtener_padre(nid_persona) {
   try {
     bExiste = await existe_nid(nid_persona);
     if (bExiste) {
-      return new Promise((resolve, reject) => {
-        conexion.dbConn.query(
-          "select nid_padre from " +
-            constantes.ESQUEMA_BD +
-            ".persona where nid = " +
-            conexion.dbConn.escape(nid_persona),
-          async (error, results, fields) => {
-            if (error) {
-              console.log(error);
-              reject(error);
-            } else if (results.length < 1) {
-              reject("No encontrada_persona");
-            } else {
-              resolve(results[0]["nid_padre"]);
-            }
-          },
-        );
-      });
+      const sql =
+        "select nid_padre from " +
+        constantes.ESQUEMA_BD +
+        ".persona where nid = " +
+        conexion.dbConn.escape(nid_persona);
+      const results = await gestor_base_datos.consulta(sql);
+      if (results.length < 1) {
+        console.log("Error: No encontrada persona");
+        throw new Error("No encontrada persona");
+      } else {
+        return results[0]["nid_padre"];
+      }
     } else {
       throw new Error("No existe el nid de la persona");
     }
@@ -404,27 +348,21 @@ async function obtener_madre(nid_persona) {
   try {
     bExiste = await existe_nid(nid_persona);
     if (bExiste) {
-      return new Promise((resolve, reject) => {
-        conexion.dbConn.query(
-          "select nid_madre from " +
-            constantes.ESQUEMA_BD +
-            ".persona where nid = " +
-            conexion.dbConn.escape(nid_persona),
-          async (error, results, fields) => {
-            if (error) {
-              console.log(error);
-              reject(error);
-            } else if (results.length < 1) {
-              reject("No encontrada persona");
-            } else {
-              resolve(results[0]["nid_madre"]);
-            }
-          },
-        );
-      });
-    } else {
-      throw new Error("No existe el nid de la persona");
+      const sql =
+        "select nid_madre from " +
+        constantes.ESQUEMA_BD +
+        ".persona where nid = " +
+        conexion.dbConn.escape(nid_persona);
+
+      const results = await gestor_base_datos.consulta(sql);
+      if (results.length < 1) {
+        console.log("Error al obtener la madre de la persona: " + sql);
+        throw new Error("Error al obtener la madre de la persona");
+      } else {
+        return results[0]["nid_madre"];
+      }
     }
+    throw new Error("No existe el nid de la persona");
   } catch (error) {
     console.log(error);
     throw new Error("Error al obtener la madre de la persona");
@@ -436,27 +374,21 @@ async function obtener_hijos(nid_persona) {
     bExiste = await existe_nid(nid_persona);
 
     if (bExiste) {
-      return new Promise((resolve, reject) => {
-        conexion.dbConn.query(
-          "select concat(ifnull(p.nif, ''), ' ',  ifnull(p.nombre, ''), ' ', ifnull(p.primer_apellido, ''), ' ' , ifnull(p.segundo_apellido, '')) etiqueta, p.* from " +
-            constantes.ESQUEMA_BD +
-            ".persona p where nid_madre = " +
-            conexion.dbConn.escape(nid_persona) +
-            " or nid_padre = " +
-            conexion.dbConn.escape(nid_persona),
-          (error, results, fields) => {
-            if (error) {
-              console.log(error);
-              reject("Error al obtener los hijos de la persona");
-            } else {
-              resolve(results);
-            }
-          },
-        );
-      });
+      const sql =
+        "select concat(ifnull(p.nif, ''), ' ',  ifnull(p.nombre, ''), ' ', ifnull(p.primer_apellido, ''), ' ' , ifnull(p.segundo_apellido, '')) etiqueta, p.* from " +
+        constantes.ESQUEMA_BD +
+        ".persona p where nid_madre = " +
+        conexion.dbConn.escape(nid_persona) +
+        " or nid_padre = " +
+        conexion.dbConn.escape(nid_persona);
+
+      const results = await gestor_base_datos.consulta(sql);
+      return results;
+    } else {
+      throw new Error("No existe el nid de la persona");
     }
   } catch (error) {
-    console.log(error);
+    console.log("Error al obtener los hijos de la persona: " + error);
     throw new Error("Error al obtener los hijos de la persona");
   }
 }
