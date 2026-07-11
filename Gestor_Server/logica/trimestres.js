@@ -1,80 +1,60 @@
 const conexion = require("../conexion.js");
 const constantes = require("../constantes.js");
+const gestor_base_datos = require("./base_datos.js");
 
-function obtener_trimestre(nid_trimestre) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(
+async function obtener_trimestre(nid_trimestre) {
+  try {
+    const sql =
       "select * from " +
-        constantes.ESQUEMA_BD +
-        ".trimestre where nid_trimestre = " +
-        conexion.dbConn.escape(nid_trimestre),
-      (error, results, fields) => {
-        if (error) {
-          console.log(error);
-          reject(error);
-        } else {
-          resolve(results[0]);
-        }
-      }
-    );
-  });
+      constantes.ESQUEMA_BD +
+      ".trimestre where nid_trimestre = " +
+      conexion.dbConn.escape(nid_trimestre);
+    const results = await gestor_base_datos.consulta(sql);
+    return results[0];
+  } catch (error) {
+    console.log("Error al obtener trimestre: ", error);
+    throw new Error("Error al obtener el trimestre");
+  }
 }
 
-function obtener_trimestres() {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(
-      "select * from " + constantes.ESQUEMA_BD + ".trimestre",
-      (error, results, fields) => {
-        if (error) {
-          console.log(error);
-          reject(error);
-        } else {
-          resolve(results);
-        }
-      }
-    );
-  });
+async function obtener_trimestres() {
+  try {
+    const sql =
+      "select * from " + constantes.ESQUEMA_BD + ".trimestre";
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.log("Error al obtener trimestres: ", error);
+    throw new Error("Error al obtener los trimestres");
+  }
 }
 
-function obtener_trimestres_sucios() {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(
-      "select * from " + constantes.ESQUEMA_BD + ".trimestre where sucio = 'S'",
-      (error, results, fields) => {
-        if (error) {
-          console.log(error);
-          reject(error);
-        } else {
-          resolve(results);
-        }
-      }
-    );
-  });
+async function obtener_trimestres_sucios() {
+  try {
+    const sql =
+      "select * from " + constantes.ESQUEMA_BD + ".trimestre where sucio = 'S'";
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.log("Error al obtener trimestres sucios: ", error);
+    throw new Error("Error al obtener los trimestres sucios");
+  }
 }
 
-function actualizar_trimestre_sucio(nid_trimestre, sucio) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(
-        "update " +
-          constantes.ESQUEMA_BD +
-          ".trimestre set sucio = " +
-          conexion.dbConn.escape(sucio) +
-          " where nid_trimestre = " +
-          conexion.dbConn.escape(nid_trimestre),
-        (error, results, fields) => {
-          if (error) {
-            console.log(error);
-            conexion.dbConn.rollback();
-            reject(error);
-          } else {
-            conexion.dbConn.commit();
-            resolve();
-          }
-        }
-      );
-    });
-  });
+async function actualizar_trimestre_sucio(nid_trimestre, sucio) {
+  try {
+    const sql =
+      "update " +
+      constantes.ESQUEMA_BD +
+      ".trimestre set sucio = " +
+      conexion.dbConn.escape(sucio) +
+      " where nid_trimestre = " +
+      conexion.dbConn.escape(nid_trimestre);
+    await gestor_base_datos.actualiza(sql);
+  } catch (error) {
+    console.log("Error al actualizar trimestre: ", error);
+    throw new Error("Error al actualizar el trimestre");
+  }
 }
 
 module.exports.obtener_trimestre = obtener_trimestre;

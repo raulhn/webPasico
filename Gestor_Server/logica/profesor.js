@@ -1,42 +1,39 @@
 const conexion = require("../conexion");
 const constantes = require("../constantes");
+const gestor_base_datos = require("./base_datos");
 
-function esAlumnoProfesor(nid_alumno, nid_profesor, nid_curso) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(
+async function esAlumnoProfesor(nid_alumno, nid_profesor, nid_curso) {
+  try {
+    const sql =
       "select count(*) as num " +
-        " from " +
-        constantes.ESQUEMA_BD +
-        ".matricula m, " +
-        constantes.ESQUEMA_BD +
-        ".matricula_asignatura ma, " +
-        constantes.ESQUEMA_BD +
-        ".profesor_alumno_matricula pam " +
-        " where m.nid = ma.nid_matricula " +
-        "   and ma.nid = pam.nid_matricula_asignatura " +
-        "   and m.nid_curso = " +
-        conexion.dbConn.escape(nid_curso) +
-        "   and pam.nid_profesor = " +
-        conexion.dbConn.escape(nid_profesor) +
-        "   and m.nid_persona = " +
-        conexion.dbConn.escape(nid_alumno),
-      (error, results, fields) => {
-        if (error) {
-          console.log(
-            "profesor.js - esAlumnoProfesor - Error en la consulta: " + error,
-          );
-          reject(error);
-        } else {
-          if (results[0].num > 0) resolve(true);
-          else resolve(false);
-        }
-      },
+      " from " +
+      constantes.ESQUEMA_BD +
+      ".matricula m, " +
+      constantes.ESQUEMA_BD +
+      ".matricula_asignatura ma, " +
+      constantes.ESQUEMA_BD +
+      ".profesor_alumno_matricula pam " +
+      " where m.nid = ma.nid_matricula " +
+      "   and ma.nid = pam.nid_matricula_asignatura " +
+      "   and m.nid_curso = " +
+      conexion.dbConn.escape(nid_curso) +
+      "   and pam.nid_profesor = " +
+      conexion.dbConn.escape(nid_profesor) +
+      "   and m.nid_persona = " +
+      conexion.dbConn.escape(nid_alumno);
+    const results = await gestor_base_datos.consulta(sql);
+    return results[0].num > 0;
+  } catch (error) {
+    console.log(
+      "profesor.js - esAlumnoProfesor - Error en la consulta: ",
+      error
     );
-  });
+    throw new Error("Error al consultar si alumno es profesor");
+  }
 }
 
-function darDeBajaProfesor(nid_profesor, nid_asignatura) {
-  return new Promise((resolve, reject) => {
+async function darDeBajaProfesor(nid_profesor, nid_asignatura) {
+  try {
     const sql =
       "update " +
       constantes.ESQUEMA_BD +
@@ -46,18 +43,15 @@ function darDeBajaProfesor(nid_profesor, nid_asignatura) {
       conexion.dbConn.escape(nid_profesor) +
       "   and nid_asignatura = " +
       conexion.dbConn.escape(nid_asignatura);
-
-    conexion.dbConn.query(sql, (error, results, fields) => {
-      if (error) {
-        console.log(
-          "profesor.js - darDeBajaProfesor - Error en la consulta: " + error,
-        );
-        reject(error);
-      } else {
-        resolve(true);
-      }
-    });
-  });
+    await gestor_base_datos.actualiza(sql);
+    return true;
+  } catch (error) {
+    console.log(
+      "profesor.js - darDeBajaProfesor - Error en la consulta: ",
+      error
+    );
+    throw new Error("Error al actualizar profesor");
+  }
 }
 
 module.exports.esAlumnoProfesor = esAlumnoProfesor;
