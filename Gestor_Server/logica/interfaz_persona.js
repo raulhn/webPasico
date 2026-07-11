@@ -1,254 +1,197 @@
 const conexion = require("../conexion.js");
 const constantes = require("../constantes.js");
 const gestor_interfaz_socio = require("./interfaz_socio.js");
+const gestor_base_datos = require("./base_datos.js");
 
-function obtener_persona_nif(nif, lote) {
-  const sql =
-    "select * from " +
-    constantes.ESQUEMA_BD +
-    ".interfaz_persona where dni = " +
-    conexion.dbConn.escape(nif) +
-    " and lote = " +
-    conexion.dbConn.escape(lote) +
-    " and dni <> ''";
+async function obtener_persona_nif(nif, lote) {
+  try {
+    const sql =
+      "select * from " +
+      constantes.ESQUEMA_BD +
+      ".interfaz_persona where dni = " +
+      conexion.dbConn.escape(nif) +
+      " and lote = " +
+      conexion.dbConn.escape(lote) +
+      " and dni <> ''";
 
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(sql, (error, results) => {
-      if (error) {
-        console.log("interfaz_persona -> obtener_persona_nif_insert", error);
-        reject("Error al recuperar la persona por nif");
-      } else {
-        resolve(results);
-      }
-    });
-  });
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.log("interfaz_persona -> obtener_persona_nif_insert", error);
+    throw new Error("Error al recuperar la persona por nif");
+  }
 }
-function obtener_persona_nombre(
+
+async function obtener_persona_nombre(
   nombre,
   primer_apellido,
   segundo_apellido,
   lote,
 ) {
-  const sql =
-    "select * from " +
-    constantes.ESQUEMA_BD +
-    ".interfaz_persona where nombre = " +
-    conexion.dbConn.escape(nombre) +
-    " and primer_apellido = " +
-    conexion.dbConn.escape(primer_apellido) +
-    " and segundo_apellido = " +
-    conexion.dbConn.escape(segundo_apellido) +
-    "and operacion = " +
-    conexion.dbConn.escape(constantes.OPERACIONES_INTERFAZ.INSERTAR) +
-    " and lote = " +
-    conexion.dbConn.escape(lote);
+  try {
+    const sql =
+      "select * from " +
+      constantes.ESQUEMA_BD +
+      ".interfaz_persona where nombre = " +
+      conexion.dbConn.escape(nombre) +
+      " and primer_apellido = " +
+      conexion.dbConn.escape(primer_apellido) +
+      " and segundo_apellido = " +
+      conexion.dbConn.escape(segundo_apellido) +
+      "and operacion = " +
+      conexion.dbConn.escape(constantes.OPERACIONES_INTERFAZ.INSERTAR) +
+      " and lote = " +
+      conexion.dbConn.escape(lote);
 
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(sql, function (err, result) {
-      if (err) {
-        console.log(err);
-        reject("Error al recuperar la persona");
-      } else {
-        resolve(result);
-      }
-    });
-  });
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.log("interfaz_persona -> obtener_persona_nombre_insert", error);
+    throw new Error("Error al recuperar la persona por nombre");
+  }
 }
 
-function obtener_persona_apellidos(primer_apellido, segundo_apellido, lote) {
-  const sql =
-    "select * from " +
-    constantes.ESQUEMA_BD +
-    ".interfaz_persona where primer_apellido = " +
-    conexion.dbConn.escape(primer_apellido) +
-    " and segundo_apellido = " +
-    conexion.dbConn.escape(segundo_apellido) +
-    "and operacion = " +
-    conexion.dbConn.escape(constantes.OPERACIONES_INTERFAZ.INSERTAR) +
-    " and lote = " +
-    conexion.dbConn.escape(lote);
+async function obtener_persona_apellidos(
+  primer_apellido,
+  segundo_apellido,
+  lote,
+) {
+  try {
+    const sql =
+      "select * from " +
+      constantes.ESQUEMA_BD +
+      ".interfaz_persona where primer_apellido = " +
+      conexion.dbConn.escape(primer_apellido) +
+      " and segundo_apellido = " +
+      conexion.dbConn.escape(segundo_apellido) +
+      "and operacion = " +
+      conexion.dbConn.escape(constantes.OPERACIONES_INTERFAZ.INSERTAR) +
+      " and lote = " +
+      conexion.dbConn.escape(lote);
 
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(sql, (err, results) => {
-      if (err) {
-        console.log(
-          "interfaz_persona -> obtener_persona_apellidos_insert:",
-          err,
-        );
-        throw new Error("Error al recuperar las personas");
-      } else {
-        resolve(results);
-      }
-    });
-  });
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.log("interfaz_persona -> obtener_persona_apellidos_insert", error);
+    throw new Error("Error al recuperar la persona por apellidos");
+  }
 }
 
-function obtener_conflictos_personas(nid_interfaz_persona) {
-  const sql =
-    "select * from " +
-    constantes.ESQUEMA_BD +
-    ".interfaz_conflictos_persona where nid_interfaz_persona = " +
-    conexion.dbConn.escape(nid_interfaz_persona);
+async function obtener_conflictos_personas(nid_interfaz_persona) {
+  try {
+    const sql =
+      "select * from " +
+      constantes.ESQUEMA_BD +
+      ".interfaz_conflictos_persona where nid_interfaz_persona = " +
+      conexion.dbConn.escape(nid_interfaz_persona);
 
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(sql, (error, results) => {
-      if (error) {
-        console.log(
-          "interfaz_persona -> obtener_conflictos_personas: Error al obtener_conflictos_personas para ",
-          nid_interfaz_persona,
-        );
-        reject("Error al obtener los conflictos de personas");
-      } else {
-        resolve(results);
-      }
-    });
-  });
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.log("interfaz_persona -> obtener_conflictos_personas", error);
+    throw new Error("Error al recuperar los conflictos de personas");
+  }
 }
 
-function obtener_interfaz_personas(lote) {
-  const sql =
-    "select * from " +
-    constantes.ESQUEMA_BD +
-    ".interfaz_persona where lote = " +
-    conexion.dbConn.escape(lote);
+async function obtener_interfaz_personas(lote) {
+  try {
+    const sql =
+      "select * from " +
+      constantes.ESQUEMA_BD +
+      ".interfaz_persona where lote = " +
+      conexion.dbConn.escape(lote);
 
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(sql, (error, results) => {
-      if (error) {
-        console.log(error);
-        reject("Se ha producido un error al recuperar el interfaz de persona");
-      } else {
-        resolve(results);
-      }
-    });
-  });
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.log("interfaz_persona -> obtener_interfaz_personas", error);
+    throw new Error("Error al recuperar las personas del lote");
+  }
 }
 
-function obtener_interfaz_personas_pendiente(lote) {
-  const sql =
-    "select * from " +
-    constantes.ESQUEMA_BD +
-    ".interfaz_persona where lote = " +
-    conexion.dbConn.escape(lote) +
-    " and estado = " +
-    conexion.dbConn.escape(constantes.ESTADOS_INTERFAZ.PENDIENTE);
+async function obtener_interfaz_personas_pendiente(lote) {
+  try {
+    const sql =
+      "select * from " +
+      constantes.ESQUEMA_BD +
+      ".interfaz_persona where lote = " +
+      conexion.dbConn.escape(lote) +
+      " and estado = " +
+      conexion.dbConn.escape(constantes.ESTADOS_INTERFAZ.PENDIENTE);
 
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(sql, (error, results) => {
-      if (error) {
-        console.log(error);
-        reject(
-          "Se ha producido un error al recuperar el interfaz de persona pendiente",
-        );
-      } else {
-        resolve(results);
-      }
-    });
-  });
+    const resuls = await gestor_base_datos.consulta(sql);
+    return resuls;
+  } catch (error) {
+    console.log(
+      "interfaz_persona -> obtener_interfaz_personas_pendiente",
+      error,
+    );
+    throw new Error("Error al recuperar las personas pendientes del lote");
+  }
 }
 
-function actualizar_interfaz_persona(interfaz_persona) {
-  const sql =
-    "update " +
-    constantes.ESQUEMA_BD +
-    ".interfaz_persona set dni = " +
-    conexion.dbConn.escape(interfaz_persona.dni) +
-    ", nombre = " +
-    conexion.dbConn.escape(interfaz_persona.nombre) +
-    ", primer_apellido = " +
-    conexion.dbConn.escape(interfaz_persona.primer_apellido) +
-    ", segundo_apellido = " +
-    conexion.dbConn.escape(interfaz_persona.segundo_apellido) +
-    ", fecha_nacimiento = " +
-    conexion.dbConn.escape(interfaz_persona.fecha_nacimiento) +
-    ", operacion = " +
-    conexion.dbConn.escape(interfaz_persona.operacion) +
-    ", lote = " +
-    conexion.dbConn.escape(interfaz_persona.lote) +
-    ", nid_persona = " +
-    conexion.dbConn.escape(interfaz_persona.nid_persona) +
-    ", estado = " +
-    conexion.dbConn.escape(interfaz_persona.estado) +
-    ", nid_interfaz_socio = " + conexion.dbConn.escape(interfaz_persona.nid_interfaz_socio) +
-    ", nid_interfaz_madre = " + conexion.dbConn.escape(interfaz_persona.nid_interfaz_madre) + ", nid_interfaz_padre = " + conexion.dbConn.escape(interfaz_persona.nid_interfaz_padre) +
-    " where nid_interfaz_persona = " +
-    conexion.dbConn.escape(interfaz_persona.nid_interfaz_persona);
+async function actualizar_interfaz_persona(interfaz_persona) {
+  try {
+    const sql =
+      "update " +
+      constantes.ESQUEMA_BD +
+      ".interfaz_persona set dni = " +
+      conexion.dbConn.escape(interfaz_persona.dni) +
+      ", nombre = " +
+      conexion.dbConn.escape(interfaz_persona.nombre) +
+      ", primer_apellido = " +
+      conexion.dbConn.escape(interfaz_persona.primer_apellido) +
+      ", segundo_apellido = " +
+      conexion.dbConn.escape(interfaz_persona.segundo_apellido) +
+      ", fecha_nacimiento = " +
+      conexion.dbConn.escape(interfaz_persona.fecha_nacimiento) +
+      ", operacion = " +
+      conexion.dbConn.escape(interfaz_persona.operacion) +
+      ", lote = " +
+      conexion.dbConn.escape(interfaz_persona.lote) +
+      ", nid_persona = " +
+      conexion.dbConn.escape(interfaz_persona.nid_persona) +
+      ", estado = " +
+      conexion.dbConn.escape(interfaz_persona.estado) +
+      ", nid_interfaz_socio = " +
+      conexion.dbConn.escape(interfaz_persona.nid_interfaz_socio) +
+      ", nid_interfaz_madre = " +
+      conexion.dbConn.escape(interfaz_persona.nid_interfaz_madre) +
+      ", nid_interfaz_padre = " +
+      conexion.dbConn.escape(interfaz_persona.nid_interfaz_padre) +
+      " where nid_interfaz_persona = " +
+      conexion.dbConn.escape(interfaz_persona.nid_interfaz_persona);
 
-  console.log("SQL: ", sql)
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.beginTransaction((err) => {
-      if (err) {
-        console.log(
-          "interfaz_persona -> actualizar_interfaz_persona: Error al iniciar la transacción:",
-          err,
-        );
-        reject("Error al iniciar la transacción");
-        return;
-      }
-
-      conexion.dbConn.query(sql, (error, results) => {
-        if (error) {
-          console.log(
-            "interfaz_persona -> actualizar_interfaz_persona: Error al actualizar la interfaz persona para ",
-            interfaz_persona.nid_interfaz_persona,
-            ":",
-            error,
-          );
-          conexion.dbConn.rollback();
-          reject("Error al actualizar la interfaz persona");
-        } else {
-          conexion.dbConn.commit();
-          resolve();
-        }
-      });
-    });
-  });
+    const results = await gestor_base_datos.actualiza(sql);
+    return results;
+  } catch (error) {
+    console.log("Error al actualizar la interfaz persona: " + error);
+    throw new Error("Error al actualizar la interfaz persona");
+  }
 }
 
-function actualizar_operacion_conflicto(
+async function actualizar_operacion_conflicto(
   nid_interfaz_persona,
   operacion,
   nid_persona,
 ) {
-  const sql =
-    "update " +
-    constantes.ESQUEMA_BD +
-    ".interfaz_persona set operacion = " +
-    conexion.dbConn.escape(operacion) +
-    ", nid_persona = " +
-    conexion.dbConn.escape(nid_persona) +
-    " where nid_interfaz_persona = " +
-    conexion.dbConn.escape(nid_interfaz_persona);
+  try {
+    const sql =
+      "update " +
+      constantes.ESQUEMA_BD +
+      ".interfaz_persona set operacion = " +
+      conexion.dbConn.escape(operacion) +
+      ", nid_persona = " +
+      conexion.dbConn.escape(nid_persona) +
+      " where nid_interfaz_persona = " +
+      conexion.dbConn.escape(nid_interfaz_persona);
 
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.beginTransaction((err) => {
-      if (err) {
-        console.log("Error al iniciar la transacción:", err);
-        reject("Error al iniciar la transacción");
-        return;
-      }
-
-      conexion.dbConn.query(sql, (error, results) => {
-        if (error) {
-          console.log(
-            "interfaz_persona -> actualizar_operacion_conflicto: Error al actualizar la operación del conflicto para ",
-            nid_interfaz_persona,
-            " a ",
-            operacion,
-            " con nid_persona ",
-            nid_persona,
-            ":",
-            error,
-          );
-          conexion.dbConn.rollback();
-          reject("Error al actualizar la operación del conflicto");
-        } else {
-          conexion.dbConn.commit();
-          resolve();
-        }
-      });
-    });
-  });
+    const results = await gestor_base_datos.actualiza(sql);
+    return results;
+  } catch (error) {
+    console.log("Error al actualizar la operación del conflicto: " + error);
+    throw new Error("Error al actualizar la operación del conflicto");
+  }
 }
 
 //  Función para obtener el socio nuevo asociado a una interfaz_persona, en caso de que exista un conflicto de actualización
@@ -278,138 +221,80 @@ async function obtener_socio_nuevo(nid_interfaz_persona) {
   }
 }
 
-function actualizar_conflicto_persona(conflicto_persona) {
-  const sql =
-    "update " +
-    constantes.ESQUEMA_BD +
-    ".interfaz_conflictos_persona set nid_persona = " +
-    conexion.dbConn.escape(conflicto_persona.nid_persona) +
-    ", nid_socio = ifnull(" +
-    conexion.dbConn.escape(conflicto_persona.nid_socio) +
-    ", nid_socio)" +
-    " where nid_conflicto = " +
-    conexion.dbConn.escape(conflicto_persona.nid_conflicto);
+async function actualizar_conflicto_persona(conflicto_persona) {
+  try {
+    const sql =
+      "update " +
+      constantes.ESQUEMA_BD +
+      ".interfaz_conflictos_persona set nid_persona = " +
+      conexion.dbConn.escape(conflicto_persona.nid_persona) +
+      ", nid_socio = ifnull(" +
+      conexion.dbConn.escape(conflicto_persona.nid_socio) +
+      ", nid_socio)" +
+      " where nid_conflicto = " +
+      conexion.dbConn.escape(conflicto_persona.nid_conflicto);
 
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.beginTransaction((err) => {
-      if (err) {
-        console.log("Error al iniciar la transacción:", err);
-        reject("Error al iniciar la transacción");
-        return;
-      }
-
-      conexion.dbConn.query(sql, (error, results) => {
-        if (error) {
-          console.log(
-            "interfaz_persona -> actualizar_conflicto_persona: Error al actualizar el conflicto de persona para ",
-            conflicto_persona.nid_interfaz_conflicto_persona,
-            " a ",
-            conflicto_persona.operacion,
-            " con nid_persona ",
-            conflicto_persona.nid_persona,
-            ":",
-            error,
-          );
-          conexion.dbConn.rollback();
-          reject("Error al actualizar el conflicto de persona");
-        } else {
-          conexion.dbConn.commit();
-          resolve();
-        }
-      });
-    });
-  });
+    const results = await gestor_base_datos.actualiza(sql);
+    return results;
+  } catch (error) {
+    console.log("Error al actualizar el conflicto de persona: " + error);
+    throw new Error("Error al actualizar el conflicto de persona");
+  }
 }
 
-function obtener_conflicto_actualizacion(nid_interfaz_persona) {
-  const sql =
-    "select * from " +
-    constantes.ESQUEMA_BD +
-    ".interfaz_conflictos_persona where nid_interfaz_persona = " +
-    conexion.dbConn.escape(nid_interfaz_persona) +
-    " and nid_persona is not null";
+async function obtener_conflicto_actualizacion(nid_interfaz_persona) {
+  try {
+    const sql =
+      "select * from " +
+      constantes.ESQUEMA_BD +
+      ".interfaz_conflictos_persona where nid_interfaz_persona = " +
+      conexion.dbConn.escape(nid_interfaz_persona) +
+      " and nid_persona is not null";
 
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(sql, (error, results) => {
-      if (error) {
-        console.log(
-          "interfaz_persona -> obtener_conflicto_actualizacion: Error al obtener el conflicto de actualización para ",
-          nid_interfaz_persona,
-          ":",
-          error,
-        );
-        reject("Error al obtener el conflicto de actualización");
-      } else {
-        resolve(results);
-      }
-    });
-  });
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.log("interfaz_persona -> obtener_conflicto_actualizacion", error);
+    throw new Error("Error al recuperar el conflicto de actualización");
+  }
 }
 
-function actualizar_estado(nid_interfaz_persona, estado) {
-  const sql =
-    "update " +
-    constantes.ESQUEMA_BD +
-    ".interfaz_persona set estado = " +
-    conexion.dbConn.escape(estado) +
-    " where nid_interfaz_persona = " +
-    conexion.dbConn.escape(nid_interfaz_persona);
+async function actualizar_estado(nid_interfaz_persona, estado) {
+  try {
+    const sql =
+      "update " +
+      constantes.ESQUEMA_BD +
+      ".interfaz_persona set estado = " +
+      conexion.dbConn.escape(estado) +
+      " where nid_interfaz_persona = " +
+      conexion.dbConn.escape(nid_interfaz_persona);
 
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.beginTransaction((err) => {
-      if (err) {
-        console.log("Error al iniciar la transacción:", err);
-        reject("Error al iniciar la transacción");
-        return;
-      }
-
-      conexion.dbConn.query(sql, (error, results) => {
-        if (error) {
-          console.log(
-            "interfaz_persona -> actualizar_estado: Error al actualizar el estado para ",
-            nid_interfaz_persona,
-            " a ",
-            estado,
-            ":",
-            error,
-          );
-          conexion.dbConn.rollback();
-          reject("Error al actualizar el estado");
-        } else {
-          conexion.dbConn.commit();
-          resolve();
-        }
-      });
-    });
-  });
+    const results = await gestor_base_datos.actualiza(sql);
+    return results;
+  } catch (error) {
+    console.log(
+      "Error al actualizar el estado de la interfaz persona: " + error,
+    );
+    throw new Error("Error al actualizar el estado de la interfaz persona");
+  }
 }
 
-function obtener_interfaz_persona(nid_interfaz_persona) {
-  const sql =
-    "select * from " +
-    constantes.ESQUEMA_BD +
-    ".interfaz_persona where nid_interfaz_persona = " +
-    conexion.dbConn.escape(nid_interfaz_persona);
+async function obtener_interfaz_persona(nid_interfaz_persona) {
+  try {
+    const sql =
+      "select * from " +
+      constantes.ESQUEMA_BD +
+      ".interfaz_persona where nid_interfaz_persona = " +
+      conexion.dbConn.escape(nid_interfaz_persona);
 
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(sql, (error, results) => {
-      if (error) {
-        console.log("interfaz_persona -> obtener_interfaz_persona: ", error);
-        reject(
-          "Se ha producido un error al recuperar la interfaz Persona con nid: ",
-          nid_interfaz_persona,
-        );
-      } else if (results.length == 0) {
-        console.log(
-          "interfaz_persona -> obtener_interfaz_persona: No se ha eencontrado la inteeerfaz_persona para el nid",
-          nid_interfaz_persona,
-        );
-        reject("No se ha encontrado el interfaz persona");
-      } else {
-        resolve(results[0]);
-      }
-    });
-  });
+    const results = await gestor_base_datos.consulta(sql);
+    return results[0];
+  } catch (error) {
+    console.log("interfaz_persona -> obtener_interfaz_persona: ", error);
+    throw new Error(
+      "Se ha producido un error al recuperar la interfaz Persona con nid",
+    );
+  }
 }
 
 module.exports.obtener_persona_nif = obtener_persona_nif;
