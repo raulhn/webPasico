@@ -1,4 +1,3 @@
-const conexion = require("../conexion.js");
 const constantes = require("../constantes.js");
 
 function obtener_preinscripciones() {
@@ -45,7 +44,7 @@ function obtener_preinscripciones_detalle(nid_preinscripcion) {
       });
     } catch (error) {
       console.log(
-        "preinscripcion.js - obtener_preinscripciones_detalle -> " + error
+        "preinscripcion.js - obtener_preinscripciones_detalle -> " + error,
       );
       reject("Error en obtener_preinscripciones_detalle");
     }

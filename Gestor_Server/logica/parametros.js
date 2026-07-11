@@ -1,46 +1,46 @@
-const conexion = require('../conexion.js')
-const constantes = require('../constantes.js')
+const conexion = require("../conexion.js");
+const constantes = require("../constantes.js");
+const gestor_base_datos = require("./base_datos.js");
 
-function obtener_valor(p_nombre)
-{
-    return new Promise(
-        (resolve, reject) =>
-        {
-            conexion.dbConn.query('select nombre, valor from ' + constantes.ESQUEMA_BD + '.parametros ' +
-                    'where nombre = ' + conexion.dbConn.escape(p_nombre),
-                (error, results, fields) =>
-                {
-                    if(error) {console.log(error); reject();}
-                    else{resolve(results[0])}
-                }    
-                    
-            )
-        }
-    )
+async function obtener_valor(p_nombre) {
+  try {
+    const sql =
+      "select nombre, valor from " +
+      constantes.ESQUEMA_BD +
+      ".parametros " +
+      "where nombre = " +
+      conexion.dbConn.escape(p_nombre);
+
+    const results = await gestor_base_datos.consulta(sql);
+    return results[0];
+  } catch (error) {
+    console.log(
+      "parametro.js -> obtener_valor: Error en obtener_valor: " + error,
+    );
+    throw new Error("Error en obtener_valor: " + error);
+  }
 }
 
-function actualizar_valor(p_nombre, p_valor)
-{
-    return new Promise(
-        (resolve, reject) =>
-        {
-            conexion.dbConn.beginTransaction(
-                () =>
-                {
-                    conexion.dbConn.query('update ' + constantes.ESQUEMA_BD + '.parametros ' +
-                        'set valor = ' + conexion.dbConn.escape(p_valor) +  ' where nombre = ' + conexion.dbConn.escape(p_nombre),
-                        (error, reults, fields) =>
-                        {
-                            if(error) {console.log(error); conexion.dbConn.rollback(); reject();}
-                            else {conexion.dbConn.commit(); resolve();}
-                        }
-                    )
-                }
-            )
-        }
-    )
-}
+async function actualizar_valor(p_nombre, p_valor) {
+  try {
+    const sql =
+      "update " +
+      constantes.ESQUEMA_BD +
+      ".parametros " +
+      "set valor = " +
+      conexion.dbConn.escape(p_valor) +
+      " where nombre = " +
+      conexion.dbConn.escape(p_nombre);
 
+    const results = await gestor_base_datos.actualiza(sql);
+    return results;
+  } catch (error) {
+    console.log(
+      "parametro.js -> actualizar_valor: Error en actualizar_valor: " + error,
+    );
+    throw new Error("Error en actualizar_valor: " + error);
+  }
+}
 
 module.exports.obtener_valor = obtener_valor;
 module.exports.actualizar_valor = actualizar_valor;

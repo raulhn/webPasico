@@ -1,462 +1,391 @@
 const constantes = require("../constantes");
 const conexion = require("../conexion");
-const gestorProfesorMatricula = require("./profesor_matricula.js");
+const gestor_base_datos = require("./base_datos.js");
 
-function obtener_matriculas_asignaturas_alumno(nid_alumno, nid_curso) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(
+async function obtener_matriculas_asignaturas_alumno(nid_alumno, nid_curso) {
+  try {
+    const sql =
       "select m.nid as nid_matricula, " +
-        "       ma.nid as nid_matricula_asignatura, " +
-        "       ma.nid_asignatura, " +
-        "       m.nid_curso, " +
-        "       ma.nid_matricula, " +
-        "       concat(p.nombr, ' ', p.apellido1, ' ', p.apellido2) as nombre_profesor " +
-        "       a.descripcion as nombre_asignatura " +
-        "       ma.fecha_alta, " +
-        "       ma.fecha_baja, " +
-        " from " +
-        constantes.ESQUEMA_BD +
-        ".matricula m, " +
-        constantes.ESQUEMA_BD +
-        ".matricula_asignatura ma, " +
-        constantes.ESQUEMA_BD +
-        ".profesor_alumno_matricula pam, " +
-        constantes.ESQUEMA_BD +
-        ".persona p, " +
-        constantes.ESQUEMA_BD +
-        ".asignatura a " +
-        " where m.nid = ma.nid_matricula " +
-        "   and ma.nid_asignatura = a.nid " +
-        "   and m.nid_curso = " +
-        conexion.dbConn.escape(nid_curso) +
-        "   and m.nid_persona = " +
-        conexion.dbConn.escape(nid_alumno) +
-        "   and ma.nid = pam.nid_matricula_asignatura ",
-      (error, results, fields) => {
-        if (error) {
-          console.log(
-            "matricula_asignatura.js - obtener_matriculas_asignaturas_alumno - Error en la consulta: " +
-              error,
-          );
-          reject(error);
-        } else {
-          resolve(results);
-        }
-      },
+      "       ma.nid as nid_matricula_asignatura, " +
+      "       ma.nid_asignatura, " +
+      "       m.nid_curso, " +
+      "       ma.nid_matricula, " +
+      "       concat(p.nombr, ' ', p.apellido1, ' ', p.apellido2) as nombre_profesor " +
+      "       a.descripcion as nombre_asignatura " +
+      "       ma.fecha_alta, " +
+      "       ma.fecha_baja, " +
+      " from " +
+      constantes.ESQUEMA_BD +
+      ".matricula m, " +
+      constantes.ESQUEMA_BD +
+      ".matricula_asignatura ma, " +
+      constantes.ESQUEMA_BD +
+      ".profesor_alumno_matricula pam, " +
+      constantes.ESQUEMA_BD +
+      ".persona p, " +
+      constantes.ESQUEMA_BD +
+      ".asignatura a " +
+      " where m.nid = ma.nid_matricula " +
+      "   and ma.nid_asignatura = a.nid " +
+      "   and m.nid_curso = " +
+      conexion.dbConn.escape(nid_curso) +
+      "   and m.nid_persona = " +
+      conexion.dbConn.escape(nid_alumno) +
+      "   and ma.nid = pam.nid_matricula_asignatura ";
+
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.log(
+      "matricula_asignatura.js - obtener_matriculas_asignaturas_alumno - Error en la consulta: " +
+        error,
     );
-  });
+    throw new Error(
+      "Error en la consulta al obtener matriculas asignaturas alumno",
+    );
+  }
 }
 
-function obtener_matricula_asignatura(nid_matricula_asignatura) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(
+async function obtener_matricula_asignatura(nid_matricula_asignatura) {
+  try {
+    const sql =
       "select ma.nid as nid_matricula_asignatura, " +
-        "       ma.nid_matricula, " +
-        "       ma.nid_asignatura, " +
-        "       ma.fecha_alta, " +
-        "       ma.fecha_baja, " +
-        " ma.fecha_actualizacion " +
-        " from " +
-        constantes.ESQUEMA_BD +
-        ".matricula_asignatura ma " +
-        " where ma.nid = " +
-        conexion.dbConn.escape(nid_matricula_asignatura),
-      (error, results, fields) => {
-        if (error) {
-          console.log(
-            "matricula_asignatura.js - obtener_matricula_asignatura - Error en la consulta: " +
-              error,
-          );
-          reject(new Error("Error en la consulta"));
-        } else {
-          resolve(results[0]);
-        }
-      },
+      "       ma.nid_matricula, " +
+      "       ma.nid_asignatura, " +
+      "       ma.fecha_alta, " +
+      "       ma.fecha_baja, " +
+      " ma.fecha_actualizacion " +
+      " from " +
+      constantes.ESQUEMA_BD +
+      ".matricula_asignatura ma " +
+      " where ma.nid = " +
+      conexion.dbConn.escape(nid_matricula_asignatura);
+
+    const results = await gestor_base_datos.consulta(sql);
+    return results[0];
+  } catch (error) {
+    console.log(
+      "matricula_asignatura.js - obtener_matricula_asignatura - Error en la consulta: " +
+        error,
     );
-  });
+    throw new Error("Error en la consulta al obtener matricula asignatura");
+  }
 }
 
-function obtener_nid_matricula_asignatura(nid_matricula, nid_asignatura) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(
+async function obtener_nid_matricula_asignatura(nid_matricula, nid_asignatura) {
+  try {
+    const sql =
       "select ma.nid as nid_matricula_asignatura " +
-        " from " +
-        constantes.ESQUEMA_BD +
-        ".matricula_asignatura ma " +
-        " where ma.nid_matricula = " +
-        conexion.dbConn.escape(nid_matricula) +
-        " and ma.nid_asignatura = " +
-        conexion.dbConn.escape(nid_asignatura),
-      (error, results, fields) => {
-        if (error) {
-          console.log(
-            "matricula_asignatura.js - obtener_nid_matricula_asignatura - Error en la consulta: " +
-              error,
-          );
-          reject(new Error("Error en la consulta"));
-        }
-        if (results.length == 0) {
-          resolve(null);
-        } else {
-          resolve(results[0]["nid_matricula_asignatura"]);
-        }
-      },
+      " from " +
+      constantes.ESQUEMA_BD +
+      ".matricula_asignatura ma " +
+      " where ma.nid_matricula = " +
+      conexion.dbConn.escape(nid_matricula) +
+      " and ma.nid_asignatura = " +
+      conexion.dbConn.escape(nid_asignatura);
+
+    const results = await gestor_base_datos.consulta(sql);
+    if (results.length == 0) {
+      return null;
+    } else {
+      return results[0]["nid_matricula_asignatura"];
+    }
+  } catch (error) {
+    console.log(
+      "matricula_asignatura.js - obtener_nid_matricula_asignatura - Error en la consulta: " +
+        error,
     );
-  });
+    throw new Error("Error en la consulta al obtener nid matricula asignatura");
+  }
 }
 
-function actualizar_fecha_alta_matricula_asignatura(
+async function actualizar_fecha_alta_matricula_asignatura(
   nid_matricula_asignatura,
   fecha_alta,
 ) {
-  return new Promise((resolve, reject) => {
-    try {
-      conexion.dbConn.beginTransaction(
-        "update " +
-          constantes.ESQUEMA_BD +
-          ".matricula_asignatura set fecha_alta = " +
-          "str_to_date(nullif(" +
-          conexion.dbConn.escape(fecha_alta) +
-          ", '') , '%Y-%m-%d') " +
-          " where nid = " +
-          conexion.dbConn.escape(nid_matricula_asignatura),
-        (error, results, fields) => {
-          if (error) {
-            console.log(error);
-            conexion.dbConn.rollback();
-            reject("Error al actualizar la fecha de alta");
-          } else {
-            conexion.dbConn.commit();
-            resolve();
-          }
-        },
-      );
-    } catch (error) {
-      console.log(error);
-      reject();
-    }
-  });
+  try {
+    const sql =
+      "update " +
+      constantes.ESQUEMA_BD +
+      ".matricula_asignatura set fecha_alta = " +
+      "str_to_date(nullif(" +
+      conexion.dbConn.escape(fecha_alta) +
+      ", '') , '%Y-%m-%d') " +
+      " where nid = " +
+      conexion.dbConn.escape(nid_matricula_asignatura);
+
+    const results = await gestor_base_datos.actualiza(sql);
+    return results;
+  } catch (error) {
+    console.log(
+      "matricula_asignatura.js - actualizar_fecha_alta_matricula_asignatura - Error en la consulta: " +
+        error,
+    );
+    throw new Error(
+      "Error en la consulta al actualizar fecha alta matricula asignatura",
+    );
+  }
 }
 
-function actualizar_fecha_baja_matricula_asignatura(
+async function actualizar_fecha_baja_matricula_asignatura(
   nid_matricula_asignatura,
   fecha_baja,
 ) {
-  return new Promise((resolve, reject) => {
-    try {
-      conexion.dbConn.beginTransaction(
-        "update " +
-          constantes.ESQUEMA_BD +
-          ".matricula_asignatura set fecha_baja = " +
-          "str_to_date(nullif(" +
-          conexion.dbConn.escape(fecha_baja) +
-          ", '') , '%Y-%m-%d') " +
-          " where nid = " +
-          conexion.dbConn.escape(nid_matricula_asignatura),
-        (error, results, fields) => {
-          if (error) {
-            console.log(error);
-            conexion.dbConn.rollback();
-            reject("Error al actualizar la fecha de baja");
-          } else {
-            conexion.dbConn.commit();
-            resolve();
-          }
-        },
-      );
-    } catch (error) {
-      console.log(error);
-      reject();
-    }
-  });
-}
+  try {
+    const sql =
+      "update " +
+      constantes.ESQUEMA_BD +
+      ".matricula_asignatura set fecha_baja = " +
+      "str_to_date(nullif(" +
+      conexion.dbConn.escape(fecha_baja) +
+      ", '') , '%Y-%m-%d') " +
+      " where nid = " +
+      conexion.dbConn.escape(nid_matricula_asignatura);
 
-function add_asignatura(nid_matricula, nid_asignatura) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(
-        "insert into " +
-          constantes.ESQUEMA_BD +
-          ".matricula_asignatura(nid_matricula, nid_asignatura, fecha_alta) values(" +
-          conexion.dbConn.escape(nid_matricula) +
-          ", " +
-          conexion.dbConn.escape(nid_asignatura) +
-          ", sysdate())",
-        async (error, results, fields) => {
-          if (error) {
-            console.log(error);
-            conexion.dbConn.rollback();
-            reject();
-          } else {
-            conexion.dbConn.commit();
-            resolve(results.insertId);
-          }
-        },
-      );
-    });
-  });
-}
-
-function eliminar_asignatura(nid_matricula, nid_asignatura) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(
-        "delete from " +
-          constantes.ESQUEMA_BD +
-          ".matricula_asignatura where nid_matricula = " +
-          conexion.dbConn.escape(nid_matricula) +
-          ", " +
-          conexion.dbConn.escape(nid_asignatura),
-        (error, results, fields) => {
-          if (error) {
-            console.log(error);
-            conexion.dbConn.rollback();
-            reject();
-          } else {
-            conexion.dbConn.commit();
-            resolve();
-          }
-        },
-      );
-    });
-  });
-}
-
-function dar_baja_asignatura(nid, nid_matricula, nid_asignatura, fecha_baja) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(
-        "update " +
-          constantes.ESQUEMA_BD +
-          ".matricula_asignatura set fecha_baja = " +
-          "str_to_date(nullif(" +
-          conexion.dbConn.escape(fecha_baja) +
-          ", '') , '%Y-%m-%d') where nid_matricula = " +
-          conexion.dbConn.escape(nid_matricula) +
-          " and nid_asignatura = " +
-          conexion.dbConn.escape(nid_asignatura) +
-          " and nid = " +
-          conexion.dbConn.escape(nid),
-        (error, results, fields) => {
-          if (error) {
-            console.log(error);
-            conexion.dbConn.rollback();
-            reject();
-          } else {
-            conexion.dbConn.commit();
-            resolve();
-          }
-        },
-      );
-    });
-  });
-}
-
-function modificar_sucio(nid_matricula_asignatura, sucio) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(
-        "update " +
-          constantes.ESQUEMA_BD +
-          ".matricula_asignatura set sucio = " +
-          conexion.dbConn.escape(sucio) +
-          " where nid = " +
-          conexion.dbConn.escape(nid_matricula_asignatura),
-        (error, results, fields) => {
-          if (error) {
-            console.log(error);
-            conexion.dbConn.rollback();
-            reject();
-          } else {
-            conexion.dbConn.commit();
-            resolve();
-          }
-        },
-      );
-    });
-  });
-}
-
-function obtener_matriculas_asignaturas_sucias() {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.beginTransaction(() => {
-      conexion.dbConn.query(
-        "select ma.*  " +
-          "from  " +
-          constantes.ESQUEMA_BD +
-          ".matricula_asignatura ma " +
-          "where ma.sucio = 'S'",
-        (error, results, fields) => {
-          if (error) {
-            console.log(
-              "matricula_asignatura.js - obtener_matriculas_asignaturas_sucias - Error en la consulta: " +
-                error,
-            );
-            conexion.dbConn.rollback();
-            reject(error);
-          } else {
-            conexion.dbConn.commit();
-            resolve(results);
-          }
-        },
-      );
-    });
-  });
-}
-
-function obtener_alumnos_sin_profesor(nid_curso, nid_asignatura) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(
-      "select distinct p.*, a.nid nid_asignatura, a.descripcion descripcion_asignatura, m.nid nid_matricula " +
-        "from " +
-        constantes.ESQUEMA_BD +
-        ".matricula_asignatura ma, " +
-        constantes.ESQUEMA_BD +
-        ".matricula m, " +
-        constantes.ESQUEMA_BD +
-        ".persona p, " +
-        constantes.ESQUEMA_BD +
-        ".asignatura a " +
-        "where m.nid = ma.nid_matricula " +
-        "and p.nid = m.nid_persona " +
-        "and ma.nid_asignatura = a.nid " +
-        "and m.nid_curso = " +
-        conexion.dbConn.escape(nid_curso) +
-        " " +
-        "and (a.nid = " +
-        conexion.dbConn.escape(nid_asignatura) +
-        " or " +
-        conexion.dbConn.escape(nid_asignatura) +
-        " = 0) " +
-        "and not exists( select 1 " +
-        "                from " +
-        constantes.ESQUEMA_BD +
-        ".profesor_alumno_matricula pam " +
-        "                where pam.nid_matricula_asignatura = ma.nid ) ",
-      (error, results, fields) => {
-        if (error) {
-          console.log(error);
-          reject();
-        } else {
-          resolve(results);
-        }
-      },
+    const results = await gestor_base_datos.actualiza(sql);
+    return results;
+  } catch (error) {
+    console.log(
+      "matricula_asignatura.js - actualizar_fecha_baja_matricula_asignatura - Error en la consulta: " +
+        error,
     );
-  });
-}
-
-function obtener_alumnos_sin_profesor_alta(nid_curso, nid_asignatura) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(
-      "select distinct p.*, a.nid nid_asignatura, a.descripcion descripcion_asignatura, m.nid nid_matricula " +
-        "from " +
-        constantes.ESQUEMA_BD +
-        ".matricula_asignatura ma, " +
-        constantes.ESQUEMA_BD +
-        ".matricula m, " +
-        constantes.ESQUEMA_BD +
-        ".persona p, " +
-        constantes.ESQUEMA_BD +
-        ".asignatura a " +
-        "where m.nid = ma.nid_matricula " +
-        "and p.nid = m.nid_persona " +
-        "and ma.nid_asignatura = a.nid " +
-        "and m.nid_curso = " +
-        conexion.dbConn.escape(nid_curso) +
-        " " +
-        "and (a.nid = " +
-        conexion.dbConn.escape(nid_asignatura) +
-        " or " +
-        conexion.dbConn.escape(nid_asignatura) +
-        " = 0) " +
-        "and not exists( select 1 " +
-        "                from " +
-        constantes.ESQUEMA_BD +
-        ".profesor_alumno_matricula pam " +
-        "                where pam.nid_matricula_asignatura = ma.nid " +
-        "and (pam.fecha_baja is null or pam.fecha_baja >= sysdate()) )",
-      (error, results, fields) => {
-        if (error) {
-          console.log(error);
-          reject();
-        } else {
-          resolve(results);
-        }
-      },
+    throw new Error(
+      "Error en la consulta al actualizar fecha baja matricula asignatura",
     );
-  });
+  }
 }
 
-function obtener_alumnos_sin_profesor_baja(nid_curso, nid_asignatura) {
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(
-      "select distinct p.*, a.nid nid_asignatura, a.descripcion descripcion_asignatura, m.nid nid_matricula " +
-        "from " +
-        constantes.ESQUEMA_BD +
-        ".matricula_asignatura ma, " +
-        constantes.ESQUEMA_BD +
-        ".matricula m, " +
-        constantes.ESQUEMA_BD +
-        ".persona p, " +
-        constantes.ESQUEMA_BD +
-        ".asignatura a " +
-        "where m.nid = ma.nid_matricula " +
-        "and p.nid = m.nid_persona " +
-        "and ma.nid_asignatura = a.nid " +
-        "and m.nid_curso = " +
-        conexion.dbConn.escape(nid_curso) +
-        " " +
-        "and (a.nid = " +
-        conexion.dbConn.escape(nid_asignatura) +
-        " or " +
-        conexion.dbConn.escape(nid_asignatura) +
-        " = 0) " +
-        "and not exists( select 1 " +
-        "                from " +
-        constantes.ESQUEMA_BD +
-        ".profesor_alumno_matricula pam " +
-        "                where pam.nid_matricula_asignatura = ma.nid  " +
-        "and (pam.fecha_baja >= sysdate())) ",
-      (error, results, fields) => {
-        if (error) {
-          console.log(error);
-          reject();
-        } else {
-          resolve(results);
-        }
-      },
+async function add_asignatura(nid_matricula, nid_asignatura) {
+  try {
+    const sql =
+      "insert into " +
+      constantes.ESQUEMA_BD +
+      ".matricula_asignatura(nid_matricula, nid_asignatura, fecha_alta) values(" +
+      conexion.dbConn.escape(nid_matricula) +
+      ", " +
+      conexion.dbConn.escape(nid_asignatura) +
+      ", sysdate())";
+
+    const results = await gestor_base_datos.actualiza(sql);
+    return results.insertId;
+  } catch (error) {
+    console.log(
+      "matricula_asignatura.js - add_asignatura - Error en la consulta: " +
+        error,
     );
-  });
+    throw new Error("Error en la consulta al añadir asignatura a matricula");
+  }
 }
 
-function obtener_alumnos_sin_pago(nid_curso) {
-  const sql =
-    "select p.nid, p.nombre, p.primer_apellido, p.segundo_apellido, p.correo_electronico, p.telefono, p.nif from " +
-    constantes.ESQUEMA_BD +
-    ".persona p, " +
-    constantes.ESQUEMA_BD +
-    ".matricula m, " +
-    constantes.ESQUEMA_BD +
-    ".matricula_asignatura ma " +
-    "where m.nid_persona = p.nid " +
-    " and ma.nid_matricula = m.nid " +
-    " and ((ma.fecha_baja is null) or (ma.fecha_baja > now()))" +
-    " and p.nid_forma_pago is null" +
-    " group by p.nid, p.nombre, p.primer_apellido, p.segundo_apellido, p.correo_electronico, p.telefono, p.nif";
+async function eliminar_asignatura(nid_matricula, nid_asignatura) {
+  try {
+    const sql =
+      "delete from " +
+      constantes.ESQUEMA_BD +
+      ".matricula_asignatura where nid_matricula = " +
+      conexion.dbConn.escape(nid_matricula) +
+      ", " +
+      conexion.dbConn.escape(nid_asignatura);
 
-  return new Promise((resolve, reject) => {
-    conexion.dbConn.query(sql, (error, results, fields) => {
-      if (error) {
-        console.log(
-          "matricula_asignatura.js -> obtener_alumnos_sin_pago:",
-          error,
-        );
-        reject("Se ha producido un error al recuperar los alumnos sin pago");
-      } else {
-        resolve(results);
-      }
-    });
-  });
+    const reseults = await gestor_base_datos.actualiza(sql);
+    return reseults;
+  } catch (error) {
+    console.log(
+      "matricula_asignatura.js - eliminar_asignatura - Error en la consulta: " +
+        error,
+    );
+    throw new Error("Error en la consulta al eliminar asignatura de matricula");
+  }
+}
+
+async function dar_baja_asignatura(
+  nid,
+  nid_matricula,
+  nid_asignatura,
+  fecha_baja,
+) {
+  try {
+    const sql =
+      "update " +
+      constantes.ESQUEMA_BD +
+      ".matricula_asignatura set fecha_baja = " +
+      "str_to_date(nullif(" +
+      conexion.dbConn.escape(fecha_baja) +
+      ", '') , '%Y-%m-%d') where nid_matricula = " +
+      conexion.dbConn.escape(nid_matricula) +
+      " and nid_asignatura = " +
+      conexion.dbConn.escape(nid_asignatura) +
+      " and nid = " +
+      conexion.dbConn.escape(nid);
+
+    const results = await gestor_base_datos.actualiza(sql);
+    return results;
+  } catch (error) {
+    console.log(
+      "matricula_asignatura.js - dar_baja_asignatura - Error en la consulta: " +
+        error,
+    );
+    throw new Error(
+      "Error en la consulta al dar de baja asignatura de matricula",
+    );
+  }
+}
+
+async function modificar_sucio(nid_matricula_asignatura, sucio) {
+  try {
+    const sql =
+      "update " +
+      constantes.ESQUEMA_BD +
+      ".matricula_asignatura set sucio = " +
+      conexion.dbConn.escape(sucio) +
+      " where nid = " +
+      conexion.dbConn.escape(nid_matricula_asignatura);
+
+    const results = await gestor_base_datos.actualiza(sql);
+    return results;
+  } catch (error) {
+    console.log(
+      "matricula_asignatura.js - modificar_sucio - Error en la consulta: " +
+        error,
+    );
+    throw new Error(
+      "Error en la consulta al modificar el campo sucio de matricula asignatura",
+    );
+  }
+}
+
+async function obtener_matriculas_asignaturas_sucias() {
+  try {
+    const sql =
+      "select ma.*  " +
+      "from  " +
+      constantes.ESQUEMA_BD +
+      ".matricula_asignatura ma " +
+      "where ma.sucio = 'S'";
+
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.log(
+      "matricula_asignatura.js - obtener_matriculas_asignaturas_sucias - Error en la consulta: " +
+        error,
+    );
+    throw new Error(
+      "Error en la consulta al obtener matriculas asignaturas sucias",
+    );
+  }
+}
+
+async function obtener_alumnos_sin_profesor(nid_curso, nid_asignatura) {
+  try {
+    const sql =
+      "select distinct p.*, a.nid nid_asignatura, a.descripcion descripcion_asignatura, m.nid nid_matricula " +
+      "from " +
+      constantes.ESQUEMA_BD +
+      ".matricula_asignatura ma, " +
+      constantes.ESQUEMA_BD +
+      ".matricula m, " +
+      constantes.ESQUEMA_BD +
+      ".persona p, " +
+      constantes.ESQUEMA_BD +
+      ".asignatura a " +
+      "where m.nid = ma.nid_matricula " +
+      "and p.nid = m.nid_persona " +
+      "and ma.nid_asignatura = a.nid " +
+      "and m.nid_curso = " +
+      conexion.dbConn.escape(nid_curso) +
+      " " +
+      "and (a.nid = " +
+      conexion.dbConn.escape(nid_asignatura) +
+      " or " +
+      conexion.dbConn.escape(nid_asignatura) +
+      " = 0) " +
+      "and not exists( select 1 " +
+      "                from " +
+      constantes.ESQUEMA_BD +
+      ".profesor_alumno_matricula pam " +
+      "                where pam.nid_matricula_asignatura = ma.nid ) ";
+
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.log(
+      "matricula_asignatura.js - obtener_alumnos_sin_profesor - Error en la consulta: " +
+        error,
+    );
+    throw new Error("Error en la consulta al obtener alumnos sin profesor");
+  }
+}
+
+async function obtener_alumnos_sin_profesor_alta(nid_curso, nid_asignatura) {
+  try {
+    const sql =
+      "select distinct p.*, a.nid nid_asignatura, a.descripcion descripcion_asignatura, m.nid nid_matricula " +
+      "from " +
+      constantes.ESQUEMA_BD +
+      ".matricula_asignatura ma, " +
+      constantes.ESQUEMA_BD +
+      ".matricula m, " +
+      constantes.ESQUEMA_BD +
+      ".persona p, " +
+      constantes.ESQUEMA_BD +
+      ".asignatura a " +
+      "where m.nid = ma.nid_matricula " +
+      "and p.nid = m.nid_persona " +
+      "and ma.nid_asignatura = a.nid " +
+      "and m.nid_curso = " +
+      conexion.dbConn.escape(nid_curso) +
+      " " +
+      "and (a.nid = " +
+      conexion.dbConn.escape(nid_asignatura) +
+      " or " +
+      conexion.dbConn.escape(nid_asignatura) +
+      " = 0) " +
+      "and not exists( select 1 " +
+      "                from " +
+      constantes.ESQUEMA_BD +
+      ".profesor_alumno_matricula pam " +
+      "                where pam.nid_matricula_asignatura = ma.nid " +
+      "and (pam.fecha_baja is null or pam.fecha_baja >= sysdate()) )";
+
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.log(
+      "matricula_asignatura.js - obtener_alumnos_sin_profesor_alta - Error en la consulta: " +
+        error,
+    );
+    throw new Error(
+      "Error en la consulta al obtener alumnos sin profesor alta",
+    );
+  }
+}
+
+async function obtener_alumnos_sin_pago(nid_curso) {
+  try {
+    const sql =
+      "select p.nid, p.nombre, p.primer_apellido, p.segundo_apellido, p.correo_electronico, p.telefono, p.nif from " +
+      constantes.ESQUEMA_BD +
+      ".persona p, " +
+      constantes.ESQUEMA_BD +
+      ".matricula m, " +
+      constantes.ESQUEMA_BD +
+      ".matricula_asignatura ma " +
+      "where m.nid_persona = p.nid " +
+      " and ma.nid_matricula = m.nid " +
+      " and ((ma.fecha_baja is null) or (ma.fecha_baja > now()))" +
+      " and p.nid_forma_pago is null" +
+      " group by p.nid, p.nombre, p.primer_apellido, p.segundo_apellido, p.correo_electronico, p.telefono, p.nif";
+
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.log(
+      "matricula_asignatura.js - obtener_alumnos_sin_pago - Error en la consulta: " +
+        error,
+    );
+    throw new Error("Error en la consulta al obtener alumnos sin pago");
+  }
 }
 
 module.exports.obtener_matriculas_asignaturas_alumno =
