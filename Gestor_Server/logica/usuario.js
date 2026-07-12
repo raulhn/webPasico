@@ -193,7 +193,7 @@ async function registrar_usuario(user, pass) {
         conexion.dbConn.escape(hash) +
         ", 2)";
 
-      const results = await gestor_base_datos.inserta(sql);
+      const results = await gestor_base_datos.actualiza(sql);
       return results.insertId;
     } else {
       throw new Error("El usuario ya existe");

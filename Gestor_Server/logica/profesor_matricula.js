@@ -13,7 +13,7 @@ async function alta_profesor_matricula(nid_matricula_asignatura, nid_profesor) {
       conexion.dbConn.escape(nid_matricula_asignatura) +
       ", sysdate())";
 
-    const results = await gestor_base_datos.inserta(sql);
+    const results = await gestor_base_datos.actualiza(sql);
     return results.insertId;
   } catch (error) {
     console.log("profesor_matricula.js - alta_profesor_matricula -> " + error);

@@ -48,7 +48,7 @@ async function registrar_prestamo(nid_persona, nid_inventario, fecha_inicio) {
         conexion.dbConn.escape(fecha_inicio) +
         ", '') , '%Y-%m-%d')) ";
 
-      const results = await gestor_base_datos.inserta(sql);
+      const results = await gestor_base_datos.actualiza(sql);
       return results.insertId;
     } else {
       console.log("El instrumento no está disponible");
