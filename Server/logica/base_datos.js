@@ -30,12 +30,14 @@ function actualiza(sql) {
         try {
           if (error) {
             console.log("base_datos.js -> actualiza:", error);
+            connection.release();
             reject(error);
           } else {
             connection.beginTransaction((error) => {
               try {
                 if (error) {
                   console.log("base_datos.js -> actualiza:", error);
+                  connection.release();
                   reject(error);
                 } else {
                   connection.query(sql, (error, results) => {
@@ -43,26 +45,31 @@ function actualiza(sql) {
                       if (error) {
                         connection.rollback();
                         console.log("base_datos.js -> actualiza:", error);
+                        connection.release();
                         reject(error);
                       } else {
                         connection.commit((error) => {
                           if (error) {
                             connection.rollback();
                             console.log("base_datos.js -> actualiza:", error);
+                            connection.release();
                             reject(error);
                           } else {
+                            connection.release();
                             resolve(results);
                           }
                         });
                       }
                     } catch (error) {
                       console.log("base_datos.js -> actualiza:", error);
+                      connection.release();
                       reject(error);
                     }
                   });
                 }
               } catch (error) {
                 console.log("base_datos.js -> actualiza:", error);
+                connection.release();
                 reject(error);
               }
             });
