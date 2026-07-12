@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { InventarioService } from 'src/app/servicios/inventario.service';
 import Swal from 'sweetalert2';
+import { URL } from 'src/app/logica/constantes';
 
 @Component({
   selector: 'app-lista-inventarios',
@@ -19,7 +20,7 @@ export class ListaInventariosComponent implements OnInit {
 
   ficha_seleccionada: string = '';
 
-  URL_FICHA_INVENTARIO = '/ficha_inventario/';
+  URL_FICHA_INVENTARIO = URL.URL_FRONT_END + '/ficha_inventario/';
 
   $lista_inventarios: WritableSignal<any[]> = signal([]);
   $id_tabla_inventarios: Signal<string> = signal('tabla_ficha_inventario');
