@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { AsignaturasService } from 'src/app/servicios/asignaturas.service';
 import Swal from 'sweetalert2';
+import { URL } from 'src/app/logica/constantes';
 
 @Component({
   selector: 'app-asignaturas',
@@ -72,7 +73,11 @@ export class AsignaturasComponent implements OnInit {
   };
 
   url_ficha_asignatura() {
-    return '/ficha_asignatura/' + this.asignatura_seleccionada.nid;
+    return (
+      URL.URL_FRONT_END +
+      '/ficha_asignatura/' +
+      this.asignatura_seleccionada.nid
+    );
   }
 
   addAsignatura() {
