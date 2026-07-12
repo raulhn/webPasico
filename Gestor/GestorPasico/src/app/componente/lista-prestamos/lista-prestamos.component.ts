@@ -8,6 +8,7 @@ import {
 import { PrestamosService } from 'src/app/servicios/prestamos.service';
 import 'datatables.net-plugins/filtering/type-based/accent-neutralise.mjs';
 import Swal from 'sweetalert2';
+import { URL } from 'src/app/logica/constantes';
 
 @Component({
   selector: 'app-lista-prestamos',
@@ -20,7 +21,7 @@ export class ListaPrestamosComponent implements OnInit {
 
   constructor(private prestamosServices: PrestamosService) {}
 
-  URL_FICHA_PRESTAMO = '/ficha_prestamo/';
+  URL_FICHA_PRESTAMO = URL.URL_FRONT_END + '/ficha_prestamo/';
 
   prestamo_seleccionado: string = '';
 
