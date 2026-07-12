@@ -1,39 +1,35 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { CursosService } from 'src/app/servicios/cursos.service';
+import { URL } from 'src/app/logica/constantes';
 
 @Component({
-    selector: 'app-cursos-profesor',
-    templateUrl: './cursos-profesor.component.html',
-    styleUrls: ['./cursos-profesor.component.css'],
-    standalone: false
+  selector: 'app-cursos-profesor',
+  templateUrl: './cursos-profesor.component.html',
+  styleUrls: ['./cursos-profesor.component.css'],
+  standalone: false,
 })
 export class CursosProfesorComponent implements OnInit {
-
   lista_cursos: any[] = [];
   bCargado: boolean = false;
 
-  @Input() nid_profesor: string = "";
+  @Input() nid_profesor: string = '';
 
-  constructor(private cursosService: CursosService)
-  {
+  constructor(private cursosService: CursosService) {}
 
-  }
-
-  recuperar_cursos =
-  {
-    next: (respuesta: any) =>
-    {
+  recuperar_cursos = {
+    next: (respuesta: any) => {
       this.lista_cursos = respuesta.cursos;
       this.bCargado = true;
-    }
-  }
+    },
+  };
 
   ngOnInit(): void {
-    this.cursosService.obtener_cursos_profesor(this.nid_profesor).subscribe(this.recuperar_cursos)
+    this.cursosService
+      .obtener_cursos_profesor(this.nid_profesor)
+      .subscribe(this.recuperar_cursos);
   }
 
-  obtiene_url_ficha()
-  {
-    return '/ficha_profesor/' + this.nid_profesor;
+  obtiene_url_ficha() {
+    return URL.URL_FRONT_END + '/ficha_profesor/' + this.nid_profesor;
   }
 }
