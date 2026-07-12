@@ -46,21 +46,21 @@
     </div>
   }
 
-    <div class="p-3">
-      <app-appdatatable
-        [$cabeceras]="cabecera_alumnos"
-        [$lista]="$lista_alumnos()"
-        [$identificador]="$id_tabla_alumnos()"
-        (rowSelected)="click_alumno($event)"
-      ></app-appdatatable>
-      @if (alumno_seleccionado !== undefined) {
-        <div class="float-end p-3">
-          <a [href]="obtiene_url_ficha()">
-            <button class="btn btn-primary">Ver Ficha</button></a
-          >
-        </div>
-      }
-    </div>
+  <div class="p-3">
+    <app-appdatatable
+      [$cabeceras]="cabecera_alumnos"
+      [$lista]="$lista_alumnos()"
+      [$identificador]="$id_tabla_alumnos()"
+      (rowSelected)="click_alumno($event)"
+    ></app-appdatatable>
+    @if (alumno_seleccionado) {
+      <div class="float-end p-3">
+        <a [href]="obtiene_url_ficha()">
+          <button class="btn btn-primary">Ver Ficha</button></a
+        >
+      </div>
+    }
+  </div>
 
   @if (bhorario_asignatura_recuperado) {
     <div>
