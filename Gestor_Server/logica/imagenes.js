@@ -1,9 +1,8 @@
 const constantes = require("../constantes.js");
 const conexion = require("../conexion.js");
 const ficheros = require("./ficheros.js");
-const { obtener_evaluacion } = require("./evaluacion.js");
 const fs = require("fs");
-const gestor_base_datos = requiree("./base_datos.js");
+const gestor_base_datos = require("./base_datos.js");
 
 async function existe_imagen(id_imagen) {
   try {
