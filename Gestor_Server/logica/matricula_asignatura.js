@@ -361,6 +361,49 @@ async function obtener_alumnos_sin_profesor_alta(nid_curso, nid_asignatura) {
   }
 }
 
+async function obtener_alumnos_sin_profesor_baja(nid_curso, nid_asignatura) {
+  try {
+    const sql =
+      "select distinct p.*, a.nid nid_asignatura, a.descripcion descripcion_asignatura, m.nid nid_matricula " +
+      "from " +
+      constantes.ESQUEMA_BD +
+      ".matricula_asignatura ma, " +
+      constantes.ESQUEMA_BD +
+      ".matricula m, " +
+      constantes.ESQUEMA_BD +
+      ".persona p, " +
+      constantes.ESQUEMA_BD +
+      ".asignatura a " +
+      "where m.nid = ma.nid_matricula " +
+      "and p.nid = m.nid_persona " +
+      "and ma.nid_asignatura = a.nid " +
+      "and m.nid_curso = " +
+      conexion.dbConn.escape(nid_curso) +
+      " " +
+      "and (a.nid = " +
+      conexion.dbConn.escape(nid_asignatura) +
+      " or " +
+      conexion.dbConn.escape(nid_asignatura) +
+      " = 0) " +
+      "and not exists( select 1 " +
+      "                from " +
+      constantes.ESQUEMA_BD +
+      ".profesor_alumno_matricula pam " +
+      "                where pam.nid_matricula_asignatura = ma.nid  " +
+      "and (pam.fecha_baja >= sysdate())) ";
+
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.log(
+      "Error en la consulta al obtener alumnos sin profesor baja: " + error,
+    );
+    throw new Error(
+      "Error en la consulta al obtener alumnos sin profesor baja",
+    );
+  }
+}
+
 async function obtener_alumnos_sin_pago(nid_curso) {
   try {
     const sql =
