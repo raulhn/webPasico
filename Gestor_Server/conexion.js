@@ -1,10 +1,11 @@
 var mysql = require("mysql");
 var bd_connection = require("./config/bd.json");
-const bdPool = require("./config/bdPool.json");
+var bdPool = require("./config/bdPool.json");
 var bd_connection_web = require("./config/bd_web.json");
 var dbConn = mysql.createConnection(bd_connection);
 var dbConn_web = mysql.createConnection(bd_connection_web);
+const pool = mysql.createPool(bdPool);
 
 module.exports.dbConn = dbConn;
 module.exports.dbConn_web = dbConn_web;
-module.exports.bdPool = bdPool;
+module.exports.pool = pool;

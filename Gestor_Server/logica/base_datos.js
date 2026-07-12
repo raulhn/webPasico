@@ -3,7 +3,7 @@ const conexion = require("../conexion.js");
 function consulta(sql) {
   return new Promise((resolve, reject) => {
     try {
-      conexion.bdPool.query(sql, (error, results) => {
+      conexion.pool.query(sql, (error, results) => {
         try {
           if (error) {
             console.log("base_datos.js -> actualiza:", error);
@@ -26,7 +26,7 @@ function consulta(sql) {
 function actualiza(sql) {
   return new Promise((resolve, reject) => {
     try {
-      conexion.bdPool.getConnection((error, connection) => {
+      conexion.pool.getConnection((error, connection) => {
         try {
           if (error) {
             console.log("base_datos.js -> actualiza:", error);
