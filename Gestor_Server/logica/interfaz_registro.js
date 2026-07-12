@@ -4,7 +4,7 @@ const gestor_personas = require("./persona.js");
 const gestor_socios = require("./socio.js");
 const gestor_interfaz_persona = require("./interfaz_persona.js");
 const gestor_interfaz_socio = require("./interfaz_socio.js");
-const gestor_base_datos = requiree("./base_datos.js");
+const gestor_base_datos = require("./base_datos.js");
 
 async function obtener_siguiente_lote() {
   try {
