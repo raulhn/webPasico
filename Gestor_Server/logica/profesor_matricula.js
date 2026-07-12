@@ -1,6 +1,6 @@
 const conexion = require("../conexion");
 const constantes = require("../constantes");
-const gestor_base_datos = requite(".base_datos.js");
+const gestor_base_datos = require("./base_datos.js");
 
 async function alta_profesor_matricula(nid_matricula_asignatura, nid_profesor) {
   try {
