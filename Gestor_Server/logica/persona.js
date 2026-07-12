@@ -105,7 +105,7 @@ async function existe_nif(nif) {
     await actualizar_personas_sucias();
 
     if (!nif || nif.length === 0) {
-      resolve(false);
+      return false;
     } else {
       const sql =
         "select count(*) cont from " +
