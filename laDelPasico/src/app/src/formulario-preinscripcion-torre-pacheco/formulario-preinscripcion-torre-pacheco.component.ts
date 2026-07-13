@@ -399,8 +399,9 @@ export class FormularioPreinscripcionTorrePachecoComponent implements OnInit {
                 numero: this.numero,
                 escalera: this.escalera,
                 puerta: this.puerta,
-                instrumento: this.instrumento,
-                familia_instrumento: this.familia_instrumento,
+                instrumento: this.instrumentos_seleccionados[0].instrumento,
+                familia_instrumento:
+                  this.instrumentos_seleccionados[0].familia_instrumento,
                 sucursal: this.sucursal,
                 curso: this.obtener_curso(),
                 horario: this.horario_seleccionado,
