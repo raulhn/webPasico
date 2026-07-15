@@ -1,12 +1,25 @@
 const gestor_grupos = require("../logica/grupos.js");
 const servletComun = require("./servlet_comun");
 const servletPersona = require("./servlet_persona.js");
+const gestor_profesor = require("../logica/profesores.js");
 
 async function crear_grupo(req, res) {
   try {
     const nombre = req.body.nombre;
     const nid_asignatura = req.body.nid_asignatura;
     const nid_persona = await servletPersona.obtenerNidPersona(req, res);
+
+    const bEsProfesor = await gestor_profesor.esProfesor(
+      nid_persona,
+      nid_asignatura,
+    );
+    if (!bEsProfesor) {
+      res.status(400).send({
+        error: true,
+        message: "No está autorizado para crear un grupo en esta asignatura",
+      });
+      return;
+    }
 
     await gestor_grupos.crear_grupo(nombre, nid_persona, nid_asignatura);
 

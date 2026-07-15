@@ -33,6 +33,7 @@ const servletTipoProgreso = require("./servlets/servlet_tipo_progreso.js");
 const servletEvaluacion = require("./servlets/servlet_evaluacion.js");
 const servletEvaluacionMatricula = require("./servlets/servlet_evaluacion_matricula.js");
 const servletAgendaEvento = require("./servlets/servlet_agenda_evento.js");
+const servletGrupos = require("./servlets/servlet_grupos.js");
 
 // Tablon Anuncios //
 const servletTablonAnuncios = require("./servlets/servlet_tablon_anuncios.js");
@@ -455,6 +456,12 @@ app.post(
   "/eliminar_tablon_anuncio",
   servletTablonAnuncios.eliminarTablonAnuncio,
 );
+
+app.post("/crear_grupo", servletGrupos.crear_grupo);
+app.post("/eliminar_grupo", servletGrupos.eliminar_grupo);
+app.get("/obtener_grupos", servletGrupos.obtener_grupos);
+app.post("/add_alumno_grupo", servletGrupos.add_alumno_grupo);
+app.post("/eliminar_alumno_grupo", servletGrupos.eliminar_alumno_grupo);
 
 https
   .createServer(
