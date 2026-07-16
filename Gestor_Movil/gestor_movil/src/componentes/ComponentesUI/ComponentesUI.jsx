@@ -355,10 +355,6 @@ function removeAccents(text) {
     .normalize();
 }
 
-function concatenarArray(array) {
-  return array.join(" ");
-}
-
 export function DataTable({ cabeceras, datos, accion = (e) => {} }) {
   const [filtro, setFiltro] = useState("");
   const [datosFiltrados, setDatosFiltrados] = useState(datos);
