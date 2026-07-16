@@ -124,6 +124,31 @@ async function obtener_alumnos_grupo(nid_grupo) {
   }
 }
 
+async function obtener_grupos(nid_profesor) {
+  try {
+    const sql =
+      "select concat(p.nombre, ' ', p.primer_apellido, ' ', p.segundo_apellido) as profesor, g.* from " +
+      constantes.ESQUEMA +
+      ".grupos g, " +
+      constantes.ESQUEMA +
+      ".persona p where nid_profesor = " +
+      conexion.dbConn.escape(nid_profesor) +
+      " and g.nid_profesor = p.nid_persona " +
+      " and borrado = 'N'";
+
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (err) {
+    console.log(
+      "grupos.js -> obtener_grupos: Error al obtener grupos del profesor: " +
+        err,
+    );
+    throw new Error(
+      "Se ha producido un error al obtener los grupos del profesor",
+    );
+  }
+}
+
 module.exports.crear_grupo = crear_grupo;
 module.exports.borrar_grupo = borrar_grupo;
 module.exports.obtener_grupos = obtener_grupos;

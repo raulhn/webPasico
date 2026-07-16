@@ -67,7 +67,17 @@ async function obtener_grupos(req, res) {
     const nid_profesor = await servletPersona.obtenerNidPersona(req, res);
     const grupos = await gestor_grupos.obtener_grupos(nid_profesor);
 
-    res.status(200).send({ error: false, grupos: grupos });
+    const gruposConAlumnos = [];
+
+    for (let i = 0; i < grupos.length; i++) {
+      const grupo = grupos[i];
+      const alumnos = await gestor_grupos.obtener_alumnos_grupo(
+        grupo.nid_grupo,
+      );
+
+      gruposConAlumnos.alumnos.push({ grupo: grupo, alumnos: alumnos });
+    }
+    res.status(200).send({ error: false, grupos: gruposConAlumnos });
   } catch (error) {
     console.log("servlet_grupos -> obtener_grupos: ", error);
     res
