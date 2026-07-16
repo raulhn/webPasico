@@ -36,7 +36,7 @@ export function EntradaTexto({
 export function Boton({
   texto = "Botón",
   type = "button",
-  onClick = () => { },
+  onClick = () => {},
 }) {
   return (
     <button className={"boton"} onClick={onClick} type={type}>
@@ -128,22 +128,22 @@ export function CustomTabs({ tabs, pestana = 0 }) {
             }}
             onClick={() => setPestanaSeleccionada(index)}
             onMouseDown={(e) =>
-            (e.currentTarget.style.background = obtenerBackGroundColor(
-              true,
-              index,
-            ))
+              (e.currentTarget.style.background = obtenerBackGroundColor(
+                true,
+                index,
+              ))
             }
             onMouseUp={(e) =>
-            (e.currentTarget.style.background = obtenerBackGroundColor(
-              false,
-              index,
-            ))
+              (e.currentTarget.style.background = obtenerBackGroundColor(
+                false,
+                index,
+              ))
             }
             onMouseLeave={(e) =>
-            (e.currentTarget.style.background = obtenerBackGroundColor(
-              false,
-              index,
-            ))
+              (e.currentTarget.style.background = obtenerBackGroundColor(
+                false,
+                index,
+              ))
             }
           >
             {tab.nombre}
@@ -257,6 +257,19 @@ export function EnlaceDiv({ onClick, contenido }) {
   );
 }
 
+export function ModalComponente({ visible, contenido, titulo = "" }) {
+  if (!visible) return null;
+
+  return (
+    <div className="modal-overlay">
+      <div className="modal-content">
+        {titulo && <div className="titulo">{titulo}</div>}
+        <div className="contenido">{contenido}</div>
+      </div>
+    </div>
+  );
+}
+
 export function Paginacion({
   array = [],
   page_size = 10,
@@ -346,7 +359,7 @@ function concatenarArray(array) {
   return array.join(" ");
 }
 
-export function DataTable({ cabeceras, datos, accion = (e) => { } }) {
+export function DataTable({ cabeceras, datos, accion = (e) => {} }) {
   const [filtro, setFiltro] = useState("");
   const [datosFiltrados, setDatosFiltrados] = useState(datos);
   const [paginaActual, setPaginaActual] = useState(1);
@@ -355,51 +368,50 @@ export function DataTable({ cabeceras, datos, accion = (e) => { } }) {
 
   function obtiene_resultados(datos_filtrados) {
     if (!datos_filtrados || datos_filtrados.length === 0) {
-      return (<div>No hay datos para mostrar</div>
-      )
-    }
-    else {
-      return (<>
-        <table className="data-table">
-          <thead>
-            <tr>
-              {cabeceras.map((cabecera, index) => (
-                <th key={index}>{cabecera}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {datos_filtrados.map((fila, indexFila) => (
-              <tr
-                key={indexFila}
-                style={{
-                  ...(indexFila >= TAM_PAGINA * (paginaActual - 1) &&
-                    indexFila < TAM_PAGINA * paginaActual
-                    ? {}
-                    : { display: "none" }),
-                  ...(seleccionado === indexFila
-                    ? { backgroundColor: "#d3d3d3" }
-                    : {}),
-                }}
-                onClick={() => {
-                  setSeleccionado(indexFila);
-                  accion(fila[0]);
-                }}
-              >
-                {fila.map((celda, indexCelda) => (
-                  <td
-                    key={indexCelda}
-                    style={indexCelda === 0 ? { display: "none" } : {}}
-                  >
-                    {celda}
-                  </td>
+      return <div>No hay datos para mostrar</div>;
+    } else {
+      return (
+        <>
+          <table className="data-table">
+            <thead>
+              <tr>
+                {cabeceras.map((cabecera, index) => (
+                  <th key={index}>{cabecera}</th>
                 ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </>
-      )
+            </thead>
+            <tbody>
+              {datos_filtrados.map((fila, indexFila) => (
+                <tr
+                  key={indexFila}
+                  style={{
+                    ...(indexFila >= TAM_PAGINA * (paginaActual - 1) &&
+                    indexFila < TAM_PAGINA * paginaActual
+                      ? {}
+                      : { display: "none" }),
+                    ...(seleccionado === indexFila
+                      ? { backgroundColor: "#d3d3d3" }
+                      : {}),
+                  }}
+                  onClick={() => {
+                    setSeleccionado(indexFila);
+                    accion(fila[0]);
+                  }}
+                >
+                  {fila.map((celda, indexCelda) => (
+                    <td
+                      key={indexCelda}
+                      style={indexCelda === 0 ? { display: "none" } : {}}
+                    >
+                      {celda}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </>
+      );
     }
   }
 
@@ -426,7 +438,6 @@ export function DataTable({ cabeceras, datos, accion = (e) => { } }) {
     }
   }, [filtro, datos]);
 
-
   return (
     <>
       <div
@@ -443,7 +454,7 @@ export function DataTable({ cabeceras, datos, accion = (e) => { } }) {
           }}
         />
         <p style={{ margin: 0 }}>Total: {datosFiltrados.length}</p>
-      </div >
+      </div>
       {obtiene_resultados(datosFiltrados)}
       <div className="paginacion">
         <button

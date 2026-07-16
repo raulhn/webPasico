@@ -4,11 +4,14 @@ import { useState, useEffect } from "react";
 export const useGrupos = () => {
   const [grupos, setGrupos] = useState([]);
   const [error, setError] = useState(false);
+  const [refrescar, setRefrescar] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchGrupos = async () => {
       try {
         const response = await ServiceGrupos.obtenerGrupos();
+        setLoading(false);
         setGrupos(response);
       } catch (error) {
         setError(true);
@@ -19,6 +22,11 @@ export const useGrupos = () => {
     fetchGrupos();
   }, []);
 
+  function lanzarRefresco() {
+    setLoading(true);
+    setRefrescar(!refrescar);
+  }
+
   async function crearGrupo(nombre, nid_asigntura) {
     try {
       await ServiceGrupos.crearGrupo(nombre, nid_asigntura);
@@ -28,5 +36,5 @@ export const useGrupos = () => {
     }
   }
 
-  return { grupos, error, crearGrupo };
+  return { grupos, error, crearGrupo, loading, lanzarRefresco };
 };

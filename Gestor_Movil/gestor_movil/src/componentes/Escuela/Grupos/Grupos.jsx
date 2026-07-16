@@ -1,14 +1,16 @@
 import { useGrupos } from "../../../hooks/useGrupos";
 
 export default function Grupos() {
-  const { grupos } = useGrupos();
+  const { grupos, loading, lanzarRefresco } = useGrupos();
 
-  function CardGrupo(grupo) {
+  function CardGrupo(objetoGrupo) {
+    let alumnos = objetoGrupo.alumnos;
+    let grupo = objetoGrupo.grupo;
     return (
       <div key={grupo.nid_grupo} className="card">
         <h3>{grupo.nombre}</h3>
         <p>Profesor: {grupo.profesor}</p>
-        <p>Alumnos: {grupo.alumnos.length}</p>
+        <p>Alumnos: {alumnos.length}</p>
       </div>
     );
   }
@@ -16,6 +18,11 @@ export default function Grupos() {
   function CardGrupos() {
     return grupos.map((grupo) => CardGrupo(grupo));
   }
+
+  if (loading) {
+    return <p>Cargando grupos...</p>;
+  }
+
   return (
     <>
       <CardGrupos></CardGrupos>
