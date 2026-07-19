@@ -33,15 +33,8 @@ export default function Grupos() {
 
   async function handleCrearGrupo(nombre, asignatura) {
     try {
-      console.log(
-        "Creando grupo con nombre:",
-        nombre,
-        "y asignatura:",
-        asignatura,
-      );
       if (nombre && asignatura) {
         await crearGrupo(nombre, asignatura);
-        lanzarRefresco();
         setExitoCrearGrupo(true);
       } else {
         setErrorCrearGrupo({
@@ -111,6 +104,7 @@ export default function Grupos() {
           setVisible={() => {
             setVisibleFormulario(false);
             setExitoCrearGrupo(false);
+            lanzarRefresco();
           }}
           mensaje={"Grupo creado con éxito"}
           textBoton={"Aceptar"}

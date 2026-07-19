@@ -11,10 +11,11 @@ export const useGrupos = () => {
     const fetchGrupos = async () => {
       try {
         const response = await ServiceGrupos.obtenerGrupos();
-        setLoading(false);
         setGrupos(response.grupos);
+        setLoading(false);
       } catch (error) {
         setError(true);
+        setLoading(false);
         console.error("Error al obtener grupos:", error);
       }
     };
