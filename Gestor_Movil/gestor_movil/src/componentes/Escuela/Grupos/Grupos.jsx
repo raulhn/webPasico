@@ -52,10 +52,7 @@ export default function Grupos() {
 
   function FormularioGrupo() {
     const [nombre, setNombre] = useState("");
-    const [asignatura, setAsignatura] = useState({
-      etiqueta: "Selecciona asignatura",
-      valor: "",
-    });
+    const [asignatura, setAsignatura] = useState("");
 
     const lista_asignaturas = asignaturas.map((asignatura) => ({
       valor: asignatura.nid_asignatura,
