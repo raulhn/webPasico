@@ -23,7 +23,7 @@ export const eliminarGrupo = async (nid_grupo) => {
 
 // Get groups service
 export const obtenerGrupos = async () => {
-  return await peticionServicio("GET", `${URL_SERVICIO_MOVIL}/obtener_grupos`);
+  return await peticionServicio("GET", `${URL_SERVICIO_MOVIL}obtener_grupos`);
 };
 
 // Add student to group service

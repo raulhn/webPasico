@@ -1,4 +1,4 @@
-import * as ServiceGrupos from "../services/ServiceGrupos.js";
+import * as ServiceGrupos from "../services/serviceGrupos.js";
 import { useState, useEffect } from "react";
 
 export const useGrupos = () => {
