@@ -7,7 +7,7 @@ async function crear_grupo(nombre, nid_profesor, nid_asignatura) {
     const sql =
       "insert into " +
       constantes.ESQUEMA +
-      ".grupos(nombre, nid_profesor) values(" +
+      ".grupos(nombre, nid_profesor, nid_asignatura) values(" +
       conexion.dbConn.escape(nombre) +
       ", " +
       conexion.dbConn.escape(nid_profesor) +
