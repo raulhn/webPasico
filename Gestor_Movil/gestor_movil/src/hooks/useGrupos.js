@@ -21,7 +21,7 @@ export const useGrupos = () => {
     };
 
     fetchGrupos();
-  }, []);
+  }, [refrescar]);
 
   function lanzarRefresco() {
     setLoading(true);

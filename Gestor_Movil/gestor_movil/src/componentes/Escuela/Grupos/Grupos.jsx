@@ -52,7 +52,10 @@ export default function Grupos() {
 
   function FormularioGrupo() {
     const [nombre, setNombre] = useState("");
-    const [asignatura, setAsignatura] = useState("");
+    const [asignatura, setAsignatura] = useState({
+      etiqueta: "Selecciona asignatura",
+      valor: "",
+    });
 
     return (
       <>
