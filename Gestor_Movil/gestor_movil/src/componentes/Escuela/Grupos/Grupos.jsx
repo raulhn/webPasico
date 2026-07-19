@@ -8,6 +8,7 @@ import {
   Boton,
 } from "../../ComponentesUI/ComponentesUI";
 import { useAsignaturasProfesor } from "../../../hooks/useAsignaturas";
+import "./Grupos.css";
 
 export default function Grupos() {
   const { grupos, loading, lanzarRefresco, crearGrupo } = useGrupos();
@@ -57,30 +58,37 @@ export default function Grupos() {
     return (
       <>
         <form>
-          <label htmlFor="nombre">Nombre del grupo:</label>
-          <EntradaTexto
-            id="nombre"
-            value={nombre}
-            setTexto={(texto) => {
-              setNombre(texto);
-            }}
-          />
-          <Selector
-            valor={asignatura}
-            setValor={setAsignatura}
-            width="200px"
-            opciones={asignaturas.map((asignatura) => ({
-              valor: asignatura.nid_asignatura,
-              etiqueta: asignatura.descripcion,
-            }))}
-            placeholder="Seleccione asignatura"
-          />
+          <div className="grupos-container">
+            <label htmlFor="nombre">Nombre del grupo:</label>
+            <EntradaTexto
+              id="nombre"
+              value={nombre}
+              setTexto={(texto) => {
+                setNombre(texto);
+              }}
+            />
+            <Selector
+              valor={asignatura}
+              setValor={setAsignatura}
+              width="200px"
+              opciones={asignaturas.map((asignatura) => ({
+                valor: asignatura.nid_asignatura,
+                etiqueta: asignatura.descripcion,
+              }))}
+              placeholder="Seleccione asignatura"
+            />
 
-          <Boton
-            texto="Crear grupo"
-            onClick={() => handleCrearGrupo(nombre, asignatura)}
-          />
-          <Boton texto="Cancelar" onClick={() => setVisibleFormulario(false)} />
+            <div className="grupo-item grupo-acciones">
+              <Boton
+                texto="Crear grupo"
+                onClick={() => handleCrearGrupo(nombre, asignatura)}
+              />
+              <Boton
+                texto="Cancelar"
+                onClick={() => setVisibleFormulario(false)}
+              />
+            </div>
+          </div>
         </form>
         <ModalAviso
           visible={errorCrearGrupo !== null}
