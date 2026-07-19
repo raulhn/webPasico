@@ -43,7 +43,7 @@ async function add_alumno(nid_grupo, nid_matricula_asignatura) {
     const sql =
       "insert into " +
       constantes.ESQUEMA +
-      ".alumnos_grupos(nid_grupo, nid_matricula_asignatura) values(" +
+      ".grupo_matricula_asignatura(nid_grupo, nid_matricula_asignatura) values(" +
       conexion.dbConn.escape(nid_grupo) +
       ", " +
       conexion.dbConn.escape(nid_matricula_asignatura) +
@@ -64,7 +64,7 @@ async function eliminar_alumno(nid_grupo, nid_matricula_asignatura) {
     const sql =
       "delete from " +
       constantes.ESQUEMA +
-      ".alumnos_grupos where nid_grupo = " +
+      ".grupo_matricula_asignatura where nid_grupo = " +
       conexion.dbConn.escape(nid_grupo) +
       " and nid_matricula_asignatura = " +
       conexion.dbConn.escape(nid_matricula_asignatura);
@@ -108,7 +108,7 @@ async function obtener_alumnos_grupo(nid_grupo) {
     const sql =
       "select * from " +
       constantes.ESQUEMA +
-      ".alumnos_grupos where nid_grupo = " +
+      ".grupo_matricula_asignatura where nid_grupo = " +
       conexion.dbConn.escape(nid_grupo);
 
     const results = await gestor_base_datos.consulta(sql);
