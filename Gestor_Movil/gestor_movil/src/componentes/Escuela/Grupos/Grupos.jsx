@@ -57,6 +57,12 @@ export default function Grupos() {
       valor: "",
     });
 
+    const lista_asignaturas = asignaturas.map((asignatura) => ({
+      valor: asignatura.nid_asignatura,
+      etiqueta: asignatura.descripcion,
+    }));
+
+    lista_asignaturas.push({ valor: "", etiqueta: "Selecciona asignatura" });
     return (
       <>
         <form>
@@ -73,12 +79,7 @@ export default function Grupos() {
               valor={asignatura}
               setValor={setAsignatura}
               width="200px"
-              opciones={asignaturas
-                .map((asignatura) => ({
-                  valor: asignatura.nid_asignatura,
-                  etiqueta: asignatura.descripcion,
-                }))
-                .push({ valor: "", etiqueta: "Selecciona asignatura" })}
+              opciones={lista_asignaturas}
               placeholder="Seleccione asignatura"
             />
 
