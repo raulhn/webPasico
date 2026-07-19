@@ -33,6 +33,12 @@ export default function Grupos() {
 
   async function handleCrearGrupo(nombre, asignatura) {
     try {
+      console.log(
+        "Creando grupo con nombre:",
+        nombre,
+        "y asignatura:",
+        asignatura,
+      );
       if (nombre && asignatura) {
         await crearGrupo(nombre, asignatura);
         lanzarRefresco();
