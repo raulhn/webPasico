@@ -78,7 +78,7 @@ export default function Grupos() {
               placeholder="Seleccione asignatura"
             />
 
-            <div className="grupo-item grupo-acciones">
+            <div className=" grupo-item">
               <Boton
                 texto="Crear grupo"
                 onClick={() => handleCrearGrupo(nombre, asignatura)}
