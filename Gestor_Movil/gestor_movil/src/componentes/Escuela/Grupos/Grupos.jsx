@@ -5,6 +5,7 @@ import {
   Selector,
   ModalAviso,
   ModalExito,
+  Boton,
 } from "../../ComponentesUI/ComponentesUI";
 import { useAsignaturasProfesor } from "../../../hooks/useAsignaturas";
 
