@@ -73,10 +73,12 @@ export default function Grupos() {
               valor={asignatura}
               setValor={setAsignatura}
               width="200px"
-              opciones={asignaturas.map((asignatura) => ({
-                valor: asignatura.nid_asignatura,
-                etiqueta: asignatura.descripcion,
-              }))}
+              opciones={asignaturas
+                .map((asignatura) => ({
+                  valor: asignatura.nid_asignatura,
+                  etiqueta: asignatura.descripcion,
+                }))
+                .push({ valor: "", etiqueta: "Selecciona asignatura" })}
               placeholder="Seleccione asignatura"
             />
 
