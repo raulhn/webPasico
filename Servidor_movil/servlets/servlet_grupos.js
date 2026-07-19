@@ -75,7 +75,7 @@ async function obtener_grupos(req, res) {
         grupo.nid_grupo,
       );
 
-      gruposConAlumnos.alumnos.push({ grupo: grupo, alumnos: alumnos });
+      gruposConAlumnos.push({ grupo: grupo, alumnos: alumnos });
     }
     res.status(200).send({ error: false, grupos: gruposConAlumnos });
   } catch (error) {
