@@ -12,7 +12,7 @@ export const useGrupos = () => {
       try {
         const response = await ServiceGrupos.obtenerGrupos();
         setLoading(false);
-        setGrupos(response);
+        setGrupos(response.grupos);
       } catch (error) {
         setError(true);
         console.error("Error al obtener grupos:", error);
