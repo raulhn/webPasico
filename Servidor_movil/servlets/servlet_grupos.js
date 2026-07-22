@@ -119,7 +119,7 @@ async function eliminar_alumno_grupo(req, res) {
     const bEsProfesor = await gestor_grupos.es_profesor(nid_grupo, nid_persona);
     if (bEsProfesor) {
       await gestor_grupos.eliminar_alumno(nid_grupo, nid_matricula_asignatura);
-      res.status(200).send({ error: true, message: "Alumno eliminado" });
+      res.status(200).send({ error: false, message: "Alumno eliminado" });
       return;
     } else {
       res.status(400).send({ error: true, message: "Acceso no autorizado" });

@@ -117,6 +117,7 @@ export default function DetalleGrupo() {
       }
       setAlumnoAEliminar(null);
       setConfirmarEliminacion(false);
+      await cargarGrupo();
       setExito("Alumno eliminado del grupo.");
     } catch (error) {
       setError(error.message || "No se ha podido eliminar el alumno.");
@@ -209,7 +210,6 @@ export default function DetalleGrupo() {
         visible={Boolean(exito)}
         setVisible={() => {
           setExito("");
-          cargarGrupo();
         }}
         mensaje={exito}
         textBoton="Aceptar"
