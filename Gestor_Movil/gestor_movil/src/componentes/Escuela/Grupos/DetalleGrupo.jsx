@@ -97,10 +97,13 @@ export default function DetalleGrupo() {
         alumnoSeleccionado,
       );
       if (respuesta.error) {
-        throw new Error(respuesta.message || "No se ha podido incluir el alumno.");
+        throw new Error(
+          respuesta.message || "No se ha podido incluir el alumno.",
+        );
       }
       setAlumnoSeleccionado("");
       setExito("Alumno incluido en el grupo.");
+      cargarGrupo();
     } catch (error) {
       setError(error.message || "No se ha podido incluir el alumno.");
     }
@@ -113,7 +116,9 @@ export default function DetalleGrupo() {
         alumnoAEliminar,
       );
       if (respuesta.error) {
-        throw new Error(respuesta.message || "No se ha podido eliminar el alumno.");
+        throw new Error(
+          respuesta.message || "No se ha podido eliminar el alumno.",
+        );
       }
       setAlumnoAEliminar(null);
       setConfirmarEliminacion(false);
