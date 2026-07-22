@@ -6,13 +6,17 @@ import {
   ModalAviso,
   ModalExito,
   Boton,
+  EnlaceDiv,
 } from "../../ComponentesUI/ComponentesUI";
 import { useAsignaturasProfesor } from "../../../hooks/useAsignaturas";
+import { useNavigate } from "react-router";
+import { URL_SUBPATH } from "../../../config/Constantes";
 import "./Grupos.css";
 
 export default function Grupos() {
   const { grupos, loading, lanzarRefresco, crearGrupo } = useGrupos();
   const { asignaturas } = useAsignaturasProfesor();
+  const navigate = useNavigate();
 
   const [errorCrearGrupo, setErrorCrearGrupo] = useState(null);
   const [exitoCrearGrupo, setExitoCrearGrupo] = useState(false);
@@ -23,11 +27,19 @@ export default function Grupos() {
     let alumnos = objetoGrupo.alumnos;
     let grupo = objetoGrupo.grupo;
     return (
-      <div key={grupo.nid_grupo} className="card">
-        <h3>{grupo.nombre}</h3>
-        <p>Profesor: {grupo.profesor}</p>
-        <p>Alumnos: {alumnos.length}</p>
-      </div>
+      <EnlaceDiv
+        key={grupo.nid_grupo}
+        onClick={() =>
+          navigate(`${URL_SUBPATH}/grupo/${grupo.nid_grupo}`)
+        }
+        contenido={() => (
+          <div className="card">
+            <h3>{grupo.nombre}</h3>
+            <p>Profesor: {grupo.profesor}</p>
+            <p>Alumnos: {alumnos.length}</p>
+          </div>
+        )}
+      />
     );
   }
 

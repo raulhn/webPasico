@@ -316,10 +316,10 @@ async function esAlumnoAsignatura(nid_persona, nid_asignatura, nid_curso) {
 async function obtenerAlumnosAsignatura(nid_asignatura, nid_curso) {
   try {
     const sql =
-      "SELECT a.nid_persona, a.nombre, a.primer_apellido, a.segundo_apellido, ma.nid_matricula_asignatura, ma.nid_matricula " +
+      "SELECT p.nid_persona, p.nombre, p.primer_apellido, p.segundo_apellido, ma.nid_matricula_asignatura, ma.nid_matricula " +
       "FROM " +
       constantes.ESQUEMA +
-      ".asignaturas a, " +
+      ".persona p, " +
       constantes.ESQUEMA +
       ".matricula m, " +
       constantes.ESQUEMA +
@@ -327,10 +327,10 @@ async function obtenerAlumnosAsignatura(nid_asignatura, nid_curso) {
       "WHERE ma.nid_asignatura = " +
       conexion.dbConn.escape(nid_asignatura) +
       " AND ma.nid_matricula = m.nid_matricula " +
-      " AND m.nid_persona = a.nid_persona " +
+      " AND m.nid_persona = p.nid_persona " +
       " AND m.nid_curso = " +
       conexion.dbConn.escape(nid_curso) +
-      " AND (m.fecha_baja IS NULL OR m.fecha_baja > NOW())";
+      " AND (ma.fecha_baja IS NULL OR ma.fecha_baja > NOW())";
 
     const result = await gestor_base_datos.consulta(sql);
     return result;

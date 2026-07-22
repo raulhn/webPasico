@@ -18,6 +18,7 @@ import EvaluacionesProfesor from "./componentes/Escuela/EvaluacionesProfesor/Eva
 import Registro from "./componentes/Usuarios/Registro/Registro.jsx";
 import RecuperarPassword from "./componentes/Usuarios/RecuperaPassword/RecuperaPassword.jsx";
 import Grupos from "./componentes/Escuela/Grupos/Grupos.jsx"
+import DetalleGrupo from "./componentes/Escuela/Grupos/DetalleGrupo.jsx";
 
 import { URL_SUBPATH } from "./config/Constantes";
 import Agenda from "./componentes/ComponenteCalendario/Agenda/Agenda.jsx"
@@ -83,6 +84,10 @@ createRoot(document.getElementById("root")).render(
         />
         <Route path={URL_SUBPATH + "/agenda"} element={<Agenda />} />
         <Route path={URL_SUBPATH + "/grupos"} element={<Grupos />} />
+        <Route
+          path={URL_SUBPATH + "/grupo/:nidGrupo"}
+          element={<DetalleGrupo />}
+        />
 
       </Routes>
     </BrowserRouter>

@@ -201,20 +201,20 @@ async function obtenerMatriculasAsignaturaPersona(req, res) {
 async function obtenerAlumnosAsignatura(req, res) {
   try {
     const nid_asignatura = req.params.nid_asignatura;
-    const rolePermitidoAdministrador = [constantes.ADMINISTRADOR];
+    const rolesPermitidosAdministrador = [constantes.ADMINISTRADOR];
     let rolAdministrador = await servletComun.comprobarRol(
       req,
       res,
-      rolesPermitidos,
+      rolesPermitidosAdministrador,
     );
+    let rolProfesor = false;
 
     if (!rolAdministrador) {
-      const rolPermitidoProfesor = [constantes.PROFESOR];
-
-      const rolProfesor = await servletComun.comprobarRol(
+      const rolesPermitidosProfesor = [constantes.PROFESOR];
+      rolProfesor = await servletComun.comprobarRol(
         req,
         res,
-        rolPermitidoProfesor,
+        rolesPermitidosProfesor,
       );
 
       const nid_profesor = await servletPersona.obtenerNidPersona(req);
@@ -223,7 +223,7 @@ async function obtenerAlumnosAsignatura(req, res) {
         nid_asignatura,
       );
 
-      if (!rolProfesor && !esProfesor) {
+      if (!rolProfesor || !esProfesor) {
         res.status(403).send({
           error: true,
           mensaje:
@@ -241,7 +241,7 @@ async function obtenerAlumnosAsignatura(req, res) {
       return;
     }
 
-    const curso = gestorCurso.obtenerCursoActivo();
+    const curso = await gestorCurso.obtenerCursoActivo();
 
     const alumnos = await gestorMatriculaAsignatura.obtenerAlumnosAsignatura(
       nid_asignatura,

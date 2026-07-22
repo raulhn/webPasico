@@ -106,9 +106,18 @@ async function es_profesor(nid_grupo, nid_persona) {
 async function obtener_alumnos_grupo(nid_grupo) {
   try {
     const sql =
-      "select * from " +
+      "select gma.nid_grupo, gma.nid_matricula_asignatura, p.nid_persona, p.nombre, p.primer_apellido, p.segundo_apellido from " +
       constantes.ESQUEMA +
-      ".grupos_matricula_asignatura where nid_grupo = " +
+      ".grupos_matricula_asignatura gma, " +
+      constantes.ESQUEMA +
+      ".matricula_asignatura ma, " +
+      constantes.ESQUEMA +
+      ".matricula m, " +
+      constantes.ESQUEMA +
+      ".persona p where gma.nid_matricula_asignatura = ma.nid_matricula_asignatura " +
+      "and ma.nid_matricula = m.nid_matricula " +
+      "and m.nid_persona = p.nid_persona " +
+      "and gma.nid_grupo = " +
       conexion.dbConn.escape(nid_grupo);
 
     const results = await gestor_base_datos.consulta(sql);

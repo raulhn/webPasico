@@ -25,3 +25,9 @@
   display: flex;
   gap: 10px;
 }
+
+.detalle-grupo-container {
+  align-items: stretch;
+  max-width: 800px;
+  margin: 20px auto;
+}
