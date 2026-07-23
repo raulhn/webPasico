@@ -10,12 +10,15 @@ import {
 } from "../../ComponentesUI/ComponentesUI";
 import {
   addAlumnoGrupo,
+  actualizarHorarioGrupo,
   eliminarAlumnoGrupo,
   obtenerAlumnosAsignatura,
   obtenerGrupos,
 } from "../../../services/serviceGrupos";
 import { URL_SUBPATH } from "../../../config/Constantes";
 import "./Grupos.css";
+
+const DIAS_SEMANA = ["L", "M", "X", "J", "V", "S", "D"];
 
 function nombreCompleto(alumno) {
   return [alumno.nombre, alumno.primer_apellido, alumno.segundo_apellido]
@@ -31,6 +34,7 @@ export default function DetalleGrupo() {
   const [alumnoSeleccionado, setAlumnoSeleccionado] = useState("");
   const [alumnoAEliminar, setAlumnoAEliminar] = useState(null);
   const [confirmarEliminacion, setConfirmarEliminacion] = useState(false);
+  const [diasSeleccionados, setDiasSeleccionados] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState("");
   const [exito, setExito] = useState("");
@@ -51,6 +55,11 @@ export default function DetalleGrupo() {
       }
 
       setGrupo(grupoEncontrado);
+      setDiasSeleccionados(
+        (grupoEncontrado.grupo.horario || "")
+          .split("-")
+          .filter((dia) => DIAS_SEMANA.includes(dia)),
+      );
       const alumnos = await obtenerAlumnosAsignatura(
         grupoEncontrado.grupo.nid_asignatura,
       );
@@ -129,6 +138,36 @@ export default function DetalleGrupo() {
     }
   }
 
+  function cambiarDiaSeleccionado(dia) {
+    setDiasSeleccionados((dias) =>
+      dias.includes(dia) ? dias.filter((diaActual) => diaActual !== dia) : [...dias, dia],
+    );
+  }
+
+  async function guardarHorario() {
+    try {
+      const horario = DIAS_SEMANA.filter((dia) =>
+        diasSeleccionados.includes(dia),
+      ).join("-");
+      const respuesta = await actualizarHorarioGrupo(
+        grupo.grupo.nid_grupo,
+        horario,
+      );
+      if (respuesta.error) {
+        throw new Error(
+          respuesta.message || "No se ha podido guardar el horario.",
+        );
+      }
+      setGrupo((grupoActual) => ({
+        ...grupoActual,
+        grupo: { ...grupoActual.grupo, horario },
+      }));
+      setExito("Horario guardado.");
+    } catch (error) {
+      setError(error.message || "No se ha podido guardar el horario.");
+    }
+  }
+
   if (cargando) {
     return <p>Cargando grupo...</p>;
   }
@@ -160,6 +199,23 @@ export default function DetalleGrupo() {
       <h2>{grupo.grupo.nombre}</h2>
       <p>Profesor: {grupo.grupo.profesor}</p>
       <p>Alumnos incluidos: {alumnosGrupo.length}</p>
+
+      <section className="horario-grupo">
+        <h3>Horario</h3>
+        <div className="dias-semana" role="group" aria-label="Días de clase">
+          {DIAS_SEMANA.map((dia) => (
+            <label key={dia} className="dia-semana">
+              <input
+                type="checkbox"
+                checked={diasSeleccionados.includes(dia)}
+                onChange={() => cambiarDiaSeleccionado(dia)}
+              />
+              {dia}
+            </label>
+          ))}
+        </div>
+        <Boton texto="Guardar horario" onClick={guardarHorario} />
+      </section>
 
       <h3>Incluir alumno</h3>
       <div className="grupo-acciones">

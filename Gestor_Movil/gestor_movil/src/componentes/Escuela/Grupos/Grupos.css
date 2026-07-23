@@ -31,3 +31,26 @@
   max-width: 800px;
   margin: 20px auto;
 }
+
+.horario-grupo {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.horario-grupo h3 {
+  margin: 0;
+}
+
+.dias-semana {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.dia-semana {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}

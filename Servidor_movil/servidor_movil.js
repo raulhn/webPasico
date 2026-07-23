@@ -462,6 +462,10 @@ app.post("/eliminar_grupo", servletGrupos.eliminar_grupo);
 app.get("/obtener_grupos", servletGrupos.obtener_grupos);
 app.post("/add_alumno_grupo", servletGrupos.add_alumno_grupo);
 app.post("/eliminar_alumno_grupo", servletGrupos.eliminar_alumno_grupo);
+app.post(
+  "/actualizar_horario_grupo",
+  servletGrupos.actualizar_horario_grupo,
+);
 
 https
   .createServer(

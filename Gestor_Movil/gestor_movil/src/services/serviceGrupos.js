@@ -49,6 +49,15 @@ export const eliminarAlumnoGrupo = async (
   );
 };
 
+export const actualizarHorarioGrupo = async (nid_grupo, horario) => {
+  const payload = { nid_grupo, horario };
+  return await peticionServicio(
+    "POST",
+    `${URL_SERVICIO_MOVIL}actualizar_horario_grupo`,
+    payload,
+  );
+};
+
 export const obtenerAlumnosAsignatura = async (nid_asignatura) => {
   const respuesta = await peticionServicio(
     "GET",

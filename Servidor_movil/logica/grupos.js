@@ -80,6 +80,25 @@ async function eliminar_alumno(nid_grupo, nid_matricula_asignatura) {
   }
 }
 
+async function actualizar_horario(nid_grupo, horario) {
+  try {
+    const sql =
+      "update " +
+      constantes.ESQUEMA +
+      ".grupos set horario = " +
+      conexion.dbConn.escape(horario) +
+      " where nid_grupo = " +
+      conexion.dbConn.escape(nid_grupo);
+
+    return await gestor_base_datos.actualiza(sql);
+  } catch (err) {
+    console.log(
+      "grupos.js -> actualizar_horario: Error al actualizar el horario: " + err,
+    );
+    throw new Error("Se ha producido un error al actualizar el horario");
+  }
+}
+
 async function es_profesor(nid_grupo, nid_persona) {
   try {
     const sql =
@@ -163,5 +182,6 @@ module.exports.borrar_grupo = borrar_grupo;
 module.exports.obtener_grupos = obtener_grupos;
 module.exports.add_alumno = add_alumno;
 module.exports.eliminar_alumno = eliminar_alumno;
+module.exports.actualizar_horario = actualizar_horario;
 module.exports.es_profesor = es_profesor;
 module.exports.obtener_alumnos_grupo = obtener_alumnos_grupo;

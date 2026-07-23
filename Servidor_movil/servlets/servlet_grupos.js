@@ -134,6 +134,50 @@ async function eliminar_alumno_grupo(req, res) {
   }
 }
 
+async function actualizar_horario_grupo(req, res) {
+  try {
+    const nid_grupo = req.body.nid_grupo;
+    const { horario: horarioRecibido } = req.body;
+    const diasSemana = ["L", "M", "X", "J", "V", "S", "D"];
+
+    if (
+      typeof horarioRecibido !== "string" ||
+      horarioRecibido.length > 13 ||
+      !/^(|[LMXJVSD](?:-[LMXJVSD])*)$/.test(horarioRecibido)
+    ) {
+      res.status(400).send({ error: true, message: "Horario no válido" });
+      return;
+    }
+
+    const dias = horarioRecibido === "" ? [] : horarioRecibido.split("-");
+    if (
+      dias.some((dia) => !diasSemana.includes(dia)) ||
+      new Set(dias).size !== dias.length
+    ) {
+      res.status(400).send({ error: true, message: "Horario no válido" });
+      return;
+    }
+
+    const horario = diasSemana.filter((dia) => dias.includes(dia)).join("-");
+    const nid_persona = await servletPersona.obtenerNidPersona(req, res);
+    const bEsProfesor = await gestor_grupos.es_profesor(nid_grupo, nid_persona);
+
+    if (!bEsProfesor) {
+      res.status(400).send({ error: true, message: "Acceso no autorizado" });
+      return;
+    }
+
+    await gestor_grupos.actualizar_horario(nid_grupo, horario);
+    res.status(200).send({ error: false, message: "Horario actualizado" });
+  } catch (error) {
+    console.log("servlet_grupos -> actualizar_horario_grupo:", error);
+    res.status(400).send({
+      error: true,
+      message: "Se ha producido un error al actualizar el horario",
+    });
+  }
+}
+
 async function obtener_alumnos_grupo(req, res) {
   try {
     const nid_grupo = req.params.nid_grupo;
@@ -162,4 +206,5 @@ module.exports.eliminar_grupo = eliminar_grupo;
 module.exports.obtener_grupos = obtener_grupos;
 module.exports.add_alumno_grupo = add_alumno_grupo;
 module.exports.eliminar_alumno_grupo = eliminar_alumno_grupo;
+module.exports.actualizar_horario_grupo = actualizar_horario_grupo;
 module.exports.obtener_alumnos_grupo = obtener_alumnos_grupo;
