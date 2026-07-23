@@ -6,6 +6,7 @@ create table pasico_movil.grupos (
   nid_profesor integer not null,
   nid_asignatura integer not null,
   borrado varchar(1) default 'N',
+  horario varchar(15),
   primary key (nid_grupo)
 );
 
