@@ -1,0 +1,65 @@
+.asistencias-container {
+  max-width: 900px;
+  margin: 20px auto;
+  padding: 15px;
+}
+
+.asistencias-filtros,
+.asistencias-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 12px;
+}
+
+.asistencias-filtros label,
+.asistencia-alumno label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.asistencias-filtros input,
+.asistencia-causa input {
+  box-sizing: border-box;
+  min-height: 38px;
+  padding: 6px;
+}
+
+.asistencias-ayuda {
+  margin-top: 25px;
+}
+
+.asistencias-listado {
+  display: grid;
+  gap: 10px;
+}
+
+.asistencia-alumno {
+  display: grid;
+  grid-template-columns: minmax(160px, 1fr) auto auto minmax(180px, 1fr);
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+}
+
+.asistencia-alumno label:not(.asistencia-causa) {
+  flex-direction: row;
+  align-items: center;
+}
+
+.asistencia-causa input {
+  width: 100%;
+}
+
+.asistencias-acciones {
+  margin-top: 20px;
+}
+
+@media (max-width: 700px) {
+  .asistencia-alumno {
+    grid-template-columns: 1fr;
+  }
+}
