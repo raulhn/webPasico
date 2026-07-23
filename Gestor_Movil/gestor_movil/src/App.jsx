@@ -1,6 +1,7 @@
 import "./App.css";
 import { useNavigate } from "react-router";
 import { MdChromeReaderMode } from "react-icons/md";
+import { MdFactCheck } from "react-icons/md";
 import { EnlaceDiv } from "./componentes/ComponentesUI/ComponentesUI";
 import * as Constantes from "./config/Constantes";
 import Cabecera from "./componentes/Cabecera/Cabecera";
@@ -11,7 +12,7 @@ function App() {
   return (
     <>
       <Cabecera />
-      <div style={{ padding: "60px" }}>
+      <div style={{ padding: "60px", display: "flex", gap: "30px" }}>
         <EnlaceDiv
           onClick={() => navigate(Constantes.URL_SUBPATH + `/evaluaciones`)}
           contenido={() => (
@@ -24,6 +25,21 @@ function App() {
             >
               <MdChromeReaderMode size={40} />
               <span>Evaluaciones</span>
+            </div>
+          )}
+        />
+        <EnlaceDiv
+          onClick={() => navigate(Constantes.URL_SUBPATH + `/asistencias`)}
+          contenido={() => (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                flexDirection: "column",
+              }}
+            >
+              <MdFactCheck size={40} />
+              <span>Asistencias</span>
             </div>
           )}
         />

@@ -201,6 +201,113 @@ async function obtener_alumnos_grupo(req, res) {
   }
 }
 
+function esFechaValida(fecha) {
+  if (typeof fecha !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(fecha)) {
+    return false;
+  }
+
+  const [anio, mes, dia] = fecha.split("-").map(Number);
+  const fechaParseada = new Date(Date.UTC(anio, mes - 1, dia));
+  return (
+    fechaParseada.getUTCFullYear() === anio &&
+    fechaParseada.getUTCMonth() === mes - 1 &&
+    fechaParseada.getUTCDate() === dia
+  );
+}
+
+function esDiaDeClase(horario, fecha) {
+  const diasSemana = ["D", "L", "M", "X", "J", "V", "S"];
+  return (horario || "").split("-").includes(diasSemana[new Date(fecha + "T00:00:00Z").getUTCDay()]);
+}
+
+async function obtener_asistencia_grupo(req, res) {
+  try {
+    const { nid_grupo, fecha } = req.params;
+    if (!esFechaValida(fecha)) {
+      res.status(400).send({ error: true, message: "Fecha no válida" });
+      return;
+    }
+
+    const nid_persona = await servletPersona.obtenerNidPersona(req, res);
+    if (!(await gestor_grupos.es_profesor(nid_grupo, nid_persona))) {
+      res.status(403).send({ error: true, message: "Acceso no autorizado" });
+      return;
+    }
+
+    const grupo = (await gestor_grupos.obtener_grupos(nid_persona)).find(
+      (elementoGrupo) => String(elementoGrupo.nid_grupo) === String(nid_grupo),
+    );
+    if (!grupo || !esDiaDeClase(grupo.horario, fecha)) {
+      res.status(400).send({
+        error: true,
+        message: "El grupo no tiene clase el día seleccionado",
+      });
+      return;
+    }
+
+    const alumnos = await gestor_grupos.obtener_asistencia_grupo(nid_grupo, fecha);
+    res.status(200).send({ error: false, alumnos });
+  } catch (error) {
+    console.log("servlet_grupos -> obtener_asistencia_grupo:", error);
+    res.status(400).send({
+      error: true,
+      message: "No se ha podido obtener la asistencia del grupo",
+    });
+  }
+}
+
+async function guardar_asistencia_grupo(req, res) {
+  try {
+    const { nid_grupo, fecha, asistencias } = req.body;
+    if (
+      !esFechaValida(fecha) ||
+      !Array.isArray(asistencias) ||
+      asistencias.some(
+        (asistencia) =>
+          !asistencia ||
+          !Number.isInteger(Number(asistencia.nid_matricula_asignatura)) ||
+          typeof asistencia.falta !== "boolean" ||
+          typeof asistencia.justificada !== "boolean" ||
+          typeof asistencia.causa !== "string" ||
+          asistencia.causa.length > 500,
+      )
+    ) {
+      res.status(400).send({ error: true, message: "Datos de asistencia no válidos" });
+      return;
+    }
+
+    const nid_persona = await servletPersona.obtenerNidPersona(req, res);
+    if (!(await gestor_grupos.es_profesor(nid_grupo, nid_persona))) {
+      res.status(403).send({ error: true, message: "Acceso no autorizado" });
+      return;
+    }
+
+    const grupo = (await gestor_grupos.obtener_grupos(nid_persona)).find(
+      (elementoGrupo) => String(elementoGrupo.nid_grupo) === String(nid_grupo),
+    );
+    if (!grupo || !esDiaDeClase(grupo.horario, fecha)) {
+      res.status(400).send({
+        error: true,
+        message: "El grupo no tiene clase el día seleccionado",
+      });
+      return;
+    }
+
+    await gestor_grupos.guardar_asistencia_grupo(
+      nid_grupo,
+      fecha,
+      asistencias,
+    );
+    res.status(200).send({ error: false, message: "Asistencia guardada" });
+  } catch (error) {
+    console.log("servlet_grupos -> guardar_asistencia_grupo:", error);
+    res.status(400).send({
+      error: true,
+      message: error.message || "No se ha podido guardar la asistencia",
+    });
+  }
+}
+
 module.exports.crear_grupo = crear_grupo;
 module.exports.eliminar_grupo = eliminar_grupo;
 module.exports.obtener_grupos = obtener_grupos;
@@ -208,3 +315,5 @@ module.exports.add_alumno_grupo = add_alumno_grupo;
 module.exports.eliminar_alumno_grupo = eliminar_alumno_grupo;
 module.exports.actualizar_horario_grupo = actualizar_horario_grupo;
 module.exports.obtener_alumnos_grupo = obtener_alumnos_grupo;
+module.exports.obtener_asistencia_grupo = obtener_asistencia_grupo;
+module.exports.guardar_asistencia_grupo = guardar_asistencia_grupo;

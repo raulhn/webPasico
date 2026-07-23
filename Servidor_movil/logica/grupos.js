@@ -177,6 +177,102 @@ async function obtener_grupos(nid_profesor) {
   }
 }
 
+async function obtener_asistencia_grupo(nid_grupo, fecha) {
+  try {
+    const sql =
+      "select gma.nid_matricula_asignatura, p.nid_persona, p.nombre, p.primer_apellido, p.segundo_apellido, " +
+      "coalesce(ag.falta, 'N') as falta, coalesce(ag.justificada, 'N') as justificada, coalesce(ag.causa, '') as causa " +
+      "from " +
+      constantes.ESQUEMA +
+      ".grupos_matricula_asignatura gma " +
+      "inner join " +
+      constantes.ESQUEMA +
+      ".matricula_asignatura ma on ma.nid_matricula_asignatura = gma.nid_matricula_asignatura " +
+      "inner join " +
+      constantes.ESQUEMA +
+      ".matricula m on m.nid_matricula = ma.nid_matricula " +
+      "inner join " +
+      constantes.ESQUEMA +
+      ".persona p on p.nid_persona = m.nid_persona " +
+      "left join " +
+      constantes.ESQUEMA +
+      ".asistencia_grupo ag on ag.nid_grupo = gma.nid_grupo " +
+      "and ag.nid_matricula_asignatura = gma.nid_matricula_asignatura " +
+      "and ag.fecha = " +
+      conexion.dbConn.escape(fecha) +
+      " where gma.nid_grupo = " +
+      conexion.dbConn.escape(nid_grupo) +
+      " order by p.primer_apellido, p.segundo_apellido, p.nombre";
+
+    return await gestor_base_datos.consulta(sql);
+  } catch (err) {
+    console.log(
+      "grupos.js -> obtener_asistencia_grupo: Error al obtener la asistencia: " +
+        err,
+    );
+    throw new Error("Se ha producido un error al obtener la asistencia");
+  }
+}
+
+async function guardar_asistencia_grupo(nid_grupo, fecha, asistencias) {
+  try {
+    const alumnosGrupo = await obtener_alumnos_grupo(nid_grupo);
+    const matriculasGrupo = new Set(
+      alumnosGrupo.map((alumno) => String(alumno.nid_matricula_asignatura)),
+    );
+
+    if (
+      asistencias.some(
+        (asistencia) =>
+          !matriculasGrupo.has(
+            String(asistencia.nid_matricula_asignatura),
+          ),
+      )
+    ) {
+      throw new Error("Hay alumnos que no pertenecen al grupo");
+    }
+
+    if (asistencias.length === 0) {
+      return;
+    }
+
+    const valores = asistencias.map((asistencia) => {
+      const falta = asistencia.falta ? "S" : "N";
+      const justificada = asistencia.falta && asistencia.justificada ? "S" : "N";
+      const causa = asistencia.falta && asistencia.justificada ? asistencia.causa : "";
+      return (
+        "(" +
+        conexion.dbConn.escape(nid_grupo) +
+        ", " +
+        conexion.dbConn.escape(asistencia.nid_matricula_asignatura) +
+        ", " +
+        conexion.dbConn.escape(fecha) +
+        ", " +
+        conexion.dbConn.escape(falta) +
+        ", " +
+        conexion.dbConn.escape(justificada) +
+        ", " +
+        conexion.dbConn.escape(causa) +
+        ")"
+      );
+    });
+    const sql =
+      "insert into " +
+      constantes.ESQUEMA +
+      ".asistencia_grupo (nid_grupo, nid_matricula_asignatura, fecha, falta, justificada, causa) values " +
+      valores.join(", ") +
+      " on duplicate key update falta = values(falta), justificada = values(justificada), causa = values(causa)";
+
+    return await gestor_base_datos.actualiza(sql);
+  } catch (err) {
+    console.log(
+      "grupos.js -> guardar_asistencia_grupo: Error al guardar la asistencia: " +
+        err,
+    );
+    throw err;
+  }
+}
+
 module.exports.crear_grupo = crear_grupo;
 module.exports.borrar_grupo = borrar_grupo;
 module.exports.obtener_grupos = obtener_grupos;
@@ -185,3 +281,5 @@ module.exports.eliminar_alumno = eliminar_alumno;
 module.exports.actualizar_horario = actualizar_horario;
 module.exports.es_profesor = es_profesor;
 module.exports.obtener_alumnos_grupo = obtener_alumnos_grupo;
+module.exports.obtener_asistencia_grupo = obtener_asistencia_grupo;
+module.exports.guardar_asistencia_grupo = guardar_asistencia_grupo;

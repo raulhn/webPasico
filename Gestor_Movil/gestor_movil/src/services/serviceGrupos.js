@@ -72,3 +72,18 @@ export const obtenerAlumnosAsignatura = async (nid_asignatura) => {
 
   return respuesta.alumnos;
 };
+
+export const obtenerAsistenciaGrupo = async (nid_grupo, fecha) => {
+  return await peticionServicio(
+    "GET",
+    `${URL_SERVICIO_MOVIL}obtener_asistencia_grupo/${nid_grupo}/${fecha}`,
+  );
+};
+
+export const guardarAsistenciaGrupo = async (nid_grupo, fecha, asistencias) => {
+  return await peticionServicio(
+    "POST",
+    `${URL_SERVICIO_MOVIL}guardar_asistencia_grupo`,
+    { nid_grupo, fecha, asistencias },
+  );
+};

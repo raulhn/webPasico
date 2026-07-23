@@ -466,6 +466,11 @@ app.post(
   "/actualizar_horario_grupo",
   servletGrupos.actualizar_horario_grupo,
 );
+app.get(
+  "/obtener_asistencia_grupo/:nid_grupo/:fecha",
+  servletGrupos.obtener_asistencia_grupo,
+);
+app.post("/guardar_asistencia_grupo", servletGrupos.guardar_asistencia_grupo);
 
 https
   .createServer(
