@@ -140,9 +140,13 @@ export default function Grupos() {
 
   return (
     <>
-      <CardGrupos></CardGrupos>
+      <div className="contenedor">
+        <CardGrupos></CardGrupos>
+      </div>
       {visibleFormulario ? (
-        <FormularioGrupo />
+        <div className="modal">
+          <FormularioGrupo />
+        </div>
       ) : (
         <Boton
           texto="Crear nuevo grupo"
