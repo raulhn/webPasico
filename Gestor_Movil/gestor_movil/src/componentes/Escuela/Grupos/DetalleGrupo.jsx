@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router";
-import { Cabecera } from "../../Cabecera/Cabecera";
+import Cabecera from "../../Cabecera/Cabecera";
 import {
   Boton,
   DataTable,
