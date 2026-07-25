@@ -31,7 +31,7 @@ export default function Grupos() {
     if (cursoSeleccionado) {
       setNidCurso(cursoSeleccionado.nid_curso);
     }
-  }, [cursos, obtener_curso_seleccionado]);
+  }, [cursos]);
 
   const [errorCrearGrupo, setErrorCrearGrupo] = useState(null);
   const [exitoCrearGrupo, setExitoCrearGrupo] = useState(false);
