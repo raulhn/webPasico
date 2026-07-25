@@ -71,7 +71,7 @@ async function eliminar_grupo(req, res) {
 async function obtener_grupos(req, res) {
   try {
     const { nid_curso } = req.params;
-    if (!Number.isInteger(Number(nid_curso))) {
+    if (nid_curso !== undefined && !Number.isInteger(Number(nid_curso))) {
       res.status(400).send({ error: true, message: "Curso no válido" });
       return;
     }

@@ -44,6 +44,10 @@ export default function DetalleGrupo() {
     setCargando(true);
     try {
       const respuesta = await obtenerGrupos();
+      if (!Array.isArray(respuesta.grupos)) {
+        throw new Error(respuesta.message || "No se ha podido cargar el grupo.");
+      }
+
       const grupoEncontrado = respuesta.grupos.find(
         ({ grupo: elementoGrupo }) =>
           String(elementoGrupo.nid_grupo) === String(nidGrupo),

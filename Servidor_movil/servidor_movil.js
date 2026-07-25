@@ -459,6 +459,7 @@ app.post(
 
 app.post("/crear_grupo", servletGrupos.crear_grupo);
 app.post("/eliminar_grupo", servletGrupos.eliminar_grupo);
+app.get("/obtener_grupos", servletGrupos.obtener_grupos);
 app.get("/obtener_grupos/:nid_curso", servletGrupos.obtener_grupos);
 app.post("/add_alumno_grupo", servletGrupos.add_alumno_grupo);
 app.post("/eliminar_alumno_grupo", servletGrupos.eliminar_alumno_grupo);
