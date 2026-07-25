@@ -64,11 +64,11 @@ export default function Grupos() {
     }
   }
 
-  function FormularioGrupo() {
-    const [nombre, setNombre] = useState("");
-    const [asignatura, setAsignatura] = useState("");
-    const [curso, setCurso] = useState("");
+  const [nombre, setNombre] = useState("");
+  const [asignatura, setAsignatura] = useState("");
+  const [curso, setCurso] = useState("");
 
+  function FormularioGrupo() {
     const lista_asignaturas = asignaturas.map((asignatura) => ({
       valor: asignatura.nid_asignatura,
       etiqueta: asignatura.descripcion,
@@ -112,7 +112,10 @@ export default function Grupos() {
               <div className=" grupo-item">
                 <Boton
                   texto="Crear grupo"
-                  onClick={() => handleCrearGrupo(curso, nombre, asignatura)}
+                  onClick={(event) => {
+                    event.preventDefault();
+                    handleCrearGrupo(curso, nombre, asignatura);
+                  }}
                 />
                 <Boton
                   texto="Cancelar"
