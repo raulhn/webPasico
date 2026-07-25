@@ -1,121 +1,132 @@
 /* Estilos para enlace-div como botón */
 .enlace-div {
-    display: inline-block;
-    background: #3182ce;
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    padding: 10px 22px;
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
-    box-shadow: 0 2px 8px rgba(49,130,206,0.08);
-    transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
-    outline: none;
-    text-align: center;
-    text-decoration: none;
-    user-select: none;
+  display: inline-block;
+  background: #3182ce;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 22px;
+  width: 80px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(49, 130, 206, 0.08);
+  transition:
+    background 0.2s,
+    box-shadow 0.2s,
+    transform 0.1s;
+  outline: none;
+  text-align: center;
+  text-decoration: none;
+  user-select: none;
 }
 
-.enlace-div:hover, .enlace-div:focus {
-    background: #225ea8;
-    box-shadow: 0 4px 16px rgba(49,130,206,0.16);
-    transform: translateY(-2px) scale(1.03);
+.enlace-div:hover,
+.enlace-div:focus {
+  background: #225ea8;
+  box-shadow: 0 4px 16px rgba(49, 130, 206, 0.16);
+  transform: translateY(-2px) scale(1.03);
 }
 
 .enlace-div:active {
-    background: #1a365d;
-    transform: translateY(1px) scale(0.98);
+  background: #1a365d;
+  transform: translateY(1px) scale(0.98);
 }
 /* Estilos para selectores personalizados */
 .selector {
-    width: 100%;
-    padding: 10px 14px;
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    background: #f7fafc;
-    font-size: 1rem;
-    color: #2d3a4a;
-    transition: border 0.2s, box-shadow 0.2s;
-    outline: none;
-    margin-bottom: 12px;
-    appearance: none;
-    box-shadow: 0 1px 4px rgba(49,130,206,0.04);
-    text-align: center;
-    justify-content: center;
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #f7fafc;
+  font-size: 1rem;
+  color: #2d3a4a;
+  transition:
+    border 0.2s,
+    box-shadow 0.2s;
+  outline: none;
+  margin-bottom: 12px;
+  appearance: none;
+  box-shadow: 0 1px 4px rgba(49, 130, 206, 0.04);
+  text-align: center;
+  justify-content: center;
 }
 
 .selector:focus {
-    border-color: #3182ce;
-    background: #fff;
-    box-shadow: 0 2px 8px rgba(49,130,206,0.10);
+  border-color: #3182ce;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(49, 130, 206, 0.1);
 }
 
 .selector:disabled {
-    background: #e2e8f0;
-    color: #a0aec0;
-    cursor: not-allowed;
+  background: #e2e8f0;
+  color: #a0aec0;
+  cursor: not-allowed;
 }
 .entrada-texto {
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    padding: 8px;
-    font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 8px;
+  font-size: 16px;
 }
 
 .entrada-texto:focus {
-    border-color: #007bff;
-    outline: none;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
 
 .entrada-texto-area {
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    padding: 8px;
-    font-size: 16px;
-    resize: vertical;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 8px;
+  font-size: 16px;
+  resize: vertical;
 }
 
 .entrada-texto-area:focus {
-    border-color: #007bff;
-    outline: none;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
 
 .boton {
-    display: inline-block;
-    background: #3182ce;
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    padding: 10px 22px;
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
-    box-shadow: 0 2px 8px rgba(49,130,206,0.08);
-    transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
-    outline: none;
+  display: inline-block;
+  background: #3182ce;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 22px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(49, 130, 206, 0.08);
+  transition:
+    background 0.2s,
+    box-shadow 0.2s,
+    transform 0.1s;
+  outline: none;
 }
 
-.boton:hover, .boton:focus {
-    background: #225ea8;
-    box-shadow: 0 4px 16px rgba(49,130,206,0.16);
-    transform: translateY(-2px) scale(1.03);
+.boton:hover,
+.boton:focus {
+  background: #225ea8;
+  box-shadow: 0 4px 16px rgba(49, 130, 206, 0.16);
+  transform: translateY(-2px) scale(1.03);
 }
 
 .boton:active {
-    background: #1a365d;
-    transform: translateY(1px) scale(0.98);
+  background: #1a365d;
+  transform: translateY(1px) scale(0.98);
 }
 
 .boton:hover {
-    background-color: #0056b3;
+  background-color: #0056b3;
 }
 
 .boton:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
+  background-color: #ccc;
+  cursor: not-allowed;
 }
 
 .custom-tabs-bar {
@@ -131,8 +142,11 @@
 
 .modal-overlay {
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.35);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.35);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -144,7 +158,7 @@
   padding: 32px 24px;
   min-width: 320px;
   max-width: 90vw;
-  box-shadow: 0 4px 32px rgba(0,0,0,0.18);
+  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.18);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -160,13 +174,13 @@
 }
 
 .enlace-div {
-    display: inline-block;
-    background-color: #007bff;
-    color: #fff;
-    border-radius: 8px;
-    padding: 12px;
-    width: auto;
-    height: auto;
+  display: inline-block;
+  background-color: #007bff;
+  color: #fff;
+  border-radius: 8px;
+  padding: 12px;
+  width: auto;
+  height: auto;
 }
 
 .titulo {
@@ -175,14 +189,16 @@
   color: #225ea8;
 }
 
-.entrada-texto, .entrada-texto-area {
+.entrada-texto,
+.entrada-texto-area {
   width: 100%;
   box-sizing: border-box;
 }
 
-.entrada-texto:focus, .entrada-texto-area:focus {
+.entrada-texto:focus,
+.entrada-texto-area:focus {
   border-color: #3182ce;
-  box-shadow: 0 2px 8px rgba(49,130,206,0.10);
+  box-shadow: 0 2px 8px rgba(49, 130, 206, 0.1);
 }
 
 .boton {
