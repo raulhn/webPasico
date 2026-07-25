@@ -2,8 +2,8 @@ import { URL_SERVICIO_MOVIL } from "../config/Constantes";
 import { peticionServicio } from "./ServiceComun";
 
 // Create a group service
-export const crearGrupo = async (curso, nombre, nid_asignatura) => {
-  const payload = { curso, nombre, nid_asignatura };
+export const crearGrupo = async (nid_curso, nombre, nid_asignatura) => {
+  const payload = { nid_curso, nombre, nid_asignatura };
   return await peticionServicio(
     "POST",
     `${URL_SERVICIO_MOVIL}crear_grupo`,

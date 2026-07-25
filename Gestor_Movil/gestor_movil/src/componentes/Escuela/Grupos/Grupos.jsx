@@ -16,11 +16,12 @@ import { URL_SUBPATH } from "../../../config/Constantes";
 import "./Grupos.css";
 
 export default function Grupos() {
-  const [nid_curso, setNidCurso] = useState(null);
   const { grupos, loading, lanzarRefresco, crearGrupo } = useGrupos();
   const { asignaturas } = useAsignaturasProfesor();
   const { cursos, loading: loadingCursos } = useCursos(nid_curso);
   const navigate = useNavigate();
+
+  const [nid_curso, setNidCurso] = useState(null);
 
   const [errorCrearGrupo, setErrorCrearGrupo] = useState(null);
   const [exitoCrearGrupo, setExitoCrearGrupo] = useState(false);
