@@ -142,7 +142,9 @@ export default function Grupos() {
     <>
       <div className="container">
         <Cabecera />
-        <CardGrupos></CardGrupos>
+        <div className="lista-grupos">
+          <CardGrupos></CardGrupos>
+        </div>
       </div>
       {visibleFormulario ? (
         <div className="modal">
