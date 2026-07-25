@@ -73,7 +73,7 @@ export default function Grupos() {
     return (
       <>
         <Cabecera />
-        <div className="contenedor" style={{ paddingTop: "60px" }}>
+        <div className="container" style={{ paddingTop: "60px" }}>
           <form>
             <div className="grupos-container">
               <label htmlFor="nombre">Nombre del grupo:</label>
