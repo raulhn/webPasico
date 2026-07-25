@@ -1,6 +1,7 @@
 create table pasico_movil.grupos (
   nid_grupo int not null auto_increment,
   nombre varchar(255) not null,
+  nid_curso int,
   fecha_creacion datetime default current_timestamp,
   fecha_actualizacion datetime default current_timestamp on update current_timestamp,
   nid_profesor integer not null,
@@ -13,6 +14,7 @@ create table pasico_movil.grupos (
 
 alter table pasico_movil.grupos add constraint fk_grupos_porfesor foreign key(nid_profesor) references pasico_movil.persona(nid_persona);
 alter table pasico_movil.grupos add constraint fk_grupos_asignatura foreign key(nid_asignatura) references pasico_movil.asignatura(nid_asignatura);
+alter table pasico_movil.grupos add constraint fk_grupos_curso foreign key(nid_curso) references pasico_movil.curso(nid_curso);
 
 create table pasico_movil.grupos_matricula_asignatura(
   nid_grupo int  not null,

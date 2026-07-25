@@ -1,7 +1,7 @@
 import * as ServiceGrupos from "../services/serviceGrupos.js";
 import { useState, useEffect } from "react";
 
-export const useGrupos = () => {
+export const useGrupos = (nid_curso) => {
   const [grupos, setGrupos] = useState([]);
   const [error, setError] = useState(false);
   const [refrescar, setRefrescar] = useState(false);
@@ -10,7 +10,7 @@ export const useGrupos = () => {
   useEffect(() => {
     const fetchGrupos = async () => {
       try {
-        const response = await ServiceGrupos.obtenerGrupos();
+        const response = await ServiceGrupos.obtenerGrupos(nid_curso);
         setGrupos(response.grupos);
         setLoading(false);
       } catch (error) {
@@ -21,16 +21,16 @@ export const useGrupos = () => {
     };
 
     fetchGrupos();
-  }, [refrescar]);
+  }, [refrescar, nid_curso]);
 
   function lanzarRefresco() {
     setLoading(true);
     setRefrescar(!refrescar);
   }
 
-  async function crearGrupo(nombre, nid_asigntura) {
+  async function crearGrupo(curso, nombre, nid_asigntura) {
     try {
-      await ServiceGrupos.crearGrupo(nombre, nid_asigntura);
+      await ServiceGrupos.crearGrupo(curso, nombre, nid_asigntura);
     } catch (error) {
       console.log("Se ha producido un error al añadir el grupo", error);
       throw new Error("Se ha producido un error al añadir el grupo");

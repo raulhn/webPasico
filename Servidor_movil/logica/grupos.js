@@ -2,17 +2,19 @@ const constantes = require("../constantes.js");
 const conexion = require("../conexion.js");
 const gestor_base_datos = require("./base_datos.js");
 
-async function crear_grupo(nombre, nid_profesor, nid_asignatura) {
+async function crear_grupo(nombre, nid_profesor, nid_asignatura, nid_curso) {
   try {
     const sql =
       "insert into " +
       constantes.ESQUEMA +
-      ".grupos(nombre, nid_profesor, nid_asignatura) values(" +
+      ".grupos(nombre, nid_profesor, nid_asignatura, nid_curso) values(" +
       conexion.dbConn.escape(nombre) +
       ", " +
       conexion.dbConn.escape(nid_profesor) +
       ", " +
       conexion.dbConn.escape(nid_asignatura) +
+      ", " +
+      conexion.dbConn.escape(nid_curso) +
       ")";
     const results = await gestor_base_datos.actualiza(sql);
     return results.insertId;
@@ -152,7 +154,7 @@ async function obtener_alumnos_grupo(nid_grupo) {
   }
 }
 
-async function obtener_grupos(nid_profesor) {
+async function obtener_grupos(nid_profesor, nid_curso) {
   try {
     const sql =
       "select concat(p.nombre, ' ', p.primer_apellido, ' ', p.segundo_apellido) as profesor, g.* from " +
@@ -162,6 +164,8 @@ async function obtener_grupos(nid_profesor) {
       ".persona p where nid_profesor = " +
       conexion.dbConn.escape(nid_profesor) +
       " and g.nid_profesor = p.nid_persona " +
+      " and g.nid_curso = " +
+      conexion.dbConn.escape(nid_curso) +
       " and borrado = 'N'";
 
     const results = await gestor_base_datos.consulta(sql);
@@ -224,9 +228,7 @@ async function guardar_asistencia_grupo(nid_grupo, fecha, asistencias) {
     if (
       asistencias.some(
         (asistencia) =>
-          !matriculasGrupo.has(
-            String(asistencia.nid_matricula_asignatura),
-          ),
+          !matriculasGrupo.has(String(asistencia.nid_matricula_asignatura)),
       )
     ) {
       throw new Error("Hay alumnos que no pertenecen al grupo");
@@ -238,8 +240,10 @@ async function guardar_asistencia_grupo(nid_grupo, fecha, asistencias) {
 
     const valores = asistencias.map((asistencia) => {
       const falta = asistencia.falta ? "S" : "N";
-      const justificada = asistencia.falta && asistencia.justificada ? "S" : "N";
-      const causa = asistencia.falta && asistencia.justificada ? asistencia.causa : "";
+      const justificada =
+        asistencia.falta && asistencia.justificada ? "S" : "N";
+      const causa =
+        asistencia.falta && asistencia.justificada ? asistencia.causa : "";
       return (
         "(" +
         conexion.dbConn.escape(nid_grupo) +

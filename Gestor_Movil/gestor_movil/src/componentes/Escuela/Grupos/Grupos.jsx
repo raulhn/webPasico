@@ -1,4 +1,5 @@
 import { useGrupos } from "../../../hooks/useGrupos";
+import { useCursos } from "../../../hooks/useCursos";
 import { useState } from "react";
 import Cabecera from "../../Cabecera/Cabecera";
 import {
@@ -15,8 +16,10 @@ import { URL_SUBPATH } from "../../../config/Constantes";
 import "./Grupos.css";
 
 export default function Grupos() {
+  const [nid_curso, setNidCurso] = useState(null);
   const { grupos, loading, lanzarRefresco, crearGrupo } = useGrupos();
   const { asignaturas } = useAsignaturasProfesor();
+  const { cursos, loading: loadingCursos } = useCursos(nid_curso);
   const navigate = useNavigate();
 
   const [errorCrearGrupo, setErrorCrearGrupo] = useState(null);
@@ -42,10 +45,10 @@ export default function Grupos() {
     );
   }
 
-  async function handleCrearGrupo(nombre, asignatura) {
+  async function handleCrearGrupo(curso, nombre, asignatura) {
     try {
-      if (nombre && asignatura) {
-        await crearGrupo(nombre, asignatura);
+      if (curso && nombre && asignatura) {
+        await crearGrupo(curso, nombre, asignatura);
         setExitoCrearGrupo(true);
       } else {
         setErrorCrearGrupo({
@@ -64,10 +67,16 @@ export default function Grupos() {
   function FormularioGrupo() {
     const [nombre, setNombre] = useState("");
     const [asignatura, setAsignatura] = useState("");
+    const [curso, setCurso] = useState("");
 
     const lista_asignaturas = asignaturas.map((asignatura) => ({
       valor: asignatura.nid_asignatura,
       etiqueta: asignatura.descripcion,
+    }));
+
+    const lista_cursos = cursos.map((curso) => ({
+      valor: curso.nid_curso,
+      etiqueta: curso.descripcion,
     }));
 
     lista_asignaturas.push({ valor: "", etiqueta: "Selecciona asignatura" });
@@ -85,6 +94,14 @@ export default function Grupos() {
                 }}
               />
               <Selector
+                valor={curso}
+                setValor={setCurso}
+                width="200px"
+                opciones={lista_cursos}
+                placeholder="Seleccione curso"
+              />
+
+              <Selector
                 valor={asignatura}
                 setValor={setAsignatura}
                 width="200px"
@@ -95,7 +112,7 @@ export default function Grupos() {
               <div className=" grupo-item">
                 <Boton
                   texto="Crear grupo"
-                  onClick={() => handleCrearGrupo(nombre, asignatura)}
+                  onClick={() => handleCrearGrupo(curso, nombre, asignatura)}
                 />
                 <Boton
                   texto="Cancelar"
@@ -143,6 +160,16 @@ export default function Grupos() {
       <div className="container">
         <Cabecera />
         <div className="lista-grupos">
+          <Selector
+            valor={nid_curso}
+            setValor={setNidCurso}
+            width="200px"
+            opciones={cursos.map((curso) => ({
+              valor: curso.nid_curso,
+              etiqueta: curso.descripcion,
+            }))}
+            placeholder="Seleccione curso"
+          />
           <CardGrupos></CardGrupos>
         </div>
       </div>

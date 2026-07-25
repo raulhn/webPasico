@@ -2,8 +2,8 @@ import { URL_SERVICIO_MOVIL } from "../config/Constantes";
 import { peticionServicio } from "./ServiceComun";
 
 // Create a group service
-export const crearGrupo = async (nombre, nid_asignatura) => {
-  const payload = { nombre, nid_asignatura };
+export const crearGrupo = async (curso, nombre, nid_asignatura) => {
+  const payload = { curso, nombre, nid_asignatura };
   return await peticionServicio(
     "POST",
     `${URL_SERVICIO_MOVIL}crear_grupo`,
@@ -22,8 +22,11 @@ export const eliminarGrupo = async (nid_grupo) => {
 };
 
 // Get groups service
-export const obtenerGrupos = async () => {
-  return await peticionServicio("GET", `${URL_SERVICIO_MOVIL}obtener_grupos`);
+export const obtenerGrupos = async (nid_curso) => {
+  return await peticionServicio(
+    "GET",
+    `${URL_SERVICIO_MOVIL}obtener_grupos/${nid_curso}`,
+  );
 };
 
 // Add student to group service
@@ -66,7 +69,8 @@ export const obtenerAlumnosAsignatura = async (nid_asignatura) => {
 
   if (respuesta.error) {
     throw new Error(
-      respuesta.mensaje || "No se han podido obtener los alumnos de la asignatura",
+      respuesta.mensaje ||
+        "No se han podido obtener los alumnos de la asignatura",
     );
   }
 
