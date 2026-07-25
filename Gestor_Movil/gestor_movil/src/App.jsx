@@ -22,6 +22,7 @@ function App() {
                 display: "flex",
                 alignItems: "center",
                 flexDirection: "column",
+                width: "80px",
               }}
             >
               <MdChromeReaderMode size={40} />
@@ -37,6 +38,7 @@ function App() {
                 display: "flex",
                 alignItems: "center",
                 flexDirection: "column",
+                width: "80px",
               }}
             >
               <MdFactCheck size={40} />
@@ -53,6 +55,7 @@ function App() {
                 display: "flex",
                 alignItems: "center",
                 flexDirection: "column",
+                width: "80px",
               }}
             >
               <MdGroups size={40} />
