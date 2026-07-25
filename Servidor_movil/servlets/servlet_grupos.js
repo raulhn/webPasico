@@ -7,6 +7,7 @@ async function crear_grupo(req, res) {
   try {
     const nombre = req.body.nombre;
     const nid_asignatura = req.body.nid_asignatura;
+    const nid_curso = req.body.nid_curso;
     const nid_persona = await servletPersona.obtenerNidPersona(req, res);
 
     const bEsProfesor = await gestor_profesor.esProfesor(
@@ -21,7 +22,12 @@ async function crear_grupo(req, res) {
       return;
     }
 
-    await gestor_grupos.crear_grupo(nombre, nid_persona, nid_asignatura);
+    await gestor_grupos.crear_grupo(
+      nombre,
+      nid_persona,
+      nid_asignatura,
+      nid_curso,
+    );
 
     res.status(200).send({ error: false, message: "Grupo creado" });
   } catch (error) {
@@ -217,7 +223,9 @@ function esFechaValida(fecha) {
 
 function esDiaDeClase(horario, fecha) {
   const diasSemana = ["D", "L", "M", "X", "J", "V", "S"];
-  return (horario || "").split("-").includes(diasSemana[new Date(fecha + "T00:00:00Z").getUTCDay()]);
+  return (horario || "")
+    .split("-")
+    .includes(diasSemana[new Date(fecha + "T00:00:00Z").getUTCDay()]);
 }
 
 async function obtener_asistencia_grupo(req, res) {
@@ -245,7 +253,10 @@ async function obtener_asistencia_grupo(req, res) {
       return;
     }
 
-    const alumnos = await gestor_grupos.obtener_asistencia_grupo(nid_grupo, fecha);
+    const alumnos = await gestor_grupos.obtener_asistencia_grupo(
+      nid_grupo,
+      fecha,
+    );
     res.status(200).send({ error: false, alumnos });
   } catch (error) {
     console.log("servlet_grupos -> obtener_asistencia_grupo:", error);
@@ -272,7 +283,9 @@ async function guardar_asistencia_grupo(req, res) {
           asistencia.causa.length > 500,
       )
     ) {
-      res.status(400).send({ error: true, message: "Datos de asistencia no válidos" });
+      res
+        .status(400)
+        .send({ error: true, message: "Datos de asistencia no válidos" });
       return;
     }
 
@@ -293,11 +306,7 @@ async function guardar_asistencia_grupo(req, res) {
       return;
     }
 
-    await gestor_grupos.guardar_asistencia_grupo(
-      nid_grupo,
-      fecha,
-      asistencias,
-    );
+    await gestor_grupos.guardar_asistencia_grupo(nid_grupo, fecha, asistencias);
     res.status(200).send({ error: false, message: "Asistencia guardada" });
   } catch (error) {
     console.log("servlet_grupos -> guardar_asistencia_grupo:", error);
