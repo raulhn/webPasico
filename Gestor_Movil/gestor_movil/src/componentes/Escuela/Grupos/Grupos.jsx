@@ -1,5 +1,6 @@
 import { useGrupos } from "../../../hooks/useGrupos";
 import { useState } from "react";
+import Cabecera from "../../Cabecera/Cabecera";
 import {
   EntradaTexto,
   Selector,
@@ -72,8 +73,7 @@ export default function Grupos() {
     lista_asignaturas.push({ valor: "", etiqueta: "Selecciona asignatura" });
     return (
       <>
-        <Cabecera />
-        <div className="container" style={{ paddingTop: "60px" }}>
+        <div className="modal" style={{ paddingTop: "60px" }}>
           <form>
             <div className="grupos-container">
               <label htmlFor="nombre">Nombre del grupo:</label>
@@ -140,7 +140,8 @@ export default function Grupos() {
 
   return (
     <>
-      <div className="contenedor">
+      <div className="container">
+        <Cabecera />
         <CardGrupos></CardGrupos>
       </div>
       {visibleFormulario ? (
