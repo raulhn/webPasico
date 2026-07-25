@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router";
+import { Cabecera } from "../../ComponentesUI/Cabecera";
 import {
   Boton,
   DataTable,
@@ -140,7 +141,9 @@ export default function DetalleGrupo() {
 
   function cambiarDiaSeleccionado(dia) {
     setDiasSeleccionados((dias) =>
-      dias.includes(dia) ? dias.filter((diaActual) => diaActual !== dia) : [...dias, dia],
+      dias.includes(dia)
+        ? dias.filter((diaActual) => diaActual !== dia)
+        : [...dias, dia],
     );
   }
 
@@ -196,6 +199,7 @@ export default function DetalleGrupo() {
 
   return (
     <div className="grupos-container detalle-grupo-container">
+      <Cabecera />
       <h2>{grupo.grupo.nombre}</h2>
       <p>Profesor: {grupo.grupo.profesor}</p>
       <p>Alumnos incluidos: {alumnosGrupo.length}</p>
