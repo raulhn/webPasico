@@ -1,6 +1,6 @@
 import { useGrupos } from "../../../hooks/useGrupos";
 import { useCursos } from "../../../hooks/useCursos";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Cabecera from "../../Cabecera/Cabecera";
 import {
   EntradaTexto,
@@ -19,8 +19,19 @@ export default function Grupos() {
   const [nid_curso, setNidCurso] = useState("");
   const { grupos, loading, lanzarRefresco, crearGrupo } = useGrupos(nid_curso);
   const { asignaturas } = useAsignaturasProfesor();
-  const { cursos, loading: loadingCursos } = useCursos();
+  const {
+    cursos,
+    loading: loadingCursos,
+    obtener_curso_seleccionado,
+  } = useCursos();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const cursoSeleccionado = obtener_curso_seleccionado();
+    if (cursoSeleccionado) {
+      setNidCurso(cursoSeleccionado.nid_curso);
+    }
+  }, [cursos, obtener_curso_seleccionado]);
 
   const [errorCrearGrupo, setErrorCrearGrupo] = useState(null);
   const [exitoCrearGrupo, setExitoCrearGrupo] = useState(false);

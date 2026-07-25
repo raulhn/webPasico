@@ -1,5 +1,5 @@
-import {useState, useEffect} from 'react';
-import * as ServiceCursos from '../services/ServiceCursos';
+import { useState, useEffect } from "react";
+import * as ServiceCursos from "../services/ServiceCursos";
 
 export const useCursos = () => {
   const [cursos, setCursos] = useState([]);
@@ -21,5 +21,8 @@ export const useCursos = () => {
     fetchCursos();
   }, []);
 
-  return { cursos, loading, error };
+  function obtener_curso_seleccionado() {
+    return cursos.find((curso) => curso.activo === "S");
+  }
+  return { cursos, loading, error, obtener_curso_seleccionado };
 };
