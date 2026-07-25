@@ -64,11 +64,11 @@ export default function Grupos() {
     }
   }
 
-  const [nombre, setNombre] = useState("");
-  const [asignatura, setAsignatura] = useState("");
-  const [curso, setCurso] = useState("");
-
   function FormularioGrupo() {
+    const [nombre, setNombre] = useState("");
+    const [asignatura, setAsignatura] = useState("");
+    const [curso, setCurso] = useState("");
+
     const lista_asignaturas = asignaturas.map((asignatura) => ({
       valor: asignatura.nid_asignatura,
       etiqueta: asignatura.descripcion,
