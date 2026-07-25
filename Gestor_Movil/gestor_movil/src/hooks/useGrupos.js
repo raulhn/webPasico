@@ -9,6 +9,12 @@ export const useGrupos = (nid_curso) => {
 
   useEffect(() => {
     const fetchGrupos = async () => {
+      if (!nid_curso) {
+        setGrupos([]);
+        setLoading(false);
+        return;
+      }
+
       try {
         const response = await ServiceGrupos.obtenerGrupos(nid_curso);
         setGrupos(response.grupos);
@@ -25,7 +31,7 @@ export const useGrupos = (nid_curso) => {
 
   function lanzarRefresco() {
     setLoading(true);
-    setRefrescar(!refrescar);
+    setRefrescar((valorActual) => !valorActual);
   }
 
   async function crearGrupo(curso, nombre, nid_asigntura) {

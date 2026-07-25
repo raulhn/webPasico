@@ -156,6 +156,9 @@ async function obtener_alumnos_grupo(nid_grupo) {
 
 async function obtener_grupos(nid_profesor, nid_curso) {
   try {
+    const filtroCurso = nid_curso
+      ? " and g.nid_curso = " + conexion.dbConn.escape(nid_curso)
+      : "";
     const sql =
       "select concat(p.nombre, ' ', p.primer_apellido, ' ', p.segundo_apellido) as profesor, g.* from " +
       constantes.ESQUEMA +
@@ -164,8 +167,7 @@ async function obtener_grupos(nid_profesor, nid_curso) {
       ".persona p where nid_profesor = " +
       conexion.dbConn.escape(nid_profesor) +
       " and g.nid_profesor = p.nid_persona " +
-      " and g.nid_curso = " +
-      conexion.dbConn.escape(nid_curso) +
+      filtroCurso +
       " and borrado = 'N'";
 
     const results = await gestor_base_datos.consulta(sql);

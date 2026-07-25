@@ -16,12 +16,11 @@ import { URL_SUBPATH } from "../../../config/Constantes";
 import "./Grupos.css";
 
 export default function Grupos() {
-  const { grupos, loading, lanzarRefresco, crearGrupo } = useGrupos();
+  const [nid_curso, setNidCurso] = useState("");
+  const { grupos, loading, lanzarRefresco, crearGrupo } = useGrupos(nid_curso);
   const { asignaturas } = useAsignaturasProfesor();
-  const { cursos, loading: loadingCursos } = useCursos(nid_curso);
+  const { cursos, loading: loadingCursos } = useCursos();
   const navigate = useNavigate();
-
-  const [nid_curso, setNidCurso] = useState(null);
 
   const [errorCrearGrupo, setErrorCrearGrupo] = useState(null);
   const [exitoCrearGrupo, setExitoCrearGrupo] = useState(false);
@@ -75,10 +74,13 @@ export default function Grupos() {
       etiqueta: asignatura.descripcion,
     }));
 
-    const lista_cursos = cursos.map((curso) => ({
-      valor: curso.nid_curso,
-      etiqueta: curso.descripcion,
-    }));
+    const lista_cursos = [
+      { valor: "", etiqueta: "Seleccione curso" },
+      ...cursos.map((curso) => ({
+        valor: curso.nid_curso,
+        etiqueta: curso.descripcion,
+      })),
+    ];
 
     lista_asignaturas.push({ valor: "", etiqueta: "Selecciona asignatura" });
     return (
@@ -155,7 +157,7 @@ export default function Grupos() {
     return grupos.map((grupo) => CardGrupo(grupo));
   }
 
-  if (loading) {
+  if (loading || loadingCursos) {
     return <p>Cargando grupos...</p>;
   }
 
@@ -168,11 +170,13 @@ export default function Grupos() {
             valor={nid_curso}
             setValor={setNidCurso}
             width="200px"
-            opciones={cursos.map((curso) => ({
-              valor: curso.nid_curso,
-              etiqueta: curso.descripcion,
-            }))}
-            placeholder="Seleccione curso"
+            opciones={[
+              { valor: "", etiqueta: "Seleccione curso" },
+              ...cursos.map((curso) => ({
+                valor: curso.nid_curso,
+                etiqueta: curso.descripcion,
+              })),
+            ]}
           />
           <CardGrupos></CardGrupos>
         </div>
