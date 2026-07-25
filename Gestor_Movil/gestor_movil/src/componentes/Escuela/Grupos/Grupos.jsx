@@ -29,9 +29,7 @@ export default function Grupos() {
     return (
       <EnlaceDiv
         key={grupo.nid_grupo}
-        onClick={() =>
-          navigate(`${URL_SUBPATH}/grupo/${grupo.nid_grupo}`)
-        }
+        onClick={() => navigate(`${URL_SUBPATH}/grupo/${grupo.nid_grupo}`)}
         contenido={() => (
           <div className="card">
             <h3>{grupo.nombre}</h3>
@@ -74,57 +72,60 @@ export default function Grupos() {
     lista_asignaturas.push({ valor: "", etiqueta: "Selecciona asignatura" });
     return (
       <>
-        <form>
-          <div className="grupos-container">
-            <label htmlFor="nombre">Nombre del grupo:</label>
-            <EntradaTexto
-              id="nombre"
-              value={nombre}
-              setTexto={(texto) => {
-                setNombre(texto);
-              }}
-            />
-            <Selector
-              valor={asignatura}
-              setValor={setAsignatura}
-              width="200px"
-              opciones={lista_asignaturas}
-              placeholder="Seleccione asignatura"
-            />
+        <Cabecera />
+        <div className="contenedor" style={{ paddingTop: "60px" }}>
+          <form>
+            <div className="grupos-container">
+              <label htmlFor="nombre">Nombre del grupo:</label>
+              <EntradaTexto
+                id="nombre"
+                value={nombre}
+                setTexto={(texto) => {
+                  setNombre(texto);
+                }}
+              />
+              <Selector
+                valor={asignatura}
+                setValor={setAsignatura}
+                width="200px"
+                opciones={lista_asignaturas}
+                placeholder="Seleccione asignatura"
+              />
 
-            <div className=" grupo-item">
-              <Boton
-                texto="Crear grupo"
-                onClick={() => handleCrearGrupo(nombre, asignatura)}
-              />
-              <Boton
-                texto="Cancelar"
-                onClick={() => setVisibleFormulario(false)}
-              />
+              <div className=" grupo-item">
+                <Boton
+                  texto="Crear grupo"
+                  onClick={() => handleCrearGrupo(nombre, asignatura)}
+                />
+                <Boton
+                  texto="Cancelar"
+                  onClick={() => setVisibleFormulario(false)}
+                />
+              </div>
             </div>
-          </div>
-        </form>
-        <ModalAviso
-          visible={errorCrearGrupo !== null}
-          setVisible={() => {
-            setErrorCrearGrupo(null);
-          }}
-          mensaje={errorCrearGrupo ? errorCrearGrupo.message : ""}
-          textBoton={"Aceptar"}
-          titulo={"Error"}
-        />
+          </form>
+          <ModalAviso
+            visible={errorCrearGrupo !== null}
+            setVisible={() => {
+              setErrorCrearGrupo(null);
+            }}
+            mensaje={errorCrearGrupo ? errorCrearGrupo.message : ""}
+            textBoton={"Aceptar"}
+            titulo={"Error"}
+          />
 
-        <ModalExito
-          visible={exitoCrearGrupo}
-          setVisible={() => {
-            setVisibleFormulario(false);
-            setExitoCrearGrupo(false);
-            lanzarRefresco();
-          }}
-          mensaje={"Grupo creado con éxito"}
-          textBoton={"Aceptar"}
-          titulo={"Éxito"}
-        />
+          <ModalExito
+            visible={exitoCrearGrupo}
+            setVisible={() => {
+              setVisibleFormulario(false);
+              setExitoCrearGrupo(false);
+              lanzarRefresco();
+            }}
+            mensaje={"Grupo creado con éxito"}
+            textBoton={"Aceptar"}
+            titulo={"Éxito"}
+          />
+        </div>
       </>
     );
   }

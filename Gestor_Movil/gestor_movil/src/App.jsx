@@ -2,6 +2,7 @@ import "./App.css";
 import { useNavigate } from "react-router";
 import { MdChromeReaderMode } from "react-icons/md";
 import { MdFactCheck } from "react-icons/md";
+import { MdGroups } from "react-icons/md";
 import { EnlaceDiv } from "./componentes/ComponentesUI/ComponentesUI";
 import * as Constantes from "./config/Constantes";
 import Cabecera from "./componentes/Cabecera/Cabecera";
@@ -40,6 +41,22 @@ function App() {
             >
               <MdFactCheck size={40} />
               <span>Asistencias</span>
+            </div>
+          )}
+        />
+
+        <EnlaceDiv
+          onClick={() => navigate(Constantes.URL_SUBPATH + `/grupos`)}
+          contenido={() => (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                flexDirection: "column",
+              }}
+            >
+              <MdGroups size={40} />
+              <span>Grupos</span>
             </div>
           )}
         />

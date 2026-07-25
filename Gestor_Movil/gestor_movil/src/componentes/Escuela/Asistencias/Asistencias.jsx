@@ -1,6 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router";
-import { Boton, ModalAviso, ModalExito, Selector } from "../../ComponentesUI/ComponentesUI";
+import {
+  Boton,
+  ModalAviso,
+  ModalExito,
+  Selector,
+} from "../../ComponentesUI/ComponentesUI";
 import {
   guardarAsistenciaGrupo,
   obtenerAsistenciaGrupo,
@@ -26,7 +31,9 @@ function nombreCompleto(alumno) {
 
 function esDiaDeClase(horario, fecha) {
   const fechaSeleccionada = new Date(`${fecha}T00:00:00`);
-  return (horario || "").split("-").includes(DIAS_SEMANA[fechaSeleccionada.getDay()]);
+  return (horario || "")
+    .split("-")
+    .includes(DIAS_SEMANA[fechaSeleccionada.getDay()]);
 }
 
 export default function Asistencias() {
@@ -46,7 +53,9 @@ export default function Asistencias() {
       try {
         const respuesta = await obtenerGrupos();
         if (respuesta.error) {
-          throw new Error(respuesta.message || "No se han podido obtener los grupos.");
+          throw new Error(
+            respuesta.message || "No se han podido obtener los grupos.",
+          );
         }
         setGrupos(respuesta.grupos.map(({ grupo }) => grupo));
       } catch (error) {
@@ -65,7 +74,11 @@ export default function Asistencias() {
   );
 
   useEffect(() => {
-    if (!gruposDelDia.some((grupo) => String(grupo.nid_grupo) === String(nidGrupo))) {
+    if (
+      !gruposDelDia.some(
+        (grupo) => String(grupo.nid_grupo) === String(nidGrupo),
+      )
+    ) {
       setNidGrupo("");
       setAlumnos([]);
     }
@@ -128,7 +141,9 @@ export default function Asistencias() {
         })),
       );
       if (respuesta.error) {
-        throw new Error(respuesta.message || "No se ha podido guardar la asistencia.");
+        throw new Error(
+          respuesta.message || "No se ha podido guardar la asistencia.",
+        );
       }
       setExito("Asistencia guardada correctamente.");
     } catch (error) {
@@ -147,118 +162,127 @@ export default function Asistencias() {
   ];
 
   return (
-    <main className="asistencias-container">
-      <h2>Registro de asistencias</h2>
-      <div className="asistencias-filtros">
-        <label>
-          Fecha
-          <input
-            type="date"
-            value={fecha}
-            onChange={(event) => setFecha(event.target.value)}
+    <>
+      {" "}
+      <Cabecera />
+      <div className="contenedor" style={{ paddingTop: "60px" }}>
+        <main className="asistencias-container">
+          <h2>Registro de asistencias</h2>
+          <div className="asistencias-filtros">
+            <label>
+              Fecha
+              <input
+                type="date"
+                value={fecha}
+                onChange={(event) => setFecha(event.target.value)}
+              />
+            </label>
+            <Selector
+              valor={nidGrupo}
+              setValor={setNidGrupo}
+              opciones={opcionesGrupos}
+              width="280px"
+            />
+          </div>
+
+          {cargandoGrupos && <p>Cargando grupos...</p>}
+          {!cargandoGrupos && gruposDelDia.length === 0 && (
+            <p>No tienes grupos programados para la fecha seleccionada.</p>
+          )}
+          {cargandoAsistencia && <p>Cargando asistencia...</p>}
+          {!cargandoAsistencia && nidGrupo && alumnos.length === 0 && (
+            <p>Este grupo no tiene alumnos.</p>
+          )}
+          {!cargandoAsistencia && alumnos.length > 0 && (
+            <>
+              <p className="asistencias-ayuda">
+                Por defecto todos los alumnos están presentes. Marca solo las
+                faltas.
+              </p>
+              <div className="asistencias-listado">
+                {alumnos.map((alumno) => (
+                  <article
+                    className="asistencia-alumno"
+                    key={alumno.nid_matricula_asignatura}
+                  >
+                    <strong>{nombreCompleto(alumno)}</strong>
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={alumno.falta}
+                        onChange={(event) =>
+                          actualizarAlumno(alumno.nid_matricula_asignatura, {
+                            falta: event.target.checked,
+                            justificada: event.target.checked
+                              ? alumno.justificada
+                              : false,
+                            causa: event.target.checked ? alumno.causa : "",
+                          })
+                        }
+                      />
+                      Ha faltado
+                    </label>
+                    <label>
+                      <input
+                        type="checkbox"
+                        disabled={!alumno.falta}
+                        checked={alumno.falta && alumno.justificada}
+                        onChange={(event) =>
+                          actualizarAlumno(alumno.nid_matricula_asignatura, {
+                            justificada: event.target.checked,
+                            causa: event.target.checked ? alumno.causa : "",
+                          })
+                        }
+                      />
+                      Falta justificada
+                    </label>
+                    <label className="asistencia-causa">
+                      Causa
+                      <input
+                        type="text"
+                        maxLength="500"
+                        disabled={!alumno.falta || !alumno.justificada}
+                        value={
+                          alumno.falta && alumno.justificada ? alumno.causa : ""
+                        }
+                        onChange={(event) =>
+                          actualizarAlumno(alumno.nid_matricula_asignatura, {
+                            causa: event.target.value,
+                          })
+                        }
+                      />
+                    </label>
+                  </article>
+                ))}
+              </div>
+              <div className="asistencias-acciones">
+                <Boton
+                  texto={guardando ? "Guardando..." : "Guardar asistencia"}
+                  onClick={guardarAsistencia}
+                />
+                <Boton
+                  texto="Volver"
+                  onClick={() => navigate(`${URL_SUBPATH}/`)}
+                />
+              </div>
+            </>
+          )}
+
+          <ModalAviso
+            visible={Boolean(error)}
+            setVisible={() => setError("")}
+            mensaje={error}
+            textBoton="Aceptar"
+            titulo="Error"
           />
-        </label>
-        <Selector
-          valor={nidGrupo}
-          setValor={setNidGrupo}
-          opciones={opcionesGrupos}
-          width="280px"
-        />
+          <ModalExito
+            visible={Boolean(exito)}
+            setVisible={() => setExito("")}
+            mensaje={exito}
+            textBoton="Aceptar"
+          />
+        </main>
       </div>
-
-      {cargandoGrupos && <p>Cargando grupos...</p>}
-      {!cargandoGrupos && gruposDelDia.length === 0 && (
-        <p>No tienes grupos programados para la fecha seleccionada.</p>
-      )}
-      {cargandoAsistencia && <p>Cargando asistencia...</p>}
-      {!cargandoAsistencia && nidGrupo && alumnos.length === 0 && (
-        <p>Este grupo no tiene alumnos.</p>
-      )}
-      {!cargandoAsistencia && alumnos.length > 0 && (
-        <>
-          <p className="asistencias-ayuda">
-            Por defecto todos los alumnos están presentes. Marca solo las faltas.
-          </p>
-          <div className="asistencias-listado">
-            {alumnos.map((alumno) => (
-              <article
-                className="asistencia-alumno"
-                key={alumno.nid_matricula_asignatura}
-              >
-                <strong>{nombreCompleto(alumno)}</strong>
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={alumno.falta}
-                    onChange={(event) =>
-                      actualizarAlumno(alumno.nid_matricula_asignatura, {
-                        falta: event.target.checked,
-                        justificada: event.target.checked
-                          ? alumno.justificada
-                          : false,
-                        causa: event.target.checked ? alumno.causa : "",
-                      })
-                    }
-                  />
-                  Ha faltado
-                </label>
-                <label>
-                  <input
-                    type="checkbox"
-                    disabled={!alumno.falta}
-                    checked={alumno.falta && alumno.justificada}
-                    onChange={(event) =>
-                      actualizarAlumno(alumno.nid_matricula_asignatura, {
-                        justificada: event.target.checked,
-                        causa: event.target.checked ? alumno.causa : "",
-                      })
-                    }
-                  />
-                  Falta justificada
-                </label>
-                <label className="asistencia-causa">
-                  Causa
-                  <input
-                    type="text"
-                    maxLength="500"
-                    disabled={!alumno.falta || !alumno.justificada}
-                    value={alumno.falta && alumno.justificada ? alumno.causa : ""}
-                    onChange={(event) =>
-                      actualizarAlumno(alumno.nid_matricula_asignatura, {
-                        causa: event.target.value,
-                      })
-                    }
-                  />
-                </label>
-              </article>
-            ))}
-          </div>
-          <div className="asistencias-acciones">
-            <Boton
-              texto={guardando ? "Guardando..." : "Guardar asistencia"}
-              onClick={guardarAsistencia}
-            />
-            <Boton
-              texto="Volver"
-              onClick={() => navigate(`${URL_SUBPATH}/`)}
-            />
-          </div>
-        </>
-      )}
-
-      <ModalAviso
-        visible={Boolean(error)}
-        setVisible={() => setError("")}
-        mensaje={error}
-        textBoton="Aceptar"
-        titulo="Error"
-      />
-      <ModalExito
-        visible={Boolean(exito)}
-        setVisible={() => setExito("")}
-        mensaje={exito}
-        textBoton="Aceptar"
-      />
-    </main>
+    </>
   );
 }
