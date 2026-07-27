@@ -160,18 +160,21 @@ export default function Grupos() {
         <View style={estilos.fondoModal}>
           <ScrollView contentContainerStyle={estilos.modal}>
             <Text style={estilos.titulo}>Crear grupo</Text>
+            <Text>Nombre del grupo</Text>
             <EntradaTexto
               placeholder="Nombre del grupo"
               valor={nombre}
               setValor={setNombre}
               ancho={280}
             />
+            <Text>Curso</Text>
             <EntradaGroupRadioButton
               titulo="Curso"
               opciones={opcionesCursos}
               valor={cursoNuevo}
               setValorSeleccionado={setCursoNuevo}
             />
+            <Text>Asignatura</Text>
             <EntradaGroupRadioButton
               titulo="Asignatura"
               opciones={opcionesAsignaturas}
