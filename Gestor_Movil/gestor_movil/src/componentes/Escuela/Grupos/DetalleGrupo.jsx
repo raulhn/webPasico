@@ -13,9 +13,11 @@ import {
   addAlumnoGrupo,
   actualizarHorarioGrupo,
   eliminarAlumnoGrupo,
-  obtenerAlumnosAsignatura,
   obtenerGrupos,
 } from "../../../services/serviceGrupos";
+
+import { useAlumnosAsignaturaProfesor } from "../../../hooks/useAlumnos";
+
 import { URL_SUBPATH } from "../../../config/Constantes";
 import "./Grupos.css";
 
@@ -31,7 +33,6 @@ export default function DetalleGrupo() {
   const { nidGrupo } = useParams();
   const navigate = useNavigate();
   const [grupo, setGrupo] = useState(null);
-  const [alumnosDisponibles, setAlumnosDisponibles] = useState([]);
   const [alumnoSeleccionado, setAlumnoSeleccionado] = useState("");
   const [alumnoAEliminar, setAlumnoAEliminar] = useState(null);
   const [confirmarEliminacion, setConfirmarEliminacion] = useState(false);
@@ -40,12 +41,19 @@ export default function DetalleGrupo() {
   const [error, setError] = useState("");
   const [exito, setExito] = useState("");
 
+  const { alumnos: alumnosAsignatura } = useAlumnosAsignaturaProfesor(
+    grupo?.grupo.nid_curso,
+    grupo?.grupo.nid_asignatura,
+  );
+
   const cargarGrupo = useCallback(async () => {
     setCargando(true);
     try {
       const respuesta = await obtenerGrupos();
       if (!Array.isArray(respuesta.grupos)) {
-        throw new Error(respuesta.message || "No se ha podido cargar el grupo.");
+        throw new Error(
+          respuesta.message || "No se ha podido cargar el grupo.",
+        );
       }
 
       const grupoEncontrado = respuesta.grupos.find(
@@ -65,10 +73,6 @@ export default function DetalleGrupo() {
           .split("-")
           .filter((dia) => DIAS_SEMANA.includes(dia)),
       );
-      const alumnos = await obtenerAlumnosAsignatura(
-        grupoEncontrado.grupo.nid_asignatura,
-      );
-      setAlumnosDisponibles(alumnos);
     } catch (error) {
       setError(error.message || "No se ha podido cargar el grupo.");
     } finally {
@@ -85,11 +89,11 @@ export default function DetalleGrupo() {
     const matriculasIncluidas = new Set(
       alumnosGrupo.map((alumno) => String(alumno.nid_matricula_asignatura)),
     );
-    return alumnosDisponibles.filter(
+    return alumnosAsignatura.filter(
       (alumno) =>
         !matriculasIncluidas.has(String(alumno.nid_matricula_asignatura)),
     );
-  }, [alumnosDisponibles, alumnosGrupo]);
+  }, [alumnosAsignatura, alumnosGrupo]);
 
   const opcionesAlumnos = [
     { valor: "", etiqueta: "Selecciona un alumno" },
