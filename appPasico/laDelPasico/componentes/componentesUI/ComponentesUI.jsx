@@ -615,7 +615,12 @@ export function RadioInput({
   );
 }
 
-export function CheckBox({ item, valorSeleccionado, setValorSeleccionado }) {
+export function CheckBox({
+  item,
+  valorSeleccionado,
+  setValorSeleccionado,
+  disabled = false,
+}) {
   const [seleccionado, setSeleccionado] = useState(false);
   const [esPresionado, setEsPresionado] = useState(false);
 
@@ -630,13 +635,15 @@ export function CheckBox({ item, valorSeleccionado, setValorSeleccionado }) {
 
   return (
     <Pressable
-      onPress={accionPresionar}
+      onPress={disabled ? undefined : accionPresionar}
+      disabled={disabled}
       onPressIn={() => setEsPresionado(true)}
       onPressOut={() => setEsPresionado(false)}
     >
       <View
         style={[
           esPresionado ? estilos.presionadoCheckBox : {},
+          disabled ? { opacity: 0.5 } : {},
           {
             display: "flex",
             flexDirection: "row",

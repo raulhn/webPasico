@@ -77,6 +77,21 @@ export default function DrawerLayout() {
             title: "Evaluaciones",
           }}
         />
+        <Drawer.Screen
+          name="stackGrupos"
+          options={{
+            title: "Grupos",
+            headerShown: false,
+            drawerItemStyle: esRol(["PROFESOR"]) ? {} : { display: "none" },
+          }}
+        />
+        <Drawer.Screen
+          name="asistencias"
+          options={{
+            title: "Asistencias",
+            drawerItemStyle: esRol(["PROFESOR"]) ? {} : { display: "none" },
+          }}
+        />
 
         <Drawer.Screen
           name="escuela_privada"
