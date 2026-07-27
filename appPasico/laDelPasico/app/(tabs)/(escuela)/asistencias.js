@@ -20,6 +20,15 @@ import {
 
 const DIAS_SEMANA = ["D", "L", "M", "X", "J", "V", "S"];
 const SIN_SELECCION = { etiqueta: "", valor: null };
+const NOMBRE_DIAS_SEMANA = [
+  "Domingo",
+  "Lunes",
+  "Martes",
+  "Miércoles",
+  "Jueves",
+  "Viernes",
+  "Sábado",
+];
 
 function fechaISO(fecha) {
   const anio = fecha.getFullYear();
@@ -162,8 +171,21 @@ export default function Asistencias() {
   return (
     <ScrollView contentContainerStyle={estilos.contenedor}>
       <Text style={estilos.titulo}>Registro de asistencias</Text>
-      <Text>Fecha</Text>
-      <EntradaFecha onChangeFecha={setFecha} valorFecha={fecha} />
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-around",
+          alignItems: "center",
+        }}
+      >
+        <View style={{ fontSize: 16, fontWeight: "bold" }}>
+          <Text>Fecha</Text>
+          <EntradaFecha onChangeFecha={setFecha} valorFecha={fecha} />
+        </View>
+        <View style={estilos.contenedorDia}>
+          <Text>{NOMBRE_DIAS_SEMANA[fecha?.getDay()]}</Text>
+        </View>
+      </View>
       <EntradaGroupRadioButton
         titulo="Grupos con clase"
         opciones={gruposDelDia.map((elemento) => ({
@@ -244,4 +266,15 @@ const estilos = StyleSheet.create({
   titulo: { fontSize: 22, fontWeight: "bold", textAlign: "center" },
   alumno: { borderWidth: 1, borderColor: "#ddd", borderRadius: 8, padding: 12 },
   nombre: { fontSize: 16, fontWeight: "bold" },
+  contenedorDia: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    borderRadius: 8,
+    padding: 12,
+    borderWidth: 1,
+    borderColor: "#ddd",
+    height: 50,
+    backgroundColor: "#f0f0f0",
+  },
 });
