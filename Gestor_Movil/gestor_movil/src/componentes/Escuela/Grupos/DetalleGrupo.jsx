@@ -41,6 +41,7 @@ export default function DetalleGrupo() {
   const [error, setError] = useState("");
   const [exito, setExito] = useState("");
 
+  console.log("Grupo: ", grupo);
   const { alumnos: alumnosAsignatura } = useAlumnosAsignaturaProfesor(
     grupo?.grupo.nid_curso,
     grupo?.grupo.nid_asignatura,

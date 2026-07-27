@@ -15,6 +15,11 @@ export const useAlumnosAsignaturaProfesor = (nidCurso_, nidAsignatura_) => {
   }
 
   useEffect(() => {
+    setNidAsignatura(nidAsignatura_);
+    setNidCurso(nidCurso_);
+  }, [nidCurso_, nidAsignatura_]);
+
+  useEffect(() => {
     if (nidAsignatura && nidCurso) {
       serviceMatriculaAsignatura
         .obtenerAlumnosAsignaturaProfesor(nidCurso, nidAsignatura)
