@@ -221,6 +221,7 @@ export default function DetalleGrupo() {
           onPress={() => setAlumnoAEliminar(elemento)}
         >
           <Text>{nombreCompleto(elemento)}</Text>
+          <Text>Faltas: {elemento.faltas}</Text>
         </Pressable>
       ))}
       <Boton
