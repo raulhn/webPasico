@@ -204,6 +204,7 @@ export default function DetalleGrupo() {
   const filasAlumnos = alumnosGrupo.map((alumno) => [
     alumno.nid_matricula_asignatura,
     nombreCompleto(alumno),
+    alumno.faltas,
   ]);
 
   return (
@@ -244,7 +245,7 @@ export default function DetalleGrupo() {
       <h3>Alumnos del grupo</h3>
       <DataTable
         datos={filasAlumnos}
-        cabeceras={["Alumno"]}
+        cabeceras={["Alumno", "Faltas"]}
         accion={setAlumnoAEliminar}
       />
       <div className="grupo-acciones">

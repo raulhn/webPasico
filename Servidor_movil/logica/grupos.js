@@ -127,7 +127,9 @@ async function es_profesor(nid_grupo, nid_persona) {
 async function obtener_alumnos_grupo(nid_grupo) {
   try {
     const sql =
-      "select gma.nid_grupo, gma.nid_matricula_asignatura, p.nid_persona, p.nombre, p.primer_apellido, p.segundo_apellido from " +
+      "select gma.nid_grupo, gma.nid_matricula_asignatura, p.nid_persona, p.nombre, p.primer_apellido, p.segundo_apellido" +
+      ", (select count(*) from asistencia_grupo ag where ag.nid_grupo = gma.nid_grupo and ag.nid_matricula_asignatura = gma.nid_matricula_asignatura and ag.falta = 'S') as faltas" +
+      " from " +
       constantes.ESQUEMA +
       ".grupos_matricula_asignatura gma, " +
       constantes.ESQUEMA +
