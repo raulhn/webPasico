@@ -1,5 +1,6 @@
 const gestorCursos = require("../logica/curso.js");
 const servletComun = require("./servlet_comun.js");
+const constantes = require("../constantes.js");
 
 function registrarCurso(req, res) {
   servletComun.comprobacionAccesoAPIKey(req, res, async () => {
@@ -14,7 +15,7 @@ function registrarCurso(req, res) {
         nid_curso,
         descripcion,
         ano,
-        fecha_actualizacion
+        fecha_actualizacion,
       );
 
       gestorCursos
@@ -42,24 +43,21 @@ function registrarCurso(req, res) {
   });
 }
 
-
 async function obtenerCursos(req, res) {
-try{
-  const cursos = await gestorCursos.obtenerCursos();
-  res.status(200).send({
-    error: false,
-    cursos: cursos
-  });
+  try {
+    const cursos = await gestorCursos.obtenerCursos();
+    res.status(200).send({
+      error: false,
+      cursos: cursos,
+    });
+  } catch (error) {
+    console.error("Error al obtener los cursos:" + error.message);
+    res.status(400).send({
+      error: true,
+      mensaje: "Error al obtener los cursos",
+    });
+  }
 }
-catch (error) {
-  console.error("Error al obtener los cursos:" + error.message);
-  res.status(400).send({
-    error: true,
-    mensaje: "Error al obtener los cursos",
-  });
-}
-}
-
 
 module.exports.registrarCurso = registrarCurso;
 module.exports.obtenerCursos = obtenerCursos;

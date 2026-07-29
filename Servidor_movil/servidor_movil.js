@@ -463,15 +463,16 @@ app.get("/obtener_grupos", servletGrupos.obtener_grupos);
 app.get("/obtener_grupos/:nid_curso", servletGrupos.obtener_grupos);
 app.post("/add_alumno_grupo", servletGrupos.add_alumno_grupo);
 app.post("/eliminar_alumno_grupo", servletGrupos.eliminar_alumno_grupo);
-app.post(
-  "/actualizar_horario_grupo",
-  servletGrupos.actualizar_horario_grupo,
-);
+app.post("/actualizar_horario_grupo", servletGrupos.actualizar_horario_grupo);
 app.get(
   "/obtener_asistencia_grupo/:nid_grupo/:fecha",
   servletGrupos.obtener_asistencia_grupo,
 );
 app.post("/guardar_asistencia_grupo", servletGrupos.guardar_asistencia_grupo);
+app.get(
+  "/obtener_asistencias_asisgnatura/:nid_asignatura/:nid_curso",
+  servletGrupos.obtener_asistencias_asignatura,
+);
 
 https
   .createServer(

@@ -281,6 +281,46 @@ async function guardar_asistencia_grupo(nid_grupo, fecha, asistencias) {
   }
 }
 
+async function obtener_asistencias_asignatura(nid_asignatura, nid_curso) {
+  try {
+    const sql =
+      "select p.nombre, p.primer_apellido, p.segundo_apellido, g.nombre as grupo, ag.fecha, ag.falta, ag.justificada, ag.causa " +
+      "from " +
+      constantes.ESQUEMA +
+      ".asistencia_grupo ag " +
+      "inner join " +
+      constantes.ESQUEMA +
+      ".grupos g on g.nid_grupo = ag.nid_grupo " +
+      "inner join " +
+      constantes.ESQUEMA +
+      ".grupos_matricula_asignatura gma on gma.nid_grupo = g.nid_grupo and gma.nid_matricula_asignatura = ag.nid_matricula_asignatura " +
+      "inner join " +
+      constantes.ESQUEMA +
+      ".matricula_asignatura ma on ma.nid_matricula_asignatura = gma.nid_matricula_asignatura " +
+      "inner join " +
+      constantes.ESQUEMA +
+      ".matricula m on m.nid_matricula = ma.nid_matricula " +
+      "inner join " +
+      constantes.ESQUEMA +
+      ".persona p on p.nid_persona = m.nid_persona " +
+      "where g.nid_asignatura = " +
+      conexion.dbConn.escape(nid_asignatura) +
+      " and g.nid_curso = " +
+      conexion.dbConn.escape(nid_curso) +
+      " order by ag.fecha desc, p.primer_apellido, p.segundo_apellido, p.nombre";
+
+    return await gestor_base_datos.consulta(sql);
+  } catch (err) {
+    console.log(
+      "grupos.js -> obtener_asistencias_asignatura: Error al obtener la asistencia de la asignatura: " +
+        err,
+    );
+    throw new Error(
+      "Se ha producido un error al obtener la asistencia de la asignatura",
+    );
+  }
+}
+
 module.exports.crear_grupo = crear_grupo;
 module.exports.borrar_grupo = borrar_grupo;
 module.exports.obtener_grupos = obtener_grupos;
@@ -291,3 +331,4 @@ module.exports.es_profesor = es_profesor;
 module.exports.obtener_alumnos_grupo = obtener_alumnos_grupo;
 module.exports.obtener_asistencia_grupo = obtener_asistencia_grupo;
 module.exports.guardar_asistencia_grupo = guardar_asistencia_grupo;
+module.exports.obtener_asistencias_asignatura = obtener_asistencias_asignatura;

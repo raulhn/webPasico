@@ -26,10 +26,7 @@ export const obtenerGrupos = async (nid_curso) => {
   const url = nid_curso
     ? `${URL_SERVICIO_MOVIL}obtener_grupos/${nid_curso}`
     : `${URL_SERVICIO_MOVIL}obtener_grupos`;
-  return await peticionServicio(
-    "GET",
-    url,
-  );
+  return await peticionServicio("GET", url);
 };
 
 // Add student to group service
@@ -92,5 +89,15 @@ export const guardarAsistenciaGrupo = async (nid_grupo, fecha, asistencias) => {
     "POST",
     `${URL_SERVICIO_MOVIL}guardar_asistencia_grupo`,
     { nid_grupo, fecha, asistencias },
+  );
+};
+
+export const obtenerAsistenciaAsignaturas = async (
+  nid_asignatura,
+  nid_curso,
+) => {
+  return await peticionServicio(
+    "GET",
+    `${URL_SERVICIO_MOVIL}obtener_asistencia_asignatura/${nid_asignatura}/${nid_curso}`,
   );
 };

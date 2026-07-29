@@ -323,6 +323,43 @@ async function guardar_asistencia_grupo(req, res) {
   }
 }
 
+async function obtener_asistencias_asignatura(req, res) {
+  try {
+    const roles_permitidos = [constantes.ADMINISTRADOR, constantes.DIRECTIVO];
+    const bPermisos = await servletComun.comprobarPermisos(
+      req,
+      res,
+      roles_permitidos,
+    );
+    if (!bPermisos) {
+      res.status(403).send({
+        error: true,
+        mensaje: "No tiene permisos para acceder a este recurso",
+      });
+      return;
+    }
+    let nid_asignatura = req.params.nid_asignatura;
+    const nid_curso = req.params.nid_curso;
+
+    const asistencias = await gestorCursos.obtenerAsistenciasAsignatura(
+      nid_asignatura,
+      nid_curso,
+    );
+    res.status(200).send({
+      error: false,
+      asistencias: asistencias,
+    });
+  } catch (error) {
+    console.error(
+      "Error al obtener las asistencias de la asignatura:" + error.message,
+    );
+    res.status(400).send({
+      error: true,
+      mensaje: "Error al obtener las asistencias de la asignatura",
+    });
+  }
+}
+
 module.exports.crear_grupo = crear_grupo;
 module.exports.eliminar_grupo = eliminar_grupo;
 module.exports.obtener_grupos = obtener_grupos;
@@ -332,3 +369,4 @@ module.exports.actualizar_horario_grupo = actualizar_horario_grupo;
 module.exports.obtener_alumnos_grupo = obtener_alumnos_grupo;
 module.exports.obtener_asistencia_grupo = obtener_asistencia_grupo;
 module.exports.guardar_asistencia_grupo = guardar_asistencia_grupo;
+module.exports.obtener_asistencias_asignatura = obtener_asistencias_asignatura;
