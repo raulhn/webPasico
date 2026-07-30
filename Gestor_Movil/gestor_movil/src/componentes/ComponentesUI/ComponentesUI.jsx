@@ -358,9 +358,11 @@ function removeAccents(text) {
 export function DataTable({ cabeceras, datos, accion = (e) => {} }) {
   const [filtro, setFiltro] = useState("");
   const [datosFiltrados, setDatosFiltrados] = useState(datos);
-  const [paginaActual, setPaginaActual] = useState(1);
-  const [seleccionado, setSeleccionado] = useState(null);
   const TAM_PAGINA = 10;
+  const [paginaActual, setPaginaActual] = useState(
+    Math.min(1, datosFiltrados.length / TAM_PAGINA),
+  );
+  const [seleccionado, setSeleccionado] = useState(null);
 
   function obtiene_resultados(datos_filtrados) {
     if (!datos_filtrados || datos_filtrados.length === 0) {
