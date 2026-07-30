@@ -50,7 +50,7 @@ export default function AsistenciaAsignatura() {
   return (
     <>
       <Cabecera />
-      <div className="contenedor">
+      <div className="contenedor" style={{ paddingTop: "60px" }}>
         <Selector
           opciones={elementos_cursos}
           setValor={setCursoSeleccionado}
