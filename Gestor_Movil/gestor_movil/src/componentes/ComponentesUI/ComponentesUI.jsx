@@ -364,6 +364,10 @@ export function DataTable({ cabeceras, datos, accion = (e) => {} }) {
   );
   const [seleccionado, setSeleccionado] = useState(null);
 
+  useEffect(() => {
+    setPaginaActual(Math.min(1, datos.length / TAM_PAGINA));
+  }, [datos]);
+
   function obtiene_resultados(datos_filtrados) {
     if (!datos_filtrados || datos_filtrados.length === 0) {
       return <div>No hay datos para mostrar</div>;
