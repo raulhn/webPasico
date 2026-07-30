@@ -462,14 +462,14 @@ export function DataTable({ cabeceras, datos, accion = (e) => {} }) {
         <button
           className="boton"
           onClick={() => setPaginaActual(1)}
-          disabled={paginaActual === 1}
+          disabled={Number(paginaActual) <= 1}
         >
           {"<<"}
         </button>
         <button
           className="boton"
           onClick={() => setPaginaActual(paginaActual - 1)}
-          disabled={paginaActual === 1}
+          disabled={Number(paginaActual) <= 1}
         >
           {"<"}
         </button>
@@ -481,7 +481,8 @@ export function DataTable({ cabeceras, datos, accion = (e) => {} }) {
           className="boton"
           onClick={() => setPaginaActual(paginaActual + 1)}
           disabled={
-            paginaActual === Math.ceil(datosFiltrados.length / TAM_PAGINA)
+            Number(paginaActual) >=
+            Math.ceil(datosFiltrados.length / TAM_PAGINA)
           }
         >
           {">"}
@@ -492,7 +493,8 @@ export function DataTable({ cabeceras, datos, accion = (e) => {} }) {
             setPaginaActual(Math.ceil(datosFiltrados.length / TAM_PAGINA))
           }
           disabled={
-            paginaActual === Math.ceil(datosFiltrados.length / TAM_PAGINA)
+            Number(paginaActual) >=
+            Math.ceil(datosFiltrados.length / TAM_PAGINA)
           }
         >
           {">>"}
