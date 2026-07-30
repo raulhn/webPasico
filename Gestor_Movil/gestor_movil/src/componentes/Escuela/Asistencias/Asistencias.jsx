@@ -164,7 +164,6 @@ export default function Asistencias() {
 
   return (
     <>
-      {" "}
       <Cabecera />
       <div className="contenedor" style={{ paddingTop: "60px" }}>
         <main className="asistencias-container">

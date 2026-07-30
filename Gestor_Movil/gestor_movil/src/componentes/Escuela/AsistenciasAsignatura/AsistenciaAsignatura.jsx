@@ -20,11 +20,7 @@ export default function AsistenciaAsignatura() {
 
   const filasAsistencias = asistencias.map((asistencia, indice) => [
     `${asistencia.fecha}-${asistencia.grupo}-${indice}`,
-    [
-      asistencia.nombre,
-      asistencia.primer_apellido,
-      asistencia.segundo_apellido,
-    ]
+    [asistencia.nombre, asistencia.primer_apellido, asistencia.segundo_apellido]
       .filter(Boolean)
       .join(" "),
     asistencia.grupo,
@@ -51,52 +47,57 @@ export default function AsistenciaAsignatura() {
   ];
 
   return (
-    <div className="contenedor">
-      <Selector
-        opciones={elementos_cursos}
-        setValor={setCursoSeleccionado}
-        valor={cursoSeleccionado}
-      />
-      <Selector
-        opciones={elementos_asignaturas}
-        setValor={setAsignaturaSeleccionada}
-        valor={asignaturaSeleccionada}
-      />
+    <>
+      <Cabecera />
+      <div className="contenedor">
+        <Selector
+          opciones={elementos_cursos}
+          setValor={setCursoSeleccionado}
+          valor={cursoSeleccionado}
+        />
+        <Selector
+          opciones={elementos_asignaturas}
+          setValor={setAsignaturaSeleccionada}
+          valor={asignaturaSeleccionada}
+        />
 
-      {(cargando || loadingCursos) && <p>Cargando opciones...</p>}
-      {(error || errorCursos) && (
-        <p>{error?.message || errorCursos?.message || "Error al cargar las opciones."}</p>
-      )}
+        {(cargando || loadingCursos) && <p>Cargando opciones...</p>}
+        {(error || errorCursos) && (
+          <p>
+            {error?.message ||
+              errorCursos?.message ||
+              "Error al cargar las opciones."}
+          </p>
+        )}
 
-      {cursoSeleccionado &&
-        asignaturaSeleccionada &&
-        cargandoAsistencias && <p>Cargando asistencias...</p>}
-      {cursoSeleccionado &&
-        asignaturaSeleccionada &&
-        errorAsistencias && (
+        {cursoSeleccionado && asignaturaSeleccionada && cargandoAsistencias && (
+          <p>Cargando asistencias...</p>
+        )}
+        {cursoSeleccionado && asignaturaSeleccionada && errorAsistencias && (
           <p>
             {errorAsistencias.message ||
               "No se han podido obtener las asistencias."}
           </p>
         )}
-      {cursoSeleccionado &&
-        asignaturaSeleccionada &&
-        !cargandoAsistencias &&
-        !errorAsistencias && (
-          <div className="tabla-container">
-            <DataTable
-              datos={filasAsistencias}
-              cabeceras={[
-                "Alumno",
-                "Grupo",
-                "Fecha",
-                "Estado",
-                "Justificada",
-                "Causa",
-              ]}
-            />
-          </div>
-        )}
+        {cursoSeleccionado &&
+          asignaturaSeleccionada &&
+          !cargandoAsistencias &&
+          !errorAsistencias && (
+            <div className="tabla-container">
+              <DataTable
+                datos={filasAsistencias}
+                cabeceras={[
+                  "Alumno",
+                  "Grupo",
+                  "Fecha",
+                  "Estado",
+                  "Justificada",
+                  "Causa",
+                ]}
+              />
+            </div>
+          )}
       </div>
+    </>
   );
 }
