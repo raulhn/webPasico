@@ -327,7 +327,7 @@ async function guardar_asistencia_grupo(req, res) {
 async function obtener_asistencias_asignatura(req, res) {
   try {
     const roles_permitidos = [constantes.ADMINISTRADOR, constantes.DIRECTIVO];
-    const bPermisos = await servletComun.comprobarPermisos(
+    const bPermisos = await servletComun.comprobarRol(
       req,
       res,
       roles_permitidos,
