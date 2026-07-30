@@ -98,6 +98,6 @@ export const obtenerAsistenciaAsignaturas = async (
 ) => {
   return await peticionServicio(
     "GET",
-    `${URL_SERVICIO_MOVIL}obtener_asistencia_asignatura/${nid_asignatura}/${nid_curso}`,
+    `${URL_SERVICIO_MOVIL}obtener_asistencias_asignatura/${nid_asignatura}/${nid_curso}`,
   );
 };

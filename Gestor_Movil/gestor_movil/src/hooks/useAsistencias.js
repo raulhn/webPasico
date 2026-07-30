@@ -1,33 +1,49 @@
 import { obtenerAsistenciaAsignaturas } from "../services/serviceGrupos";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 export const useAsistencias = (nid_asignatura, nid_curso) => {
   const [asistencias, setAsistencias] = useState([]);
-  const [cargando, setCargando] = useState(true);
+  const [cargando, setCargando] = useState(false);
   const [error, setError] = useState(null);
   const [refrescar, setRefrescar] = useState(false);
 
-  async function fetchAsistencias() {
+  const fetchAsistencias = useCallback(async () => {
     try {
-      const data = await obtenerAsistenciaAsignaturas(
+      const respuesta = await obtenerAsistenciaAsignaturas(
         nid_asignatura,
         nid_curso,
       );
-      setAsistencias(data);
+      if (respuesta.error) {
+        throw new Error(
+          respuesta.message ||
+            respuesta.mensaje ||
+            "No se han podido obtener las asistencias",
+        );
+      }
+      setAsistencias(
+        Array.isArray(respuesta.asistencias) ? respuesta.asistencias : [],
+      );
+      setError(null);
       setRefrescar(false);
     } catch (error) {
       setError(error);
+      setAsistencias([]);
       setRefrescar(false);
     } finally {
       setCargando(false);
     }
-  }
+  }, [nid_asignatura, nid_curso]);
 
   useEffect(() => {
     if (nid_asignatura && nid_curso) {
+      setCargando(true);
       fetchAsistencias();
+      return;
     }
-  }, [nid_asignatura, nid_curso, refrescar]);
+    setAsistencias([]);
+    setError(null);
+    setCargando(false);
+  }, [nid_asignatura, nid_curso, refrescar, fetchAsistencias]);
 
   function lanzarRefresco() {
     setCargando(true);

@@ -470,7 +470,7 @@ app.get(
 );
 app.post("/guardar_asistencia_grupo", servletGrupos.guardar_asistencia_grupo);
 app.get(
-  "/obtener_asistencias_asisgnatura/:nid_asignatura/:nid_curso",
+  "/obtener_asistencias_asignatura/:nid_asignatura/:nid_curso",
   servletGrupos.obtener_asistencias_asignatura,
 );
 

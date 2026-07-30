@@ -2,6 +2,7 @@ const gestor_grupos = require("../logica/grupos.js");
 const servletComun = require("./servlet_comun");
 const servletPersona = require("./servlet_persona.js");
 const gestor_profesor = require("../logica/profesores.js");
+const constantes = require("../constantes.js");
 
 async function crear_grupo(req, res) {
   try {
@@ -338,10 +339,10 @@ async function obtener_asistencias_asignatura(req, res) {
       });
       return;
     }
-    let nid_asignatura = req.params.nid_asignatura;
+    const nid_asignatura = req.params.nid_asignatura;
     const nid_curso = req.params.nid_curso;
 
-    const asistencias = await gestorCursos.obtenerAsistenciasAsignatura(
+    const asistencias = await gestor_grupos.obtener_asistencias_asignatura(
       nid_asignatura,
       nid_curso,
     );
