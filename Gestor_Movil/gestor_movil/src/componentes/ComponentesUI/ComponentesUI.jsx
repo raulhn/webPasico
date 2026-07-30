@@ -372,7 +372,9 @@ export function DataTable({ cabeceras, datos, accion = (e) => {} }) {
             <thead>
               <tr>
                 {cabeceras.map((cabecera, index) => (
-                  <th key={index}>{cabecera}</th>
+                  <th key={index} style={{ padding: "10px" }}>
+                    {cabecera}
+                  </th>
                 ))}
               </tr>
             </thead>
@@ -397,7 +399,11 @@ export function DataTable({ cabeceras, datos, accion = (e) => {} }) {
                   {fila.map((celda, indexCelda) => (
                     <td
                       key={indexCelda}
-                      style={indexCelda === 0 ? { display: "none" } : {}}
+                      style={
+                        indexCelda === 0
+                          ? { display: "none" }
+                          : { padding: "10px" }
+                      }
                     >
                       {celda}
                     </td>
