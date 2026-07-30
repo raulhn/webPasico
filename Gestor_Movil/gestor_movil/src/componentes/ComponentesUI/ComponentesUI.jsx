@@ -430,7 +430,7 @@ export function DataTable({ cabeceras, datos, accion = (e) => {} }) {
 
     if (!nuevosDatosFiltrados || nuevosDatosFiltrados.length === 0) {
       setDatosFiltrados([]);
-      setPaginaActual(Math.Min(1, datosFiltrados.length / TAM_PAGINA));
+      setPaginaActual(Math.min(1, datosFiltrados.length / TAM_PAGINA));
     } else {
       setDatosFiltrados(nuevosDatosFiltrados);
 
@@ -462,7 +462,7 @@ export function DataTable({ cabeceras, datos, accion = (e) => {} }) {
         <button
           className="boton"
           onClick={() =>
-            setPaginaActual(Math.Min(1, datosFiltrados.length / TAM_PAGINA))
+            setPaginaActual(Math.min(1, datosFiltrados.length / TAM_PAGINA))
           }
           disabled={Number(paginaActual) <= 1}
         >
