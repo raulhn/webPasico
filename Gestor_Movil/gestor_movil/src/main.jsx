@@ -17,12 +17,13 @@ import SelectorEvaluacionesProfesor from "./componentes/Escuela/SelectorEvaluaci
 import EvaluacionesProfesor from "./componentes/Escuela/EvaluacionesProfesor/EvaluacionesProfesor.jsx";
 import Registro from "./componentes/Usuarios/Registro/Registro.jsx";
 import RecuperarPassword from "./componentes/Usuarios/RecuperaPassword/RecuperaPassword.jsx";
-import Grupos from "./componentes/Escuela/Grupos/Grupos.jsx"
+import Grupos from "./componentes/Escuela/Grupos/Grupos.jsx";
 import DetalleGrupo from "./componentes/Escuela/Grupos/DetalleGrupo.jsx";
 import Asistencias from "./componentes/Escuela/Asistencias/Asistencias.jsx";
+import AsistenciaAsignatura from "./componentes/Escuela/AsistenciasAsignatura/AsistenciaAsignatura.jsx";
 
 import { URL_SUBPATH } from "./config/Constantes";
-import Agenda from "./componentes/ComponenteCalendario/Agenda/Agenda.jsx"
+import Agenda from "./componentes/ComponenteCalendario/Agenda/Agenda.jsx";
 
 createRoot(document.getElementById("root")).render(
   <UsuarioProvider>
@@ -91,6 +92,10 @@ createRoot(document.getElementById("root")).render(
           element={<DetalleGrupo />}
         />
 
+        <Route
+          path={URL_SUBPATH + "/asistenciasAsignatura"}
+          element={<AsistenciaAsignatura />}
+        />
       </Routes>
     </BrowserRouter>
   </UsuarioProvider>,
