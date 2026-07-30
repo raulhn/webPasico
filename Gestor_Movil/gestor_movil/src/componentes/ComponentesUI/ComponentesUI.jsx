@@ -430,7 +430,7 @@ export function DataTable({ cabeceras, datos, accion = (e) => {} }) {
 
     if (!nuevosDatosFiltrados || nuevosDatosFiltrados.length === 0) {
       setDatosFiltrados([]);
-      setPaginaActual(1);
+      setPaginaActual(Math.Min(1, TAM_PAGINA));
     } else {
       setDatosFiltrados(nuevosDatosFiltrados);
 
@@ -461,7 +461,7 @@ export function DataTable({ cabeceras, datos, accion = (e) => {} }) {
       <div className="paginacion">
         <button
           className="boton"
-          onClick={() => setPaginaActual(1)}
+          onClick={() => setPaginaActual(Math.Min(1, TAM_PAGINA))}
           disabled={Number(paginaActual) <= 1}
         >
           {"<<"}
