@@ -3,6 +3,7 @@ import { useCursos } from "../../../hooks/useCursos";
 import { DataTable, Selector } from "../../ComponentesUI/ComponentesUI";
 import { useState } from "react";
 import { useAsistencias } from "../../../hooks/useAsistencias";
+import Cabecera from "../../Cabecera/Cabecera";
 
 export default function AsistenciaAsignatura() {
   const [cursoSeleccionado, setCursoSeleccionado] = useState("");
