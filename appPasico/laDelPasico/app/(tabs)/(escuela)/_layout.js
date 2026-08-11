@@ -6,6 +6,7 @@ import { Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { CustomHeader } from "../../../componentes/cabecera.jsx";
 import { Stack } from "expo-router";
+import * as Constantes from "../../../config/constantes";
 
 import { useRol } from "../../../hooks/useRol"; // Asegúrate de que la ruta sea correcta
 
@@ -93,6 +94,19 @@ export default function DrawerLayout() {
           }}
         />
 
+        <Drawer.Screen
+          name="stackAsistenciaAsignaturas"
+          options={{
+            title: "Asistencias",
+            headerShown: false,
+            drawerItemStyle: esRol([
+              Constantes.ROL_ADMINISTRADOR,
+              Constantes.ROL_DIRECTIVO,
+            ])
+              ? {}
+              : { display: "none" },
+          }}
+        />
         <Drawer.Screen
           name="escuela_privada"
           options={{
