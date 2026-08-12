@@ -1,9 +1,17 @@
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
+
+import Animated, {
+  Extrapolate,
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from "react-native-reanimated";
+
 import {
   Pressable,
   Platform,
-  Touchable,
   TouchableOpacity,
   StyleSheet,
   View,
@@ -11,7 +19,6 @@ import {
   Text,
   FlatList,
   Modal,
-  KeyboardAvoidingView,
 } from "react-native";
 import { useState, useEffect } from "react";
 import { Link } from "expo-router";
@@ -893,6 +900,24 @@ export function ListaNavegable({
         </Link>
       )}
     />
+  );
+}
+
+export function DropDown({ cabecera, cuerpo }) {
+  const isVisible = useSharedValue(0);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    height: interpolate(isVisible.value, [0, 1], [0, 100], Extrapolate.CLAMP),
+    opacity: withSpring(isVisible.value),
+  }));
+
+  return (
+    <View>
+      <Pressable onPress={() => (isVisible.value = isVisible.value ? 0 : 1)}>
+        {cabecera()}
+      </Pressable>
+      <Animated.View style={[animatedStyle]}>{cuerpo()}</Animated.View>
+    </View>
   );
 }
 

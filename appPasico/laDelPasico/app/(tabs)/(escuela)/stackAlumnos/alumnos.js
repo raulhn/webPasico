@@ -5,18 +5,7 @@ import {
 import { useContext, useState } from "react";
 import { AuthContext } from "../../../../providers/AuthContext";
 import { useAlumnosAsignaturaProfesor } from "../../../../hooks/escuela/useAlumnos";
-import {
-  usePersonas,
-  useListadoPersonas,
-} from "../../../../hooks/personas/usePersonas";
 import ListaAlumnos from "../../../../componentes/componentesEscuela/ListaAlumnos";
-import {
-  ROL_ADMINISTRADOR,
-  ROL_DIRECTIVO,
-  ESCUELA,
-} from "../../../../config/constantes";
-
-import { useRol } from "../../../../hooks/useRol";
 
 export default function Alumnos() {
   const [nidCurso, setNidCurso] = useState(null);

@@ -3,9 +3,12 @@ import { useAsignaturas } from "../../../../hooks/escuela/useAsignaturas";
 import { useCursos } from "../../../../hooks/escuela/useCurso";
 
 import { useState, useContext } from "react";
-import { View } from "react-native";
+import { View, FlatList } from "react-native";
 import { AuthContext } from "../../../../providers/AuthContext";
-import { EntradaGroupRadioButton } from "../../../../componentes/componentesUI/ComponentesUI";
+import {
+  EntradaGroupRadioButton,
+  DropDown,
+} from "../../../../componentes/componentesUI/ComponentesUI";
 
 export default function AsistenciaAsignaturas() {
   const [nidAsignatura, setNidAsignatura] = useState(1);
@@ -33,6 +36,11 @@ export default function AsistenciaAsignaturas() {
     valor: curso.nid_curso,
   }));
 
+  console.log(
+    "asistenciaAsignaturas.js -> asignaturas, cursos, asistencias",
+    asistencias
+  );
+
   return (
     <>
       <View>
@@ -53,6 +61,32 @@ export default function AsistenciaAsignaturas() {
           </>
         )}
       </View>
+      <FlatList
+        data={asistencias}
+        renderItem={({ item }) => (
+          <>
+            <DropDown
+              cabecera={() => {
+                return (
+                  <View
+                    style={{ padding: 10, backgroundColor: "#f0f0f0" }}
+                  ></View>
+                );
+              }}
+              cuerpo={() => {
+                return <View></View>;
+              }}
+            />
+          </>
+        )}
+        keyExtractor={(item) => item.nid_asistencia}
+        horizontal={true}
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{
+          flexDirection: "column",
+          gap: 10,
+        }}
+      />
     </>
   );
 }

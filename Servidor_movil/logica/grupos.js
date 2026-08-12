@@ -284,7 +284,7 @@ async function guardar_asistencia_grupo(nid_grupo, fecha, asistencias) {
 async function obtener_asistencias_asignatura(nid_asignatura, nid_curso) {
   try {
     const sql =
-      "select p.nombre, p.primer_apellido, p.segundo_apellido, g.nombre as grupo, ag.fecha, ag.falta, ag.justificada, ag.causa " +
+      "select p.nid_persona, p.nombre, p.primer_apellido, p.segundo_apellido, g.nombre as grupo, ag.fecha, ag.falta, ag.justificada, ag.causa, ag.nid_asistencia_grupo " +
       "from " +
       constantes.ESQUEMA +
       ".asistencia_grupo ag " +
