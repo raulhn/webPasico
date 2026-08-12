@@ -3,7 +3,7 @@ import { useAsignaturas } from "../../../../hooks/escuela/useAsignaturas";
 import { useCursos } from "../../../../hooks/escuela/useCurso";
 
 import { useState, useContext } from "react";
-import { View, FlatList } from "react-native";
+import { View, FlatList, Text } from "react-native";
 import { AuthContext } from "../../../../providers/AuthContext";
 import {
   EntradaGroupRadioButton,
@@ -36,10 +36,47 @@ export default function AsistenciaAsignaturas() {
     valor: curso.nid_curso,
   }));
 
-  console.log(
-    "asistenciaAsignaturas.js -> asignaturas, cursos, asistencias",
-    asistencias
+  const conjunto_personas = new Set(
+    asistencias.map((asistencia) => {
+      return {
+        nid_persona: asistencia.nid_persona,
+        nombre: asistencia.nombre,
+        primer_apellido: asistencia.primer_apellido,
+        segundo_apellido: asistencia.segundo_apellido,
+      };
+    })
   );
+
+  const array_personas = conjunto_personas ? Array.from(personas) : [];
+
+  function asistenciaPersona(nid_persona) {
+    const asistencias_persona = asistencias.filter(
+      (asistencia) => asistencia.nid_persona === nid_persona
+    );
+
+    const persona = array_personas.find((p) => p.nid_persona === nid_persona);
+    return (
+      <DropDown
+        cabecera={() => {
+          return (
+            <View style={{ padding: 10, backgroundColor: "#f0f0f0" }}>
+              <Text>
+                {persona.nombre} {persona.primer_apellido}{" "}
+                {persona.segundo_apellido}
+              </Text>
+            </View>
+          );
+        }}
+        cuerpo={() => {
+          return asistencias_persona.map((item) => (
+            <View key={item.nid_asistencia_grupo}>
+              <Text>{item.fecha}</Text>
+            </View>
+          ));
+        }}
+      />
+    );
+  }
 
   return (
     <>
@@ -62,24 +99,9 @@ export default function AsistenciaAsignaturas() {
         )}
       </View>
       <FlatList
-        data={asistencias}
-        renderItem={({ item }) => (
-          <>
-            <DropDown
-              cabecera={() => {
-                return (
-                  <View
-                    style={{ padding: 10, backgroundColor: "#f0f0f0" }}
-                  ></View>
-                );
-              }}
-              cuerpo={() => {
-                return <View></View>;
-              }}
-            />
-          </>
-        )}
-        keyExtractor={(item) => item.nid_asistencia}
+        data={array_personas}
+        renderItem={({ item }) => <>{asistenciaPersona(item.nid_persona)} </>}
+        keyExtractor={(item) => item.nid_persona}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{
