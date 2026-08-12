@@ -1,4 +1,4 @@
-import serviceAsistencias from "../../servicios/serviceAsistencias.js";
+import { obtenerAsistenciasAsignatura } from "../../servicios/serviceAsistencias.js";
 import { useState, useEffect } from "react";
 
 export const useAsistencias = (nid_asignatura, nid_curso, cerrar_sesion) => {
@@ -9,19 +9,23 @@ export const useAsistencias = (nid_asignatura, nid_curso, cerrar_sesion) => {
 
   async function fetchAsistencias() {
     try {
-      setLoading(true);
-      const data = await serviceAsistencias.obtenerAsistenciasAsignatura(
-        nid_asignatura,
-        nid_curso,
-        cerrar_sesion
-      );
+      setCargando(true);
+      if (!nid_asignatura || !nid_curso) {
+        const data = await obtenerAsistenciasAsignatura(
+          nid_asignatura,
+          nid_curso,
+          cerrar_sesion
+        );
 
-      setAsistencias(data.asistencias || []);
-      setLoading(false);
+        setAsistencias(data.asistencias || []);
+      } else {
+        setAsistencias([]);
+      }
+      setCargando(false);
+      return;
     } catch (error) {
       console.log("Error en useAsistencias:", error);
-      setLoading(false);
-      throw new Error("No se han podido cargar las asistencias.");
+      setCargando(false);
     }
   }
 

@@ -1,6 +1,6 @@
 import { useAsistencias } from "../../../../hooks/escuela/useAsistencias";
 import { useAsignaturas } from "../../../../hooks/escuela/useAsignaturas";
-import { useCursos } from "../../../../hooks/escuela/useCursos";
+import { useCursos } from "../../../../hooks/escuela/useCurso";
 
 import { useState, useContext } from "react";
 import { View } from "react-native";
@@ -24,14 +24,16 @@ export default function AsistenciaAsignaturas() {
     useAsignaturas(cerrarSesion);
 
   const opcionesAsignaturas = asignaturas.map((asignatura) => ({
-    etiqueta: asignatura.nombre,
+    etiqueta: asignatura.descripcion,
     valor: asignatura.nid_asignatura,
   }));
 
   const opcionesCursos = cursos.map((curso) => ({
-    etiqueta: curso.nombre,
+    etiqueta: curso.descripcion,
     valor: curso.nid_curso,
   }));
+
+  console.log("Asistencias:", asistencias);
 
   return (
     <>
@@ -42,13 +44,13 @@ export default function AsistenciaAsignaturas() {
               titulo="Curso"
               opciones={opcionesCursos}
               valorSeleccionado={nidCurso}
-              onValorSeleccionado={setNidCurso}
+              setValorSeleccionado={setNidCurso}
             />
             <EntradaGroupRadioButton
               titulo="Asignatura"
               opciones={opcionesAsignaturas}
               valorSeleccionado={nidAsignatura}
-              onValorSeleccionado={setNidAsignatura}
+              setValorSeleccionado={setNidAsignatura}
             />
           </>
         )}
