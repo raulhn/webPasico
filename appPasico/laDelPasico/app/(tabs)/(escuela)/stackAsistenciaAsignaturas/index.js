@@ -1,6 +1,10 @@
 import { useAsistencias } from "../../../../hooks/escuela/useAsistencias";
 import { useAsignaturas } from "../../../../hooks/escuela/useAsignaturas";
 import { useCursos } from "../../../../hooks/escuela/useCurso";
+import {
+  obtenerFechaFormateada,
+  obtenerFechaFormateadaSoloFecha,
+} from "../../../../comun/fechas";
 
 import { useState, useContext } from "react";
 import { View, FlatList, Text } from "react-native";
@@ -36,41 +40,39 @@ export default function AsistenciaAsignaturas() {
     valor: curso.nid_curso,
   }));
 
-  const conjunto_personas = new Set(
-    asistencias.map((asistencia) => {
-      return {
-        nid_persona: asistencia.nid_persona,
-        nombre: asistencia.nombre,
-        primer_apellido: asistencia.primer_apellido,
-        segundo_apellido: asistencia.segundo_apellido,
-      };
-    })
+  const lista_nid_persona = asistencias.map(
+    (asistencia) => asistencia.nid_persona
   );
 
-  const array_personas = conjunto_personas ? Array.from(personas) : [];
+  const conjunto_personas = new Set(lista_nid_persona);
 
-  function asistenciaPersona(nid_persona) {
+  const array_personas = conjunto_personas ? Array.from(conjunto_personas) : [];
+
+  function AsistenciaPersona({ nid_persona }) {
     const asistencias_persona = asistencias.filter(
-      (asistencia) => asistencia.nid_persona === nid_persona
+      (asistencia) =>
+        asistencia.nid_persona === nid_persona && asistencia.falta === "S"
     );
 
-    const persona = array_personas.find((p) => p.nid_persona === nid_persona);
+    const persona = asistencias.find((p) => p.nid_persona === nid_persona);
+
     return (
       <DropDown
         cabecera={() => {
           return (
             <View style={{ padding: 10, backgroundColor: "#f0f0f0" }}>
               <Text>
-                {persona.nombre} {persona.primer_apellido}{" "}
+                {persona.nombre} {persona.primer_apellido}
                 {persona.segundo_apellido}
               </Text>
+              <Text>{asistencias_persona.length} Faltas</Text>
             </View>
           );
         }}
         cuerpo={() => {
           return asistencias_persona.map((item) => (
             <View key={item.nid_asistencia_grupo}>
-              <Text>{item.fecha}</Text>
+              <Text>{obtenerFechaFormateadaSoloFecha(item.fecha)}</Text>
             </View>
           ));
         }}
@@ -100,8 +102,12 @@ export default function AsistenciaAsignaturas() {
       </View>
       <FlatList
         data={array_personas}
-        renderItem={({ item }) => <>{asistenciaPersona(item.nid_persona)} </>}
-        keyExtractor={(item) => item.nid_persona}
+        renderItem={({ item }) => (
+          <>
+            <AsistenciaPersona nid_persona={item} />
+          </>
+        )}
+        keyExtractor={(item) => item}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{
