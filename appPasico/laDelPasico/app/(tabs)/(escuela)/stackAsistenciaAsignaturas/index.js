@@ -14,8 +14,8 @@ export default function AsistenciaAsignaturas() {
   const { cerrarSesion } = useContext(AuthContext);
 
   const { asistencias, refrescarAsistencias, cargando, error } = useAsistencias(
-    nidAsignatura, // nid_asignatura
-    nidCurso, // nid_curso
+    nidAsignatura.valor, // nid_asignatura
+    nidCurso.valor, // nid_curso
     cerrarSesion // función para cerrar sesión
   );
 
@@ -32,8 +32,6 @@ export default function AsistenciaAsignaturas() {
     etiqueta: curso.descripcion,
     valor: curso.nid_curso,
   }));
-
-  console.log("Asistencias:", asistencias);
 
   return (
     <>

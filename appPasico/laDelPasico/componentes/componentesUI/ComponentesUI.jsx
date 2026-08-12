@@ -895,6 +895,7 @@ export function ListaNavegable({
     />
   );
 }
+
 const estilos = StyleSheet.create({
   boton: {
     padding: 10,

@@ -10,7 +10,8 @@ export const useAsistencias = (nid_asignatura, nid_curso, cerrar_sesion) => {
   async function fetchAsistencias() {
     try {
       setCargando(true);
-      if (!nid_asignatura || !nid_curso) {
+
+      if (nid_asignatura && nid_curso) {
         const data = await obtenerAsistenciasAsignatura(
           nid_asignatura,
           nid_curso,
@@ -30,6 +31,11 @@ export const useAsistencias = (nid_asignatura, nid_curso, cerrar_sesion) => {
   }
 
   useEffect(() => {
+    console.log(
+      "useAsistencias: nid_asignatura, nid_curso",
+      nid_asignatura,
+      nid_curso
+    );
     fetchAsistencias();
   }, [nid_asignatura, nid_curso, cerrar_sesion, refrescar]);
 

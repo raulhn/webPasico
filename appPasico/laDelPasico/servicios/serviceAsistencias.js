@@ -11,9 +11,9 @@ export function obtenerAsistenciasAsignatura(
       .peticionSesion(
         "GET",
         constantes.URL_SERVICIO_MOVIL +
-          "obtener_asistencias_asignatura?nid_asignatura=" +
+          "obtener_asistencias_asignatura/" +
           nid_asignatura +
-          "&nid_curso=" +
+          "/" +
           nid_curso,
         null,
         cerrar_sesion
