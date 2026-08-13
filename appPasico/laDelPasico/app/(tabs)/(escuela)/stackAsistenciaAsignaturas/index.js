@@ -7,7 +7,7 @@ import {
 } from "../../../../comun/fechas";
 
 import { useState, useContext } from "react";
-import { View, FlatList, Text, StyleSheet, ScrollView } from "react-native";
+import { View, FlatList, Text, StyleSheet } from "react-native";
 import { AuthContext } from "../../../../providers/AuthContext";
 import {
   EntradaGroupRadioButton,
@@ -83,49 +83,46 @@ export default function AsistenciaAsignaturas() {
   }
 
   return (
-    <ScrollView style={estilos.contenedor}>
-      <View style={estilos.filtros}>
-        {asignaturas.length > 0 && cursos.length > 0 && (
-          <>
-            <Text>Curso</Text>
-            <EntradaGroupRadioButton
-              titulo="Curso"
-              opciones={opcionesCursos}
-              valorSeleccionado={nidCurso}
-              setValorSeleccionado={setNidCurso}
-            />
-            <Text>Asignatura</Text>
-            <EntradaGroupRadioButton
-              titulo="Asignatura"
-              opciones={opcionesAsignaturas}
-              valorSeleccionado={nidAsignatura}
-              setValorSeleccionado={setNidAsignatura}
-            />
-          </>
-        )}
-      </View>
-      {array_personas.length === 0 && (
-        <View style={{ padding: 10 }}>
-          <Text>No hay faltas registradas para esta asignatura y curso.</Text>
-        </View>
-      )}
-      <FlatList
-        data={array_personas}
-        renderItem={({ item }) => (
-          <>
-            <AsistenciaPersona nid_persona={item} />
-          </>
-        )}
-        keyExtractor={(item) => item}
-        horizontal={true}
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{
-          flexDirection: "column",
-          gap: 10,
-          width: "100%",
-        }}
-      />
-    </ScrollView>
+    <FlatList
+      style={estilos.contenedor}
+      contentContainerStyle={estilos.contenidoLista}
+      data={array_personas}
+      ListHeaderComponent={
+        <>
+          <View style={estilos.filtros}>
+            {asignaturas.length > 0 && cursos.length > 0 && (
+              <>
+                <Text>Curso</Text>
+                <EntradaGroupRadioButton
+                  titulo="Curso"
+                  opciones={opcionesCursos}
+                  valorSeleccionado={nidCurso}
+                  setValorSeleccionado={setNidCurso}
+                />
+                <Text>Asignatura</Text>
+                <EntradaGroupRadioButton
+                  titulo="Asignatura"
+                  opciones={opcionesAsignaturas}
+                  valorSeleccionado={nidAsignatura}
+                  setValorSeleccionado={setNidAsignatura}
+                />
+              </>
+            )}
+          </View>
+          {array_personas.length === 0 && (
+            <View style={estilos.mensajeVacio}>
+              <Text>
+                No hay faltas registradas para esta asignatura y curso.
+              </Text>
+            </View>
+          )}
+        </>
+      }
+      renderItem={({ item }) => <AsistenciaPersona nid_persona={item} />}
+      keyExtractor={(item) => item.toString()}
+      ItemSeparatorComponent={() => <View style={estilos.separador} />}
+      showsVerticalScrollIndicator={false}
+    />
   );
 }
 
@@ -139,8 +136,12 @@ const estilos = StyleSheet.create({
   },
   contenedor: {
     flex: 1,
-    padding: 10,
     backgroundColor: "#ffffff",
+  },
+  contenidoLista: {
+    flexGrow: 1,
+    padding: 10,
+    paddingBottom: 24,
   },
   cabecera: {
     padding: 10,
@@ -149,5 +150,11 @@ const estilos = StyleSheet.create({
   cuerpo: {
     padding: 10,
     backgroundColor: "#ffffff",
+  },
+  mensajeVacio: {
+    paddingVertical: 10,
+  },
+  separador: {
+    height: 10,
   },
 });
