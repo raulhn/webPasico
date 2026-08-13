@@ -97,7 +97,7 @@ export default function DrawerLayout() {
         <Drawer.Screen
           name="stackAsistenciaAsignaturas"
           options={{
-            title: "Asistencias por Asignatura",
+            title: "Consulta de Asistencias",
             headerShown: false,
             drawerItemStyle: esRol([
               Constantes.ROL_ADMINISTRADOR,
