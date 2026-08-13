@@ -157,39 +157,41 @@ export default function Grupos() {
       </ScrollView>
 
       <Modal visible={mostrarFormulario} transparent animationType="fade">
-        <View style={[estilos.fondoModal]}>
-          <ScrollView contentContainerStyle={estilos.modal}>
-            <Text style={estilos.titulo}>Crear grupo</Text>
-            <Text>Nombre del grupo</Text>
-            <EntradaTexto
-              placeholder="Nombre del grupo"
-              valor={nombre}
-              setValor={setNombre}
-              ancho={280}
-            />
-            <Text>Curso</Text>
-            <EntradaGroupRadioButton
-              titulo="Curso"
-              opciones={opcionesCursos}
-              valor={cursoNuevo}
-              setValorSeleccionado={setCursoNuevo}
-            />
-            <Text>Asignatura</Text>
-            <EntradaGroupRadioButton
-              titulo="Asignatura"
-              opciones={opcionesAsignaturas}
-              valor={asignatura}
-              setValorSeleccionado={setAsignatura}
-            />
-            <View style={estilos.acciones}>
-              <Boton nombre="Crear" onPress={crearGrupo} />
-              <Boton
-                nombre="Cancelar"
-                color="#777"
-                onPress={() => setMostrarFormulario(false)}
+        <View style={estilos.fondoModal}>
+          <View style={estilos.contenedorModal}>
+            <ScrollView contentContainerStyle={estilos.modal}>
+              <Text style={estilos.titulo}>Crear grupo</Text>
+              <Text>Nombre del grupo</Text>
+              <EntradaTexto
+                placeholder="Nombre del grupo"
+                valor={nombre}
+                setValor={setNombre}
+                ancho={280}
               />
-            </View>
-          </ScrollView>
+              <Text>Curso</Text>
+              <EntradaGroupRadioButton
+                titulo="Curso"
+                opciones={opcionesCursos}
+                valor={cursoNuevo}
+                setValorSeleccionado={setCursoNuevo}
+              />
+              <Text>Asignatura</Text>
+              <EntradaGroupRadioButton
+                titulo="Asignatura"
+                opciones={opcionesAsignaturas}
+                valor={asignatura}
+                setValorSeleccionado={setAsignatura}
+              />
+              <View style={estilos.acciones}>
+                <Boton nombre="Crear" onPress={crearGrupo} />
+                <Boton
+                  nombre="Cancelar"
+                  color="#777"
+                  onPress={() => setMostrarFormulario(false)}
+                />
+              </View>
+            </ScrollView>
+          </View>
         </View>
       </Modal>
       <ModalAviso
@@ -222,18 +224,13 @@ const estilos = StyleSheet.create({
   nombreGrupo: { fontSize: 18, fontWeight: "bold" },
   vacio: { textAlign: "center", marginVertical: 12 },
   fondoModal: {
-    backgroundColor: "rgba(0,0,0,0.45)",
-    padding: 20,
-    alignItems: "center",
     flex: 1,
-  },
-  modal: {
+    backgroundColor: "rgba(0,0,0,0.45)",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "white",
-    borderRadius: 8,
     padding: 20,
-    gap: 14,
   },
+  contenedorModal: { width: "100%", maxHeight: "90%" },
+  modal: { backgroundColor: "white", borderRadius: 8, padding: 20, gap: 14 },
   acciones: { flexDirection: "row", justifyContent: "center", gap: 10 },
 });
