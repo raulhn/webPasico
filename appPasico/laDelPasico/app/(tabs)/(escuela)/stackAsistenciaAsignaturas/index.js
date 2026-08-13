@@ -81,8 +81,8 @@ export default function AsistenciaAsignaturas() {
   }
 
   return (
-    <>
-      <View>
+    <View style={estilos.contenedor}>
+      <View style={estilos.filtros}>
         {asignaturas.length > 0 && cursos.length > 0 && (
           <>
             <EntradaGroupRadioButton
@@ -115,6 +115,27 @@ export default function AsistenciaAsignaturas() {
           gap: 10,
         }}
       />
-    </>
+    </View>
   );
 }
+
+const estilos = StyleSheet.create({
+  filtros: {
+    justifyContent: "space-between",
+    flexDirection: "vertical",
+    gap: 10,
+  },
+  contenedor: {
+    flex: 1,
+    padding: 10,
+    backgroundColor: "#ffffff",
+  },
+  cabecera: {
+    padding: 10,
+    backgroundColor: "#f0f0f0",
+  },
+  cuerpo: {
+    padding: 10,
+    backgroundColor: "#ffffff",
+  },
+});
