@@ -327,21 +327,36 @@ async function guardar_asistencia_grupo(req, res) {
 async function obtener_asistencias_asignatura(req, res) {
   try {
     const roles_permitidos = [constantes.ADMINISTRADOR, constantes.DIRECTIVO];
+    const nid_asignatura = req.params.nid_asignatura;
+    const nid_curso = req.params.nid_curso;
+
     const bPermisos = await servletComun.comprobarRol(
       req,
       res,
       roles_permitidos,
     );
     if (!bPermisos) {
-      res.status(403).send({
-        error: true,
-        mensaje: "No tiene permisos para acceder a este recurso",
-      });
-      return;
-    }
-    const nid_asignatura = req.params.nid_asignatura;
-    const nid_curso = req.params.nid_curso;
+      const rol_permitido_profesor = [constantes.PROFESOR];
+      const bPermisosProfesor = await servletComun.comprobarRol(
+        req,
+        res,
+        rol_permitido_profesor,
+      );
+      const nid_persona = await servletPersona.obtenerNidPersona(req, res);
 
+      const bEsProfesor = await gestor_profesor.esProfesor(
+        nid_persona,
+        nid_asignatura,
+      );
+
+      if (!bPermisosProfesor && !bEsProfesor) {
+        res.status(403).send({
+          error: true,
+          mensaje: "No tiene permisos para acceder a este recurso",
+        });
+        return;
+      }
+    }
     const asistencias = await gestor_grupos.obtener_asistencias_asignatura(
       nid_asignatura,
       nid_curso,

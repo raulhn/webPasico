@@ -7,7 +7,7 @@ export default function StackGrupos() {
       <Stack.Screen
         name="index"
         options={{
-          title: "Asistencia por asignnatura",
+          title: "Asistencia por asignatura",
           header: (props) => <CustomHeaderEscuela {...props} />,
         }}
       />

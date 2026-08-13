@@ -102,6 +102,7 @@ export default function DrawerLayout() {
             drawerItemStyle: esRol([
               Constantes.ROL_ADMINISTRADOR,
               Constantes.ROL_DIRECTIVO,
+              Constantes.ROL_PROFESOR,
             ])
               ? {}
               : { display: "none" },

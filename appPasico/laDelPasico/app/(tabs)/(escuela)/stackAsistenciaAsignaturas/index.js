@@ -1,24 +1,32 @@
 import { useAsistencias } from "../../../../hooks/escuela/useAsistencias";
-import { useAsignaturas } from "../../../../hooks/escuela/useAsignaturas";
+import {
+  useAsignaturas,
+  useAsignaturasProfesor,
+} from "../../../../hooks/escuela/useAsignaturas";
 import { useCursos } from "../../../../hooks/escuela/useCurso";
+import { useRol } from "../../../../hooks/useRol";
 import {
   obtenerFechaFormateada,
   obtenerFechaFormateadaSoloFecha,
 } from "../../../../comun/fechas";
 
 import { useState, useContext } from "react";
-import { View, FlatList, Text, StyleSheet } from "react-native";
+import { View, FlatList, Text, StyleSheet, RefreshControl } from "react-native";
 import { AuthContext } from "../../../../providers/AuthContext";
 import {
   EntradaGroupRadioButton,
   DropDown,
 } from "../../../../componentes/componentesUI/ComponentesUI";
 
+import Constantes from "../../../../config/constantes";
+
 export default function AsistenciaAsignaturas() {
   const [nidAsignatura, setNidAsignatura] = useState(1);
   const [nidCurso, setNidCurso] = useState(1);
 
   const { cerrarSesion } = useContext(AuthContext);
+
+  const { esRol } = useRol(cerrarSesion);
 
   const { asistencias, refrescarAsistencias, cargando, error } = useAsistencias(
     nidAsignatura.valor, // nid_asignatura
@@ -29,11 +37,22 @@ export default function AsistenciaAsignaturas() {
   const { cursos, cargando: cargandoCursos } = useCursos(cerrarSesion);
   const { asignaturas, cargando: cargandoAsignaturas } =
     useAsignaturas(cerrarSesion);
+  const { asignaturasProfesor, cargando: cargandoAsignaturasProfesor } =
+    useAsignaturasProfesor(cerrarSesion);
 
-  const opcionesAsignaturas = asignaturas.map((asignatura) => ({
-    etiqueta: asignatura.descripcion,
-    valor: asignatura.nid_asignatura,
-  }));
+  let opcionesAsignaturas = [];
+
+  if (esRol([Constantes.ROL_ADMINISTRADOR, Constantes.ROL_DIRECTIVO])) {
+    opcionesAsignaturas = asignaturas.map((asignatura) => ({
+      etiqueta: asignatura.descripcion,
+      valor: asignatura.nid_asignatura,
+    }));
+  } else if (esRol([Constantes.ROL_PROFESOR])) {
+    opcionesAsignaturas = asignaturasProfesor.map((asignatura) => ({
+      etiqueta: asignatura.descripcion,
+      valor: asignatura.nid_asignatura,
+    }));
+  }
 
   const opcionesCursos = cursos.map((curso) => ({
     etiqueta: curso.descripcion,
@@ -74,7 +93,15 @@ export default function AsistenciaAsignaturas() {
         cuerpo={() => {
           return asistencias_persona.map((item) => (
             <View key={item.nid_asistencia_grupo}>
-              <Text>{obtenerFechaFormateadaSoloFecha(item.fecha)}</Text>
+              <Text>
+                <Text style={{ fontWeight: "bold" }}>
+                  {obtenerFechaFormateadaSoloFecha(item.fecha)}
+                </Text>
+                {" - "}
+                {item.justificada === "S" ? "Justificada - " : "No Justificada"}
+                {item.causa}
+                {}
+              </Text>
             </View>
           ));
         }}
@@ -87,25 +114,37 @@ export default function AsistenciaAsignaturas() {
       style={estilos.contenedor}
       contentContainerStyle={estilos.contenidoLista}
       data={array_personas}
+      refreshControl={
+        <RefreshControl
+          refreshing={cargando}
+          onRefresh={() => {
+            refrescarAsistencias();
+          }}
+        />
+      }
       ListHeaderComponent={
         <>
           <View style={estilos.filtros}>
             {asignaturas.length > 0 && cursos.length > 0 && (
               <>
-                <Text>Curso</Text>
-                <EntradaGroupRadioButton
-                  titulo="Curso"
-                  opciones={opcionesCursos}
-                  valorSeleccionado={nidCurso}
-                  setValorSeleccionado={setNidCurso}
-                />
-                <Text>Asignatura</Text>
-                <EntradaGroupRadioButton
-                  titulo="Asignatura"
-                  opciones={opcionesAsignaturas}
-                  valorSeleccionado={nidAsignatura}
-                  setValorSeleccionado={setNidAsignatura}
-                />
+                <View style={estilos.filtroCampo}>
+                  <Text>Curso</Text>
+                  <EntradaGroupRadioButton
+                    titulo="Curso"
+                    opciones={opcionesCursos}
+                    valorSeleccionado={nidCurso}
+                    setValorSeleccionado={setNidCurso}
+                  />
+                </View>
+                <View style={estilos.filtroCampo}>
+                  <Text>Asignatura</Text>
+                  <EntradaGroupRadioButton
+                    titulo="Asignatura"
+                    opciones={opcionesAsignaturas}
+                    valorSeleccionado={nidAsignatura}
+                    setValorSeleccionado={setNidAsignatura}
+                  />
+                </View>
               </>
             )}
           </View>
@@ -128,11 +167,17 @@ export default function AsistenciaAsignaturas() {
 
 const estilos = StyleSheet.create({
   filtros: {
+    justifyContent: "space-around",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    paddingBottom: 10,
+  },
+  filtroCampo: {
     justifyContent: "space-between",
     flexDirection: "vertical",
     alignItems: "center",
     gap: 10,
-    paddingBottom: 10,
   },
   contenedor: {
     flex: 1,
