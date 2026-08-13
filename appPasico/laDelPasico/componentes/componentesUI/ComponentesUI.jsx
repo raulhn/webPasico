@@ -2,11 +2,9 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 
 import Animated, {
-  Extrapolate,
-  interpolate,
   useAnimatedStyle,
   useSharedValue,
-  withSpring,
+  withTiming,
 } from "react-native-reanimated";
 
 import {
@@ -904,19 +902,68 @@ export function ListaNavegable({
 }
 
 export function DropDown({ cabecera, cuerpo }) {
-  const isVisible = useSharedValue(0);
+  const [abierto, setAbierto] = useState(false);
+  const progreso = useSharedValue(0);
+  const alturaCuerpo = useSharedValue(0);
 
   const animatedStyle = useAnimatedStyle(() => ({
-    height: interpolate(isVisible.value, [0, 1], [0, 100], Extrapolate.CLAMP),
-    opacity: withSpring(isVisible.value),
+    height: withTiming(progreso.value * alturaCuerpo.value, {
+      duration: 260,
+    }),
+    opacity: withTiming(progreso.value, { duration: 180 }),
+    transform: [
+      {
+        translateY: withTiming(progreso.value ? 0 : -8, { duration: 260 }),
+      },
+    ],
   }));
 
+  const alternar = () => {
+    const siguienteEstado = !abierto;
+    setAbierto(siguienteEstado);
+    progreso.value = siguienteEstado ? 1 : 0;
+  };
+
   return (
-    <View>
-      <Pressable onPress={() => (isVisible.value = isVisible.value ? 0 : 1)}>
-        {cabecera()}
+    <View style={estilos.dropDown}>
+      <Pressable
+        accessibilityRole="button"
+        accessibilityState={{ expanded: abierto }}
+        onPress={alternar}
+        style={({ pressed }) => [
+          estilos.dropDownCabecera,
+          pressed && estilos.dropDownCabeceraPresionada,
+        ]}
+      >
+        <View style={estilos.dropDownCabeceraContenido}>
+          <MaterialCommunityIcons
+            name={
+              abierto
+                ? "arrow-up-drop-circle-outline"
+                : "arrow-down-drop-circle-outline"
+            }
+            size={26}
+            color="#fff"
+          />
+          <View style={estilos.dropDownCabeceraTexto}>
+            {cabecera({ colorTexto: "#fff", abierto })}
+          </View>
+        </View>
       </Pressable>
-      <Animated.View style={[animatedStyle]}>{cuerpo()}</Animated.View>
+      <Animated.View
+        pointerEvents={abierto ? "auto" : "none"}
+        style={[estilos.dropDownCuerpoContenedor, animatedStyle]}
+      >
+        <View
+          collapsable={false}
+          onLayout={(evento) => {
+            alturaCuerpo.value = evento.nativeEvent.layout.height;
+          }}
+          style={estilos.dropDownCuerpo}
+        >
+          {cuerpo()}
+        </View>
+      </Animated.View>
     </View>
   );
 }
@@ -1031,5 +1078,50 @@ const estilos = StyleSheet.create({
   },
   tarjetaPresionada: {
     transform: [{ scale: 1.05 }],
+  },
+  dropDown: {
+    width: "100%",
+    alignSelf: "stretch",
+    backgroundColor: "#fff",
+    borderWidth: 1,
+    borderColor: "#e2e8f0",
+    borderRadius: 12,
+    overflow: "hidden",
+    shadowColor: "#0f172a",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 3,
+  },
+  dropDownCabecera: {
+    backgroundColor: Constantes.COLOR_AZUL,
+  },
+  dropDownCabeceraPresionada: {
+    backgroundColor: "#0065ce",
+    opacity: 0.9,
+  },
+  dropDownCabeceraContenido: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    gap: 10,
+  },
+  dropDownCabeceraTexto: {
+    flex: 1,
+  },
+  dropDownCuerpoContenedor: {
+    position: "relative",
+    overflow: "hidden",
+  },
+  dropDownCuerpo: {
+    position: "absolute",
+    top: 0,
+    right: 0,
+    left: 0,
+    padding: 12,
+    backgroundColor: "#fff",
+    borderTopWidth: 1,
+    borderTopColor: "#e2e8f0",
   },
 });

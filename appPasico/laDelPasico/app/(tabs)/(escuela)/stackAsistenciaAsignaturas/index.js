@@ -7,7 +7,7 @@ import {
 } from "../../../../comun/fechas";
 
 import { useState, useContext } from "react";
-import { View, FlatList, Text, StyleSheet } from "react-native";
+import { View, FlatList, Text, StyleSheet, ScrollView } from "react-native";
 import { AuthContext } from "../../../../providers/AuthContext";
 import {
   EntradaGroupRadioButton,
@@ -58,14 +58,16 @@ export default function AsistenciaAsignaturas() {
 
     return (
       <DropDown
-        cabecera={() => {
+        cabecera={({ colorTexto }) => {
           return (
-            <View style={{ padding: 10, backgroundColor: "#f0f0f0" }}>
-              <Text>
+            <View>
+              <Text style={{ color: colorTexto }}>
                 {persona.nombre} {persona.primer_apellido}
                 {persona.segundo_apellido}
               </Text>
-              <Text>{asistencias_persona.length} Faltas</Text>
+              <Text style={{ color: colorTexto }}>
+                {asistencias_persona.length} Faltas
+              </Text>
             </View>
           );
         }}
@@ -81,7 +83,7 @@ export default function AsistenciaAsignaturas() {
   }
 
   return (
-    <View style={estilos.contenedor}>
+    <ScrollView style={estilos.contenedor}>
       <View style={estilos.filtros}>
         {asignaturas.length > 0 && cursos.length > 0 && (
           <>
@@ -120,9 +122,10 @@ export default function AsistenciaAsignaturas() {
         contentContainerStyle={{
           flexDirection: "column",
           gap: 10,
+          width: "100%",
         }}
       />
-    </View>
+    </ScrollView>
   );
 }
 
@@ -132,6 +135,7 @@ const estilos = StyleSheet.create({
     flexDirection: "vertical",
     alignItems: "center",
     gap: 10,
+    paddingBottom: 10,
   },
   contenedor: {
     flex: 1,
