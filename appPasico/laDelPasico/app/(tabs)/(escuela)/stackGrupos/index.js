@@ -157,7 +157,7 @@ export default function Grupos() {
       </ScrollView>
 
       <Modal visible={mostrarFormulario} transparent animationType="fade">
-        <View style={estilos.fondoModal}>
+        <View style={[estilos.fondoModal]}>
           <ScrollView contentContainerStyle={estilos.modal}>
             <Text style={estilos.titulo}>Crear grupo</Text>
             <Text>Nombre del grupo</Text>
@@ -222,11 +222,18 @@ const estilos = StyleSheet.create({
   nombreGrupo: { fontSize: 18, fontWeight: "bold" },
   vacio: { textAlign: "center", marginVertical: 12 },
   fondoModal: {
-    flex: 1,
     backgroundColor: "rgba(0,0,0,0.45)",
-    justifyContent: "center",
     padding: 20,
+    alignItems: "center",
+    flex: 1,
   },
-  modal: { backgroundColor: "white", borderRadius: 8, padding: 20, gap: 14 },
+  modal: {
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "white",
+    borderRadius: 8,
+    padding: 20,
+    gap: 14,
+  },
   acciones: { flexDirection: "row", justifyContent: "center", gap: 10 },
 });

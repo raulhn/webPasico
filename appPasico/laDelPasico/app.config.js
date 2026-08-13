@@ -2,7 +2,7 @@ export default {
 	  "expo": {
     "name": "La del Pasico",
     "slug": "laDelPasico",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "scheme": "laDelPasico",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
