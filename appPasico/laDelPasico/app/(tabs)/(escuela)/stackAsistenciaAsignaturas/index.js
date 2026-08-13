@@ -7,7 +7,7 @@ import {
 } from "../../../../comun/fechas";
 
 import { useState, useContext } from "react";
-import { View, FlatList, Text } from "react-native";
+import { View, FlatList, Text, StyleSheet } from "react-native";
 import { AuthContext } from "../../../../providers/AuthContext";
 import {
   EntradaGroupRadioButton,
@@ -85,12 +85,14 @@ export default function AsistenciaAsignaturas() {
       <View style={estilos.filtros}>
         {asignaturas.length > 0 && cursos.length > 0 && (
           <>
+            <Text>Curso</Text>
             <EntradaGroupRadioButton
               titulo="Curso"
               opciones={opcionesCursos}
               valorSeleccionado={nidCurso}
               setValorSeleccionado={setNidCurso}
             />
+            <Text>Asignatura</Text>
             <EntradaGroupRadioButton
               titulo="Asignatura"
               opciones={opcionesAsignaturas}
@@ -100,6 +102,11 @@ export default function AsistenciaAsignaturas() {
           </>
         )}
       </View>
+      {array_personas.length === 0 && (
+        <View style={{ padding: 10 }}>
+          <Text>No hay faltas registradas para esta asignatura y curso.</Text>
+        </View>
+      )}
       <FlatList
         data={array_personas}
         renderItem={({ item }) => (
@@ -123,6 +130,7 @@ const estilos = StyleSheet.create({
   filtros: {
     justifyContent: "space-between",
     flexDirection: "vertical",
+    alignItems: "center",
     gap: 10,
   },
   contenedor: {
