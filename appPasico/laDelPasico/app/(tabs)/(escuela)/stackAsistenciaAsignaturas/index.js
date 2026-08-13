@@ -37,8 +37,10 @@ export default function AsistenciaAsignaturas() {
   const { cursos, cargando: cargandoCursos } = useCursos(cerrarSesion);
   const { asignaturas, cargando: cargandoAsignaturas } =
     useAsignaturas(cerrarSesion);
-  const { asignaturasProfesor, cargando: cargandoAsignaturasProfesor } =
-    useAsignaturasProfesor(cerrarSesion);
+  const {
+    asignaturas: asignaturasProfesor,
+    cargando: cargandoAsignaturasProfesor,
+  } = useAsignaturasProfesor(cerrarSesion);
 
   let opcionesAsignaturas = [];
 
