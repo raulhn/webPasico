@@ -55,7 +55,7 @@ export default function Login() {
     <div className="contenedor">
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
-        <div className="contenedor">
+        <div className="formulario">
           <div className="campo">
             <span>Correo electrónico:</span>
             <EntradaTexto
