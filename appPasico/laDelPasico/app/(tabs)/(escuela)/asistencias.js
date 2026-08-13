@@ -176,6 +176,7 @@ export default function Asistencias() {
           flexDirection: "row",
           justifyContent: "space-around",
           alignItems: "center",
+          flexWrap: "wrap",
         }}
       >
         <View style={{ fontSize: 16, fontWeight: "bold" }}>
@@ -185,16 +186,16 @@ export default function Asistencias() {
         <View style={estilos.contenedorDia}>
           <Text>{NOMBRE_DIAS_SEMANA[fecha?.getDay()]}</Text>
         </View>
+        <EntradaGroupRadioButton
+          titulo="Grupos con clase"
+          opciones={gruposDelDia.map((elemento) => ({
+            etiqueta: elemento.nombre,
+            valor: elemento.nid_grupo,
+          }))}
+          valor={grupo}
+          setValorSeleccionado={setGrupo}
+        />
       </View>
-      <EntradaGroupRadioButton
-        titulo="Grupos con clase"
-        opciones={gruposDelDia.map((elemento) => ({
-          etiqueta: elemento.nombre,
-          valor: elemento.nid_grupo,
-        }))}
-        valor={grupo}
-        setValorSeleccionado={setGrupo}
-      />
       {cargandoGrupos && <ActivityIndicator size="large" />}
       {!cargandoGrupos && gruposDelDia.length === 0 && (
         <Text>No tienes grupos programados para la fecha seleccionada.</Text>
