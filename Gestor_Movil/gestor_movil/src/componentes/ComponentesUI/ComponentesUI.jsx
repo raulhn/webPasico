@@ -1,5 +1,5 @@
 import "./ComponentesUI.css";
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import * as Constantes from "../../config/Constantes";
 
 import { MdWarningAmber, MdCheckCircleOutline } from "react-icons/md";
@@ -90,6 +90,35 @@ export function Selector({
         </option>
       ))}
     </select>
+  );
+}
+
+export function DropDown({
+  cabecera,
+  cuerpo,
+  expandidoInicial = false,
+}) {
+  const [expandido, setExpandido] = useState(expandidoInicial);
+  const idContenido = useId();
+
+  return (
+    <article className="dropdown">
+      <button
+        type="button"
+        className="dropdown-cabecera"
+        aria-expanded={expandido}
+        aria-controls={idContenido}
+        onClick={() => setExpandido((estadoActual) => !estadoActual)}
+        >
+          <div className="dropdown-cabecera-contenido">{cabecera}</div>
+          <span className="dropdown-indicador" aria-hidden="true">
+            {expandido ? "−" : "+"}
+          </span>
+        </button>
+        <div id={idContenido} className="dropdown-cuerpo" hidden={!expandido}>
+          {cuerpo}
+        </div>
+    </article>
   );
 }
 
