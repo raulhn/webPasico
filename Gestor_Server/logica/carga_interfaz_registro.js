@@ -4,8 +4,7 @@ const gestor_interfaz_persona = require("./interfaz_persona");
 const gestor_personas = require("./persona.js");
 const gestor_socios = require("./socio.js");
 const gestor_interfaz_socio = require("./interfaz_socio.js");
-const fechas = require ("./fechas.js");
-)
+const fechas = require("./fechas.js");
 
 async function cargar_personas(lote) {
   try {
