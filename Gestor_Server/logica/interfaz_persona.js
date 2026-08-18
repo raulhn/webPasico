@@ -2,6 +2,7 @@ const conexion = require("../conexion.js");
 const constantes = require("../constantes.js");
 const gestor_interfaz_socio = require("./interfaz_socio.js");
 const gestor_base_datos = require("./base_datos.js");
+const fechas = require("./fechas.js");
 
 async function obtener_persona_nif(nif, lote) {
   try {
@@ -144,8 +145,10 @@ async function actualizar_interfaz_persona(interfaz_persona) {
       ", segundo_apellido = " +
       conexion.dbConn.escape(interfaz_persona.segundo_apellido) +
       ", fecha_nacimiento = str_to_date(substr(nullif(" +
-      conexion.dbConn.escape(interfaz_persona.fecha_nacimiento) +
-      " , ''), 1, 10), '%d-%m-%Y')" +
+      conexion.dbConn.escape(
+        fechas.formatearFechaGuion(interfaz_persona.fecha_nacimiento),
+      ) +
+      " , ''), 1, 10), '%Y-%m-%d')" +
       ", operacion = " +
       conexion.dbConn.escape(interfaz_persona.operacion) +
       ", lote = " +
