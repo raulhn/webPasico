@@ -143,8 +143,9 @@ async function actualizar_interfaz_persona(interfaz_persona) {
       conexion.dbConn.escape(interfaz_persona.primer_apellido) +
       ", segundo_apellido = " +
       conexion.dbConn.escape(interfaz_persona.segundo_apellido) +
-      ", fecha_nacimiento = " +
+      ", fecha_nacimiento = str_to_date(substr(nullif(" +
       conexion.dbConn.escape(interfaz_persona.fecha_nacimiento) +
+      " , ''), 1, 10), '%d-%m-%Y')" +
       ", operacion = " +
       conexion.dbConn.escape(interfaz_persona.operacion) +
       ", lote = " +
