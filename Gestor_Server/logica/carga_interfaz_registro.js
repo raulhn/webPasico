@@ -30,9 +30,11 @@ async function cargar_personas(lote) {
           interfaz_persona.estado = constantes.ESTADOS_INTERFAZ.PROCESADO;
           interfaz_persona.nid_persona = nid_persona;
 
+          console.log("interfaz_persona", interfaz_persona)
           await gestor_interfaz_persona.actualizar_interfaz_persona(
             interfaz_persona,
           );
+
         } catch (error) {
           console.log("Error al registrar persona: ", error);
           await gestor_interfaz_persona.actualizar_estado(
@@ -199,6 +201,8 @@ async function cargar_padres(lote) {
       let nid_madre = null;
 
       const nid_persona = interfaz_persona.nid_persona;
+      console.log("interfaz_persona", interfaz_persona)
+      console.log("Lote", lote)
       const persona = await gestor_personas.obtener_persona(nid_persona);
 
       // Solo se actualiza si la persona no tiene padre registrado
