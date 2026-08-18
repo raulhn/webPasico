@@ -33,8 +33,11 @@ function lanzar_proceso(req, res) {
   servlet_comun.comprobaciones(req, res, async () => {
     try {
       const lote = req.body.lote;
+      console.log("Carga Personas");
       await gestor_carga_interfaz_registro.cargar_personas(lote);
+      console.log("Carga Socios");
       await gestor_carga_interfaz_registro.cargar_interfaz_socios(lote);
+      console.log("Carga Padres");
       await gestor_carga_interfaz_registro.cargar_padres(lote);
       res.status(200).send({ error: false, message: "Proceso lanzado" });
     } catch (error) {
