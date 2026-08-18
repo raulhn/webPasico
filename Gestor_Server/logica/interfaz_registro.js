@@ -182,7 +182,7 @@ async function registrar_interfaz_persona(lote, persona) {
       conexion.dbConn.escape(persona.telefono) +
       ", str_to_date(substr(nullif(" +
       conexion.dbConn.escape(persona.fecha_nacimiento) +
-      ", ''), 1, 10), '%d-%m-%Y'), " +
+      ", ''), 1, 10), '%Y-%m-%d'), " +
       conexion.dbConn.escape(persona.operacion) +
       ", " +
       conexion.dbConn.escape(constantes.ESTADOS_INTERFAZ.PENDIENTE) +
