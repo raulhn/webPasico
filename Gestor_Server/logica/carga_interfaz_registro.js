@@ -20,7 +20,7 @@ async function cargar_personas(lote) {
             interfaz_persona.primer_apellido,
             interfaz_persona.segundo_apellido,
             interfaz_persona.telefono,
-            substr(interfaz_persona.fecha_nacimiento, 0, 10),
+            interfaz_persona.fecha_nacimiento.substr(0, 10),
             interfaz_persona.dni,
             interfaz_persona.email,
             null,
