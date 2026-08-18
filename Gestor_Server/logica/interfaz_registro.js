@@ -224,7 +224,7 @@ async function actualizar_interfaz_persona(persona, nid_interfaz_persona) {
       conexion.dbConn.escape(persona.telefono) +
       ", fecha_nacimiento = str_to_date(substr(nullif(" +
       conexion.dbConn.escape(persona.fecha_nacimiento) +
-      ", ''), 1, 10), '%d-%m-%Y'), operacion = " +
+      ", ''), 1, 10), '%Y-%m-%d'), operacion = " +
       conexion.dbConn.escape(persona.operacion) +
       ", nid_persona = " +
       conexion.dbConn.escape(persona.nid_persona) +
