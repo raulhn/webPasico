@@ -4,6 +4,8 @@ const gestor_interfaz_persona = require("./interfaz_persona");
 const gestor_personas = require("./persona.js");
 const gestor_socios = require("./socio.js");
 const gestor_interfaz_socio = require("./interfaz_socio.js");
+const fechas = require ("./fechas.js");
+)
 
 async function cargar_personas(lote) {
   try {
@@ -20,7 +22,7 @@ async function cargar_personas(lote) {
             interfaz_persona.primer_apellido,
             interfaz_persona.segundo_apellido,
             interfaz_persona.telefono,
-            interfaz_persona.fecha_nacimiento.substr(0, 10),
+            fechas.formatearFechaGuion(interfaz_persona.fecha_nacimiento),
             interfaz_persona.dni,
             interfaz_persona.email,
             null,
