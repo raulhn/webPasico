@@ -5,6 +5,7 @@ const gestor_socios = require("./socio.js");
 const gestor_interfaz_persona = require("./interfaz_persona.js");
 const gestor_interfaz_socio = require("./interfaz_socio.js");
 const gestor_base_datos = require("./base_datos.js");
+const fechas = require("./fechas.js");
 
 async function obtener_siguiente_lote() {
   try {
@@ -181,7 +182,9 @@ async function registrar_interfaz_persona(lote, persona) {
       ", " +
       conexion.dbConn.escape(persona.telefono) +
       ", str_to_date(substr(nullif(" +
-      conexion.dbConn.escape(persona.fecha_nacimiento) +
+      conexion.dbConn.escape(
+        fechas.formatearFechaGuion(persona.fecha_nacimiento),
+      ) +
       ", ''), 1, 10), '%Y-%m-%d'), " +
       conexion.dbConn.escape(persona.operacion) +
       ", " +
