@@ -199,7 +199,7 @@ async function cargar_padres(lote) {
       let nid_padre = null;
       let nid_madre = null;
 
-      const nid_persona = interfaz_persona.nid_persona;
+      let nid_persona = interfaz_persona.nid_persona;
       console.log("interfaz_persona", interfaz_persona);
       console.log("Lote", lote);
       try {
