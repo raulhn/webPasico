@@ -197,7 +197,7 @@ async function cargar_padres(lote) {
       await gestor_interfaz_persona.obtener_interfaz_personas(lote);
     for (const interfaz_persona of interfaz_personas) {
       if (
-        interfaz_persona.estado !== constantes.ESTADOS_INTERFAZ.PROCESADO &&
+        interfaz_persona.estado == constantes.ESTADOS_INTERFAZ.PROCESADO &&
         interfaz_persona.operacion !=
           constantes.OPERACIONES_INTERFAZ.SIN_CAMBIOS
       ) {
