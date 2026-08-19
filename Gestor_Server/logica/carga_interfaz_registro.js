@@ -199,9 +199,11 @@ async function cargar_padres(lote) {
       let nid_padre = null;
       let nid_madre = null;
 
-      let nid_persona = interfaz_persona.nid_persona;
+      let nid_persona = interfaz_persona[0].nid_persona;
       console.log("interfaz_persona", interfaz_persona);
+      console.log("NID Persona", nid_persona);
       console.log("Lote", lote);
+
       try {
         if (!nid_persona) {
           const persona = await gestor_personas.obtener_persona(nid_persona);
