@@ -233,7 +233,11 @@ async function cargar_padres(lote) {
       }
     }
   } catch (error) {
-    console.log("carga_interfaz_registro -> carga_padres:", error);
+    console.log(
+      "carga_interfaz_registro -> carga_padres, nid_persona:",
+      nid_persona,
+      error,
+    );
     throw new Error("Error al cargar padres");
   }
 }
