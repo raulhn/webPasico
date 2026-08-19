@@ -181,16 +181,31 @@ async function actualizar_operacion_conflicto(
   nid_persona,
 ) {
   try {
-    const sql =
-      "update " +
-      constantes.ESQUEMA_BD +
-      ".interfaz_persona set operacion = " +
-      conexion.dbConn.escape(operacion) +
-      ", nid_persona = ifnull(nullif(nid_persona, ''), nullif(" +
-      conexion.dbConn.escape(nid_persona) +
-      ", '')) " +
-      " where nid_interfaz_persona = " +
-      conexion.dbConn.escape(nid_interfaz_persona);
+    let sql;
+    if (
+      nid_persona === null ||
+      nid_persona === undefined ||
+      nid_persona === ""
+    ) {
+      sql =
+        "update " +
+        constantes.ESQUEMA_BD +
+        ".interfaz_persona set operacion = " +
+        conexion.dbConn.escape(operacion) +
+        " where nid_interfaz_persona = " +
+        conexion.dbConn.escape(nid_interfaz_persona);
+    } else {
+      sql =
+        "update " +
+        constantes.ESQUEMA_BD +
+        ".interfaz_persona set operacion = " +
+        conexion.dbConn.escape(operacion) +
+        ", nid_persona = ifnull(nid_persona, " +
+        conexion.dbConn.escape(nid_persona) +
+        ")" +
+        " where nid_interfaz_persona = " +
+        conexion.dbConn.escape(nid_interfaz_persona);
+    }
 
     const results = await gestor_base_datos.actualiza(sql);
     return results;
