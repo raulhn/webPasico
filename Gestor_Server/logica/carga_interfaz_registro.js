@@ -215,7 +215,7 @@ async function cargar_padres(lote) {
           // Solo se actualiza si la persona no tiene padre registrado
           if (interfaz_persona.nid_interfaz_padre && !persona.nid_padre) {
             const interfaz_padre =
-              await gestor_interfaz_persona.obtener_interfaz_persona(
+              await gestor_interfaz_persona.obtener_interfaz_persona_nid(
                 interfaz_persona.nid_interfaz_padre,
               );
             nid_padre = interfaz_padre.nid_persona;
@@ -225,7 +225,7 @@ async function cargar_padres(lote) {
           //Solo se actualiza si la persona no tiene madre registrada
           if (interfaz_persona.nid_interfaz_madre && !persona.nid_madre) {
             const interfaz_madre =
-              await gestor_interfaz_persona.obtener_interfaz_persona(
+              await gestor_interfaz_persona.obtener_interfaz_persona_nid(
                 interfaz_persona.nid_interfaz_madre,
               );
 
