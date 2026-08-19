@@ -196,38 +196,44 @@ async function cargar_padres(lote) {
     const interfaz_personas =
       await gestor_interfaz_persona.obtener_interfaz_personas(lote);
     for (const interfaz_persona of interfaz_personas) {
-      let nid_padre = null;
-      let nid_madre = null;
+      if (
+        interfaz_persona.estado !== constantes.ESTADOS_INTERFAZ.PROCESADO &&
+        interfaz_persona.operacion !=
+          constantes.OPERACIONES_INTERFAZ.SIN_CAMBIOS
+      ) {
+        let nid_padre = null;
+        let nid_madre = null;
 
-      let nid_persona = interfaz_persona.nid_persona;
-      console.log("interfaz_persona", interfaz_persona);
-      console.log("NID Persona", nid_persona);
-      console.log("Lote", lote);
+        let nid_persona = interfaz_persona.nid_persona;
+        console.log("interfaz_persona", interfaz_persona);
+        console.log("NID Persona", nid_persona);
+        console.log("Lote", lote);
 
-      try {
-        const persona = await gestor_personas.obtener_persona(nid_persona);
+        try {
+          const persona = await gestor_personas.obtener_persona(nid_persona);
+          console.log("Persona", persona);
+          // Solo se actualiza si la persona no tiene padre registrado
+          if (interfaz_persona.nid_interfaz_padre && !persona.nid_padre) {
+            const interfaz_padre =
+              await gestor_interfaz_persona.obtener_interfaz_persona(
+                interfaz_persona.nid_interfaz_padre,
+              );
+            nid_padre = interfaz_padre.nid_persona;
+            await gestor_personas.registrar_padre(nid_persona, nid_padre);
+          }
 
-        // Solo se actualiza si la persona no tiene padre registrado
-        if (interfaz_persona.nid_interfaz_padre && !persona.nid_padre) {
-          const interfaz_padre =
-            await gestor_interfaz_persona.obtener_interfaz_persona(
-              interfaz_persona.nid_interfaz_padre,
-            );
-          nid_padre = interfaz_padre.nid_persona;
-          await gestor_personas.registrar_padre(nid_persona, nid_padre);
+          //Solo se actualiza si la persona no tiene madre registrada
+          if (interfaz_persona.nid_interfaz_madre && !persona.nid_madre) {
+            const interfaz_madre =
+              await gestor_interfaz_persona.obtener_interfaz_persona(
+                interfaz_persona.nid_interfaz_madre,
+              );
+            nid_madre = interfaz_madre.nid_persona;
+            await gestor_personas.registrar_madre(nid_persona, nid_madre);
+          }
+        } catch (error) {
+          console.log("Error al registrar padre/madre: ", error);
         }
-
-        //Solo se actualiza si la persona no tiene madre registrada
-        if (interfaz_persona.nid_interfaz_madre && !persona.nid_madre) {
-          const interfaz_madre =
-            await gestor_interfaz_persona.obtener_interfaz_persona(
-              interfaz_persona.nid_interfaz_madre,
-            );
-          nid_madre = interfaz_madre.nid_persona;
-          await gestor_personas.registrar_madre(nid_persona, nid_madre);
-        }
-      } catch (error) {
-        console.log("Error al registrar padre/madre: ", error);
       }
     }
   } catch (error) {
