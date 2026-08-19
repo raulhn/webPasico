@@ -228,6 +228,8 @@ async function cargar_padres(lote) {
               await gestor_interfaz_persona.obtener_interfaz_persona(
                 interfaz_persona.nid_interfaz_madre,
               );
+
+            console.log("Interfaz madre", interfaz_madre);
             nid_madre = interfaz_madre.nid_persona;
             await gestor_personas.registrar_madre(nid_persona, nid_madre);
           }
