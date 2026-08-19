@@ -133,7 +133,7 @@ async function obtener_interfaz_personas_pendiente(lote) {
 
 async function actualizar_interfaz_persona(interfaz_persona) {
   try {
-    console.log("interfaz persona a actualizar", interfaz_persona)
+    console.log("interfaz persona a actualizar", interfaz_persona);
     const sql =
       "update " +
       constantes.ESQUEMA_BD +
@@ -186,8 +186,9 @@ async function actualizar_operacion_conflicto(
       constantes.ESQUEMA_BD +
       ".interfaz_persona set operacion = " +
       conexion.dbConn.escape(operacion) +
-      ", nid_persona = ifnull(nid_persona, nullif(" +
-      conexion.dbConn.escape(nid_persona) + ", '')) " +
+      ", nid_persona = ifnull(nullif(nid_persona, ''), nullif(" +
+      conexion.dbConn.escape(nid_persona) +
+      ", '')) " +
       " where nid_interfaz_persona = " +
       conexion.dbConn.escape(nid_interfaz_persona);
 
