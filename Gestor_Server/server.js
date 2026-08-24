@@ -41,6 +41,7 @@ var conexion = require("./conexion.js");
 var sesion_config = require("./config/sesion.json");
 
 const serviceComun = require("./services/serviceComun.js");
+const serviceImpresion = require("./services/serviceImpresion.js");
 
 // Habilitar la subida de documentos
 app.use(
@@ -60,6 +61,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session(sesion_config));
 
 serviceComun.actualizar_sucios();
+serviceImpresion.iniciarProcesoImpresion();
 
 app.get("/", (req, res) => {
   return res.status(200).send({ error: true, message: "Hola mundo" });

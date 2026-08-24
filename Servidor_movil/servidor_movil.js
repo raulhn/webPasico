@@ -24,6 +24,7 @@ const servletMatriculaAsignatura = require("./servlets/servlet_matricula_asignat
 const servletProfesorAlumnoMatricula = require("./servlets/servlet_profesor_alumno_matricula.js");
 const servletEventoConcierto = require("./servlets/servletEventoConcierto.js");
 const servletPartituras = require("./servlets/servlet_partituras.js");
+const servletSolicitudesImpresion = require("./servlets/servlet_solicitudes_impresion.js");
 const servlet_categoria_partituras = require("./servlets/servlet_categoria_partituras.js");
 const servletNotificaciones = require("./servlets/servlet_notificaciones.js");
 const gestorNotificaciones = require("./logica/notificaciones.js");
@@ -216,6 +217,18 @@ app.get(
   "/obtener_evento_banda/:nid_evento_concierto",
   servletEventoConcierto.obtenerEvento,
 );
+app.post(
+  "/reclamar_solicitudes_impresion",
+  servletSolicitudesImpresion.reclamarSolicitudesImpresion,
+);
+app.post(
+  "/actualizar_solicitud_impresion",
+  servletSolicitudesImpresion.actualizarSolicitudImpresion,
+);
+app.get(
+  "/descargar_solicitud_impresion_archivo/:nid_solicitud_impresion_archivo",
+  servletSolicitudesImpresion.descargarSolicitudImpresionArchivo,
+);
 ///////////////////////////////////////////////
 // Peticiones que requieren inicio de sesión //
 ///////////////////////////////////////////////
@@ -301,6 +314,34 @@ app.get("/obtener_partituras", servletPartituras.obtenerPartituras);
 app.get(
   "/obtener_partitura/:nid_partitura",
   servletPartituras.obtenerPartitura,
+);
+app.post(
+  "/inspeccionar_partitura_drive",
+  servletSolicitudesImpresion.inspeccionarPartituraDrive,
+);
+app.post(
+  "/registrar_solicitud_impresion",
+  servletSolicitudesImpresion.registrarSolicitudImpresion,
+);
+app.get(
+  "/obtener_solicitudes_impresion",
+  servletSolicitudesImpresion.obtenerSolicitudesImpresion,
+);
+app.get(
+  "/obtener_solicitud_impresion/:nid_solicitud_impresion",
+  servletSolicitudesImpresion.obtenerSolicitudImpresion,
+);
+app.post(
+  "/cancelar_solicitud_impresion",
+  servletSolicitudesImpresion.cancelarSolicitudImpresion,
+);
+app.get(
+  "/obtener_configuracion_cuota_impresion",
+  servletSolicitudesImpresion.obtenerConfiguracionCuota,
+);
+app.post(
+  "/actualizar_configuracion_cuota_impresion",
+  servletSolicitudesImpresion.actualizarConfiguracionCuota,
 );
 
 // Agenda Eventos //
