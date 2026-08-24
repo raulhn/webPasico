@@ -26,6 +26,40 @@ async function inspeccionarPartituraDrive(req, res) {
       return;
     }
 
+    async function explorarPartituraImpresion(req, res) {
+      try {
+        const rolesPermitidos = [
+          constantes.DIRECTOR,
+          constantes.ADMINISTRADOR,
+          constantes.MUSICO,
+        ];
+        const autorizado = await servletComun.comprobarRol(req, res, rolesPermitidos);
+        if (!autorizado) {
+          res.status(403).send({
+            error: true,
+            mensaje: "No tienes permisos para inspeccionar partituras",
+          });
+          return;
+        }
+
+        const resultado = await gestorSolicitudesImpresion.inspeccionarPartitura({
+          nid_partitura: req.params.nid_partitura,
+        });
+        res.status(200).send({
+          error: false,
+          ...resultado.inspeccion,
+          partitura: resultado.partitura,
+        });
+      } catch (error) {
+        console.error("servlet_solicitudes_impresion -> explorarPartituraImpresion:", error);
+        res.status(error.estadoHttp || 400).send({
+          error: true,
+          mensaje: error.message || "No se ha podido inspeccionar la partitura",
+          codigo: error.codigo || "IMPRESION_INSPECCION",
+        });
+      }
+    }
+
     const inspeccion = await gestorSolicitudesImpresion.inspeccionarPartitura(req.body || {});
     res.status(200).send({
       error: false,
@@ -285,40 +319,41 @@ function actualizarSolicitudImpresion(req, res) {
         codigo: error.codigo || "IMPRESION_ACTUALIZAR",
       });
     }
+  });
+}
 
-    function descargarSolicitudImpresionArchivo(req, res) {
-      servletComun.comprobacionAccesoAPIKey(req, res, async () => {
-        try {
-          const archivo =
-            await gestorSolicitudesImpresion.obtenerArchivoSolicitudImpresion(
-              req.params.nid_solicitud_impresion_archivo,
-            );
+function descargarSolicitudImpresionArchivo(req, res) {
+  servletComun.comprobacionAccesoAPIKey(req, res, async () => {
+    try {
+      const archivo =
+        await gestorSolicitudesImpresion.obtenerArchivoSolicitudImpresion(
+          req.params.nid_solicitud_impresion_archivo,
+        );
 
-          if (archivo.mime_type) {
-            res.type(archivo.mime_type);
-          }
-          res.setHeader(
-            "Content-Disposition",
-            'attachment; filename="' + archivo.nombre_archivo + '"',
-          );
-          res.sendFile(archivo.ruta_local);
-        } catch (error) {
-          console.error(
-            "servlet_solicitudes_impresion -> descargarSolicitudImpresionArchivo:",
-            error,
-          );
-          res.status(error.estadoHttp || 400).send({
-            error: true,
-            mensaje: error.message || "No se ha podido descargar el archivo",
-            codigo: error.codigo || "IMPRESION_DESCARGA",
-          });
-        }
+      if (archivo.mime_type) {
+        res.type(archivo.mime_type);
+      }
+      res.setHeader(
+        "Content-Disposition",
+        'attachment; filename="' + archivo.nombre_archivo + '"',
+      );
+      res.sendFile(archivo.ruta_local);
+    } catch (error) {
+      console.error(
+        "servlet_solicitudes_impresion -> descargarSolicitudImpresionArchivo:",
+        error,
+      );
+      res.status(error.estadoHttp || 400).send({
+        error: true,
+        mensaje: error.message || "No se ha podido descargar el archivo",
+        codigo: error.codigo || "IMPRESION_DESCARGA",
       });
     }
   });
 }
 
 module.exports.inspeccionarPartituraDrive = inspeccionarPartituraDrive;
+module.exports.explorarPartituraImpresion = explorarPartituraImpresion;
 module.exports.registrarSolicitudImpresion = registrarSolicitudImpresion;
 module.exports.obtenerSolicitudesImpresion = obtenerSolicitudesImpresion;
 module.exports.obtenerSolicitudImpresion = obtenerSolicitudImpresion;

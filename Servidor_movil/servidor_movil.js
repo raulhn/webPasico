@@ -319,6 +319,10 @@ app.post(
   "/inspeccionar_partitura_drive",
   servletSolicitudesImpresion.inspeccionarPartituraDrive,
 );
+app.get(
+  "/explorar_partitura_impresion/:nid_partitura",
+  servletSolicitudesImpresion.explorarPartituraImpresion,
+);
 app.post(
   "/registrar_solicitud_impresion",
   servletSolicitudesImpresion.registrarSolicitudImpresion,
@@ -339,8 +343,16 @@ app.get(
   "/obtener_configuracion_cuota_impresion",
   servletSolicitudesImpresion.obtenerConfiguracionCuota,
 );
+app.get(
+  "/obtener_cuotas_impresion",
+  servletSolicitudesImpresion.obtenerConfiguracionCuota,
+);
 app.post(
   "/actualizar_configuracion_cuota_impresion",
+  servletSolicitudesImpresion.actualizarConfiguracionCuota,
+);
+app.post(
+  "/actualizar_cuota_impresion",
   servletSolicitudesImpresion.actualizarConfiguracionCuota,
 );
 

@@ -33,10 +33,19 @@ function explorarPartituraImpresion(nidPartitura, cerrarSesion) {
 
 function registrarSolicitudImpresion(solicitud, cerrarSesion) {
   const archivos = Array.isArray(solicitud?.archivos) ? solicitud.archivos : [];
-  const opciones = solicitud?.opciones || {
-    archivos,
-    rango_paginas: solicitud?.rango_paginas || null,
-    escala_porcentaje: solicitud?.escala_porcentaje || 100,
+  const opcionesEntrada = solicitud?.opciones || {};
+  const opciones = {
+    ...opcionesEntrada,
+    escala:
+      opcionesEntrada.escala ||
+      opcionesEntrada.escala_porcentaje ||
+      solicitud?.escala_porcentaje ||
+      100,
+    rango_paginas:
+      opcionesEntrada.rango_paginas ||
+      opcionesEntrada.rangoPaginas ||
+      solicitud?.rango_paginas ||
+      null,
   };
 
   return peticionAutenticada(
@@ -44,8 +53,12 @@ function registrarSolicitudImpresion(solicitud, cerrarSesion) {
     "registrar_solicitud_impresion",
     {
       nid_partitura: solicitud?.nid_partitura,
-      archivos,
-      archivos_seleccionados: archivos,
+      archivos: archivos.map((archivo) => ({
+        drive_file_id:
+          archivo?.drive_file_id ||
+          archivo?.referencia ||
+          archivo?.id,
+      })),
       rango_paginas: solicitud?.rango_paginas || null,
       escala_porcentaje: solicitud?.escala_porcentaje || 100,
       idempotency_key: solicitud?.idempotency_key,

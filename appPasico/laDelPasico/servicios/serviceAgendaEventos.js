@@ -79,7 +79,7 @@ function obtenerEventosFecha(fecha_evento, cerrarSesion) {
     ServiceComun.peticionSesion(
       "GET",
       Constantes.URL_SERVICIO_MOVIL +
-        "obtener_eventos_fecha" +
+        "obtener_agenda_eventos_fecha" +
         "/" +
         fecha_evento,
       data,

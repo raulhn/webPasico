@@ -84,69 +84,69 @@ function normalizarEstado(estado) {
   return estadoNormalizado;
 }
 
+function obtenerBaseUrlDescarga() {
+  const baseUrl =
+    process.env.URL_SERVICIO_MOVIL_EXTERNA ||
+    process.env.IMPRESION_DOWNLOAD_BASE_URL ||
+    "";
+
+  if (typeof baseUrl !== "string" || baseUrl.trim() === "") {
+    return "";
+  }
+
+  return baseUrl.trim().replace(/\/+$/, "");
+}
+
+function construirEndpointDescargaArchivo(nidSolicitudImpresionArchivo) {
+  return (
+    "/descargar_solicitud_impresion_archivo/" +
+    String(nidSolicitudImpresionArchivo)
+  );
+}
+
+function mapearArchivoSolicitud(archivo, opciones = {}) {
+  const resultado = {
+    nid_solicitud_impresion_archivo: archivo.nid_solicitud_impresion_archivo,
+    nid_solicitud_impresion: archivo.nid_solicitud_impresion,
+    nid_partitura: archivo.nid_partitura,
+    drive_file_id: archivo.drive_file_id,
+    drive_parent_id: archivo.drive_parent_id,
+    nombre_archivo: archivo.nombre_archivo,
+    mime_type: archivo.mime_type,
+    size_bytes: archivo.size_bytes,
+    orden: archivo.orden,
+    fecha_creacion: archivo.fecha_creacion,
+    fecha_descarga: archivo.fecha_descarga,
+  };
+
+  if (opciones.incluirEndpointDescarga) {
+    const endpointDescarga = construirEndpointDescargaArchivo(
+      archivo.nid_solicitud_impresion_archivo,
+    );
+    resultado.endpoint_descarga = endpointDescarga;
+    resultado.descarga = {
+      metodo: "API_KEY",
+      requiere_api_key: true,
+      endpoint: endpointDescarga,
+    };
+
+    const baseUrlDescarga = obtenerBaseUrlDescarga();
+    if (baseUrlDescarga) {
+      resultado.url_descarga = baseUrlDescarga + endpointDescarga;
+      resultado.descarga.url = resultado.url_descarga;
+    }
+  }
+
+  if (opciones.incluirRutaLocal) {
+    resultado.ruta_local = archivo.ruta_local;
+  }
+
+  return resultado;
+}
+
 function parsearJsonSeguro(valor, valorPorDefecto) {
   if (!valor) {
     return valorPorDefecto;
-  }
-
-  function obtenerBaseUrlDescarga() {
-    const baseUrl =
-      process.env.URL_SERVICIO_MOVIL_EXTERNA ||
-      process.env.IMPRESION_DOWNLOAD_BASE_URL ||
-      "";
-
-    if (typeof baseUrl !== "string" || baseUrl.trim() === "") {
-      return "";
-    }
-
-    return baseUrl.trim().replace(/\/+$/, "");
-  }
-
-  function construirEndpointDescargaArchivo(nidSolicitudImpresionArchivo) {
-    return (
-      "/descargar_solicitud_impresion_archivo/" +
-      String(nidSolicitudImpresionArchivo)
-    );
-  }
-
-  function mapearArchivoSolicitud(archivo, opciones = {}) {
-    const resultado = {
-      nid_solicitud_impresion_archivo: archivo.nid_solicitud_impresion_archivo,
-      nid_solicitud_impresion: archivo.nid_solicitud_impresion,
-      nid_partitura: archivo.nid_partitura,
-      drive_file_id: archivo.drive_file_id,
-      drive_parent_id: archivo.drive_parent_id,
-      nombre_archivo: archivo.nombre_archivo,
-      mime_type: archivo.mime_type,
-      size_bytes: archivo.size_bytes,
-      orden: archivo.orden,
-      fecha_creacion: archivo.fecha_creacion,
-      fecha_descarga: archivo.fecha_descarga,
-    };
-
-    if (opciones.incluirEndpointDescarga) {
-      const endpointDescarga = construirEndpointDescargaArchivo(
-        archivo.nid_solicitud_impresion_archivo,
-      );
-      resultado.endpoint_descarga = endpointDescarga;
-      resultado.descarga = {
-        metodo: "API_KEY",
-        requiere_api_key: true,
-        endpoint: endpointDescarga,
-      };
-
-      const baseUrlDescarga = obtenerBaseUrlDescarga();
-      if (baseUrlDescarga) {
-        resultado.url_descarga = baseUrlDescarga + endpointDescarga;
-        resultado.descarga.url = resultado.url_descarga;
-      }
-    }
-
-    if (opciones.incluirRutaLocal) {
-      resultado.ruta_local = archivo.ruta_local;
-    }
-
-    return resultado;
   }
   if (typeof valor === "object") {
     return valor;
