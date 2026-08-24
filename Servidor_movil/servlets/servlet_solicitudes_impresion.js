@@ -10,7 +10,7 @@ async function obtenerNidUsuario(req) {
   return tokenDecode.nid_usuario;
 }
 
-async function inspeccionarPartituraDrive(req, res) {
+async function explorarPartituraImpresion(req, res) {
   try {
     const rolesPermitidos = [
       constantes.DIRECTOR,
@@ -26,38 +26,38 @@ async function inspeccionarPartituraDrive(req, res) {
       return;
     }
 
-    async function explorarPartituraImpresion(req, res) {
-      try {
-        const rolesPermitidos = [
-          constantes.DIRECTOR,
-          constantes.ADMINISTRADOR,
-          constantes.MUSICO,
-        ];
-        const autorizado = await servletComun.comprobarRol(req, res, rolesPermitidos);
-        if (!autorizado) {
-          res.status(403).send({
-            error: true,
-            mensaje: "No tienes permisos para inspeccionar partituras",
-          });
-          return;
-        }
+    const resultado = await gestorSolicitudesImpresion.inspeccionarPartitura({
+      nid_partitura: req.params.nid_partitura,
+    });
+    res.status(200).send({
+      error: false,
+      ...resultado.inspeccion,
+      partitura: resultado.partitura,
+    });
+  } catch (error) {
+    console.error("servlet_solicitudes_impresion -> explorarPartituraImpresion:", error);
+    res.status(error.estadoHttp || 400).send({
+      error: true,
+      mensaje: error.message || "No se ha podido inspeccionar la partitura",
+      codigo: error.codigo || "IMPRESION_INSPECCION",
+    });
+  }
+}
 
-        const resultado = await gestorSolicitudesImpresion.inspeccionarPartitura({
-          nid_partitura: req.params.nid_partitura,
-        });
-        res.status(200).send({
-          error: false,
-          ...resultado.inspeccion,
-          partitura: resultado.partitura,
-        });
-      } catch (error) {
-        console.error("servlet_solicitudes_impresion -> explorarPartituraImpresion:", error);
-        res.status(error.estadoHttp || 400).send({
-          error: true,
-          mensaje: error.message || "No se ha podido inspeccionar la partitura",
-          codigo: error.codigo || "IMPRESION_INSPECCION",
-        });
-      }
+async function inspeccionarPartituraDrive(req, res) {
+  try {
+    const rolesPermitidos = [
+      constantes.DIRECTOR,
+      constantes.ADMINISTRADOR,
+      constantes.MUSICO,
+    ];
+    const autorizado = await servletComun.comprobarRol(req, res, rolesPermitidos);
+    if (!autorizado) {
+      res.status(403).send({
+        error: true,
+        mensaje: "No tienes permisos para inspeccionar partituras",
+      });
+      return;
     }
 
     const inspeccion = await gestorSolicitudesImpresion.inspeccionarPartitura(req.body || {});
