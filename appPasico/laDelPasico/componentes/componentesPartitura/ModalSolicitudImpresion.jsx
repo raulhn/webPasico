@@ -46,6 +46,7 @@ function serializarArchivosSeleccionados(archivos) {
     referencia: archivo.referenciaServidor || archivo.id,
     ruta_relativa: archivo.rutaRelativa || undefined,
     paginas: archivo.paginas,
+    drive_file_id: archivo.original.drive_file_id,
   }));
 }
 
@@ -159,6 +160,7 @@ export default function ModalSolicitudImpresion({
   }
 
   async function solicitarImpresion() {
+    console.log("Solicitu de impresión");
     if (archivosActivos.length === 0) {
       setMensajeAviso("Selecciona al menos un archivo para imprimir.");
       return;
@@ -178,6 +180,13 @@ export default function ModalSolicitudImpresion({
     setEnviando(true);
 
     try {
+      console.log(
+        "Archivos activos:",
+        serializarArchivosSeleccionados(archivosActivos)
+      );
+
+      console.log("Archivos activos sin serializar:", archivosActivos);
+
       const payload = {
         nid_partitura: partitura.nid_partitura,
         archivos: serializarArchivosSeleccionados(archivosActivos),
