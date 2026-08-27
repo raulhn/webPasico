@@ -21,6 +21,7 @@ import { useInstrumentos } from "../../hooks/banda/useInstrumentos";
 import { AuthContext } from "../../providers/AuthContext";
 
 import { useRouter } from "expo-router";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
 import { COLOR_ROJO } from "../../config/constantes.js";
 
@@ -28,6 +29,7 @@ import { useListadoPersonas } from "../../hooks/personas/usePersonas";
 import CardPersona from "./CardPersona.jsx";
 
 export default function ListadoPersonas() {
+  const alturaBarraInferior = useBottomTabBarHeight();
   const opcionesTipo = [
     { etiqueta: "Todas las personas", valor: 1 },
     { etiqueta: "Alumnos", valor: 3 },
@@ -247,7 +249,7 @@ export default function ListadoPersonas() {
             }}
           />
         </View>
-        <View>
+        <View style={estilos.contenedorListado}>
           <FlatList
             data={personasFiltradas}
             onScrollEndDrag={() => {
@@ -303,7 +305,11 @@ export default function ListadoPersonas() {
                 </View>
               );
             }}
-            contentContainerStyle={{ gap: 10, flexGrow: 1 }}
+            contentContainerStyle={{
+              gap: 10,
+              flexGrow: 1,
+              paddingBottom: alturaBarraInferior,
+            }}
           />
         </View>
       </View>
@@ -439,10 +445,12 @@ export default function ListadoPersonas() {
 
 const estilos = StyleSheet.create({
   contenedor: {
-    paddingTop: 25,
+    flex: 1,
     backgroundColor: "white",
     alignItems: "stretch",
-    height: "100%",
+  },
+  contenedorListado: {
+    flex: 1,
   },
   contenedorModal: {
     flex: 1,
