@@ -47,6 +47,10 @@ function serializarArchivosSeleccionados(archivos) {
     ruta_relativa: archivo.rutaRelativa || undefined,
     paginas: archivo.paginas,
     drive_file_id: archivo.original.drive_file_id,
+    web_view_link: archivo.original.web_view_link,
+    nombre_archivo: archivo.original.nombre_archivo,
+    mime_type: archivo.original.mime_type,
+    drive_parent_id: archivo.original.drive_parent_id,
   }));
 }
 
