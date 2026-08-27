@@ -221,9 +221,6 @@ export default function ModalSolicitudImpresion({
     }
   }
 
-  console.log("Archivos activos:", archivosActivos);
-  console.log("Archivos", inspeccion.archivos);
-
   return (
     <Modal animationType="slide" visible={visible} onRequestClose={cerrarModal}>
       <View style={styles.container}>
