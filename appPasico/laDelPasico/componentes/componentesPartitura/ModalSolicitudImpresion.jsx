@@ -71,7 +71,9 @@ export default function ModalSolicitudImpresion({
 
   const archivosActivos = useMemo(
     () =>
-      inspeccion.archivos.filter((archivo) => archivosSeleccionados[archivo.id]),
+      inspeccion.archivos.filter(
+        (archivo) => archivosSeleccionados[archivo.id]
+      ),
     [archivosSeleccionados, inspeccion.archivos]
   );
 
@@ -96,12 +98,17 @@ export default function ModalSolicitudImpresion({
       ]);
 
       const datosInspeccion =
-        respuestaInspeccion.status === "fulfilled" ? respuestaInspeccion.value : {};
+        respuestaInspeccion.status === "fulfilled"
+          ? respuestaInspeccion.value
+          : {};
       const datosCuotas =
         respuestaCuotas.status === "fulfilled" ? respuestaCuotas.value : {};
 
       if (respuestaInspeccion.status !== "fulfilled") {
-        throw respuestaInspeccion.reason || new Error("No se pudo inspeccionar la partitura");
+        throw (
+          respuestaInspeccion.reason ||
+          new Error("No se pudo inspeccionar la partitura")
+        );
       }
 
       if (datosInspeccion?.error) {
@@ -158,9 +165,7 @@ export default function ModalSolicitudImpresion({
     }
 
     if (!validarRangoPaginasImpresion(rangoPaginas)) {
-      setMensajeAviso(
-        "Indica un rango válido. Ejemplos: 1-3, 5 o 1-2,4,7-9."
-      );
+      setMensajeAviso("Indica un rango válido. Ejemplos: 1-3, 5 o 1-2,4,7-9.");
       return;
     }
 
@@ -183,10 +188,11 @@ export default function ModalSolicitudImpresion({
         ),
       };
 
-      const respuesta = await ServiceSolicitudesImpresion.registrarSolicitudImpresion(
-        payload,
-        cerrarSesion
-      );
+      const respuesta =
+        await ServiceSolicitudesImpresion.registrarSolicitudImpresion(
+          payload,
+          cerrarSesion
+        );
 
       if (respuesta?.error) {
         throw new Error(
@@ -215,12 +221,11 @@ export default function ModalSolicitudImpresion({
     }
   }
 
+  console.log("Archivos activos:", archivosActivos);
+  console.log("Archivos", inspeccion.archivos);
+
   return (
-    <Modal
-      animationType="slide"
-      visible={visible}
-      onRequestClose={cerrarModal}
-    >
+    <Modal animationType="slide" visible={visible} onRequestClose={cerrarModal}>
       <View style={styles.container}>
         <View style={styles.cabecera}>
           <View style={{ flex: 1 }}>
@@ -261,11 +266,7 @@ export default function ModalSolicitudImpresion({
 
           {!cargando && errorCarga ? (
             <View style={styles.cardError}>
-              <MaterialIcons
-                name="warning-amber"
-                size={36}
-                color="#f87c00"
-              />
+              <MaterialIcons name="warning-amber" size={36} color="#f87c00" />
               <Text style={styles.errorTexto}>{errorCarga}</Text>
               <View style={styles.filaBotones}>
                 <Boton nombre="Reintentar" onPress={cargarInspeccion} />
@@ -287,7 +288,9 @@ export default function ModalSolicitudImpresion({
                     size={22}
                     color={Constantes.COLOR_AZUL}
                   />
-                  <Text style={styles.textoSecundario}>{inspeccion.mensaje}</Text>
+                  <Text style={styles.textoSecundario}>
+                    {inspeccion.mensaje}
+                  </Text>
                 </View>
               ) : null}
 
@@ -331,7 +334,9 @@ export default function ModalSolicitudImpresion({
               ) : null}
 
               <View style={styles.seccion}>
-                <Text style={styles.tituloSeccion}>Archivos seleccionables</Text>
+                <Text style={styles.tituloSeccion}>
+                  Archivos seleccionables
+                </Text>
                 {inspeccion.archivos.length === 0 ? (
                   <Text style={styles.textoSecundario}>
                     El servidor no devolvió archivos imprimibles para esta
@@ -341,7 +346,12 @@ export default function ModalSolicitudImpresion({
                   inspeccion.archivos.map((archivo) => (
                     <View key={archivo.id} style={styles.cardArchivo}>
                       <CheckBox
-                        item={archivo}
+                        item={{
+                          etiqueta:
+                            archivo.original?.nombre_archivo ||
+                            archivo.etiqueta,
+                          id: archivo.id,
+                        }}
                         valorSeleccionado={Boolean(
                           archivosSeleccionados[archivo.id]
                         )}
@@ -349,11 +359,6 @@ export default function ModalSolicitudImpresion({
                           actualizarArchivoSeleccionado(item, seleccionado)
                         }
                       />
-                      {archivo.descripcion ? (
-                        <Text style={styles.descripcionArchivo}>
-                          {archivo.descripcion}
-                        </Text>
-                      ) : null}
                     </View>
                   ))
                 )}
