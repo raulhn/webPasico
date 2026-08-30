@@ -68,11 +68,6 @@ function obtenerApiKeyDrive() {
 }
 
 function obtenerClienteDrive() {
-  const apiKey = obtenerApiKeyDrive();
-  if (apiKey) {
-    return google.drive({ version: "v3", auth: apiKey });
-  }
-
   if (
     tieneValor(process.env.GOOGLE_DRIVE_CLIENT_EMAIL) &&
     tieneValor(process.env.GOOGLE_DRIVE_PRIVATE_KEY)
@@ -85,6 +80,11 @@ function obtenerClienteDrive() {
     );
 
     return google.drive({ version: "v3", auth });
+  }
+
+  const apiKey = obtenerApiKeyDrive();
+  if (apiKey) {
+    return google.drive({ version: "v3", auth: apiKey });
   }
 
   return null;
@@ -199,7 +199,12 @@ function manejarErrorDrive(error, mensajeBase) {
     throw error;
   }
 
-  const codigo = error && error.code ? Number(error.code) : 0;
+  const codigo =
+    error && error.code
+      ? Number(error.code)
+      : error && error.response && error.response.status
+        ? Number(error.response.status)
+        : 0;
   if (codigo === 404) {
     throw crearError(
       "No se ha encontrado el recurso de Google Drive",
@@ -364,46 +369,33 @@ async function descargarArchivoDrive(
   nombrePreferido,
   metadata = {},
 ) {
-  const apiKey = obtenerApiKeyDrive();
-  const urlDescarga = apiKey
-    ? "https://www.googleapis.com/drive/v3/files/" +
-      encodeURIComponent(driveFileId) +
-      "?alt=media&key=" +
-      encodeURIComponent(apiKey)
-    : "https://drive.google.com/uc?export=download&id=" +
-      encodeURIComponent(driveFileId);
-
-  const respuesta = await fetch(urlDescarga, {
-    method: "GET",
-    redirect: "follow",
-  });
-
-  if (!respuesta.ok) {
-    if (respuesta.status === 404) {
-      throw crearError(
-        "No se ha encontrado el fichero de Google Drive",
-        "DRIVE_NO_ENCONTRADO",
-        404,
-      );
-    }
-
-    if (respuesta.status === 401 || respuesta.status === 403) {
-      throw crearError(
-        "No se puede descargar el fichero de Google Drive con la configuración actual",
-        "DRIVE_ACCESO_DENEGADO",
-        403,
-      );
-    }
-
+  const drive = obtenerClienteDrive();
+  if (!drive) {
     throw crearError(
-      "Google Drive devolvió HTTP " + respuesta.status + " al descargar el fichero",
-      "DRIVE_DESCARGA_HTTP",
-      502,
+      "La descarga requiere GOOGLE_DRIVE_API_KEY o una cuenta de servicio de solo lectura",
+      "CONFIGURACION_DRIVE_NO_DISPONIBLE",
+      503,
     );
   }
 
+  let respuesta;
+  try {
+    respuesta = await drive.files.get(
+      {
+        fileId: driveFileId,
+        alt: "media",
+        supportsAllDrives: true,
+      },
+      {
+        responseType: "arraybuffer",
+      },
+    );
+  } catch (error) {
+    manejarErrorDrive(error, "Error al descargar el fichero de Google Drive");
+  }
+
   const mimeType = normalizarMimeType(
-    metadata.mime_type || respuesta.headers.get("content-type"),
+    respuesta.headers["content-type"] || metadata.mime_type,
   );
   if (mimeType && mimeType.indexOf("text/html") === 0) {
     throw crearError(
@@ -431,7 +423,7 @@ async function descargarArchivoDrive(
 
   await fs.promises.mkdir(directorioDestino, { recursive: true });
   const rutaLocal = path.resolve(directorioDestino, nombreFinal);
-  const contenido = Buffer.from(await respuesta.arrayBuffer());
+  const contenido = Buffer.from(respuesta.data);
   await fs.promises.writeFile(rutaLocal, contenido);
 
   return {
