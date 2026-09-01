@@ -1,6 +1,6 @@
 // Producción //
 const URL_SERVICIO = "https://ladelpasico.es/api/";
-const URL_SERVICIO_MOVIL = "http://ladelpasico.es/api_movil/";
+const URL_SERVICIO_MOVIL = "https://ladelpasico.es/api_movil/";
 
 // Desarrollo //
 //const URL_SERVICIO = "https://ladelpasico.es/api/";
