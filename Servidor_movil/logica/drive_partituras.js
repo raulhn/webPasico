@@ -434,9 +434,64 @@ async function descargarArchivoDrive(
   };
 }
 
+async function obtenerArchivoDriveComoStream(driveFileId, metadata = {}) {
+  const drive = obtenerClienteDrive();
+  if (!drive) {
+    throw crearError(
+      "La descarga requiere GOOGLE_DRIVE_API_KEY o una cuenta de servicio de solo lectura",
+      "CONFIGURACION_DRIVE_NO_DISPONIBLE",
+      503,
+    );
+  }
+
+  let respuesta;
+  try {
+    respuesta = await drive.files.get(
+      {
+        fileId: driveFileId,
+        alt: "media",
+        supportsAllDrives: true,
+      },
+      {
+        responseType: "stream",
+      },
+    );
+  } catch (error) {
+    manejarErrorDrive(error, "Error al descargar el fichero de Google Drive");
+  }
+
+  const mimeType = normalizarMimeType(
+    respuesta.headers["content-type"] || metadata.mime_type,
+  );
+  if (mimeType && mimeType.indexOf("text/html") === 0) {
+    throw crearError(
+      "Google Drive devolvió HTML en lugar del fichero imprimible",
+      "DRIVE_RESPUESTA_HTML",
+      502,
+    );
+  }
+
+  if (mimeType && !esMimeImprimible(mimeType)) {
+    throw crearError(
+      "El fichero de Google Drive no tiene un formato imprimible soportado",
+      "MIME_NO_IMPRIMIBLE",
+      400,
+    );
+  }
+
+  const sizeBytes = Number.parseInt(respuesta.headers["content-length"], 10);
+  return {
+    stream: respuesta.data,
+    mime_type: mimeType,
+    size_bytes:
+      Number.isSafeInteger(sizeBytes) && sizeBytes >= 0 ? sizeBytes : null,
+  };
+}
+
 module.exports.crearError = crearError;
 module.exports.tieneConfiguracionDrive = tieneConfiguracionDrive;
 module.exports.parsearUrlDrive = parsearUrlDrive;
 module.exports.esMimeImprimible = esMimeImprimible;
 module.exports.inspeccionarUrlDrive = inspeccionarUrlDrive;
 module.exports.descargarArchivoDrive = descargarArchivoDrive;
+module.exports.obtenerArchivoDriveComoStream = obtenerArchivoDriveComoStream;

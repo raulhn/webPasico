@@ -1,6 +1,7 @@
 const gestorSolicitudesImpresion = require("../logica/solicitudes_impresion.js");
 const servletComun = require("./servlet_comun.js");
 const constantes = require("../constantes.js");
+const { pipeline } = require("stream");
 
 async function obtenerNidUsuario(req) {
   const tokenDecode = await servletComun.obtenerTokenDecoded(req);
@@ -326,7 +327,7 @@ function descargarSolicitudImpresionArchivo(req, res) {
   servletComun.comprobacionAccesoAPIKey(req, res, async () => {
     try {
       const archivo =
-        await gestorSolicitudesImpresion.obtenerArchivoSolicitudImpresion(
+        await gestorSolicitudesImpresion.descargarArchivoSolicitudImpresion(
           req.params.nid_solicitud_impresion_archivo,
         );
 
@@ -337,7 +338,23 @@ function descargarSolicitudImpresionArchivo(req, res) {
         "Content-Disposition",
         'attachment; filename="' + archivo.nombre_archivo + '"',
       );
-      res.sendFile(archivo.ruta_local);
+      pipeline(archivo.stream, res, (error) => {
+        if (!error) {
+          return;
+        }
+
+        console.error(
+          "servlet_solicitudes_impresion -> descargarSolicitudImpresionArchivo:",
+          error,
+        );
+        if (!res.headersSent && !res.destroyed) {
+          res.status(502).send({
+            error: true,
+            mensaje: "No se ha podido descargar el archivo",
+            codigo: "IMPRESION_DESCARGA",
+          });
+        }
+      });
     } catch (error) {
       console.error(
         "servlet_solicitudes_impresion -> descargarSolicitudImpresionArchivo:",

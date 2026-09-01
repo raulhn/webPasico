@@ -1299,7 +1299,7 @@ async function actualizarSolicitudDesdeApi(datos) {
 }
 
 async function obtenerArchivoSolicitudImpresion(nidSolicitudImpresionArchivo) {
-  let archivos = await gestor_base_datos.consulta(
+  const archivos = await gestor_base_datos.consulta(
     "SELECT a.*, s.nid_usuario, s.nid_solicitud_impresion, s.estado, p.titulo partitura_titulo " +
       "FROM " +
       constantes.ESQUEMA +
@@ -1323,56 +1323,9 @@ async function obtenerArchivoSolicitudImpresion(nidSolicitudImpresionArchivo) {
     );
   }
 
-  let archivo = archivos[0];
-  if (!archivo.ruta_local || !fs.existsSync(archivo.ruta_local)) {
-    const solicitudPreparada = await prepararArchivosSolicitud(
-      await obtenerSolicitudDetalle(archivo.nid_solicitud_impresion, null, {
-        incluirRutaLocal: true,
-      }),
-    );
-
-    const archivoPreparado = solicitudPreparada.archivos.find(
-      (elementoArchivo) =>
-        String(elementoArchivo.nid_solicitud_impresion_archivo) ===
-        String(nidSolicitudImpresionArchivo),
-    );
-
-    archivos = await gestor_base_datos.consulta(
-      "SELECT a.*, s.nid_usuario, s.nid_solicitud_impresion, s.estado, p.titulo partitura_titulo " +
-        "FROM " +
-        constantes.ESQUEMA +
-        ".solicitud_impresion_archivos a " +
-        "INNER JOIN " +
-        constantes.ESQUEMA +
-        ".solicitudes_impresion s ON s.nid_solicitud_impresion = a.nid_solicitud_impresion " +
-        "INNER JOIN " +
-        constantes.ESQUEMA +
-        ".partituras p ON p.nid_partitura = a.nid_partitura " +
-        "WHERE a.nid_solicitud_impresion_archivo = " +
-        escapeSql(nidSolicitudImpresionArchivo) +
-        " LIMIT 1",
-    );
-
-    if (archivos.length === 0 || !archivoPreparado) {
-      throw crearError(
-        "No se ha podido preparar el archivo de impresión",
-        "ARCHIVO_SOLICITUD_NO_DISPONIBLE",
-        409,
-      );
-    }
-    archivo = archivos[0];
-  }
-
-  if (!archivo.ruta_local || !fs.existsSync(archivo.ruta_local)) {
-    throw crearError(
-      "El archivo de impresión no está disponible en caché",
-      "ARCHIVO_SOLICITUD_NO_DISPONIBLE",
-      409,
-    );
-  }
+  const archivo = archivos[0];
 
   return {
-    ruta_local: archivo.ruta_local,
     nombre_archivo:
       archivo.nombre_archivo ||
       archivo.partitura_titulo ||
@@ -1386,6 +1339,24 @@ async function obtenerArchivoSolicitudImpresion(nidSolicitudImpresionArchivo) {
   };
 }
 
+async function descargarArchivoSolicitudImpresion(nidSolicitudImpresionArchivo) {
+  const archivo = await obtenerArchivoSolicitudImpresion(
+    nidSolicitudImpresionArchivo,
+  );
+  const descarga = await gestorDrivePartituras.obtenerArchivoDriveComoStream(
+    archivo.drive_file_id,
+    {
+      nombre_archivo: archivo.nombre_archivo,
+      mime_type: archivo.mime_type,
+    },
+  );
+
+  return {
+    ...archivo,
+    ...descarga,
+  };
+}
+
 module.exports.obtenerConfiguracionCuota = obtenerConfiguracionCuota;
 module.exports.guardarConfiguracionCuota = guardarConfiguracionCuota;
 module.exports.inspeccionarPartitura = inspeccionarPartitura;
@@ -1396,3 +1367,5 @@ module.exports.cancelarSolicitudUsuario = cancelarSolicitudUsuario;
 module.exports.reclamarSolicitudesPendientes = reclamarSolicitudesPendientes;
 module.exports.actualizarSolicitudDesdeApi = actualizarSolicitudDesdeApi;
 module.exports.obtenerArchivoSolicitudImpresion = obtenerArchivoSolicitudImpresion;
+module.exports.descargarArchivoSolicitudImpresion =
+  descargarArchivoSolicitudImpresion;

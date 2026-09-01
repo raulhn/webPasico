@@ -11,10 +11,7 @@ function obtener_preinscripciones() {
           "x-api-key": process.env.API_KEY,
         },
       }).then(async (response) => {
-        console.log("obtener_preinscripciones -> " + API_URL);
         let respuesta = await response.json();
-        console.log("obtener_preinscripciones -> ", respuesta);
-        console.log("api key", process.env.API_KEY);
         resolve(respuesta.preinscripciones);
       });
     } catch (error) {
