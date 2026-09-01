@@ -931,7 +931,14 @@ async function crearSolicitudImpresion(nidUsuario, datos, headers = {}) {
   return solicitud;
 }
 
-async function listarSolicitudesUsuario(nidUsuario) {
+async function listarSolicitudesUsuario(nidUsuario, filtros = {}) {
+  const condiciones = ["s.nid_usuario = " + escapeSql(nidUsuario)];
+  if (filtros.nid_partitura) {
+    condiciones.push(
+      "s.nid_partitura = " + escapeSql(filtros.nid_partitura),
+    );
+  }
+
   const solicitudes = await gestor_base_datos.consulta(
     "SELECT s.nid_solicitud_impresion, s.nid_usuario, s.estado, s.idempotency_key, s.opciones, s.origen_drive_tipo, s.origen_drive_id, s.trabajo_cups, s.intentos, s.mensaje_error, s.fecha_solicitud, s.fecha_reclamacion, s.fecha_cancelacion, s.fecha_actualizacion, s.nid_partitura, p.titulo partitura_titulo, p.autor partitura_autor, count(a.nid_solicitud_impresion_archivo) total_archivos FROM " +
       constantes.ESQUEMA +
@@ -939,8 +946,8 @@ async function listarSolicitudesUsuario(nidUsuario) {
       constantes.ESQUEMA +
       ".partituras p ON p.nid_partitura = s.nid_partitura LEFT JOIN " +
       constantes.ESQUEMA +
-      ".solicitud_impresion_archivos a ON a.nid_solicitud_impresion = s.nid_solicitud_impresion WHERE s.nid_usuario = " +
-      escapeSql(nidUsuario) +
+      ".solicitud_impresion_archivos a ON a.nid_solicitud_impresion = s.nid_solicitud_impresion WHERE " +
+      condiciones.join(" AND ") +
       " GROUP BY s.nid_solicitud_impresion ORDER BY s.fecha_solicitud DESC, s.nid_solicitud_impresion DESC",
   );
 

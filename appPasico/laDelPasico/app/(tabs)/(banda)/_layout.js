@@ -47,6 +47,14 @@ export default function DrawerLayout() {
       />
 
       <Drawer.Screen
+        name="historialSolicitudesImpresion"
+        options={{
+          title: "Historial de impresión",
+          drawerItemStyle: esRol(["MUSICO"]) ? {} : { display: "none" },
+        }}
+      />
+
+      <Drawer.Screen
         name="banda_privada"
         options={{
           title: "Zona Privada",

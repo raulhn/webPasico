@@ -130,7 +130,10 @@ async function obtenerSolicitudesImpresion(req, res) {
     }
 
     const nidUsuario = await obtenerNidUsuario(req);
-    const solicitudes = await gestorSolicitudesImpresion.listarSolicitudesUsuario(nidUsuario);
+    const solicitudes = await gestorSolicitudesImpresion.listarSolicitudesUsuario(
+      nidUsuario,
+      req.query || {},
+    );
     res.status(200).send({
       error: false,
       solicitudes,

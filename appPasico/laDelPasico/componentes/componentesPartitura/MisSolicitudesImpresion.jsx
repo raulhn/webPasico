@@ -22,9 +22,14 @@ import {
 
 export default function MisSolicitudesImpresion({
   nidPartitura,
-  visible,
+  visible = true,
   refresco = 0,
   onActualizada,
+  titulo = "Mis solicitudes recientes",
+  mensajeVacio = "Aún no has enviado solicitudes para esta partitura.",
+  limite = 5,
+  permitirCancelacion = true,
+  mostrarPartitura = false,
 }) {
   const { cerrarSesion } = useContext(AuthContext);
   const [cargando, setCargando] = useState(false);
@@ -38,7 +43,7 @@ export default function MisSolicitudesImpresion({
   const [errorCarga, setErrorCarga] = useState("");
 
   useEffect(() => {
-    if (visible && nidPartitura) {
+    if (visible) {
       cargarSolicitudes();
     }
   }, [nidPartitura, refresco, visible]);
@@ -49,7 +54,7 @@ export default function MisSolicitudesImpresion({
 
     try {
       const respuesta = await ServiceSolicitudesImpresion.obtenerSolicitudesImpresion(
-        { nid_partitura: nidPartitura },
+        nidPartitura ? { nid_partitura: nidPartitura } : {},
         cerrarSesion
       );
 
@@ -59,7 +64,12 @@ export default function MisSolicitudesImpresion({
         );
       }
 
-      setSolicitudes(normalizarListadoSolicitudesImpresion(respuesta).slice(0, 5));
+      const solicitudesNormalizadas = normalizarListadoSolicitudesImpresion(respuesta);
+      setSolicitudes(
+        Number.isInteger(limite)
+          ? solicitudesNormalizadas.slice(0, limite)
+          : solicitudesNormalizadas
+      );
     } catch (error) {
       setErrorCarga("No se pudieron cargar tus solicitudes recientes.");
     } finally {
@@ -142,14 +152,14 @@ export default function MisSolicitudesImpresion({
     }
   }
 
-  if (!visible || !nidPartitura) {
+  if (!visible) {
     return null;
   }
 
   return (
     <View style={styles.contenedor}>
       <View style={styles.cabecera}>
-        <Text style={styles.titulo}>Mis solicitudes recientes</Text>
+        <Text style={styles.titulo}>{titulo}</Text>
         <Boton nombre="Refrescar" onPress={cargarSolicitudes} />
       </View>
 
@@ -165,9 +175,7 @@ export default function MisSolicitudesImpresion({
       ) : null}
 
       {!cargando && !errorCarga && solicitudes.length === 0 ? (
-        <Text style={styles.textoSecundario}>
-          Aún no has enviado solicitudes para esta partitura.
-        </Text>
+        <Text style={styles.textoSecundario}>{mensajeVacio}</Text>
       ) : null}
 
       {!cargando &&
@@ -206,6 +214,15 @@ export default function MisSolicitudesImpresion({
                 </Text>
               </View>
 
+              {mostrarPartitura && detalle.partitura?.titulo ? (
+                <View style={styles.filaInfo}>
+                  <MaterialIcons name="music-note" size={18} color="#555" />
+                  <Text style={styles.textoInfo}>
+                    Partitura: {detalle.partitura.titulo}
+                  </Text>
+                </View>
+              ) : null}
+
               {detalle.rangoPaginas ? (
                 <View style={styles.filaInfo}>
                   <MaterialIcons name="filter-1" size={18} color="#555" />
@@ -235,7 +252,8 @@ export default function MisSolicitudesImpresion({
                   }
                   onPress={() => alternarDetalle(solicitud)}
                 />
-                {esEstadoSolicitudCancelable(solicitud.estado) ? (
+                {permitirCancelacion &&
+                esEstadoSolicitudCancelable(solicitud.estado) ? (
                   <Boton
                     nombre={cancelando ? "Cancelando..." : "Cancelar"}
                     color={Constantes.COLOR_ROJO}

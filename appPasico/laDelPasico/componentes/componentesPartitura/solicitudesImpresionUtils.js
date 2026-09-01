@@ -2,6 +2,18 @@ function normalizarTexto(valor) {
   return typeof valor === "string" ? valor.trim() : "";
 }
 
+function normalizarIdentificador(valor) {
+  if (typeof valor === "string") {
+    return valor.trim();
+  }
+
+  if (typeof valor === "number" && Number.isFinite(valor)) {
+    return String(valor);
+  }
+
+  return "";
+}
+
 function obtenerEntero(valor) {
   const numero = Number.parseInt(valor, 10);
   return Number.isFinite(numero) ? numero : null;
@@ -106,6 +118,7 @@ export function normalizarArchivosImpresion(archivos) {
     const etiqueta =
       normalizarTexto(archivo.etiqueta) ||
       normalizarTexto(archivo.nombre_mostrar) ||
+      normalizarTexto(archivo.nombre_archivo) ||
       normalizarTexto(archivo.nombre) ||
       normalizarTexto(archivo.filename) ||
       obtenerNombreDesdeRuta(rutaRelativa) ||
@@ -132,6 +145,7 @@ export function normalizarArchivosImpresion(archivos) {
         normalizarTexto(archivo.id) ||
         normalizarTexto(archivo.identificador) ||
         normalizarTexto(archivo.nid_archivo) ||
+        normalizarTexto(archivo.drive_file_id) ||
         rutaRelativa ||
         `${etiqueta}-${indice}`,
       etiqueta,
@@ -140,6 +154,7 @@ export function normalizarArchivosImpresion(archivos) {
       rutaRelativa,
       referenciaServidor:
         normalizarTexto(archivo.referencia) ||
+        normalizarTexto(archivo.drive_file_id) ||
         normalizarTexto(archivo.file_id) ||
         normalizarTexto(archivo.id_archivo) ||
         rutaRelativa ||
@@ -266,8 +281,8 @@ export function normalizarSolicitudImpresion(solicitud, indice = 0) {
 
   return {
     id:
-      normalizarTexto(datos.id) ||
-      normalizarTexto(datos.nid_solicitud_impresion) ||
+      normalizarIdentificador(datos.id) ||
+      normalizarIdentificador(datos.nid_solicitud_impresion) ||
       `solicitud-${indice}`,
     estado,
     estadoEtiqueta: estado.split("_").join(" "),
@@ -287,6 +302,11 @@ export function normalizarSolicitudImpresion(solicitud, indice = 0) {
     trabajoCups:
       normalizarTexto(datos.trabajo_cups) ||
       normalizarTexto(datos.cups_job_id),
+    partitura: {
+      titulo:
+        normalizarTexto(datos.partitura?.titulo) ||
+        normalizarTexto(datos.partitura_titulo),
+    },
     archivos,
     rangoPaginas:
       normalizarTexto(datos.rango_paginas) ||

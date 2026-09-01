@@ -13,6 +13,7 @@ const MIMES_IMPRIMIBLES = new Set([
   "image/tiff",
   "image/webp",
 ]);
+const MIME_TIPO_CARPETA = "application/vnd.google-apps.folder";
 const EXTENSIONES_MIME = {
   "application/pdf": ".pdf",
   "image/bmp": ".bmp",
@@ -276,30 +277,47 @@ async function listarArchivosCarpeta(driveFolderId) {
 
   const drive = obtenerClienteDrive();
   const archivos = [];
-  let pageToken = null;
+  const carpetasPendientes = [driveFolderId];
+  const carpetasVisitadas = new Set();
 
   try {
-    do {
-      const respuesta = await drive.files.list({
-        q:
-          "'" +
-          driveFolderId +
-          "' in parents and trashed = false and mimeType != 'application/vnd.google-apps.folder'",
-        fields: "nextPageToken, files(id, name, mimeType, parents, size, webViewLink)",
-        includeItemsFromAllDrives: true,
-        supportsAllDrives: true,
-        orderBy: "name",
-        pageSize: 200,
-        pageToken,
-      });
-
-      const ficherosPagina = respuesta.data.files || [];
-      for (let i = 0; i < ficherosPagina.length; i++) {
-        archivos.push(normalizarArchivoDrive(ficherosPagina[i]));
+    for (let indiceCarpeta = 0; indiceCarpeta < carpetasPendientes.length; indiceCarpeta++) {
+      const nidCarpeta = carpetasPendientes[indiceCarpeta];
+      if (carpetasVisitadas.has(nidCarpeta)) {
+        continue;
       }
+      carpetasVisitadas.add(nidCarpeta);
 
-      pageToken = respuesta.data.nextPageToken || null;
-    } while (pageToken);
+      let pageToken = null;
+      do {
+        const respuesta = await drive.files.list({
+          q: "'" + nidCarpeta + "' in parents and trashed = false",
+          fields:
+            "nextPageToken, files(id, name, mimeType, parents, size, webViewLink)",
+          includeItemsFromAllDrives: true,
+          supportsAllDrives: true,
+          orderBy: "name",
+          pageSize: 200,
+          pageToken,
+        });
+
+        const ficherosPagina = respuesta.data.files || [];
+        for (let i = 0; i < ficherosPagina.length; i++) {
+          const fichero = ficherosPagina[i];
+          if (normalizarMimeType(fichero.mimeType) === MIME_TIPO_CARPETA) {
+            carpetasPendientes.push(fichero.id);
+            continue;
+          }
+
+          const archivo = normalizarArchivoDrive(fichero);
+          if (archivo.imprimible) {
+            archivos.push(archivo);
+          }
+        }
+
+        pageToken = respuesta.data.nextPageToken || null;
+      } while (pageToken);
+    }
   } catch (error) {
     manejarErrorDrive(error, "Error al listar la carpeta de Google Drive");
   }
