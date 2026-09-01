@@ -1326,6 +1326,7 @@ async function obtenerArchivoSolicitudImpresion(nidSolicitudImpresionArchivo) {
   const archivo = archivos[0];
 
   return {
+    drive_file_id: archivo.drive_file_id,
     nombre_archivo:
       archivo.nombre_archivo ||
       archivo.partitura_titulo ||
