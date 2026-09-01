@@ -17,7 +17,6 @@ import {
   normalizarListadoSolicitudesImpresion,
   normalizarSolicitudImpresion,
   obtenerColorEstadoSolicitud,
-  resumirArchivosSolicitud,
 } from "./solicitudesImpresionUtils";
 
 export default function MisSolicitudesImpresion({
@@ -53,10 +52,11 @@ export default function MisSolicitudesImpresion({
     setErrorCarga("");
 
     try {
-      const respuesta = await ServiceSolicitudesImpresion.obtenerSolicitudesImpresion(
-        nidPartitura ? { nid_partitura: nidPartitura } : {},
-        cerrarSesion
-      );
+      const respuesta =
+        await ServiceSolicitudesImpresion.obtenerSolicitudesImpresion(
+          nidPartitura ? { nid_partitura: nidPartitura } : {},
+          cerrarSesion
+        );
 
       if (respuesta?.error) {
         throw new Error(
@@ -64,7 +64,8 @@ export default function MisSolicitudesImpresion({
         );
       }
 
-      const solicitudesNormalizadas = normalizarListadoSolicitudesImpresion(respuesta);
+      const solicitudesNormalizadas =
+        normalizarListadoSolicitudesImpresion(respuesta);
       setSolicitudes(
         Number.isInteger(limite)
           ? solicitudesNormalizadas.slice(0, limite)
@@ -99,10 +100,11 @@ export default function MisSolicitudesImpresion({
     setDetalleCargandoId(solicitud.id);
 
     try {
-      const respuesta = await ServiceSolicitudesImpresion.obtenerSolicitudImpresion(
-        solicitud.id,
-        cerrarSesion
-      );
+      const respuesta =
+        await ServiceSolicitudesImpresion.obtenerSolicitudImpresion(
+          solicitud.id,
+          cerrarSesion
+        );
 
       if (respuesta?.error) {
         throw new Error(respuesta?.mensaje || "No se pudo obtener el detalle");
@@ -137,7 +139,9 @@ export default function MisSolicitudesImpresion({
         );
 
       if (respuesta?.error) {
-        throw new Error(respuesta?.mensaje || "No se pudo cancelar la solicitud");
+        throw new Error(
+          respuesta?.mensaje || "No se pudo cancelar la solicitud"
+        );
       }
 
       setSolicitudCancelar(null);
@@ -207,13 +211,6 @@ export default function MisSolicitudesImpresion({
                 </Text>
               </View>
 
-              <View style={styles.filaInfo}>
-                <MaterialIcons name="description" size={18} color="#555" />
-                <Text style={styles.textoInfo}>
-                  {resumirArchivosSolicitud(detalle)}
-                </Text>
-              </View>
-
               {mostrarPartitura && detalle.partitura?.titulo ? (
                 <View style={styles.filaInfo}>
                   <MaterialIcons name="music-note" size={18} color="#555" />
@@ -247,8 +244,8 @@ export default function MisSolicitudesImpresion({
                     cargandoDetalle
                       ? "Cargando..."
                       : estaAbierta
-                        ? "Ocultar detalle"
-                        : "Ver detalle"
+                      ? "Ocultar detalle"
+                      : "Ver detalle"
                   }
                   onPress={() => alternarDetalle(solicitud)}
                 />
