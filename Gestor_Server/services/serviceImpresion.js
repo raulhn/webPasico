@@ -14,6 +14,7 @@ const ESTADOS_FINALES = new Set([
   "ERROR_FINAL",
   "CANCELADA",
 ]);
+const MAX_PAGINAS_POR_ARCHIVO = 6;
 
 function obtenerConfiguracion() {
   const cola = process.env.CUPS_PRINTER;
@@ -111,10 +112,46 @@ function validarOpciones(opciones) {
   ) {
     throw new Error("El rango de páginas no es válido");
   }
+
+  if (!opciones.rango_paginas) {
+    throw new Error(
+      "Debe indicar un rango de hasta " +
+        MAX_PAGINAS_POR_ARCHIVO +
+        " páginas para imprimir archivos PDF",
+    );
+  }
+
+  let numeroPaginas = 0;
+  for (const segmento of opciones.rango_paginas.split(",")) {
+    const limites = segmento.split("-").map((valor) => Number.parseInt(valor, 10));
+    const inicio = limites[0];
+    const fin = limites.length === 2 ? limites[1] : inicio;
+    if (
+      !Number.isSafeInteger(inicio) ||
+      !Number.isSafeInteger(fin) ||
+      inicio < 1 ||
+      fin < inicio
+    ) {
+      throw new Error("El rango de páginas no es válido");
+    }
+
+    for (let pagina = inicio; pagina <= fin; pagina += 1) {
+      numeroPaginas += 1;
+      if (numeroPaginas > MAX_PAGINAS_POR_ARCHIVO) {
+        throw new Error(
+          "No se pueden imprimir más de " +
+            MAX_PAGINAS_POR_ARCHIVO +
+            " páginas por archivo",
+        );
+      }
+    }
+  }
 }
 
 function construirArgumentosCups(solicitud, fichero) {
-  validarOpciones(solicitud.opciones);
+  if (fichero.mime_type === "application/pdf") {
+    validarOpciones(solicitud.opciones);
+  }
 
   const argumentos = [
     "-d",

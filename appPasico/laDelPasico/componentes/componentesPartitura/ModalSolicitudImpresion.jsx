@@ -31,6 +31,8 @@ import {
   validarRangoPaginasImpresion,
 } from "./solicitudesImpresionUtils";
 
+const MAX_PAGINAS_POR_ARCHIVO = 6;
+
 function construirSeleccionInicial(archivos) {
   return archivos.reduce((resultado, archivo) => {
     resultado[archivo.id] = Boolean(archivo.seleccionadoPorDefecto);
@@ -135,7 +137,7 @@ export default function ModalSolicitudImpresion({
       setArchivosSeleccionados(
         construirSeleccionInicial(inspeccionNormalizada.archivos)
       );
-      setRangoPaginas(inspeccionNormalizada.rangoPaginas || "");
+      setRangoPaginas(inspeccionNormalizada.rangoPaginas || "1-6");
       setEscalaPorcentaje(
         String(inspeccionNormalizada.escalaPorcentaje || 100)
       );
@@ -170,8 +172,23 @@ export default function ModalSolicitudImpresion({
       return;
     }
 
-    if (!validarRangoPaginasImpresion(rangoPaginas)) {
-      setMensajeAviso("Indica un rango válido. Ejemplos: 1-3, 5 o 1-2,4,7-9.");
+    const hayPdfSeleccionado = archivosActivos.some(
+      (archivo) => archivo.original?.mime_type === "application/pdf"
+    );
+    if (
+      !validarRangoPaginasImpresion(
+        rangoPaginas,
+        hayPdfSeleccionado ? MAX_PAGINAS_POR_ARCHIVO : null
+      )
+    ) {
+      setMensajeAviso(
+        "Indica un rango válido de un máximo de 6 páginas por archivo. Ejemplos: 1-3, 5 o 1-2,4."
+      );
+      return;
+    }
+
+    if (hayPdfSeleccionado && !rangoPaginas.trim()) {
+      setMensajeAviso("Indica las páginas a imprimir (máximo 6 por archivo).");
       return;
     }
 
@@ -377,7 +394,7 @@ export default function ModalSolicitudImpresion({
               <View style={styles.seccion}>
                 <Text style={styles.tituloSeccion}>Rango de páginas</Text>
                 <EntradaTexto
-                  placeholder="Opcional. Ejemplo: 1-2,4,7-8"
+                  placeholder="Máximo 6 páginas. Ejemplo: 1-2,4"
                   valor={rangoPaginas}
                   setValor={setRangoPaginas}
                   ancho="100%"
@@ -390,8 +407,8 @@ export default function ModalSolicitudImpresion({
                   ancho="100%"
                 />
                 <Text style={styles.ayuda}>
-                  Puedes ajustar el porcentaje entre 25 y 200 para adaptar la
-                  impresión.
+                  En cada PDF se pueden imprimir hasta 6 páginas. Puedes
+                  ajustar el porcentaje entre 25 y 200 para adaptar la impresión.
                 </Text>
               </View>
 

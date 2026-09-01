@@ -16,6 +16,7 @@ const CONFIGURACION_DEFECTO = {
   escala_minima: 25,
   escala_maxima: 200,
 };
+const MAX_PAGINAS_POR_ARCHIVO = 6;
 const ESTADOS_FINALES = new Set([
   "IMPRESA",
   "RECHAZADA_CUOTA",
@@ -505,6 +506,64 @@ function normalizarOpciones(datos, configuracion) {
   };
 }
 
+function contarPaginasRango(rangoPaginas) {
+  let numeroPaginas = 0;
+
+  for (const segmento of rangoPaginas.split(",")) {
+    const limites = segmento.split("-").map((valor) => Number.parseInt(valor, 10));
+    const inicio = limites[0];
+    const fin = limites.length === 2 ? limites[1] : inicio;
+
+    if (
+      !Number.isSafeInteger(inicio) ||
+      !Number.isSafeInteger(fin) ||
+      inicio < 1 ||
+      fin < inicio
+    ) {
+      throw crearError(
+        "El rango de páginas indicado no es válido",
+        "RANGO_PAGINAS_INVALIDO",
+        400,
+      );
+    }
+
+    for (let pagina = inicio; pagina <= fin; pagina += 1) {
+      numeroPaginas += 1;
+      if (numeroPaginas > MAX_PAGINAS_POR_ARCHIVO) {
+        throw crearError(
+          "No se pueden imprimir más de " +
+            MAX_PAGINAS_POR_ARCHIVO +
+            " páginas por archivo",
+          "MAXIMO_PAGINAS_POR_ARCHIVO_SUPERADO",
+          400,
+        );
+      }
+    }
+  }
+}
+
+function validarLimitePaginasPorArchivo(archivos, opciones) {
+  const incluyePdf = archivos.some(
+    (archivo) => archivo.mime_type === "application/pdf",
+  );
+
+  if (!incluyePdf) {
+    return;
+  }
+
+  if (!opciones.rango_paginas) {
+    throw crearError(
+      "Debe indicar un rango de hasta " +
+        MAX_PAGINAS_POR_ARCHIVO +
+        " páginas para imprimir archivos PDF",
+      "RANGO_PAGINAS_REQUERIDO",
+      400,
+    );
+  }
+
+  contarPaginasRango(opciones.rango_paginas);
+}
+
 function normalizarSeleccionArchivos(archivos, inspeccion) {
   let seleccion = Array.isArray(archivos) ? archivos.slice() : [];
   if (seleccion.length === 0 && inspeccion.tipo === "ARCHIVO") {
@@ -826,6 +885,7 @@ async function crearSolicitudImpresion(nidUsuario, datos, headers = {}) {
     partitura,
   );
   const opciones = normalizarOpciones(datos, configuracion);
+  validarLimitePaginasPorArchivo(archivosValidados, opciones);
   const idempotencyKey = normalizarIdempotencyKey(datos, headers);
 
   const resultado = await withTransaction(async (connection) => {

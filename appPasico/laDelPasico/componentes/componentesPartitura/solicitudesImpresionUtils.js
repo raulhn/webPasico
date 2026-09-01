@@ -331,7 +331,7 @@ export function generarIdempotencyKeyImpresion(nidPartitura) {
     .slice(2, 10)}`;
 }
 
-export function validarRangoPaginasImpresion(rangoPaginas) {
+export function validarRangoPaginasImpresion(rangoPaginas, maximoPaginas = null) {
   const valor = normalizarTexto(rangoPaginas);
   if (!valor) {
     return true;
@@ -341,16 +341,29 @@ export function validarRangoPaginasImpresion(rangoPaginas) {
     return false;
   }
 
-  return valor.split(",").every((segmento) => {
+  let numeroPaginas = 0;
+  const rangoValido = valor.split(",").every((segmento) => {
     const [inicio, fin] = segmento.split("-").map((item) => obtenerEntero(item));
     if (inicio === null) {
       return false;
     }
     if (segmento.includes("-")) {
-      return fin !== null && fin >= inicio;
+      if (fin === null || fin < inicio) {
+        return false;
+      }
+      for (let pagina = inicio; pagina <= fin; pagina += 1) {
+        numeroPaginas += 1;
+      }
+      return true;
     }
+    numeroPaginas += 1;
     return true;
   });
+
+  return (
+    rangoValido &&
+    (maximoPaginas === null || numeroPaginas <= maximoPaginas)
+  );
 }
 
 export function esEstadoSolicitudFinal(estado) {
