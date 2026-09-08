@@ -4,6 +4,7 @@ const fs = require("fs/promises");
 const os = require("os");
 const path = require("path");
 const cron = require("node-cron");
+const { PDFDocument } = require("pdf-lib");
 const serviceComun = require("./serviceComun");
 const constantes = require("../constantes");
 
@@ -100,6 +101,34 @@ async function descargarFichero(solicitud, fichero, directorioTemporal) {
   return { ...fichero, ruta_local: rutaLocal };
 }
 
+async function escalarPdf(rutaPdf, escala) {
+  const factorEscala = escala / 100;
+  if (factorEscala === 1) {
+    return;
+  }
+
+  const documentoOrigen = await PDFDocument.load(await fs.readFile(rutaPdf));
+  const documentoEscalado = await PDFDocument.create();
+
+  for (const paginaOrigen of documentoOrigen.getPages()) {
+    const { width, height } = paginaOrigen.getSize();
+    const paginaDestino = documentoEscalado.addPage([width, height]);
+    paginaOrigen.getContentStream();
+    const paginaIncrustada = await documentoEscalado.embedPage(paginaOrigen);
+    const anchoEscalado = width * factorEscala;
+    const altoEscalado = height * factorEscala;
+
+    paginaDestino.drawPage(paginaIncrustada, {
+      x: (width - anchoEscalado) / 2,
+      y: (height - altoEscalado) / 2,
+      width: anchoEscalado,
+      height: altoEscalado,
+    });
+  }
+
+  await fs.writeFile(rutaPdf, await documentoEscalado.save(), { mode: 0o600 });
+}
+
 function validarOpciones(opciones) {
   const escala = Number(opciones.escala);
   if (!Number.isInteger(escala) || escala < 25 || escala > 200) {
@@ -161,9 +190,9 @@ function construirArgumentosCups(solicitud, fichero) {
   if (fichero.mime_type === "application/pdf") {
     // Evita que el escalado automático de PDF sustituya el porcentaje solicitado.
     argumentos.push("-o", "print-scaling=none");
+  } else {
+    argumentos.push("-o", "scaling=" + solicitud.opciones.escala);
   }
-
-  argumentos.push("-o", "scaling=" + solicitud.opciones.escala);
 
   if (solicitud.opciones.rango_paginas && fichero.mime_type === "application/pdf") {
     argumentos.push("-o", "page-ranges=" + solicitud.opciones.rango_paginas);
@@ -239,6 +268,10 @@ async function imprimirSolicitud(solicitud) {
         fichero,
         directorioTemporal,
       );
+      if (ficheroTemporal.mime_type === "application/pdf") {
+        validarOpciones(solicitud.opciones);
+        await escalarPdf(ficheroTemporal.ruta_local, solicitud.opciones.escala);
+      }
       const argumentos = construirArgumentosCups(solicitud, ficheroTemporal);
       const { stdout } = await execFileAsync("lp", argumentos, {
         timeout: obtenerConfiguracion().timeout,
@@ -302,3 +335,4 @@ function iniciarProcesoImpresion() {
 module.exports.iniciarProcesoImpresion = iniciarProcesoImpresion;
 module.exports.procesarSolicitudesImpresion = procesarSolicitudesImpresion;
 module.exports.construirArgumentosCups = construirArgumentosCups;
+module.exports.escalarPdf = escalarPdf;
