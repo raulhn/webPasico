@@ -156,9 +156,14 @@ function construirArgumentosCups(solicitud, fichero) {
   const argumentos = [
     "-d",
     obtenerConfiguracion().cola,
-    "-o",
-    "scaling=" + solicitud.opciones.escala,
   ];
+
+  if (fichero.mime_type === "application/pdf") {
+    // Evita que el escalado automático de PDF sustituya el porcentaje solicitado.
+    argumentos.push("-o", "print-scaling=none");
+  }
+
+  argumentos.push("-o", "scaling=" + solicitud.opciones.escala);
 
   if (solicitud.opciones.rango_paginas && fichero.mime_type === "application/pdf") {
     argumentos.push("-o", "page-ranges=" + solicitud.opciones.rango_paginas);
