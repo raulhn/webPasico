@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, FlatList, StyleSheet, Button, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, RefreshControl } from 'react-native';
 import { EntradaGroupRadioButton, EntradaTexto, Boton, ModalExito, ModalAviso, BotonFixed } from '../componentesUI/ComponentesUI';
 import ServiceEvaluaciones from '../../servicios/serviceEvaluaciones';
 import { useRouter } from 'expo-router';
@@ -10,7 +10,15 @@ const opcionesProgreso = [
   { etiqueta: 'Sin evaluar', valor: 0}
 ];
 
-export default function EvaluacionesAlumnosForm({ alumnos, evaluacionesRecuperadas=[], nid_curso, nid_asignatura, nid_trimestre }) {
+export default function EvaluacionesAlumnosForm({
+  alumnos,
+  evaluacionesRecuperadas = [],
+  nid_curso,
+  nid_asignatura,
+  nid_trimestre,
+  refreshing,
+  onRefresh,
+}) {
   // Estado para las evaluaciones de cada alumno
 
   const router = useRouter();
@@ -82,25 +90,32 @@ export default function EvaluacionesAlumnosForm({ alumnos, evaluacionesRecuperad
 
 
   return (
-    <>
-    <ScrollView contentContainerStyle={estilos.scrollContainer}>
-      {evaluaciones.map((evaluacion, idx) => (
-        <View key={ evaluacion.id} style={estilos.card}>
-          <Text style={estilos.nombre}>{evaluacion.nombre}</Text>
-          <View style={{position: "absolute", top: 10, right: 10}}>
+    <View style={estilos.contenedor}>
+      <ScrollView
+        contentContainerStyle={estilos.scrollContainer}
+        refreshControl={
+          onRefresh ? (
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          ) : undefined
+        }
+      >
+        {evaluaciones.map((evaluacion, idx) => (
+          <View key={ evaluacion.id} style={estilos.card}>
+            <Text style={estilos.nombre}>{evaluacion.nombre}</Text>
+            <View style={{position: "absolute", top: 10, right: 10}}>
 
-        <BotonFixed
-            icon="menu-book"
-            onPress={() => {
-              router.push({
-                pathname: "/stackEvaluaciones/fichaEvaluacion/" + evaluacion.nid_matricula,
-                params: { pestana: Number(nid_trimestre) - 1 },
-              });
-            }}
-            size={30}
-          />
-          </View>
-          <Text style={estilos.label}>Nota (0-10)</Text>
+          <BotonFixed
+              icon="menu-book"
+              onPress={() => {
+                router.push({
+                  pathname: "/stackEvaluaciones/fichaEvaluacion/" + evaluacion.nid_matricula,
+                  params: { pestana: Number(nid_trimestre) - 1 },
+                });
+              }}
+              size={30}
+            />
+            </View>
+            <Text style={estilos.label}>Nota (0-10)</Text>
 
 
           <EntradaTexto placeholder={"0-10"} valor={evaluacionesEdicion[idx].nota} 
@@ -123,33 +138,43 @@ export default function EvaluacionesAlumnosForm({ alumnos, evaluacionesRecuperad
             ancho={"100%"}
             alto={"100"}
           />
-        
-        </View>
-      ))}
-
-      <Boton nombre="Guardar Evaluaciones" onPress={handleGuardar} />
-    </ScrollView>
-    <ModalExito
-      visible={modalVisibleExito}
-      setVisible={() => setModalVisibleExito(false)}
-      mensaje="Evaluaciones guardadas con éxito"
-      textBoton={"Aceptar"}
-    />
-    <ModalAviso
-      visible={modalVisibleAviso}
-      setVisible={() => setModalVisibleAviso(false)}
-      mensaje="Error al guardar evaluaciones"
-      textBoton={"Aceptar"}
-    />
-    </>
+          </View>
+        ))}
+      </ScrollView>
+      <View style={estilos.botonFlotante}>
+        <Boton nombre="Guardar Evaluaciones" onPress={handleGuardar} />
+      </View>
+      <ModalExito
+        visible={modalVisibleExito}
+        setVisible={() => setModalVisibleExito(false)}
+        mensaje="Evaluaciones guardadas con éxito"
+        textBoton={"Aceptar"}
+      />
+      <ModalAviso
+        visible={modalVisibleAviso}
+        setVisible={() => setModalVisibleAviso(false)}
+        mensaje="Error al guardar evaluaciones"
+        textBoton={"Aceptar"}
+      />
+    </View>
   );
 }
 
 const estilos = StyleSheet.create({
+  contenedor: {
+    flex: 1,
+  },
   scrollContainer: {
     padding: 16,
     alignItems: 'center',
-    paddingBottom: 40,
+    paddingBottom: 90,
+  },
+  botonFlotante: {
+    position: 'absolute',
+    bottom: 16,
+    alignSelf: 'center',
+    zIndex: 10,
+    elevation: 10,
   },
   card: {
     width: '98%',

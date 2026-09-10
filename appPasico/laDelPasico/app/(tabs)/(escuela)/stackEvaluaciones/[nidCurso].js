@@ -1,4 +1,4 @@
-import {ActivityIndicator, ScrollView, Text, RefreshControl} from 'react-native';
+import {ActivityIndicator, View, Text} from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { useAlumnosAsignaturaProfesor } from '../../../../hooks/escuela/useAlumnos';
 import { useContext } from 'react';
@@ -19,9 +19,19 @@ export default function CrearEvaluacion() {
     return (<><ActivityIndicator /><Text>Cargando alumnos...</Text></>);
   }
   return (
-    <ScrollView refreshControl={<RefreshControl refreshing={cargandoAlumnos} onRefresh={()=> {lanzarRefresco(); lanzarRefrescoEvaluaciones() }} />}>
-
-      <EvaluacionesAlumnosForm alumnos={alumnos} nid_curso={nidCurso} nid_asignatura={nidAsignatura} nid_trimestre={nidTrimestre} evaluacionesRecuperadas={evaluaciones} />
-    </ScrollView>
+    <View style={{ flex: 1 }}>
+      <EvaluacionesAlumnosForm
+        alumnos={alumnos}
+        nid_curso={nidCurso}
+        nid_asignatura={nidAsignatura}
+        nid_trimestre={nidTrimestre}
+        evaluacionesRecuperadas={evaluaciones}
+        refreshing={cargandoAlumnos}
+        onRefresh={() => {
+          lanzarRefresco();
+          lanzarRefrescoEvaluaciones();
+        }}
+      />
+    </View>
   );
 }
