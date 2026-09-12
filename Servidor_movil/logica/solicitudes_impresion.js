@@ -855,12 +855,20 @@ async function validarCuotaTx(connection, nidUsuario, configuracion) {
     connection,
     nidUsuario,
   );
-  if (solicitudesPendientes >= configuracion.max_solicitudes_pendientes) {
-    throw crearError(
-      "Has superado el máximo de solicitudes pendientes permitidas",
-      "CUOTA_IMPRESION_SUPERADA",
-      409,
-    );
+
+  const roles = [constantes.ADMINISTRADOR];
+  const bAdministrador = await servlet_comun.comprobarRolNidUsuario(
+    nidUsuario,
+    roles,
+  );
+  if (!bAdministrador) {
+    if (solicitudesPendientes >= configuracion.max_solicitudes_pendientes) {
+      throw crearError(
+        "Has superado el máximo de solicitudes pendientes permitidas",
+        "CUOTA_IMPRESION_SUPERADA",
+        409,
+      );
+    }
   }
 
   const solicitudesVentana = await contarSolicitudesVentanaTx(
@@ -868,12 +876,14 @@ async function validarCuotaTx(connection, nidUsuario, configuracion) {
     nidUsuario,
     configuracion.ventana_dias,
   );
-  if (solicitudesVentana >= configuracion.max_solicitudes_ventana) {
-    throw crearError(
-      "Has superado la cuota de solicitudes de impresión disponible",
-      "CUOTA_IMPRESION_SUPERADA",
-      409,
-    );
+  if (!bAdministrador) {
+    if (solicitudesVentana >= configuracion.max_solicitudes_ventana) {
+      throw crearError(
+        "Has superado la cuota de solicitudes de impresión disponible",
+        "CUOTA_IMPRESION_SUPERADA",
+        409,
+      );
+    }
   }
 }
 

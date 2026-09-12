@@ -88,11 +88,8 @@ function comprobacionAccesoAPIKey(req, res, callback) {
   }
 }
 
-async function comprobarRol(req, res, rolesPermitidos) {
+async function comprobarRolNidUsuario(nid_usuario, rolesPermitidos) {
   try {
-    const tokenDecode = await obtenerTokenDecoded(req, res);
-    const nid_usuario = tokenDecode.nid_usuario;
-
     const roles = await gestorUsuarios.construirRoles(nid_usuario);
 
     if (!roles || roles.length === 0) {
@@ -112,7 +109,19 @@ async function comprobarRol(req, res, rolesPermitidos) {
   }
 }
 
+async function comprobarRol(req, res, rolesPermitidos) {
+  try {
+    const tokenDecode = await obtenerTokenDecoded(req, res);
+    const nid_usuario = tokenDecode.nid_usuario;
+
+    return await comprobarRolNidUsuario(nid_usuario, rolesPermitidos);
+  } catch (error) {
+    return false;
+  }
+}
+
 module.exports.comprobacionLogin = comprobacionLogin;
 module.exports.comprobacionAccesoAPIKey = comprobacionAccesoAPIKey;
 module.exports.obtenerTokenDecoded = obtenerTokenDecoded;
 module.exports.comprobarRol = comprobarRol;
+module.exports.comprobarRolNidUsuario = comprobarRolNidUsuario;
