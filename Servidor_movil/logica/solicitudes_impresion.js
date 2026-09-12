@@ -16,6 +16,7 @@ const CONFIGURACION_DEFECTO = {
   escala_minima: 25,
   escala_maxima: 200,
 };
+
 const MAX_PAGINAS_POR_ARCHIVO = 6;
 const ESTADOS_FINALES = new Set([
   "IMPRESA",
@@ -25,10 +26,27 @@ const ESTADOS_FINALES = new Set([
 ]);
 const ESTADOS_CANCELABLES = new Set(["PENDIENTE", "REINTENTABLE"]);
 const TRANSICIONES_ESTADO = {
-  PENDIENTE: new Set(["RECLAMADA", "IMPRIMIENDO", "CANCELADA", "RECHAZADA_CUOTA"]),
-  RECLAMADA: new Set(["IMPRIMIENDO", "REINTENTABLE", "ERROR_FINAL", "CANCELADA", "RECHAZADA_CUOTA"]),
+  PENDIENTE: new Set([
+    "RECLAMADA",
+    "IMPRIMIENDO",
+    "CANCELADA",
+    "RECHAZADA_CUOTA",
+  ]),
+  RECLAMADA: new Set([
+    "IMPRIMIENDO",
+    "REINTENTABLE",
+    "ERROR_FINAL",
+    "CANCELADA",
+    "RECHAZADA_CUOTA",
+  ]),
   IMPRIMIENDO: new Set(["IMPRESA", "REINTENTABLE", "ERROR_FINAL"]),
-  REINTENTABLE: new Set(["RECLAMADA", "IMPRIMIENDO", "CANCELADA", "ERROR_FINAL", "RECHAZADA_CUOTA"]),
+  REINTENTABLE: new Set([
+    "RECLAMADA",
+    "IMPRIMIENDO",
+    "CANCELADA",
+    "ERROR_FINAL",
+    "RECHAZADA_CUOTA",
+  ]),
   IMPRESA: new Set([]),
   RECHAZADA_CUOTA: new Set([]),
   ERROR_FINAL: new Set([]),
@@ -74,7 +92,9 @@ function crearHashIdempotencia(valor) {
 }
 
 function normalizarEstado(estado) {
-  const estadoNormalizado = String(estado || "").trim().toUpperCase();
+  const estadoNormalizado = String(estado || "")
+    .trim()
+    .toUpperCase();
   if (!ESTADOS_ADMITIDOS.has(estadoNormalizado)) {
     throw crearError(
       "El estado de la solicitud de impresión no es válido",
@@ -164,7 +184,11 @@ function construirNombreActor(fila) {
     return null;
   }
 
-  const partes = [fila.nombre_actor, fila.primer_apellido_actor, fila.segundo_apellido_actor]
+  const partes = [
+    fila.nombre_actor,
+    fila.primer_apellido_actor,
+    fila.segundo_apellido_actor,
+  ]
     .filter(Boolean)
     .map((parte) => String(parte).trim())
     .filter((parte) => parte !== "");
@@ -193,8 +217,10 @@ function normalizarConfiguracion(fila) {
         10,
       ) || CONFIGURACION_DEFECTO.max_solicitudes_ventana,
     ventana_dias:
-      Number.parseInt(base.ventana_dias || CONFIGURACION_DEFECTO.ventana_dias, 10) ||
-      CONFIGURACION_DEFECTO.ventana_dias,
+      Number.parseInt(
+        base.ventana_dias || CONFIGURACION_DEFECTO.ventana_dias,
+        10,
+      ) || CONFIGURACION_DEFECTO.ventana_dias,
     max_archivos_por_solicitud:
       Number.parseInt(
         base.max_archivos_por_solicitud ||
@@ -202,11 +228,15 @@ function normalizarConfiguracion(fila) {
         10,
       ) || CONFIGURACION_DEFECTO.max_archivos_por_solicitud,
     escala_minima:
-      Number.parseInt(base.escala_minima || CONFIGURACION_DEFECTO.escala_minima, 10) ||
-      CONFIGURACION_DEFECTO.escala_minima,
+      Number.parseInt(
+        base.escala_minima || CONFIGURACION_DEFECTO.escala_minima,
+        10,
+      ) || CONFIGURACION_DEFECTO.escala_minima,
     escala_maxima:
-      Number.parseInt(base.escala_maxima || CONFIGURACION_DEFECTO.escala_maxima, 10) ||
-      CONFIGURACION_DEFECTO.escala_maxima,
+      Number.parseInt(
+        base.escala_maxima || CONFIGURACION_DEFECTO.escala_maxima,
+        10,
+      ) || CONFIGURACION_DEFECTO.escala_maxima,
     creado_por_usuario: base.creado_por_usuario || null,
     actualizado_por_usuario: base.actualizado_por_usuario || null,
     fecha_creacion: base.fecha_creacion || null,
@@ -225,13 +255,22 @@ function validarConfiguracionEntrada(configuracion) {
       configuracion.max_solicitudes_ventana,
       "max_solicitudes_ventana",
     ),
-    ventana_dias: obtenerIntPositivo(configuracion.ventana_dias, "ventana_dias"),
+    ventana_dias: obtenerIntPositivo(
+      configuracion.ventana_dias,
+      "ventana_dias",
+    ),
     max_archivos_por_solicitud: obtenerIntPositivo(
       configuracion.max_archivos_por_solicitud,
       "max_archivos_por_solicitud",
     ),
-    escala_minima: obtenerIntPositivo(configuracion.escala_minima, "escala_minima"),
-    escala_maxima: obtenerIntPositivo(configuracion.escala_maxima, "escala_maxima"),
+    escala_minima: obtenerIntPositivo(
+      configuracion.escala_minima,
+      "escala_minima",
+    ),
+    escala_maxima: obtenerIntPositivo(
+      configuracion.escala_maxima,
+      "escala_maxima",
+    ),
   };
 
   if (
@@ -245,7 +284,10 @@ function validarConfiguracionEntrada(configuracion) {
     );
   }
 
-  if (configuracionNormalizada.escala_minima > configuracionNormalizada.escala_maxima) {
+  if (
+    configuracionNormalizada.escala_minima >
+    configuracionNormalizada.escala_maxima
+  ) {
     throw crearError(
       "escala_minima no puede ser mayor que escala_maxima",
       "VALIDACION_CONFIGURACION",
@@ -407,7 +449,11 @@ async function guardarConfiguracionCuota(nidUsuarioActor, configuracion) {
 async function obtenerPartituraObligatoria(nidPartitura) {
   const partitura = await gestorPartituras.obtenerPartitura(nidPartitura);
   if (!partitura || !partitura.nid_partitura) {
-    throw crearError("La partitura indicada no existe", "PARTITURA_NO_ENCONTRADA", 404);
+    throw crearError(
+      "La partitura indicada no existe",
+      "PARTITURA_NO_ENCONTRADA",
+      404,
+    );
   }
 
   if (!partitura.url_partitura) {
@@ -423,7 +469,8 @@ async function obtenerPartituraObligatoria(nidPartitura) {
 
 async function inspeccionarPartitura(datos) {
   let partitura = null;
-  let urlPartitura = datos && datos.url_partitura ? String(datos.url_partitura).trim() : "";
+  let urlPartitura =
+    datos && datos.url_partitura ? String(datos.url_partitura).trim() : "";
 
   if (datos && datos.nid_partitura) {
     partitura = await obtenerPartituraObligatoria(datos.nid_partitura);
@@ -438,15 +485,18 @@ async function inspeccionarPartitura(datos) {
     );
   }
 
-  const inspeccion = await gestorDrivePartituras.inspeccionarUrlDrive(urlPartitura);
+  const inspeccion =
+    await gestorDrivePartituras.inspeccionarUrlDrive(urlPartitura);
   if (
     partitura &&
     inspeccion.tipo === "ARCHIVO" &&
     inspeccion.archivos.length === 1 &&
     (!inspeccion.archivos[0].nombre_archivo ||
-      inspeccion.archivos[0].nombre_archivo === inspeccion.archivos[0].drive_file_id)
+      inspeccion.archivos[0].nombre_archivo ===
+        inspeccion.archivos[0].drive_file_id)
   ) {
-    inspeccion.archivos[0].nombre_archivo = partitura.titulo || inspeccion.archivos[0].drive_file_id;
+    inspeccion.archivos[0].nombre_archivo =
+      partitura.titulo || inspeccion.archivos[0].drive_file_id;
   }
 
   return {
@@ -469,13 +519,19 @@ function normalizarIdempotencyKey(datos, headers) {
 }
 
 function normalizarOpciones(datos, configuracion) {
-  const origenOpciones = datos.opciones && typeof datos.opciones === "object" ? datos.opciones : datos;
+  const origenOpciones =
+    datos.opciones && typeof datos.opciones === "object"
+      ? datos.opciones
+      : datos;
   const escala = Number.parseInt(origenOpciones.escala, 10);
   if (!Number.isInteger(escala)) {
     throw crearError("La escala es obligatoria", "ESCALA_REQUERIDA", 400);
   }
 
-  if (escala < configuracion.escala_minima || escala > configuracion.escala_maxima) {
+  if (
+    escala < configuracion.escala_minima ||
+    escala > configuracion.escala_maxima
+  ) {
     throw crearError(
       "La escala debe estar entre " +
         configuracion.escala_minima +
@@ -510,7 +566,9 @@ function contarPaginasRango(rangoPaginas) {
   let numeroPaginas = 0;
 
   for (const segmento of rangoPaginas.split(",")) {
-    const limites = segmento.split("-").map((valor) => Number.parseInt(valor, 10));
+    const limites = segmento
+      .split("-")
+      .map((valor) => Number.parseInt(valor, 10));
     const inicio = limites[0];
     const fin = limites.length === 2 ? limites[1] : inicio;
 
@@ -616,7 +674,12 @@ function normalizarSeleccionArchivos(archivos, inspeccion) {
   return resultado;
 }
 
-function validarArchivosSeleccionados(inspeccion, seleccion, configuracion, partitura) {
+function validarArchivosSeleccionados(
+  inspeccion,
+  seleccion,
+  configuracion,
+  partitura,
+) {
   if (seleccion.length > configuracion.max_archivos_por_solicitud) {
     throw crearError(
       "Se supera el máximo de archivos permitidos por solicitud",
@@ -627,7 +690,10 @@ function validarArchivosSeleccionados(inspeccion, seleccion, configuracion, part
 
   const mapaArchivos = new Map();
   for (let i = 0; i < inspeccion.archivos.length; i++) {
-    mapaArchivos.set(inspeccion.archivos[i].drive_file_id, inspeccion.archivos[i]);
+    mapaArchivos.set(
+      inspeccion.archivos[i].drive_file_id,
+      inspeccion.archivos[i],
+    );
   }
 
   return seleccion.map((archivoSeleccionado) => {
@@ -661,7 +727,11 @@ function validarArchivosSeleccionados(inspeccion, seleccion, configuracion, part
   });
 }
 
-async function obtenerSolicitudPorIdempotenciaTx(connection, nidUsuario, idempotencyKey) {
+async function obtenerSolicitudPorIdempotenciaTx(
+  connection,
+  nidUsuario,
+  idempotencyKey,
+) {
   const filas = await ejecutarQuery(
     connection,
     "SELECT * FROM " +
@@ -687,23 +757,36 @@ async function obtenerArchivosSolicitudTx(connection, nidSolicitud) {
 }
 
 function mismaSolicitud(existing, archivosExistentes, datosNuevaSolicitud) {
-  if (String(existing.nid_partitura) !== String(datosNuevaSolicitud.nid_partitura)) {
+  if (
+    String(existing.nid_partitura) !== String(datosNuevaSolicitud.nid_partitura)
+  ) {
     return false;
   }
-  if (String(existing.origen_drive_tipo) !== String(datosNuevaSolicitud.origen_drive_tipo)) {
+  if (
+    String(existing.origen_drive_tipo) !==
+    String(datosNuevaSolicitud.origen_drive_tipo)
+  ) {
     return false;
   }
-  if (String(existing.origen_drive_id) !== String(datosNuevaSolicitud.origen_drive_id)) {
+  if (
+    String(existing.origen_drive_id) !==
+    String(datosNuevaSolicitud.origen_drive_id)
+  ) {
     return false;
   }
 
   const opcionesExistentes = parsearJsonSeguro(existing.opciones, {});
-  if (JSON.stringify(opcionesExistentes) !== JSON.stringify(datosNuevaSolicitud.opciones)) {
+  if (
+    JSON.stringify(opcionesExistentes) !==
+    JSON.stringify(datosNuevaSolicitud.opciones)
+  ) {
     return false;
   }
 
   const actuales = archivosExistentes.map((archivo) => archivo.drive_file_id);
-  const nuevas = datosNuevaSolicitud.archivos.map((archivo) => archivo.drive_file_id);
+  const nuevas = datosNuevaSolicitud.archivos.map(
+    (archivo) => archivo.drive_file_id,
+  );
   return JSON.stringify(actuales) === JSON.stringify(nuevas);
 }
 
@@ -734,8 +817,44 @@ async function contarSolicitudesVentanaTx(connection, nidUsuario, ventanaDias) {
   return Number.parseInt(filas[0].total, 10) || 0;
 }
 
+async function obtenerImpresionesRestantes(nidUsuario) {
+  try {
+    const configuracion = await obtenerConfiguracionCuota();
+    const maxSolicitudesVentana = configuracion.max_solicitudes_ventana;
+    const ventanaDias = configuracion.ventana_dias;
+
+    const restantes = await withTransaction(async (connection) => {
+      try {
+        const solicitudesVentana = await contarSolicitudesVentanaTx(
+          connection,
+          nidUsuario,
+          ventanaDias,
+        );
+        return Math.max(0, maxSolicitudesVentana - solicitudesVentana);
+      } catch (error) {
+        throw crearError(
+          "Error al calcular las impresiones restantes: " + error.message,
+          "ERROR_CALCULO_IMPRESIONES_RESTANTES",
+          500,
+        );
+      }
+    });
+    return restantes;
+  } catch (error) {
+    console.log("Error al obtener impresiones restantes: " + error.message);
+    throw crearError(
+      "Error al obtener las impresiones restantes: " + error.message,
+      "ERROR_OBTENER_IMPRESIONES_RESTANTES",
+      500,
+    );
+  }
+}
+
 async function validarCuotaTx(connection, nidUsuario, configuracion) {
-  const solicitudesPendientes = await contarSolicitudesPendientesTx(connection, nidUsuario);
+  const solicitudesPendientes = await contarSolicitudesPendientesTx(
+    connection,
+    nidUsuario,
+  );
   if (solicitudesPendientes >= configuracion.max_solicitudes_pendientes) {
     throw crearError(
       "Has superado el máximo de solicitudes pendientes permitidas",
@@ -783,7 +902,11 @@ async function insertarAuditoriaEstadoTx(connection, datos) {
   );
 }
 
-async function obtenerSolicitudDetalle(nidSolicitud, nidUsuario, opciones = {}) {
+async function obtenerSolicitudDetalle(
+  nidSolicitud,
+  nidUsuario,
+  opciones = {},
+) {
   const condiciones = [
     "s.nid_solicitud_impresion = " + escapeSql(nidSolicitud),
   ];
@@ -855,7 +978,9 @@ async function obtenerSolicitudDetalle(nidSolicitud, nidUsuario, opciones = {}) 
       autor: solicitud.partitura_autor,
       nid_categoria: solicitud.partitura_nid_categoria,
     },
-    archivos: archivos.map((archivo) => mapearArchivoSolicitud(archivo, opciones)),
+    archivos: archivos.map((archivo) =>
+      mapearArchivoSolicitud(archivo, opciones),
+    ),
     auditoria: auditoria.map((evento) => ({
       nid_solicitud_impresion_estado: evento.nid_solicitud_impresion_estado,
       estado_anterior: evento.estado_anterior,
@@ -877,7 +1002,10 @@ async function crearSolicitudImpresion(nidUsuario, datos, headers = {}) {
   const inspeccion = await inspeccionarPartitura({
     nid_partitura: datos.nid_partitura,
   });
-  const archivosSeleccionados = normalizarSeleccionArchivos(datos.archivos, inspeccion.inspeccion);
+  const archivosSeleccionados = normalizarSeleccionArchivos(
+    datos.archivos,
+    inspeccion.inspeccion,
+  );
   const archivosValidados = validarArchivosSeleccionados(
     inspeccion.inspeccion,
     archivosSeleccionados,
@@ -986,7 +1114,10 @@ async function crearSolicitudImpresion(nidUsuario, datos, headers = {}) {
     };
   });
 
-  const solicitud = await obtenerSolicitudDetalle(resultado.nid_solicitud_impresion, nidUsuario);
+  const solicitud = await obtenerSolicitudDetalle(
+    resultado.nid_solicitud_impresion,
+    nidUsuario,
+  );
   solicitud.idempotente = resultado.idempotente;
   return solicitud;
 }
@@ -994,9 +1125,7 @@ async function crearSolicitudImpresion(nidUsuario, datos, headers = {}) {
 async function listarSolicitudesUsuario(nidUsuario, filtros = {}) {
   const condiciones = ["s.nid_usuario = " + escapeSql(nidUsuario)];
   if (filtros.nid_partitura) {
-    condiciones.push(
-      "s.nid_partitura = " + escapeSql(filtros.nid_partitura),
-    );
+    condiciones.push("s.nid_partitura = " + escapeSql(filtros.nid_partitura));
   }
 
   const solicitudes = await gestor_base_datos.consulta(
@@ -1038,7 +1167,12 @@ async function obtenerSolicitudUsuario(nidUsuario, nidSolicitud) {
   return obtenerSolicitudDetalle(nidSolicitud, nidUsuario);
 }
 
-async function actualizarEstadoSolicitud(nidSolicitud, nuevoEstado, datosActualizacion, actor) {
+async function actualizarEstadoSolicitud(
+  nidSolicitud,
+  nuevoEstado,
+  datosActualizacion,
+  actor,
+) {
   await withTransaction(async (connection) => {
     const filas = await ejecutarQuery(
       connection,
@@ -1084,15 +1218,22 @@ async function actualizarEstadoSolicitud(nidSolicitud, nuevoEstado, datosActuali
       "fecha_actualizacion = current_timestamp",
     ];
 
-    if (datosActualizacion && Object.prototype.hasOwnProperty.call(datosActualizacion, "trabajo_cups")) {
+    if (
+      datosActualizacion &&
+      Object.prototype.hasOwnProperty.call(datosActualizacion, "trabajo_cups")
+    ) {
       camposUpdate.push(
         "trabajo_cups = " + escapeSql(datosActualizacion.trabajo_cups || null),
       );
     }
 
-    if (datosActualizacion && Object.prototype.hasOwnProperty.call(datosActualizacion, "mensaje_error")) {
+    if (
+      datosActualizacion &&
+      Object.prototype.hasOwnProperty.call(datosActualizacion, "mensaje_error")
+    ) {
       camposUpdate.push(
-        "mensaje_error = " + escapeSql(datosActualizacion.mensaje_error || null),
+        "mensaje_error = " +
+          escapeSql(datosActualizacion.mensaje_error || null),
       );
     } else if (["RECLAMADA", "IMPRIMIENDO", "IMPRESA"].includes(nuevoEstado)) {
       camposUpdate.push("mensaje_error = null");
@@ -1126,7 +1267,8 @@ async function actualizarEstadoSolicitud(nidSolicitud, nuevoEstado, datosActuali
         (datosActualizacion && datosActualizacion.mensaje_error) ||
         null,
       trabajo_cups:
-        datosActualizacion && Object.prototype.hasOwnProperty.call(datosActualizacion, "trabajo_cups")
+        datosActualizacion &&
+        Object.prototype.hasOwnProperty.call(datosActualizacion, "trabajo_cups")
           ? datosActualizacion.trabajo_cups || null
           : actual.trabajo_cups || null,
       tipo_actor: actor.tipo_actor,
@@ -1221,7 +1363,9 @@ async function prepararArchivosSolicitud(solicitud) {
     const nombreBase =
       String(archivo.orden || i + 1).padStart(2, "0") +
       "_" +
-      (archivo.nombre_archivo || solicitud.partitura.titulo || archivo.drive_file_id);
+      (archivo.nombre_archivo ||
+        solicitud.partitura.titulo ||
+        archivo.drive_file_id);
 
     const descarga = await gestorDrivePartituras.descargarArchivoDrive(
       archivo.drive_file_id,
@@ -1317,7 +1461,10 @@ async function reclamarSolicitudesPendientes(limite) {
       const preparada = await prepararArchivosSolicitud(detalle);
       solicitudes.push(preparada);
     } catch (error) {
-      console.error("solicitudes_impresion -> reclamarSolicitudesPendientes:", error);
+      console.error(
+        "solicitudes_impresion -> reclamarSolicitudesPendientes:",
+        error,
+      );
       const estadoError = clasificarErrorPreparacion(error);
       await actualizarEstadoSolicitud(
         nidSolicitud,
@@ -1407,7 +1554,9 @@ async function obtenerArchivoSolicitudImpresion(nidSolicitudImpresionArchivo) {
   };
 }
 
-async function descargarArchivoSolicitudImpresion(nidSolicitudImpresionArchivo) {
+async function descargarArchivoSolicitudImpresion(
+  nidSolicitudImpresionArchivo,
+) {
   const archivo = await obtenerArchivoSolicitudImpresion(
     nidSolicitudImpresionArchivo,
   );
@@ -1434,6 +1583,8 @@ module.exports.obtenerSolicitudUsuario = obtenerSolicitudUsuario;
 module.exports.cancelarSolicitudUsuario = cancelarSolicitudUsuario;
 module.exports.reclamarSolicitudesPendientes = reclamarSolicitudesPendientes;
 module.exports.actualizarSolicitudDesdeApi = actualizarSolicitudDesdeApi;
-module.exports.obtenerArchivoSolicitudImpresion = obtenerArchivoSolicitudImpresion;
+module.exports.obtenerArchivoSolicitudImpresion =
+  obtenerArchivoSolicitudImpresion;
 module.exports.descargarArchivoSolicitudImpresion =
   descargarArchivoSolicitudImpresion;
+module.exports.obtenerImpresionesRestantes = obtenerImpresionesRestantes;

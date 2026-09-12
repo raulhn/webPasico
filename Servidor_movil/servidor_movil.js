@@ -356,6 +356,11 @@ app.post(
   servletSolicitudesImpresion.actualizarConfiguracionCuota,
 );
 
+app.get(
+  "/obtener_impresiones_restantes",
+  servletSolicitudesImpresion.obtenerImpresionesRestantes,
+);
+
 // Agenda Eventos //
 app.post("/registrar_agenda_evento", servletAgendaEvento.registrarEvento);
 app.post("/actualizar_agenda_evento", servletAgendaEvento.actualizarEvento);

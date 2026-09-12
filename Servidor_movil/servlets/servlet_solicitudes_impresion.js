@@ -18,7 +18,11 @@ async function explorarPartituraImpresion(req, res) {
       constantes.ADMINISTRADOR,
       constantes.MUSICO,
     ];
-    const autorizado = await servletComun.comprobarRol(req, res, rolesPermitidos);
+    const autorizado = await servletComun.comprobarRol(
+      req,
+      res,
+      rolesPermitidos,
+    );
     if (!autorizado) {
       res.status(403).send({
         error: true,
@@ -36,7 +40,10 @@ async function explorarPartituraImpresion(req, res) {
       partitura: resultado.partitura,
     });
   } catch (error) {
-    console.error("servlet_solicitudes_impresion -> explorarPartituraImpresion:", error);
+    console.error(
+      "servlet_solicitudes_impresion -> explorarPartituraImpresion:",
+      error,
+    );
     res.status(error.estadoHttp || 400).send({
       error: true,
       mensaje: error.message || "No se ha podido inspeccionar la partitura",
@@ -52,7 +59,11 @@ async function inspeccionarPartituraDrive(req, res) {
       constantes.ADMINISTRADOR,
       constantes.MUSICO,
     ];
-    const autorizado = await servletComun.comprobarRol(req, res, rolesPermitidos);
+    const autorizado = await servletComun.comprobarRol(
+      req,
+      res,
+      rolesPermitidos,
+    );
     if (!autorizado) {
       res.status(403).send({
         error: true,
@@ -61,13 +72,18 @@ async function inspeccionarPartituraDrive(req, res) {
       return;
     }
 
-    const inspeccion = await gestorSolicitudesImpresion.inspeccionarPartitura(req.body || {});
+    const inspeccion = await gestorSolicitudesImpresion.inspeccionarPartitura(
+      req.body || {},
+    );
     res.status(200).send({
       error: false,
       inspeccion,
     });
   } catch (error) {
-    console.error("servlet_solicitudes_impresion -> inspeccionarPartituraDrive:", error);
+    console.error(
+      "servlet_solicitudes_impresion -> inspeccionarPartituraDrive:",
+      error,
+    );
     res.status(error.estadoHttp || 400).send({
       error: true,
       mensaje: error.message || "No se ha podido inspeccionar la partitura",
@@ -83,7 +99,11 @@ async function registrarSolicitudImpresion(req, res) {
       constantes.ADMINISTRADOR,
       constantes.MUSICO,
     ];
-    const autorizado = await servletComun.comprobarRol(req, res, rolesPermitidos);
+    const autorizado = await servletComun.comprobarRol(
+      req,
+      res,
+      rolesPermitidos,
+    );
     if (!autorizado) {
       res.status(403).send({
         error: true,
@@ -104,7 +124,10 @@ async function registrarSolicitudImpresion(req, res) {
       solicitud,
     });
   } catch (error) {
-    console.error("servlet_solicitudes_impresion -> registrarSolicitudImpresion:", error);
+    console.error(
+      "servlet_solicitudes_impresion -> registrarSolicitudImpresion:",
+      error,
+    );
     res.status(error.estadoHttp || 400).send({
       error: true,
       mensaje: error.message || "No se ha podido registrar la solicitud",
@@ -120,7 +143,11 @@ async function obtenerSolicitudesImpresion(req, res) {
       constantes.ADMINISTRADOR,
       constantes.MUSICO,
     ];
-    const autorizado = await servletComun.comprobarRol(req, res, rolesPermitidos);
+    const autorizado = await servletComun.comprobarRol(
+      req,
+      res,
+      rolesPermitidos,
+    );
     if (!autorizado) {
       res.status(403).send({
         error: true,
@@ -130,16 +157,20 @@ async function obtenerSolicitudesImpresion(req, res) {
     }
 
     const nidUsuario = await obtenerNidUsuario(req);
-    const solicitudes = await gestorSolicitudesImpresion.listarSolicitudesUsuario(
-      nidUsuario,
-      req.query || {},
-    );
+    const solicitudes =
+      await gestorSolicitudesImpresion.listarSolicitudesUsuario(
+        nidUsuario,
+        req.query || {},
+      );
     res.status(200).send({
       error: false,
       solicitudes,
     });
   } catch (error) {
-    console.error("servlet_solicitudes_impresion -> obtenerSolicitudesImpresion:", error);
+    console.error(
+      "servlet_solicitudes_impresion -> obtenerSolicitudesImpresion:",
+      error,
+    );
     res.status(error.estadoHttp || 400).send({
       error: true,
       mensaje: error.message || "No se han podido obtener las solicitudes",
@@ -155,11 +186,16 @@ async function obtenerSolicitudImpresion(req, res) {
       constantes.ADMINISTRADOR,
       constantes.MUSICO,
     ];
-    const autorizado = await servletComun.comprobarRol(req, res, rolesPermitidos);
+    const autorizado = await servletComun.comprobarRol(
+      req,
+      res,
+      rolesPermitidos,
+    );
     if (!autorizado) {
       res.status(403).send({
         error: true,
-        mensaje: "No tienes permisos para consultar esta solicitud de impresión",
+        mensaje:
+          "No tienes permisos para consultar esta solicitud de impresión",
       });
       return;
     }
@@ -175,7 +211,10 @@ async function obtenerSolicitudImpresion(req, res) {
       solicitud,
     });
   } catch (error) {
-    console.error("servlet_solicitudes_impresion -> obtenerSolicitudImpresion:", error);
+    console.error(
+      "servlet_solicitudes_impresion -> obtenerSolicitudImpresion:",
+      error,
+    );
     res.status(error.estadoHttp || 400).send({
       error: true,
       mensaje: error.message || "No se ha podido obtener la solicitud",
@@ -191,7 +230,11 @@ async function cancelarSolicitudImpresion(req, res) {
       constantes.ADMINISTRADOR,
       constantes.MUSICO,
     ];
-    const autorizado = await servletComun.comprobarRol(req, res, rolesPermitidos);
+    const autorizado = await servletComun.comprobarRol(
+      req,
+      res,
+      rolesPermitidos,
+    );
     if (!autorizado) {
       res.status(403).send({
         error: true,
@@ -214,7 +257,10 @@ async function cancelarSolicitudImpresion(req, res) {
       solicitud,
     });
   } catch (error) {
-    console.error("servlet_solicitudes_impresion -> cancelarSolicitudImpresion:", error);
+    console.error(
+      "servlet_solicitudes_impresion -> cancelarSolicitudImpresion:",
+      error,
+    );
     res.status(error.estadoHttp || 400).send({
       error: true,
       mensaje: error.message || "No se ha podido cancelar la solicitud",
@@ -226,22 +272,31 @@ async function cancelarSolicitudImpresion(req, res) {
 async function obtenerConfiguracionCuota(req, res) {
   try {
     const rolesPermitidos = [constantes.DIRECTOR, constantes.ADMINISTRADOR];
-    const autorizado = await servletComun.comprobarRol(req, res, rolesPermitidos);
+    const autorizado = await servletComun.comprobarRol(
+      req,
+      res,
+      rolesPermitidos,
+    );
     if (!autorizado) {
       res.status(403).send({
         error: true,
-        mensaje: "No tienes permisos para consultar la configuración de impresión",
+        mensaje:
+          "No tienes permisos para consultar la configuración de impresión",
       });
       return;
     }
 
-    const configuracion = await gestorSolicitudesImpresion.obtenerConfiguracionCuota();
+    const configuracion =
+      await gestorSolicitudesImpresion.obtenerConfiguracionCuota();
     res.status(200).send({
       error: false,
       configuracion,
     });
   } catch (error) {
-    console.error("servlet_solicitudes_impresion -> obtenerConfiguracionCuota:", error);
+    console.error(
+      "servlet_solicitudes_impresion -> obtenerConfiguracionCuota:",
+      error,
+    );
     res.status(error.estadoHttp || 400).send({
       error: true,
       mensaje: error.message || "No se ha podido obtener la configuración",
@@ -253,27 +308,36 @@ async function obtenerConfiguracionCuota(req, res) {
 async function actualizarConfiguracionCuota(req, res) {
   try {
     const rolesPermitidos = [constantes.DIRECTOR, constantes.ADMINISTRADOR];
-    const autorizado = await servletComun.comprobarRol(req, res, rolesPermitidos);
+    const autorizado = await servletComun.comprobarRol(
+      req,
+      res,
+      rolesPermitidos,
+    );
     if (!autorizado) {
       res.status(403).send({
         error: true,
-        mensaje: "No tienes permisos para actualizar la configuración de impresión",
+        mensaje:
+          "No tienes permisos para actualizar la configuración de impresión",
       });
       return;
     }
 
     const nidUsuario = await obtenerNidUsuario(req);
-    const configuracion = await gestorSolicitudesImpresion.guardarConfiguracionCuota(
-      nidUsuario,
-      req.body || {},
-    );
+    const configuracion =
+      await gestorSolicitudesImpresion.guardarConfiguracionCuota(
+        nidUsuario,
+        req.body || {},
+      );
 
     res.status(200).send({
       error: false,
       configuracion,
     });
   } catch (error) {
-    console.error("servlet_solicitudes_impresion -> actualizarConfiguracionCuota:", error);
+    console.error(
+      "servlet_solicitudes_impresion -> actualizarConfiguracionCuota:",
+      error,
+    );
     res.status(error.estadoHttp || 400).send({
       error: true,
       mensaje: error.message || "No se ha podido actualizar la configuración",
@@ -282,19 +346,64 @@ async function actualizarConfiguracionCuota(req, res) {
   }
 }
 
+async function obtenerImpresionesRestantes(req, res) {
+  try {
+    const rolesPermitidos = [
+      constantes.DIRECTOR,
+      constantes.ADMINISTRADOR,
+      constantes.MUSICO,
+    ];
+    const autorizado = await servletComun.comprobarRol(
+      req,
+      res,
+      rolesPermitidos,
+    );
+    if (!autorizado) {
+      res.status(403).send({
+        error: true,
+        mensaje: "No tienes permisos para consultar las impresiones restantes",
+      });
+      return;
+    }
+    const nidUsuario = await obtenerNidUsuario(req);
+    const impresionesRestantes =
+      await gestorSolicitudesImpresion.obtenerImpresionesRestantes(nidUsuario);
+
+    res.status(200).send({
+      error: false,
+      impresionesRestantes: impresionesRestantes,
+    });
+  } catch (error) {
+    console.error(
+      "servlet_solicitudes_impresion -> obtenerImpresionesRestantes:",
+      error,
+    );
+    res.status(error.estadoHttp || 400).send({
+      error: true,
+      mensaje:
+        error.message || "No se han podido obtener las impresiones restantes",
+      codigo: error.codigo || "IMPRESION_RESTANTES",
+    });
+  }
+}
+
 function reclamarSolicitudesImpresion(req, res) {
   servletComun.comprobacionAccesoAPIKey(req, res, async () => {
     try {
-      const solicitudes = await gestorSolicitudesImpresion.reclamarSolicitudesPendientes(
-        req.body && req.body.limite,
-      );
+      const solicitudes =
+        await gestorSolicitudesImpresion.reclamarSolicitudesPendientes(
+          req.body && req.body.limite,
+        );
 
       res.status(200).send({
         error: false,
         solicitudes,
       });
     } catch (error) {
-      console.error("servlet_solicitudes_impresion -> reclamarSolicitudesImpresion:", error);
+      console.error(
+        "servlet_solicitudes_impresion -> reclamarSolicitudesImpresion:",
+        error,
+      );
       res.status(error.estadoHttp || 400).send({
         error: true,
         mensaje: error.message || "No se han podido reclamar solicitudes",
@@ -307,16 +416,20 @@ function reclamarSolicitudesImpresion(req, res) {
 function actualizarSolicitudImpresion(req, res) {
   servletComun.comprobacionAccesoAPIKey(req, res, async () => {
     try {
-      const solicitud = await gestorSolicitudesImpresion.actualizarSolicitudDesdeApi(
-        req.body || {},
-      );
+      const solicitud =
+        await gestorSolicitudesImpresion.actualizarSolicitudDesdeApi(
+          req.body || {},
+        );
 
       res.status(200).send({
         error: false,
         solicitud,
       });
     } catch (error) {
-      console.error("servlet_solicitudes_impresion -> actualizarSolicitudImpresion:", error);
+      console.error(
+        "servlet_solicitudes_impresion -> actualizarSolicitudImpresion:",
+        error,
+      );
       res.status(error.estadoHttp || 400).send({
         error: true,
         mensaje: error.message || "No se ha podido actualizar la solicitud",
@@ -384,3 +497,4 @@ module.exports.reclamarSolicitudesImpresion = reclamarSolicitudesImpresion;
 module.exports.actualizarSolicitudImpresion = actualizarSolicitudImpresion;
 module.exports.descargarSolicitudImpresionArchivo =
   descargarSolicitudImpresionArchivo;
+module.exports.obtenerImpresionesRestantes = obtenerImpresionesRestantes;
