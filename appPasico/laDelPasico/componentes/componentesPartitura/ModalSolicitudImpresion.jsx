@@ -109,9 +109,7 @@ export default function ModalSolicitudImpresion({
         await ServiceSolicitudesImpresion.obtenerImpresionesRestantes(
           cerrarSesion
         );
-      setImpresionesRestantes(
-        respuestaRestantes?.impresiones_restantes || null
-      );
+      setImpresionesRestantes(respuestaRestantes?.impresionesRestantes || null);
 
       const datosInspeccion =
         respuestaInspeccion.status === "fulfilled"
@@ -272,7 +270,11 @@ export default function ModalSolicitudImpresion({
             <MaterialIcons name="close" size={24} color="#fff" />
           </Pressable>
         </View>
-        <Text>Impresiones Restantes: {impresionesRestantes}</Text>
+        <View style={styles.textoImpresionesRestantes}>
+          <Text style={{ fontWeight: "bold" }}>
+            Impresiones Restantes: {impresionesRestantes}
+          </Text>
+        </View>
         <ScrollView contentContainerStyle={styles.scroll}>
           <View style={styles.cardResumen}>
             <Text style={styles.labelResumen}>Partitura</Text>
@@ -659,5 +661,14 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     color: "#222",
+  },
+  textoImpresionesRestantes: {
+    fontSize: 14,
+    fontWeight: "bold",
+    color: "#333",
+    textAlign: "right",
+    marginBottom: 10,
+    alignItems: "flex-end",
+    paddingHorizontal: 20,
   },
 });

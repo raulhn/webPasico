@@ -64,9 +64,7 @@ export default function MisSolicitudesImpresion({
         await ServiceSolicitudesImpresion.obtenerImpresionesRestantes(
           cerrarSesion
         );
-      setImpresionesRestantes(
-        respuestaRestantes?.impresiones_restantes || null
-      );
+      setImpresionesRestantes(respuestaRestantes?.impresionesRestantes || null);
 
       if (respuesta?.error) {
         throw new Error(
@@ -172,7 +170,11 @@ export default function MisSolicitudesImpresion({
 
   return (
     <View style={styles.contenedor}>
-      <Text>Impresiones restantes {impresionesRestantes}</Text>
+      <View style={styles.textoImpresionesRestantes}>
+        <Text style={{ fontWeight: "bold" }}>
+          Impresiones restantes: {impresionesRestantes}
+        </Text>
+      </View>
       <View style={styles.cabecera}>
         <Text style={styles.titulo}>{titulo}</Text>
         <Boton nombre="Refrescar" onPress={cargarSolicitudes} />
@@ -250,16 +252,6 @@ export default function MisSolicitudesImpresion({
               ) : null}
 
               <View style={styles.filaBotones}>
-                <Boton
-                  nombre={
-                    cargandoDetalle
-                      ? "Cargando..."
-                      : estaAbierta
-                      ? "Ocultar detalle"
-                      : "Ver detalle"
-                  }
-                  onPress={() => alternarDetalle(solicitud)}
-                />
                 {permitirCancelacion &&
                 esEstadoSolicitudCancelable(solicitud.estado) ? (
                   <Boton
@@ -317,8 +309,15 @@ export default function MisSolicitudesImpresion({
 }
 
 const styles = StyleSheet.create({
+  textoImpresionesRestantes: {
+    fontSize: 14,
+    fontWeight: "bold",
+    color: "#333",
+    textAlign: "right",
+    marginBottom: 10,
+    alignItems: "flex-end",
+  },
   contenedor: {
-    marginTop: 20,
     gap: 12,
   },
   cabecera: {
