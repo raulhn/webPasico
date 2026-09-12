@@ -109,11 +109,9 @@ async function escalarPdf(rutaPdf, escala) {
 
   const documentoOrigen = await PDFDocument.load(await fs.readFile(rutaPdf));
   const documentoEscalado = await PDFDocument.create();
-
   for (const paginaOrigen of documentoOrigen.getPages()) {
     const { width, height } = paginaOrigen.getSize();
     const paginaDestino = documentoEscalado.addPage([width, height]);
-    paginaOrigen.getContentStream();
     const paginaIncrustada = await documentoEscalado.embedPage(paginaOrigen);
     const anchoEscalado = width * factorEscala;
     const altoEscalado = height * factorEscala;
@@ -127,6 +125,44 @@ async function escalarPdf(rutaPdf, escala) {
   }
 
   await fs.writeFile(rutaPdf, await documentoEscalado.save(), { mode: 0o600 });
+}
+
+function obtenerPaginasSolicitadas(rangoPaginas) {
+  const paginas = [];
+
+  for (const segmento of rangoPaginas.split(",")) {
+    const limites = segmento.split("-").map((valor) => Number.parseInt(valor, 10));
+    const inicio = limites[0];
+    const fin = limites.length === 2 ? limites[1] : inicio;
+
+    for (let pagina = inicio; pagina <= fin; pagina += 1) {
+      paginas.push(pagina);
+    }
+  }
+
+  return paginas;
+}
+
+async function seleccionarPaginasPdf(rutaPdf, rangoPaginas) {
+  const documentoOrigen = await PDFDocument.load(await fs.readFile(rutaPdf));
+  const paginasSolicitadas = obtenerPaginasSolicitadas(rangoPaginas);
+  const numeroPaginas = documentoOrigen.getPageCount();
+
+  if (paginasSolicitadas.some((pagina) => pagina > numeroPaginas)) {
+    throw new Error("El rango de páginas supera las páginas del documento");
+  }
+
+  const documentoSeleccionado = await PDFDocument.create();
+  const paginas = await documentoSeleccionado.copyPages(
+    documentoOrigen,
+    paginasSolicitadas.map((pagina) => pagina - 1),
+  );
+
+  for (const pagina of paginas) {
+    documentoSeleccionado.addPage(pagina);
+  }
+
+  await fs.writeFile(rutaPdf, await documentoSeleccionado.save(), { mode: 0o600 });
 }
 
 function validarOpciones(opciones) {
@@ -150,30 +186,12 @@ function validarOpciones(opciones) {
     );
   }
 
-  let numeroPaginas = 0;
-  for (const segmento of opciones.rango_paginas.split(",")) {
-    const limites = segmento.split("-").map((valor) => Number.parseInt(valor, 10));
-    const inicio = limites[0];
-    const fin = limites.length === 2 ? limites[1] : inicio;
-    if (
-      !Number.isSafeInteger(inicio) ||
-      !Number.isSafeInteger(fin) ||
-      inicio < 1 ||
-      fin < inicio
-    ) {
-      throw new Error("El rango de páginas no es válido");
-    }
-
-    for (let pagina = inicio; pagina <= fin; pagina += 1) {
-      numeroPaginas += 1;
-      if (numeroPaginas > MAX_PAGINAS_POR_ARCHIVO) {
-        throw new Error(
-          "No se pueden imprimir más de " +
-            MAX_PAGINAS_POR_ARCHIVO +
-            " páginas por archivo",
-        );
-      }
-    }
+  if (obtenerPaginasSolicitadas(opciones.rango_paginas).length > MAX_PAGINAS_POR_ARCHIVO) {
+    throw new Error(
+      "No se pueden imprimir más de " +
+        MAX_PAGINAS_POR_ARCHIVO +
+        " páginas por archivo",
+    );
   }
 }
 
@@ -192,10 +210,6 @@ function construirArgumentosCups(solicitud, fichero) {
     argumentos.push("-o", "print-scaling=none");
   } else {
     argumentos.push("-o", "scaling=" + solicitud.opciones.escala);
-  }
-
-  if (solicitud.opciones.rango_paginas && fichero.mime_type === "application/pdf") {
-    argumentos.push("-o", "page-ranges=" + solicitud.opciones.rango_paginas);
   }
 
   argumentos.push(fichero.ruta_local);
@@ -271,6 +285,10 @@ async function imprimirSolicitud(solicitud) {
       if (ficheroTemporal.mime_type === "application/pdf") {
         validarOpciones(solicitud.opciones);
         await escalarPdf(ficheroTemporal.ruta_local, solicitud.opciones.escala);
+        await seleccionarPaginasPdf(
+          ficheroTemporal.ruta_local,
+          solicitud.opciones.rango_paginas,
+        );
       }
       const argumentos = construirArgumentosCups(solicitud, ficheroTemporal);
       const { stdout } = await execFileAsync("lp", argumentos, {
@@ -336,3 +354,4 @@ module.exports.iniciarProcesoImpresion = iniciarProcesoImpresion;
 module.exports.procesarSolicitudesImpresion = procesarSolicitudesImpresion;
 module.exports.construirArgumentosCups = construirArgumentosCups;
 module.exports.escalarPdf = escalarPdf;
+module.exports.seleccionarPaginasPdf = seleccionarPaginasPdf;
