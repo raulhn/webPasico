@@ -75,6 +75,7 @@ export default function ModalSolicitudImpresion({
   const [mensajeExito, setMensajeExito] = useState("");
   const [resultadoSolicitud, setResultadoSolicitud] = useState(null);
   const [versionSolicitudes, setVersionSolicitudes] = useState(0);
+  const [impresionesRestantes, setImpresionesRestantes] = useState(null);
 
   const archivosActivos = useMemo(
     () =>
@@ -103,6 +104,14 @@ export default function ModalSolicitudImpresion({
         ),
         ServiceSolicitudesImpresion.obtenerCuotasImpresion(cerrarSesion),
       ]);
+
+      const respuestaRestantes =
+        await ServiceSolicitudesImpresion.obtenerImpresionesRestantes(
+          cerrarSesion
+        );
+      setImpresionesRestantes(
+        respuestaRestantes?.impresiones_restantes || null
+      );
 
       const datosInspeccion =
         respuestaInspeccion.status === "fulfilled"
@@ -263,7 +272,7 @@ export default function ModalSolicitudImpresion({
             <MaterialIcons name="close" size={24} color="#fff" />
           </Pressable>
         </View>
-
+        <Text>Impresiones Restantes: {impresionesRestantes}</Text>
         <ScrollView contentContainerStyle={styles.scroll}>
           <View style={styles.cardResumen}>
             <Text style={styles.labelResumen}>Partitura</Text>
@@ -407,8 +416,8 @@ export default function ModalSolicitudImpresion({
                   ancho="100%"
                 />
                 <Text style={styles.ayuda}>
-                  En cada PDF se pueden imprimir hasta 6 páginas. Puedes
-                  ajustar el porcentaje entre 25 y 200 para adaptar la impresión.
+                  En cada PDF se pueden imprimir hasta 6 páginas. Puedes ajustar
+                  el porcentaje entre 25 y 200 para adaptar la impresión.
                 </Text>
               </View>
 

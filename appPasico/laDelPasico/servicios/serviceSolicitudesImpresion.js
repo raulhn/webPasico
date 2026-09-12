@@ -3,7 +3,9 @@ const constantes = require("../config/constantes");
 
 function construirQueryString(filtros = {}) {
   const queryString = Object.entries(filtros)
-    .filter(([, valor]) => valor !== undefined && valor !== null && valor !== "")
+    .filter(
+      ([, valor]) => valor !== undefined && valor !== null && valor !== ""
+    )
     .map(
       ([clave, valor]) =>
         `${encodeURIComponent(clave)}=${encodeURIComponent(valor)}`
@@ -55,9 +57,7 @@ function registrarSolicitudImpresion(solicitud, cerrarSesion) {
       nid_partitura: solicitud?.nid_partitura,
       archivos: archivos.map((archivo) => ({
         drive_file_id:
-          archivo?.drive_file_id ||
-          archivo?.referencia ||
-          archivo?.id,
+          archivo?.drive_file_id || archivo?.referencia || archivo?.id,
       })),
       rango_paginas: solicitud?.rango_paginas || null,
       escala_porcentaje: solicitud?.escala_porcentaje || 100,
@@ -98,7 +98,12 @@ function cancelarSolicitudImpresion(nidSolicitudImpresion, cerrarSesion) {
 }
 
 function obtenerCuotasImpresion(cerrarSesion) {
-  return peticionAutenticada("GET", "obtener_cuotas_impresion", null, cerrarSesion);
+  return peticionAutenticada(
+    "GET",
+    "obtener_cuotas_impresion",
+    null,
+    cerrarSesion
+  );
 }
 
 function actualizarCuotaImpresion(cuota, cerrarSesion) {
@@ -110,6 +115,15 @@ function actualizarCuotaImpresion(cuota, cerrarSesion) {
   );
 }
 
+function obtenerImpresionesRestantes(cerrarSesion) {
+  return peticionAutenticada(
+    "GET",
+    "obtener_impresiones_restantes",
+    null,
+    cerrarSesion
+  );
+}
+
 module.exports.explorarPartituraImpresion = explorarPartituraImpresion;
 module.exports.registrarSolicitudImpresion = registrarSolicitudImpresion;
 module.exports.obtenerSolicitudesImpresion = obtenerSolicitudesImpresion;
@@ -117,3 +131,4 @@ module.exports.obtenerSolicitudImpresion = obtenerSolicitudImpresion;
 module.exports.cancelarSolicitudImpresion = cancelarSolicitudImpresion;
 module.exports.obtenerCuotasImpresion = obtenerCuotasImpresion;
 module.exports.actualizarCuotaImpresion = actualizarCuotaImpresion;
+module.exports.obtenerImpresionesRestantes = obtenerImpresionesRestantes;

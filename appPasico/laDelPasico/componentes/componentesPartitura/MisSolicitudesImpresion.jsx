@@ -41,6 +41,8 @@ export default function MisSolicitudesImpresion({
   const [mensajeAviso, setMensajeAviso] = useState("");
   const [errorCarga, setErrorCarga] = useState("");
 
+  const [impresionesRestantes, setImpresionesRestantes] = useState(null);
+
   useEffect(() => {
     if (visible) {
       cargarSolicitudes();
@@ -57,6 +59,14 @@ export default function MisSolicitudesImpresion({
           nidPartitura ? { nid_partitura: nidPartitura } : {},
           cerrarSesion
         );
+
+      const respuestaRestantes =
+        await ServiceSolicitudesImpresion.obtenerImpresionesRestantes(
+          cerrarSesion
+        );
+      setImpresionesRestantes(
+        respuestaRestantes?.impresiones_restantes || null
+      );
 
       if (respuesta?.error) {
         throw new Error(
@@ -162,6 +172,7 @@ export default function MisSolicitudesImpresion({
 
   return (
     <View style={styles.contenedor}>
+      <Text>Impresiones restantes {impresionesRestantes}</Text>
       <View style={styles.cabecera}>
         <Text style={styles.titulo}>{titulo}</Text>
         <Boton nombre="Refrescar" onPress={cargarSolicitudes} />
