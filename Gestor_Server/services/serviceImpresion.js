@@ -55,7 +55,9 @@ function extensionParaMime(mimeType) {
 async function descargarFichero(solicitud, fichero, directorioTemporal) {
   const nidArchivo = Number(fichero.nid_solicitud_impresion_archivo);
   if (!Number.isSafeInteger(nidArchivo) || nidArchivo < 1) {
-    throw new Error("La solicitud contiene un identificador de archivo inválido");
+    throw new Error(
+      "La solicitud contiene un identificador de archivo inválido",
+    );
   }
 
   const configuracion = obtenerConfiguracion();
@@ -152,7 +154,9 @@ function validarOpciones(opciones) {
 
   let numeroPaginas = 0;
   for (const segmento of opciones.rango_paginas.split(",")) {
-    const limites = segmento.split("-").map((valor) => Number.parseInt(valor, 10));
+    const limites = segmento
+      .split("-")
+      .map((valor) => Number.parseInt(valor, 10));
     const inicio = limites[0];
     const fin = limites.length === 2 ? limites[1] : inicio;
     if (
@@ -182,19 +186,19 @@ function construirArgumentosCups(solicitud, fichero) {
     validarOpciones(solicitud.opciones);
   }
 
-  const argumentos = [
-    "-d",
-    obtenerConfiguracion().cola,
-  ];
+  const argumentos = ["-d", obtenerConfiguracion().cola];
 
   if (fichero.mime_type === "application/pdf") {
     // Evita que el escalado automático de PDF sustituya el porcentaje solicitado.
-    argumentos.push("-o", "print-scaling=none");
+    argumentos.push("-o", "print-scaling=auto-fit");
   } else {
     argumentos.push("-o", "scaling=" + solicitud.opciones.escala);
   }
 
-  if (solicitud.opciones.rango_paginas && fichero.mime_type === "application/pdf") {
+  if (
+    solicitud.opciones.rango_paginas &&
+    fichero.mime_type === "application/pdf"
+  ) {
     argumentos.push("-o", "page-ranges=" + solicitud.opciones.rango_paginas);
   }
 
@@ -292,9 +296,13 @@ async function imprimirSolicitud(solicitud) {
       "Error al imprimir solicitud " + solicitud.nid_solicitud_impresion + ":",
       error.message,
     );
-    await actualizarSolicitud(solicitud.nid_solicitud_impresion, "REINTENTABLE", {
-      mensaje_error: error.message,
-    });
+    await actualizarSolicitud(
+      solicitud.nid_solicitud_impresion,
+      "REINTENTABLE",
+      {
+        mensaje_error: error.message,
+      },
+    );
   } finally {
     await fs.rm(directorioTemporal, { recursive: true, force: true });
   }
@@ -314,7 +322,10 @@ async function procesarSolicitudesImpresion() {
       await imprimirSolicitud(solicitud);
     }
   } catch (error) {
-    console.error("Error al sincronizar solicitudes de impresión:", error.message);
+    console.error(
+      "Error al sincronizar solicitudes de impresión:",
+      error.message,
+    );
   } finally {
     procesoEnCurso = false;
   }
