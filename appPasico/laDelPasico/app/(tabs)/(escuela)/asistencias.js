@@ -81,13 +81,17 @@ export default function Asistencias() {
         }
 
         const gruposRecuperados = respuesta.grupos || [];
+
         setGruposOriginales(gruposRecuperados);
 
-        const gruposFiltrados = gruposRecuperados.filter(
-          (elemento) => (elemento.grupo.nid_curso = curso?.nid_curso)
-        );
+        let gruposFiltrados = [];
 
-        console.log("Grupos Filtrados", gruposFiltrados);
+        for (const elemento of gruposRecuperados) {
+          if (elemento.grupo.nid_curso === curso?.nid_curso) {
+            gruposFiltrados.push(elemento);
+          }
+        }
+
         setGrupos((gruposFiltrados || []).map((elemento) => elemento.grupo));
       } catch (err) {
         setError(err.message || "No se han podido obtener los grupos.");
@@ -96,7 +100,7 @@ export default function Asistencias() {
       }
     }
     cargarGrupos();
-  }, [cerrarSesion, curso]);
+  }, [cerrarSesion, curso, fechaSeleccionada]);
 
   const gruposDelDia = useMemo(
     () => grupos.filter((elemento) => esDiaDeClase(elemento.horario, fecha)),
