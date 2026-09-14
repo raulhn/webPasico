@@ -83,10 +83,8 @@ async function obtener_grupos(req, res) {
     const gruposConAlumnos = [];
 
     for (let i = 0; i < grupos.length; i++) {
-      const grupo = grupos[i];
-      const alumnos = await gestor_grupos.obtener_alumnos_grupo(
-        grupo.nid_grupo,
-      );
+      let grupo = grupos[i];
+      let alumnos = await gestor_grupos.obtener_alumnos_grupo(grupo.nid_grupo);
 
       gruposConAlumnos.push({ grupo: grupo, alumnos: alumnos });
     }

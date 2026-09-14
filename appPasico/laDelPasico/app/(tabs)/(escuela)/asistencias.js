@@ -1,4 +1,5 @@
 import { useContext, useEffect, useMemo, useState } from "react";
+import { useCursos } from "../../../hooks/escuela/useCurso";
 import {
   ActivityIndicator,
   ScrollView,
@@ -48,10 +49,11 @@ function esDiaDeClase(horario, fecha) {
 }
 
 export default function Asistencias() {
+  const { cursos, cargando: cargandoCursos } = useCursos(cerrarSesion);
   const { cerrarSesion } = useContext(AuthContext);
   const [fecha, setFecha] = useState(new Date());
-  const [grupos, setGrupos] = useState([]);
   const [grupo, setGrupo] = useState(SIN_SELECCION);
+  const [gruposOriginales, setGruposOriginales] = useState([]);
   const [alumnos, setAlumnos] = useState([]);
   const [cargandoGrupos, setCargandoGrupos] = useState(true);
   const [cargandoAsistencia, setCargandoAsistencia] = useState(false);
@@ -59,17 +61,34 @@ export default function Asistencias() {
   const [error, setError] = useState("");
   const [exito, setExito] = useState("");
   const fechaSeleccionada = fechaISO(fecha);
+  const [grupos, setGrupos] = useState([]);
+  const [curso, setCurso] = useState(null);
+
+  useEffect(() => {
+    const cursoActivo = cursos.find((elemento) => elemento.activo === "S");
+    setCurso(cursoActivo);
+  }, [cursos]);
 
   useEffect(() => {
     async function cargarGrupos() {
       try {
         const respuesta = await serviceGrupos.obtenerGrupos(null, cerrarSesion);
+
         if (respuesta.error) {
           throw new Error(
             respuesta.message || "No se han podido obtener los grupos."
           );
         }
-        setGrupos((respuesta.grupos || []).map((elemento) => elemento.grupo));
+
+        const gruposRecuperados = respuesta.grupos || [];
+        setGruposOriginales(gruposRecuperados);
+
+        const gruposFiltrados = gruposRecuperados.filter(
+          (elemento) => (elemento.grupo.nid_curso = curso?.nid_curso)
+        );
+
+        console.log("Grupos Filtrados", gruposFiltrados);
+        setGrupos((gruposFiltrados || []).map((elemento) => elemento.grupo));
       } catch (err) {
         setError(err.message || "No se han podido obtener los grupos.");
       } finally {
@@ -77,7 +96,7 @@ export default function Asistencias() {
       }
     }
     cargarGrupos();
-  }, [cerrarSesion]);
+  }, [cerrarSesion, curso]);
 
   const gruposDelDia = useMemo(
     () => grupos.filter((elemento) => esDiaDeClase(elemento.horario, fecha)),
