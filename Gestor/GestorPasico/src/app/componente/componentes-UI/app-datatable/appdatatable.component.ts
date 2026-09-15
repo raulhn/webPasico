@@ -76,7 +76,10 @@ export class AppDataTableComponent implements OnChanges {
         s.normalize('NFD').replace(/\p{Diacritic}/gu, '');
       this.filteredData = this.$lista().filter((row: any) => {
         const texto = Object.values(row).join(' ').toLowerCase();
-        return normalize(texto.toLowerCase()).includes(normalize(text));
+        const texto_sin_espacios = texto.replace(/\s+/g, ' ');
+        return normalize(texto_sin_espacios.toLowerCase()).includes(
+          normalize(text),
+        );
       });
     }
 
