@@ -9,6 +9,8 @@ import {
   StyleSheet,
   Text,
   View,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 
 import Constantes from "../../config/constantes";
@@ -261,240 +263,251 @@ export default function ModalSolicitudImpresion({
   return (
     <Modal animationType="slide" visible={visible} onRequestClose={cerrarModal}>
       <View style={styles.container}>
-        <View style={styles.cabecera}>
-          <View style={{ flex: 1 }}>
-            <Text style={styles.titulo}>Solicitud de impresión</Text>
-            <Text style={styles.subtitulo}>{partitura?.titulo}</Text>
-          </View>
-          <Pressable onPress={cerrarModal} style={styles.botonCerrar}>
-            <MaterialIcons name="close" size={24} color="#fff" />
-          </Pressable>
-        </View>
-        <View style={styles.textoImpresionesRestantes}>
-          <Text style={{ fontWeight: "bold" }}>
-            Impresiones Restantes: {impresionesRestantes}
-          </Text>
-        </View>
-        <ScrollView contentContainerStyle={styles.scroll}>
-          <View style={styles.cardResumen}>
-            <Text style={styles.labelResumen}>Partitura</Text>
-            <Text style={styles.valorResumen}>{partitura?.titulo}</Text>
-            {partitura?.autor ? (
-              <>
-                <Text style={styles.labelResumen}>Autor</Text>
-                <Text style={styles.textoSecundario}>{partitura.autor}</Text>
-              </>
-            ) : null}
-            {inspeccion.carpeta ? (
-              <>
-                <Text style={styles.labelResumen}>Carpeta detectada</Text>
-                <Text style={styles.textoSecundario}>{inspeccion.carpeta}</Text>
-              </>
-            ) : null}
-          </View>
-
-          {cargando ? (
-            <View style={styles.cardCargando}>
-              <ActivityIndicator size="large" color={Constantes.COLOR_AZUL} />
-              <Text style={styles.textoSecundario}>
-                Inspeccionando archivos imprimibles...
-              </Text>
+        <KeyboardAvoidingView
+          style={{ flex: 1 }}
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0} // Ajusta según tu header
+        >
+          <View style={styles.cabecera}>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.titulo}>Solicitud de impresión</Text>
+              <Text style={styles.subtitulo}>{partitura?.titulo}</Text>
             </View>
-          ) : null}
+            <Pressable onPress={cerrarModal} style={styles.botonCerrar}>
+              <MaterialIcons name="close" size={24} color="#fff" />
+            </Pressable>
+          </View>
+          <View style={styles.textoImpresionesRestantes}>
+            <Text style={{ fontWeight: "bold" }}>
+              Impresiones Restantes: {impresionesRestantes}
+            </Text>
+          </View>
+          <ScrollView contentContainerStyle={styles.scroll}>
+            <View style={styles.cardResumen}>
+              <Text style={styles.labelResumen}>Partitura</Text>
+              <Text style={styles.valorResumen}>{partitura?.titulo}</Text>
+              {partitura?.autor ? (
+                <>
+                  <Text style={styles.labelResumen}>Autor</Text>
+                  <Text style={styles.textoSecundario}>{partitura.autor}</Text>
+                </>
+              ) : null}
+              {inspeccion.carpeta ? (
+                <>
+                  <Text style={styles.labelResumen}>Carpeta detectada</Text>
+                  <Text style={styles.textoSecundario}>
+                    {inspeccion.carpeta}
+                  </Text>
+                </>
+              ) : null}
+            </View>
 
-          {!cargando && errorCarga ? (
-            <View style={styles.cardError}>
-              <MaterialIcons name="warning-amber" size={36} color="#f87c00" />
-              <Text style={styles.errorTexto}>{errorCarga}</Text>
-              <View style={styles.filaBotones}>
-                <Boton nombre="Reintentar" onPress={cargarInspeccion} />
-                <Boton
-                  nombre="Cerrar"
-                  color={Constantes.COLOR_ROJO}
-                  onPress={cerrarModal}
-                />
+            {cargando ? (
+              <View style={styles.cardCargando}>
+                <ActivityIndicator size="large" color={Constantes.COLOR_AZUL} />
+                <Text style={styles.textoSecundario}>
+                  Inspeccionando archivos imprimibles...
+                </Text>
               </View>
-            </View>
-          ) : null}
+            ) : null}
 
-          {!cargando && !errorCarga ? (
-            <>
-              {inspeccion.mensaje ? (
-                <View style={styles.cardInfo}>
-                  <MaterialIcons
-                    name="info-outline"
-                    size={22}
-                    color={Constantes.COLOR_AZUL}
+            {!cargando && errorCarga ? (
+              <View style={styles.cardError}>
+                <MaterialIcons name="warning-amber" size={36} color="#f87c00" />
+                <Text style={styles.errorTexto}>{errorCarga}</Text>
+                <View style={styles.filaBotones}>
+                  <Boton nombre="Reintentar" onPress={cargarInspeccion} />
+                  <Boton
+                    nombre="Cerrar"
+                    color={Constantes.COLOR_ROJO}
+                    onPress={cerrarModal}
                   />
-                  <Text style={styles.textoSecundario}>
-                    {inspeccion.mensaje}
-                  </Text>
                 </View>
-              ) : null}
+              </View>
+            ) : null}
 
-              {inspeccion.cuota ? (
-                <View style={styles.cardCuota}>
-                  <Text style={styles.tituloSeccion}>
-                    {inspeccion.cuota.titulo}
-                  </Text>
-                  {inspeccion.cuota.periodo ? (
+            {!cargando && !errorCarga ? (
+              <>
+                {inspeccion.mensaje ? (
+                  <View style={styles.cardInfo}>
+                    <MaterialIcons
+                      name="info-outline"
+                      size={22}
+                      color={Constantes.COLOR_AZUL}
+                    />
                     <Text style={styles.textoSecundario}>
-                      Periodo: {inspeccion.cuota.periodo}
+                      {inspeccion.mensaje}
                     </Text>
-                  ) : null}
-                  <View style={styles.filaResumen}>
-                    {inspeccion.cuota.limite !== null ? (
-                      <View style={styles.itemResumen}>
-                        <Text style={styles.numeroResumen}>
-                          {inspeccion.cuota.limite}
-                        </Text>
-                        <Text style={styles.textoResumen}>Límite</Text>
-                      </View>
-                    ) : null}
-                    {inspeccion.cuota.usadas !== null ? (
-                      <View style={styles.itemResumen}>
-                        <Text style={styles.numeroResumen}>
-                          {inspeccion.cuota.usadas}
-                        </Text>
-                        <Text style={styles.textoResumen}>Usadas</Text>
-                      </View>
-                    ) : null}
-                    {inspeccion.cuota.disponibles !== null ? (
-                      <View style={styles.itemResumen}>
-                        <Text style={styles.numeroResumen}>
-                          {inspeccion.cuota.disponibles}
-                        </Text>
-                        <Text style={styles.textoResumen}>Disponibles</Text>
-                      </View>
-                    ) : null}
                   </View>
-                </View>
-              ) : null}
+                ) : null}
 
-              <View style={styles.seccion}>
-                <Text style={styles.tituloSeccion}>
-                  Archivos seleccionables
-                </Text>
-                {inspeccion.archivos.length === 0 ? (
-                  <Text style={styles.textoSecundario}>
-                    El servidor no devolvió archivos imprimibles para esta
-                    partitura.
-                  </Text>
-                ) : (
-                  inspeccion.archivos.map((archivo) => (
-                    <View key={archivo.id} style={styles.cardArchivo}>
-                      <CheckBox
-                        item={{
-                          etiqueta:
-                            archivo.original?.nombre_archivo ||
-                            archivo.etiqueta,
-                          id: archivo.id,
-                        }}
-                        valorSeleccionado={Boolean(
-                          archivosSeleccionados[archivo.id]
-                        )}
-                        setValorSeleccionado={(item, seleccionado) =>
-                          actualizarArchivoSeleccionado(item, seleccionado)
-                        }
-                      />
+                {inspeccion.cuota ? (
+                  <View style={styles.cardCuota}>
+                    <Text style={styles.tituloSeccion}>
+                      {inspeccion.cuota.titulo}
+                    </Text>
+                    {inspeccion.cuota.periodo ? (
+                      <Text style={styles.textoSecundario}>
+                        Periodo: {inspeccion.cuota.periodo}
+                      </Text>
+                    ) : null}
+                    <View style={styles.filaResumen}>
+                      {inspeccion.cuota.limite !== null ? (
+                        <View style={styles.itemResumen}>
+                          <Text style={styles.numeroResumen}>
+                            {inspeccion.cuota.limite}
+                          </Text>
+                          <Text style={styles.textoResumen}>Límite</Text>
+                        </View>
+                      ) : null}
+                      {inspeccion.cuota.usadas !== null ? (
+                        <View style={styles.itemResumen}>
+                          <Text style={styles.numeroResumen}>
+                            {inspeccion.cuota.usadas}
+                          </Text>
+                          <Text style={styles.textoResumen}>Usadas</Text>
+                        </View>
+                      ) : null}
+                      {inspeccion.cuota.disponibles !== null ? (
+                        <View style={styles.itemResumen}>
+                          <Text style={styles.numeroResumen}>
+                            {inspeccion.cuota.disponibles}
+                          </Text>
+                          <Text style={styles.textoResumen}>Disponibles</Text>
+                        </View>
+                      ) : null}
                     </View>
-                  ))
-                )}
-              </View>
-
-              <View style={styles.seccion}>
-                <Text style={styles.tituloSeccion}>Rango de páginas</Text>
-                <EntradaTexto
-                  placeholder="Máximo 6 páginas. Ejemplo: 1-2,4"
-                  valor={rangoPaginas}
-                  setValor={setRangoPaginas}
-                  ancho="100%"
-                />
-                <Text style={styles.tituloSeccion}>Escala (%)</Text>
-                <EntradaTexto
-                  placeholder="100"
-                  valor={escalaPorcentaje}
-                  setValor={setEscalaPorcentaje}
-                  ancho="100%"
-                />
-                <Text style={styles.ayuda}>
-                  En cada PDF se pueden imprimir hasta 6 páginas. Puedes ajustar
-                  el porcentaje entre 25 y 200 para adaptar la impresión.
-                </Text>
-              </View>
-
-              <View style={styles.filaBotones}>
-                <Boton
-                  nombre={enviando ? "Enviando..." : "Solicitar impresión"}
-                  onPress={solicitarImpresion}
-                />
-                <Boton
-                  nombre="Cerrar"
-                  color={Constantes.COLOR_ROJO}
-                  onPress={cerrarModal}
-                />
-              </View>
-
-              {resultadoSolicitud ? (
-                <View style={styles.cardResultado}>
-                  <View
-                    style={[
-                      styles.estadoResultado,
-                      {
-                        backgroundColor: obtenerColorEstadoSolicitud(
-                          resultadoSolicitud.estado
-                        ),
-                      },
-                    ]}
-                  >
-                    <Text style={styles.estadoResultadoTexto}>
-                      {resultadoSolicitud.estadoEtiqueta}
-                    </Text>
                   </View>
-                  <Text style={styles.resultadoTexto}>
-                    Solicitud {resultadoSolicitud.id}
+                ) : null}
+
+                <View style={styles.seccion}>
+                  <Text style={styles.tituloSeccion}>
+                    Archivos seleccionables
                   </Text>
-                  <Text style={styles.textoSecundario}>
-                    Fecha:{" "}
-                    {formatearFechaSolicitud(resultadoSolicitud.fechaSolicitud)}
-                  </Text>
-                  {resultadoSolicitud.trabajoCups ? (
+                  {inspeccion.archivos.length === 0 ? (
                     <Text style={styles.textoSecundario}>
-                      Trabajo CUPS: {resultadoSolicitud.trabajoCups}
+                      El servidor no devolvió archivos imprimibles para esta
+                      partitura.
                     </Text>
-                  ) : null}
-                  {resultadoSolicitud.mensaje ? (
-                    <Text style={styles.textoSecundario}>
-                      {resultadoSolicitud.mensaje}
-                    </Text>
-                  ) : null}
+                  ) : (
+                    inspeccion.archivos.map((archivo) => (
+                      <View key={archivo.id} style={styles.cardArchivo}>
+                        <CheckBox
+                          item={{
+                            etiqueta:
+                              archivo.original?.nombre_archivo ||
+                              archivo.etiqueta,
+                            id: archivo.id,
+                          }}
+                          valorSeleccionado={Boolean(
+                            archivosSeleccionados[archivo.id]
+                          )}
+                          setValorSeleccionado={(item, seleccionado) =>
+                            actualizarArchivoSeleccionado(item, seleccionado)
+                          }
+                        />
+                      </View>
+                    ))
+                  )}
                 </View>
-              ) : null}
 
-              <MisSolicitudesImpresion
-                nidPartitura={partitura?.nid_partitura}
-                visible={visible}
-                refresco={versionSolicitudes}
-                onActualizada={() =>
-                  setVersionSolicitudes((valor) => valor + 1)
-                }
-              />
-            </>
-          ) : null}
-        </ScrollView>
+                <View style={styles.seccion}>
+                  <Text style={styles.tituloSeccion}>Rango de páginas</Text>
+                  <EntradaTexto
+                    placeholder="Máximo 6 páginas. Ejemplo: 1-2,4"
+                    valor={rangoPaginas}
+                    setValor={setRangoPaginas}
+                    ancho="100%"
+                  />
+                  <Text style={styles.tituloSeccion}>Escala (%)</Text>
+                  <EntradaTexto
+                    placeholder="100"
+                    valor={escalaPorcentaje}
+                    setValor={setEscalaPorcentaje}
+                    ancho="100%"
+                  />
+                  <Text style={styles.ayuda}>
+                    En cada PDF se pueden imprimir hasta 6 páginas. Puedes
+                    ajustar el porcentaje entre 25 y 200 para adaptar la
+                    impresión.
+                  </Text>
+                </View>
 
-        <ModalAviso
-          visible={Boolean(mensajeAviso)}
-          setVisible={() => setMensajeAviso("")}
-          mensaje={mensajeAviso}
-          textBoton="Aceptar"
-        />
-        <ModalExito
-          visible={Boolean(mensajeExito)}
-          setVisible={() => setMensajeExito("")}
-          mensaje={mensajeExito}
-          textBoton="Aceptar"
-        />
+                <View style={styles.filaBotones}>
+                  <Boton
+                    nombre={enviando ? "Enviando..." : "Solicitar impresión"}
+                    onPress={solicitarImpresion}
+                  />
+                  <Boton
+                    nombre="Cerrar"
+                    color={Constantes.COLOR_ROJO}
+                    onPress={cerrarModal}
+                  />
+                </View>
+
+                {resultadoSolicitud ? (
+                  <View style={styles.cardResultado}>
+                    <View
+                      style={[
+                        styles.estadoResultado,
+                        {
+                          backgroundColor: obtenerColorEstadoSolicitud(
+                            resultadoSolicitud.estado
+                          ),
+                        },
+                      ]}
+                    >
+                      <Text style={styles.estadoResultadoTexto}>
+                        {resultadoSolicitud.estadoEtiqueta}
+                      </Text>
+                    </View>
+                    <Text style={styles.resultadoTexto}>
+                      Solicitud {resultadoSolicitud.id}
+                    </Text>
+                    <Text style={styles.textoSecundario}>
+                      Fecha:{" "}
+                      {formatearFechaSolicitud(
+                        resultadoSolicitud.fechaSolicitud
+                      )}
+                    </Text>
+                    {resultadoSolicitud.trabajoCups ? (
+                      <Text style={styles.textoSecundario}>
+                        Trabajo CUPS: {resultadoSolicitud.trabajoCups}
+                      </Text>
+                    ) : null}
+                    {resultadoSolicitud.mensaje ? (
+                      <Text style={styles.textoSecundario}>
+                        {resultadoSolicitud.mensaje}
+                      </Text>
+                    ) : null}
+                  </View>
+                ) : null}
+
+                <MisSolicitudesImpresion
+                  nidPartitura={partitura?.nid_partitura}
+                  visible={visible}
+                  refresco={versionSolicitudes}
+                  onActualizada={() =>
+                    setVersionSolicitudes((valor) => valor + 1)
+                  }
+                />
+              </>
+            ) : null}
+          </ScrollView>
+
+          <ModalAviso
+            visible={Boolean(mensajeAviso)}
+            setVisible={() => setMensajeAviso("")}
+            mensaje={mensajeAviso}
+            textBoton="Aceptar"
+          />
+          <ModalExito
+            visible={Boolean(mensajeExito)}
+            setVisible={() => setMensajeExito("")}
+            mensaje={mensajeExito}
+            textBoton="Aceptar"
+          />
+        </KeyboardAvoidingView>
       </View>
     </Modal>
   );
