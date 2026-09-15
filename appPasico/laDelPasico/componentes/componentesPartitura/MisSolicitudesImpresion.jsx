@@ -64,7 +64,8 @@ export default function MisSolicitudesImpresion({
         await ServiceSolicitudesImpresion.obtenerImpresionesRestantes(
           cerrarSesion
         );
-      setImpresionesRestantes(respuestaRestantes?.impresionesRestantes || null);
+      const numImpresionesRestantes = respuestaRestantes?.impresionesRestantes;
+     setImpresionesRestantes(numImpresionesRestantes);
 
       if (respuesta?.error) {
         throw new Error(
