@@ -35,18 +35,25 @@ export default function SelectorPartituras({ callback, edicion, refrescar }) {
   const [filtroTexto, setFiltroTexto] = useState("");
 
   useEffect(() => {
-    const resultado = partituras.filter(
-      (partitura) =>
-        (partitura.titulo.toLowerCase().includes(filtroTexto.toLowerCase()) ||
-          partitura.autor.toLowerCase().includes(filtroTexto.toLowerCase()) ||
-          partitura.nombre_categoria
-            .toLowerCase()
-            .includes(filtroTexto.toLowerCase())) &&
+    const normalizarTexto = (texto) =>
+      texto
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase();
+
+    const resultado = partituras.filter((partitura) => {
+      const filtroNormalizado = normalizarTexto(filtroTexto);
+      return (
+        (normalizarTexto(partitura.titulo).includes(filtroNormalizado) ||
+          normalizarTexto(partitura.autor).includes(filtroNormalizado) ||
+          normalizarTexto(partitura.nombre_categoria).includes(
+            filtroNormalizado
+          )) &&
         categoriaSeleccionada &&
         (categoriaSeleccionada.etiqueta === "" ||
           partitura.nombre_categoria === categoriaSeleccionada.etiqueta)
-    );
-
+      );
+    });
     setPartiturasFiltradas(resultado);
   }, [categoriaSeleccionada, filtroTexto, partituras]);
 
