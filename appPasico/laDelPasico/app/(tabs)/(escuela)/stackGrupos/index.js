@@ -38,6 +38,7 @@ export default function Grupos() {
   const [cursoNuevo, setCursoNuevo] = useState(SIN_SELECCION);
   const [error, setError] = useState("");
   const [exito, setExito] = useState("");
+  const [refrescar, setRefrescar] = useState(false);
 
   useEffect(() => {
     const cursoActivo = cursos.find((elemento) => elemento.activo === "S");
@@ -76,7 +77,7 @@ export default function Grupos() {
 
   useEffect(() => {
     cargarGrupos();
-  }, [curso.valor]);
+  }, [curso.valor, refrescar]);
 
   async function crearGrupo() {
     if (!nombre.trim() || !cursoNuevo.valor || !asignatura.valor) {
@@ -94,15 +95,13 @@ export default function Grupos() {
       if (respuesta.error) {
         throw new Error(respuesta.message || "No se ha podido crear el grupo.");
       }
+      setRefrescar(!refrescar);
       setMostrarFormulario(false);
       setNombre("");
       setAsignatura(SIN_SELECCION);
       setCursoNuevo(SIN_SELECCION);
       setCurso(cursoNuevo);
       setExito("Grupo creado correctamente.");
-      if (String(curso.valor) === String(cursoNuevo.valor)) {
-        cargarGrupos();
-      }
     } catch (err) {
       setError(err.message || "No se ha podido crear el grupo.");
     }

@@ -57,6 +57,17 @@ function eliminarAlumnoGrupo(nidGrupo, nidMatriculaAsignatura, cerrarSesion) {
   );
 }
 
+function eliminarGrupo(nidGrupo, cerrarSesion) {
+  return peticion(
+    "POST",
+    "eliminar_grupo",
+    {
+      nid_grupo: nidGrupo,
+    },
+    cerrarSesion
+  );
+}
+
 function obtenerAsistenciaGrupo(nidGrupo, fecha, cerrarSesion) {
   return peticion(
     "GET",
@@ -80,6 +91,7 @@ module.exports = {
   obtenerGrupos,
   actualizarHorarioGrupo,
   addAlumnoGrupo,
+  eliminarGrupo,
   eliminarAlumnoGrupo,
   obtenerAsistenciaGrupo,
   guardarAsistenciaGrupo,

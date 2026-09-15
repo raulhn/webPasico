@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Text,
   View,
+  RefreshControl,
 } from "react-native";
 import { AuthContext } from "../../../providers/AuthContext";
 import serviceGrupos from "../../../servicios/serviceGrupos";
@@ -55,6 +56,7 @@ export default function Asistencias() {
   const [grupo, setGrupo] = useState(SIN_SELECCION);
   const [gruposOriginales, setGruposOriginales] = useState([]);
   const [alumnos, setAlumnos] = useState([]);
+  const [refrescar, setRefresco] = useState(false);
   const [cargandoGrupos, setCargandoGrupos] = useState(true);
   const [cargandoAsistencia, setCargandoAsistencia] = useState(false);
   const [guardando, setGuardando] = useState(false);
@@ -97,10 +99,11 @@ export default function Asistencias() {
         setError(err.message || "No se han podido obtener los grupos.");
       } finally {
         setCargandoGrupos(false);
+        setRefresco(false); // Restablece el estado de refresco después de cargar los grupos
       }
     }
     cargarGrupos();
-  }, [cerrarSesion, curso, fechaSeleccionada]);
+  }, [cerrarSesion, curso, fechaSeleccionada, refrescar]);
 
   const gruposDelDia = useMemo(
     () => grupos.filter((elemento) => esDiaDeClase(elemento.horario, fecha)),
@@ -192,7 +195,17 @@ export default function Asistencias() {
   }
 
   return (
-    <ScrollView contentContainerStyle={estilos.contenedor}>
+    <ScrollView
+      contentContainerStyle={estilos.contenedor}
+      refreshControl={
+        <RefreshControl
+          refreshing={refrescar}
+          onRefresh={() => {
+            setRefresco(true); // Cambia el estado de refresco
+          }}
+        />
+      }
+    >
       <Text style={estilos.titulo}>Registro de asistencias</Text>
       <View
         style={{

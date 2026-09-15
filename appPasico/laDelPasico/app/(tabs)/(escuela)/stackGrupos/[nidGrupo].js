@@ -20,6 +20,8 @@ import {
   ModalExito,
 } from "../../../../componentes/componentesUI/ComponentesUI";
 
+import { useRouter } from "expo-router";
+
 const DIAS_SEMANA = ["L", "M", "X", "J", "V", "S", "D"];
 const SIN_SELECCION = { etiqueta: "", valor: null };
 
@@ -37,9 +39,14 @@ export default function DetalleGrupo() {
   const [alumno, setAlumno] = useState(SIN_SELECCION);
   const [alumnoAEliminar, setAlumnoAEliminar] = useState(null);
   const [confirmarEliminacion, setConfirmarEliminacion] = useState(false);
+  const [confirmarEliminacionGrupo, setConfirmarEliminacionGrupo] =
+    useState(false);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState("");
   const [exito, setExito] = useState("");
+  const [exitoGrupo, setExitoGrupo] = useState("");
+
+  const router = useRouter();
 
   const { alumnos: alumnosAsignatura } = useAlumnosAsignaturaProfesor(
     grupo?.grupo.nid_curso,
@@ -163,6 +170,24 @@ export default function DetalleGrupo() {
     }
   }
 
+  async function eliminarGrupo() {
+    try {
+      const respuesta = await serviceGrupos.eliminarGrupo(
+        nidGrupo,
+        cerrarSesion
+      );
+      if (respuesta.error) {
+        throw new Error(
+          respuesta.message || "No se ha podido eliminar el grupo."
+        );
+      }
+      setExitoGrupo("Grupo eliminado.");
+      // Aquí podrías redirigir a otra pantalla después de eliminar el grupo
+    } catch (err) {
+      setError(err.message || "No se ha podido eliminar el grupo.");
+    }
+  }
+
   if (cargando) {
     return <ActivityIndicator style={estilos.cargando} size="large" />;
   }
@@ -181,7 +206,17 @@ export default function DetalleGrupo() {
   return (
     <ScrollView contentContainerStyle={estilos.contenedor}>
       <Text style={estilos.titulo}>{grupo.grupo.nombre}</Text>
-      <Text>Alumnos incluidos: {grupo.alumnos.length}</Text>
+      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <Text>Alumnos incluidos: {grupo.alumnos.length}</Text>
+        <Boton
+          nombre="Eliminar grupo"
+          color="#c62828"
+          onPress={() => {
+            setConfirmarEliminacionGrupo(true);
+          }}
+        />
+      </View>
+
       <Text style={estilos.subtitulo}>Horario de clase</Text>
       <View style={estilos.dias}>
         {DIAS_SEMANA.map((dia) => (
@@ -236,6 +271,16 @@ export default function DetalleGrupo() {
         }}
       />
       <ModalConfirmacion
+        visible={confirmarEliminacionGrupo}
+        setVisible={() => setConfirmarEliminacionGrupo(false)}
+        mensaje="¿Seguro que quieres eliminar el grupo?"
+        textBoton="Eliminar"
+        textBotonCancelar="Cancelar"
+        accion={eliminarGrupo}
+        accionCancelar={() => setConfirmarEliminacionGrupo(false)}
+      />
+
+      <ModalConfirmacion
         visible={confirmarEliminacion}
         setVisible={() => setConfirmarEliminacion(false)}
         mensaje="¿Quieres eliminar este alumno del grupo?"
@@ -254,6 +299,17 @@ export default function DetalleGrupo() {
         visible={Boolean(exito)}
         setVisible={() => setExito("")}
         mensaje={exito}
+        textBoton="Aceptar"
+      />
+
+      <ModalExito
+        visible={Boolean(exitoGrupo)}
+        setVisible={() => {
+          setExitoGrupo("");
+          console.log("Redirigiendo a la lista de grupos...");
+          router.replace("/(tabs)/(escuela)/stackGrupos");
+        }}
+        mensaje={exitoGrupo}
         textBoton="Aceptar"
       />
     </ScrollView>
