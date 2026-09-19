@@ -99,7 +99,7 @@ async function registrar_preinscripcion(
       ", " +
       "nullif(" +
       conexion.dbConn.escape(familia_instrumento3) +
-      "," +
+      ",'') ," +
       conexion.dbConn.escape(idempotencia_key) +
       ")";
     await gestion_base_datos.actualiza(sql);
