@@ -40,6 +40,24 @@ function registrar_preinscripcion(req, res) {
 
     let token = req.body.token;
 
+    let idemportencia_key = req.body.idempotencia_key;
+
+    if (!idemportencia_key || idemportencia_key == "") {
+      res.status(400).send({ error: true, message: "Falta idempotencia_key" });
+      return;
+    }
+
+    let existe_idempotencia =
+      await preinscripcion.comprobar_idempotencia(idemportencia_key);
+
+    if (existe_idempotencia) {
+      res.status(400).send({
+        error: true,
+        message: "Ya se ha realizado una preinscripción con esta clave",
+      });
+      return;
+    }
+
     const url =
       "https://www.google.com/recaptcha/api/siteverify?secret=" +
       constantes_email.CLAVE +
@@ -81,7 +99,7 @@ function registrar_preinscripcion(req, res) {
         instrumento2,
         familia_instrumento2,
         instrumento3,
-        familia_instrumento3
+        familia_instrumento3,
       );
 
       res
@@ -92,7 +110,7 @@ function registrar_preinscripcion(req, res) {
         nombre,
         primer_apellido,
         segundo_apellido,
-        fecha_nacimiento
+        fecha_nacimiento,
       );
       await enviar_email_respuesta(correo_electronico);
     } else {
@@ -105,7 +123,7 @@ function enviar_email(
   nombre,
   primer_apellido,
   segundo_apellido,
-  fecha_nacimiento
+  fecha_nacimiento,
 ) {
   return new Promise((resolve, reject) => {
     let createTransport = s_transporter.obtener_transporter();
@@ -168,9 +186,8 @@ function obtener_preinscripciones_detalle_login(req, res) {
   comun.comprobaciones_login(req, res, async () => {
     let nid_preinscripcion = req.params.nid_preinscripcion;
 
-    let resultado = await preinscripcion.obtener_preincripciones_detalle(
-      nid_preinscripcion
-    );
+    let resultado =
+      await preinscripcion.obtener_preincripciones_detalle(nid_preinscripcion);
 
     res.status(200).send({ error: false, preinscripciones: resultado });
   });
@@ -189,9 +206,8 @@ function obtener_preinscripciones_detalle(req, res) {
   comun.comprobaciones_api(req, res, async () => {
     let nid_preinscripcion = req.params.nid_preinscripcion;
 
-    let resultado = await preinscripcion.obtener_preincripciones_detalle(
-      nid_preinscripcion
-    );
+    let resultado =
+      await preinscripcion.obtener_preincripciones_detalle(nid_preinscripcion);
 
     res.status(200).send({ error: false, preinscripciones: resultado });
   });

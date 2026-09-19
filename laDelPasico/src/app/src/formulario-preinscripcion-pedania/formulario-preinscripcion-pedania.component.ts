@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 import { ServicioPreinscripcionService } from 'src/app/servicios/servicio-preinscripcion.service';
 import Swal from 'sweetalert2';
+import { generarIdempotencyKeyImpresion } from "../logica/utilidades";
 //import { ReCaptchaV3Service } from 'ng-recaptcha';
 import { ReCaptchaV3Service } from 'ngx-captcha';
 
@@ -60,7 +61,11 @@ export class FormularioPreinscripcionPedaniaComponent implements OnInit {
   puerta: string = '';
   escalera: string = '';
 
-  ngOnInit(): void {}
+  idempotency_key: string =
+
+  ngOnInit(): void {
+    this.idempotency_key = generarIdempotencyKeyImpresion();
+  }
 
   calculo_edad() {
     let date_nacimiento = new Date(this.fecha_nacimiento);
@@ -244,6 +249,7 @@ export class FormularioPreinscripcionPedaniaComponent implements OnInit {
 
   realiza_registro = {
     next: (respuesta: any) => {
+    this.idempotency_key = generarIdempotencyKeyImpresion();
       Swal.fire({
         icon: 'success',
         title: 'Registro correcto',

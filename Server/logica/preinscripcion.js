@@ -147,7 +147,23 @@ async function obtener_preincripciones_detalle(nid_preinscripcion) {
   }
 }
 
+async function comprobar_idempotencia(idempotencia_key) {
+  try {
+    const sql =
+      "select count(*) cont from " +
+      constantes.ESQUEMA_BD +
+      ".preincripcion where idempotencia_key = " +
+      conexion.dbConn.escape(idempotencia_key);
+    const results = await gestion_base_datos.consulta(sql);
+    return results[0].cont;
+  } catch (error) {
+    console.log("Error al obtener la clave de idemportencia");
+    throw new Error("Error al obtener la clave de idemportencia");
+  }
+}
+
 module.exports.obtener_preinscripciones = obtener_preinscripciones;
 module.exports.registrar_preinscripcion = registrar_preinscripcion;
 module.exports.obtener_preincripciones_detalle =
   obtener_preincripciones_detalle;
+module.exports.comprobar_idempotencia = comprobar_idempotencia;
