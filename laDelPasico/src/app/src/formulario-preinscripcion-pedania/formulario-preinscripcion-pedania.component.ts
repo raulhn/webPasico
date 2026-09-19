@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 import { ServicioPreinscripcionService } from 'src/app/servicios/servicio-preinscripcion.service';
 import Swal from 'sweetalert2';
-import * as utilidades from '../logica/utilidades.js';
+import * as utilidades from '../logica/utilidades';
 //import { ReCaptchaV3Service } from 'ng-recaptcha';
 import { ReCaptchaV3Service } from 'ngx-captcha';
 
