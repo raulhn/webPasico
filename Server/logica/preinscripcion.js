@@ -152,7 +152,7 @@ async function comprobar_idempotencia(idempotencia_key) {
     const sql =
       "select count(*) cont from " +
       constantes.ESQUEMA_BD +
-      ".preinscripcion where idempotencia_key = " +
+      ".preinscripcion where idempotency_key = " +
       conexion.dbConn.escape(idempotencia_key);
     const results = await gestion_base_datos.consulta(sql);
     return results[0].cont;
