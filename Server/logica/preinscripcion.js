@@ -31,6 +31,7 @@ async function registrar_preinscripcion(
   familia_instrumento2,
   instrumento3,
   familia_instrumento3,
+  idempotencia_key,
 ) {
   try {
     const sql =
@@ -39,7 +40,7 @@ async function registrar_preinscripcion(
       ".preinscripcion(nombre, primer_apellido, segundo_apellido, dni, fecha_nacimiento, nombre_padre, primer_apellido_padre, " +
       "segundo_apellido_padre, dni_padre, correo_electronico, telefono, municipio, provincia, direccion, " +
       "numero, puerta, escalera, codigo_postal, instrumento, familia_instrumento, sucursal, curso, horario, tipo_inscripcion" +
-      ", instrumento2, familia_instrumento2, instrumento3, familia_instrumento3) values(" +
+      ", instrumento2, familia_instrumento2, instrumento3, familia_instrumento3, idempotency_key) values(" +
       conexion.dbConn.escape(nombre) +
       ", " +
       conexion.dbConn.escape(primer_apellido) +
@@ -98,7 +99,8 @@ async function registrar_preinscripcion(
       ", " +
       "nullif(" +
       conexion.dbConn.escape(familia_instrumento3) +
-      ",'') " +
+      ",'') ," +
+      conexion.dbConn.escape(idempotencia_key) +
       ")";
     await gestion_base_datos.actualiza(sql);
     return;
@@ -147,7 +149,23 @@ async function obtener_preincripciones_detalle(nid_preinscripcion) {
   }
 }
 
+async function comprobar_idempotencia(idempotencia_key) {
+  try {
+    const sql =
+      "select count(*) cont from " +
+      constantes.ESQUEMA_BD +
+      ".preinscripcion where idempotency_key = " +
+      conexion.dbConn.escape(idempotencia_key);
+    const results = await gestion_base_datos.consulta(sql);
+    return results[0].cont;
+  } catch (error) {
+    console.log("Error al obtener la clave de idemportencia");
+    throw new Error("Error al obtener la clave de idemportencia");
+  }
+}
+
 module.exports.obtener_preinscripciones = obtener_preinscripciones;
 module.exports.registrar_preinscripcion = registrar_preinscripcion;
 module.exports.obtener_preincripciones_detalle =
   obtener_preincripciones_detalle;
+module.exports.comprobar_idempotencia = comprobar_idempotencia;

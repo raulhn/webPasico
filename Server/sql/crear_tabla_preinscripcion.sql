@@ -17,7 +17,8 @@ create table pasico.preinscripcion(
     codigo_postal varchar(20),
 	numero varchar(10),
 	puerta varchar(10),
-	escalera varchar(10)
+	escalera varchar(10),
+idempotency_key varchar(64) 
 );
 
 create table pasicopru.preinscripcion(

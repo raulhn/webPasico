@@ -79,6 +79,8 @@ export default function ModalSolicitudImpresion({
   const [versionSolicitudes, setVersionSolicitudes] = useState(0);
   const [impresionesRestantes, setImpresionesRestantes] = useState(null);
 
+  const [idempotencyKey, setIdempotencyKey] = useState(null);
+
   const archivosActivos = useMemo(
     () =>
       inspeccion.archivos.filter(
@@ -90,6 +92,9 @@ export default function ModalSolicitudImpresion({
   useEffect(() => {
     if (visible && partitura?.nid_partitura) {
       cargarInspeccion();
+      setIdempotencyKey(
+        generarIdempotencyKeyImpresion(partitura.nid_partitura)
+      );
     }
   }, [visible, partitura?.nid_partitura]);
 
@@ -222,9 +227,7 @@ export default function ModalSolicitudImpresion({
         archivos: serializarArchivosSeleccionados(archivosActivos),
         rango_paginas: rangoPaginas.trim() || null,
         escala_porcentaje: escala,
-        idempotency_key: generarIdempotencyKeyImpresion(
-          partitura.nid_partitura
-        ),
+        idempotency_key: idempotencyKey,
       };
 
       const respuesta =
@@ -250,6 +253,9 @@ export default function ModalSolicitudImpresion({
 
       setResultadoSolicitud(solicitudNormalizada);
       setMensajeExito("Solicitud enviada correctamente.");
+      setIdempotencyKey(
+        generarIdempotencyKeyImpresion(partitura.nid_partitura)
+      );
       setVersionSolicitudes((valor) => valor + 1);
     } catch (error) {
       setMensajeAviso(

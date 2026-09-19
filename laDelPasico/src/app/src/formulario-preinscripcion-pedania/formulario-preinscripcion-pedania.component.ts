@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 import { ServicioPreinscripcionService } from 'src/app/servicios/servicio-preinscripcion.service';
 import Swal from 'sweetalert2';
+import * as utilidades from '../logica/utilidades';
 //import { ReCaptchaV3Service } from 'ng-recaptcha';
 import { ReCaptchaV3Service } from 'ngx-captcha';
 
@@ -60,7 +61,11 @@ export class FormularioPreinscripcionPedaniaComponent implements OnInit {
   puerta: string = '';
   escalera: string = '';
 
-  ngOnInit(): void {}
+  idempotency_key: string = '';
+
+  ngOnInit(): void {
+    this.idempotency_key = utilidades.generarIdempotencyKeyImpresion();
+  }
 
   calculo_edad() {
     let date_nacimiento = new Date(this.fecha_nacimiento);
@@ -117,6 +122,7 @@ export class FormularioPreinscripcionPedaniaComponent implements OnInit {
           instrumento3: this.instrumentos_seleccionados[2].instrumento,
           familia_instrumento3:
             this.instrumentos_seleccionados[2].familia_instrumento,
+          idempotencia_key: this.idempotency_key,
         };
 
         this.servicioPreinscripcion
@@ -153,6 +159,7 @@ export class FormularioPreinscripcionPedaniaComponent implements OnInit {
           familia_instrumento2: '',
           instrumento3: '',
           familia_instrumento3: '',
+          idempotencia_key: this.idempotency_key,
         };
 
         this.servicioPreinscripcion
@@ -244,6 +251,7 @@ export class FormularioPreinscripcionPedaniaComponent implements OnInit {
 
   realiza_registro = {
     next: (respuesta: any) => {
+      this.idempotency_key = utilidades.generarIdempotencyKeyImpresion();
       Swal.fire({
         icon: 'success',
         title: 'Registro correcto',
@@ -306,6 +314,7 @@ export class FormularioPreinscripcionPedaniaComponent implements OnInit {
                 instrumento3: this.instrumentos_seleccionados[2].instrumento,
                 familia_instrumento3:
                   this.instrumentos_seleccionados[2].familia_instrumento,
+                idempotencia_key: this.idempotency_key,
               };
 
               this.servicioPreinscripcion
@@ -342,6 +351,7 @@ export class FormularioPreinscripcionPedaniaComponent implements OnInit {
                 familia_instrumento2: '',
                 instrumento3: '',
                 familia_instrumento3: '',
+                idempotencia_key: this.idempotency_key,
               };
 
               this.servicioPreinscripcion
