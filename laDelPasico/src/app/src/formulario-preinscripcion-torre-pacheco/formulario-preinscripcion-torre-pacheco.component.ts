@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 import { ServicioPreinscripcionService } from 'src/app/servicios/servicio-preinscripcion.service';
 import Swal from 'sweetalert2';
+import { generarIdempotencyKeyImpresion } from '../logica/utilidades';
+
 import { ReCaptchaV3Service } from 'ngx-captcha';
 //import { ReCaptchaV3Service } from 'ng-recaptcha';
 import { Instrumento } from '../logica/instrumento';
@@ -67,8 +69,11 @@ export class FormularioPreinscripcionTorrePachecoComponent implements OnInit {
   numero: string = '';
   puerta: string = '';
   escalera: string = '';
+  idempotency_key: string = '';
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.idempotency_key = generarIdempotencyKeyImpresion();
+  }
 
   calculo_edad() {
     let date_nacimiento = new Date(this.fecha_nacimiento);
@@ -148,6 +153,7 @@ export class FormularioPreinscripcionTorrePachecoComponent implements OnInit {
           instrumento3: this.instrumentos_seleccionados[2].instrumento,
           familia_instrumento3:
             this.instrumentos_seleccionados[2].familia_instrumento,
+          idemportencia_key: this.idempotency_key,
         };
 
         this.servicioPreinscripcion
@@ -184,6 +190,7 @@ export class FormularioPreinscripcionTorrePachecoComponent implements OnInit {
           familia_instrumento2: '',
           instrumento3: '',
           familia_instrumento3: '',
+          idemportencia_key: this.idempotency_key,
         };
 
         this.servicioPreinscripcion
@@ -348,6 +355,8 @@ export class FormularioPreinscripcionTorrePachecoComponent implements OnInit {
 
   realiza_registro = {
     next: (respuesta: any) => {
+      this.idempotency_key = generarIdempotencyKeyImpresion();
+
       Swal.fire({
         icon: 'success',
         title: 'Registro correcto',

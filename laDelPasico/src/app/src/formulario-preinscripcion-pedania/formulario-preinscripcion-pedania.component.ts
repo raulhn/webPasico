@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 import { ServicioPreinscripcionService } from 'src/app/servicios/servicio-preinscripcion.service';
 import Swal from 'sweetalert2';
-import { generarIdempotencyKeyImpresion } from "../logica/utilidades";
+import { generarIdempotencyKeyImpresion } from '../logica/utilidades';
 //import { ReCaptchaV3Service } from 'ng-recaptcha';
 import { ReCaptchaV3Service } from 'ngx-captcha';
 
@@ -61,7 +61,7 @@ export class FormularioPreinscripcionPedaniaComponent implements OnInit {
   puerta: string = '';
   escalera: string = '';
 
-  idempotency_key: string =
+  idempotency_key: string = '';
 
   ngOnInit(): void {
     this.idempotency_key = generarIdempotencyKeyImpresion();
@@ -122,6 +122,7 @@ export class FormularioPreinscripcionPedaniaComponent implements OnInit {
           instrumento3: this.instrumentos_seleccionados[2].instrumento,
           familia_instrumento3:
             this.instrumentos_seleccionados[2].familia_instrumento,
+          idemportencia_key: this.idempotency_key,
         };
 
         this.servicioPreinscripcion
@@ -158,6 +159,7 @@ export class FormularioPreinscripcionPedaniaComponent implements OnInit {
           familia_instrumento2: '',
           instrumento3: '',
           familia_instrumento3: '',
+          idemportencia_key: this.idempotency_key,
         };
 
         this.servicioPreinscripcion
@@ -249,7 +251,7 @@ export class FormularioPreinscripcionPedaniaComponent implements OnInit {
 
   realiza_registro = {
     next: (respuesta: any) => {
-    this.idempotency_key = generarIdempotencyKeyImpresion();
+      this.idempotency_key = generarIdempotencyKeyImpresion();
       Swal.fire({
         icon: 'success',
         title: 'Registro correcto',
