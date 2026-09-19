@@ -421,6 +421,7 @@ export class FormularioPreinscripcionTorrePachecoComponent implements OnInit {
                 instrumento3: this.instrumentos_seleccionados[2].instrumento,
                 familia_instrumento3:
                   this.instrumentos_seleccionados[2].familia_instrumento,
+                idempotencia_key: this.idempotency_key,
               };
 
               this.servicioPreinscripcion
@@ -457,6 +458,7 @@ export class FormularioPreinscripcionTorrePachecoComponent implements OnInit {
                 familia_instrumento2: '',
                 instrumento3: '',
                 familia_instrumento3: '',
+                idempotencia_key: this.idempotency_key,
               };
 
               this.servicioPreinscripcion
