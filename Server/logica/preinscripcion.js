@@ -40,7 +40,7 @@ async function registrar_preinscripcion(
       ".preinscripcion(nombre, primer_apellido, segundo_apellido, dni, fecha_nacimiento, nombre_padre, primer_apellido_padre, " +
       "segundo_apellido_padre, dni_padre, correo_electronico, telefono, municipio, provincia, direccion, " +
       "numero, puerta, escalera, codigo_postal, instrumento, familia_instrumento, sucursal, curso, horario, tipo_inscripcion" +
-      ", instrumento2, familia_instrumento2, instrumento3, familia_instrumento3, idempotyency_key) values(" +
+      ", instrumento2, familia_instrumento2, instrumento3, familia_instrumento3, idempotency_key) values(" +
       conexion.dbConn.escape(nombre) +
       ", " +
       conexion.dbConn.escape(primer_apellido) +
