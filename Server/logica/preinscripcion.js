@@ -106,6 +106,9 @@ async function registrar_preinscripcion(
     return;
   } catch (error) {
     console.log("preinscripcion.js -> registrar_preinscripcion:", error);
+    if (error && error.code === "ER_DUP_ENTRY") {
+      throw error;
+    }
     throw new Error("Error al registrar la preinscripción");
   }
 }
@@ -157,7 +160,7 @@ async function comprobar_idempotencia(idempotencia_key) {
       ".preinscripcion where idempotency_key = " +
       conexion.dbConn.escape(idempotencia_key);
     const results = await gestion_base_datos.consulta(sql);
-    return results[0].cont;
+    return results[0].cont > 0;
   } catch (error) {
     console.log("Error al obtener la clave de idemportencia");
     throw new Error("Error al obtener la clave de idemportencia");

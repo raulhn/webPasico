@@ -18,7 +18,8 @@ create table pasico.preinscripcion(
 	numero varchar(10),
 	puerta varchar(10),
 	escalera varchar(10),
-idempotency_key varchar(64) 
+idempotency_key varchar(64),
+unique key uk_preinscripcion_idempotency (idempotency_key)
 );
 
 create table pasicopru.preinscripcion(

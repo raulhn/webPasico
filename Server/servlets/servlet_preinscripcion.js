@@ -72,37 +72,49 @@ function registrar_preinscripcion(req, res) {
     let bSuccess = respuesta_json.success;
 
     if (bSuccess) {
-      await preinscripcion.registrar_preinscripcion(
-        nombre,
-        primer_apellido,
-        segundo_apellido,
-        dni,
-        fecha_nacimiento,
-        nombre_padre,
-        primer_apellido_padre,
-        segundo_apellido_padre,
-        dni_padre,
-        correo_electronico,
-        telefono,
-        municipio,
-        provincia,
-        direccion,
-        numero,
-        puerta,
-        escalera,
-        codigo_postal,
-        instrumento,
-        familia_instrumento,
-        sucursal,
-        curso,
-        horario,
-        tipo_inscripcion,
-        instrumento2,
-        familia_instrumento2,
-        instrumento3,
-        familia_instrumento3,
-        idempotencia_key,
-      );
+      try {
+        await preinscripcion.registrar_preinscripcion(
+          nombre,
+          primer_apellido,
+          segundo_apellido,
+          dni,
+          fecha_nacimiento,
+          nombre_padre,
+          primer_apellido_padre,
+          segundo_apellido_padre,
+          dni_padre,
+          correo_electronico,
+          telefono,
+          municipio,
+          provincia,
+          direccion,
+          numero,
+          puerta,
+          escalera,
+          codigo_postal,
+          instrumento,
+          familia_instrumento,
+          sucursal,
+          curso,
+          horario,
+          tipo_inscripcion,
+          instrumento2,
+          familia_instrumento2,
+          instrumento3,
+          familia_instrumento3,
+          idempotencia_key,
+        );
+      } catch (error) {
+        if (error && error.code === "ER_DUP_ENTRY") {
+          res.status(200).send({
+            error: true,
+            message: "Ya se ha realizado una preinscripción con esta clave",
+            resultado: "IDEMPOTENCIA",
+          });
+          return;
+        }
+        throw error;
+      }
 
       res
         .status(200)

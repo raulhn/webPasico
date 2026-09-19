@@ -13,3 +13,5 @@ alter table pasico.preinscripcion add instrumento2 varchar(50);
 alter table pasico.preinscripcion add familia_instrumento3 varchar(1);
 
 alter table pasico.preinscripcion add instrumento3 varchar(50);
+
+alter table pasico.preinscripcion add unique key uk_preinscripcion_idempotency (idempotency_key);
