@@ -51,9 +51,10 @@ function registrar_preinscripcion(req, res) {
       await preinscripcion.comprobar_idempotencia(idempotencia_key);
 
     if (existe_idempotencia) {
-      res.status(400).send({
+      res.status(200).send({
         error: true,
         message: "Ya se ha realizado una preinscripción con esta clave",
+        resultado: "IDEMPOTENCIA",
       });
       return;
     }

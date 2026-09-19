@@ -355,6 +355,9 @@ export class FormularioPreinscripcionTorrePachecoComponent implements OnInit {
 
   realiza_registro = {
     next: (respuesta: any) => {
+      if (respuesta?.resultado == 'IDEMPOTENCIA') {
+        return;
+      }
       this.idempotency_key = utilidades.generarIdempotencyKeyImpresion();
 
       Swal.fire({
