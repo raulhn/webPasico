@@ -40,15 +40,15 @@ function registrar_preinscripcion(req, res) {
 
     let token = req.body.token;
 
-    let idemportencia_key = req.body.idempotencia_key;
+    let idempotencia_key = req.body.idempotencia_key;
 
-    if (!idemportencia_key || idemportencia_key == "") {
+    if (!idempotencia_key || idempotencia_key == "") {
       res.status(400).send({ error: true, message: "Falta idempotencia_key" });
       return;
     }
 
     let existe_idempotencia =
-      await preinscripcion.comprobar_idempotencia(idemportencia_key);
+      await preinscripcion.comprobar_idempotencia(idempotencia_key);
 
     if (existe_idempotencia) {
       res.status(400).send({

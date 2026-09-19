@@ -122,7 +122,7 @@ export class FormularioPreinscripcionPedaniaComponent implements OnInit {
           instrumento3: this.instrumentos_seleccionados[2].instrumento,
           familia_instrumento3:
             this.instrumentos_seleccionados[2].familia_instrumento,
-          idemportencia_key: this.idempotency_key,
+          idempotencia_key: this.idempotency_key,
         };
 
         this.servicioPreinscripcion
@@ -159,7 +159,7 @@ export class FormularioPreinscripcionPedaniaComponent implements OnInit {
           familia_instrumento2: '',
           instrumento3: '',
           familia_instrumento3: '',
-          idemportencia_key: this.idempotency_key,
+          idempotencia_key: this.idempotency_key,
         };
 
         this.servicioPreinscripcion
@@ -314,6 +314,7 @@ export class FormularioPreinscripcionPedaniaComponent implements OnInit {
                 instrumento3: this.instrumentos_seleccionados[2].instrumento,
                 familia_instrumento3:
                   this.instrumentos_seleccionados[2].familia_instrumento,
+                idempotencia_key: this.idempotency_key,
               };
 
               this.servicioPreinscripcion
@@ -350,6 +351,7 @@ export class FormularioPreinscripcionPedaniaComponent implements OnInit {
                 familia_instrumento2: '',
                 instrumento3: '',
                 familia_instrumento3: '',
+                idempotencia_key: this.idempotency_key,
               };
 
               this.servicioPreinscripcion
