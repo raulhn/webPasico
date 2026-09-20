@@ -251,7 +251,6 @@ export class FormularioPreinscripcionPedaniaComponent implements OnInit {
 
   realiza_registro = {
     next: (respuesta: any) => {
-      this.idempotency_key = utilidades.generarIdempotencyKeyImpresion();
       Swal.fire({
         icon: 'success',
         title: 'Registro correcto',
