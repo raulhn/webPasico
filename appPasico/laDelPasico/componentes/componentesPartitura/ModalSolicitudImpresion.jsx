@@ -253,9 +253,7 @@ export default function ModalSolicitudImpresion({
 
       setResultadoSolicitud(solicitudNormalizada);
       setMensajeExito("Solicitud enviada correctamente.");
-      setIdempotencyKey(
-        generarIdempotencyKeyImpresion(partitura.nid_partitura)
-      );
+
       setVersionSolicitudes((valor) => valor + 1);
     } catch (error) {
       setMensajeAviso(
@@ -509,7 +507,12 @@ export default function ModalSolicitudImpresion({
           />
           <ModalExito
             visible={Boolean(mensajeExito)}
-            setVisible={() => setMensajeExito("")}
+            setVisible={() => {
+              setMensajeExito("");
+              setIdempotencyKey(
+                generarIdempotencyKeyImpresion(partitura.nid_partitura)
+              );
+            }}
             mensaje={mensajeExito}
             textBoton="Aceptar"
           />
