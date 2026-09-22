@@ -479,7 +479,7 @@ async function recuperarPassword(correoElectronico) {
     } else {
       const token = crypto.randomBytes(6).toString("hex");
 
-      const hash = hashPassword(token);
+      const hash = await hashPassword(token);
       const query =
         "UPDATE " +
         constantes.ESQUEMA +
