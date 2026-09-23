@@ -12,6 +12,7 @@ import { AsignaturasService } from 'src/app/servicios/asignaturas.service';
 import { CursosService } from 'src/app/servicios/cursos.service';
 import { MatriculasService } from 'src/app/servicios/matriculas.service';
 import { PersonasService } from 'src/app/servicios/personas.service';
+import { ProfesorAlumnoMatriculaService } from 'src/app/servicios/profesor-alumno-matricula.service';
 import { ActivatedRoute } from '@angular/router';
 import { DataTablesOptions } from 'src/app/logica/constantes';
 import { URL } from 'src/app/logica/constantes';
@@ -95,6 +96,7 @@ export class RegistroMatriculaComponent implements OnInit {
     private cursosServices: CursosService,
     private matriculasServices: MatriculasService,
     private asignaturasServices: AsignaturasService,
+    private profesorAlumnoMatriculaService: ProfesorAlumnoMatriculaService,
   ) {
     this.nid_asignatura = rutaActiva.snapshot.params['nid_asignatura'];
   }
@@ -346,6 +348,29 @@ export class RegistroMatriculaComponent implements OnInit {
           .sustituir_profesor_alumno(
             this.profesor,
             this.alumno_seleccionado.nid_matricula,
+            this.nid_asignatura,
+          )
+          .subscribe(this.registrar_cambio_profesor);
+      }
+    });
+  }
+
+  quitar_profesor() {
+    Swal.fire({
+      title: 'Quitar Profesor',
+      text: '¿Está seguro de que desea quitar al profesor de este alumno?',
+      confirmButtonText: 'Actualizar',
+      showCancelButton: true,
+    }).then((results: any) => {
+      if (results.isConfirmed) {
+        console.log(
+          this.profesor,
+          this.alumno_seleccionado.nid_matricula,
+          this.nid_asignatura,
+        );
+        this.profesorAlumnoMatriculaService
+          .quitarProfesor(
+            this.alumno_seleccionado.nid_matricula_asignatura,
             this.nid_asignatura,
           )
           .subscribe(this.registrar_cambio_profesor);

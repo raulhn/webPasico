@@ -49,7 +49,34 @@ function cambiarFechaAltaAlumnoDeProfesor(req, res) {
   });
 }
 
+function quitarProfesor(req, res) {
+  comun.comprobaciones(req, res, async () => {
+    try {
+      const nid_matricula_asignatura = req.body.nid_matricula_asignatura;
+      const nid_profesor = req.body.nid_profesor;
+      const nid_profesor_alumno_matricula =
+        await gestorProfesorAlumnoMatricula.obtener_nid_profesor_alumno_matricula(
+          nid_profesor,
+          nid_matricula_asignatura,
+        );
+      await gestorProfesorAlumnoMatricula.quitar_profesor(
+        nid_profesor_alumno_matricula,
+      );
+      res
+        .status(200)
+        .send({ error: false, message: "Se ha quitado al profesor" });
+    } catch (error) {
+      console.log(
+        "servlet_profesor_alumno_matricula.js - quitarProfesor - Error: " +
+          error,
+      );
+      res.status(500).send({ error: true, message: "Error del servidor" });
+    }
+  });
+}
+
 module.exports.cambiarFechaBajaAlumnoDeProfesor =
   cambiarFechaBajaAlumnoDeProfesor;
 module.exports.cambiarFechaAltaAlumnoDeProfesor =
   cambiarFechaAltaAlumnoDeProfesor;
+module.exports.quitarProfesor = quitarProfesor;

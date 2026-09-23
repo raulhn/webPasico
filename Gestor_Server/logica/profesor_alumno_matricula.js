@@ -2,7 +2,9 @@ const constantes = require("../constantes");
 const conexion = require("../conexion");
 const gestor_base_datos = require("./base_datos.js");
 
-async function obtener_profesor_alumno_matricula(nid_profesor_alumno_matricula) {
+async function obtener_profesor_alumno_matricula(
+  nid_profesor_alumno_matricula,
+) {
   try {
     const sql =
       "SELECT pam.nid nid_profesor_alumno_matricula, pam.nid_profesor, pam.nid_matricula_asignatura, " +
@@ -24,7 +26,10 @@ async function obtener_profesor_alumno_matricula(nid_profesor_alumno_matricula) 
   }
 }
 
-async function obtener_nid_profesor_alumno_matricula(nid_profesor, nid_matricula_asignatura) {
+async function obtener_nid_profesor_alumno_matricula(
+  nid_profesor,
+  nid_matricula_asignatura,
+) {
   try {
     const sql =
       "SELECT pam.nid as nid_profesor_alumno_matricula " +
@@ -90,7 +95,10 @@ async function obtener_sucios() {
   }
 }
 
-async function cambiar_fecha_baja_profesor_alumno_matricula(nid_profesor_alumno_matricula, fecha_baja) {
+async function cambiar_fecha_baja_profesor_alumno_matricula(
+  nid_profesor_alumno_matricula,
+  fecha_baja,
+) {
   try {
     const sql =
       "UPDATE " +
@@ -110,7 +118,10 @@ async function cambiar_fecha_baja_profesor_alumno_matricula(nid_profesor_alumno_
   }
 }
 
-async function cambiar_fecha_alta_profesor_alumno_matricula(nid_profesor_alumno_matricula, fecha_alta) {
+async function cambiar_fecha_alta_profesor_alumno_matricula(
+  nid_profesor_alumno_matricula,
+  fecha_alta,
+) {
   try {
     const sql =
       "UPDATE " +
@@ -130,6 +141,23 @@ async function cambiar_fecha_alta_profesor_alumno_matricula(nid_profesor_alumno_
   }
 }
 
+async function quitar_profesor(nid_profesor_alumno_matricula) {
+  try {
+    const sql =
+      "DELETE FROM " +
+      constantes.ESQUEMA_BD +
+      ".profesor_alumno_matricula WHERE nid = " +
+      conexion.dbConn.escape(nid_profesor_alumno_matricula);
+    await gestor_base_datos.actualiza(sql);
+  } catch (error) {
+    console.log(
+      "profesor_alumno_matricula.js - quitar_profesor - Error en la consulta: " +
+        error,
+    );
+    throw new Error("Error en la consulta");
+  }
+}
+
 module.exports.obtener_profesor_alumno_matricula =
   obtener_profesor_alumno_matricula;
 module.exports.obtener_nid_profesor_alumno_matricula =
@@ -140,3 +168,4 @@ module.exports.cambiar_fecha_baja_profesor_alumno_matricula =
   cambiar_fecha_baja_profesor_alumno_matricula;
 module.exports.cambiar_fecha_alta_profesor_alumno_matricula =
   cambiar_fecha_alta_profesor_alumno_matricula;
+module.exports.quitar_profesor = quitar_profesor;

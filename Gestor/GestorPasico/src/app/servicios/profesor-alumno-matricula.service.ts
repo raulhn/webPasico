@@ -39,4 +39,28 @@ export class ProfesorAlumnoMatriculaService {
       { withCredentials: true },
     );
   }
+
+  bajaProfesor(nid_profesor: string, nid_asignatura: string) {
+    let API_URL = this.url + '/darDeBajaProfesor';
+    return this.http.post(
+      API_URL,
+      {
+        nid_profesor: nid_profesor,
+        nid_asignatura: nid_asignatura,
+      },
+      { withCredentials: true },
+    );
+  }
+
+  quitarProfesor(nid_profesor: string, nid_matricula_asignatura: string) {
+    let API_URL = this.url + '/quitar_profesor';
+    return this.http.post(
+      API_URL,
+      {
+        nid_profesor: nid_profesor,
+        nid_matricula_asignatura: nid_matricula_asignatura,
+      },
+      { withCredentials: true },
+    );
+  }
 }

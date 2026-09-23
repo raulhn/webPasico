@@ -511,6 +511,8 @@ app.get(
   servlet_evaluacion.generar_boletin_profesor,
 );
 
+app.post("/quitar_profesor", servlet_profesor_alumno_matricula.quitarProfesor);
+
 /** Carga de datos **/
 app.post("/cargar_datos", servlet_carga_datos.carga_fichero);
 
