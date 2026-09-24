@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { AsignaturasService } from 'src/app/servicios/asignaturas.service';
 import { PersonasService } from 'src/app/servicios/personas.service';
-import { DataTablesOptions } from 'src/app/logica/constantes';
+import { ProfesorAlumnoMatriculaService } from 'src/app/servicios/profesor-alumno-matricula.service';
 import Swal from 'sweetalert2';
 import { MatriculasService } from 'src/app/servicios/matriculas.service';
 import { URL } from 'src/app/logica/constantes';
@@ -57,6 +57,7 @@ export class FichaAsignaturaComponent implements OnInit {
     private asignaturaServices: AsignaturasService,
     private matriculaServices: MatriculasService,
     private personaService: PersonasService,
+    private profesorAlumnoMatriculaService: ProfesorAlumnoMatriculaService,
   ) {}
 
   recuperar_asignatura = {
@@ -184,6 +185,41 @@ export class FichaAsignaturaComponent implements OnInit {
             this.nid_asignatura,
           )
           .subscribe(this.peticion_sustitucion);
+      }
+    });
+  }
+
+  baja_profesor() {
+    Swal.fire({
+      title: 'Dar de baja Profesor',
+      text: '¿Está seguro de que desea dar de baja al profesor?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, dar de baja',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.profesorAlumnoMatriculaService
+          .bajaProfesor(this.profesor_seleccionado.nid, this.nid_asignatura)
+          .subscribe({
+            next: (respuesta: any) => {
+              Swal.fire({
+                icon: 'success',
+                title: 'Profesor dado de baja',
+                text: 'Se ha dado de baja al profesor',
+              });
+              this.asignaturaServices
+                .obtener_profesores_asignatura(this.nid_asignatura)
+                .subscribe(this.obtener_profesores);
+            },
+            error: (respuesta: any) => {
+              Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Se ha producido un error al dar de baja al profesor',
+              });
+            },
+          });
       }
     });
   }

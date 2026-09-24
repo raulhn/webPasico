@@ -104,6 +104,13 @@
         </div>
       }
     </div>
+    @if (profesor_seleccionado !== null) {
+      <div class="float-end p-3">
+        <button class="btn btn-danger" (click)="baja_profesor()">
+          Dar de baja
+        </button>
+      </div>
+    }
   }
 </div>
 
