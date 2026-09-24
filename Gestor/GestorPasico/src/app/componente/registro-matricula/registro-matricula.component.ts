@@ -212,13 +212,7 @@ export class RegistroMatriculaComponent implements OnInit {
         title: 'Registro correcto',
         text: 'Se ha registrado correctamente',
       });
-      this.matriculasServices
-        .obtener_alumnos_asignaturas(
-          this.curso,
-          this.nid_asignatura,
-          this.activo,
-        )
-        .subscribe(this.refrescar_alumnos);
+      this.cambia_seleccion();
     },
     error: (respuesta: any) => {
       Swal.fire({
