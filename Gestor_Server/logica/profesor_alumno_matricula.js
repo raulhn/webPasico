@@ -164,7 +164,7 @@ async function obtener_profesores_alumnos_matricula(nid_matricula_asignatura) {
     const sql =
       "SELECT pam.nid as nid_profesor_alumno_matricula, pam.nid_profesor, pam.nid_matricula_asignatura, " +
       " pam.fecha_alta, pam.fecha_baja, pam.fecha_actualizacion, " +
-      "concat(p.nombre, ' ', p.apellido1, ' ', p.apellido2) as nombre_completo  " +
+      "concat(p.nombre, ' ', p.primer_apellido, ' ', p.segundo_apellido) as nombre_completo  " +
       " FROM " +
       constantes.ESQUEMA_BD +
       ".profesor_alumno_matricula pam, " +
