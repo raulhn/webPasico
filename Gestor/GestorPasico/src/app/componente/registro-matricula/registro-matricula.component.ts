@@ -366,7 +366,7 @@ export class RegistroMatriculaComponent implements OnInit {
         this.alumno_seleccionado.nid_matricula_asignatura,
       )
       .subscribe((respuesta: any) => {
-        if (respuesta.profesores.length > 1) {
+        if (respuesta.profesores_alumnos_matricula.length > 1) {
           this.lista_profesores_matricula =
             respuesta.profesores_alumnos_matricula;
           Swal.fire({
@@ -397,7 +397,7 @@ export class RegistroMatriculaComponent implements OnInit {
                 });
             }
           });
-        } else if (respuesta.profesores.length == 0) {
+        } else if (respuesta.profesores_alumnos_matricula.length == 0) {
           Swal.fire({
             icon: 'error',
             title: 'Error',
@@ -405,7 +405,8 @@ export class RegistroMatriculaComponent implements OnInit {
           });
         } else {
           //Solo hay uno se elimina directamente
-          this.profesor_matricula_seleccionado = respuesta.profesores[0];
+          this.profesor_matricula_seleccionado =
+            respuesta.profesores_alumnos_matricula[0];
           Swal.fire({
             title: 'Quitar Profesor',
             text: '¿Está seguro de que desea quitar al profesor asignado a este alumno?',
