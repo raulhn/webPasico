@@ -373,7 +373,7 @@ export class RegistroMatriculaComponent implements OnInit {
             if (results.isConfirmed) {
               this.profesorAlumnoMatriculaService
                 .quitarProfesor(
-                  this.profesor_matricula_seleccionado.nid_profesor,
+                  this.profesor_matricula_seleccionado,
                   this.alumno_seleccionado.nid_matricula_asignatura,
                 )
                 .subscribe((respuesta: any) => {
@@ -401,7 +401,7 @@ export class RegistroMatriculaComponent implements OnInit {
         } else {
           //Solo hay uno se elimina directamente
           this.profesor_matricula_seleccionado =
-            respuesta.profesores_alumnos_matricula[0];
+            respuesta.profesores_alumnos_matricula[0].nid_profesor;
           Swal.fire({
             title: 'Quitar Profesor',
             text: '¿Está seguro de que desea quitar al profesor asignado a este alumno?',
@@ -412,7 +412,7 @@ export class RegistroMatriculaComponent implements OnInit {
             if (results.isConfirmed) {
               this.profesorAlumnoMatriculaService
                 .quitarProfesor(
-                  this.profesor_matricula_seleccionado.nid_profesor,
+                  this.profesor_matricula_seleccionado,
                   this.alumno_seleccionado.nid_matricula_asignatura,
                 )
                 .subscribe((respuesta: any) => {
