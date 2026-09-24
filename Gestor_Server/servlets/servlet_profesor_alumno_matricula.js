@@ -54,11 +54,21 @@ function quitarProfesor(req, res) {
     try {
       const nid_matricula_asignatura = req.body.nid_matricula_asignatura;
       const nid_profesor = req.body.nid_profesor;
+      console.log(
+        "Quitr profesor: " +
+          nid_profesor +
+          " de la matricula: " +
+          nid_matricula_asignatura,
+      );
       const nid_profesor_alumno_matricula =
         await gestorProfesorAlumnoMatricula.obtener_nid_profesor_alumno_matricula(
           nid_profesor,
           nid_matricula_asignatura,
         );
+      console.log(
+        "NID Profesor Alumno Matricula: ",
+        nid_profesor_alumno_matricula,
+      );
       await gestorProfesorAlumnoMatricula.quitar_profesor(
         nid_profesor_alumno_matricula,
       );

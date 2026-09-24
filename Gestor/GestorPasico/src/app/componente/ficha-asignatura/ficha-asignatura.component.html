@@ -97,7 +97,7 @@
         (rowSelected)="click_profesor($event)"
       ></app-appdatatable>
       @if (profesor_seleccionado !== null) {
-        <div class="float-end p-3">
+        <div class="float-end p-3" style="display: flex; gap: 5px">
           <a [href]="obtener_url_ficha_profesor()"
             ><button class="btn btn-primary">Ficha profesor</button></a
           >
