@@ -53,6 +53,9 @@ export class RegistroMatriculaComponent implements OnInit {
   asignatura: any;
 
   lista_profesores: any[] = [];
+  lista_profesores_matricula: any[] = [];
+
+  profesor_matricula_seleccionado: any;
 
   $listaAlumnos: WritableSignal<any[]> = signal([]);
   $id_tabla_alumnos: Signal<string> = signal('tabla_alumnos');
@@ -71,6 +74,8 @@ export class RegistroMatriculaComponent implements OnInit {
   @ViewChild('instancia_baja') instancia_baja!: ElementRef;
   @ViewChild('instancia_cambio_profesor')
   instancia_cambio_profesor!: ElementRef;
+  @ViewChild('instancia_quitar_profesor')
+  instancia_quitar_profesor!: ElementRef;
 
   obtener_cursos = {
     next: (respuesta: any) => {
@@ -356,25 +361,81 @@ export class RegistroMatriculaComponent implements OnInit {
   }
 
   quitar_profesor() {
-    Swal.fire({
-      title: 'Quitar Profesor',
-      text: '¿Está seguro de que desea quitar al profesor de este alumno?',
-      confirmButtonText: 'Actualizar',
-      showCancelButton: true,
-    }).then((results: any) => {
-      if (results.isConfirmed) {
-        console.log(
-          this.profesor,
-          this.alumno_seleccionado.nid_matricula,
-          this.nid_asignatura,
-        );
-        this.profesorAlumnoMatriculaService
-          .quitarProfesor(
-            this.alumno_seleccionado.nid_matricula_asignatura,
-            this.nid_asignatura,
-          )
-          .subscribe(this.registrar_cambio_profesor);
-      }
-    });
+    this.profesorAlumnoMatriculaService
+      .obtenerProfesoresMatricula(
+        this.alumno_seleccionado.nid_matricula_asignatura,
+      )
+      .subscribe((respuesta: any) => {
+        if (respuesta.profesores.length > 1) {
+          this.lista_profesores_matricula =
+            respuesta.profesores_alumnos_matricula;
+          Swal.fire({
+            title: 'Quitar Profesor',
+            html: this.instancia_quitar_profesor.nativeElement,
+            confirmButtonText: 'Actualizar',
+            showCancelButton: true,
+          }).then((results: any) => {
+            if (results.isConfirmed) {
+              this.profesorAlumnoMatriculaService
+                .quitarProfesor(
+                  this.profesor_matricula_seleccionado,
+                  this.alumno_seleccionado.nid_matricula_asignatura,
+                )
+                .subscribe((respuesta: any) => {
+                  Swal.fire({
+                    icon: 'success',
+                    title: 'Profesor quitado',
+                    text: 'Se ha quitado el profesor correctamente',
+                  });
+                  this.matriculasServices
+                    .obtener_alumnos_asignaturas(
+                      this.curso,
+                      this.nid_asignatura,
+                      this.activo,
+                    )
+                    .subscribe(this.refrescar_alumnos);
+                });
+            }
+          });
+        } else if (respuesta.profesores.length == 0) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'No hay profesores asignados a este alumno.',
+          });
+        } else {
+          //Solo hay uno se elimina directamente
+          this.profesor_matricula_seleccionado = respuesta.profesores[0];
+          Swal.fire({
+            title: 'Quitar Profesor',
+            text: '¿Está seguro de que desea quitar al profesor asignado a este alumno?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Quitar',
+          }).then((results: any) => {
+            if (results.isConfirmed) {
+              this.profesorAlumnoMatriculaService
+                .quitarProfesor(
+                  this.profesor_matricula_seleccionado,
+                  this.alumno_seleccionado.nid_matricula_asignatura,
+                )
+                .subscribe((respuesta: any) => {
+                  Swal.fire({
+                    icon: 'success',
+                    title: 'Profesor quitado',
+                    text: 'Se ha quitado el profesor correctamente',
+                  });
+                  this.matriculasServices
+                    .obtener_alumnos_asignaturas(
+                      this.curso,
+                      this.nid_asignatura,
+                      this.activo,
+                    )
+                    .subscribe(this.refrescar_alumnos);
+                });
+            }
+          });
+        }
+      });
   }
 }

@@ -85,8 +85,34 @@ function quitarProfesor(req, res) {
   });
 }
 
+function obtener_profesores_alumnos_matricula(req, res) {
+  servlet_comun.comprobaciones(req, res, async () => {
+    try {
+      const nid_matricula_asignatura = req.body.nid_matricula_asignatura;
+      const profesores_alumnos_matricula =
+        await gestorProfesorAlumnoMatricula.obtener_profesores_alumnos_matricula(
+          nid_matricula_asignatura,
+        );
+      res
+        .status(200)
+        .send({
+          error: false,
+          profesores_alumnos_matricula: profesores_alumnos_matricula,
+        });
+    } catch (error) {
+      console.log(
+        "servlet_profesor_alumno_matricula.js - obtener_profesores_alumnos_matricula - Error: " +
+          error,
+      );
+      res.status(500).send({ error: true, message: "Error del servidor" });
+    }
+  });
+}
+
 module.exports.cambiarFechaBajaAlumnoDeProfesor =
   cambiarFechaBajaAlumnoDeProfesor;
 module.exports.cambiarFechaAltaAlumnoDeProfesor =
   cambiarFechaAltaAlumnoDeProfesor;
 module.exports.quitarProfesor = quitarProfesor;
+module.exports.obtener_profesores_alumnos_matricula =
+  obtener_profesores_alumnos_matricula;

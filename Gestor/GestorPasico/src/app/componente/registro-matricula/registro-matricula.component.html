@@ -148,4 +148,19 @@
       </div>
     </div>
   </div>
+
+  <!-- Registrar alumno en asignatura -->
+  <div style="display: none">
+    <div #instancia_quitar_profesor>
+      <div>
+        <label>Profesor</label>
+        <ng-select
+          [items]="lista_profesores_matricula"
+          bindLabel="nombre_completo"
+          bindValue="nid_profesor"
+          [(ngModel)]="profesor_matricula_seleccionado"
+        ></ng-select>
+      </div>
+    </div>
+  </div>
 </div>

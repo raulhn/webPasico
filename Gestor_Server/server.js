@@ -513,6 +513,11 @@ app.get(
 
 app.post("/quitar_profesor", servlet_profesor_alumno_matricula.quitarProfesor);
 
+app.get(
+  "/obtener_profesores_alumnos_matricula/:nid_matricula_asignatura",
+  servlet_profesor_alumno_matricula.obtener_profesores_alumnos_matricula,
+);
+
 /** Carga de datos **/
 app.post("/cargar_datos", servlet_carga_datos.carga_fichero);
 

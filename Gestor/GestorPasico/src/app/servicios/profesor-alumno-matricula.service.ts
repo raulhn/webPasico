@@ -63,4 +63,12 @@ export class ProfesorAlumnoMatriculaService {
       { withCredentials: true },
     );
   }
+
+  obtenerProfesoresMatricula(nid_matricula_asignatura: string) {
+    let API_URL =
+      this.url +
+      '/obtener_profesores_alumno_matricula/' +
+      nid_matricula_asignatura;
+    return this.http.get(API_URL, { withCredentials: true });
+  }
 }

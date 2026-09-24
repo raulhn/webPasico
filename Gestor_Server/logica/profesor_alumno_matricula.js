@@ -159,6 +159,32 @@ async function quitar_profesor(nid_profesor_alumno_matricula) {
   }
 }
 
+async function obtener_profesores_alumnos_matricula(nid_matricula_asignatura) {
+  try {
+    const sql =
+      "SELECT pam.nid as nid_profesor_alumno_matricula, pam.nid_profesor, pam.nid_matricula_asignatura, " +
+      " pam.fecha_alta, pam.fecha_baja, pam.fecha_actualizacion, " +
+      "concat(p.nombre, ' ', p.apellido1, ' ', p.apellido2) as nombre_completo  " +
+      " FROM " +
+      constantes.ESQUEMA_BD +
+      ".profesor_alumno_matricula pam, " +
+      constantes.ESQUEMA_BD +
+      ".personas p  " +
+      " WHERE pam.nid_matricula_asignatura = " +
+      conexion.dbConn.escape(nid_matricula_asignatura) +
+      " and pam.nid_profesor = p.nid ";
+
+    const results = await gestor_base_datos.consulta(sql);
+    return results;
+  } catch (error) {
+    console.log(
+      "profesor_alumno_matricula.js - obtener_profesores_alumnos_matricula - Error en la consulta: " +
+        error,
+    );
+    throw new Error("Error en la consulta");
+  }
+}
+
 module.exports.obtener_profesor_alumno_matricula =
   obtener_profesor_alumno_matricula;
 module.exports.obtener_nid_profesor_alumno_matricula =
@@ -170,3 +196,5 @@ module.exports.cambiar_fecha_baja_profesor_alumno_matricula =
 module.exports.cambiar_fecha_alta_profesor_alumno_matricula =
   cambiar_fecha_alta_profesor_alumno_matricula;
 module.exports.quitar_profesor = quitar_profesor;
+module.exports.obtener_profesores_alumnos_matricula =
+  obtener_profesores_alumnos_matricula;
