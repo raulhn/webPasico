@@ -88,17 +88,15 @@ function quitarProfesor(req, res) {
 function obtener_profesores_alumnos_matricula(req, res) {
   servlet_comun.comprobaciones(req, res, async () => {
     try {
-      const nid_matricula_asignatura = req.body.nid_matricula_asignatura;
+      const nid_matricula_asignatura = req.params.nid_matricula_asignatura;
       const profesores_alumnos_matricula =
         await gestorProfesorAlumnoMatricula.obtener_profesores_alumnos_matricula(
           nid_matricula_asignatura,
         );
-      res
-        .status(200)
-        .send({
-          error: false,
-          profesores_alumnos_matricula: profesores_alumnos_matricula,
-        });
+      res.status(200).send({
+        error: false,
+        profesores_alumnos_matricula: profesores_alumnos_matricula,
+      });
     } catch (error) {
       console.log(
         "servlet_profesor_alumno_matricula.js - obtener_profesores_alumnos_matricula - Error: " +
