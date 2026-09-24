@@ -344,11 +344,6 @@ export class RegistroMatriculaComponent implements OnInit {
       showCancelButton: true,
     }).then((results: any) => {
       if (results.isConfirmed) {
-        console.log(
-          this.profesor,
-          this.alumno_seleccionado.nid_matricula,
-          this.nid_asignatura,
-        );
         this.matriculasServices
           .sustituir_profesor_alumno(
             this.profesor,

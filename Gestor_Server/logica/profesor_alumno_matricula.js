@@ -148,7 +148,6 @@ async function quitar_profesor(nid_profesor_alumno_matricula) {
       constantes.ESQUEMA_BD +
       ".profesor_alumno_matricula WHERE nid = " +
       conexion.dbConn.escape(nid_profesor_alumno_matricula);
-    console.log("Eliminar profesor", sql);
     await gestor_base_datos.actualiza(sql);
   } catch (error) {
     console.log(
