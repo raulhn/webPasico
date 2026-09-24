@@ -35,11 +35,19 @@ function registrar_matricula(req, res) {
       bExisteAsignatura = await asignatura.existe_asignatura(nid_asignatura);
 
       if (bExisteAsignatura) {
-        const nid_matricula_asignatura =
-          await gestorMatriculaAsignatura.add_asignatura(
+        let nid_matricula_asignatura =
+          await gestorMatriculaAsignatura.obtener_nid_matricula_asignatura(
             nid_matricula,
             nid_asignatura,
           );
+
+        if (!nid_matricula_asignatura) {
+          nid_matricula_asignatura =
+            await gestorMatriculaAsignatura.add_asignatura(
+              nid_matricula,
+              nid_asignatura,
+            );
+        }
 
         await gestorMatriculaAsignatura.modificar_sucio(
           nid_matricula_asignatura,
