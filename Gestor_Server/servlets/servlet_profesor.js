@@ -1,10 +1,10 @@
 var GestorProfesor = require("../logica/profesor.js");
-var comun = require("../logica/comun.js");
 var gestorMatricula = require("../logica/matricula.js");
 var GestorCurso = require("../logica/curso.js");
+const servlet_comun = require("./servlet_comun.js");
 
 function darDeBajaProfesor(req, res) {
-  comun.comprobaciones(req, res, async () => {
+  servlet_comun.comprobaciones(req, res, async () => {
     try {
       let nid_profesor = req.body.nid_profesor;
       let nid_asignatura = req.body.nid_asignatura;

@@ -101,16 +101,12 @@
           <a [href]="obtener_url_ficha_profesor()"
             ><button class="btn btn-primary">Ficha profesor</button></a
           >
+          <button class="btn btn-danger" (click)="baja_profesor()">
+            Dar de baja
+          </button>
         </div>
       }
     </div>
-    @if (profesor_seleccionado !== null) {
-      <div class="float-end p-3">
-        <button class="btn btn-danger" (click)="baja_profesor()">
-          Dar de baja
-        </button>
-      </div>
-    }
   }
 </div>
 

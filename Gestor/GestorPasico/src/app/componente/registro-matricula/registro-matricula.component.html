@@ -73,15 +73,16 @@
         (rowSelected)="click_alumno($event)"
       ></app-appdatatable>
       @if (alumno_seleccionado !== undefined) {
-        <div class="float-end p-3">
+        <div
+          class="float-end p-3"
+          style="display: flex; flex-direction: row; gap: 5px"
+        >
           <button class="btn btn-danger" (click)="dar_baja_alumno()">
             <fa-icon [icon]="faXmark"></fa-icon> Dar de baja
           </button>
-          <span class="p-1"></span>
           <a [href]="obtener_url_ficha_alumno()"
             ><button class="btn btn-primary">Ficha alumno</button></a
           >
-          <span class="p-1"></span>
           <button class="btn btn-primary" (click)="cambiar_profesor()">
             Cambiar Profesor
           </button>

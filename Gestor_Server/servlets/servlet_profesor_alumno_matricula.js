@@ -1,8 +1,8 @@
-var comun = require("../logica/comun.js");
 var gestorProfesorAlumnoMatricula = require("../logica/profesor_alumno_matricula.js");
+const servlet_comun = require("./servlet_comun.js");
 
 function cambiarFechaBajaAlumnoDeProfesor(req, res) {
-  comun.comprobaciones(req, res, async () => {
+  servlet_comun.comprobaciones(req, res, async () => {
     try {
       let nid_profesor_alumno_matricula =
         req.body.nid_profesor_alumno_matricula;
@@ -26,7 +26,7 @@ function cambiarFechaBajaAlumnoDeProfesor(req, res) {
 }
 
 function cambiarFechaAltaAlumnoDeProfesor(req, res) {
-  comun.comprobaciones(req, res, async () => {
+  servlet_comun.comprobaciones(req, res, async () => {
     try {
       let nid_profesor_alumno_matricula =
         req.body.nid_profesor_alumno_matricula;
@@ -50,7 +50,7 @@ function cambiarFechaAltaAlumnoDeProfesor(req, res) {
 }
 
 function quitarProfesor(req, res) {
-  comun.comprobaciones(req, res, async () => {
+  servlet_comun.comprobaciones(req, res, async () => {
     try {
       const nid_matricula_asignatura = req.body.nid_matricula_asignatura;
       const nid_profesor = req.body.nid_profesor;
