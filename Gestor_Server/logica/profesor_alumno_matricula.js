@@ -169,7 +169,7 @@ async function obtener_profesores_alumnos_matricula(nid_matricula_asignatura) {
       constantes.ESQUEMA_BD +
       ".profesor_alumno_matricula pam, " +
       constantes.ESQUEMA_BD +
-      ".personas p  " +
+      ".persona p  " +
       " WHERE pam.nid_matricula_asignatura = " +
       conexion.dbConn.escape(nid_matricula_asignatura) +
       " and pam.nid_profesor = p.nid ";
