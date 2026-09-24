@@ -273,7 +273,7 @@ async function obtener_alumnos_profesor(
 ) {
   try {
     const sql =
-      "select distinct p.*, a.nid nid_asignatura, a.descripcion descripcion_asignatura, m.nid nid_matricula , ma.nid nid_matricula_asignatura" +
+      "select distinct p.*, a.nid nid_asignatura, a.descripcion descripcion_asignatura, m.nid nid_matricula , ma.nid nid_matricula_asignatura " +
       "from " +
       constantes.ESQUEMA_BD +
       ".matricula_asignatura ma, " +
@@ -316,7 +316,7 @@ async function obtener_alumnos_profesor_alta(
 ) {
   try {
     const sql =
-      "select distinct p.*, a.nid nid_asignatura, a.descripcion descripcion_asignatura, m.nid nid_matricula , ma.nid nid_matricula_asignatura" +
+      "select distinct p.*, a.nid nid_asignatura, a.descripcion descripcion_asignatura, m.nid nid_matricula , ma.nid nid_matricula_asignatura " +
       "from " +
       constantes.ESQUEMA_BD +
       ".matricula_asignatura ma, " +
@@ -361,7 +361,7 @@ async function obtener_alumnos_profesor_baja(
 ) {
   try {
     const sql =
-      "select distinct p.*, a.nid nid_asignatura, a.descripcion descripcion_asignatura, m.nid  nid_matricula, ma.nid nid_matricula_asignatura" +
+      "select distinct p.*, a.nid nid_asignatura, a.descripcion descripcion_asignatura, m.nid  nid_matricula, ma.nid nid_matricula_asignatura " +
       "from " +
       constantes.ESQUEMA_BD +
       ".matricula_asignatura ma, " +
