@@ -378,7 +378,7 @@ export class RegistroMatriculaComponent implements OnInit {
             if (results.isConfirmed) {
               this.profesorAlumnoMatriculaService
                 .quitarProfesor(
-                  this.profesor_matricula_seleccionado,
+                  this.profesor_matricula_seleccionado.nid_profesor,
                   this.alumno_seleccionado.nid_matricula_asignatura,
                 )
                 .subscribe((respuesta: any) => {
@@ -417,7 +417,7 @@ export class RegistroMatriculaComponent implements OnInit {
             if (results.isConfirmed) {
               this.profesorAlumnoMatriculaService
                 .quitarProfesor(
-                  this.profesor_matricula_seleccionado,
+                  this.profesor_matricula_seleccionado.nid_profesor,
                   this.alumno_seleccionado.nid_matricula_asignatura,
                 )
                 .subscribe((respuesta: any) => {
