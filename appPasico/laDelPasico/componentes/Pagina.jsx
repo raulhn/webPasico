@@ -13,7 +13,7 @@ import {
 import Constantes from "../config/constantes.js";
 import FormularioNotificacion from "./notificaciones/FormularioNotificacion.jsx";
 import { useRol } from "../hooks/useRol.js";
-import { BotonFixed } from "./componentesUI/ComponentesUI.jsx";
+import { Boton, BotonFixed } from "./componentesUI/ComponentesUI.jsx";
 import { router } from "expo-router";
 
 const { width, height } = Dimensions.get("window");
@@ -25,6 +25,8 @@ export default function Pagina({
 }) {
   const [componentes, setComponentes] = useState([]);
   const [cargando, setCargando] = useState(true);
+  const [error, setError] = useState(false);
+  const [refrescar, setRefrescar] = useState(false);
   const [titulo, setTitulo] = useState("");
   const [modalVisibleNotificacion, setModalVisibleNotificacion] =
     useState(false);
@@ -59,8 +61,26 @@ export default function Pagina({
           setTitulo(data.data[0].titulo);
         }
       })
-      .catch((error) => {});
-  }, [nidPagina]);
+      .catch((error) => {
+        setError(true);
+      });
+  }, [nidPagina, refrescar]);
+
+  if (error) {
+    return (
+      <View style={styles.loadingContainer}>
+        <Text style={styles.loadingText}>Error al cargar el contenido. </Text>
+        <Boton
+          nombre="Reintentar"
+          onPress={() => {
+            setRefrescar(!refrescar);
+            setCargando(true);
+            setError(false);
+          }}
+        />
+      </View>
+    );
+  }
 
   if (cargando) {
     return (
