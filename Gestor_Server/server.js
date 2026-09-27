@@ -186,6 +186,7 @@ app.get(
   servlet_matricula.obtener_cursos_profesor,
 );
 app.get("/obtener_nid_ultimo_curso", servlet_curso.obtener_nid_ultimo_curso);
+app.post("/activar_curso", servlet_curso.activar_curso);
 
 /** Matriculas **/
 app.post("/registrar_matricula", servlet_matricula.registrar_matricula);
