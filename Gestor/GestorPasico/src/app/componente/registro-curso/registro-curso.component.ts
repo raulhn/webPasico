@@ -17,11 +17,15 @@ import Swal from 'sweetalert2';
 export class RegistroCursoComponent implements OnInit {
   $cursos: WritableSignal<any[]> = signal([]);
   $id_tabla_cursos: Signal<string> = signal('tabla_cursos');
-  cabecera_cursos: any[] = [{ title: 'Curso', data: 'descripcion' }];
+  cabecera_cursos: any[] = [
+    { title: 'Curso', data: 'descripcion' },
+    { title: 'Seleccionado', data: 'seleccionado' },
+  ];
 
   nuevo_curso: string = '';
 
   bCargado: boolean = false;
+  curso_seleccionado: any;
 
   constructor(private cursosService: CursosService) {}
 
@@ -79,5 +83,31 @@ export class RegistroCursoComponent implements OnInit {
           .subscribe(this.registrar_curso);
       }
     });
+  }
+
+  click_curso(curso_marcado: any) {
+    this.curso_seleccionado = curso_marcado;
+  }
+
+  activar_curso() {
+    this.cursosService
+      .activar_curso(this.curso_seleccionado.nid_curso)
+      .subscribe({
+        next: (respuesta: any) => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Curso activado',
+            text: 'Se ha activado correctamente',
+          });
+          this.cursosService.obtener_cursos().subscribe(this.refrescar_cursos);
+        },
+        error: (respuesta: any) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Se ha producido un error',
+          });
+        },
+      });
   }
 }
