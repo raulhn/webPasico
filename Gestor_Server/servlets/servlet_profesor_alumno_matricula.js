@@ -1,4 +1,5 @@
 var gestorProfesorAlumnoMatricula = require("../logica/profesor_alumno_matricula.js");
+const service_profesor_alumno_matricula = require("../services/serviceProfesorAlumnoMatricula.js");
 const servlet_comun = require("./servlet_comun.js");
 
 function cambiarFechaBajaAlumnoDeProfesor(req, res) {
@@ -60,6 +61,9 @@ function quitarProfesor(req, res) {
           nid_matricula_asignatura,
         );
 
+      await service_profesor_alumno_matricula.eliminar_profesor_alumno_matricula(
+        nid_profesor_alumno_matricula,
+      );
       await gestorProfesorAlumnoMatricula.quitar_profesor(
         nid_profesor_alumno_matricula,
       );

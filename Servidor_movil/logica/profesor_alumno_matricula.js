@@ -229,10 +229,27 @@ async function esAlumnoProfesor(nid_alumno, nid_profesor, nid_curso) {
   }
 }
 
+async function eliminarProfesorAlumnoMatricula(nid_profesor_alumno_matricula) {
+  try {
+    const sql =
+      "DELETE FROM " +
+      constantes.ESQUEMA +
+      ".profesor_alumno_matricula WHERE nid_profesor_alumno_matricula = " +
+      conexion.dbConn.escape(nid_profesor_alumno_matricula);
+
+    const results = await gestor_base_datos.actualiza(sql);
+    return results;
+  } catch (error) {
+    console.error("Error al eliminar el profesor-alumno-matricula:", error);
+    throw new Error("Error al eliminar el profesor-alumno-matricula");
+  }
+}
+
 module.exports.registrarProfesorAlumnoMatricula =
   registrarProfesorAlumnoMatricula;
 module.exports.obtenerAlumnosProfesorCursoActual =
   obtenerAlumnosProfesorCursoActual;
 module.exports.obtenerProfesorAlumnoMatricula = obtenerProfesorAlumnoMatricula;
 module.exports.esAlumnoProfesor = esAlumnoProfesor;
-
+module.exports.eliminarProfesorAlumnoMatricula =
+  eliminarProfesorAlumnoMatricula;

@@ -173,6 +173,11 @@ app.post(
   servletProfesorAlumnoMatricula.registrarProfesorAlumnoMatricula,
 );
 
+app.post(
+  "/eliminar_profesor_alumno_matricula",
+  servletProfesorAlumnoMatricula.eliminarProfesorAlumnoMatricula,
+);
+
 // Tipo Musico //
 app.get("/obtener_tipos_musico", servletTipoMusico.obtenerTipoMusico);
 

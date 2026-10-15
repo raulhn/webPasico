@@ -3,7 +3,7 @@ const constantes = require("../constantes.js");
 const gestorProfesorAlumnoMatricula = require("../logica/profesor_alumno_matricula.js");
 
 function peticion_registrar_profesor_alumno_matricula(
-  profesor_alumno_matricula
+  profesor_alumno_matricula,
 ) {
   return new Promise((resolve, reject) => {
     try {
@@ -27,7 +27,7 @@ function peticion_registrar_profesor_alumno_matricula(
               fecha_actualizacion:
                 profesor_alumno_matricula.fecha_actualizacion,
             }),
-          }
+          },
         )
         .then((response) => {
           response
@@ -43,7 +43,7 @@ function peticion_registrar_profesor_alumno_matricula(
             .catch((error) => {
               console.error(
                 "serviceProfesorAlumnoMatricula.js - Error al procesar la respuesta JSON:",
-                error
+                error,
               );
               reject("Error al procesar la respuesta JSON");
             });
@@ -55,37 +55,68 @@ function peticion_registrar_profesor_alumno_matricula(
     } catch (error) {
       console.error(
         "Error en la función registrar_profesor_alumno_matricula:",
-        error
+        error,
       );
       reject("Error en la función registrar_profesor_alumno_matricula");
     }
   });
 }
 
+async function eliminar_profesor_alumno_matricula(
+  nid_profesor_alumno_matricula,
+) {
+  try {
+    console.log(
+      "eliminar_profesor_alumno_matricula - nid_profesor_alumno_matricula",
+      nid_profesor_alumno_matricula,
+    );
+
+    await serviceComun.fetchWithTimeout(
+      constantes.URL_SERVICIO_MOVIL + "eliminar_profesor_alumno_matricula",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": process.env.API_KEY_MOVIL,
+        },
+        body: JSON.stringify({
+          nid_profesor_alumno_matricula: nid_profesor_alumno_matricula,
+        }),
+      },
+    );
+  } catch (error) {
+    console.error(
+      "Error en la función eliminar_profesor_alumno_matricula:",
+      error,
+    );
+    throw new Error("Error en la función eliminar_profesor_alumno_matricula");
+  }
+}
+
 async function registrar_profesor_alumno_matricula(
-  nid_profesor_alumno_matricula
+  nid_profesor_alumno_matricula,
 ) {
   try {
     console.log(
       "registrar_profesor_alumno_matricula - nid_profesor_alumno_matricula",
-      nid_profesor_alumno_matricula
+      nid_profesor_alumno_matricula,
     );
     let profesor_alumno_matricula =
       await gestorProfesorAlumnoMatricula.obtener_profesor_alumno_matricula(
-        nid_profesor_alumno_matricula
+        nid_profesor_alumno_matricula,
       );
 
     await peticion_registrar_profesor_alumno_matricula(
-      profesor_alumno_matricula
+      profesor_alumno_matricula,
     );
     await gestorProfesorAlumnoMatricula.actualizar_sucio(
       nid_profesor_alumno_matricula,
-      "N"
+      "N",
     );
   } catch (error) {
     console.error(
       "Error en la función registrar_profesor_alumno_matricula:",
-      error
+      error,
     );
     throw new Error("Error en la función registrar_profesor_alumno_matricula");
   }
@@ -100,7 +131,7 @@ function actualizar_sucios() {
       for (let i = 0; i < profesores_alumnos_matriculas.length; i++) {
         const profesor_alumno_matricula = profesores_alumnos_matriculas[i];
         await registrar_profesor_alumno_matricula(
-          profesor_alumno_matricula.nid
+          profesor_alumno_matricula.nid,
         );
       }
       resolve();
@@ -113,5 +144,6 @@ function actualizar_sucios() {
 
 module.exports.registrar_profesor_alumno_matricula =
   registrar_profesor_alumno_matricula;
-
+module.exports.eliminar_profesor_alumno_matricula =
+  eliminar_profesor_alumno_matricula;
 module.exports.actualizar_sucios = actualizar_sucios;

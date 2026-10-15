@@ -21,7 +21,7 @@ function registrarProfesorAlumnoMatricula(req, res) {
         nid_profesor,
         fecha_alta,
         fecha_baja,
-        fecha_actualizacion
+        fecha_actualizacion,
       );
 
       await gestorProfesorAlumnoMatricula.registrarProfesorAlumnoMatricula(
@@ -30,7 +30,7 @@ function registrarProfesorAlumnoMatricula(req, res) {
         nid_matricula_asignatura,
         fecha_alta,
         fecha_baja,
-        fecha_actualizacion
+        fecha_actualizacion,
       );
 
       res.status(200).json({
@@ -47,13 +47,42 @@ function registrarProfesorAlumnoMatricula(req, res) {
   });
 }
 
+function eliminarProfesorAlumnoMatricula(req, res) {
+  servletComun.comprobacionAccesoAPIKey(req, res, async () => {
+    try {
+      const nid_profesor_alumno_matricula =
+        req.body.nid_profesor_alumno_matricula;
+
+      console.log(
+        "Eliminar provesor alumno matricula: ",
+        nid_profesor_alumno_matricula,
+      );
+
+      await gestorProfesorAlumnoMatricula.eliminarProfesorAlumnoMatricula(
+        nid_profesor_alumno_matricula,
+      );
+
+      res.status(200).json({
+        error: false,
+        mensaje: "Profesor alumno matricula eliminada correctamente",
+      });
+    } catch (error) {
+      console.error("Error al eliminar la matricula:", error);
+      res.status(500).json({
+        error: "Error al eliminar la matricula",
+        message: error.message,
+      });
+    }
+  });
+}
+
 async function obtenerAlumnosProfesor(req, res) {
   try {
     const rolesPermitidos = [constantes.PROFESOR];
     let rolProfesor = await servletComun.comprobarRol(
       req,
       res,
-      rolesPermitidos
+      rolesPermitidos,
     );
     if (!rolProfesor) {
       res.status(403).send({
@@ -69,7 +98,7 @@ async function obtenerAlumnosProfesor(req, res) {
     const nid_profesor = await gestorPersona.obtenerPersonaUsuario(nid_usuario);
     let alumnos =
       await gestorProfesorAlumnoMatricula.obtenerAlumnosProfesorCursoActual(
-        nid_profesor
+        nid_profesor,
       );
 
     res.status(200).send({ error: false, alumnos: alumnos });
@@ -86,3 +115,5 @@ module.exports.registrarProfesorAlumnoMatricula =
   registrarProfesorAlumnoMatricula;
 
 module.exports.obtenerAlumnosProfesor = obtenerAlumnosProfesor;
+module.exports.eliminarProfesorAlumnoMatricula =
+  eliminarProfesorAlumnoMatricula;
