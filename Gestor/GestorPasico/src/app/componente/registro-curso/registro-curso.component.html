@@ -1,16 +1,21 @@
-<button (click)="addCurso()">Añadir Curso</button>
+<app-menu class=""></app-menu>
+<div class="container mt-3">
+  <button class="btn btn-primary" (click)="addCurso()">Añadir Curso</button>
 
-<div>
-  <app-appdatatable
-    [$cabeceras]="cabecera_cursos"
-    [$lista]="$cursos()"
-    [$identificador]="$id_tabla_cursos()"
-    (rowSelected)="click_curso($event)"
-  ></app-appdatatable>
+  <div>
+    <app-appdatatable
+      [$cabeceras]="cabecera_cursos"
+      [$lista]="$cursos()"
+      [$identificador]="$id_tabla_cursos()"
+      (rowSelected)="click_curso($event)"
+    ></app-appdatatable>
 
-  @if (curso_seleccionado && curso_seleccionado.seleccionado == "N") {
-    <div>
-      <button (click)="activar_curso()">Activar Curso</button>
-    </div>
-  }
+    @if (curso_seleccionado && curso_seleccionado.seleccionado == "N") {
+      <div>
+        <button class="btn btn-primary" (click)="activar_curso()">
+          Activar Curso
+        </button>
+      </div>
+    }
+  </div>
 </div>
