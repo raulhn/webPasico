@@ -11,23 +11,6 @@ function registrarCurso(req, res) {
       let fecha_actualizacion = req.body.fecha_actualizacion;
       let activo = req.body.activo;
 
-      console.log(
-        "Registrar Curso: ",
-        nid_curso,
-        descripcion,
-        ano,
-        fecha_actualizacion,
-      );
-
-      console.log(
-        "Registrar Curso: ",
-        nid_curso,
-        descripcion,
-        ano,
-        fecha_actualizacion,
-        activo,
-      );
-
       gestorCursos
         .registrarCurso(
           nid_curso,
