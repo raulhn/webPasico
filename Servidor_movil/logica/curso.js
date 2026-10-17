@@ -97,8 +97,8 @@ async function registrarCurso(
   activo,
 ) {
   try {
-    const existeCurso = await existeCurso(nid_curso);
-    if (existeCurso) {
+    const bexisteCurso = await existeCurso(nid_curso);
+    if (bexisteCurso) {
       return actualizarCurso(
         nid_curso,
         descripcion,
