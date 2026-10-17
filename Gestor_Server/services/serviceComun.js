@@ -14,6 +14,7 @@ const serviceTipoProgreso = require("./serviceTipoProgreso");
 const serviceTrimestres = require("./serviceTrimestres");
 const serviceEvaluacion = require("./serviceEvaluacion");
 const serviceEvaluacionMatricula = require("./serviceEvaluacionMatricula");
+const serviceCursos = require("./serviceCursos");
 
 // Función para manejar el timeout
 function fetchWithTimeout(url, options, timeout = 5000) {
@@ -23,8 +24,8 @@ function fetchWithTimeout(url, options, timeout = 5000) {
     new Promise((_, reject) =>
       setTimeout(
         () => reject(new Error("Timeout: El servicio no respondió a tiempo")),
-        timeout
-      )
+        timeout,
+      ),
     ),
   ]);
 }
@@ -33,6 +34,7 @@ async function actualizar_sucios() {
   console.log("Iniciando el proceso de refresco");
   cron.schedule("*/1 * * * *", async () => {
     try {
+      await serviceCursos.actualizar_sucios();
       await serviceAsignatura.actualizar_sucios();
       await servicePersona.actualizar_sucios();
       await serviceSocios.actualizar_sucios();

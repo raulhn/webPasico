@@ -11,12 +11,18 @@ function formatDateToMySQL(date) {
   }
 }
 
-async function insertarCurso(nid_curso, descripcion, ano, fecha_actualizacion) {
+async function insertarCurso(
+  nid_curso,
+  descripcion,
+  ano,
+  fecha_actualizacion,
+  activo,
+) {
   try {
     const sql =
       "INSERT INTO " +
       constantes.ESQUEMA +
-      ".curso (nid_curso, descripcion, ano, fecha_actualizacion)" +
+      ".curso (nid_curso, descripcion, ano, fecha_actualizacion, activo)" +
       "values(" +
       conexion.dbConn.escape(nid_curso) +
       "," +
@@ -25,6 +31,8 @@ async function insertarCurso(nid_curso, descripcion, ano, fecha_actualizacion) {
       conexion.dbConn.escape(ano) +
       "," +
       conexion.dbConn.escape(formatDateToMySQL(fecha_actualizacion)) +
+      "," +
+      conexion.dbConn.escape(activo) +
       ")";
 
     const result = await gestor_base_datos.actualiza(sql);
@@ -40,6 +48,7 @@ async function actualizarCurso(
   descripcion,
   ano,
   fecha_actualizacion,
+  activo,
 ) {
   try {
     const sql =
@@ -51,6 +60,8 @@ async function actualizarCurso(
       conexion.dbConn.escape(ano) +
       ", fecha_actualizacion = " +
       conexion.dbConn.escape(formatDateToMySQL(fecha_actualizacion)) +
+      ", activo = " +
+      conexion.dbConn.escape(activo) +
       " WHERE nid_curso = " +
       conexion.dbConn.escape(nid_curso);
 
@@ -83,13 +94,26 @@ async function registrarCurso(
   descripcion,
   ano,
   fecha_actualizacion,
+  activo,
 ) {
   try {
     const existeCurso = await existeCurso(nid_curso);
     if (existeCurso) {
-      return actualizarCurso(nid_curso, descripcion, ano, fecha_actualizacion);
+      return actualizarCurso(
+        nid_curso,
+        descripcion,
+        ano,
+        fecha_actualizacion,
+        activo,
+      );
     } else {
-      return insertarCurso(nid_curso, descripcion, ano, fecha_actualizacion);
+      return insertarCurso(
+        nid_curso,
+        descripcion,
+        ano,
+        fecha_actualizacion,
+        activo,
+      );
     }
   } catch (error) {
     console.error("Error al registrar el curso: ", error);

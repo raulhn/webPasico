@@ -9,6 +9,7 @@ function registrarCurso(req, res) {
       let descripcion = req.body.descripcion;
       let ano = req.body.ano;
       let fecha_actualizacion = req.body.fecha_actualizacion;
+      let activo = req.body.activo;
 
       console.log(
         "Registrar Curso: ",
@@ -19,7 +20,13 @@ function registrarCurso(req, res) {
       );
 
       gestorCursos
-        .registrarCurso(nid_curso, descripcion, ano, fecha_actualizacion)
+        .registrarCurso(
+          nid_curso,
+          descripcion,
+          ano,
+          fecha_actualizacion,
+          activo,
+        )
         .then(() => {
           res.status(200).send({
             error: false,
