@@ -23,6 +23,7 @@ export class RegistroCursoComponent implements OnInit {
   ];
 
   nuevo_curso: string = '';
+  ano: string = '';
 
   bCargado: boolean = false;
   curso_seleccionado: any;
@@ -66,8 +67,9 @@ export class RegistroCursoComponent implements OnInit {
   addCurso() {
     //https://sweetalert2.github.io/
     Swal.fire({
-      title: 'Crear asignatura',
+      title: 'Crear curso',
       html: `<input type="text" id="nombre_curso" class="swal2-input" placeholder="Username">
+            <input type="text" id="ano" class="swal2-input" placeholder="Año">
              `,
       confirmButtonText: 'Crear',
       showCancelButton: true,
@@ -75,11 +77,13 @@ export class RegistroCursoComponent implements OnInit {
         this.nuevo_curso = (<HTMLInputElement>(
           document.getElementById('nombre_curso')
         )).value;
+
+        this.ano = (<HTMLInputElement>document.getElementById('ano')).value;
       },
     }).then((results: any) => {
       if (results.isConfirmed) {
         this.cursosService
-          .registrar_curso(this.nuevo_curso)
+          .registrar_curso(this.nuevo_curso, this.ano)
           .subscribe(this.registrar_curso);
       }
     });

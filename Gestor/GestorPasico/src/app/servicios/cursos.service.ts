@@ -9,11 +9,11 @@ export class CursosService {
   constructor(private http: HttpClient) {}
   private url: string = URL.URL_SERVICIO;
 
-  registrar_curso(descripcion: string) {
+  registrar_curso(descripcion: string, ano: string) {
     let API_URL = this.url + '/registrar_curso';
     return this.http.post(
       API_URL,
-      { descripcion: descripcion },
+      { descripcion: descripcion, ano: ano },
       { withCredentials: true },
     );
   }

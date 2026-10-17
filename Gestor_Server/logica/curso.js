@@ -2,13 +2,15 @@ const conexion = require("../conexion.js");
 const constantes = require("../constantes.js");
 const gestor_base_datos = require("./base_datos.js");
 
-async function registrar_curso(descripcion) {
+async function registrar_curso(descripcion, ano) {
   try {
     const sql =
       "insert into " +
       constantes.ESQUEMA_BD +
-      ".curso(descripcion) values(" +
+      ".curso(descripcion, ano) values(" +
       conexion.dbConn.escape(descripcion) +
+      ", " +
+      conexion.dbConn.escape(ano) +
       ")";
 
     const results = await gestor_base_datos.actualiza(sql);

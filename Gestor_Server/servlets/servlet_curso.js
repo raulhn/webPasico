@@ -4,7 +4,8 @@ const comun = require("./servlet_comun.js");
 function registrar_curso(req, res) {
   comun.comprobaciones(req, res, async () => {
     let descripcion = req.body.descripcion;
-    await curso.registrar_curso(descripcion);
+    let ano = req.body.ano;
+    await curso.registrar_curso(descripcion, ano);
 
     res.status(200).send({ error: false, message: "Curso registrado" });
   });
