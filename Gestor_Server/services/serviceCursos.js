@@ -17,7 +17,7 @@ function peticionRegistrarCurso(curso) {
             descripcion: curso.descripcion,
             ano: curso.ano,
             fecha_actualizacion: curso.fecha_actualizacion,
-            activo: curso.activo,
+            activo: curso.seleccionado,
           }),
         })
         .then((response) => {
