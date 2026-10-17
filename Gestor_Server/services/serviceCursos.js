@@ -1,11 +1,12 @@
 const gestorCursos = require("../logica/curso.js");
 const serviceComun = require("./serviceComun.js");
+const constantes = require("../constantes.js");
 
 function peticionRegistrarCurso(curso) {
   return new Promise((resolve, reject) => {
     try {
       serviceComun
-        .fetchWithTimeout(process.env.URL_SERVICIO_MOVIL + "registrar_curso", {
+        .fetchWithTimeout(constantes.URL_SERVICIO_MOVIL + "registrar_curso", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
