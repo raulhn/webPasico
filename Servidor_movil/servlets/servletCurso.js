@@ -19,6 +19,15 @@ function registrarCurso(req, res) {
         fecha_actualizacion,
       );
 
+      console.log(
+        "Registrar Curso: ",
+        nid_curso,
+        descripcion,
+        ano,
+        fecha_actualizacion,
+        activo,
+      );
+
       gestorCursos
         .registrarCurso(
           nid_curso,
