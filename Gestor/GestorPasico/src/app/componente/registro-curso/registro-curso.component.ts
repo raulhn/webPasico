@@ -94,6 +94,7 @@ export class RegistroCursoComponent implements OnInit {
   }
 
   activar_curso() {
+    console.log('Activando curso: ', this.curso_seleccionado);
     this.cursosService.activar_curso(this.curso_seleccionado.nid).subscribe({
       next: (respuesta: any) => {
         Swal.fire({
