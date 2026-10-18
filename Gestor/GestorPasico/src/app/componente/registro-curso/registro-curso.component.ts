@@ -94,24 +94,22 @@ export class RegistroCursoComponent implements OnInit {
   }
 
   activar_curso() {
-    this.cursosService
-      .activar_curso(this.curso_seleccionado.nid_curso)
-      .subscribe({
-        next: (respuesta: any) => {
-          Swal.fire({
-            icon: 'success',
-            title: 'Curso activado',
-            text: 'Se ha activado correctamente',
-          });
-          this.cursosService.obtener_cursos().subscribe(this.refrescar_cursos);
-        },
-        error: (respuesta: any) => {
-          Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Se ha producido un error',
-          });
-        },
-      });
+    this.cursosService.activar_curso(this.curso_seleccionado.nid).subscribe({
+      next: (respuesta: any) => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Curso activado',
+          text: 'Se ha activado correctamente',
+        });
+        this.cursosService.obtener_cursos().subscribe(this.refrescar_cursos);
+      },
+      error: (respuesta: any) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Se ha producido un error',
+        });
+      },
+    });
   }
 }

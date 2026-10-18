@@ -37,6 +37,7 @@ function obtener_nid_ultimo_curso(req, res) {
 function activar_curso(req, res) {
   comun.comprobaciones(req, res, async () => {
     let nid_curso = req.body.nid_curso;
+
     await curso.activar_curso(nid_curso);
 
     res.status(200).send({ error: false, message: "Curso activado" });
