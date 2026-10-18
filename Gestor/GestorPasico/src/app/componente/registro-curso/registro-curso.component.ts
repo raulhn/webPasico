@@ -68,7 +68,7 @@ export class RegistroCursoComponent implements OnInit {
     //https://sweetalert2.github.io/
     Swal.fire({
       title: 'Crear curso',
-      html: `<input type="text" id="nombre_curso" class="swal2-input" placeholder="Username">
+      html: `<input type="text" id="nombre_curso" class="swal2-input" placeholder="Descripción">
             <input type="text" id="ano" class="swal2-input" placeholder="Año">
              `,
       confirmButtonText: 'Crear',

@@ -90,7 +90,10 @@ async function activar_curso(nid_curso) {
   try {
     // Desactivar todos los cursos
     const sqlDesactivar =
-      "update " + constantes.ESQUEMA_BD + ".curso set seleccionado = 'N'";
+      "update " +
+      constantes.ESQUEMA_BD +
+      ".curso set seleccionado = 'N', sucio = 'S' where nid <> " +
+      conexion.dbConn.escape(nid_curso);
 
     await gestor_base_datos.actualiza(sqlDesactivar);
 
