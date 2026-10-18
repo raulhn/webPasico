@@ -19,6 +19,7 @@ export class RegistroCursoComponent implements OnInit {
   $id_tabla_cursos: Signal<string> = signal('tabla_cursos');
   cabecera_cursos: any[] = [
     { title: 'Curso', data: 'descripcion' },
+    { title: 'Año', data: 'ano' },
     { title: 'Seleccionado', data: 'seleccionado' },
   ];
 
