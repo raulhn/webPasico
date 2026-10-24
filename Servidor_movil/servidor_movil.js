@@ -356,10 +356,6 @@ app.post(
   "/actualizar_configuracion_cuota_impresion",
   servletSolicitudesImpresion.actualizarConfiguracionCuota,
 );
-app.post(
-  "/actualizar_cuota_impresion",
-  servletSolicitudesImpresion.actualizarConfiguracionCuota,
-);
 
 app.get(
   "/obtener_impresiones_restantes",

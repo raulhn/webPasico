@@ -271,6 +271,7 @@ function validarConfiguracionEntrada(configuracion) {
       configuracion.escala_maxima,
       "escala_maxima",
     ),
+    max_paginas: obtenerIntPositivo(configuracion.max_paginas),
   };
 
   if (
@@ -398,7 +399,7 @@ async function guardarConfiguracionCuota(nidUsuarioActor, configuracion) {
         connection,
         "INSERT INTO " +
           constantes.ESQUEMA +
-          ".configuracion_cuota_impresion (max_solicitudes_pendientes, max_solicitudes_ventana, ventana_dias, max_archivos_por_solicitud, escala_minima, escala_maxima, creado_por_usuario, actualizado_por_usuario) VALUES (" +
+          ".configuracion_cuota_impresion (max_solicitudes_pendientes, max_solicitudes_ventana, ventana_dias, max_archivos_por_solicitud, escala_minima, escala_maxima, creado_por_usuario, actualizado_por_usuario, max_paginas) VALUES (" +
           escapeSql(configuracionNormalizada.max_solicitudes_pendientes) +
           ", " +
           escapeSql(configuracionNormalizada.max_solicitudes_ventana) +
@@ -414,6 +415,8 @@ async function guardarConfiguracionCuota(nidUsuarioActor, configuracion) {
           escapeSql(nidUsuarioActor) +
           ", " +
           escapeSql(nidUsuarioActor) +
+          ", " +
+          escapeSql(configuracionNormalizada.max_paginas) +
           ")",
       );
     } else {
@@ -435,6 +438,8 @@ async function guardarConfiguracionCuota(nidUsuarioActor, configuracion) {
           escapeSql(configuracionNormalizada.escala_maxima) +
           ", actualizado_por_usuario = " +
           escapeSql(nidUsuarioActor) +
+          ", max_paginas = " +
+          escapeSql(configuracionNormalizada.max_paginas) +
           " WHERE nid_configuracion_cuota_impresion = " +
           escapeSql(filas[0].nid_configuracion_cuota_impresion),
       );
