@@ -21,7 +21,10 @@ export const CustomHeader = ({ navigation, route, options, title }) => {
         if (response.usuario) {
           iniciarSesion(response.usuario); // Actualiza el estado del usuario en el contexto
           guardarRoles(response.roles); // Guarda los roles en el contexto
+          console.log("Respuesta", response);
         } else {
+          console.log("Respuesta", response);
+
           console.log("No hay usuario autenticado");
           iniciarSesion(null); // Si no hay usuario, establece el estado como nulo
           guardarRoles([]); // Limpia los roles en el contexto

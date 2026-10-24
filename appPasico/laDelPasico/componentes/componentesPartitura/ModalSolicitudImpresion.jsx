@@ -102,18 +102,19 @@ export default function ModalSolicitudImpresion({
     setResultadoSolicitud(null);
 
     try {
-      const [
-        respuestaInspeccion,
-        respuestaMaxPaginas,
-        respuestaRestantes,
-      ] = await Promise.all([
-        ServiceSolicitudesImpresion.explorarPartituraImpresion(
-          partitura.nid_partitura,
-          cerrarSesion
-        ),
-        ServiceSolicitudesImpresion.obtenerMaxPaginasImpresion(cerrarSesion),
-        ServiceSolicitudesImpresion.obtenerImpresionesRestantes(cerrarSesion),
-      ]);
+      const [respuestaInspeccion, respuestaMaxPaginas, respuestaRestantes] =
+        await Promise.all([
+          ServiceSolicitudesImpresion.explorarPartituraImpresion(
+            partitura.nid_partitura,
+            cerrarSesion
+          ),
+          ServiceSolicitudesImpresion.obtenerMaxPaginasImpresion(cerrarSesion),
+          ServiceSolicitudesImpresion.obtenerImpresionesRestantes(cerrarSesion),
+        ]);
+
+      console.log("Respuesta inspección:", respuestaInspeccion);
+      console.log("Respuesta máximo páginas:", respuestaMaxPaginas);
+      console.log("Respuesta impresiones restantes:", respuestaRestantes);
 
       if (respuestaInspeccion?.error) {
         throw new Error(

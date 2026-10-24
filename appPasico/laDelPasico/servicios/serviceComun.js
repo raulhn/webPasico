@@ -100,6 +100,7 @@ async function peticionSesion(metodo, url, body, cerrarSesion) {
     }
     return data;
   } catch (error) {
+    console.log("Respuesta erronea", url);
     console.log("Error en la petición de sesión", error);
     throw error; // Propaga el error para que pueda ser manejado por el llamador
   }

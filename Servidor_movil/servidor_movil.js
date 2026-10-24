@@ -366,10 +366,6 @@ app.get(
   "/obtener_max_paginas_impresion",
   servletSolicitudesImpresion.obtenerMaxPaginas,
 );
-app.get(
-  "/obtener_max_paginas_impreesion",
-  servletSolicitudesImpresion.obtenerMaxPaginas,
-);
 
 // Agenda Eventos //
 app.post("/registrar_agenda_evento", servletAgendaEvento.registrarEvento);
