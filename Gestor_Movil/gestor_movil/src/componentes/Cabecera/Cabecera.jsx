@@ -141,6 +141,20 @@ export default function Cabecera() {
                 </Link>
               </li>
             )}
+            {comprobarRoles(["ADMINISTRADOR"]) && (
+              <li>
+                <Link
+                  to={URL_SUBPATH + "/configuracion_impresion"}
+                  style={{
+                    color: "#fff",
+                    textDecoration: "none",
+                    fontWeight: 500,
+                  }}
+                >
+                  Configuración de impresión
+                </Link>
+              </li>
+            )}
           </ul>
         </nav>
       </div>

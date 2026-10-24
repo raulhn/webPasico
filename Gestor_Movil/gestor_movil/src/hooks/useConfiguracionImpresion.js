@@ -4,12 +4,21 @@ import {
 } from "../services/serviceSolicitudImpresion";
 import { useState, useEffect } from "react";
 
-export const useConfiguracionImpresion = () => {
+export const useConfiguracionImpresion = (habilitada = true) => {
   const [configuracion, setConfiguracion] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    if (!habilitada) {
+      setConfiguracion(null);
+      setLoading(false);
+      setError(null);
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
     obtenerConfiguracionImpresion()
       .then((response) => {
         setConfiguracion(response.configuracion || null);
@@ -19,7 +28,7 @@ export const useConfiguracionImpresion = () => {
         setError(err);
         setLoading(false);
       });
-  }, []);
+  }, [habilitada]);
 
   async function actualizarConfiguracion(datosConfiguracion) {
     try {

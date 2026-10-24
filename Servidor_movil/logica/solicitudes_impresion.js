@@ -16,6 +16,7 @@ const CONFIGURACION_DEFECTO = {
   max_archivos_por_solicitud: 10,
   escala_minima: 25,
   escala_maxima: 200,
+  max_paginas: 6,
 };
 
 const ESTADOS_FINALES = new Set([
@@ -237,6 +238,11 @@ function normalizarConfiguracion(fila) {
         base.escala_maxima || CONFIGURACION_DEFECTO.escala_maxima,
         10,
       ) || CONFIGURACION_DEFECTO.escala_maxima,
+    max_paginas:
+      Number.parseInt(
+        base.max_paginas || CONFIGURACION_DEFECTO.max_paginas,
+        10,
+      ) || CONFIGURACION_DEFECTO.max_paginas,
     creado_por_usuario: base.creado_por_usuario || null,
     actualizado_por_usuario: base.actualizado_por_usuario || null,
     fecha_creacion: base.fecha_creacion || null,
@@ -271,7 +277,10 @@ function validarConfiguracionEntrada(configuracion) {
       configuracion.escala_maxima,
       "escala_maxima",
     ),
-    max_paginas: obtenerIntPositivo(configuracion.max_paginas),
+    max_paginas: obtenerIntPositivo(
+      configuracion.max_paginas,
+      "max_paginas",
+    ),
   };
 
   if (

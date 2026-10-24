@@ -271,7 +271,7 @@ async function cancelarSolicitudImpresion(req, res) {
 
 async function obtenerConfiguracionCuota(req, res) {
   try {
-    const rolesPermitidos = [constantes.DIRECTOR, constantes.ADMINISTRADOR];
+    const rolesPermitidos = [constantes.ADMINISTRADOR];
     const autorizado = await servletComun.comprobarRol(
       req,
       res,
@@ -307,7 +307,7 @@ async function obtenerConfiguracionCuota(req, res) {
 
 async function actualizarConfiguracionCuota(req, res) {
   try {
-    const rolesPermitidos = [constantes.DIRECTOR, constantes.ADMINISTRADOR];
+    const rolesPermitidos = [constantes.ADMINISTRADOR];
     const autorizado = await servletComun.comprobarRol(
       req,
       res,

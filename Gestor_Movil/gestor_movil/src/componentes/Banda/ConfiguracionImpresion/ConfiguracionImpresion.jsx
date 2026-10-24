@@ -1,99 +1,156 @@
 import { useConfiguracionImpresion } from "../../../hooks/useConfiguracionImpresion";
-import { useState, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
-  EntradaTexto,
-  Boton,
   ModalAviso,
   ModalExito,
 } from "../../ComponentesUI/ComponentesUI.jsx";
+import Cabecera from "../../Cabecera/Cabecera.jsx";
+import { UsuarioContext } from "../../../contexto/UsuarioContext.js";
 
 export default function ConfiguracionImpresion() {
-  const { configuracion, actualizarConfiguracion } =
-    useConfiguracionImpresion();
-  const [
-    nid_configuracion_cuota_impresion,
-    set_nid_configuracion_cuota_impresion,
-  ] = useState();
-  const [max_solicitudes_pendientes, set_max_solicitudes_pendientes] =
-    useState();
-  const [max_solicitudes_ventana, set_max_solicitudes_ventana] = useState();
-  const [ventana_dias, set_ventana_dias] = useState();
-  const [max_archivos_set_por_solicitud, max_archivos_por_solicitud] =
-    useState();
-  const [max_paginas, set_max_paginas] = useState();
-
+  const { comprobarRoles } = useContext(UsuarioContext);
+  const esAdministrador = comprobarRoles(["ADMINISTRADOR"]);
+  const { configuracion, loading, error: errorCarga, actualizarConfiguracion } =
+    useConfiguracionImpresion(esAdministrador);
+  const [valores, setValores] = useState({
+    max_solicitudes_pendientes: "",
+    max_solicitudes_ventana: "",
+    ventana_dias: "",
+    max_archivos_por_solicitud: "",
+    escala_minima: "",
+    escala_maxima: "",
+    max_paginas: "",
+  });
+  const [guardando, setGuardando] = useState(false);
   const [error, setError] = useState(null);
   const [exito, setExito] = useState(null);
 
   useEffect(() => {
     if (configuracion) {
-      set_max_solicitudes_pendientes(configuracion.max_solicitudes_pendientes);
-      set_max_solicitudes_ventana(configuracion.max_solicitudes_ventana);
-      set_ventana_dias(configuracion.ventana_dias);
-      max_archivos_por_solicitud(configuracion.max_archivos_set_por_solicitud);
-      set_max_paginas(configuracion.max_paginas);
-      set_nid_configuracion_cuota_impresion(
-        configuracion.nid_configuracion_cuota_impresion,
-      );
+      setValores({
+        max_solicitudes_pendientes:
+          configuracion.max_solicitudes_pendientes,
+        max_solicitudes_ventana: configuracion.max_solicitudes_ventana,
+        ventana_dias: configuracion.ventana_dias,
+        max_archivos_por_solicitud:
+          configuracion.max_archivos_por_solicitud,
+        escala_minima: configuracion.escala_minima,
+        escala_maxima: configuracion.escala_maxima,
+        max_paginas: configuracion.max_paginas,
+      });
     }
   }, [configuracion]);
 
-  async function peticionActualizarConficuarcion() {
-    try {
-      const respuetsa = await actualizarConfiguracion({
-        nid_configuracion_cuota_impresion,
-        max_solicitudes_pendientes,
-        max_solicitudes_ventana,
-        ventana_dias,
-        max_archivos_set_por_solicitud,
-        max_paginas,
-      });
+  function actualizarValor(evento) {
+    const { name, value } = evento.target;
+    setValores((valoresActuales) => ({
+      ...valoresActuales,
+      [name]: value,
+    }));
+  }
 
-      console.log("Configuración actualizada:", respuetsa);
+  async function guardarConfiguracion(evento) {
+    evento.preventDefault();
+    const configuracionActualizada = Object.fromEntries(
+      Object.entries(valores).map(([campo, valor]) => [
+        campo,
+        Number(valor),
+      ]),
+    );
+
+    if (
+      Object.values(configuracionActualizada).some(
+        (valor) => !Number.isInteger(valor) || valor <= 0,
+      )
+    ) {
+      setError("Todos los valores deben ser números enteros positivos.");
+      return;
+    }
+
+    if (
+      configuracionActualizada.max_solicitudes_ventana <
+      configuracionActualizada.max_solicitudes_pendientes
+    ) {
+      setError(
+        "El máximo de solicitudes por ventana no puede ser menor que el máximo de solicitudes pendientes.",
+      );
+      return;
+    }
+
+    if (
+      configuracionActualizada.escala_minima >
+      configuracionActualizada.escala_maxima
+    ) {
+      setError("La escala mínima no puede ser mayor que la escala máxima.");
+      return;
+    }
+
+    try {
+      setGuardando(true);
+      await actualizarConfiguracion(configuracionActualizada);
       setExito("Configuración actualizada correctamente.");
-    } catch (error) {
-      console.error("Error al actualizar la configuración:", error);
-      setError("Error al actualizar la configuración");
+    } catch (errorActualizacion) {
+      setError(
+        errorActualizacion.message ||
+          "No se ha podido actualizar la configuración.",
+      );
+    } finally {
+      setGuardando(false);
     }
   }
 
+  const campos = [
+    ["max_solicitudes_pendientes", "Máximo de solicitudes pendientes"],
+    ["max_solicitudes_ventana", "Máximo de solicitudes por ventana"],
+    ["ventana_dias", "Ventana en días"],
+    ["max_archivos_por_solicitud", "Máximo de archivos por solicitud"],
+    ["escala_minima", "Escala mínima (%)"],
+    ["escala_maxima", "Escala máxima (%)"],
+    ["max_paginas", "Máximo de páginas por archivo"],
+  ];
+
   return (
-    <div>
-      <h1>Configuración de Impresión</h1>
-      {/* Aquí puedes agregar los elementos de configuración de impresión */}
-      <EntradaTexto
-        label="Máximo de solicitudes pendientes"
-        value={max_solicitudes_pendientes}
-        onChange={(e) => set_max_solicitudes_pendientes(e.target.value)}
-      />
-      <EntradaTexto
-        label="Máximo de solicitudes por ventana"
-        value={max_solicitudes_ventana}
-        onChange={(e) => set_max_solicitudes_ventana(e.target.value)}
-      />
-      <EntradaTexto
-        label="Ventana en días"
-        value={ventana_dias}
-        onChange={(e) => set_ventana_dias(e.target.value)}
-      />
-      <EntradaTexto
-        label="Máximo de archivos por solicitud"
-        value={max_archivos_set_por_solicitud}
-        onChange={(e) => max_archivos_por_solicitud(e.target.value)}
-      />
-      <EntradaTexto
-        label="Máximo de páginas"
-        value={max_paginas}
-        onChange={(e) => set_max_paginas(e.target.value)}
-      />
-      <Boton
-        texto="Guardar Configuración"
-        onClick={() => {
-          // Aquí puedes agregar la lógica para guardar la configuración
-          console.log("Configuración guardada");
-          peticionActualizarConficuarcion();
-        }}
-      />
+    <>
+      <Cabecera />
+      <main style={{ maxWidth: "640px", margin: "40px auto" }}>
+        <h1>Configuración de impresión</h1>
+        {!esAdministrador ? (
+          <p>No tienes permisos para administrar la configuración de impresión.</p>
+        ) : loading ? (
+          <p>Cargando configuración...</p>
+        ) : errorCarga ? (
+          <p>No se ha podido cargar la configuración de impresión.</p>
+        ) : (
+          <form onSubmit={guardarConfiguracion}>
+            {campos.map(([nombre, etiqueta]) => (
+              <label
+                key={nombre}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "6px",
+                  marginBottom: "16px",
+                }}
+              >
+                {etiqueta}
+                <input
+                  className="entrada-texto"
+                  min="1"
+                  name={nombre}
+                  onChange={actualizarValor}
+                  required
+                  step="1"
+                  type="number"
+                  value={valores[nombre]}
+                />
+              </label>
+            ))}
+            <button className="boton" disabled={guardando} type="submit">
+              {guardando ? "Guardando..." : "Guardar configuración"}
+            </button>
+          </form>
+        )}
+      </main>
 
       <ModalAviso
         visible={error !== null}
@@ -109,6 +166,6 @@ export default function ConfiguracionImpresion() {
         titulo={"Configuración de Impresión"}
         mensaje={exito}
       />
-    </div>
+    </>
   );
 }

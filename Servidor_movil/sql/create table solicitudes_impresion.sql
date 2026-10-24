@@ -6,6 +6,7 @@ create table pasico_movil.configuracion_cuota_impresion(
   max_archivos_por_solicitud integer not null default 10,
   escala_minima integer not null default 25,
   escala_maxima integer not null default 200,
+  max_paginas integer not null default 6,
   creado_por_usuario integer,
   actualizado_por_usuario integer,
   fecha_creacion datetime not null default current_timestamp,

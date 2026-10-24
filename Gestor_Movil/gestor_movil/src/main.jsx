@@ -21,6 +21,7 @@ import Grupos from "./componentes/Escuela/Grupos/Grupos.jsx";
 import DetalleGrupo from "./componentes/Escuela/Grupos/DetalleGrupo.jsx";
 import Asistencias from "./componentes/Escuela/Asistencias/Asistencias.jsx";
 import AsistenciaAsignatura from "./componentes/Escuela/AsistenciasAsignatura/AsistenciaAsignatura.jsx";
+import ConfiguracionImpresion from "./componentes/Banda/ConfiguracionImpresion/ConfiguracionImpresion.jsx";
 
 import { URL_SUBPATH } from "./config/Constantes";
 import Agenda from "./componentes/ComponenteCalendario/Agenda/Agenda.jsx";
@@ -87,6 +88,10 @@ createRoot(document.getElementById("root")).render(
         <Route path={URL_SUBPATH + "/agenda"} element={<Agenda />} />
         <Route path={URL_SUBPATH + "/grupos"} element={<Grupos />} />
         <Route path={URL_SUBPATH + "/asistencias"} element={<Asistencias />} />
+        <Route
+          path={URL_SUBPATH + "/configuracion_impresion"}
+          element={<ConfiguracionImpresion />}
+        />
         <Route
           path={URL_SUBPATH + "/grupo/:nidGrupo"}
           element={<DetalleGrupo />}
