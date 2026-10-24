@@ -1585,6 +1585,26 @@ async function descargarArchivoSolicitudImpresion(
   };
 }
 
+async function obtenrMaxPaginas() {
+  try {
+    const MAX_PAGINAS_DEFAULT = 6;
+    const sql =
+      "SELECT * FROM " +
+      constantes.ESQUEMA +
+      ".configuracion_cuota_impresion ORDER BY nid_configuracion_cuota_impresion DESC LIMIT 1";
+
+    const filas = await gestor_base_datos.consulta(sql);
+    if (filas.length === 0) {
+      return MAX_PAGINAS_DEFAULT;
+    }
+    const configuracion = filas[0];
+    return configuracion.max_paginas;
+  } catch (error) {
+    console.error("Error al obtener max_paginas: " + error.message);
+    return MAX_PAGINAS_DEFAULT; // Valor por defecto en caso de error
+  }
+}
+
 module.exports.obtenerConfiguracionCuota = obtenerConfiguracionCuota;
 module.exports.guardarConfiguracionCuota = guardarConfiguracionCuota;
 module.exports.inspeccionarPartitura = inspeccionarPartitura;
@@ -1599,3 +1619,4 @@ module.exports.obtenerArchivoSolicitudImpresion =
 module.exports.descargarArchivoSolicitudImpresion =
   descargarArchivoSolicitudImpresion;
 module.exports.obtenerImpresionesRestantes = obtenerImpresionesRestantes;
+module.exports.obtenrMaxPaginas = obtenrMaxPaginas;

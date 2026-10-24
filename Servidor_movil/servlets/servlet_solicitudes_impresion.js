@@ -485,6 +485,40 @@ function descargarSolicitudImpresionArchivo(req, res) {
   });
 }
 
+async function obtenerMaxPaginas(req, res) {
+  try {
+    const rolesPermitidos = [
+      constantes.DIRECTOR,
+      constantes.ADMINISTRADOR,
+      constantes.MUSICO,
+    ];
+    const autorizado = await servletComun.comprobarRol(
+      req,
+      res,
+      rolesPermitidos,
+    );
+    if (!autorizado) {
+      res.status(403).send({
+        error: true,
+        mensaje: "No tienes permisos para consultar las impresiones restantes",
+      });
+      return;
+    }
+
+    const maxPaginas = await gestorSolicitudesImpresion.obtenerMaxPaginas();
+    res.status(200).send({
+      error: false,
+      maxPaginas: maxPaginas,
+    });
+  } catch (error) {
+    console.log("servlet_solicitudes_impresion -> obtenerMaxPaginas:", error);
+    res.status(400).send({
+      error: true,
+      mensaje: "No se han podido obtener las impresiones restantes",
+    });
+  }
+}
+
 module.exports.inspeccionarPartituraDrive = inspeccionarPartituraDrive;
 module.exports.explorarPartituraImpresion = explorarPartituraImpresion;
 module.exports.registrarSolicitudImpresion = registrarSolicitudImpresion;
@@ -498,3 +532,4 @@ module.exports.actualizarSolicitudImpresion = actualizarSolicitudImpresion;
 module.exports.descargarSolicitudImpresionArchivo =
   descargarSolicitudImpresionArchivo;
 module.exports.obtenerImpresionesRestantes = obtenerImpresionesRestantes;
+module.exports.obtenerMaxPaginas = obtenerMaxPaginas;
