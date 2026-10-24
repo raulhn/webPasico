@@ -112,10 +112,6 @@ export default function ModalSolicitudImpresion({
           ServiceSolicitudesImpresion.obtenerImpresionesRestantes(cerrarSesion),
         ]);
 
-      console.log("Respuesta inspección:", respuestaInspeccion);
-      console.log("Respuesta máximo páginas:", respuestaMaxPaginas);
-      console.log("Respuesta impresiones restantes:", respuestaRestantes);
-
       if (respuestaInspeccion?.error) {
         throw new Error(
           respuestaInspeccion?.mensaje || "No se pudo inspeccionar la partitura"
