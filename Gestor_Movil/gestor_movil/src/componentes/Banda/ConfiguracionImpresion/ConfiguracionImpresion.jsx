@@ -1,17 +1,18 @@
 import { useConfiguracionImpresion } from "../../../hooks/useConfiguracionImpresion";
 import { useContext, useEffect, useState } from "react";
-import {
-  ModalAviso,
-  ModalExito,
-} from "../../ComponentesUI/ComponentesUI.jsx";
+import { ModalAviso, ModalExito } from "../../ComponentesUI/ComponentesUI.jsx";
 import Cabecera from "../../Cabecera/Cabecera.jsx";
 import { UsuarioContext } from "../../../contexto/UsuarioContext.js";
 
 export default function ConfiguracionImpresion() {
   const { comprobarRoles } = useContext(UsuarioContext);
   const esAdministrador = comprobarRoles(["ADMINISTRADOR"]);
-  const { configuracion, loading, error: errorCarga, actualizarConfiguracion } =
-    useConfiguracionImpresion(esAdministrador);
+  const {
+    configuracion,
+    loading,
+    error: errorCarga,
+    actualizarConfiguracion,
+  } = useConfiguracionImpresion(esAdministrador);
   const [valores, setValores] = useState({
     max_solicitudes_pendientes: "",
     max_solicitudes_ventana: "",
@@ -28,12 +29,10 @@ export default function ConfiguracionImpresion() {
   useEffect(() => {
     if (configuracion) {
       setValores({
-        max_solicitudes_pendientes:
-          configuracion.max_solicitudes_pendientes,
+        max_solicitudes_pendientes: configuracion.max_solicitudes_pendientes,
         max_solicitudes_ventana: configuracion.max_solicitudes_ventana,
         ventana_dias: configuracion.ventana_dias,
-        max_archivos_por_solicitud:
-          configuracion.max_archivos_por_solicitud,
+        max_archivos_por_solicitud: configuracion.max_archivos_por_solicitud,
         escala_minima: configuracion.escala_minima,
         escala_maxima: configuracion.escala_maxima,
         max_paginas: configuracion.max_paginas,
@@ -52,10 +51,7 @@ export default function ConfiguracionImpresion() {
   async function guardarConfiguracion(evento) {
     evento.preventDefault();
     const configuracionActualizada = Object.fromEntries(
-      Object.entries(valores).map(([campo, valor]) => [
-        campo,
-        Number(valor),
-      ]),
+      Object.entries(valores).map(([campo, valor]) => [campo, Number(valor)]),
     );
 
     if (
@@ -112,10 +108,12 @@ export default function ConfiguracionImpresion() {
   return (
     <>
       <Cabecera />
-      <main style={{ maxWidth: "640px", margin: "40px auto" }}>
+      <main style={{ maxWidth: "640px", margin: "40px auto", padding: "2rem" }}>
         <h1>Configuración de impresión</h1>
         {!esAdministrador ? (
-          <p>No tienes permisos para administrar la configuración de impresión.</p>
+          <p>
+            No tienes permisos para administrar la configuración de impresión.
+          </p>
         ) : loading ? (
           <p>Cargando configuración...</p>
         ) : errorCarga ? (
