@@ -33,8 +33,6 @@ import {
   validarRangoPaginasImpresion,
 } from "./solicitudesImpresionUtils";
 
-const MAX_PAGINAS_POR_ARCHIVO = 6;
-
 function construirSeleccionInicial(archivos) {
   return archivos.reduce((resultado, archivo) => {
     resultado[archivo.id] = Boolean(archivo.seleccionadoPorDefecto);
@@ -78,7 +76,7 @@ export default function ModalSolicitudImpresion({
   const [resultadoSolicitud, setResultadoSolicitud] = useState(null);
   const [versionSolicitudes, setVersionSolicitudes] = useState(0);
   const [impresionesRestantes, setImpresionesRestantes] = useState(null);
-
+  const [maxPaginas, setMaxPaginas] = useState(null);
   const [idempotencyKey, setIdempotencyKey] = useState(null);
 
   const archivosActivos = useMemo(
@@ -104,46 +102,55 @@ export default function ModalSolicitudImpresion({
     setResultadoSolicitud(null);
 
     try {
-      const [respuestaInspeccion, respuestaCuotas] = await Promise.allSettled([
+      const [
+        respuestaInspeccion,
+        respuestaMaxPaginas,
+        respuestaRestantes,
+      ] = await Promise.all([
         ServiceSolicitudesImpresion.explorarPartituraImpresion(
           partitura.nid_partitura,
           cerrarSesion
         ),
-        ServiceSolicitudesImpresion.obtenerCuotasImpresion(cerrarSesion),
+        ServiceSolicitudesImpresion.obtenerMaxPaginasImpresion(cerrarSesion),
+        ServiceSolicitudesImpresion.obtenerImpresionesRestantes(cerrarSesion),
       ]);
 
-      const respuestaRestantes =
-        await ServiceSolicitudesImpresion.obtenerImpresionesRestantes(
-          cerrarSesion
-        );
-      setImpresionesRestantes(respuestaRestantes?.impresionesRestantes || null);
-
-      const datosInspeccion =
-        respuestaInspeccion.status === "fulfilled"
-          ? respuestaInspeccion.value
-          : {};
-      const datosCuotas =
-        respuestaCuotas.status === "fulfilled" ? respuestaCuotas.value : {};
-
-      if (respuestaInspeccion.status !== "fulfilled") {
-        throw (
-          respuestaInspeccion.reason ||
-          new Error("No se pudo inspeccionar la partitura")
-        );
-      }
-
-      if (datosInspeccion?.error) {
+      if (respuestaInspeccion?.error) {
         throw new Error(
-          datosInspeccion?.mensaje || "No se pudo inspeccionar la partitura"
+          respuestaInspeccion?.mensaje || "No se pudo inspeccionar la partitura"
         );
       }
+
+      if (respuestaMaxPaginas?.error) {
+        throw new Error(
+          respuestaMaxPaginas?.mensaje ||
+            "No se pudo obtener el límite de páginas."
+        );
+      }
+
+      const maximoPaginasConfigurado = Number.parseInt(
+        respuestaMaxPaginas?.maxPaginas,
+        10
+      );
+      if (
+        !Number.isInteger(maximoPaginasConfigurado) ||
+        maximoPaginasConfigurado <= 0
+      ) {
+        throw new Error("El límite de páginas configurado no es válido.");
+      }
+
+      if (respuestaRestantes?.error) {
+        throw new Error(
+          respuestaRestantes?.mensaje ||
+            "No se pudieron obtener las impresiones restantes."
+        );
+      }
+
+      setImpresionesRestantes(respuestaRestantes.impresionesRestantes || null);
+      setMaxPaginas(maximoPaginasConfigurado);
 
       const inspeccionNormalizada = normalizarInspeccionImpresion(
-        {
-          ...datosInspeccion,
-          cuota: datosInspeccion?.cuota || datosCuotas?.cuota,
-          cuotas: datosInspeccion?.cuotas || datosCuotas?.cuotas,
-        },
+        respuestaInspeccion,
         partitura
       );
 
@@ -151,13 +158,16 @@ export default function ModalSolicitudImpresion({
       setArchivosSeleccionados(
         construirSeleccionInicial(inspeccionNormalizada.archivos)
       );
-      setRangoPaginas(inspeccionNormalizada.rangoPaginas || "1-6");
+      setRangoPaginas(
+        inspeccionNormalizada.rangoPaginas || `1-${maximoPaginasConfigurado}`
+      );
       setEscalaPorcentaje(
         String(inspeccionNormalizada.escalaPorcentaje || 100)
       );
     } catch (error) {
       setInspeccion(normalizarInspeccionImpresion({}, partitura));
       setArchivosSeleccionados({});
+      setMaxPaginas(null);
       setErrorCarga(
         error?.message || "No se pudo preparar la solicitud de impresión."
       );
@@ -181,6 +191,11 @@ export default function ModalSolicitudImpresion({
 
   async function solicitarImpresion() {
     console.log("Solicitu de impresión");
+    if (!Number.isInteger(maxPaginas) || maxPaginas <= 0) {
+      setMensajeAviso("No se ha podido obtener el límite de páginas.");
+      return;
+    }
+
     if (archivosActivos.length === 0) {
       setMensajeAviso("Selecciona al menos un archivo para imprimir.");
       return;
@@ -192,17 +207,19 @@ export default function ModalSolicitudImpresion({
     if (
       !validarRangoPaginasImpresion(
         rangoPaginas,
-        hayPdfSeleccionado ? MAX_PAGINAS_POR_ARCHIVO : null
+        hayPdfSeleccionado ? maxPaginas : null
       )
     ) {
       setMensajeAviso(
-        "Indica un rango válido de un máximo de 6 páginas por archivo. Ejemplos: 1-3, 5 o 1-2,4."
+        `Indica un rango válido de un máximo de ${maxPaginas} páginas por archivo. Ejemplos: 1-3, 5 o 1-2,4.`
       );
       return;
     }
 
     if (hayPdfSeleccionado && !rangoPaginas.trim()) {
-      setMensajeAviso("Indica las páginas a imprimir (máximo 6 por archivo).");
+      setMensajeAviso(
+        `Indica las páginas a imprimir (máximo ${maxPaginas} por archivo).`
+      );
       return;
     }
 
@@ -418,7 +435,11 @@ export default function ModalSolicitudImpresion({
                 <View style={styles.seccion}>
                   <Text style={styles.tituloSeccion}>Rango de páginas</Text>
                   <EntradaTexto
-                    placeholder="Máximo 6 páginas. Ejemplo: 1-2,4"
+                    placeholder={
+                      maxPaginas
+                        ? `Máximo ${maxPaginas} páginas. Ejemplo: 1-2,4`
+                        : "Cargando límite de páginas..."
+                    }
                     valor={rangoPaginas}
                     setValor={setRangoPaginas}
                     ancho="100%"
@@ -431,9 +452,9 @@ export default function ModalSolicitudImpresion({
                     ancho="100%"
                   />
                   <Text style={styles.ayuda}>
-                    En cada PDF se pueden imprimir hasta 6 páginas. Puedes
-                    ajustar el porcentaje entre 25 y 200 para adaptar la
-                    impresión.
+                    En cada PDF se pueden imprimir hasta {maxPaginas || "…"}{" "}
+                    páginas. Puedes ajustar el porcentaje entre 25 y 200 para
+                    adaptar la impresión.
                   </Text>
                 </View>
 

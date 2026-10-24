@@ -124,6 +124,15 @@ function obtenerImpresionesRestantes(cerrarSesion) {
   );
 }
 
+function obtenerMaxPaginasImpresion(cerrarSesion) {
+  return peticionAutenticada(
+    "GET",
+    "obtener_max_paginas_impresion",
+    null,
+    cerrarSesion
+  );
+}
+
 module.exports.explorarPartituraImpresion = explorarPartituraImpresion;
 module.exports.registrarSolicitudImpresion = registrarSolicitudImpresion;
 module.exports.obtenerSolicitudesImpresion = obtenerSolicitudesImpresion;
@@ -132,3 +141,4 @@ module.exports.cancelarSolicitudImpresion = cancelarSolicitudImpresion;
 module.exports.obtenerCuotasImpresion = obtenerCuotasImpresion;
 module.exports.actualizarCuotaImpresion = actualizarCuotaImpresion;
 module.exports.obtenerImpresionesRestantes = obtenerImpresionesRestantes;
+module.exports.obtenerMaxPaginasImpresion = obtenerMaxPaginasImpresion;
