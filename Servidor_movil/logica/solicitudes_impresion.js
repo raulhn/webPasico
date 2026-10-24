@@ -18,7 +18,6 @@ const CONFIGURACION_DEFECTO = {
   escala_maxima: 200,
 };
 
-const MAX_PAGINAS_POR_ARCHIVO = 6;
 const ESTADOS_FINALES = new Set([
   "IMPRESA",
   "RECHAZADA_CUOTA",
@@ -563,9 +562,10 @@ function normalizarOpciones(datos, configuracion) {
   };
 }
 
-function contarPaginasRango(rangoPaginas) {
+async function contarPaginasRango(rangoPaginas) {
   let numeroPaginas = 0;
 
+  const MAX_PAGINAS_POR_ARCHIVO = await obtenerMaxPaginas();
   for (const segmento of rangoPaginas.split(",")) {
     const limites = segmento
       .split("-")
@@ -601,7 +601,8 @@ function contarPaginasRango(rangoPaginas) {
   }
 }
 
-function validarLimitePaginasPorArchivo(archivos, opciones) {
+async function validarLimitePaginasPorArchivo(archivos, opciones) {
+  const MAX_PAGINAS_POR_ARCHIVO = await obtenerMaxPaginas();
   const incluyePdf = archivos.some(
     (archivo) => archivo.mime_type === "application/pdf",
   );
@@ -620,7 +621,7 @@ function validarLimitePaginasPorArchivo(archivos, opciones) {
     );
   }
 
-  contarPaginasRango(opciones.rango_paginas);
+  await contarPaginasRango(opciones.rango_paginas);
 }
 
 function normalizarSeleccionArchivos(archivos, inspeccion) {
@@ -1024,7 +1025,7 @@ async function crearSolicitudImpresion(nidUsuario, datos, headers = {}) {
     partitura,
   );
   const opciones = normalizarOpciones(datos, configuracion);
-  validarLimitePaginasPorArchivo(archivosValidados, opciones);
+  await validarLimitePaginasPorArchivo(archivosValidados, opciones);
   const idempotencyKey = normalizarIdempotencyKey(datos, headers);
 
   const resultado = await withTransaction(async (connection) => {
@@ -1585,7 +1586,7 @@ async function descargarArchivoSolicitudImpresion(
   };
 }
 
-async function obtenrMaxPaginas() {
+async function obtenerMaxPaginas() {
   try {
     const MAX_PAGINAS_DEFAULT = 6;
     const sql =
@@ -1619,4 +1620,4 @@ module.exports.obtenerArchivoSolicitudImpresion =
 module.exports.descargarArchivoSolicitudImpresion =
   descargarArchivoSolicitudImpresion;
 module.exports.obtenerImpresionesRestantes = obtenerImpresionesRestantes;
-module.exports.obtenrMaxPaginas = obtenrMaxPaginas;
+module.exports.obtenerMaxPaginas = obtenerMaxPaginas;
