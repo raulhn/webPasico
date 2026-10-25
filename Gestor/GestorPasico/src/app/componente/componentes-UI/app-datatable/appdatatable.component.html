@@ -1,7 +1,11 @@
 <div class="datatable">
   <div class="toolbar">
     <input type="text" placeholder="Filter…" (input)="onFilterChange($event)" />
+
     <button type="button" (click)="exportCsv()">Export CSV</button>
+  </div>
+  <div>
+    <p style="margin: 0">Total: {{ filteredData.length }}</p>
   </div>
 
   @if (paginatedData.length) {
@@ -9,7 +13,10 @@
       <thead>
         <tr>
           @for (col of $cabeceras(); track col) {
-            <th (click)="sortData(col.data)" [class.active]="sortColumn === col.data">
+            <th
+              (click)="sortData(col.data)"
+              [class.active]="sortColumn === col.data"
+            >
               {{ col.title | titlecase }}
               @if (sortColumn === col.data && sortDirection === "asc") {
                 <span class="indicator asc">▲</span>
