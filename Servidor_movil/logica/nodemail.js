@@ -31,7 +31,6 @@ async function enviarEmail(to, subject, html) {
   const accessToken = await oauth2Client.getAccessToken();
 
   console.log("Access token: " , accessToken);
-	console.log("Access token 2: ", accessToken.res.data.access_token);
   return new Promise((resolve, reject) => {
     console.log(MAILING_SERVICE_REFRESH_TOKEN);
     const smtpTransport = nodemailer.createTransport({
@@ -42,7 +41,7 @@ async function enviarEmail(to, subject, html) {
         clientId: MAILING_SERVICE_CLIENT_ID,
         clientSecret: MAILING_SERVICE_CLIENT_SECRET,
         refreshToken: MAILING_SERVICE_REFRESH_TOKEN,
-        accessToken: accessToken.res.data.access_token,
+        accessToken: accessToken.token,
       },
     });
 
