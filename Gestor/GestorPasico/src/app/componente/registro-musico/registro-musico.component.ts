@@ -211,7 +211,6 @@ export class RegistroMusicoComponent implements OnInit {
           )
           .subscribe(this.peticion_registrar_musico);
       }
-      this.bCargadasPersonas = false;
     });
   }
 
