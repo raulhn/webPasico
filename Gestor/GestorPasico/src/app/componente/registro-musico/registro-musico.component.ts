@@ -85,7 +85,9 @@ export class RegistroMusicoComponent implements OnInit {
   }
 
   refrescar_personas = {
-    next: (respuesta: any) => {},
+    next: (respuesta: any) => {
+      this.$lista_personas.set(respuesta.personas);
+    },
   };
 
   refrescar_musicos = {
@@ -209,7 +211,6 @@ export class RegistroMusicoComponent implements OnInit {
           )
           .subscribe(this.peticion_registrar_musico);
       }
-      this.bCargadasPersonas = false;
     });
   }
 
