@@ -187,7 +187,7 @@ async function obtener_alumnos_cursos_alta(nid_curso) {
       "and (ma.fecha_baja is null or ma.fecha_baja > sysdate()))";
 
     const results = await gestor_base_datos.consulta(sql);
-    return restults;
+    return results;
   } catch (error) {
     console.log("Error al obtener alumnos cursos alta: " + error);
     throw new Error("Error al obtener alumnos cursos alta");
